@@ -102,6 +102,18 @@ test('predeclared budget rejects before spending; actual oversize usage is prese
   assert.equal(calls, 1); assert.equal(tooLarge.status, 'failed'); assert.equal(tooLarge.usage.inputTokens, 70000); assert.match(tooLarge.cases[0].evaluationError!, /usage exceeds/); assert.equal(tooLarge.cases.filter(item => item.attempted).length, 1);
 });
 
+test('nonzero output price is rejected before spending, while actual total-token and cost overruns stop after one request', async () => {
+  let calls = 0;
+  const unsupported = await runJevBenchmark({ ...config, outputPerMillion: 0.1 }, new AbortController().signal, { evaluate: async (_config, context) => { calls++; return evaluation(context); }, gate: injectedGate });
+  assert.equal(calls, 0); assert.equal(unsupported.status, 'failed'); assert.match(unsupported.error!, /zero output fee/);
+  for (const usage of [{ inputTokens: 1000, outputTokens: 200000, estimatedCost: 0.000042, currency: 'USD' as const, complete: true }, { inputTokens: 1000, outputTokens: 40, estimatedCost: 1.1, currency: 'USD' as const, complete: true }]) {
+    const result = await runJevBenchmark(config, new AbortController().signal, { evaluate: async (_config, context) => { calls++; return { ...evaluation(context), usage }; }, gate: injectedGate });
+    assert.equal(result.status, 'failed'); assert.equal(result.metrics.attemptedCases, 1); assert.equal(result.usage.inputTokens, usage.inputTokens); assert.equal(result.usage.outputTokens, usage.outputTokens); assert.equal(result.usage.estimatedCost, usage.estimatedCost);
+    assert.match(result.error!, /usage exceeds/); assert.equal(result.cases.filter(item => item.status === 'skipped').length, 2);
+  }
+  assert.equal(calls, 2);
+});
+
 test('cancel retains the attempted snapshot and partial Gate evidence, and stops the remaining evaluations', async () => {
   const controller = new AbortController(); const snapshots: JevBenchmarkRun[] = []; let calls = 0; let gates = 0;
   const result = await runJevBenchmark(config, controller.signal, { onSnapshot: snapshot => { snapshots.push(snapshot); }, evaluate: async (_config, context) => { calls++; return evaluation(context); }, gate: async (html, _checks, signal) => { gates++; assert.equal(signal, controller.signal); controller.abort(); throw new DOMException('Cancelled Gate', 'AbortError'); } });
