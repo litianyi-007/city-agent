@@ -14,6 +14,8 @@ import { preflightResearchTask, researchTaskSchema } from './research/contract.j
 import { getResearchTemplates } from './research/templates.js';
 import { getResidentTemplates, residentCreateSchema, residentPatchSchema, researchProjectInputSchema } from './research/residents.js';
 import { createSurveyService } from './research/surveys.js';
+import { productionEnvironment } from '../config/production-environment.js';
+import { createProductionService } from './production/service.js';
 
 const agentFields = {
   name: z.string().trim().min(1).max(100),
@@ -62,6 +64,9 @@ export function createApp(store: CityStore, suppliedRunner?: Runner) {
   const app = express();
   const runner = suppliedRunner ?? createRunner(store);
   const surveys = createSurveyService(store);
+  const environment = productionEnvironment();
+  const production = createProductionService(store.dataDir);
+  app.locals.production = production;
   app.disable('x-powered-by');
   app.use((request, response, next) => {
     response.setHeader('X-Content-Type-Options', 'nosniff');
@@ -79,7 +84,7 @@ export function createApp(store: CityStore, suppliedRunner?: Runner) {
       try {
         const origin = new URL(originHeader);
         allowed = ['http:', 'https:'].includes(origin.protocol) && isLoopback(origin.hostname)
-          && (origin.host === host.host || ['5173', '4173'].includes(origin.port));
+          && (origin.host === host.host || ['5173', '4173', String(environment.webPort), String(environment.previewPort)].includes(origin.port));
       } catch { /* Invalid and opaque origins are denied. */ }
       if (!allowed) { response.status(403).json({ error: '不允许此来源的请求。' }); return; }
     }
@@ -89,6 +94,7 @@ export function createApp(store: CityStore, suppliedRunner?: Runner) {
     next();
   });
   app.use(express.json({ limit: '1mb' }));
+  app.use('/api/production', production.router);
 
   app.get('/api/health', (_request, response) => response.json({ ok: true, service: 'city-agent', storage: 'sqlite', localOnly: true }));
   app.get('/api/city', async (_request, response) => response.json(await getCityProfile()));
@@ -273,11 +279,18 @@ export function createApp(store: CityStore, suppliedRunner?: Runner) {
 
 const entryPath = process.argv[1] ? path.resolve(process.argv[1]) : '';
 if (entryPath === fileURLToPath(import.meta.url)) {
-  const store = new CityStore();
-  const port = Number(process.env.PORT || 4310);
-  if (!Number.isInteger(port) || port < 1 || port > 65535) throw new Error('PORT must be a valid TCP port.');
-  const server = createApp(store).listen(port, '127.0.0.1', () => console.log(`City Agent: http://127.0.0.1:${port}`));
-  const shutdown = () => server.close(() => { store.close(); process.exit(0); });
+  const environment = productionEnvironment();
+  const store = new CityStore(environment.dataDir);
+  const port = environment.apiPort;
+  const app = createApp(store);
+  const server = app.listen(port, '127.0.0.1', () => console.log(`City Agent: http://127.0.0.1:${port}/#production`));
+  let shuttingDown = false;
+  const shutdown = async () => {
+    if (shuttingDown) return;
+    shuttingDown = true;
+    await app.locals.production.close();
+    server.close(() => { store.close(); process.exit(0); });
+  };
   process.once('SIGINT', shutdown);
   process.once('SIGTERM', shutdown);
 }

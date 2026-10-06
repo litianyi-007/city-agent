@@ -143,6 +143,10 @@ export default function App() {
       <a className="brand" href="#" onClick={e => { e.preventDefault(); setView('workspace'); }}><span className="brand-mark">c<span>·</span>a</span><span>city agent<small>AUTONOMOUS STUDIO</small></span></a>
       <div className="nav-caption">工作空间</div>
       <nav aria-label="主导航">
+        <button className="nav-item" onClick={() => {
+          if (isResearchView(view) && researchDirty && !window.confirm('调查或人群预设有未保存修改，是否离开？')) return;
+          window.location.hash = 'production';
+        }}><span className="nav-icon">P</span>自主软件生产<span className="nav-key">NEW</span></button>
         <button className={view === 'workspace' ? 'nav-item selected' : 'nav-item'} onClick={() => setView('workspace')}><span className="nav-icon">▦</span>任务工作台<span className="nav-key">01</span></button>
         <button className={isResearchView(view) ? 'nav-item selected' : 'nav-item'} onClick={() => setView('research')}><span className="nav-icon">◎</span>虚拟社会调查<span className="nav-key">02</span></button>
         <button className={view === 'agents' ? 'nav-item selected' : 'nav-item'} onClick={() => setView('agents')}><span className="nav-icon">◈</span>智能体团队<span className="nav-key">{agents.length.toString().padStart(2, '0')}</span></button>
