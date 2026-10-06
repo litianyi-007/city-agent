@@ -1,0 +1,24 @@
+{
+  "id": "submission-milestone-2026-10-07",
+  "title": "City Agent 阶段申报里程碑",
+  "cutoffAt": "2026-10-06T19:19:40.181Z",
+  "cutoffLocal": "2026-10-07 03:19:40 Asia/Shanghai",
+  "cutoffBasis": "上一轮最后完成任务：已发布源码在Node22.22.3下的干净构建；以该构建dist/index.html产物mtime固定截止时点，不把本次材料整理记为新增产品实验。",
+  "validatedSourceCommit": "2e26dd2fbdb854193c665d9c3a24263378527c10",
+  "validatedPagesCommit": "ca5cb37fa87b1613e1553c94ce33270eef0a7b12",
+  "freezeTag": "submission-milestone-2026-10-07",
+  "scope": "四项申报材料与可复现阶段基线，不替代产品M1/M2完整验收",
+  "demoUrl": "https://litianyi-007.github.io/city-agent/",
+  "video": { "artifact": "demo.mp4", "durationSeconds": 254, "kind": "实际浏览器操作，规则运行与已发布真实模型快照，不是现场新模型调用" },
+  "evidence": { "baseline": "live-run.json", "questionnaire": "sample-questionnaire.json", "population": "population-pack.json", "sources": "sources.json", "prompts": "prompts.txt", "evaluation": "evaluation-summary.json", "experiments": "experiment-runs.json", "deliveryAttempts": "delivery-attempts.json" },
+  "status": {
+    "residentBaseline": { "planned": 12, "valid": 12, "questions": 15 },
+    "residentExperiments": { "modelCalls": 49, "valid": 44, "invalid": 5 },
+    "fourRoleDelivery": { "attempts": 6, "passed": 0, "finalGate": "not-passed" },
+    "marketValidation": "not-validated",
+    "productM1": "partial",
+    "productM2": "partial",
+    "engineeringRegression": { "tests": 109, "browserCases": 5, "publicAssetChecks": 30, "dependencyAdvisories": 0 }
+  },
+  "plannedNotImplemented": ["MCP现实观测与agent/群体映射绑定", "有限居民自主性", "隔离短期与长期记忆", "kata wiki与dream整理", "家庭关系与社交演化", "现实业务留出校准"]
+}

@@ -45,7 +45,7 @@ for (const relative of selected) {
   }
 }
 // Preserve public project-document archives (not private reviews, queues or raw POPO downloads).
-for (const name of ['2026-09-23-before-demo', '2026-09-23-before-population', '2026-10-07-before-audit-fixes']) {
+for (const name of ['2026-09-23-before-demo', '2026-09-23-before-population', '2026-10-07-before-audit-fixes', '2026-10-07-before-milestone-report']) {
   const relative = `docs/archive/${name}`;
   if (existsSync(path.join(root, relative))) { cpSync(path.join(root, relative), path.join(destination, relative), { recursive: true }); selected.push(relative); }
 }

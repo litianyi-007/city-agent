@@ -1,0 +1,150 @@
+{
+  "id": "submission-milestone-2026-10-07",
+  "cutoffAt": "2026-10-06T19:19:40.181Z",
+  "validatedSourceCommit": "2e26dd2fbdb854193c665d9c3a24263378527c10",
+  "freezeTag": "submission-milestone-2026-10-07",
+  "packagedAt": "2026-10-06T19:44:29.421Z",
+  "note": "本清单不含自身；SHA-256核验字节版本，不构成数字签名或效度认证。Tag与GitHub Release保存同版材料。",
+  "files": [
+    {
+      "path": "delivery-acceptance.json",
+      "bytes": 8369,
+      "sha256": "99d3ca5ddad8da186aa7a72f81fe2d301095fcd77a956ec33fcf0b2d7cf2af48"
+    },
+    {
+      "path": "delivery-attempts.json",
+      "bytes": 2360099,
+      "sha256": "43eae631103b10d67d77d73f9ebb6a0ab2f558cf1b8617f93963e546677f3484"
+    },
+    {
+      "path": "delivery-gate.json",
+      "bytes": 1717,
+      "sha256": "5da77dafb992d66d4833850210102f3b6a132118f79db56b79dc9b5ee40df13c"
+    },
+    {
+      "path": "delivery-manifest.json",
+      "bytes": 6689,
+      "sha256": "cd0ede3b86e95f0bb6bf0e6873858643ceb33a4585375d6e8e536f9ad2a7d1a2"
+    },
+    {
+      "path": "delivery-run.json",
+      "bytes": 382479,
+      "sha256": "f656d333a4a4bad1346d80750ee0c80d4a6fbf0ca45d2b6eb9b64004ef694cde"
+    },
+    {
+      "path": "delivery-source.txt",
+      "bytes": 12369,
+      "sha256": "1449d0e9e27555f1c9cf9af0cfdfc91c0e9a9653eabd62d04e8868e9d8182c53"
+    },
+    {
+      "path": "demo.mp4",
+      "bytes": 6071048,
+      "sha256": "41856a0d50a3c5bc16b2c665adc1c2deede3bdabfe4e11c971ca22cb8e3f1a32"
+    },
+    {
+      "path": "evaluation-summary.json",
+      "bytes": 133812,
+      "sha256": "7eb9ac68043752c12cbff47ed2cdbc1f1c11e9ba82602542a1c46a3a5a3881f8"
+    },
+    {
+      "path": "experiment-runs.json",
+      "bytes": 2408439,
+      "sha256": "20a42eceec511d4bbcea84f290bc58b46d9a9a686512fc51cb42e6e9e4c9ba57"
+    },
+    {
+      "path": "index.html",
+      "bytes": 24146,
+      "sha256": "0ac8f2530cff301bb92d8ee9d696a56f90cfee29705b7962a732a8c60719f421"
+    },
+    {
+      "path": "live-run.json",
+      "bytes": 325830,
+      "sha256": "ecd7a3385f706a27cd06034926ee250fded61f6626cf09a69ec7704fb6c57b5f"
+    },
+    {
+      "path": "metrics.json",
+      "bytes": 1383,
+      "sha256": "3b830b761a715d7b36b3d7ba9a4829593e49b529cfcd2456802b7548bc75d4d0"
+    },
+    {
+      "path": "milestone-report.md",
+      "bytes": 10437,
+      "sha256": "efed84c7fdba6583db589081fe3c9eaf694f4b59fcbc357f8e9992d787dad21a"
+    },
+    {
+      "path": "milestone.json",
+      "bytes": 1905,
+      "sha256": "9c6cf8f11e6390167ae1ae0b718ea5e6a924f7afba78ef6e7e84e02117ad86d4"
+    },
+    {
+      "path": "population-pack.json",
+      "bytes": 20972,
+      "sha256": "b23aaf30c015381f7b102b71848ee97ecb64756829e7edf98c24db1bf59068d7"
+    },
+    {
+      "path": "prior-attempts.json",
+      "bytes": 2712088,
+      "sha256": "350e697f46a22b59cf0c1175979fd0a1fba3ab5bd9db1a514f7ce91d6f7c6282"
+    },
+    {
+      "path": "project-materials.md",
+      "bytes": 19435,
+      "sha256": "de8c52598b091a8262f9d291d71ba94465e4161d2e2ce3db745e9e946cd77510"
+    },
+    {
+      "path": "project-materials.pdf",
+      "bytes": 1153686,
+      "sha256": "ac8ae10dd7c3539e048ccd517db03cae36265d42361d6545e4a44e95c93f3bb0"
+    },
+    {
+      "path": "prompts.txt",
+      "bytes": 82693,
+      "sha256": "d0e5160ca6dff4ad5f84d81eecf64a066fb92460e6a5d76c5c377975a8635149"
+    },
+    {
+      "path": "sample-profiles.json",
+      "bytes": 19238,
+      "sha256": "b2f03af67be259e6191d78efe6d550d998dae26502d2142c9183968c21d809f9"
+    },
+    {
+      "path": "sample-questionnaire.json",
+      "bytes": 12420,
+      "sha256": "be5430d0f46ed0f49c14d64f844b6618cef3a6c7c78855d9f31880397aae98c3"
+    },
+    {
+      "path": "sample-run.json",
+      "bytes": 303506,
+      "sha256": "c2b33d89b6ab3408281cc15f87e0949e4d0f90346c7cbeba4ba51dad857a055c"
+    },
+    {
+      "path": "sources.json",
+      "bytes": 36171,
+      "sha256": "a17630438396f3228d17a822d58dc68acf5056197d92140d8cbfd053412f3831"
+    },
+    {
+      "path": "sources/binjiang-2023-yearbook.pdf",
+      "bytes": 1354816,
+      "sha256": "338886a362ca60640ce999f185bb120e33922dedee9bc31dbbad57a0a4088134"
+    },
+    {
+      "path": "sources/binjiang-2024-communique.pdf",
+      "bytes": 2583332,
+      "sha256": "7825d0efe321c224aaef04fa3afce1a255dfe8144d79a36651407e959c640876"
+    },
+    {
+      "path": "sources/binjiang-2025-communique.pdf",
+      "bytes": 2443591,
+      "sha256": "78f948305d953b3bef24ef4731fd043d321267401361cc54c81fd50c18b4ad11"
+    },
+    {
+      "path": "sources/binjiang-census-yearbook.pdf",
+      "bytes": 2048236,
+      "sha256": "70119b88dc3209909f237921ae9efc764c5011d7e6f6032d1d27c2a1949fb966"
+    },
+    {
+      "path": "video-script.md",
+      "bytes": 476,
+      "sha256": "f02da26985fb1c576e7dc61b34b2d493de91695a6838664d4ed28fc9cc6ad459"
+    }
+  ]
+}

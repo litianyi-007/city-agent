@@ -11,7 +11,7 @@ function files(directory: string, prefix = ''): string[] {
   return readdirSync(directory, { withFileTypes: true }).flatMap(entry => entry.isDirectory() ? files(path.join(directory, entry.name), prefix + entry.name + '/') : [prefix + entry.name]);
 }
 const published = files(source);
-const permitted = /^(index\.html|assets\/[A-Za-z0-9_-]+\.(js|css)|submission\/(index\.html|project-materials\.(md|pdf)|demo\.mp4|video-script\.md|prompts\.txt|delivery-source\.txt|[a-z-]+\.json|sources\/[a-z0-9-]+\.pdf))$/;
+const permitted = /^(index\.html|assets\/[A-Za-z0-9_-]+\.(js|css)|submission\/(index\.html|project-materials\.(md|pdf)|milestone-report\.md|demo\.mp4|video-script\.md|prompts\.txt|delivery-source\.txt|[a-z-]+\.json|sources\/[a-z0-9-]+\.pdf))$/;
 if (published.some(file => !permitted.test(file))) throw new Error('发布白名单检查失败。');
 for (const file of published.filter(file => /\.(js|json|html|txt|md)$/.test(file))) {
   const text = readFileSync(path.join(source, file), 'utf8');

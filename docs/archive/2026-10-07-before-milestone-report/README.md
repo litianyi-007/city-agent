@@ -1,7 +1,5 @@
 # City Agent
 
-[阶段里程碑汇报](docs/MILESTONE-SUBMISSION-2026-10-07.md)：封板截至2026-10-07 03:19:40（北京时间），四项申报附件及外部观测映射、记忆/wiki/dream的未实施规划齐备。冻结Tag：`submission-milestone-2026-10-07`；后续新任务从此Tag分支。申报完成不代表原产品M1/M2全部验收通过。
-
 公开问卷 Demo：**https://litianyi-007.github.io/city-agent/** · [申报材料](https://litianyi-007.github.io/city-agent/submission/index.html) · [4分钟录屏](https://litianyi-007.github.io/city-agent/submission/demo.mp4)。
 
 外网版可直接点击「查看已发布实测 · 无需Key」。已附12人15题真实问卷，以及49次居民实验的重复/价格/消融与失败记录；当前批次44/49有效，稳定性未全面通过。自备Key在页面填写，只保留本次会话，刷新后清除。GitHub Pages不托管Harness后端，真人市场效度仍未验证。[本轮补齐与剩余门限](docs/research/AUDIT-FIXES-2026-10-07.md)。
