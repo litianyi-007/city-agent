@@ -1,0 +1,398 @@
+{
+  "schemaVersion": "1.0",
+  "id": "ai-membership",
+  "title": "AI 生活服务会员问卷预检",
+  "objective": "price-benefits",
+  "decisionContext": {
+    "offering": "AI会员概念：免费版提供基础AI与5GB；标准版19元/月，完整AI与100GB；家庭版39元/月，最多5人共用500GB。",
+    "buyer": "假设考虑个人或家庭订阅的人；15+人口框不等于有购买资格的成年人。",
+    "endUser": "免费版/标准版为个人使用，家庭版最多5人；实际家庭关系和支付决定者尚未核验。",
+    "channel": "假设线上订阅渠道；没有真实渠道触达或支付数据。"
+  },
+  "population": {
+    "regionCode": "binjiang",
+    "period": "2020-11-01",
+    "unit": "person",
+    "filters": [
+      {
+        "field": "ageBand",
+        "op": "in",
+        "values": [
+          "15-59",
+          "60+"
+        ]
+      }
+    ]
+  },
+  "questionnaire": {
+    "id": "ai-membership-15",
+    "version": "1",
+    "questions": [
+      {
+        "id": "street",
+        "prompt": "在本次设定中，您居住在哪个街道？回答不会更新登记人口事实。",
+        "required": true,
+        "type": "single",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "西兴"
+          },
+          {
+            "id": "option-2",
+            "label": "长河"
+          },
+          {
+            "id": "option-3",
+            "label": "浦沿"
+          },
+          {
+            "id": "option-4",
+            "label": "其他地区"
+          },
+          {
+            "id": "option-5",
+            "label": "不确定"
+          }
+        ]
+      },
+      {
+        "id": "age-range",
+        "prompt": "在本次设定中，您的年龄范围是？",
+        "required": true,
+        "type": "single",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "14岁及以下"
+          },
+          {
+            "id": "option-2",
+            "label": "15–17岁"
+          },
+          {
+            "id": "option-3",
+            "label": "18–29岁"
+          },
+          {
+            "id": "option-4",
+            "label": "30–44岁"
+          },
+          {
+            "id": "option-5",
+            "label": "45–59岁"
+          },
+          {
+            "id": "option-6",
+            "label": "60岁及以上"
+          },
+          {
+            "id": "option-7",
+            "label": "不确定"
+          }
+        ]
+      },
+      {
+        "id": "occupation",
+        "prompt": "在本次设定中，您的职业或就业状态是？",
+        "required": true,
+        "type": "single",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "在职雇员"
+          },
+          {
+            "id": "option-2",
+            "label": "个体经营/自由职业"
+          },
+          {
+            "id": "option-3",
+            "label": "学生"
+          },
+          {
+            "id": "option-4",
+            "label": "退休"
+          },
+          {
+            "id": "option-5",
+            "label": "暂未就业"
+          },
+          {
+            "id": "option-6",
+            "label": "其他或不确定"
+          }
+        ]
+      },
+      {
+        "id": "household",
+        "prompt": "在本次设定中，您的同住家庭情况是？",
+        "required": true,
+        "type": "single",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "独居"
+          },
+          {
+            "id": "option-2",
+            "label": "与伴侣同住"
+          },
+          {
+            "id": "option-3",
+            "label": "与孩子同住"
+          },
+          {
+            "id": "option-4",
+            "label": "多代同住"
+          },
+          {
+            "id": "option-5",
+            "label": "其他或不确定"
+          }
+        ]
+      },
+      {
+        "id": "ai-experience",
+        "prompt": "在本次设定中，您是否使用过AI产品？",
+        "required": true,
+        "type": "single",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "经常使用"
+          },
+          {
+            "id": "option-2",
+            "label": "偶尔使用"
+          },
+          {
+            "id": "option-3",
+            "label": "试过但已不用"
+          },
+          {
+            "id": "option-4",
+            "label": "从未使用"
+          },
+          {
+            "id": "option-5",
+            "label": "不确定"
+          }
+        ]
+      },
+      {
+        "id": "ai-uses",
+        "prompt": "在本次设定中，您通常使用AI做哪些事情？如果没有使用过或没有明确用途，请如实说明，不必编造用途。",
+        "required": true,
+        "type": "text",
+        "maxLength": 1000
+      },
+      {
+        "id": "cloud-experience",
+        "prompt": "在本次设定中，您是否使用过云存储或照片备份服务？",
+        "required": true,
+        "type": "single",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "经常使用"
+          },
+          {
+            "id": "option-2",
+            "label": "偶尔使用"
+          },
+          {
+            "id": "option-3",
+            "label": "试过但已不用"
+          },
+          {
+            "id": "option-4",
+            "label": "从未使用"
+          },
+          {
+            "id": "option-5",
+            "label": "不确定"
+          }
+        ]
+      },
+      {
+        "id": "top-features",
+        "prompt": "对AI会员，您最看重哪些功能？最多选3项，选项不代表已具备相关偏好证据。",
+        "required": true,
+        "type": "multiple",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "AI能力与效果"
+          },
+          {
+            "id": "option-2",
+            "label": "存储容量"
+          },
+          {
+            "id": "option-3",
+            "label": "照片备份"
+          },
+          {
+            "id": "option-4",
+            "label": "家庭共享"
+          },
+          {
+            "id": "option-5",
+            "label": "隐私与数据控制"
+          },
+          {
+            "id": "option-6",
+            "label": "价格"
+          },
+          {
+            "id": "option-7",
+            "label": "使用方便"
+          }
+        ],
+        "minSelections": 1,
+        "maxSelections": 3
+      },
+      {
+        "id": "privacy",
+        "prompt": "在考虑此类服务时，您有多关注隐私和数据使用？",
+        "required": true,
+        "type": "scale",
+        "min": 1,
+        "max": 5,
+        "minLabel": "完全不关注",
+        "maxLabel": "非常关注"
+      },
+      {
+        "id": "version-choice",
+        "prompt": "假设以下套餐可用，您会考虑哪一种？",
+        "required": true,
+        "type": "single",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "免费版：基础AI + 5GB"
+          },
+          {
+            "id": "option-2",
+            "label": "标准版：19元/月，完整AI + 100GB"
+          },
+          {
+            "id": "option-3",
+            "label": "家庭版：39元/月，最多5人 + 500GB"
+          },
+          {
+            "id": "option-4",
+            "label": "都不选择"
+          },
+          {
+            "id": "option-5",
+            "label": "不确定"
+          }
+        ]
+      },
+      {
+        "id": "max-monthly-payment",
+        "prompt": "对于符合您需求的AI会员，您最高愿意考虑每月支付多少元？不愿付费可填0；这是合成意向而非真实成交价。",
+        "required": true,
+        "type": "number",
+        "min": 0,
+        "max": 1000,
+        "unit": "元/月"
+      },
+      {
+        "id": "purchase-concerns",
+        "prompt": "您购买或使用该会员的主要顾虑是什么？如不适用，请说明。",
+        "required": true,
+        "type": "text",
+        "maxLength": 1000
+      },
+      {
+        "id": "standard-price-change",
+        "prompt": "仅将标准版从19元/月改为29元/月，其他套餐与权益不变，您会如何调整第10题的选择？",
+        "required": true,
+        "type": "single",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "保持原选择"
+          },
+          {
+            "id": "option-2",
+            "label": "改选免费版"
+          },
+          {
+            "id": "option-3",
+            "label": "改选标准版29元/月"
+          },
+          {
+            "id": "option-4",
+            "label": "改选家庭版39元/月"
+          },
+          {
+            "id": "option-5",
+            "label": "改为都不选择"
+          },
+          {
+            "id": "option-6",
+            "label": "不确定"
+          }
+        ]
+      },
+      {
+        "id": "family-antifraud",
+        "prompt": "回到第10题的原始价格与套餐，只在家庭版增加老人防诈功能，您会如何调整第10题的选择？",
+        "required": true,
+        "type": "single",
+        "options": [
+          {
+            "id": "option-1",
+            "label": "保持原选择"
+          },
+          {
+            "id": "option-2",
+            "label": "改选免费版"
+          },
+          {
+            "id": "option-3",
+            "label": "改选标准版19元/月"
+          },
+          {
+            "id": "option-4",
+            "label": "改选家庭版39元/月"
+          },
+          {
+            "id": "option-5",
+            "label": "改为都不选择"
+          },
+          {
+            "id": "option-6",
+            "label": "不确定"
+          }
+        ]
+      },
+      {
+        "id": "trial-intent-reason",
+        "prompt": "如果可免费试用一个月，您是否愿意尝试，为什么？也可回答不确定或不适用。",
+        "required": true,
+        "type": "text",
+        "maxLength": 1000
+      }
+    ]
+  },
+  "declarations": [
+    {
+      "id": "membership-assumption",
+      "claim": "三套餐和15题为概念研究设定；回答的职业、家庭、年龄细分等不能当人口事实。15+框包含未成年人。问卷内条件追问不等于已经执行9/19/29/49独立价格实验、单属性反事实、跨街道、措辞或重复作答验证。",
+      "provenance": "assumption",
+      "sourceIds": [],
+      "observationIds": []
+    }
+  ],
+  "requestedOutputs": [
+    "questionnaire-review",
+    "synthetic-analysis",
+    "price-comparison",
+    "group-comparison"
+  ]
+}
