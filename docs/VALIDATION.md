@@ -17,6 +17,8 @@
 - `scripts/check-pages-public.ts`覆盖本次全部30个资产，包括真实问卷、13组当前实验、历史负结果、六次交付失败、PDF、MP4与四份官方PDF。
 - `CITY_PAGES_URL=https://litianyi-007.github.io/city-agent/ npx tsx scripts/verify-pages.ts`通过实际Chromium公网实操：12人15题规则夹具、已发布12人实测读取、导航/刷新保留历史、v2证据导出、模型协议Mock、401停止后续请求、Key不落浏览器存储/导出且刷新清除、390px无横向溢出，无页面异常。该检查没有新增真实模型请求，不能证明供应商公网CORS已付费验证。
 - 本机后端在确认无活跃任务后重启，最新契约校验生效，原加密配置与历史不变。源码另以隔离临时克隆、公开文件白名单、实际Key字节扫描进行普通main分支发布；不将用户脏工作区整体暂存，不上传数据库、密钥文件或原始内部文档。
+- 干净克隆的默认shell曾选中Node20，npm给出engine告警；切换已声明的Node22.22.3后安装/构建通过。新增`.nvmrc`与README提示，不把错误运行时的安装当作支持证明。
+- 安装阶段另发现锁文件5项告警（2 critical、3 high），已更新上游兼容范围内的MCP、sharp与source-map-js补丁，并为concurrently固定的shell-quote旧依赖增加`1.12.0`覆盖。DeepSeek SDK仍锁定`0.1.5-rc.3`、未改源码。`npm audit --audit-level=low`当前0项；此为已知依赖告警检查，不等于完整安全审计或现实效度验证。
 
 日期：2026-09-23；环境：macOS、Node.js 22.22.3、DeepSeek Harness SDK 0.1.5-rc.3。
 

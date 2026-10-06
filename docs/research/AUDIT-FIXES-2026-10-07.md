@@ -16,6 +16,8 @@
 
 ## 当前49次居民实验（不与早期尝试混账）
 
+发布时的依赖复核另发现2 critical、3 high告警，现已更新兼容补丁且npm audit归零，Harness SDK仍为0.1.5-rc.3、未改其源码。具体上游依据：[MCP OAuth凭证绑定](https://github.com/advisories/GHSA-6qxp-vccf-f47h)、[sharp/librsvg](https://github.com/advisories/GHSA-wq5f-xc86-pv6w)、[shell-quote](https://github.com/advisories/GHSA-pqg4-j6r4-53mv)、[source-map-js](https://github.com/advisories/GHSA-68fv-2mgg-jv7q)。这些新增补丁只做软件回归，不将旧实测改记为补丁版本实测。
+
 实验ID `4942f560-9a14-420e-8352-fa091961ec19`。模型 `deepseek-flash`，官方接口，3000输出Token/90秒/并发1/重试0；画像seed42，供应商seed与temperature未设置。无答卷缓存；供应商前缀缓存不是复用答案。
 
 | 实验 | 计划/有效 | 结论边界 |

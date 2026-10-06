@@ -10,7 +10,7 @@ const root = path.resolve('.'); const remote = 'https://github.com/litianyi-007/
 const destination = mkdtempSync(path.join(tmpdir(), 'city-agent-source-publish-'));
 const run = (program: string, args: string[]) => execFileSync(program, args, { cwd: destination, encoding: 'utf8', stdio: ['pipe', 'pipe', 'pipe'] }).trim();
 run('git', ['clone', '--single-branch', '--branch', 'main', remote, destination]);
-const roots = ['README.md', '.gitignore', 'package.json', 'package-lock.json', 'index.html', 'tsconfig.json', 'vite.config.ts', 'playwright.config.ts', 'src', 'server', 'shared', 'tests', 'scripts', 'data', 'public', 'docs'];
+const roots = ['README.md', '.gitignore', '.nvmrc', 'package.json', 'package-lock.json', 'index.html', 'tsconfig.json', 'vite.config.ts', 'playwright.config.ts', 'src', 'server', 'shared', 'tests', 'scripts', 'data', 'public', 'docs'];
 function files(relative: string): string[] {
   if (relative.startsWith('docs/reviews/') || relative.startsWith('docs/archive/')) return [];
   const full = path.join(root, relative);

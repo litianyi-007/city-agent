@@ -12,7 +12,7 @@
 
 ## 启动
 
-Node.js 22.19+（已验证 22.22.3），首次安装：
+Node.js 22.19+（已验证 22.22.3），不要使用Node 20；使用nvm时先执行`nvm install && nvm use`读取`.nvmrc`。首次安装：
 
 ```bash
 npm ci
