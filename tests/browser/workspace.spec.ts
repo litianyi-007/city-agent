@@ -1,0 +1,65 @@
+import { test, expect } from '@playwright/test';
+
+test('configure, clone, deliver and reload a complete demo from the user interface', async ({ page, request }) => {
+  const errors: string[] = [];
+  page.on('pageerror', error => errors.push(error.message));
+  await page.goto('/');
+  await expect(page.getByRole('heading', { name: '一个任务，一支自主团队。' })).toBeVisible();
+  await expect(page.getByRole('button', { name: '启动任务' })).toBeEnabled();
+
+  await page.getByRole('button', { name: /智能体团队/ }).click();
+  await expect(page.locator('.agent-card')).toHaveCount(4);
+  await page.getByRole('button', { name: '复制 产品经理', exact: true }).click();
+  await expect(page.locator('.agent-card')).toHaveCount(5);
+  const cloned = page.locator('.agent-card').last();
+  await cloned.getByRole('button', { name: '编辑配置' }).click();
+  const dialog = page.getByRole('dialog');
+  await dialog.getByLabel('名称', { exact: true }).fill('研究员备用模型');
+  await dialog.getByRole('combobox', { name: '角色', exact: true }).selectOption('researcher');
+  await dialog.getByRole('combobox', { name: 'Provider', exact: true }).selectOption('openai-compatible');
+  await dialog.getByLabel('Base URL', { exact: true }).fill('http://127.0.0.1:39999/v1');
+  await dialog.getByLabel('Model ID', { exact: true }).fill('integration-model');
+  await dialog.getByLabel('API Key', { exact: true }).fill('local-ui-test-not-a-real-key');
+  await dialog.getByRole('button', { name: '保存配置' }).click();
+  await expect(dialog).not.toBeVisible();
+  await expect(page.locator('.agent-card').last()).toContainText('integration-model');
+  const saved = await (await request.get('/api/agents')).json();
+  expect(JSON.stringify(saved)).not.toContain('local-ui-test-not-a-real-key');
+  expect(saved.find((agent: { name: string }) => agent.name === '研究员备用模型').hasApiKey).toBe(true);
+
+  await page.reload();
+  await page.getByRole('button', { name: /智能体团队/ }).click();
+  await expect(page.locator('.agent-card')).toHaveCount(5);
+  await expect(page.locator('.agent-card').last()).toContainText('研究员备用模型');
+  await page.getByRole('button', { name: /城市与样本/ }).click();
+  await expect(page.locator('.city-number')).toContainText('503,859');
+  await expect(page.locator('.street-panel .street')).toHaveCount(3);
+
+  await page.getByRole('button', { name: /任务工作台/ }).click();
+  await page.getByRole('button', { name: '真实模型', exact: true }).click();
+  await expect(page.getByRole('button', { name: '启动任务' })).toBeDisabled();
+  await expect(page.getByText('请先为四个已选智能体填写 API Key。')).toBeVisible();
+  await page.getByRole('button', { name: '流程演示', exact: true }).click();
+  await page.getByRole('button', { name: '启动任务' }).click();
+  await expect(page.locator('.run-header .status-pill')).toHaveText('已完成', { timeout: 40_000 });
+  await page.getByRole('tab', { name: /交付产物/ }).click();
+  await expect(page.getByRole('heading', { name: '✓ 验收通过' })).toBeVisible();
+  await expect(page.locator('.artifact-list a').filter({ hasText: 'manifest.json' })).toBeVisible();
+  const frame = page.frameLocator('iframe[title="交付应用预览"]');
+  await expect(frame.locator('#population')).toHaveText('503,859');
+  await frame.locator('#price').fill('0'); await frame.locator('#simulate').click();
+  const before = await frame.locator('#acceptance').textContent();
+  await frame.locator('#price').fill('999'); await frame.locator('#simulate').click();
+  await expect(frame.locator('#acceptance')).not.toHaveText(before!);
+  await expect(frame.locator('#acceptance')).toHaveText('0.0%');
+  await page.getByRole('tab', { name: '调研结果' }).click();
+  await expect(page.locator('.research-metrics')).toContainText('120');
+  await expect(page.locator('.research-bars')).toContainText('西兴街道');
+  await page.reload();
+  await expect(page.locator('.run-header .status-pill')).toHaveText('已完成');
+  await page.screenshot({ path: 'test-results/workspace-desktop.png', fullPage: true });
+  await page.setViewportSize({ width: 390, height: 844 });
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+  await page.screenshot({ path: 'test-results/workspace-mobile.png', fullPage: true });
+  expect(errors).toEqual([]);
+});

@@ -1,7 +1,5 @@
 # Demo 实现架构
 
-> 2026-10-07增量：`shared/survey-runner.ts`统一浏览器/本机问卷执行，`server/research/surveys.ts`通过Harness，SQLite/IndexedDB存冻结历史；`researchSurveyId`把完成问卷接入四角色并添加不可删的ID、有效分母、合成标记、分组交互Gate。完整记录见[审查补齐](research/AUDIT-FIXES-2026-10-07.md)。旧规则分支仍独立保留，不进入新问卷交付上下文。
-
 按 2026-09-23 用户指示，将执行 Agent 与模拟居民分离。[旧架构与 ADR](archive/2026-09-23-before-demo/ARCHITECTURE.md)留底；旧 C4/C9/C10 和 ADR-004 在当前 demo 中由下文覆盖。
 
 ## 1. 数据流

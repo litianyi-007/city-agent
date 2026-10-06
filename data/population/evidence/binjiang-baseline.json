@@ -1,0 +1,200 @@
+{
+  "schemaVersion": "1.0.0",
+  "evidenceVersion": "binjiang-census-2020-verified-2026-09-23",
+  "source": {
+    "id": "binjiang-statistical-yearbook-2020",
+    "legacyTableSourceIds": ["binjiang-census-2020-street-sex", "binjiang-census-2020-street-age"],
+    "title": "杭州高新区（滨江）统计年鉴 - 2020",
+    "landingTitle": "2020年度统计年鉴",
+    "originalAttachmentName": "2020年度《统计年鉴》（外版）1130.pdf",
+    "editionYear": 2020,
+    "publisher": "杭州高新技术产业开发区（滨江）统计局",
+    "landingPublisher": "区统计局",
+    "publishedAt": "2021-11-30T14:17:00+08:00",
+    "publishedAtPrecision": "minute",
+    "retrievedAt": "2026-09-23",
+    "retrievalTimezone": "Asia/Shanghai",
+    "url": "https://zjjcmspublic.oss-cn-hangzhou-zwynet-d01-a.internet.cloud.zj.gov.cn/jcms_files/jcms1/web2945/site/attach/0/87ab83d95bd24748b0747c7ab72bf6ce.pdf",
+    "landingUrl": "https://www.hhtz.gov.cn/art/2021/11/30/art_1229574517_3974310.html",
+    "landingAttachmentHref": "/api-gateway/jpaas-web-server/front/document/file-download?fileUrl=/cms_files/jcms1/web2945/site/attach/0/87ab83d95bd24748b0747c7ab72bf6ce.pdf",
+    "governmentInformationId": "MB1H04121/2021-12487",
+    "localPath": "data/population/sources/binjiang-census-yearbook.pdf",
+    "sha256": "70119b88dc3209909f237921ae9efc764c5011d7e6f6032d1d27c2a1949fb966",
+    "bytes": 2048236,
+    "pages": 140,
+    "landingSnapshot": {
+      "localPath": "data/population/sources/binjiang-census-yearbook-landing.html",
+      "sha256": "3c3635fcdbe199fb1c8e6c5311949cc28d5f84d03f18d5ca4736e568d7564ab1",
+      "bytes": 15092
+    },
+    "period": "2020-11-01T00:00:00+08:00",
+    "periodEvidence": "同册《杭州市滨江区2020年第七次人口普查主要数据公报》，印刷131页，PDF第139页",
+    "populationBasis": "第七次全国人口普查常住人口",
+    "geography": "杭州市滨江区，西兴街道、长河街道、浦沿街道",
+    "boundaryVintage": "2020年第七次人口普查街道口径；未取得边界几何文件",
+    "provenance": "fact",
+    "access": "政府主动公开，面向社会",
+    "metadataNotes": [
+      "PDF封面和编者说明均为2020年版；2021年是网页发布日期，不能用PDF修改时间替代出版时间。",
+      "政府网页HTML中的附件路径与已下载PDF文件名完全相同；搜索引擎返回的非政府镜像未作为证据。",
+      "SHA256证明本次保存文件的字节一致性，不能单独证明统计结论或个人记录真实。"
+    ]
+  },
+  "tables": [
+    {
+      "id": "binjiang-census-2020-street-sex",
+      "table": "1-2",
+      "title": "按街道分的常住人口状况六七普对比",
+      "page": 109,
+      "pdfPage": 117,
+      "pdfPageIndexing": "1-based",
+      "period": "2020-11-01",
+      "populationBasis": "常住人口，全龄",
+      "unit": "人；性别比以女=100",
+      "sourceId": "binjiang-statistical-yearbook-2020",
+      "visualEvidencePath": "data/population/evidence/binjiang-census-table-1-2.png",
+      "columns": ["geographyId", "name", "population", "female", "sexRatioMalePer100Female"],
+      "rows": [
+        { "geographyId": "binjiang", "name": "合计", "population": 503859, "female": 243523, "sexRatioMalePer100Female": 106.90 },
+        { "geographyId": "xixing", "name": "西兴街道", "population": 143318, "female": 68780, "sexRatioMalePer100Female": 108.37 },
+        { "geographyId": "changhe", "name": "长河街道", "population": 168276, "female": 81125, "sexRatioMalePer100Female": 107.43 },
+        { "geographyId": "puyan", "name": "浦沿街道", "population": 192265, "female": 93618, "sexRatioMalePer100Female": 105.37 }
+      ],
+      "footnotes": [],
+      "extractionNotes": ["仅录入第七次人口普查列。", "街道男性人数可由population-female算术派生；原表没有独立男性人数列。"]
+    },
+    {
+      "id": "binjiang-census-2020-street-age",
+      "table": "1-5",
+      "title": "七普按年龄段分的各街道人口",
+      "page": 112,
+      "pdfPage": 120,
+      "pdfPageIndexing": "1-based",
+      "period": "2020-11-01",
+      "populationBasis": "常住人口，全龄",
+      "unit": "人",
+      "sourceId": "binjiang-statistical-yearbook-2020",
+      "visualEvidencePath": "data/population/evidence/binjiang-census-table-1-5.png",
+      "ageOrder": ["0-4", "5-14", "15-59", "60+"],
+      "rows": [
+        { "geographyId": "binjiang", "name": "合计", "ages": [28000, 41032, 380393, 54434], "age65Plus": 34973 },
+        { "geographyId": "xixing", "name": "西兴街道", "ages": [8840, 11401, 108461, 14616], "age65Plus": 9147 },
+        { "geographyId": "changhe", "name": "长河街道", "ages": [9192, 13969, 125102, 20013], "age65Plus": 13095 },
+        { "geographyId": "puyan", "name": "浦沿街道", "ages": [9968, 15662, 146830, 19805], "age65Plus": 12731 }
+      ],
+      "footnotes": [],
+      "extractionNotes": [
+        "65岁及以上为60岁及以上的嵌套子项，不能与4个互斥年龄组再次相加。",
+        "15-59岁不能解释为18岁以上成年人；没有按单岁或18岁界限的数据。",
+        "年龄表不含性别列，不能当作街道×年龄×性别联合分布。"
+      ]
+    },
+    {
+      "id": "binjiang-census-2020-street-family-households",
+      "table": "1-3",
+      "title": "按街道分的家庭户状况六七普对比",
+      "page": 110,
+      "pdfPage": 118,
+      "pdfPageIndexing": "1-based",
+      "period": "2020-11-01",
+      "populationBasis": "常住人口中的家庭户；不含集体户",
+      "unit": "户数：户；人数与女：人；平均户规模：人/户",
+      "printedUnit": "人",
+      "sourceId": "binjiang-statistical-yearbook-2020",
+      "rows": [
+        { "geographyId": "binjiang", "name": "合计", "households": 165654, "population": 395911, "female": 198291, "meanHouseholdSize": 2.39 },
+        { "geographyId": "xixing", "name": "西兴街道", "households": 55791, "population": 123394, "female": 61281, "meanHouseholdSize": 2.21 },
+        { "geographyId": "changhe", "name": "长河街道", "households": 55428, "population": 140395, "female": 70034, "meanHouseholdSize": 2.53 },
+        { "geographyId": "puyan", "name": "浦沿街道", "households": 54435, "population": 132122, "female": 66976, "meanHouseholdSize": 2.43 }
+      ],
+      "footnotes": [],
+      "extractionNotes": [
+        "仅录入第七次人口普查列。表右上统一印刷单位为人，但户数列按户理解，平均户规模按人/户理解。",
+        "家庭户不等于人口总户数；家庭户平均规模不能用于填满全部常住人口。",
+        "没有1人户、2人户等户规模分布或亲属关系联合表，不能据平均数还原真实家庭。"
+      ]
+    },
+    {
+      "id": "binjiang-census-2020-street-education",
+      "table": "1-7",
+      "title": "七普按受教育程度分的各街道人口",
+      "page": 114,
+      "pdfPage": 122,
+      "pdfPageIndexing": "1-based",
+      "period": "2020-11-01",
+      "populationBasis": "3岁及以上常住人口",
+      "unit": "人",
+      "sourceId": "binjiang-statistical-yearbook-2020",
+      "educationOrder": ["未上过学", "学前教育", "小学", "初中", "高中", "大学专科", "大学本科", "研究生"],
+      "rows": [
+        { "geographyId": "binjiang", "name": "合计", "population": 489131, "education": [9562, 18303, 69227, 71679, 57775, 91920, 137064, 33601] },
+        { "geographyId": "xixing", "name": "西兴街道", "population": 138510, "education": [2991, 5461, 18325, 20643, 15213, 22874, 41542, 11461] },
+        { "geographyId": "changhe", "name": "长河街道", "population": 163418, "education": [1998, 6081, 27596, 25844, 22108, 24978, 44119, 10694] },
+        { "geographyId": "puyan", "name": "浦沿街道", "population": 187203, "education": [4573, 6761, 23306, 25192, 20454, 44068, 51403, 11446] }
+      ],
+      "footnotes": ["受教育程度仅统计3岁及以上常住人口。"],
+      "extractionNotes": [
+        "公报印刷132页说明受教育程度包括毕业生、肄业生和在校生；不等价于已获学历证书人数。",
+        "此表为街道×受教育程度边际，没有年龄×性别×教育联合分布。",
+        "若报告3岁及以上人群构成，分母为489131；若复现公报每10万人拥有大学文化程度人数，分母按公报为全龄503859。必须显示分母，不能混称。"
+      ]
+    }
+  ],
+  "bulletin": {
+    "title": "杭州市滨江区2020年第七次人口普查主要数据公报",
+    "sourceId": "binjiang-statistical-yearbook-2020",
+    "pages": [131, 132],
+    "pdfPages": [139, 140],
+    "population": 503859,
+    "male": 260336,
+    "female": 243523,
+    "familyHouseholds": 165654,
+    "familyPopulation": 395911,
+    "collectiveHouseholds": 33005,
+    "collectivePopulation": 107948,
+    "collegeOrAbovePopulation": 262585,
+    "illiterateAge15PlusPopulation": 6440,
+    "footnotes": [
+      "本公报中数据均为初步汇总数。",
+      "常住人口包括：居住在本乡镇街道且户口在本乡镇街道或户口待定的人；居住在本乡镇街道且离开户口登记地所在的乡镇街道半年以上的人；户口在本乡镇街道且外出不满半年或在境外工作学习的人。",
+      "家庭户是指以家庭成员关系为主、居住一处共同生活的人组成的户。",
+      "文盲率是指常住人口中15岁及以上不识字人口所占比例。",
+      "部分分项数据之和不等于总量数据是由于数值修约误差所致，未作机械调整。"
+    ]
+  },
+  "verification": {
+    "verifiedAt": "2026-09-23",
+    "methods": ["官方发布网页与附件文件名核对", "下载原件并计算SHA256和字节数", "Poppler文本提取", "PDF关键页面渲染并人工式视觉逐格核对", "行列汇总算术校验"],
+    "visualCheckedPdfPages": [117, 118, 119, 120, 121, 122, 139, 140],
+    "arithmeticChecks": [
+      "三街道常住人口之和=503859；三街道女性之和=243523。",
+      "四个互斥年龄组按街道加总均等于各街道常住人口；各年龄列之和均等于全区相应年龄组。",
+      "家庭户三街道户数之和=165654、人口之和=395911、女性之和=198291。",
+      "教育每行八类之和等于该行3岁及以上人口；三街道教育类别各列之和等于全区。",
+      "家庭户人口395911+集体户人口107948=常住人口503859。",
+      "大学专科91920+大学本科137064+研究生33601=大学文化程度262585，与同册公报相符。"
+    ],
+    "existingImplementationAudit": {
+      "file": "server/city.ts",
+      "auditScope": "本次修改前常量人口、三街道女性、四组年龄",
+      "numericErrorsFound": [],
+      "missingProvenance": ["2020年鉴版本", "2021-11-30发布日", "政府发布页", "原始文件本地留存与SHA256", "人口口径公报脚注"],
+      "modelLimitations": ["现有街道内年龄与性别独立性是假设，不是已观测联合分布。", "现有规则商品偏好没有真人校准，人口总量准确不能推导购买意愿可信。"]
+    },
+    "jointTableSearch": {
+      "scope": "同册七人普主要数据章节目录、表1-1至1-8、同册公报",
+      "streetAgeSexJointTableFound": false,
+      "table1_6": "七普按民族分的各街道人口；不是年龄×性别联合表",
+      "table1_4": "七普按户口状况分的各街道人口；不等于户籍人口总数",
+      "table1_8": "七普按街道分的来自区外、市外和省外人口；三列具有嵌套关系，不能相加",
+      "claimLimit": "仅表示在此次检查的该年鉴章节中未找到，不能据此断言所有官方资料都不存在。"
+    },
+    "limitations": [
+      "记录的是2020-11-01普查结构，不是2026年实时人口。",
+      "只核验至街道人口分布，没有社区、楼栋、网格或住户微观记录，没有可用于绘图的行政区边界几何。",
+      "家庭、教育和年龄性别分表可作为不同口径的约束，跨表联合必须显式建模并标注推断。",
+      "本次网页和PDF内容可追溯不代表普查没有调查、覆盖或汇总误差；公报自注为初步汇总数。",
+      "PDF档案元数据CreationDate为2021-11-29、ModDate为2025-04-28；不以此推断数据更新到2025年。"
+    ]
+  }
+}

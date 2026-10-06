@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI生活服务会员问卷 · 离线研究结果展示页（合成答卷）</title>
+<style>
+:root{font-family:Arial,Helvetica,sans-serif;color:#1f2937;background:#f5f7fb;line-height:1.5}
+body{margin:0}
+header,main{padding:16px;max-width:1100px;margin:0 auto}
+.card{background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:14px;margin:12px 0}
+.meta{display:flex;flex-wrap:wrap;gap:12px;background:#eef2ff;border:1px solid #c7d2fe;padding:10px;border-radius:8px}
+.meta span{background:#fff;border:1px solid #e5e7eb;padding:6px 8px;border-radius:6px}
+button{background:#4f46e5;color:#fff;border:none;border-radius:8px;padding:9px 14px;cursor:pointer}
+.denominator{color:#6b7280;font-size:13px}
+.question{margin:10px 0;padding:10px;border:1px solid #e5e7eb;border-radius:8px;background:#fafafa}
+.choice{display:flex;justify-content:space-between;padding:4px 6px;border-radius:6px;font-size:14px}
+.count{font-weight:bold;color:#4f46e5}
+.bar{height:6px;background:#e5e7eb;border-radius:4px;margin-top:3px}
+.bar span{display:block;height:6px;background:#6366f1;border-radius:4px}
+.notice{background:#fef3c7;border:1px solid #fcd34d;padding:10px;border-radius:8px}
+.limitations li{margin:5px 0}
+</style>
+</head>
+<body>
+<header>
+<h1>AI生活服务会员问卷 · 离线研究结果展示页（合成答卷）</h1>
+<div class="meta">
+<span>运行ID：<span id="run-id">0a3adcb9-6b85-40ae-b6b7-1a8f88ef8705</span></span>
+<span>有效数：<span id="valid-count">12</span></span>
+<span>计划数：<span id="plan-count">12</span></span>
+<span>时点：<span id="period">2020-11-01</span></span>
+<span>区域：<span id="region">滨江区</span></span>
+</div>
+<div id="simulation-notice" class="notice">合成 · 非真人。本页所有统计仅描述12份合成答卷，不代表滨江真人市场偏好。</div>
+</header>
+<main>
+<div class="card">
+<h2>分组摘要</h2>
+<button id="next-group" type="button">下一分组</button>
+<div id="group-summary"><span class="group-name">全部</span>（有效数 <span class="group-valid">12</span>）</div>
+</div>
+<div class="card" id="overall-stats"></div>
+<div class="card" id="group-stats"></div>
+<div class="card">
+<h2>来源时点与人口口径</h2>
+<p>滨江区2020年第七次人口普查：常住人口503859，15岁及以上434827。15–59岁380393，60岁及以上54434。15+框包含15–17岁未成年人，不等同于已核验成年购买资格人群。</p>
+</div>
+<div class="card">
+<h2>研究限制</h2>
+<ul id="limitations">
+<li>不代表滨江真人市场偏好。</li>
+<li>覆盖抽样无人口权重；街道每组4份为预设轮转，样本量小，不能推断街道间真实差异。</li>
+<li>15+人口框包含未成年人；年龄、职业、家庭与开放题为情景假设。</li>
+<li>价格与权益对比为同一答卷内的条件追问交叉表，不套用价格响应公式，不推断因果。</li>
+<li>未生成新答卷，未使用价格响应或选择模型公式。</li>
+</ul>
+</div>
+</main>
+<script>
+(function(){
+'use strict';
+var QUESTIONS=[
+{id:'street',prompt:'在本次设定中，您居住在哪个街道？回答不会更新登记人口事实。',type:'single',denominator:12,missing:0,choices:[{id:'option-1',label:'西兴',count:4},{id:'option-2',label:'长河',count:4},{id:'option-3',label:'浦沿',count:4},{id:'option-4',label:'其他地区',count:0},{id:'option-5',label:'不确定',count:0}]},
+{id:'age-range',prompt:'在本次设定中，您的年龄范围是？',type:'single',denominator:12,missing:0,choices:[{id:'option-1',label:'14岁及以下',count:0},{id:'option-2',label:'15–17岁',count:0},{id:'option-3',label:'18–29岁',count:1},{id:'option-4',label:'30–44岁',count:1},{id:'option-5',label:'45–59岁',count:4},{id:'option-6',label:'60岁及以上',count:6},{id:'option-7',label:'不确定',count:0}]},
+{id:'occupation',prompt:'在本次设定中，您的职业或就业状态是？',type:'single',denominator:12,missing:0,choices:[{id:'option-1',label:'在职雇员',count:2},{id:'option-2',label:'个体经营/自由职业',count:0},{id:'option-3',label:'学生',count:1},{id:'option-4',label:'退休',count:6},{id:'option-5',label:'暂未就业',count:0},{id:'option-6',label:'其他或不确定',count:3}]},
+{id:'household',prompt:'在本次设定中，您的同住家庭情况是？',type:'single',denominator:12,missing:0,choices:[{id:'option-1',label:'独居',count:0},{id:'option-2',label:'与伴侣同住',count:1},{id:'option-3',label:'与孩子同住',count:2},{id:'option-4',label:'多代同住',count:0},{id:'option-5',label:'其他或不确定',count:9}]},
+{id:'ai-experience',prompt:'在本次设定中，您是否使用过AI产品？',type:'single',denominator:12,missing:0,choices:[{id:'option-1',label:'经常使用',count:0},{id:'option-2',label:'偶尔使用',count:5},{id:'option-3',label:'试过但已不用',count:0},{id:'option-4',label:'从未使用',count:5},{id:'option-5',label:'不确定',count:2}]},
+{id:'ai-uses',prompt:'在本次设定中，您通常使用AI做哪些事情？如果没有使用过或没有明确用途，请如实说明，不必编造用途。',type:'text',denominator:12,missing:0},
+{id:'cloud-experience',prompt:'在本次设定中，您是否使用过云存储或照片备份服务？',type:'single',denominator:12,missing:0,choices:[{id:'option-1',label:'经常使用',count:0},{id:'option-2',label:'偶尔使用',count:6},{id:'option-3',label:'试过但已不用',count:1},{id:'option-4',label:'从未使用',count:3},{id:'option-5',label:'不确定',count:2}]},
+{id:'top-features',prompt:'对AI会员，您最看重哪些功能？最多选3项，选项不代表已具备相关偏好证据。',type:'multiple',denominator:12,missing:0,choices:[{id:'option-1',label:'AI能力与效果',count:8},{id:'option-2',label:'存储容量',count:1},{id:'option-3',label:'照片备份',count:0},{id:'option-4',label:'家庭共享',count:0},{id:'option-5',label:'隐私与数据控制',count:9},{id:'option-6',label:'价格',count:10},{id:'option-7',label:'使用方便',count:8}]},
+{id:'privacy',prompt:'在考虑此类服务时，您有多关注隐私和数据使用？',type:'scale',denominator:12,missing:0,mean:4.33,median:4,unit:'分'},
+{id:'version-choice',prompt:'假设以下套餐可用，您会考虑哪一种？',type:'single',denominator:12,missing:0,choices:[{id:'option-1',label:'免费版：基础AI + 5GB',count:5},{id:'option-2',label:'标准版：19元/月，完整AI + 100GB',count:3},{id:'option-3',label:'家庭版：39元/月，最多5人 + 500GB',count:0},{id:'option-4',label:'都不选择',count:1},{id:'option-5',label:'不确定',count:3}]},
+{id:'max-monthly-payment',prompt:'对于符合您需求的AI会员，您最高愿意考虑每月支付多少元？不愿付费可填0；这是合成意向而非真实成交价。',type:'number',denominator:12,missing:0,mean:5.67,median:0,unit:'元/月'},
+{id:'purchase-concerns',prompt:'您购买或使用该会员的主要顾虑是什么？如不适用，请说明。',type:'text',denominator:12,missing:0},
+{id:'standard-price-change',prompt:'仅将标准版从19元/月改为29元/月，其他套餐与权益不变，您会如何调整第10题的选择？',type:'single',denominator:12,missing:0,choices:[{id:'option-1',label:'保持原选择',count:5},{id:'option-2',label:'改选免费版',count:0},{id:'option-3',label:'改选标准版29元/月',count:0},{id:'option-4',label:'改选家庭版39元/月',count:0},{id:'option-5',label:'改为都不选择',count:2},{id:'option-6',label:'不确定',count:5}]},
+{id:'family-antifraud',prompt:'回到第10题的原始价格与套餐，只在家庭版增加老人防诈功能，您会如何调整第10题的选择？',type:'single',denominator:12,missing:0,choices:[{id:'option-1',label:'保持原选择',count:7},{id:'option-2',label:'改选免费版',count:0},{id:'option-3',label:'改选标准版19元/月',count:1},{id:'option-4',label:'改选家庭版39元/月',count:0},{id:'option-5',label:'改为都不选择',count:0},{id:'option-6',label:'不确定',count:4}]},
+{id:'trial-intent-reason',prompt:'如果可免费试用一个月，您是否愿意尝试，为什么？也可回答不确定或不适用。',type:'text',denominator:12,missing:0}
+];
+
+var GROUP_DATA={
+'西兴街道':{street:{choices:[4,0,0,0,0]},'age-range':{choices:[0,0,1,0,1,2,0]},occupation:{choices:[0,0,1,2,0,1]},household:{choices:[0,0,0,0,4]},'ai-experience':{choices:[0,2,0,0,2]},'cloud-experience':{choices:[0,2,0,0,2]},'top-features':{choices:[3,0,0,0,2,4,3]},'version-choice':{choices:[1,1,0,0,2]},'standard-price-change':{choices:[0,0,0,0,1,3]},'family-antifraud':{choices:[1,0,1,0,0,2]},privacy:{mean:4.25,median:4},'max-monthly-payment':{mean:7.25,median:5}},
+'长河街道':{street:{choices:[0,4,0,0,0]},'age-range':{choices:[0,0,0,0,2,2,0]},occupation:{choices:[1,0,0,2,0,1]},household:{choices:[0,0,1,0,3]},'ai-experience':{choices:[0,1,0,3,0]},'cloud-experience':{choices:[0,2,0,2,0]},'top-features':{choices:[2,1,0,0,3,3,3]},'version-choice':{choices:[1,1,0,1,1]},'standard-price-change':{choices:[2,0,0,0,1,1]},'family-antifraud':{choices:[2,0,0,0,0,2]},privacy:{mean:4.25,median:4},'max-monthly-payment':{mean:4.75,median:0}},
+'浦沿街道':{street:{choices:[0,0,4,0,0]},'age-range':{choices:[0,0,0,1,1,2,0]},occupation:{choices:[1,0,0,2,0,1]},household:{choices:[0,1,1,0,2]},'ai-experience':{choices:[0,2,0,2,0]},'cloud-experience':{choices:[0,2,1,1,0]},'top-features':{choices:[3,0,0,0,4,3,2]},'version-choice':{choices:[3,1,0,0,0]},'standard-price-change':{choices:[3,0,0,0,0,1]},'family-antifraud':{choices:[4,0,0,0,0,0]},privacy:{mean:4.5,median:4.5},'max-monthly-payment':{mean:5,median:0}}
+};
+var ORDER=['全部','西兴街道','长河街道','浦沿街道'];
+var idx=0;
+
+function esc(s){return String(s).replace(/[&<>"']/g,function(m){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m];});}
+
+function choiceRow(label,count,denominator){
+  return '<div class="choice"><span>'+esc(label)+'</span><span class="count">'+count+'</span><div class="bar"><span style="width:'+Math.round(count/denominator*100)+'%"></span></div></div>';
+}
+
+function renderQuestionCard(q,overall){
+  var inner='<h3>'+esc(q.prompt)+'</h3><div class="denominator">有效分母：'+esc(q.denominator)+'</div>';
+  if(q.type==='scale' || q.type==='number'){
+    inner+='<div>均值 '+esc(q.mean)+' · 中位数 '+esc(q.median)+' '+esc(q.unit||'')+'</div>';
+  }
+  if(q.choices && q.choices.length){
+    q.choices.forEach(function(c){
+      inner+=choiceRow(c.label,c.count,q.denominator);
+    });
+  }
+  return inner;
+}
+
+function renderOverall(){
+  var html='';
+  QUESTIONS.forEach(function(q){
+    var attr='data-question-id="'+esc(q.id)+'"';
+    html+='<div class="question" '+attr+'>'+renderQuestionCard(q,true)+'</div>';
+  });
+  document.getElementById('overall-stats').innerHTML=html;
+}
+
+function renderGroup(){
+  var summary=document.getElementById('group-summary');
+  var stats=document.getElementById('group-stats');
+  var groupName=ORDER[idx];
+  var valid=groupName==='全部'?12:4;
+  summary.innerHTML='<span class="group-name">'+esc(groupName)+'</span>（有效数 <span class="group-valid">'+valid+'</span>）';
+
+  if(groupName==='全部'){
+    stats.innerHTML='<p>当前为全部分组，整体统计已在上方 #overall-stats 显示。</p>';
+    return;
+  }
+
+  var group=GROUP_DATA[groupName];
+  var html='';
+  QUESTIONS.forEach(function(q){
+    if(!group.hasOwnProperty(q.id)){return;}
+    var token=group[q.id];
+    var inner='<h3>'+esc(q.prompt)+'</h3><div class="denominator">有效分母：4</div>';
+    if(q.id==='privacy' || q.id==='max-monthly-payment'){
+      inner+='<div>均值 '+esc(token.mean)+' · 中位数 '+esc(token.median)+' '+esc(q.unit||'')+'</div>';
+    }else if(q.choices && token.choices){
+      token.choices.forEach(function(count,i){
+        inner+=choiceRow(q.choices[i].label,count,4);
+      });
+    }
+    html+='<div class="question" data-group-question-id="'+esc(q.id)+'">'+inner+'</div>';
+  });
+  stats.innerHTML=html;
+}
+
+renderOverall();
+renderGroup();
+document.getElementById('next-group').addEventListener('click',function(){
+  idx=(idx+1)%ORDER.length;
+  renderGroup();
+});
+})();
+</script>
+</body>
+</html>

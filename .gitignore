@@ -1,0 +1,14 @@
+node_modules/
+dist/
+dist-pages/
+output/
+.city-agent/
+.city-agent-*/
+.env
+.env.*
+!.env.example
+test-results/
+playwright-report/
+tmp/pdfs/
+.DS_Store
+*.log

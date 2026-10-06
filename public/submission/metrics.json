@@ -1,0 +1,39 @@
+{
+  "scope": "当前49次居民实验，不含早期尝试和研发角色",
+  "preparedAt": "2026-10-06T18:47:40.539Z",
+  "baseline": {
+    "id": "0a3adcb9-6b85-40ae-b6b7-1a8f88ef8705",
+    "durationMs": 26453.513542,
+    "planned": 12,
+    "valid": 12,
+    "structurallyValid": 12,
+    "contradictions": 0,
+    "failed": 0,
+    "notStarted": 0,
+    "modelCalls": 12,
+    "inputTokens": 24794,
+    "outputTokens": 3922,
+    "apiCostCny": 0.080964,
+    "pricingBasis": "按证据包 pricing 中用户提供的CNY/百万Token单价估算；多模型或usage/单价缺失保持未知，最终以账单为准。"
+  },
+  "suite": {
+    "calls": 49,
+    "inputTokens": 84916,
+    "outputTokens": 13120,
+    "conservativeCostCny": 0.274792
+  },
+  "priorAttempts": {
+    "count": 14,
+    "modelCalls": 51,
+    "artifact": "prior-attempts.json",
+    "errata": "首轮SDK inputTokens未含cacheReadTokens/cacheWriteTokens，是未缓存输入量，不是总输入；其总Token和全量费用未知。保留原始记录，当前批次已修正缓存输入计数；重跑是记账修正后的新实验，不挑选成功结果。截断调用最初丢失usage亦保留为未知。"
+  },
+  "developmentRoles": {
+    "id": "d628361c-10fb-4209-8e67-cc453114a3e4",
+    "status": "failed",
+    "inputTokens": 126089,
+    "outputTokens": 28666,
+    "estimatedCost": null,
+    "durationMs": 166971
+  }
+}

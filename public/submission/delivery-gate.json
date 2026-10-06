@@ -1,0 +1,57 @@
+{
+  "passed": false,
+  "checks": [
+    {
+      "name": "页面加载、可见内容与 JavaScript",
+      "passed": true
+    },
+    {
+      "name": "冻结问卷运行ID",
+      "passed": true
+    },
+    {
+      "name": "有效答卷与合成标识",
+      "passed": true
+    },
+    {
+      "name": "分组切换真实改变显示",
+      "passed": true
+    },
+    {
+      "name": "冻结运行ID与合成声明",
+      "passed": true
+    },
+    {
+      "name": "有效分母与来源时点",
+      "passed": true
+    },
+    {
+      "name": "整体15题逐题存在且分母一致",
+      "passed": false,
+      "detail": "locator.waitFor: Timeout 1500ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#overall-stats [data-question-id] [data-question-id=\\'street\\']') to be visible\u001b[22m\n"
+    },
+    {
+      "name": "整体题计数锚点冻结",
+      "passed": false,
+      "detail": "locator.innerText: Timeout 1500ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#overall-stats [data-question-id=\\'version-choice\\'] [data-choice-id=\\'option-1\\'] .count')\u001b[22m\n"
+    },
+    {
+      "name": "分组摘要仅含组名与有效数",
+      "passed": false,
+      "detail": "locator.waitFor: Timeout 1500ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#group-stats [data-group-question-id=\\'version-choice\\']') to be visible\u001b[22m\n"
+    },
+    {
+      "name": "分组切换真实改变显示",
+      "passed": true
+    },
+    {
+      "name": "初始顺序全部→西兴",
+      "passed": true
+    },
+    {
+      "name": "研究限制与合成非真人说明可见",
+      "passed": true
+    }
+  ],
+  "summary": "浏览器验收未通过，需修复失败项。"
+}

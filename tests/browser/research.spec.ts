@@ -1,0 +1,20 @@
+import { test, expect } from '@playwright/test';
+test('local questionnaire execution survives navigation, reload and changed drafts', async ({ page }) => {
+  await page.goto('/#research');
+  await page.getByRole('button', { name: 'AI 生活服务会员', exact: true }).click();
+  await page.locator('.resident-choice').filter({ hasText: '一般成年居民' }).getByRole('checkbox').check();
+  await page.getByRole('button', { name: '保存调查草稿', exact: true }).click();
+  const panel = page.getByRole('region', { name: '问卷仿真与结果' });
+  await panel.getByRole('checkbox').check();
+  await panel.getByRole('button', { name: '运行问卷演示' }).click();
+  await expect(panel.getByRole('heading', { name: '工程演示结果 · 规则答卷 · 12/12 有效' })).toBeVisible();
+  await expect(panel.getByRole('button', { name: '交给四角色生成交付页' })).toBeEnabled();
+  const id = await panel.getByLabel('历史运行').inputValue();
+  await page.getByRole('button', { name: /城市与样本/ }).click();
+  await page.getByRole('button', { name: /虚拟社会调查/ }).click();
+  await expect(panel.getByLabel('历史运行')).toHaveValue(id);
+  await page.reload(); await expect(panel.getByLabel('历史运行')).toHaveValue(id);
+  await page.getByRole('button', { name: '儿童照护者零食概念研究', exact: true }).click();
+  await expect(panel.getByText(/当前草稿与所选历史问卷不同/)).toBeVisible();
+  await expect(panel.getByLabel('历史运行')).toHaveValue(id);
+});

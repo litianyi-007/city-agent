@@ -1,0 +1,68 @@
+{
+  "schemaVersion": "1.0",
+  "id": "new-region-intake",
+  "version": "draft-1",
+  "region": {
+    "code": "new-region",
+    "name": "待填区域",
+    "level": "custom",
+    "boundaryVersion": "待核实边界与版本"
+  },
+  "period": "待填统计时点",
+  "populationBasis": "常住人口",
+  "areas": [
+    {
+      "code": "area-a",
+      "name": "待填子区域"
+    }
+  ],
+  "ageBands": [
+    {
+      "id": "0-4",
+      "label": "0–4 岁",
+      "minAge": 0,
+      "maxAge": 4
+    },
+    {
+      "id": "5-14",
+      "label": "5–14 岁",
+      "minAge": 5,
+      "maxAge": 14
+    },
+    {
+      "id": "15-59",
+      "label": "15–59 岁",
+      "minAge": 15,
+      "maxAge": 59
+    },
+    {
+      "id": "60+",
+      "label": "60 岁及以上",
+      "minAge": 60,
+      "maxAge": null
+    }
+  ],
+  "sexCategories": [
+    {
+      "id": "female",
+      "label": "女"
+    },
+    {
+      "id": "male",
+      "label": "男"
+    }
+  ],
+  "sources": [],
+  "observations": [],
+  "limitations": [
+    "这是录入模板，人口观测与来源未填，必须被审计阻止建模；不得使用滨江数据填充其他区域。"
+  ],
+  "method": {
+    "jointStrategy": "independence",
+    "eligibleAgeBandIds": [
+      "15-59",
+      "60+"
+    ],
+    "note": "按目标问题确定年龄分组和调研框；完整录入子区域年龄、性别、总人口与原始证据后再编译。"
+  }
+}

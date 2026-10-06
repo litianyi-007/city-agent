@@ -1,0 +1,14 @@
+{
+  "mode": "fixture",
+  "startedAt": "2026-10-06T17:37:23.132Z",
+  "durationMs": 14.89379199999999,
+  "planned": 12,
+  "valid": 12,
+  "failed": 0,
+  "notStarted": 0,
+  "modelCalls": 0,
+  "inputTokens": 0,
+  "outputTokens": 0,
+  "apiCostCny": 0,
+  "pricingBasis": "本次工程夹具没有API调用，API费用为0；不含本机计算成本。"
+}
