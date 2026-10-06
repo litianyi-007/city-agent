@@ -12,6 +12,8 @@ const stepSchema = z.discriminatedUnion('action', [
   z.object({ action: z.literal('fill'), selector, value }).strict(),
   z.object({ action: z.literal('click'), selector }).strict(),
   z.object({ action: z.literal('assertText'), selector, text: z.string().min(1).max(5000) }).strict(),
+  z.object({ action: z.literal('assertTextExact'), selector, text: z.string().max(5000) }).strict(),
+  z.object({ action: z.literal('assertCount'), selector, count: z.number().int().min(0).max(500) }).strict(),
   z.object({ action: z.literal('assertVisible'), selector }).strict(),
   z.object({ action: z.literal('assertValue'), selector, value }).strict(),
   z.object({ action: z.literal('assertChanged'), selector, after: interactionSchema }).strict(),
@@ -29,11 +31,41 @@ export const acceptanceSchema = z.array(checkSchema).min(2).max(12).superRefine(
     return check.steps.some((step) => {
       if (step.action === 'assertChanged') return true;
       if (step.action === 'fill' || step.action === 'click') interacted = true;
-      return interacted && (step.action === 'assertText' || step.action === 'assertValue');
+      return interacted && (step.action === 'assertText' || step.action === 'assertTextExact' || step.action === 'assertCount' || step.action === 'assertValue');
     });
   });
   if (!meaningful) ctx.addIssue({ code: 'custom', message: '至少需要一条交互后文本/值断言，或 assertChanged；只有可见性检查不能验收功能。' });
 });
+
+/** Parse CSS using Chromium's real parser, before any generated HTML exists. */
+export async function preflightAcceptanceChecks(checks: AcceptanceCheck[], signal?: AbortSignal): Promise<{ valid: boolean; errors: string[] }> {
+  signal?.throwIfAborted();
+  const parsed = acceptanceSchema.safeParse(checks);
+  if (!parsed.success) return { valid: false, errors: parsed.error.issues.map(issue => issue.message) };
+  const selectors = [...new Set(checks.flatMap(check => check.steps.flatMap(step => [step.selector, ...(step.action === 'assertChanged' ? [step.after.selector] : [])])))];
+  let browser: Browser | undefined;
+  let stopped = false;
+  let abortListener: (() => void) | undefined;
+  try {
+    const cancelled = new Promise<never>((_, reject) => {
+      abortListener = () => { stopped = true; void browser?.close().catch(() => undefined); reject(new DOMException('验收预检已取消。', 'AbortError')); };
+      signal?.addEventListener('abort', abortListener, { once: true });
+    });
+    const operation = (async () => {
+      const launched = await chromium.launch({ headless: true, timeout: 10000 });
+      browser = launched;
+      if (stopped || signal?.aborted) { await launched.close(); throw new DOMException('验收预检已取消。', 'AbortError'); }
+      const page = await launched.newPage();
+      await page.route('**/*', route => route.abort('blockedbyclient'));
+      return page.evaluate(values => values.flatMap(selector => {
+        try { document.querySelector(selector); return []; }
+        catch { return [`非法 CSS 选择器：${selector}`]; }
+      }), selectors);
+    })();
+    const errors = await bounded(Promise.race([operation, cancelled]), 15000, '验收预检超时');
+    return { valid: errors.length === 0, errors };
+  } finally { stopped = true; if (abortListener) signal?.removeEventListener('abort', abortListener); await browser?.close().catch(() => undefined); }
+}
 
 const DOCUMENT_URL = 'https://city-agent.invalid/';
 const CSP = [
@@ -93,6 +125,12 @@ async function executeSteps(page: Page, steps: AcceptanceCheck['steps']): Promis
         break;
       case 'assertText':
         await eventually(async () => (await locator.innerText()).includes(step.text), `${step.selector} 未显示预期文本：${step.text}`);
+        break;
+      case 'assertTextExact':
+        await eventually(async () => (await locator.innerText()).replace(/\s+/g, ' ').trim() === step.text.replace(/\s+/g, ' ').trim(), `${step.selector} 文本不精确等于：${step.text}`);
+        break;
+      case 'assertCount':
+        await eventually(async () => await locator.count() === step.count, `${step.selector} 元素数量不等于 ${step.count}`);
         break;
       case 'assertValue':
         await eventually(async () => await locator.inputValue() === step.value, `${step.selector} 的值不是 ${step.value}`);

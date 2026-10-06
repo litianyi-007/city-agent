@@ -1,7 +1,8 @@
-import { mkdtemp, rm, writeFile } from 'node:fs/promises';
-import { tmpdir } from 'node:os';
+import { chmod, lstat, mkdir, mkdtemp, rm, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { DeepSeekHarness, type DeepSeekHarnessOptions } from '@deepseek-ai/dsh-sdk-client';
+import { createUsageProxy, type ObservedUsage } from './usage-observer.js';
 
 export const HARNESS_VERSION = '0.1.5-rc.3';
 export const HARNESS_NAME = `DeepSeek Harness ${HARNESS_VERSION}`;
@@ -21,11 +22,13 @@ export interface RoleResult {
   outputTokens: number;
   harness: string;
   usageReported?: boolean;
+  /** Sanitized raw-wire presence/counts only; no request bodies or credentials. */
+  providerRequests?: ObservedUsage;
 }
 
 /** Only sanitized, allowlisted evidence is carried across a failed call. */
 export class HarnessCallError extends Error {
-  constructor(message: string, public evidence: { text: string; inputTokens: number | null; outputTokens: number | null }) { super(message); }
+  constructor(message: string, public evidence: { text: string; inputTokens: number | null; outputTokens: number | null; providerRequests?: ObservedUsage }) { super(message); }
 }
 
 const ROLE_TIMEOUT_MS = 180_000;
@@ -52,12 +55,12 @@ function validateModel(agent: RoleModelConfig): URL {
   return url;
 }
 
-function safeError(error: unknown, key: string): Error {
+function safeError(error: unknown, key: string, providerRequests?: ObservedUsage): Error {
   const raw = error instanceof Error ? error.message : String(error);
   const message = key ? raw.split(key).join('[REDACTED]') : raw;
   const result = error instanceof HarnessCallError
-    ? new HarnessCallError(message.slice(0, 2000), { ...error.evidence, text: error.evidence.text.split(key).join('[REDACTED]') })
-    : new Error(message.slice(0, 2000));
+    ? new HarnessCallError(message.slice(0, 2000), { ...error.evidence, text: error.evidence.text.split(key).join('[REDACTED]'), ...(providerRequests ? { providerRequests } : {}) })
+    : providerRequests ? new HarnessCallError(message.slice(0, 2000), { text: '', inputTokens: null, outputTokens: null, providerRequests }) : new Error(message.slice(0, 2000));
   result.name = error instanceof Error ? error.name : 'Error';
   return result;
 }
@@ -84,14 +87,21 @@ export async function runRole(
   if (!Number.isInteger(maxTokens) || maxTokens < 128 || maxTokens > MAX_OUTPUT_TOKENS || !Number.isInteger(timeoutMs) || timeoutMs < 1000 || timeoutMs > ROLE_TIMEOUT_MS) throw new Error('Harness调用限额无效。');
   const major = Number(process.versions.node.split('.')[0]);
   if (major < 22) throw new Error('DeepSeek Harness 需要 Node.js 22 或更新版本，请使用项目指定的 Node 版本。');
-  const workspace = await mkdtemp(join(tmpdir(), 'city-agent-role-'));
+  const temporaryRoot = fileURLToPath(new URL('../.city-agent-harness/', import.meta.url));
+  try { if ((await lstat(temporaryRoot)).isSymbolicLink()) throw new Error('Harness 临时目录不得为符号链接。'); } catch (error) { if ((error as NodeJS.ErrnoException).code !== 'ENOENT') throw error; }
+  await mkdir(temporaryRoot, { recursive: true, mode: 0o700 });
+  if ((await lstat(temporaryRoot)).isSymbolicLink()) throw new Error('Harness 临时目录不得为符号链接。');
+  await chmod(temporaryRoot, 0o700);
+  const workspace = await mkdtemp(join(temporaryRoot, 'role-'));
   let harness: DeepSeekHarness | undefined;
   let timeout: ReturnType<typeof setTimeout> | undefined;
   let abortListener: (() => void) | undefined;
   let stopError: Error | undefined;
   let closePromise: Promise<void> | undefined;
-  const close = () => (closePromise ??= harness?.close() ?? Promise.resolve());
+  let usageProxy: Awaited<ReturnType<typeof createUsageProxy>> | undefined;
+  const close = () => (closePromise ??= (async () => { const results = await Promise.allSettled([harness?.close() ?? Promise.resolve(), usageProxy?.close() ?? Promise.resolve()]); const failure = results.find(result => result.status === 'rejected'); if (failure?.status === 'rejected') throw failure.reason; })());
   try {
+    if (limits?.reportUsage) usageProxy = await createUsageProxy(baseUrl, api, agent.apiKey, signal);
     const patchPath = join(workspace, 'role.patch.yml');
     // JSON is valid YAML. No executable interpolation and no key enters this file.
     const patch = [
@@ -112,7 +122,7 @@ export async function runRole(
               [ROUTE]: {
                 api,
                 apiKeyEnv: KEY_ENV,
-                baseURL: baseUrl.toString().replace(/\/$/, ''),
+                baseURL: usageProxy?.baseUrl ?? baseUrl.toString().replace(/\/$/, ''),
                 models: [{ id: agent.modelId, contextWindow: 65_536, maxTokens, reasoningEfforts: agent.provider === 'deepseek' ? { off: 'none', high: 'high' } : false }],
                 ...(api === 'openai-completions' && agent.provider !== 'openai' ? {
                   compat: { maxTokensField: 'max_tokens', supportsStore: false, supportsDeveloperRole: false, ...(agent.provider === 'deepseek' ? { thinkingFormat: 'deepseek' } : {}) },
@@ -175,25 +185,35 @@ export async function runRole(
     let inputTokens = 0;
     let outputTokens = 0;
     let usageReported = false;
+    let assistantMessages = 0;
+    let allNormalizedUsageValid = true;
     for (const event of result.events) {
       if (event.type !== 'assistant/message') continue;
-      usageReported ||= typeof event.data.usage?.inputTokens === 'number' && typeof event.data.usage?.outputTokens === 'number';
+      assistantMessages++;
+      const normalizedValid = typeof event.data.usage?.inputTokens === 'number' && typeof event.data.usage?.outputTokens === 'number' && Number.isFinite(event.data.usage.inputTokens) && Number.isFinite(event.data.usage.outputTokens);
+      allNormalizedUsageValid &&= normalizedValid;
+      usageReported ||= normalizedValid;
       // pi-ai input excludes cache reads/writes; report the complete prompt size.
       inputTokens += (event.data.usage?.inputTokens ?? 0) + (event.data.usage?.cacheReadTokens ?? 0) + (event.data.usage?.cacheWriteTokens ?? 0);
       outputTokens += event.data.usage?.outputTokens ?? 0;
+    }
+    const providerRequests = usageProxy?.summary();
+    if (providerRequests) {
+      usageReported = providerRequests.complete && assistantMessages === 1 && allNormalizedUsageValid && inputTokens === providerRequests.inputTokens && outputTokens === providerRequests.outputTokens;
+      if (usageReported) { inputTokens = providerRequests.inputTokens!; outputTokens = providerRequests.outputTokens!; }
     }
     const end = [...result.events].reverse().find((event) => event.type === 'turn/end');
     if (!end || end.type !== 'turn/end' || end.data.reason.kind !== 'completed' || !result.finalResponse.trim()) {
       const reason = end?.type === 'turn/end' ? JSON.stringify(end.data.reason) : '没有完成事件';
       throw new HarnessCallError(`模型执行未完成或返回空内容: ${reason}`, { text: result.finalResponse, inputTokens: usageReported ? inputTokens : null, outputTokens: usageReported ? outputTokens : null });
     }
-    return { text: result.finalResponse.split(agent.apiKey).join('[REDACTED]'), inputTokens, outputTokens, harness: HARNESS_NAME, ...(limits?.reportUsage ? { usageReported } : {}) };
+    return { text: result.finalResponse.split(agent.apiKey).join('[REDACTED]'), inputTokens, outputTokens, harness: HARNESS_NAME, ...(limits?.reportUsage ? { usageReported, providerRequests } : {}) };
   } catch (error) {
-    throw safeError(stopError ?? error, agent.apiKey);
+    throw safeError(stopError ?? error, agent.apiKey, usageProxy?.summary());
   } finally {
     if (timeout) clearTimeout(timeout);
     if (abortListener) signal.removeEventListener('abort', abortListener);
     try { await close(); }
-    finally { await rm(workspace, { recursive: true, force: true }); }
+    finally { try { await usageProxy?.close(); } finally { await rm(workspace, { recursive: true, force: true }); } }
   }
 }
