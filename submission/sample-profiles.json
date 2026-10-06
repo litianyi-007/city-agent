@@ -5,117 +5,9 @@
     "presetName": "一般成年居民",
     "street": "xixing",
     "streetName": "西兴街道",
-    "ageBand": "15-59",
-    "sex": "female",
-    "age": 28,
-    "attributes": [
-      {
-        "key": "street",
-        "value": "xixing",
-        "provenance": "infer",
-        "evidenceIds": [
-          "xixing:total",
-          "xixing:age:15-59",
-          "xixing:sex:female"
-        ]
-      },
-      {
-        "key": "ageBand",
-        "value": "15-59",
-        "provenance": "infer",
-        "evidenceIds": [
-          "xixing:total",
-          "xixing:age:15-59",
-          "xixing:sex:female"
-        ]
-      },
-      {
-        "key": "sex",
-        "value": "female",
-        "provenance": "infer",
-        "evidenceIds": [
-          "xixing:total",
-          "xixing:age:15-59",
-          "xixing:sex:female"
-        ]
-      },
-      {
-        "key": "age",
-        "value": 28,
-        "provenance": "assumption",
-        "evidenceIds": []
-      }
-    ],
-    "assumptions": [
-      "18+资格待核验；当前15–59岁统计档不能识别全部成年人。",
-      "具体年龄为年龄档内的情景赋值；60+生成上限90岁不是人口事实。",
-      "覆盖抽样无人口权重；预设资格不能赋予总体代表性。"
-    ],
-    "behaviorNotes": ""
-  },
-  {
-    "id": "resident-002",
-    "presetId": "00000000-0000-4000-8000-000000000001",
-    "presetName": "一般成年居民",
-    "street": "xixing",
-    "streetName": "西兴街道",
-    "ageBand": "15-59",
-    "sex": "male",
-    "age": 21,
-    "attributes": [
-      {
-        "key": "street",
-        "value": "xixing",
-        "provenance": "infer",
-        "evidenceIds": [
-          "xixing:total",
-          "xixing:age:15-59",
-          "xixing:sex:male"
-        ]
-      },
-      {
-        "key": "ageBand",
-        "value": "15-59",
-        "provenance": "infer",
-        "evidenceIds": [
-          "xixing:total",
-          "xixing:age:15-59",
-          "xixing:sex:male"
-        ]
-      },
-      {
-        "key": "sex",
-        "value": "male",
-        "provenance": "infer",
-        "evidenceIds": [
-          "xixing:total",
-          "xixing:age:15-59",
-          "xixing:sex:male"
-        ]
-      },
-      {
-        "key": "age",
-        "value": 21,
-        "provenance": "assumption",
-        "evidenceIds": []
-      }
-    ],
-    "assumptions": [
-      "18+资格待核验；当前15–59岁统计档不能识别全部成年人。",
-      "具体年龄为年龄档内的情景赋值；60+生成上限90岁不是人口事实。",
-      "覆盖抽样无人口权重；预设资格不能赋予总体代表性。"
-    ],
-    "behaviorNotes": ""
-  },
-  {
-    "id": "resident-003",
-    "presetId": "00000000-0000-4000-8000-000000000001",
-    "presetName": "一般成年居民",
-    "street": "xixing",
-    "streetName": "西兴街道",
     "ageBand": "60+",
-    "sex": "female",
-    "age": 77,
+    "sex": "male",
+    "age": 89,
     "attributes": [
       {
         "key": "street",
@@ -124,7 +16,7 @@
         "evidenceIds": [
           "xixing:total",
           "xixing:age:60+",
-          "xixing:sex:female"
+          "xixing:sex:male"
         ]
       },
       {
@@ -134,28 +26,142 @@
         "evidenceIds": [
           "xixing:total",
           "xixing:age:60+",
-          "xixing:sex:female"
+          "xixing:sex:male"
         ]
       },
       {
         "key": "sex",
-        "value": "female",
+        "value": "male",
         "provenance": "infer",
         "evidenceIds": [
           "xixing:total",
           "xixing:age:60+",
-          "xixing:sex:female"
+          "xixing:sex:male"
         ]
       },
       {
         "key": "age",
-        "value": 77,
+        "value": 89,
         "provenance": "assumption",
         "evidenceIds": []
       }
     ],
+    "description": "一般成年受访者；职业、收入、家庭阶段和商品偏好均未知。",
     "assumptions": [
       "18+资格待核验；当前15–59岁统计档不能识别全部成年人。",
+      "画像说明与行为均为用户情景假设，不是人口事实；与明确年龄/街道冲突时以结构化画像为准。",
+      "具体年龄为年龄档内的情景赋值；60+生成上限90岁不是人口事实。",
+      "覆盖抽样无人口权重；预设资格不能赋予总体代表性。"
+    ],
+    "behaviorNotes": ""
+  },
+  {
+    "id": "resident-002",
+    "presetId": "00000000-0000-4000-8000-000000000001",
+    "presetName": "一般成年居民",
+    "street": "changhe",
+    "streetName": "长河街道",
+    "ageBand": "15-59",
+    "sex": "male",
+    "age": 47,
+    "attributes": [
+      {
+        "key": "street",
+        "value": "changhe",
+        "provenance": "infer",
+        "evidenceIds": [
+          "changhe:total",
+          "changhe:age:15-59",
+          "changhe:sex:male"
+        ]
+      },
+      {
+        "key": "ageBand",
+        "value": "15-59",
+        "provenance": "infer",
+        "evidenceIds": [
+          "changhe:total",
+          "changhe:age:15-59",
+          "changhe:sex:male"
+        ]
+      },
+      {
+        "key": "sex",
+        "value": "male",
+        "provenance": "infer",
+        "evidenceIds": [
+          "changhe:total",
+          "changhe:age:15-59",
+          "changhe:sex:male"
+        ]
+      },
+      {
+        "key": "age",
+        "value": 47,
+        "provenance": "assumption",
+        "evidenceIds": []
+      }
+    ],
+    "description": "一般成年受访者；职业、收入、家庭阶段和商品偏好均未知。",
+    "assumptions": [
+      "18+资格待核验；当前15–59岁统计档不能识别全部成年人。",
+      "画像说明与行为均为用户情景假设，不是人口事实；与明确年龄/街道冲突时以结构化画像为准。",
+      "具体年龄为年龄档内的情景赋值；60+生成上限90岁不是人口事实。",
+      "覆盖抽样无人口权重；预设资格不能赋予总体代表性。"
+    ],
+    "behaviorNotes": ""
+  },
+  {
+    "id": "resident-003",
+    "presetId": "00000000-0000-4000-8000-000000000001",
+    "presetName": "一般成年居民",
+    "street": "puyan",
+    "streetName": "浦沿街道",
+    "ageBand": "60+",
+    "sex": "male",
+    "age": 66,
+    "attributes": [
+      {
+        "key": "street",
+        "value": "puyan",
+        "provenance": "infer",
+        "evidenceIds": [
+          "puyan:total",
+          "puyan:age:60+",
+          "puyan:sex:male"
+        ]
+      },
+      {
+        "key": "ageBand",
+        "value": "60+",
+        "provenance": "infer",
+        "evidenceIds": [
+          "puyan:total",
+          "puyan:age:60+",
+          "puyan:sex:male"
+        ]
+      },
+      {
+        "key": "sex",
+        "value": "male",
+        "provenance": "infer",
+        "evidenceIds": [
+          "puyan:total",
+          "puyan:age:60+",
+          "puyan:sex:male"
+        ]
+      },
+      {
+        "key": "age",
+        "value": 66,
+        "provenance": "assumption",
+        "evidenceIds": []
+      }
+    ],
+    "description": "一般成年受访者；职业、收入、家庭阶段和商品偏好均未知。",
+    "assumptions": [
+      "18+资格待核验；当前15–59岁统计档不能识别全部成年人。",
+      "画像说明与行为均为用户情景假设，不是人口事实；与明确年龄/街道冲突时以结构化画像为准。",
       "具体年龄为年龄档内的情景赋值；60+生成上限90岁不是人口事实。",
       "覆盖抽样无人口权重；预设资格不能赋予总体代表性。"
     ],
@@ -167,9 +173,9 @@
     "presetName": "一般成年居民",
     "street": "xixing",
     "streetName": "西兴街道",
-    "ageBand": "60+",
+    "ageBand": "15-59",
     "sex": "male",
-    "age": 66,
+    "age": 59,
     "attributes": [
       {
         "key": "street",
@@ -177,17 +183,17 @@
         "provenance": "infer",
         "evidenceIds": [
           "xixing:total",
-          "xixing:age:60+",
+          "xixing:age:15-59",
           "xixing:sex:male"
         ]
       },
       {
         "key": "ageBand",
-        "value": "60+",
+        "value": "15-59",
         "provenance": "infer",
         "evidenceIds": [
           "xixing:total",
-          "xixing:age:60+",
+          "xixing:age:15-59",
           "xixing:sex:male"
         ]
       },
@@ -197,19 +203,21 @@
         "provenance": "infer",
         "evidenceIds": [
           "xixing:total",
-          "xixing:age:60+",
+          "xixing:age:15-59",
           "xixing:sex:male"
         ]
       },
       {
         "key": "age",
-        "value": 66,
+        "value": 59,
         "provenance": "assumption",
         "evidenceIds": []
       }
     ],
+    "description": "一般成年受访者；职业、收入、家庭阶段和商品偏好均未知。",
     "assumptions": [
       "18+资格待核验；当前15–59岁统计档不能识别全部成年人。",
+      "画像说明与行为均为用户情景假设，不是人口事实；与明确年龄/街道冲突时以结构化画像为准。",
       "具体年龄为年龄档内的情景赋值；60+生成上限90岁不是人口事实。",
       "覆盖抽样无人口权重；预设资格不能赋予总体代表性。"
     ],
@@ -219,227 +227,11 @@
     "id": "resident-005",
     "presetId": "00000000-0000-4000-8000-000000000001",
     "presetName": "一般成年居民",
-    "street": "changhe",
-    "streetName": "长河街道",
-    "ageBand": "15-59",
-    "sex": "female",
-    "age": 33,
-    "attributes": [
-      {
-        "key": "street",
-        "value": "changhe",
-        "provenance": "infer",
-        "evidenceIds": [
-          "changhe:total",
-          "changhe:age:15-59",
-          "changhe:sex:female"
-        ]
-      },
-      {
-        "key": "ageBand",
-        "value": "15-59",
-        "provenance": "infer",
-        "evidenceIds": [
-          "changhe:total",
-          "changhe:age:15-59",
-          "changhe:sex:female"
-        ]
-      },
-      {
-        "key": "sex",
-        "value": "female",
-        "provenance": "infer",
-        "evidenceIds": [
-          "changhe:total",
-          "changhe:age:15-59",
-          "changhe:sex:female"
-        ]
-      },
-      {
-        "key": "age",
-        "value": 33,
-        "provenance": "assumption",
-        "evidenceIds": []
-      }
-    ],
-    "assumptions": [
-      "18+资格待核验；当前15–59岁统计档不能识别全部成年人。",
-      "具体年龄为年龄档内的情景赋值；60+生成上限90岁不是人口事实。",
-      "覆盖抽样无人口权重；预设资格不能赋予总体代表性。"
-    ],
-    "behaviorNotes": ""
-  },
-  {
-    "id": "resident-006",
-    "presetId": "00000000-0000-4000-8000-000000000001",
-    "presetName": "一般成年居民",
-    "street": "changhe",
-    "streetName": "长河街道",
-    "ageBand": "15-59",
-    "sex": "male",
-    "age": 19,
-    "attributes": [
-      {
-        "key": "street",
-        "value": "changhe",
-        "provenance": "infer",
-        "evidenceIds": [
-          "changhe:total",
-          "changhe:age:15-59",
-          "changhe:sex:male"
-        ]
-      },
-      {
-        "key": "ageBand",
-        "value": "15-59",
-        "provenance": "infer",
-        "evidenceIds": [
-          "changhe:total",
-          "changhe:age:15-59",
-          "changhe:sex:male"
-        ]
-      },
-      {
-        "key": "sex",
-        "value": "male",
-        "provenance": "infer",
-        "evidenceIds": [
-          "changhe:total",
-          "changhe:age:15-59",
-          "changhe:sex:male"
-        ]
-      },
-      {
-        "key": "age",
-        "value": 19,
-        "provenance": "assumption",
-        "evidenceIds": []
-      }
-    ],
-    "assumptions": [
-      "18+资格待核验；当前15–59岁统计档不能识别全部成年人。",
-      "具体年龄为年龄档内的情景赋值；60+生成上限90岁不是人口事实。",
-      "覆盖抽样无人口权重；预设资格不能赋予总体代表性。"
-    ],
-    "behaviorNotes": ""
-  },
-  {
-    "id": "resident-007",
-    "presetId": "00000000-0000-4000-8000-000000000001",
-    "presetName": "一般成年居民",
-    "street": "changhe",
-    "streetName": "长河街道",
-    "ageBand": "60+",
-    "sex": "female",
-    "age": 73,
-    "attributes": [
-      {
-        "key": "street",
-        "value": "changhe",
-        "provenance": "infer",
-        "evidenceIds": [
-          "changhe:total",
-          "changhe:age:60+",
-          "changhe:sex:female"
-        ]
-      },
-      {
-        "key": "ageBand",
-        "value": "60+",
-        "provenance": "infer",
-        "evidenceIds": [
-          "changhe:total",
-          "changhe:age:60+",
-          "changhe:sex:female"
-        ]
-      },
-      {
-        "key": "sex",
-        "value": "female",
-        "provenance": "infer",
-        "evidenceIds": [
-          "changhe:total",
-          "changhe:age:60+",
-          "changhe:sex:female"
-        ]
-      },
-      {
-        "key": "age",
-        "value": 73,
-        "provenance": "assumption",
-        "evidenceIds": []
-      }
-    ],
-    "assumptions": [
-      "18+资格待核验；当前15–59岁统计档不能识别全部成年人。",
-      "具体年龄为年龄档内的情景赋值；60+生成上限90岁不是人口事实。",
-      "覆盖抽样无人口权重；预设资格不能赋予总体代表性。"
-    ],
-    "behaviorNotes": ""
-  },
-  {
-    "id": "resident-008",
-    "presetId": "00000000-0000-4000-8000-000000000001",
-    "presetName": "一般成年居民",
-    "street": "changhe",
-    "streetName": "长河街道",
-    "ageBand": "60+",
-    "sex": "male",
-    "age": 63,
-    "attributes": [
-      {
-        "key": "street",
-        "value": "changhe",
-        "provenance": "infer",
-        "evidenceIds": [
-          "changhe:total",
-          "changhe:age:60+",
-          "changhe:sex:male"
-        ]
-      },
-      {
-        "key": "ageBand",
-        "value": "60+",
-        "provenance": "infer",
-        "evidenceIds": [
-          "changhe:total",
-          "changhe:age:60+",
-          "changhe:sex:male"
-        ]
-      },
-      {
-        "key": "sex",
-        "value": "male",
-        "provenance": "infer",
-        "evidenceIds": [
-          "changhe:total",
-          "changhe:age:60+",
-          "changhe:sex:male"
-        ]
-      },
-      {
-        "key": "age",
-        "value": 63,
-        "provenance": "assumption",
-        "evidenceIds": []
-      }
-    ],
-    "assumptions": [
-      "18+资格待核验；当前15–59岁统计档不能识别全部成年人。",
-      "具体年龄为年龄档内的情景赋值；60+生成上限90岁不是人口事实。",
-      "覆盖抽样无人口权重；预设资格不能赋予总体代表性。"
-    ],
-    "behaviorNotes": ""
-  },
-  {
-    "id": "resident-009",
-    "presetId": "00000000-0000-4000-8000-000000000001",
-    "presetName": "一般成年居民",
     "street": "puyan",
     "streetName": "浦沿街道",
     "ageBand": "15-59",
     "sex": "female",
-    "age": 54,
+    "age": 38,
     "attributes": [
       {
         "key": "street",
@@ -473,13 +265,239 @@
       },
       {
         "key": "age",
-        "value": 54,
+        "value": 38,
         "provenance": "assumption",
         "evidenceIds": []
       }
     ],
+    "description": "一般成年受访者；职业、收入、家庭阶段和商品偏好均未知。",
     "assumptions": [
       "18+资格待核验；当前15–59岁统计档不能识别全部成年人。",
+      "画像说明与行为均为用户情景假设，不是人口事实；与明确年龄/街道冲突时以结构化画像为准。",
+      "具体年龄为年龄档内的情景赋值；60+生成上限90岁不是人口事实。",
+      "覆盖抽样无人口权重；预设资格不能赋予总体代表性。"
+    ],
+    "behaviorNotes": ""
+  },
+  {
+    "id": "resident-006",
+    "presetId": "00000000-0000-4000-8000-000000000001",
+    "presetName": "一般成年居民",
+    "street": "changhe",
+    "streetName": "长河街道",
+    "ageBand": "60+",
+    "sex": "male",
+    "age": 90,
+    "attributes": [
+      {
+        "key": "street",
+        "value": "changhe",
+        "provenance": "infer",
+        "evidenceIds": [
+          "changhe:total",
+          "changhe:age:60+",
+          "changhe:sex:male"
+        ]
+      },
+      {
+        "key": "ageBand",
+        "value": "60+",
+        "provenance": "infer",
+        "evidenceIds": [
+          "changhe:total",
+          "changhe:age:60+",
+          "changhe:sex:male"
+        ]
+      },
+      {
+        "key": "sex",
+        "value": "male",
+        "provenance": "infer",
+        "evidenceIds": [
+          "changhe:total",
+          "changhe:age:60+",
+          "changhe:sex:male"
+        ]
+      },
+      {
+        "key": "age",
+        "value": 90,
+        "provenance": "assumption",
+        "evidenceIds": []
+      }
+    ],
+    "description": "一般成年受访者；职业、收入、家庭阶段和商品偏好均未知。",
+    "assumptions": [
+      "18+资格待核验；当前15–59岁统计档不能识别全部成年人。",
+      "画像说明与行为均为用户情景假设，不是人口事实；与明确年龄/街道冲突时以结构化画像为准。",
+      "具体年龄为年龄档内的情景赋值；60+生成上限90岁不是人口事实。",
+      "覆盖抽样无人口权重；预设资格不能赋予总体代表性。"
+    ],
+    "behaviorNotes": ""
+  },
+  {
+    "id": "resident-007",
+    "presetId": "00000000-0000-4000-8000-000000000001",
+    "presetName": "一般成年居民",
+    "street": "changhe",
+    "streetName": "长河街道",
+    "ageBand": "15-59",
+    "sex": "female",
+    "age": 53,
+    "attributes": [
+      {
+        "key": "street",
+        "value": "changhe",
+        "provenance": "infer",
+        "evidenceIds": [
+          "changhe:total",
+          "changhe:age:15-59",
+          "changhe:sex:female"
+        ]
+      },
+      {
+        "key": "ageBand",
+        "value": "15-59",
+        "provenance": "infer",
+        "evidenceIds": [
+          "changhe:total",
+          "changhe:age:15-59",
+          "changhe:sex:female"
+        ]
+      },
+      {
+        "key": "sex",
+        "value": "female",
+        "provenance": "infer",
+        "evidenceIds": [
+          "changhe:total",
+          "changhe:age:15-59",
+          "changhe:sex:female"
+        ]
+      },
+      {
+        "key": "age",
+        "value": 53,
+        "provenance": "assumption",
+        "evidenceIds": []
+      }
+    ],
+    "description": "一般成年受访者；职业、收入、家庭阶段和商品偏好均未知。",
+    "assumptions": [
+      "18+资格待核验；当前15–59岁统计档不能识别全部成年人。",
+      "画像说明与行为均为用户情景假设，不是人口事实；与明确年龄/街道冲突时以结构化画像为准。",
+      "具体年龄为年龄档内的情景赋值；60+生成上限90岁不是人口事实。",
+      "覆盖抽样无人口权重；预设资格不能赋予总体代表性。"
+    ],
+    "behaviorNotes": ""
+  },
+  {
+    "id": "resident-008",
+    "presetId": "00000000-0000-4000-8000-000000000001",
+    "presetName": "一般成年居民",
+    "street": "puyan",
+    "streetName": "浦沿街道",
+    "ageBand": "60+",
+    "sex": "female",
+    "age": 81,
+    "attributes": [
+      {
+        "key": "street",
+        "value": "puyan",
+        "provenance": "infer",
+        "evidenceIds": [
+          "puyan:total",
+          "puyan:age:60+",
+          "puyan:sex:female"
+        ]
+      },
+      {
+        "key": "ageBand",
+        "value": "60+",
+        "provenance": "infer",
+        "evidenceIds": [
+          "puyan:total",
+          "puyan:age:60+",
+          "puyan:sex:female"
+        ]
+      },
+      {
+        "key": "sex",
+        "value": "female",
+        "provenance": "infer",
+        "evidenceIds": [
+          "puyan:total",
+          "puyan:age:60+",
+          "puyan:sex:female"
+        ]
+      },
+      {
+        "key": "age",
+        "value": 81,
+        "provenance": "assumption",
+        "evidenceIds": []
+      }
+    ],
+    "description": "一般成年受访者；职业、收入、家庭阶段和商品偏好均未知。",
+    "assumptions": [
+      "18+资格待核验；当前15–59岁统计档不能识别全部成年人。",
+      "画像说明与行为均为用户情景假设，不是人口事实；与明确年龄/街道冲突时以结构化画像为准。",
+      "具体年龄为年龄档内的情景赋值；60+生成上限90岁不是人口事实。",
+      "覆盖抽样无人口权重；预设资格不能赋予总体代表性。"
+    ],
+    "behaviorNotes": ""
+  },
+  {
+    "id": "resident-009",
+    "presetId": "00000000-0000-4000-8000-000000000001",
+    "presetName": "一般成年居民",
+    "street": "xixing",
+    "streetName": "西兴街道",
+    "ageBand": "60+",
+    "sex": "female",
+    "age": 67,
+    "attributes": [
+      {
+        "key": "street",
+        "value": "xixing",
+        "provenance": "infer",
+        "evidenceIds": [
+          "xixing:total",
+          "xixing:age:60+",
+          "xixing:sex:female"
+        ]
+      },
+      {
+        "key": "ageBand",
+        "value": "60+",
+        "provenance": "infer",
+        "evidenceIds": [
+          "xixing:total",
+          "xixing:age:60+",
+          "xixing:sex:female"
+        ]
+      },
+      {
+        "key": "sex",
+        "value": "female",
+        "provenance": "infer",
+        "evidenceIds": [
+          "xixing:total",
+          "xixing:age:60+",
+          "xixing:sex:female"
+        ]
+      },
+      {
+        "key": "age",
+        "value": 67,
+        "provenance": "assumption",
+        "evidenceIds": []
+      }
+    ],
+    "description": "一般成年受访者；职业、收入、家庭阶段和商品偏好均未知。",
+    "assumptions": [
+      "18+资格待核验；当前15–59岁统计档不能识别全部成年人。",
+      "画像说明与行为均为用户情景假设，不是人口事实；与明确年龄/街道冲突时以结构化画像为准。",
       "具体年龄为年龄档内的情景赋值；60+生成上限90岁不是人口事实。",
       "覆盖抽样无人口权重；预设资格不能赋予总体代表性。"
     ],
@@ -493,7 +511,7 @@
     "streetName": "浦沿街道",
     "ageBand": "15-59",
     "sex": "male",
-    "age": 59,
+    "age": 50,
     "attributes": [
       {
         "key": "street",
@@ -527,13 +545,15 @@
       },
       {
         "key": "age",
-        "value": 59,
+        "value": 50,
         "provenance": "assumption",
         "evidenceIds": []
       }
     ],
+    "description": "一般成年受访者；职业、收入、家庭阶段和商品偏好均未知。",
     "assumptions": [
       "18+资格待核验；当前15–59岁统计档不能识别全部成年人。",
+      "画像说明与行为均为用户情景假设，不是人口事实；与明确年龄/街道冲突时以结构化画像为准。",
       "具体年龄为年龄档内的情景赋值；60+生成上限90岁不是人口事实。",
       "覆盖抽样无人口权重；预设资格不能赋予总体代表性。"
     ],
@@ -543,20 +563,20 @@
     "id": "resident-011",
     "presetId": "00000000-0000-4000-8000-000000000001",
     "presetName": "一般成年居民",
-    "street": "puyan",
-    "streetName": "浦沿街道",
+    "street": "changhe",
+    "streetName": "长河街道",
     "ageBand": "60+",
     "sex": "female",
-    "age": 86,
+    "age": 82,
     "attributes": [
       {
         "key": "street",
-        "value": "puyan",
+        "value": "changhe",
         "provenance": "infer",
         "evidenceIds": [
-          "puyan:total",
-          "puyan:age:60+",
-          "puyan:sex:female"
+          "changhe:total",
+          "changhe:age:60+",
+          "changhe:sex:female"
         ]
       },
       {
@@ -564,9 +584,9 @@
         "value": "60+",
         "provenance": "infer",
         "evidenceIds": [
-          "puyan:total",
-          "puyan:age:60+",
-          "puyan:sex:female"
+          "changhe:total",
+          "changhe:age:60+",
+          "changhe:sex:female"
         ]
       },
       {
@@ -574,20 +594,22 @@
         "value": "female",
         "provenance": "infer",
         "evidenceIds": [
-          "puyan:total",
-          "puyan:age:60+",
-          "puyan:sex:female"
+          "changhe:total",
+          "changhe:age:60+",
+          "changhe:sex:female"
         ]
       },
       {
         "key": "age",
-        "value": 86,
+        "value": 82,
         "provenance": "assumption",
         "evidenceIds": []
       }
     ],
+    "description": "一般成年受访者；职业、收入、家庭阶段和商品偏好均未知。",
     "assumptions": [
       "18+资格待核验；当前15–59岁统计档不能识别全部成年人。",
+      "画像说明与行为均为用户情景假设，不是人口事实；与明确年龄/街道冲突时以结构化画像为准。",
       "具体年龄为年龄档内的情景赋值；60+生成上限90岁不是人口事实。",
       "覆盖抽样无人口权重；预设资格不能赋予总体代表性。"
     ],
@@ -597,51 +619,53 @@
     "id": "resident-012",
     "presetId": "00000000-0000-4000-8000-000000000001",
     "presetName": "一般成年居民",
-    "street": "puyan",
-    "streetName": "浦沿街道",
-    "ageBand": "60+",
-    "sex": "male",
-    "age": 75,
+    "street": "xixing",
+    "streetName": "西兴街道",
+    "ageBand": "15-59",
+    "sex": "female",
+    "age": 19,
     "attributes": [
       {
         "key": "street",
-        "value": "puyan",
+        "value": "xixing",
         "provenance": "infer",
         "evidenceIds": [
-          "puyan:total",
-          "puyan:age:60+",
-          "puyan:sex:male"
+          "xixing:total",
+          "xixing:age:15-59",
+          "xixing:sex:female"
         ]
       },
       {
         "key": "ageBand",
-        "value": "60+",
+        "value": "15-59",
         "provenance": "infer",
         "evidenceIds": [
-          "puyan:total",
-          "puyan:age:60+",
-          "puyan:sex:male"
+          "xixing:total",
+          "xixing:age:15-59",
+          "xixing:sex:female"
         ]
       },
       {
         "key": "sex",
-        "value": "male",
+        "value": "female",
         "provenance": "infer",
         "evidenceIds": [
-          "puyan:total",
-          "puyan:age:60+",
-          "puyan:sex:male"
+          "xixing:total",
+          "xixing:age:15-59",
+          "xixing:sex:female"
         ]
       },
       {
         "key": "age",
-        "value": 75,
+        "value": 19,
         "provenance": "assumption",
         "evidenceIds": []
       }
     ],
+    "description": "一般成年受访者；职业、收入、家庭阶段和商品偏好均未知。",
     "assumptions": [
       "18+资格待核验；当前15–59岁统计档不能识别全部成年人。",
+      "画像说明与行为均为用户情景假设，不是人口事实；与明确年龄/街道冲突时以结构化画像为准。",
       "具体年龄为年龄档内的情景赋值；60+生成上限90岁不是人口事实。",
       "覆盖抽样无人口权重；预设资格不能赋予总体代表性。"
     ],

@@ -394,5 +394,90 @@
     "synthetic-analysis",
     "price-comparison",
     "group-comparison"
+  ],
+  "validationRules": [
+    {
+      "id": "street-profile",
+      "questionId": "street",
+      "field": "street",
+      "choices": [
+        {
+          "optionId": "option-1",
+          "equals": "xixing"
+        },
+        {
+          "optionId": "option-2",
+          "equals": "changhe"
+        },
+        {
+          "optionId": "option-3",
+          "equals": "puyan"
+        },
+        {
+          "optionId": "option-4",
+          "equals": "outside"
+        },
+        {
+          "optionId": "option-5",
+          "unknown": true
+        }
+      ]
+    },
+    {
+      "id": "age-profile",
+      "questionId": "age-range",
+      "field": "age",
+      "choices": [
+        {
+          "optionId": "option-1",
+          "min": 0,
+          "max": 14
+        },
+        {
+          "optionId": "option-2",
+          "min": 15,
+          "max": 17
+        },
+        {
+          "optionId": "option-3",
+          "min": 18,
+          "max": 29
+        },
+        {
+          "optionId": "option-4",
+          "min": 30,
+          "max": 44
+        },
+        {
+          "optionId": "option-5",
+          "min": 45,
+          "max": 59
+        },
+        {
+          "optionId": "option-6",
+          "min": 60
+        },
+        {
+          "optionId": "option-7",
+          "unknown": true
+        }
+      ]
+    }
+  ],
+  "comparisons": [
+    {
+      "id": "standard-price",
+      "label": "标准版19→29元的问卷内条件追问",
+      "kind": "price",
+      "baselineQuestionId": "version-choice",
+      "changedQuestionId": "standard-price-change"
+    },
+    {
+      "id": "family-benefit",
+      "label": "家庭版增加老人防诈权益的问卷内条件追问",
+      "kind": "benefit",
+      "baselineQuestionId": "version-choice",
+      "changedQuestionId": "family-antifraud"
+    }
   ]
 }

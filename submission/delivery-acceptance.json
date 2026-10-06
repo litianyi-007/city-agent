@@ -1,0 +1,307 @@
+{
+  "frozenAt": "2026-10-06T19:03:44.307Z",
+  "sha256": "048dc0a3df70fd9f48771cf6dd6b437f375e85e7f468ee56f1f2187b4ef18fa2",
+  "checks": [
+    {
+      "name": "冻结问卷运行ID",
+      "steps": [
+        {
+          "action": "assertText",
+          "selector": "#run-id",
+          "text": "0a3adcb9-6b85-40ae-b6b7-1a8f88ef8705"
+        }
+      ]
+    },
+    {
+      "name": "有效答卷与合成标识",
+      "steps": [
+        {
+          "action": "assertText",
+          "selector": "#valid-count",
+          "text": "12"
+        },
+        {
+          "action": "assertText",
+          "selector": "#simulation-notice",
+          "text": "合成"
+        }
+      ]
+    },
+    {
+      "name": "分组切换真实改变显示",
+      "steps": [
+        {
+          "action": "assertChanged",
+          "selector": "#group-summary",
+          "after": {
+            "action": "click",
+            "selector": "#next-group"
+          }
+        }
+      ]
+    },
+    {
+      "name": "冻结运行ID与合成声明",
+      "steps": [
+        {
+          "action": "assertText",
+          "selector": "#run-id",
+          "text": "0a3adcb9-6b85-40ae-b6b7-1a8f88ef8705"
+        },
+        {
+          "action": "assertVisible",
+          "selector": "#simulation-notice"
+        },
+        {
+          "action": "assertText",
+          "selector": "#simulation-notice",
+          "text": "合成"
+        }
+      ]
+    },
+    {
+      "name": "有效分母与来源时点",
+      "steps": [
+        {
+          "action": "assertText",
+          "selector": "#valid-count",
+          "text": "12"
+        },
+        {
+          "action": "assertText",
+          "selector": "#plan-count",
+          "text": "12"
+        },
+        {
+          "action": "assertText",
+          "selector": "#period",
+          "text": "2020-11-01"
+        },
+        {
+          "action": "assertText",
+          "selector": "#region",
+          "text": "滨江区"
+        }
+      ]
+    },
+    {
+      "name": "整体15题逐题存在且分母一致",
+      "steps": [
+        {
+          "action": "assertVisible",
+          "selector": "#overall-stats"
+        },
+        {
+          "action": "assertVisible",
+          "selector": "#overall-stats [data-question-id] [data-question-id='street']"
+        },
+        {
+          "action": "assertVisible",
+          "selector": "#overall-stats [data-question-id] [data-question-id='age-range']"
+        },
+        {
+          "action": "assertVisible",
+          "selector": "#overall-stats [data-question-id] [data-question-id='occupation']"
+        },
+        {
+          "action": "assertVisible",
+          "selector": "#overall-stats [data-question-id] [data-question-id='household']"
+        },
+        {
+          "action": "assertVisible",
+          "selector": "#overall-stats [data-question-id] [data-question-id='ai-experience']"
+        },
+        {
+          "action": "assertVisible",
+          "selector": "#overall-stats [data-question-id] [data-question-id='ai-uses']"
+        },
+        {
+          "action": "assertVisible",
+          "selector": "#overall-stats [data-question-id] [data-question-id='cloud-experience']"
+        },
+        {
+          "action": "assertVisible",
+          "selector": "#overall-stats [data-question-id] [data-question-id='top-features']"
+        },
+        {
+          "action": "assertVisible",
+          "selector": "#overall-stats [data-question-id] [data-question-id='privacy']"
+        },
+        {
+          "action": "assertVisible",
+          "selector": "#overall-stats [data-question-id] [data-question-id='version-choice']"
+        },
+        {
+          "action": "assertVisible",
+          "selector": "#overall-stats [data-question-id] [data-question-id='max-monthly-payment']"
+        },
+        {
+          "action": "assertVisible",
+          "selector": "#overall-stats [data-question-id] [data-question-id='purchase-concerns']"
+        },
+        {
+          "action": "assertVisible",
+          "selector": "#overall-stats [data-question-id] [data-question-id='standard-price-change']"
+        },
+        {
+          "action": "assertVisible",
+          "selector": "#overall-stats [data-question-id] [data-question-id='family-antifraud']"
+        },
+        {
+          "action": "assertVisible",
+          "selector": "#overall-stats [data-question-id] [data-question-id='trial-intent-reason']"
+        },
+        {
+          "action": "assertText",
+          "selector": "#overall-stats [data-question-id][data-question-id='street'] .denominator",
+          "text": "12"
+        }
+      ]
+    },
+    {
+      "name": "整体题计数锚点冻结",
+      "steps": [
+        {
+          "action": "assertText",
+          "selector": "#overall-stats [data-question-id='version-choice'] [data-choice-id='option-1'] .count",
+          "text": "5"
+        },
+        {
+          "action": "assertText",
+          "selector": "#overall-stats [data-question-id='version-choice'] [data-choice-id='option-2'] .count",
+          "text": "3"
+        },
+        {
+          "action": "assertText",
+          "selector": "#overall-stats [data-question-id='standard-price-change'] [data-choice-id='option-1'] .count",
+          "text": "5"
+        },
+        {
+          "action": "assertText",
+          "selector": "#overall-stats [data-question-id='age-range'] [data-choice-id='option-6'] .count",
+          "text": "6"
+        }
+      ]
+    },
+    {
+      "name": "分组摘要仅含组名与有效数",
+      "steps": [
+        {
+          "action": "assertVisible",
+          "selector": "#group-summary"
+        },
+        {
+          "action": "assertText",
+          "selector": "#group-summary .group-name",
+          "text": "全部"
+        },
+        {
+          "action": "assertText",
+          "selector": "#group-summary .group-valid",
+          "text": "12"
+        },
+        {
+          "action": "assertVisible",
+          "selector": "#group-stats"
+        },
+        {
+          "action": "assertVisible",
+          "selector": "#group-stats [data-group-question-id='version-choice']"
+        }
+      ]
+    },
+    {
+      "name": "分组切换真实改变显示",
+      "steps": [
+        {
+          "action": "assertChanged",
+          "selector": "#group-summary",
+          "after": {
+            "action": "click",
+            "selector": "#next-group"
+          }
+        }
+      ]
+    },
+    {
+      "name": "初始顺序全部→西兴",
+      "steps": [
+        {
+          "action": "assertText",
+          "selector": "#group-summary .group-name",
+          "text": "全部"
+        },
+        {
+          "action": "click",
+          "selector": "#next-group"
+        },
+        {
+          "action": "assertText",
+          "selector": "#group-summary .group-name",
+          "text": "西兴"
+        },
+        {
+          "action": "assertText",
+          "selector": "#group-summary .group-valid",
+          "text": "4"
+        },
+        {
+          "action": "click",
+          "selector": "#next-group"
+        },
+        {
+          "action": "assertText",
+          "selector": "#group-summary .group-name",
+          "text": "长河"
+        },
+        {
+          "action": "assertText",
+          "selector": "#group-summary .group-valid",
+          "text": "4"
+        },
+        {
+          "action": "click",
+          "selector": "#next-group"
+        },
+        {
+          "action": "assertText",
+          "selector": "#group-summary .group-name",
+          "text": "浦沿"
+        },
+        {
+          "action": "assertText",
+          "selector": "#group-summary .group-valid",
+          "text": "4"
+        },
+        {
+          "action": "click",
+          "selector": "#next-group"
+        },
+        {
+          "action": "assertText",
+          "selector": "#group-summary .group-name",
+          "text": "全部"
+        }
+      ]
+    },
+    {
+      "name": "研究限制与合成非真人说明可见",
+      "steps": [
+        {
+          "action": "assertVisible",
+          "selector": "#limitations"
+        },
+        {
+          "action": "assertText",
+          "selector": "#limitations",
+          "text": "不代表滨江真人市场偏好"
+        },
+        {
+          "action": "assertText",
+          "selector": "#simulation-notice",
+          "text": "非真人"
+        }
+      ]
+    }
+  ]
+}

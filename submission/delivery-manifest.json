@@ -1,0 +1,174 @@
+{
+  "runId": "d628361c-10fb-4209-8e67-cc453114a3e4",
+  "mode": "live",
+  "status": "failed",
+  "createdAt": "2026-10-06T19:03:26.734Z",
+  "finishedAt": "2026-10-06T19:06:13.705Z",
+  "harness": {
+    "name": "deepseek-harness",
+    "version": "0.1.5-rc.3"
+  },
+  "generatedBy": "four-role-llm-pipeline",
+  "humanIntervention": false,
+  "realL5Evidence": false,
+  "executionEvidence": {
+    "schemaVersion": "1.0",
+    "engineering": {
+      "scope": "single-file-offline-html",
+      "status": "not-delivered",
+      "runStatus": "failed",
+      "artifact": {
+        "available": true,
+        "deliveryStatus": "partial",
+        "origin": "live-pipeline"
+      },
+      "gate": {
+        "kind": "chromium-gate",
+        "passed": false,
+        "frozenChecks": true,
+        "verifiesDelivery": false
+      }
+    },
+    "modelExecution": {
+      "transport": "deepseek-harness",
+      "calls": 7,
+      "responses": 7,
+      "responseStatus": "responses-received",
+      "identityStatus": "unverified",
+      "observedModels": null,
+      "configuredModels": [
+        {
+          "agentId": "bb9f64d7-91dc-46ac-b339-cb84b1c23eef",
+          "role": "product",
+          "provider": "deepseek",
+          "modelId": "deepseek-flash",
+          "endpointClass": "non-loopback"
+        },
+        {
+          "agentId": "3db6736a-7a26-4c8c-a628-cef0536db4dc",
+          "role": "researcher",
+          "provider": "deepseek",
+          "modelId": "deepseek-v4-pro",
+          "endpointClass": "non-loopback"
+        },
+        {
+          "agentId": "85b9db99-74d3-47fa-8b40-bdea8a251a52",
+          "role": "developer",
+          "provider": "deepseek",
+          "modelId": "deepseek-v4-pro",
+          "endpointClass": "non-loopback"
+        },
+        {
+          "agentId": "0527d6ec-81f1-496e-b0d6-2e176694aa66",
+          "role": "tester",
+          "provider": "deepseek",
+          "modelId": "deepseek-flash",
+          "endpointClass": "non-loopback"
+        }
+      ]
+    },
+    "marketResearchValidated": false,
+    "realL5Evidence": false,
+    "limitations": [
+      "执行记录由本地运行器提供，不是独立审计或远端模型身份认证。",
+      "调用次数记录适配器请求尝试；回复次数记录适配器成功返回，不保证回复结构有效，也不证明指定模型真实执行。",
+      "provider、modelId 与 endpoint 类别均来自配置；当前 SDK 不提供已核验的观测型号，非本机地址也不构成厂商认证。",
+      "工程验证仅覆盖单文件离线 HTML 的冻结检查，不证明需求完整性、生产安全、上线可用性或通用无人干预 L5 能力。",
+      "人口统计与规则仿真不等于真人商品调研；本次运行未验证市场需求、购买意愿或预测效度。"
+    ]
+  },
+  "marketResearchValidated": false,
+  "taskHash": "600b637b3432ec736166adb503f830ef3e286123258dbcb78b0025ea35d15c3a",
+  "acceptanceHash": "048dc0a3df70fd9f48771cf6dd6b437f375e85e7f468ee56f1f2187b4ef18fa2",
+  "artifactHashes": {
+    "questionnaire-survey.json": "ecd7a3385f706a27cd06034926ee250fded61f6626cf09a69ec7704fb6c57b5f",
+    "population-pack.json": "b23aaf30c015381f7b102b71848ee97ecb64756829e7edf98c24db1bf59068d7",
+    "request.json": "eeb2fe7e29837fa92ee322a0c6f3faa3a28b37d7d50fa3b2dc69f79d55d56e1c",
+    "spec.json": "49e49b7ace434297fab71e0a4fe39bf832a2d88c65c1f251be9ea0137a40deb1",
+    "acceptance.json": "99d3ca5ddad8da186aa7a72f81fe2d301095fcd77a956ec33fcf0b2d7cf2af48",
+    "research.json": "c9aac971d493d83508fa5d6778abfbf4fcb0373e944564560c0d8d91b8e1bc8d",
+    "index.html": "1449d0e9e27555f1c9cf9af0cfdfc91c0e9a9653eabd62d04e8868e9d8182c53",
+    "gate-attempt-1.json": "5da77dafb992d66d4833850210102f3b6a132118f79db56b79dc9b5ee40df13c",
+    "gate.json": "5da77dafb992d66d4833850210102f3b6a132118f79db56b79dc9b5ee40df13c",
+    "attempt-1.html": "cafa196c89c1b172a3c7c20e9196713f6ffc93395727944d537a7bc8eaeddd46",
+    "gate-attempt-2.json": "f8e24c02c9d410ef57bbf3ae4e4384f2f99875065627215a69c2aadb2e7c7269",
+    "attempt-2.html": "e94fc6227c210ce33737d2829f7342c7424e43fdac7ceb05b70d2420f1dafb74",
+    "gate-attempt-3.json": "5da77dafb992d66d4833850210102f3b6a132118f79db56b79dc9b5ee40df13c"
+  },
+  "agents": [
+    {
+      "id": "bb9f64d7-91dc-46ac-b339-cb84b1c23eef",
+      "name": "产品经理",
+      "role": "product",
+      "provider": "deepseek",
+      "baseUrl": "https://api.deepseek.com",
+      "modelId": "deepseek-flash",
+      "hasApiKey": true,
+      "enabled": true
+    },
+    {
+      "id": "3db6736a-7a26-4c8c-a628-cef0536db4dc",
+      "name": "研究员 · Pro实测",
+      "role": "researcher",
+      "provider": "deepseek",
+      "baseUrl": "https://api.deepseek.com",
+      "modelId": "deepseek-v4-pro",
+      "hasApiKey": true,
+      "enabled": true
+    },
+    {
+      "id": "85b9db99-74d3-47fa-8b40-bdea8a251a52",
+      "name": "研发 · Pro实测",
+      "role": "developer",
+      "provider": "deepseek",
+      "baseUrl": "https://api.deepseek.com",
+      "modelId": "deepseek-v4-pro",
+      "hasApiKey": true,
+      "enabled": true
+    },
+    {
+      "id": "0527d6ec-81f1-496e-b0d6-2e176694aa66",
+      "name": "测试工程师",
+      "role": "tester",
+      "provider": "deepseek",
+      "baseUrl": "https://api.deepseek.com",
+      "modelId": "deepseek-flash",
+      "hasApiKey": true,
+      "enabled": true
+    }
+  ],
+  "usage": {
+    "inputTokens": 126089,
+    "outputTokens": 28666,
+    "estimatedCost": null
+  },
+  "modelCalls": 7,
+  "repairCount": 2,
+  "elapsedMs": 166971,
+  "data": null,
+  "population": {
+    "packId": "hangzhou-binjiang-2020",
+    "version": "2026-09-23.1",
+    "datasetHash": "46433cba846a0a5314a26809e166b8203520188490bdd98b7ca52db98e16b6a0",
+    "artifact": "population-pack.json",
+    "sourceHashes": {
+      "binjiang-census-2020-street-sex": "70119b88dc3209909f237921ae9efc764c5011d7e6f6032d1d27c2a1949fb966",
+      "binjiang-census-2020-street-age": "70119b88dc3209909f237921ae9efc764c5011d7e6f6032d1d27c2a1949fb966"
+    }
+  },
+  "questionnaire": {
+    "runId": "0a3adcb9-6b85-40ae-b6b7-1a8f88ef8705",
+    "taskHash": "421670c6c75f50e5105745b7edf161ea0e178797c678280eae40caf14aef25ee",
+    "profileHash": "f8704a4e0c19b4fef818d84272f9a1010b60abc06fca11835109dbd816083ff1",
+    "artifact": "questionnaire-survey.json",
+    "valid": 12,
+    "mode": "live"
+  },
+  "limitations": [
+    "Gate 仅证明当前冻结断言通过，不证明任意需求完备性。",
+    "规则人口调研不是 LLM 居民回答或真实市场预测。",
+    "实际供应商凭证与模型质量需要各自实测。",
+    "未配置单价，模型费用未知。"
+  ],
+  "error": "浏览器验收未通过；详见 gate.json。"
+}
