@@ -17,6 +17,7 @@ Key 在新页面重新填写，不迁移原配置。生产 Agent 使用独立六
 - [启动](RUNBOOK.md)：独立端口、数据及回归命令。
 - [申报栏目](SUBMISSION.md)：七项材料索引；实测、预测与计划分开。
 - [隔离核对](ISOLATION.md)：并行分支/worktree、主线服务与共享 Git refs 边界。
+- [工程验证](VALIDATION.md)与[真实实验账本](EXPERIMENTS.md)：包括失败、弃权、用量和未完成项。
 
 托管 TypeSafe Jev 的设置与决策已接入本线；AnyJev 本地 SDK 则仍是后续方向，不能混称。用于其他研发线复用的兼容 Harness 用量/精确 Gate 改动独立提交为 `d62b857`，只供审查后 cherry-pick，本会话不跨线合并。
 
