@@ -38,6 +38,9 @@ if (provenance.platformCommit !== platformCommit || provenance.build?.platformCo
 const jevBenchmarks = await api<JevBenchmarkRun[]>('/jev/benchmarks');
 if (jevBenchmarks.some(item => ['queued', 'running'].includes(item.status))) throw new Error('Wait for the bounded Jev benchmark to finish before packaging.');
 await save('jev-benchmarks.json', JSON.stringify(jevBenchmarks, null, 2));
+const supplementalRuns = (await api<ProductionRun[]>('/runs')).filter(run => run.evidenceKind !== 'fixture');
+if (supplementalRuns.some(run => ['queued', 'running'].includes(run.status))) throw new Error('Wait for paid/mixed runs to finish before packaging.');
+await save('mixed-and-live-runs.json', JSON.stringify(supplementalRuns, null, 2));
 
 const browser = await chromium.launch();
 let context: Awaited<ReturnType<typeof browser.newContext>> | undefined;
@@ -59,6 +62,7 @@ try {
     await page.getByRole('button', { name: '生产工作台', exact: true }).click();
   }
   await page.screenshot({ path: path.join(directory, 'workspace.png'), fullPage: true });
+  files.push({ path: 'workspace.png', sha256: sha(await readFile(path.join(directory, 'workspace.png'))) });
   for (const item of PRODUCTION_DEMO_CASES) {
     await page.getByRole('button', { name: item.title, exact: true }).click();
     if (record) await page.waitForTimeout(6000);
@@ -101,6 +105,7 @@ try {
       await preview.locator('#count').waitFor();
       if (await preview.locator('#tasks li').count() !== 1) throw new Error('Preview did not perform the expected interaction.');
       await page.screenshot({ path: path.join(directory, `${item.id}-preview.png`) });
+      files.push({ path: `${item.id}-preview.png`, sha256: sha(await readFile(path.join(directory, `${item.id}-preview.png`))) });
       if (record) await page.waitForTimeout(13000);
       await page.getByRole('button', { name: '关闭预览' }).click();
     }
@@ -111,6 +116,7 @@ try {
   }
   await page.getByRole('button', { name: '证据与申报', exact: true }).click();
   await page.screenshot({ path: path.join(directory, 'metrics.png'), fullPage: true });
+  files.push({ path: 'metrics.png', sha256: sha(await readFile(path.join(directory, 'metrics.png'))) });
   if (record) await page.waitForTimeout(12000);
   const recordedPage = page.video();
   await context.close(); context = undefined;

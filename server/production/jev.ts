@@ -11,7 +11,13 @@ const usageSchema = z.object({ input_tokens: z.number().int().nonnegative().max(
 const envelopeSchema = z.object({ model: z.string().min(1).max(100), answers: z.record(z.string(), z.unknown()), usage: usageSchema }).strict();
 const MAX_RESPONSE_BYTES = 200000;
 const TOLERANCE = 0.001;
-const CONFIDENCE_ROUNDING_TOLERANCE = 0.02;
+// The observed live v1 response displays these fields at two decimal places.
+// This bounded serialization assumption is versioned, not an API precision guarantee.
+// Validate compatible hidden values without changing or normalizing its raw evidence.
+const DISPLAY_HALF_QUANTUM = 0.005;
+const NUMERIC_EPSILON = 1e-9;
+interface ProbabilityBounds { lower: number[]; upper: number[]; }
+interface LinearConstraint { weights: number[]; maximum: number; }
 
 /** Exact secret redaction protects response/error bodies even if a provider echoes headers. */
 function sanitized(value: unknown, secret: string | undefined): unknown {
@@ -25,24 +31,114 @@ function sameKeys(actual: string[], expected: string[], name: string) {
 }
 function distribution(values: Record<string, number>, expected: string[], name: string) {
   sameKeys(Object.keys(values), expected, name);
-  if (Math.abs(Object.values(values).reduce((sum, value) => sum + value, 0) - 1) > TOLERANCE) throw new Error(`${name}: probabilities do not sum to 1`);
+  const displayed = expected.map(key => values[key]);
+  if (Math.abs(displayed.reduce((sum, value) => sum + value, 0) - 1) > expected.length * DISPLAY_HALF_QUANTUM + NUMERIC_EPSILON) throw new Error(`${name}: probabilities cannot sum to 1 within display rounding`);
+  const bounds: ProbabilityBounds = { lower: displayed.map(value => Math.max(0, value - DISPLAY_HALF_QUANTUM)), upper: displayed.map(value => Math.min(1, value + DISPLAY_HALF_QUANTUM)) };
+  if (bounds.lower.reduce((sum, value) => sum + value, 0) > 1 + NUMERIC_EPSILON || bounds.upper.reduce((sum, value) => sum + value, 0) < 1 - NUMERIC_EPSILON) throw new Error(`${name}: rounded probability intervals have no unit-sum solution`);
+  return bounds;
+}
+/** Linear objective extrema with box constraints and true sum=1, solved greedily. */
+function weightedInterval(bounds: ProbabilityBounds, weights: number[]) {
+  const extreme = (descending: boolean) => {
+    const values = [...bounds.lower]; let remaining = 1 - values.reduce((sum, value) => sum + value, 0);
+    const order = weights.map((_, index) => index).sort((a, b) => descending ? weights[b] - weights[a] : weights[a] - weights[b]);
+    for (const index of order) { const increase = Math.min(Math.max(0, remaining), bounds.upper[index] - values[index]); values[index] += increase; remaining -= increase; }
+    if (remaining > NUMERIC_EPSILON) throw new Error('Rounded probability intervals have no unit-sum solution');
+    return values.reduce((sum, value, index) => sum + value * weights[index], 0);
+  };
+  return { minimum: extreme(false), maximum: extreme(true) };
+}
+/** Solve one tiny active-constraint system with partial-pivot Gaussian elimination. */
+function intersectionPoint(constraints: LinearConstraint[], indices: number[], dimensions: number): number[] | null {
+  const matrix = indices.map(index => [...constraints[index].weights, constraints[index].maximum]);
+  for (let column = 0; column < dimensions; column++) {
+    let pivot = column;
+    for (let row = column + 1; row < dimensions; row++) if (Math.abs(matrix[row][column]) > Math.abs(matrix[pivot][column])) pivot = row;
+    if (Math.abs(matrix[pivot][column]) <= NUMERIC_EPSILON) return null;
+    [matrix[column], matrix[pivot]] = [matrix[pivot], matrix[column]];
+    const divisor = matrix[column][column];
+    for (let item = column; item <= dimensions; item++) matrix[column][item] /= divisor;
+    for (let row = 0; row < dimensions; row++) if (row !== column) {
+      const factor = matrix[row][column];
+      for (let item = column; item <= dimensions; item++) matrix[row][item] -= factor * matrix[column][item];
+    }
+  }
+  const point = matrix.map(row => row[dimensions]);
+  return point.every(Number.isFinite) ? point : null;
+}
+/**
+ * Joint bounded-simplex feasibility, not independent interval checks.
+ * Eliminate the last probability using sum=1, then enumerate vertices of the
+ * bounded polytope (at most four variables for Score, two for Choice).
+ * No hidden probabilities are returned or substituted into provider evidence.
+ */
+function hasJointDistribution(bounds: ProbabilityBounds, extra: LinearConstraint[]): boolean {
+  const count = bounds.lower.length; const dimensions = count - 1;
+  const box = bounds.lower.flatMap((lower, index) => {
+    const upperWeights = Array.from({ length: count }, (_, item) => item === index ? 1 : 0);
+    return [{ weights: upperWeights, maximum: bounds.upper[index] }, { weights: upperWeights.map(weight => -weight), maximum: -lower }];
+  });
+  const constraints = [...box, ...extra].map(({ weights, maximum }) => ({ weights: weights.slice(0, dimensions).map(weight => weight - weights[dimensions]), maximum: maximum - weights[dimensions] }));
+  if (dimensions === 0) return constraints.every(constraint => constraint.maximum >= -NUMERIC_EPSILON);
+  const indices: number[] = [];
+  const search = (start: number): boolean => {
+    if (indices.length === dimensions) {
+      const point = intersectionPoint(constraints, indices, dimensions);
+      return point !== null && constraints.every(constraint => constraint.weights.reduce((sum, weight, index) => sum + weight * point[index], 0) <= constraint.maximum + NUMERIC_EPSILON);
+    }
+    for (let index = start; index <= constraints.length - (dimensions - indices.length); index++) {
+      indices.push(index); if (search(index + 1)) return true; indices.pop();
+    }
+    return false;
+  };
+  return search(0);
+}
+function modalConstraints(count: number, mode: number): LinearConstraint[] {
+  return Array.from({ length: count }, (_, index) => index).filter(index => index !== mode).map(index => ({ weights: Array.from({ length: count }, (_, item) => item === index ? 1 : item === mode ? -1 : 0), maximum: 0 }));
 }
 function verifiedScore(value: unknown, name: string): JevScoreAnswer {
   const answer = scoreAnswer.parse(value); const keys = ['0', '1', '2', '3', '4'];
-  distribution(answer.probabilities, keys, name); sameKeys(Object.keys(answer.legend), keys, `${name}.legend`);
-  const expected = keys.reduce((sum, key) => sum + Number(key) * answer.probabilities[key], 0);
-  if (Math.abs(answer.score - expected) > TOLERANCE) throw new Error(`${name}: score does not match probability-weighted value`);
-  const mode = keys.reduce((best, key) => answer.probabilities[key] > answer.probabilities[best] ? key : best, '0');
-  const expectedConfidence = Math.max(0, 1 - keys.reduce((sum, key) => sum + answer.probabilities[key] * Math.abs(Number(key) - Number(mode)), 0) / 1.2);
-  if (Math.abs(answer.confidence - expectedConfidence) > CONFIDENCE_ROUNDING_TOLERANCE) throw new Error(`${name}: confidence does not match the documented concentration formula (allowing rounded API values)`);
+  const bounds = distribution(answer.probabilities, keys, name); sameKeys(Object.keys(answer.legend), keys, `${name}.legend`);
+  if (keys.some(key => answer.legend[key] !== LEVELS[Number(key)])) throw new Error(`${name}: legend differs from the frozen rubric; reordered or rewritten labels are not allowed`);
+  const expected = weightedInterval(bounds, keys.map(Number));
+  if (answer.score + DISPLAY_HALF_QUANTUM < expected.minimum - NUMERIC_EPSILON || answer.score - DISPLAY_HALF_QUANTUM > expected.maximum + NUMERIC_EPSILON) throw new Error(`${name}: score does not match any probability-weighted value within display rounding`);
+  const maximum = Math.max(...Object.values(answer.probabilities));
+  // A monotone rounding operation cannot make a true mode display below the
+  // displayed maximum. All displayed ties must be considered, not just the first.
+  const possibleModes = keys.filter(key => maximum - answer.probabilities[key] <= NUMERIC_EPSILON);
+  const confidenceLower = Math.max(0, answer.confidence - DISPLAY_HALF_QUANTUM);
+  const confidenceUpper = Math.min(1, answer.confidence + DISPLAY_HALF_QUANTUM);
+  const scoreWeights = keys.map(Number);
+  const confidenceCompatible = possibleModes.some(key => {
+    const mode = Number(key); const distances = scoreWeights.map(level => Math.abs(level - mode));
+    const constraints: LinearConstraint[] = [
+      { weights: scoreWeights, maximum: Math.min(4, answer.score + DISPLAY_HALF_QUANTUM) },
+      { weights: scoreWeights.map(weight => -weight), maximum: -Math.max(0, answer.score - DISPLAY_HALF_QUANTUM) },
+      { weights: distances.map(distance => -distance), maximum: -1.2 * (1 - confidenceUpper) },
+      ...modalConstraints(keys.length, mode),
+    ];
+    // confidence=max(0,1-MAD/1.2): at displayed zero there is no MAD upper bound.
+    if (confidenceLower > 0) constraints.push({ weights: distances, maximum: 1.2 * (1 - confidenceLower) });
+    return hasJointDistribution(bounds, constraints);
+  });
+  if (!confidenceCompatible) throw new Error(`${name}: score and confidence have no joint probability distribution consistent with display rounding and the modal concentration formula`);
   const { type: _, ...result } = answer; return result;
 }
 function verifiedChoice(value: unknown, candidateIds: string[]): JevChoiceAnswer {
   const answer = choiceAnswer.parse(value); const keys = [...candidateIds, 'abstain'];
-  distribution(answer.probabilities, keys, 'best');
-  if (!keys.includes(answer.choice) || answer.probabilities[answer.choice] < Math.max(...Object.values(answer.probabilities)) - TOLERANCE) throw new Error('best: choice is not a highest-probability option');
-  const confidence = (Math.max(...Object.values(answer.probabilities)) - 1 / keys.length) / (1 - 1 / keys.length);
-  if (Math.abs(answer.confidence - confidence) > CONFIDENCE_ROUNDING_TOLERANCE) throw new Error('best: confidence does not match the documented concentration formula (allowing rounded API values)');
+  const bounds = distribution(answer.probabilities, keys, 'best');
+  const selectedIndex = keys.indexOf(answer.choice);
+  if (selectedIndex < 0 || answer.probabilities[answer.choice] < Math.max(...Object.values(answer.probabilities)) - NUMERIC_EPSILON) throw new Error('best: choice is not a displayed highest-probability option');
+  const selectedWeights = keys.map((_, index) => index === selectedIndex ? 1 : 0);
+  const baseline = 1 / keys.length; const denominator = 1 - baseline;
+  const confidenceLower = Math.max(0, answer.confidence - DISPLAY_HALF_QUANTUM);
+  const confidenceUpper = Math.min(1, answer.confidence + DISPLAY_HALF_QUANTUM);
+  const constraints = [
+    { weights: selectedWeights, maximum: baseline + denominator * confidenceUpper },
+    { weights: selectedWeights.map(weight => -weight), maximum: -(baseline + denominator * confidenceLower) },
+    ...modalConstraints(keys.length, selectedIndex),
+  ];
+  if (!hasJointDistribution(bounds, constraints)) throw new Error('best: choice and confidence have no joint probability distribution consistent with display rounding');
   const { type: _, ...result } = answer; return result;
 }
 export function buildJevCandidateRequest(modelId: string, context: JevCandidateContext): JevRequestSnapshot {

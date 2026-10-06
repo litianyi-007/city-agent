@@ -1,14 +1,15 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { DEFAULT_JEV_CONFIG, JEV_ENDPOINT, JEV_MODEL_ID, jevConfigPatchSchema, type JevCandidateContext } from '../shared/jev-schema.js';
+import { DEFAULT_JEV_CONFIG, JEV_ENDPOINT, JEV_MODEL_ID, JEV_POLICY_VERSION, jevConfigPatchSchema, type JevCandidateContext } from '../shared/jev-schema.js';
 import { buildJevCandidateRequest, evaluateJevCandidates } from '../server/production/jev.js';
 
 const config = { ...DEFAULT_JEV_CONFIG, enabled: true, apiKey: 'fixture-jev-secret-not-a-real-key' };
 const context: JevCandidateContext = { phase: 'product', goal: 'Offline todo page', acceptance: 'Add and remove tasks with correct totals.', frozenHash: null, candidates: [{ id: 'candidate-one', value: { goal: 'Offline todo page', scope: 'offline-single-html' } }] };
+const levels = buildJevCandidateRequest(JEV_MODEL_ID, context).questions.c0_coverage.criteria as string[];
 function responseBody(indices = [4]) {
   const answers: Record<string, unknown> = {};
   indices.forEach((value, index) => {
-    for (const dimension of ['coverage', 'consistency', 'scope']) answers[`c${index}_${dimension}`] = { type: 'score', score: value, legend: Object.fromEntries([0, 1, 2, 3, 4].map(level => [String(level), `Level ${level}`])), probabilities: Object.fromEntries([0, 1, 2, 3, 4].map(level => [String(level), level === value ? 1 : 0])), confidence: 1 };
+    for (const dimension of ['coverage', 'consistency', 'scope']) answers[`c${index}_${dimension}`] = { type: 'score', score: value, legend: Object.fromEntries(levels.map((label, index) => [String(index), label])), probabilities: Object.fromEntries([0, 1, 2, 3, 4].map(level => [String(level), level === value ? 1 : 0])), confidence: 1 };
     answers[`c${index}_safe`] = { type: 'noul', noul: value > 2 ? 1 : 0 };
   });
   const ids = indices.map((_, index) => index === 0 ? 'candidate-one' : 'candidate-two');
@@ -17,6 +18,9 @@ function responseBody(indices = [4]) {
   return { model: JEV_MODEL_ID, answers, usage: { input_tokens: 1000, output_tokens: 40 } };
 }
 const successfulFetch = (body: unknown) => (async () => new Response(JSON.stringify(body), { headers: { 'Content-Type': 'application/json' } })) as typeof fetch;
+function roundedScore(score: number, confidence: number, probabilities: Record<string, number>) {
+  return { type: 'score', score, confidence, probabilities, legend: Object.fromEntries(levels.map((label, index) => [String(index), label])) };
+}
 
 test('Jev uses the pinned official endpoint and evaluates a single candidate via all primitives', async () => {
   let calls = 0;
@@ -45,6 +49,13 @@ test('All clearly bad candidates are rejected; not changed into a successful tem
   assert.equal(result.status, 'rejected'); assert.equal(result.selectedCandidateId, null); assert.equal(result.usage.complete, true);
 });
 
+test('Provider cannot reverse or rewrite the frozen rubric legend while returning a high score', async () => {
+  const body = responseBody();
+  (body.answers.c0_coverage as { legend: Record<string, string> }).legend['4'] = levels[0];
+  const result = await evaluateJevCandidates(config, context, new AbortController().signal, { fetch: successfulFetch(body) });
+  assert.equal(result.status, 'error'); assert.match(result.error!, /legend differs/); assert.equal(result.usage.complete, true);
+});
+
 test('A Choice selecting a weaker qualified candidate is uncertain, not labelled the best answer', async () => {
   const body = responseBody([3, 4]);
   body.answers.best = { type: 'choice', choice: 'candidate-one', probabilities: { 'candidate-one': 1, 'candidate-two': 0, abstain: 0 }, confidence: 1 };
@@ -55,10 +66,91 @@ test('A Choice selecting a weaker qualified candidate is uncertain, not labelled
 
 test('Low concentration is uncertain, never an implied accuracy or automatic acceptance', async () => {
   const body = responseBody();
-  for (const dimension of ['coverage', 'consistency', 'scope']) body.answers[`c0_${dimension}`] = { type: 'score', score: 2, legend: { '0': '0', '1': '1', '2': '2', '3': '3', '4': '4' }, probabilities: { '0': 0.2, '1': 0.2, '2': 0.2, '3': 0.2, '4': 0.2 }, confidence: 0 };
+  for (const dimension of ['coverage', 'consistency', 'scope']) body.answers[`c0_${dimension}`] = roundedScore(2, 0, { '0': 0.2, '1': 0.2, '2': 0.2, '3': 0.2, '4': 0.2 });
   body.answers.c0_safe = { type: 'noul', noul: 0.5 }; body.answers.best = { type: 'choice', choice: 'candidate-one', probabilities: { 'candidate-one': 0.5, abstain: 0.5 }, confidence: 0 };
   const result = await evaluateJevCandidates(config, context, new AbortController().signal, { fetch: successfulFetch(body) });
   assert.equal(result.status, 'uncertain'); assert.equal(result.selectedCandidateId, null);
+});
+
+test('v2 accepts two-decimal provider arithmetic and ambiguous displayed modal ties without altering evidence', async () => {
+  const body = responseBody();
+  body.answers.c0_consistency = roundedScore(2.27, 0.11, { '0': 0.04, '1': 0.33, '2': 0.13, '3': 0.33, '4': 0.17 });
+  body.answers.c0_scope = roundedScore(3.11, 0.26, { '0': 0.03, '1': 0.12, '2': 0.04, '3': 0.30, '4': 0.51 });
+  const result = await evaluateJevCandidates(config, context, new AbortController().signal, { fetch: successfulFetch(body) });
+  assert.equal(JEV_POLICY_VERSION, 'jev-candidate-v2'); assert.equal(result.policyVersion, JEV_POLICY_VERSION);
+  assert.equal(result.status, 'uncertain'); assert.equal(result.selectedCandidateId, null);
+  assert.equal(result.scores[0].dimensions.consistency.score, 2.27);
+  assert.equal(result.scores[0].dimensions.consistency.confidence, 0.11);
+  assert.deepEqual(result.rawResponse, body); assert.equal(result.scores[0].qualified, false);
+});
+
+test('rounded probability sums .99 and 1.01 are validated as unit-sum intervals, not normalized', async () => {
+  for (const [sum, answer] of [[0.99, roundedScore(3.78, 0.82, { '0': 0, '1': 0, '2': 0, '3': 0.20, '4': 0.79 })], [1.01, roundedScore(3.79, 0.83, { '0': 0, '1': 0, '2': 0.01, '3': 0.20, '4': 0.80 })]] as const) {
+    const body = responseBody(); body.answers.c0_scope = answer;
+    const result = await evaluateJevCandidates(config, context, new AbortController().signal, { fetch: successfulFetch(body) });
+    assert.equal(result.status, 'accepted'); assert.equal(result.scores[0].dimensions.scope.score, answer.score);
+    assert.ok(Math.abs(Object.values(result.scores[0].dimensions.scope.probabilities).reduce((total, value) => total + value, 0) - sum) < 1e-9);
+    assert.deepEqual(result.rawResponse, body);
+  }
+});
+
+test('Joint score/concentration validation rejects individually plausible but incompatible intervals', async () => {
+  // Mode 4 implies confidence=max(0,(E-2.8)/1.2). The reported score interval
+  // E=[3.385,3.395] cannot yield confidence=[.505,.515], despite independent
+  // probability-box extrema intersecting both intervals.
+  const body = responseBody(); body.answers.c0_scope = roundedScore(3.39, 0.51, { '0': 0.10, '1': 0, '2': 0.10, '3': 0, '4': 0.80 });
+  const result = await evaluateJevCandidates(config, context, new AbortController().signal, { fetch: successfulFetch(body) });
+  assert.equal(result.status, 'error'); assert.equal(result.selectedCandidateId, null);
+  assert.match(result.reason, /no joint probability distribution/); assert.deepEqual(result.rawResponse, body);
+  // The adjacent jointly consistent evidence remains valid, without relaxing .5.
+  body.answers.c0_scope = roundedScore(3.40, 0.50, { '0': 0.10, '1': 0, '2': 0.10, '3': 0, '4': 0.80 });
+  assert.equal((await evaluateJevCandidates(config, context, new AbortController().signal, { fetch: successfulFetch(body) })).status, 'accepted');
+});
+
+test('Choice must be a displayed argmax; a strictly lower rounded option cannot win', async () => {
+  const two = { ...context, candidates: [...context.candidates, { id: 'candidate-two', value: 'Another complete candidate' }] };
+  const body = responseBody([4, 4]);
+  body.answers.best = { type: 'choice', choice: 'candidate-one', probabilities: { 'candidate-one': 0.33, 'candidate-two': 0.34, abstain: 0.33 }, confidence: 0.01 };
+  const result = await evaluateJevCandidates(config, two, new AbortController().signal, { fetch: successfulFetch(body) });
+  assert.equal(result.status, 'error'); assert.match(result.reason, /displayed highest-probability/);
+  body.answers.best = { type: 'choice', choice: 'candidate-two', probabilities: { 'candidate-one': 0.34, 'candidate-two': 0.34, abstain: 0.32 }, confidence: 0.01 };
+  assert.equal((await evaluateJevCandidates(config, two, new AbortController().signal, { fetch: successfulFetch(body) })).status, 'uncertain');
+});
+
+test('Choice concentration and rounded probabilities must share one unit-sum distribution', async () => {
+  // The .99 displayed sum forces the hidden selected probability to .855;
+  // concentration must then be .71, not the independently plausible .69.
+  const body = responseBody(); body.answers.best = { type: 'choice', choice: 'candidate-one', probabilities: { 'candidate-one': 0.85, abstain: 0.14 }, confidence: 0.69 };
+  const result = await evaluateJevCandidates(config, context, new AbortController().signal, { fetch: successfulFetch(body) });
+  assert.equal(result.status, 'error'); assert.match(result.reason, /no joint probability distribution/); assert.deepEqual(result.rawResponse, body);
+});
+
+test('Choice supports display rounding propagation while quality and concentration thresholds stay fixed', async () => {
+  for (const [probabilities, confidence] of [[{ 'candidate-one': 0.85, abstain: 0.14 }, 0.71], [{ 'candidate-one': 0.85, abstain: 0.16 }, 0.69]] as const) {
+    const body = responseBody(); body.answers.best = { type: 'choice', choice: 'candidate-one', probabilities, confidence };
+    const result = await evaluateJevCandidates(config, context, new AbortController().signal, { fetch: successfulFetch(body) });
+    assert.equal(result.status, 'accepted'); assert.deepEqual(result.choice?.probabilities, probabilities);
+  }
+  const lowConfidence = responseBody(); lowConfidence.answers.c0_scope = roundedScore(3.39, 0.49, { '0': 0, '1': 0, '2': 0.20, '3': 0.21, '4': 0.59 });
+  assert.equal((await evaluateJevCandidates(config, context, new AbortController().signal, { fetch: successfulFetch(lowConfidence) })).status, 'uncertain');
+  const lowScore = responseBody(); lowScore.answers.c0_scope = roundedScore(2.99, 0.99, { '0': 0, '1': 0, '2': 0.01, '3': 0.99, '4': 0 });
+  assert.equal((await evaluateJevCandidates(config, context, new AbortController().signal, { fetch: successfulFetch(lowScore) })).status, 'rejected');
+  assert.equal(DEFAULT_JEV_CONFIG.minScore, 3); assert.equal(DEFAULT_JEV_CONFIG.minConfidence, 0.5);
+});
+
+test('v2 rounding compatibility still rejects corrupted distributions, scores, confidence and missing values', async () => {
+  const invalidScores = [
+    roundedScore(3.11, 0.26, { '0': -0.01, '1': 0.16, '2': 0.04, '3': 0.30, '4': 0.51 }),
+    roundedScore(3.11, 0.26, { '0': 0.03, '1': 0.12, '2': 0.04, '3': 0.30, '4': 0.40 }),
+    roundedScore(2.8, 0.26, { '0': 0.03, '1': 0.12, '2': 0.04, '3': 0.30, '4': 0.51 }),
+    roundedScore(3.11, 0.9, { '0': 0.03, '1': 0.12, '2': 0.04, '3': 0.30, '4': 0.51 }),
+    roundedScore(3.11, 0.26, { '0': 0.03, '1': 0.12, '2': 0.04, '3': 0.30 }),
+  ];
+  for (const answer of invalidScores) { const body = responseBody(); body.answers.c0_scope = answer; assert.equal((await evaluateJevCandidates(config, context, new AbortController().signal, { fetch: successfulFetch(body) })).status, 'error'); }
+  const choice = responseBody(); choice.answers.best = { type: 'choice', choice: 'candidate-one', probabilities: { 'candidate-one': 0.85, abstain: 0.15 }, confidence: 0.3 };
+  assert.equal((await evaluateJevCandidates(config, context, new AbortController().signal, { fetch: successfulFetch(choice) })).status, 'error');
+  const missing = responseBody(); missing.answers.c0_scope = { type: 'score', confidence: 1, probabilities: { '0': 0, '1': 0, '2': 0, '3': 0, '4': 1 }, legend: { '0': '0', '1': '1', '2': '2', '3': '3', '4': '4' } };
+  assert.equal((await evaluateJevCandidates(config, context, new AbortController().signal, { fetch: successfulFetch(missing) })).status, 'error');
 });
 
 test('Unexpected IDs, invalid distributions, inconsistent score/choice and model drift fail closed', async () => {

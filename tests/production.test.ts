@@ -5,6 +5,7 @@ import { mkdtempSync, readFileSync, rmSync, statSync, symlinkSync } from 'node:f
 import { createServer } from 'node:http';
 import os from 'node:os';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { test, type TestContext } from 'node:test';
 import express from 'express';
 import { productionRunInputSchema, type ProductionRun, type ProductionRunInput } from '../shared/production-schema.js';
@@ -17,7 +18,7 @@ import type { runRole } from '../server/harness.js';
 import { PRODUCTION_DEMO_CASES } from '../shared/production-benchmarks.js';
 
 async function setup(t: TestContext, options: ProductionOptions = {}) {
-  const directory = mkdtempSync(path.join(os.tmpdir(), 'city-production-test-')); const service = createProductionService(directory, options); const app = express(); app.use(express.json()); app.use('/api/production', service.router); const server = createServer(app); server.listen(0, '127.0.0.1'); await once(server, 'listening'); const address = server.address(); if (!address || typeof address === 'string') throw new Error('Test address missing');
+  const directory = mkdtempSync(path.join(fileURLToPath(new URL('../', import.meta.url)), '.city-agent-production-unit-')); const service = createProductionService(directory, options); const app = express(); app.use(express.json()); app.use('/api/production', service.router); const server = createServer(app); server.listen(0, '127.0.0.1'); await once(server, 'listening'); const address = server.address(); if (!address || typeof address === 'string') throw new Error('Test address missing');
   t.after(async () => { await service.close(); await new Promise<void>((resolve, reject) => server.close(error => error ? reject(error) : resolve())); rmSync(directory, { recursive: true, force: true }); });
   const request = (route: string, body?: unknown, method = 'GET') => fetch(`http://127.0.0.1:${address.port}/api/production${route}`, { method, headers: { 'Content-Type': 'application/json' }, ...(body === undefined ? {} : { body: JSON.stringify(body) }) });
   const input = (overrides: Partial<ProductionRunInput> = {}) => { const fixture = PRODUCTION_DEMO_CASES.find(item => item.operation === overrides.demoCaseId) ?? PRODUCTION_DEMO_CASES[0]; return productionRunInputSchema.parse({ brief: fixture.brief, mode: 'demo', ...(overrides.mode === 'live' ? {} : { demoCaseId: fixture.operation }), agentIds: service.store.agents().map(agent => agent.id), requirement: { id: fixture.id, source: fixture.source, acceptance: fixture.acceptance, kind: 'illustrative' }, ...overrides }); };
