@@ -14,6 +14,7 @@ import { hash, ProductionStore } from '../server/production/store.js';
 import type { ProductionOptions } from '../server/production/pipeline.js';
 import type { runRole, RoleResult } from '../server/harness.js';
 import { runGate } from '../server/gate.js';
+import { diagnoseJsonOutput, OUTPUT_DIAGNOSTICS_VERSION } from '../server/production/output-diagnostics.js';
 
 const INVALID_TEST_JSON = '{"checks":[{"name":"invalid function syntax","steps":[{"assertTextExact":"#result","bare-value"}]}]}';
 const standaloneInput = (brief: string) => productionRunInputSchema.parse({ brief, agentIds: Array.from({ length: 6 }, () => randomUUID()), requirement: { id: 'standalone-unit', source: 'Free engineering fixture', acceptance: 'Add tasks and show counts', kind: 'illustrative' } });
@@ -52,8 +53,53 @@ test('invalid tester JSON leads to an actual second tester call, revalidation an
   const run = await start(); assert.equal(run.status, 'completed', run.error); assert.equal(testerCalls, 2); assert.equal(run.repairs, 1); assert.equal(run.repairPolicyVersion, PRODUCTION_REPAIR_POLICY_VERSION); assert.equal(run.evidenceKind, 'injected-test');
   const testers = run.calls.filter(call => call.role === 'tester'); assert.equal(testers[0].rawOutput, INVALID_TEST_JSON); assert.ok(testers[0].error); assert.notEqual(testers[0].candidateId, testers[1].candidateId); assert.equal(testers[1].phase, 'acceptance');
   const regeneration = JSON.parse(testers[1].userPrompt).context.regeneration; assert.equal(regeneration.attempt, 1); assert.equal(regeneration.frozenHash, null); assert.equal(regeneration.rejectedCandidates[0].rawOutputExcerpt, INVALID_TEST_JSON); assert.equal(regeneration.rejectedCandidates[0].rawOutputSha256, hash(INVALID_TEST_JSON)); assert.deepEqual(regeneration.rejectedCandidateIds, [testers[0].candidateId]);
+  assert.equal(run.validationContract?.outputDiagnosticsVersion, OUTPUT_DIAGNOSTICS_VERSION);
+  assert.deepEqual(testers[0].outputDiagnostic, diagnoseJsonOutput(INVALID_TEST_JSON));
+  assert.deepEqual(regeneration.rejectedCandidates[0].outputDiagnostic, testers[0].outputDiagnostic);
+  assert.equal(regeneration.rejectedCandidates[0].callId, testers[0].id);
   assert.equal(run.events.filter(event => event.phase === 'freeze').length, 1); assert.ok(run.frozenContract); assert.equal(run.repairHistory![0].kind, 'stage-regeneration'); assert.equal(run.repairHistory![0].role, 'tester'); assert.equal(run.verifications.filter(review => review.phase === 'acceptance').length, 2);
   const manifest = JSON.parse(service.store.readArtifact(run.id, 'delivery-manifest.json')); assert.equal(manifest.repairPolicyVersion, PRODUCTION_REPAIR_POLICY_VERSION); assert.deepEqual(manifest.repairHistory, run.repairHistory);
+});
+
+test('late syntax failure carries a bound error-position excerpt beyond the old prefix, never a repaired answer or reviewer hint', async t => {
+  const malformed = `{"observations":["${'x'.repeat(2500)}"]","constraints":["scope"],"unknowns":[]}`;
+  let researchCalls = 0; let reviewed = false;
+  const { service, start } = setup(t, { roleCall: async (...args) => {
+    const data = JSON.parse(args[2]);
+    if (!args[1].startsWith('你是独立质量Verifier') && args[1].includes('"observations"')) {
+      researchCalls++;
+      if (researchCalls === 1) return result(malformed);
+      const rejected = data.context.regeneration.rejectedCandidates[0];
+      assert.equal(rejected.rawOutputTruncated, true);
+      assert.equal(rejected.rawOutputExcerpt.length, 2000);
+      assert.deepEqual(rejected.outputDiagnostic, diagnoseJsonOutput(malformed));
+      assert.equal(rejected.outputDiagnostic.sourceSha256, rejected.rawOutputSha256);
+      assert.ok(rejected.outputDiagnostic.rawPosition > 2000);
+      assert.ok(rejected.outputDiagnostic.excerpt.text.includes(']","constraints"'));
+      assert.equal(rejected.outputDiagnostic.excerpt.text, malformed.slice(rejected.outputDiagnostic.excerpt.start, rejected.outputDiagnostic.excerpt.end));
+    }
+    if (args[1].startsWith('你是独立质量Verifier') && data.criteria.phase === 'research') {
+      reviewed = true;
+      assert.equal(data.state.reviewContext.regeneration, undefined);
+      assert.equal(JSON.stringify(data.state.reviewContext).includes('x'.repeat(320)), false);
+    }
+    return injected(...args);
+  } });
+  const run = await start();
+  assert.equal(run.status, 'completed', run.error); assert.equal(run.evidenceKind, 'injected-test');
+  assert.equal(researchCalls, 2); assert.equal(reviewed, true); assert.equal(run.repairs, 1);
+  const first = run.calls.find(call => call.role === 'researcher')!;
+  assert.equal(first.rawOutput, malformed); assert.equal(first.selected, undefined);
+  assert.deepEqual(JSON.parse(service.store.readArtifact(run.id, 'evidence.json')).calls.find((call: ProductionRun['calls'][number]) => call.id === first.id).outputDiagnostic, first.outputDiagnostic);
+});
+
+test('syntax diagnostic metadata cannot be masked by an otherwise valid credential substring', () => {
+  for (const literal of [OUTPUT_DIAGNOSTICS_VERSION, 'outputDiagnosticsVersion', 'outputDiagnostic']) {
+    for (let start = 0; start < literal.length; start++) for (let end = start + 16; end <= literal.length; end++) {
+      assert.equal(productionApiKeySchema.safeParse(literal.slice(start, end)).success, false);
+    }
+  }
+  assert.equal(productionApiKeySchema.safeParse('ordinary_synthetic_metadata_key_0123456789').success, true);
 });
 
 test('actual invalid CSS preflight rejects then regenerates the tester, not a silently weakened contract', async t => {

@@ -4,7 +4,7 @@ import type { ProductionCapability } from '../../shared/production-schema.js';
 import { PRODUCTION_VERIFIER_VERSION } from '../../shared/production-verifier-rubric.js';
 import { HTML_DOM_CONTRACT_INSTRUCTIONS, HTML_EXECUTION_INSTRUCTIONS } from '../../shared/production-execution-profile.js';
 
-export const PROMPT_VERSION = 'production-html-v9';
+export const PROMPT_VERSION = 'production-html-v10';
 export const ACCEPTANCE_CONTRACT_VERSION = 'production-acceptance-v3';
 export const CRITERIA_VERSION = PRODUCTION_VERIFIER_VERSION;
 export const CAMERA_PROMPT_VERSION = 'production-camera-scene-v7';
@@ -83,10 +83,11 @@ const BASE_CONTRACT_INSTRUCTIONS = {
   developer: roleInstructions('返回严格JSON {"html":"<!doctype html>...完整闭合文档... </html>"}。实现用户业务目标及全部冻结检查，所有JS/CSS内联；禁止外部网络、弹窗、下载、iframe、worker、后端或shell。不能删除失败测试或修改冻结检查。不能把静态通过文案当功能。'),
 } as const;
 
-const htmlInstructions = (instructions: string) => `${instructions} ${HTML_EXECUTION_INSTRUCTIONS} ${HTML_DOM_CONTRACT_INSTRUCTIONS}`;
+export const HTML_JSON_INSTRUCTIONS = 'JSON语法与纠错：返回一个完整JSON对象，数组必须是数组而不是包在引号内的字符串。通用语法示例仅示范类型：{"items":["说明"],"notes":[],"meta":{"ok":true}}；数组结束符]后直接用逗号分隔下一个属性或用}闭合对象，不得在]后多写双引号。字符串内双引号、反斜杠、换行必须按JSON转义。该示例不是本角色的输出schema，不能复制items/notes/meta为额外字段。outputContract中的maxItems及其他硬限制不因语法纠错而改变。context.regeneration.rejectedCandidates[].outputDiagnostic若存在，仅定位上一份已脱敏原文的语法错误（UTF16位置、sourceSha256与局部片段），不提供修好的答案、也不代表其他位置或schema合法；结合完整本阶段schema重新生成新候选，不盲目复制旧错误。宿主不会自动修复JSON，native json_object请求也不能代替宿主解析与结构门禁。';
+const htmlInstructions = (instructions: string) => `${instructions} ${HTML_EXECUTION_INSTRUCTIONS} ${HTML_DOM_CONTRACT_INSTRUCTIONS} ${HTML_JSON_INSTRUCTIONS}`;
 export const CONTRACT_INSTRUCTIONS = Object.freeze({
   product: htmlInstructions(BASE_CONTRACT_INSTRUCTIONS.product),
-  researcher: htmlInstructions(BASE_CONTRACT_INSTRUCTIONS.researcher),
+  researcher: `${htmlInstructions(BASE_CONTRACT_INSTRUCTIONS.researcher)} 研究建议优先每类3–6条高信息密度判断，unknowns可为空；实际每数组最多12条仍以outputContract为准。简洁不能省略必需业务约束、真实阻碍或未经验证项，不把冗长说明拆成超过数量限制的条目。`,
   'project-manager': htmlInstructions(BASE_CONTRACT_INSTRUCTIONS['project-manager']),
   tester: htmlInstructions(BASE_CONTRACT_INSTRUCTIONS.tester),
   developer: htmlInstructions(BASE_CONTRACT_INSTRUCTIONS.developer),

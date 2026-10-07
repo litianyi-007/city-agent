@@ -6,8 +6,6 @@
 
 公共首屏、紧凑输出/语义预检、原生JSON、09真实场景闭环及v5发布已完成。HTML-01已真实执行并失败；下一顺序为免费修补HTML执行事实/返修评审上下文/启动身份 → 新版本HTML真实探索 → 用户主动实体摄像头验收 → Verifier同条件效益对照 → 容器及受控仓库 → 固定配置泛化实验。三DEV池免费Oracle准备与正式18池/收费模型对照分列。本分支六角色Key已由用户配置，不迁移别线；新增真实执行先冻结该实验与预算。[HTML01结果](experiments/HTML-01/RESULT.md)、[v5发布](PUBLICATION-V5-2026-10-07.md)，[本次更新前留底](archive/2026-10-07-before-html01/NEXT-STEPS.md)。
 
-上述免费修补已480/38项通过，HTML02按新预登记/干净boot实际探索一次并在研究JSON阶段失败；原始结果见[HTML02](experiments/HTML-02/RESULT.md)。本批推进[语法诊断/反馈](BATCH-HTML02-CHECKS.md)和[仓库准备契约](REPOSITORY-PREPARATION.md)，不自动追加付费或启用系统容器。接下来的免费重点是Verifier正式候选/Oracle与执行器契约；新真实任务、实体相机、收费效益实验及容器准备按各自预算/权限确认，不以Mock冒充。本次[旧文留底](archive/2026-10-07-before-html02/NEXT-STEPS.md)。
-
 下文第一批框架保留作为任务背景；修改前原文 [留底](archive/2026-10-07-before-onboarding/NEXT-STEPS.md)。本批优先免费工程验证和独立production静态入口，不把演练记为自主交付。
 
 第一批围绕单 HTML 可运行切片推进，不等待任意仓库平台。用户已批准三个模拟需求和高性价比调用方向；本分支仍需页面配置新的模型与 Key。

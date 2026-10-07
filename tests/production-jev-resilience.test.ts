@@ -93,6 +93,18 @@ test('fatal Jev protocol, unknown usage or cancellation never trigger arithmetic
   }
 });
 
+test('unknown Jev accounting retains the local capacity refusal, stops, and never infers zero usage from zero POST', async t => {
+  const cause = 'Jev request exceeds conservative context byte limits; evidence was not truncated';
+  const { service, start } = setup(t, { jevCall: async (config, context) => ({ ...evaluation(config, context, 'drift'), status: 'error', errorKind: 'fatal', reason: cause, providerRequests: 0, httpStatus: null, rawResponse: null, usage: { inputTokens: null, outputTokens: null, estimatedCost: null, currency: 'USD', complete: false } }) });
+  const run = await start();
+  assert.equal(run.status, 'failed'); assert.match(run.error!, /费用记 unknown/); assert.ok(run.error!.includes(cause));
+  assert.equal(run.repairs, 0); assert.equal(run.calls.length, 1); assert.equal(run.calls[0].role, 'product');
+  assert.equal(run.jevCalls!.length, 1); assert.equal(run.jevCalls![0].evaluation.providerRequests, 0);
+  assert.equal(run.usage.inputTokens, null); assert.equal(run.usage.estimatedCost, null); assert.equal(run.usage.complete, false);
+  assert.equal(run.frozenContract, undefined); assert.equal(run.gateHistory.length, 0);
+  assert.equal(JSON.parse(service.store.readArtifact(run.id, 'delivery-manifest.json')).failure, run.error);
+});
+
 test('unknown independent Verifier usage stops with all paid-intent records preserved and no regeneration', async t => {
   const { start } = setup(t, { roleCall: async (...args) => { const output = await roleCall(...args); return args[1].startsWith('你是独立质量Verifier') ? { ...output, usageReported: false } : output; } });
   const run = await start(); assert.equal(run.status, 'failed'); assert.match(run.error!, /unknown/); assert.equal(run.repairs, 0); assert.equal(run.calls.length, 2); assert.equal(run.jevCalls!.length, 1); assert.equal(run.usage.complete, false); assert.equal(run.usage.estimatedCost, null);

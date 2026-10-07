@@ -1,8 +1,6 @@
 # 评委安装、访问与自主测试指南
 
-工作分支更新说明：公开v5仍固定`967bbba15c92dc07cf40fd2b2f5affebf1493b12`，并非自动更新的线上后端。本Git分支在v5之后补充HTML01/02失败档、执行身份与语法诊断；想重现材料版本就checkout该publisherCommit，想试最新工程修补则保留刚克隆的`feature/autonomous-production` HEAD，先查[当前进度](POST-SUBMISSION-PLAN.md)。新源码/夹具通过不追认旧运行成功。[本次旧指南留底](archive/2026-10-07-before-html02/REVIEWER-GUIDE.md)。
-
-公开固定指南/材料为 `production-materials-v5`；部署是否已更新以publication-manifest为准，本工作分支的补充不会覆盖固定附件。公开页不需要 Key；本地真实运行需自备 Key、网络和明确预算。真实结果见 [CAMERA-09](experiments/CAMERA-09/RESULT.md)、[HTML02](experiments/HTML-02/RESULT.md)与[进度](POST-SUBMISSION-PLAN.md)。09已通过有界场景闭环，真实视觉/实体摄像头/完整需求分别验收；HTML探索失败保留，安装成功不保证任意新任务交付成功。
+本指南对应材料源码 `production-materials-v5`；公开部署是否已更新以publication-manifest为准。公开页不需要 Key；本地真实运行需自备 Key、网络和明确预算。最新真实结果见 [CAMERA-09](experiments/CAMERA-09/RESULT.md) 与 [进度](POST-SUBMISSION-PLAN.md)。09已通过有界场景闭环，真实视觉/实体摄像头/完整需求分别验收；安装成功不保证任意新任务交付成功。
 
 v3/v4固定在线页、PDF/MD/ZIP和MP4保留；新材料加入09七份原证据，安装命令固定到本版publisherCommit。部署后核对publication-manifest完整commit，不把三Mock/旧录屏source c21c588或09运行source24256f9改成新导出版本。更新前全文[留底](archive/2026-10-07-before-camera09/REVIEWER-GUIDE.md)。
 
@@ -41,8 +39,6 @@ PRODUCTION_API_PORT=4520 PRODUCTION_WEB_PORT=5520 PRODUCTION_PREVIEW_PORT=4522 P
 ```
 
 默认独立数据目录为本仓库 `.city-agent-production`；不复制原项目的任何数据、Key或日志，不建立可写目录符号链接。不同端口的开发/测试命令应使用同一组环境设置。
-
-最新分支的真实调用还要求启动时干净源码及与HEAD一致的构建。更新代码、checkout版本、准备资产或重新build后，退出**本项目**服务（Ctrl+C），在同一目录重新`npm start`；旧进程不会自动改成新身份。源码或dist漂移在下一付费阶段拒绝，不自动重放历史任务。缺/脏构建下仍可配置和运行免费Mock，但不代表真实任务可启动；不要删除历史证据或关闭身份检查来继续。
 
 在页面选择 `MOCK-01`，运行“工程演练/Mock”，再完成02/03。纯 Mock不需要六角色 Key或Jev，不产生模型费用；查看计划、候选、冻结契约、实际Gate、源码附件和原始证据。只把浏览器实际通过计为工程验证，不算模型自主完成。
 

@@ -4,8 +4,6 @@
 
 ## 当前进度
 
-最新增量：[HTML02](experiments/HTML-02/RESULT.md)真实单次失败，研究三次非法JSON、2共享纠错耗尽，36.766秒、6实际HTTP、完整估算0.011305110 USD；没有冻结/Gate/源码。新[工程批次](BATCH-HTML02-CHECKS.md)增加HTML v10精确语法反馈和Jev unknown原原因保留；[受控仓库契约](REPOSITORY-PREPARATION.md)17纯测试通过，仍无已验证隔离执行器/API。下表原HTML01/09/v5事实保留，不能用新工程夹具替代真实任务成绩。本次[全文留底](archive/2026-10-07-before-html02/POST-SUBMISSION-PLAN.md)。
-
 | 模块 | 已完成的实现/验证 | 下一步 |
 | --- | --- | --- |
 | 六角色团队 | 产品、项目经理、研究、研发、测试、Verifier；独立模型/Key/单价配置、复制、脱敏。 | 简化首次安装后的配置路径。 |

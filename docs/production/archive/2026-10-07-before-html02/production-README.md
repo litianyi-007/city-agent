@@ -8,7 +8,7 @@ v5静态页/PDF/MP4/ZIP已发布并[核验](PUBLICATION-V5-2026-10-07.md)，安�
 
 当前切片：[原生JSON请求模式](HARNESS-JSON-OUTPUT-V1.md)、[完整工程验证过程](BATCH-JSON-OUTPUT-CHECKS.md)、[CAMERA-09预登记](experiments/CAMERA-09/PRE-REGISTRATION.md)及七份原始交付；新增[三池Verifier开发语料](VERIFIER-DEV-CORPUS.md)，免费浏览器Oracle验证六份候选，但未启动模型选优效益评估。不修补旧回答或降低Gate；结构化请求、严格响应校验和最终行为验收分别留证。本次更新前全文[留底](archive/2026-10-07-before-camera09/README.md)。
 
-后续[HTML01真实探索](experiments/HTML-01/RESULT.md)失败、1次自动返修、19次实际POST、总费用unknown，原四档保持不变。[免费修补批次](BATCH-HTML01-CHECKS.md)480项工程/38项浏览器通过；随后[HTML02](experiments/HTML-02/RESULT.md)实际启动一次，在研究JSON阶段失败，36.766秒、6实际POST、完整估算0.011305110 USD、2共享纠错，无冻结/Gate/源码。新[免费修补](BATCH-HTML02-CHECKS.md)提供精确语法定位/HTML v10提示、unknown原因保留及[受控仓库准备契约](REPOSITORY-PREPARATION.md)；v10没有实测模型成绩，仓库未开放执行，不放宽门禁或追认成功。本次[旧文留底](archive/2026-10-07-before-html02/production-README.md)。
+后续[HTML01真实探索](experiments/HTML-01/RESULT.md)失败、1次自动返修、19次实际POST、总费用unknown，原四档保持不变。[免费修补批次](BATCH-HTML01-CHECKS.md)公开HTML执行事实、分离生成与独立评审上下文、加入[启动磁盘身份与付费前漂移检查](EXECUTION-IDENTITY.md)，不放宽CSP/容量/Gate。HTML02须按独立预登记与干净构建/重启后再验证，不将免费接线当真实交付。
 
 本线已进入第一批实施：产品经理、项目经理、研究员、研发、测试与 Verifier 共同执行有界软件生产。首批采用离线单 HTML 和受限 Chromium Gate，不执行生成的宿主脚本，不新增虚拟社会能力。用户允许自拟三个模拟需求；真实业务需求条款与官方 L4 认证不在本批完成范围内。
 

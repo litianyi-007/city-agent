@@ -6,10 +6,6 @@
 
 本批冻结源码最终工程验证480/480（343.702秒），独立4421浏览器38/38（1.3分钟），TypeScript及diff格式通过，详见[BATCH-HTML01-CHECKS](BATCH-HTML01-CHECKS.md)。工程夹具/注入结果不计真实自主交付；HTML02按新预登记仅启动一次。
 
-HTML02已实际单次终态failed：36.766秒、6HTTP、完整估算0.011305110 USD、2共享研究纠错耗尽、无冻结/Gate/源码，原四档[归档](experiments/HTML-02/RESULT.md)。其后新的HTML v10诊断与阶段B纯契约见[BATCH-HTML02-CHECKS](BATCH-HTML02-CHECKS.md)，不回写旧实验。当前全量结果以该新批次实际日志为准；上述480/38是HTML02运行前的源码，不直接代替后续新增代码验证。[本次旧文留底](archive/2026-10-07-before-html02/VALIDATION.md)。
-
-v10与仓库准备切片最终工程 **515/515、343.231秒**，独立浏览器 **38/38、1.2分钟**，TypeScript及diff格式通过。全部纯注入/免费工程与历史回归，不新增真实模型或实体相机证明；当前真实HTML任务仍没有通过记录。
-
 [CAMERA-09](experiments/CAMERA-09/RESULT.md)已完成一次最小真实有界场景交付，冻结source24256f9、11/11行为Gate、0返修，76.602秒、18实际HTTP、估算0.037964112 USD。完整摄像头/真实视觉/实体设备仍分别验收，不算完整良品或稳定L5。
 
 后续pending计量修补、Verifier开发语料与历史证据验证见[BATCH-CAMERA09-CHECKS](BATCH-CAMERA09-CHECKS.md)，当前六角色Key已由用户配置在本分支页面，未迁移别线。新公开材料以publication-manifest/receipt为准，旧段落的Key未配置、当时未调用/未发布与189/229项工程数字均是历史时点，不是现在状态。[本文更新前留底](archive/2026-10-07-before-camera09/VALIDATION.md)。

@@ -145,7 +145,7 @@ test('snapshots reject recursive, non-JSON and oversized contracts instead of cl
 });
 
 test('versioned role and Verifier prompts disclose output authority and retain generic Tester examples and final Gate versions', () => {
-  assert.equal(PROMPT_VERSION, 'production-html-v9'); assert.equal(CAMERA_PROMPT_VERSION, 'production-camera-scene-v7');
+  assert.equal(PROMPT_VERSION, 'production-html-v10'); assert.equal(CAMERA_PROMPT_VERSION, 'production-camera-scene-v7');
   assert.equal(CRITERIA_VERSION, 'verifier-phase-ordinal-v4'); assert.equal(PRODUCTION_VERIFIER_VERSION, CRITERIA_VERSION);
   assert.equal(ACCEPTANCE_CONTRACT_VERSION, 'production-acceptance-v3'); assert.equal(CAMERA_ACCEPTANCE_VERSION, 'production-camera-acceptance-v2'); assert.equal(CAMERA_MANDATORY_CHECKS_VERSION, 'camera-scene-behavior-v2');
   for (const capability of ['offline-single-html', 'camera-scene-v1'] as const) {

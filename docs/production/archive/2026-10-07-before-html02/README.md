@@ -6,7 +6,7 @@
 
 Node 22.19+，依次 `npm ci` → `npx playwright install chromium` → `npm run build` → `npm start`。打开“新建自定义需求”，填写原话、来源与验收，在页面配置六角色模型和费率，再授权单次预算。真实调用要求干净源码、对应构建并重启服务；漂移会在下一付费阶段前停止，不自动重跑。工程 Mock 无需 Key。
 
-CAMERA09 已通过真实有界场景 Gate，但不等于实体摄像头或完整需求验收；[HTML01](docs/production/experiments/HTML-01/RESULT.md)、[HTML02](docs/production/experiments/HTML-02/RESULT.md)通用网页实测失败且保留原档。最新免费切片增加精确JSON纠错定位和[受控仓库准备契约](docs/production/REPOSITORY-PREPARATION.md)，不代表已开放仓库执行。当前只执行受限 HTML 或声明场景，不运行模型生成的宿主 Node/shell。工程与真实结果分列，不宣称通用 L5。[本次更新前留底](docs/production/archive/2026-10-07-before-html02/README.md)。
+CAMERA09 已通过真实有界场景 Gate，但不等于实体摄像头或完整需求验收；[HTML01通用网页实测](docs/production/experiments/HTML-01/RESULT.md)失败且保留原档。当前只执行受限 HTML 或声明场景，不运行模型生成的宿主 Node/shell。新修补的免费回归与真实模型结果分列，不宣称通用 L5。
 
 以下保留虚拟社会的冻结背景与历史启动说明；本生产分支以4420 API、5420 Vite、4421 E2E、4422预览及 `.city-agent-production` 数据目录为准，不使用原目录的数据或服务。[本次修改前原文](docs/production/archive/2026-10-07-before-html01/README.md)。
 
