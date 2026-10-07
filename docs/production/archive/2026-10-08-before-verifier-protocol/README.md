@@ -2,8 +2,6 @@
 
 ## 当前结论（2026-10-08）
 
-最新免费修复：[Verifier 协议诊断、紧凑输出与边界 Gate](BATCH-VERIFIER-PROTOCOL-CHECKS.md)已实现，最终 **705/705 Node＋45/45 浏览器**、构建通过；[Jev 原响应回放](VERIFIER-JEV-COMPATIBILITY.md)保持原数值门限，仍为 2 drift / 1 uncertain。没有新增收费请求，也不以新提示工程通过冒充模型质量提升。[下一次真实对照提案](VERIFIER-NEXT-RUN-PROPOSAL.md)待新授权；[此次更新前全文留底](archive/2026-10-08-before-verifier-protocol/README.md)。下段 676/676 是首次真实实验前源码的历史成绩。
-
 本机已有可操作的Verifier评测控制面与跨设备只读核验；工程 **676/676 Node＋45/45浏览器**通过。[第一次真实对照](experiments/VERIFIER-REAL-01/RESULT.md)已执行一次，10请求后因非法JSON按协议停止，估算0.017598132USD、无Oracle、无重试；不称模型提升或自主交付成功。主线/Pages/申报原稿不变。
 
 软件需求在[本机生产工作台](http://127.0.0.1:4420/#production)输入；固定18池评测在“决策设置 → Verifier A/B/C评测”。新设备按[安装与入口说明](VERIFIER-CONTROL-PLANE.md)启动，Key由页面自行填写。没有Key也能按[真实证据核验命令](experiments/VERIFIER-REAL-01/RESULT.md#5-核验体验与下一步)查看账本，不会产生模型费用。公开GitHub Pages不是需求研发后端。

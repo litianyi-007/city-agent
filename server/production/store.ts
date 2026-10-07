@@ -10,7 +10,7 @@ interface StoredJev { public: JevConfig; secret?: string; }
 interface State { version: 1; agents: StoredAgent[]; runs: ProductionRun[]; snapshots: Record<string, StoredAgent[]>; jev?: StoredJev; jevSnapshots?: Record<string, StoredJev>; jevBenchmarks?: unknown[]; }
 export const hash = (value: unknown) => createHash('sha256').update(typeof value === 'string' ? value : JSON.stringify(value)).digest('hex');
 const STUDY_PUBLIC_CONTEXT = ['loopback-engineering', 'real-provider', 'localFixtureHttpAttempts', 'actualProviderHttpAttempts',
-  'single-new-study-no-auto-resume', 'frozenStudySha256', 'verifier-study-control-v1', 'verifier-study-source-v2',
+  'single-new-study-no-auto-resume', 'frozenStudySha256', 'verifier-study-control-v1', 'verifier-study-source-v2', 'verifier-study-source-v3',
   'estimatedBillingOnlyAcknowledged', 'jevOutputObservationOnlyAcknowledged', 'configurationSha256', 'ledgerTerminalPersisted'];
 
 /** Separate private store; parent CityStore supplies the single-process owner lock. */

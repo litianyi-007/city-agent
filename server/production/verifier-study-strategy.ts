@@ -4,9 +4,10 @@ import { JEV_POLICY_VERSION, type JevCandidateContext, type JevEvaluation } from
 import { phaseVerifierSystemPrompt, productionPhaseRubric } from '../../shared/production-verifier-rubric.js';
 import { codeSchema, CRITERIA_VERSION, outputContractSnapshot, parseJson, parseVerifiedDecision, verifierSchema } from './contracts.js';
 import { buildJevCandidateRequest } from './jev.js';
+import { parseVerifierDecisionText, VerifierDecisionError, type VerifierDecisionDiagnostic } from './verifier-diagnostics.js';
 import type { verifierPreparationRequests } from './verifier-corpus-preparation.js';
 
-export const VERIFIER_STUDY_STRATEGY_VERSION = 'verifier-study-strategy-v1' as const;
+export const VERIFIER_STUDY_STRATEGY_VERSION = 'verifier-study-strategy-v2' as const;
 export type VerifierStudyStrategy = 'baseline' | 'llm' | 'jev-cascade';
 export type VerifierStudyRequests = ReturnType<typeof verifierPreparationRequests>;
 export interface VerifierStudyPorts {
@@ -26,6 +27,7 @@ export interface VerifierStudySelection {
   engine: 'baseline' | 'llm' | 'jev' | 'jev-llm-fallback' | 'jev-llm-protocol-fallback';
   reason: string;
   failureCode?: FailureCode;
+  verifierDiagnostic?: VerifierDecisionDiagnostic;
   fallbackKind: null | 'uncertain' | 'arithmetic-drift';
   /** Callback intents, NOT observed HTTP attempts or proof of provider usage. */
   callbackCounts: { llm: number; jev: number };
@@ -121,9 +123,7 @@ export async function selectVerifierStudy(strategy: VerifierStudyStrategy, reque
     if (strategy === 'baseline') { assertIntegrity(); result.decision = 'accept'; result.selectedCandidateId = snapshot.candidates[0].id; result.reason = 'First predeclared structurally legal candidate; independent behavior Oracle remains required'; return freeze(result); }
     const llm = async () => {
       const raw = await invoke(() => { result.callbackCounts.llm++; return ports.llm(freeze(structuredClone(logicalLlm)), signal); });
-      if (typeof raw !== 'string' || Buffer.byteLength(raw, 'utf8') > 32000) refuse('protocol', 'Independent LLM response exceeds the bounded 32KB parser input');
-      let decision: LlmDecision; try { decision = parseVerifiedDecision(parseJson(raw), snapshot.candidates.map(candidate => candidate.id)); }
-      catch { refuse('protocol', 'Independent LLM returned an invalid complete-candidate, minimum-score or highest-score decision; no second review is allowed'); }
+      const decision = parseVerifierDecisionText(raw, snapshot.candidates.map(candidate => candidate.id));
       result.llmDecision = freeze(structuredClone(decision!)); result.decision = decision!.decision; result.selectedCandidateId = decision!.selectedCandidateId; result.reason = decision!.reason;
     };
     if (strategy === 'llm') { await llm(); return freeze(result); }
@@ -152,8 +152,9 @@ export async function selectVerifierStudy(strategy: VerifierStudyStrategy, reque
     await llm(); return freeze(result);
   } catch (error) {
     result.decision = 'error'; result.selectedCandidateId = null;
-    result.failureCode = error instanceof StudyFailure ? error.code : signal.aborted ? signal.reason instanceof Error && signal.reason.name === 'TimeoutError' ? 'timeout' : 'cancelled' : error instanceof Error && error.name === 'TimeoutError' ? 'timeout' : 'transport';
-    result.reason = error instanceof StudyFailure ? error.message : 'Injected study callback or request processing failed; no implicit retry or fallback';
+    result.failureCode = error instanceof VerifierDecisionError ? 'protocol' : error instanceof StudyFailure ? error.code : signal.aborted ? signal.reason instanceof Error && signal.reason.name === 'TimeoutError' ? 'timeout' : 'cancelled' : error instanceof Error && error.name === 'TimeoutError' ? 'timeout' : 'transport';
+    result.reason = error instanceof StudyFailure || error instanceof VerifierDecisionError ? error.message : 'Injected study callback or request processing failed; no implicit retry or fallback';
+    if (error instanceof VerifierDecisionError) result.verifierDiagnostic = error.diagnostic;
     return freeze(result);
   }
 }

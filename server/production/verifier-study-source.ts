@@ -5,7 +5,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { types as utilTypes } from 'node:util';
 
-export const VERIFIER_STUDY_SOURCE_VERSION = 'verifier-study-source-v2' as const;
+export const VERIFIER_STUDY_SOURCE_VERSION = 'verifier-study-source-v3' as const;
 const BRANCH = 'feature/autonomous-production';
 const BASELINE = 'b66122c21604fdb2ecdcbafb89c3d5ad8cde1466';
 // There is deliberately no caller-selected root, filename, Git command or ref.
@@ -18,7 +18,7 @@ export const VERIFIER_STUDY_SOURCE_FILES = Object.freeze([
   'scripts/prepare-production-verifier-study.ts', 'server/production/verifier-study.ts', 'server/production/verifier-study-ledger.ts',
   'server/production/verifier-study-strategy.ts', 'server/production/verifier-corpus-preparation.ts', 'server/production/jev.ts',
   'server/production/contracts.ts', 'server/production/review-context.ts', 'server/production/acceptance-preflight.ts',
-  'server/production/output-diagnostics.ts', 'server/production/verifier-scene-oracle.ts', 'server/production/camera-gate.ts',
+  'server/production/output-diagnostics.ts', 'server/production/verifier-diagnostics.ts', 'server/production/verifier-scene-oracle.ts', 'server/production/camera-gate.ts',
   'server/gate.ts', 'server/harness.ts', 'server/harness-literal-prompt.mjs', 'server/usage-observer.ts',
   'shared/production-verifier-challenge-corpus.ts', 'shared/production-verifier-html-corpus-a.ts', 'shared/production-verifier-html-corpus-b.ts',
   'shared/production-verifier-scene-corpus.ts', 'shared/production-verifier-rubric.ts', 'shared/production-schema.ts',

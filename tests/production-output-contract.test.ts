@@ -146,7 +146,7 @@ test('snapshots reject recursive, non-JSON and oversized contracts instead of cl
 
 test('versioned role and Verifier prompts disclose output authority and retain generic Tester examples and final Gate versions', () => {
   assert.equal(PROMPT_VERSION, 'production-html-v10'); assert.equal(CAMERA_PROMPT_VERSION, 'production-camera-scene-v7');
-  assert.equal(CRITERIA_VERSION, 'verifier-phase-ordinal-v4'); assert.equal(PRODUCTION_VERIFIER_VERSION, CRITERIA_VERSION);
+  assert.equal(CRITERIA_VERSION, 'verifier-phase-ordinal-v5'); assert.equal(PRODUCTION_VERIFIER_VERSION, CRITERIA_VERSION);
   assert.equal(ACCEPTANCE_CONTRACT_VERSION, 'production-acceptance-v3'); assert.equal(CAMERA_ACCEPTANCE_VERSION, 'production-camera-acceptance-v2'); assert.equal(CAMERA_MANDATORY_CHECKS_VERSION, 'camera-scene-behavior-v2');
   for (const capability of ['offline-single-html', 'camera-scene-v1'] as const) {
     for (const instruction of Object.values(contractProfile(capability).instructions)) {
@@ -167,11 +167,14 @@ test('schema-valid reversed/disabled mappings remain semantic counterexamples, n
   assert.equal(cameraSceneCodeSchema.safeParse({ scene: reversed }).success, true, 'Schema defines platform possibilities, not authority to override user requirements');
   for (const phase of ['product', 'research', 'think-design', 'acceptance', 'implement', 'repair-2', 'feedback-2']) {
     const rubric = productionPhaseRubric(phase, 'camera-scene-v1')!;
-    for (const dimension of Object.values(rubric.dimensions)) {
-      assert.match(dimension, /Preserve ALL explicit goal\/acceptance constraints/);
-      assert.match(dimension, /Schema enums never authorize optionalizing, reversing, disabling \(none\) or omitting required behavior/);
-      assert.match(dimension, /unsupported requirements block, never silently weaken the goal/);
-    }
+    assert.match(rubric.dimensions.coverage, /Preserve ALL explicit goal\/acceptance constraints/);
+    assert.match(rubric.dimensions.coverage, /Schema enums never authorize optionalizing, reversing, disabling \(none\) or omitting required behavior/);
+    assert.match(rubric.dimensions.coverage, /unsupported requirements block, never silently weaken the goal/);
+    // All Jev questions receive this same full rubric in state.phaseReview.
+    // New v5 host wording references the canonical coverage constraints rather
+    // than repeating them and pushing unchanged business evidence over 32KB.
+    assert.match(rubric.dimensions.consistency, /Apply ALL coverage business constraints/);
+    assert.match(rubric.dimensions.scope, /Apply ALL coverage business constraints/);
     assert.equal(rubric.minimumOrdinalScore, 3);
   }
   const rejection = { decision: 'abstain', selectedCandidateId: null, scores: [{ candidateId: 'reversed', score: 1, reason: 'Explicit test oracle: reversing required actions and disabling rotation violates the supplied business acceptance.' }], reason: 'Injection is a counterexample, not proof of model judgment accuracy' };

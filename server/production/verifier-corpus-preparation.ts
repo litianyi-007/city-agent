@@ -9,6 +9,7 @@ import { buildJevCandidateRequest, JEV_REQUEST_LAYOUT_VERSION } from './jev.js';
 import { ACCEPTANCE_SEMANTICS_VERSION } from './acceptance-preflight.js';
 import { REVIEW_CONTEXT_PROJECTION_VERSION } from './review-context.js';
 import { OUTPUT_DIAGNOSTICS_VERSION } from './output-diagnostics.js';
+import { VERIFIER_DECISION_DIAGNOSTICS_VERSION } from './verifier-diagnostics.js';
 import { contractProfile, CRITERIA_VERSION, outputContractSnapshot, verifierSchema } from './contracts.js';
 import { cameraRuntimeMetadata } from './camera-gate.js';
 
@@ -27,7 +28,7 @@ export function verifierPreparationRequests(poolId: VerifierChallengePoolId) {
   const snapshot = verifierChallengeReviewSnapshot(poolId, { version: contractProfile(capability).acceptanceVersion, hash: frozenHash });
   const rubric = productionPhaseRubric('implement', capability)!;
   const runtime = camera ? cameraRuntimeMetadata() : undefined;
-  const validationContract = { planningLoopVersion: PRODUCTION_PLANNING_LOOP_VERSION, reviewContextVersion: REVIEW_CONTEXT_PROJECTION_VERSION, ...(!camera ? { htmlExecutionProfileVersion: HTML_EXECUTION_PROFILE_VERSION, outputDiagnosticsVersion: OUTPUT_DIAGNOSTICS_VERSION } : {}), harnessPromptTransportVersion: HARNESS_PROMPT_TRANSPORT_VERSION, harnessJsonOutputVersion: HARNESS_JSON_OUTPUT_VERSION, responseFormatPolicy: 'deepseek-json-object-other-prompt-only', semanticsVersion: ACCEPTANCE_SEMANTICS_VERSION, jevRequestLayoutVersion: JEV_REQUEST_LAYOUT_VERSION, ...(camera ? { cameraTestSemanticsVersion: CAMERA_TEST_SEMANTICS_VERSION } : {}), coverage: snapshot.reviewContext.coverageContract };
+  const validationContract = { planningLoopVersion: PRODUCTION_PLANNING_LOOP_VERSION, reviewContextVersion: REVIEW_CONTEXT_PROJECTION_VERSION, verifierDiagnosticsVersion: VERIFIER_DECISION_DIAGNOSTICS_VERSION, ...(!camera ? { htmlExecutionProfileVersion: HTML_EXECUTION_PROFILE_VERSION, outputDiagnosticsVersion: OUTPUT_DIAGNOSTICS_VERSION } : {}), harnessPromptTransportVersion: HARNESS_PROMPT_TRANSPORT_VERSION, harnessJsonOutputVersion: HARNESS_JSON_OUTPUT_VERSION, responseFormatPolicy: 'deepseek-json-object-other-prompt-only', semanticsVersion: ACCEPTANCE_SEMANTICS_VERSION, jevRequestLayoutVersion: JEV_REQUEST_LAYOUT_VERSION, ...(camera ? { cameraTestSemanticsVersion: CAMERA_TEST_SEMANTICS_VERSION } : {}), coverage: snapshot.reviewContext.coverageContract };
   const criteria = { version: CRITERIA_VERSION, validationContract, compactOutputPolicy: VERIFIER_COMPACT_OUTPUT_POLICY, repairPolicyVersion: PRODUCTION_REPAIR_POLICY_VERSION, phase: 'implement', phaseReview: rubric, acceptance: snapshot.acceptance, goal: snapshot.goal, frozenHash, dimensions: rubric.dimensions, minimumOrdinalScore: 3, scale: '0..5 ordinal, not calibrated probability', candidateIds: snapshot.candidates.map(candidate => candidate.id), ...(camera ? { capability, cameraRuntime: runtime, evidenceBoundary: 'Synthetic scene behavior only; physical camera and actual vision remain unverified. Retain full user requirement without claiming complete hardware delivery.' } : {}) };
   const systemPrompt = phaseVerifierSystemPrompt(rubric);
   const userPrompt = JSON.stringify({ criteria, state: { reviewContext: snapshot.reviewContext }, candidates: snapshot.candidates, outputContract: outputContractSnapshot(verifierSchema) });

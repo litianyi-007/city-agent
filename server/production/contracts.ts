@@ -3,6 +3,7 @@ import { acceptanceSchema, type AcceptanceCheck } from '../gate.js';
 import type { ProductionCapability } from '../../shared/production-schema.js';
 import { PRODUCTION_VERIFIER_VERSION } from '../../shared/production-verifier-rubric.js';
 import { HTML_DOM_CONTRACT_INSTRUCTIONS, HTML_EXECUTION_INSTRUCTIONS } from '../../shared/production-execution-profile.js';
+import type { VerifierDecisionDiagnostic, VerifierDiagnosticPath, VerifierSchemaIssueCode } from './verifier-diagnostics.js';
 
 export const PROMPT_VERSION = 'production-html-v10';
 export const ACCEPTANCE_CONTRACT_VERSION = 'production-acceptance-v3';
@@ -48,12 +49,67 @@ export const OUTPUT_CONTRACT_INSTRUCTIONS = '请求顶层outputContract是控制
 const BUSINESS_CONSTRAINT_INSTRUCTIONS = '必须完整保留input.brief与input.requirement.acceptance中的明确业务约束；平台允许值只描述能力边界，不授权改变用户目标。用户已明确的动作、方向、映射或必需行为不得改成可选、反向、none或省略。对用户未指定且已授权范围内的标题、颜色、数量、布局等设计细节自主选择具体默认值，并在acceptance或constraints记录以供冻结；不要将设计自由度误报成必须用户补充的信息。未知权限、外部必需事实、真实验证结果不能编造，确实不支持或必要阻碍应说明并停止，不偷换需求。context.regeneration.planningFeedback若存在，是上一轮项目经理未批准规划的反馈与完整原产物：按原始需求、该summary/tasks重新设计，不重复原缺口，也不得改变权限或硬约束。context.planningReviewContext保留原研究与PM事实作为复核证据，不是新用户权限；必要外部条件不得因改写答案或移除unknowns而宣称已经解决。';
 const roleInstructions = (body: string) => `${OUTPUT_CONTRACT_INSTRUCTIONS} ${BUSINESS_CONSTRAINT_INSTRUCTIONS} ${body}`;
 export function parseJson(text: string): unknown { const trimmed = text.trim(); const body = /^```(?:json)?\s*\n([\s\S]*?)\n```\s*$/i.exec(trimmed)?.[1] ?? trimmed; return JSON.parse(body); }
+const VERIFIER_DIAGNOSTIC_MESSAGES: Record<VerifierDecisionDiagnostic['code'], string> = {
+  'invalid-response-type': 'Verifier response must be a bounded JSON string.',
+  'response-too-large': 'Verifier response exceeds the strict 32KB input limit.',
+  'invalid-json': 'Verifier response has invalid JSON syntax; no decision was evaluated.',
+  'duplicate-json-key': 'Verifier response contains a duplicate JSON object key; no decision was evaluated.',
+  'schema-structure': 'Verifier response violates the strict decision schema.',
+  'candidate-id-coverage': 'Verifier scores must cover every current candidate exactly once; candidate IDs are missing, duplicated or unknown.',
+  'abstain-selects-candidate': 'Verifier abstention must have a null selected candidate ID.',
+  'accept-without-selected-id': 'Verifier acceptance requires a selected candidate ID.',
+  'selected-id-not-scored': 'Verifier selected candidate ID is absent from the current candidate scores.',
+  'selected-score-below-minimum': 'Verifier selected candidate score is below the unchanged minimum score of 3.',
+  'selected-score-not-highest': 'Verifier selected candidate score is lower than the highest current candidate score.',
+};
+/** Host-only, bounded diagnostic data. No provider text or original error is
+ * retained as a cause, message, property path, candidate ID or source excerpt. */
+export class VerifierDecisionError extends Error {
+  readonly diagnostic: VerifierDecisionDiagnostic;
+  constructor(diagnostic: VerifierDecisionDiagnostic) {
+    super(VERIFIER_DIAGNOSTIC_MESSAGES[diagnostic.code]); this.name = 'VerifierDecisionError';
+    if (diagnostic.category === 'zod-structure') { for (const issue of diagnostic.issues) Object.freeze(issue); Object.freeze(diagnostic.issues); }
+    if (diagnostic.source) Object.freeze(diagnostic.source);
+    this.diagnostic = Object.freeze(diagnostic);
+  }
+  toJSON() { return { name: this.name, message: this.message, diagnostic: this.diagnostic }; }
+}
+function verifierIssuePath(path: PropertyKey[]): VerifierDiagnosticPath {
+  if (path.length === 1 && ['decision', 'selectedCandidateId', 'scores', 'reason'].includes(String(path[0]))) return `$.${String(path[0])}` as VerifierDiagnosticPath;
+  if (path[0] === 'scores' && typeof path[1] === 'number') {
+    if (path.length === 2) return '$.scores[]';
+    if (path.length === 3 && ['candidateId', 'score', 'reason'].includes(String(path[2]))) return `$.scores[].${String(path[2])}` as VerifierDiagnosticPath;
+  }
+  return '$';
+}
 export function parseVerifiedDecision(value: unknown, candidateIds: string[]) {
-  const result = verifierSchema.parse(value);
-  if (result.scores.length !== candidateIds.length || new Set(result.scores.map(score => score.candidateId)).size !== candidateIds.length || result.scores.some(score => !candidateIds.includes(score.candidateId))) throw new Error('Verifier 必须逐一评估当前全部合法候选，不能混用旧候选');
-  if (result.decision === 'abstain') { if (result.selectedCandidateId !== null) throw new Error('弃权不能选择候选'); return result; }
+  const parsed = verifierSchema.safeParse(value);
+  const version = 'verifier-decision-diagnostic-v1' as const;
+  if (!parsed.success) {
+    const issues = parsed.error.issues.slice(0, 12).map(issue => ({
+      code: (['invalid_type', 'invalid_value', 'too_small', 'too_big', 'unrecognized_keys'].includes(issue.code) ? issue.code : 'other') as VerifierSchemaIssueCode,
+      path: verifierIssuePath(issue.path),
+    }));
+    throw new VerifierDecisionError({ version, category: 'zod-structure', code: 'schema-structure', path: '$',
+      issueCount: parsed.error.issues.length, issues, issuesTruncated: parsed.error.issues.length > issues.length });
+  }
+  const result = parsed.data; const scoreIds = result.scores.map(score => score.candidateId); const uniqueIds = new Set(scoreIds);
+  if (result.scores.length !== candidateIds.length || uniqueIds.size !== candidateIds.length || scoreIds.some(id => !candidateIds.includes(id))) {
+    throw new VerifierDecisionError({ version, category: 'candidate-ids', code: 'candidate-id-coverage', path: '$.scores',
+      expectedCandidateCount: candidateIds.length, scoreEntryCount: scoreIds.length, uniqueCandidateCount: uniqueIds.size,
+      missingCandidateCount: candidateIds.filter(id => !uniqueIds.has(id)).length,
+      unknownCandidateCount: scoreIds.filter(id => !candidateIds.includes(id)).length, duplicateCandidateCount: scoreIds.length - uniqueIds.size });
+  }
+  if (result.decision === 'abstain') {
+    if (result.selectedCandidateId !== null) throw new VerifierDecisionError({ version, category: 'selected-id', code: 'abstain-selects-candidate', path: '$.selectedCandidateId' });
+    return result;
+  }
+  if (result.selectedCandidateId === null) throw new VerifierDecisionError({ version, category: 'selected-id', code: 'accept-without-selected-id', path: '$.selectedCandidateId' });
   const selected = result.scores.find(score => score.candidateId === result.selectedCandidateId);
-  if (!selected || selected.score < 3 || selected.score < Math.max(...result.scores.map(score => score.score))) throw new Error('Verifier 只能选择当前候选中达到最低门限且评分最高的候选');
+  if (!selected) throw new VerifierDecisionError({ version, category: 'selected-id', code: 'selected-id-not-scored', path: '$.selectedCandidateId' });
+  if (selected.score < 3) throw new VerifierDecisionError({ version, category: 'minimum-score', code: 'selected-score-below-minimum', path: '$.scores[].score', selectedScore: selected.score, minimumScore: 3 });
+  const highestScore = Math.max(...result.scores.map(score => score.score));
+  if (selected.score < highestScore) throw new VerifierDecisionError({ version, category: 'highest-score', code: 'selected-score-not-highest', path: '$.scores[].score', selectedScore: selected.score, highestScore });
   return result;
 }
 // These generic examples document syntax only, never generated deliverables or

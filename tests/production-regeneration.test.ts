@@ -130,7 +130,7 @@ test('semantic rejection regenerates the original tester, preserves raw placehol
   const manifest = JSON.parse(service.store.readArtifact(run.id, 'delivery-manifest.json'));
   assert.deepEqual(manifest.validationContract, run.validationContract);
   assert.equal(manifest.validationContractHash, run.frozenContract!.validationContractHash);
-  assert.equal(manifest.compactOutputPolicy.version, 'verifier-compact-output-v1');
+  assert.equal(manifest.compactOutputPolicy.version, 'verifier-compact-output-v2');
   assert.equal(run.repairHistory![0].kind, 'stage-regeneration'); assert.equal(run.repairHistory![1].kind, 'gate-repair');
 });
 

@@ -6,7 +6,7 @@ import { HARNESS_JSON_OUTPUT_VERSION, HARNESS_PROMPT_TRANSPORT_VERSION, HarnessC
 import { USAGE_OBSERVER_VERSION } from '../usage-observer.js';
 import { JEV_POLICY_VERSION, type JevEvaluation } from '../../shared/jev-schema.js';
 import { evaluateJevCandidates, JEV_REQUEST_LAYOUT_VERSION } from './jev.js';
-import { CAMERA_MANDATORY_CHECKS_VERSION, CRITERIA_VERSION, OUTPUT_CONTRACT_VERSION, codeSchema, contractProfile, outputContractSnapshot, parseJson, parseVerifiedDecision, planSchema, researchSchema, testsSchema, verifierSchema } from './contracts.js';
+import { CAMERA_MANDATORY_CHECKS_VERSION, CRITERIA_VERSION, OUTPUT_CONTRACT_VERSION, codeSchema, contractProfile, outputContractSnapshot, parseJson, planSchema, researchSchema, testsSchema, verifierSchema } from './contracts.js';
 import { cameraSceneCodeSchema } from '../../shared/camera-scene-schema.js';
 import { phaseVerifierSystemPrompt, productionPhaseRubric, VERIFIER_COMPACT_OUTPUT_POLICY } from '../../shared/production-verifier-rubric.js';
 import { productionCoverageContract } from '../../shared/production-coverage.js';
@@ -20,6 +20,7 @@ import { projectProductionReviewContext, REVIEW_CONTEXT_PROJECTION_VERSION, type
 import { HTML_EXECUTION_PROFILE, HTML_EXECUTION_PROFILE_VERSION } from '../../shared/production-execution-profile.js';
 import type { ProductionExecutionIdentity } from './provenance.js';
 import { diagnoseJsonOutput, OUTPUT_DIAGNOSTICS_VERSION } from './output-diagnostics.js';
+import { parseVerifierDecisionText, VerifierDecisionError, VERIFIER_DECISION_DIAGNOSTICS_VERSION } from './verifier-diagnostics.js';
 
 export interface ProductionOptions { roleCall?: typeof runRole; gate?: typeof runGate; cameraGate?: typeof runCameraSceneGate; jevCall?: typeof evaluateJevCandidates; acceptancePreflight?: typeof preflightAcceptanceChecks; executionIdentity?: ProductionExecutionIdentity; assertExecutionFresh?: () => void; }
 export const CAMERA_GESTURE_DOM_CONTRACT = { selector: '#gesture-map', text: '固定可信平台文案，由scene.mappings唯一计算，不是用户必须定稿的UI文字。根据用户明确映射或授权范围内尚未指定的映射选择对应完整label，不能改变硬约束。', debounceFrames: CAMERA_DEBOUNCE_FRAMES, labels: CAMERA_GESTURE_LABELS };
@@ -40,7 +41,7 @@ export class ProductionPipeline {
     run.repairPolicyVersion = PRODUCTION_REPAIR_POLICY_VERSION; run.repairHistory = []; run.repairs = 0;
     const capability = run.input.capability ?? 'offline-single-html'; const camera = capability === 'camera-scene-v1'; const profile = contractProfile(capability); const runtimeMeta = camera ? cameraRuntimeMetadata() : null;
     const responseFormatPolicy = 'deepseek-json-object-other-prompt-only' as const;
-    const validationContract = { planningLoopVersion: PRODUCTION_PLANNING_LOOP_VERSION, reviewContextVersion: REVIEW_CONTEXT_PROJECTION_VERSION, ...(!camera ? { htmlExecutionProfileVersion: HTML_EXECUTION_PROFILE_VERSION, outputDiagnosticsVersion: OUTPUT_DIAGNOSTICS_VERSION } : {}), harnessPromptTransportVersion: HARNESS_PROMPT_TRANSPORT_VERSION, harnessJsonOutputVersion: HARNESS_JSON_OUTPUT_VERSION, responseFormatPolicy, semanticsVersion: ACCEPTANCE_SEMANTICS_VERSION, jevRequestLayoutVersion: JEV_REQUEST_LAYOUT_VERSION, ...(camera ? { cameraTestSemanticsVersion: CAMERA_TEST_SEMANTICS_VERSION } : {}), coverage: productionCoverageContract(capability) };
+    const validationContract = { planningLoopVersion: PRODUCTION_PLANNING_LOOP_VERSION, reviewContextVersion: REVIEW_CONTEXT_PROJECTION_VERSION, verifierDiagnosticsVersion: VERIFIER_DECISION_DIAGNOSTICS_VERSION, ...(!camera ? { htmlExecutionProfileVersion: HTML_EXECUTION_PROFILE_VERSION, outputDiagnosticsVersion: OUTPUT_DIAGNOSTICS_VERSION } : {}), harnessPromptTransportVersion: HARNESS_PROMPT_TRANSPORT_VERSION, harnessJsonOutputVersion: HARNESS_JSON_OUTPUT_VERSION, responseFormatPolicy, semanticsVersion: ACCEPTANCE_SEMANTICS_VERSION, jevRequestLayoutVersion: JEV_REQUEST_LAYOUT_VERSION, ...(camera ? { cameraTestSemanticsVersion: CAMERA_TEST_SEMANTICS_VERSION } : {}), coverage: productionCoverageContract(capability) };
     run.validationContract = structuredClone(validationContract);
     const cameraDom = { title: { selector: '#scene-title', text: 'scene.title from developer config; freeze any requested exact title <=80 chars before development' }, canvas: { selector: '#scene-canvas', behavior: 'fixed trusted 2D Canvas; actual geometry checked by mandatory Gate' }, state: { selector: '#scene-state', initialText: 'gather', afterScatter: 'scatter', afterGather: 'gather', afterReset: 'gather' }, rotation: { selector: '#rotation', initialText: '0.0000', afterOneRightFromZero: '0.3927', afterOneLeftFromZero: '-0.3927', afterReset: '0.0000', format: 'rotation.toFixed(4), clamped -pi..pi' }, particleCount: { selector: '#particle-count', exactText: 'sum(scene.objects[].count)+scene.snowCount as decimal integer; require developer config matches any frozen count' }, manualButtons: ['#scatter', '#gather', '#rotate-left', '#rotate-right', '#reset-btn'], cameraStatus: { selector: '#camera-status', previewInitialText: '摄像头默认关闭。仅用户点击后请求视频权限，不请求音频。', previewInitialSelector: '#camera-status[data-status="off"][data-state="stopped"]', gateInitialText: '场景 Gate 使用合成输入；摄像头、视觉模型与完整需求未验收。', gateInitialSelector: '#camera-status[data-status="synthetic"][data-state="stopped"]' }, cameraStart: { selector: '#camera-start', gateDisabled: true, reason: 'No real camera permission in synthetic Gate; do not click or expect started status in CSS checks' }, cameraStop: { selector: '#camera-stop', initialDisabled: true }, interactionSource: { selector: '#interaction-source', initialText: '手动按钮模式（不是摄像头验证）', afterManualActionText: '手动按钮（不是摄像头验证）', afterResetText: '手动重置（不是摄像头验证）' }, gestureMap: { selector: '#gesture-map', text: 'computed from scene.mappings; exact config-dependent label must not be guessed before config' } };
     cameraDom.gestureMap = CAMERA_GESTURE_DOM_CONTRACT;
@@ -207,8 +208,19 @@ export class ProductionPipeline {
       const verifierOutputContract = outputContractSnapshot(verifierSchema);
       const response = await invoke('verifier', `${phase}:verify`, phaseVerifierSystemPrompt(phaseReview), JSON.stringify({ criteria: { ...criteria, reviewContext: undefined }, state: { reviewContext }, candidates: candidates.map(candidate => ({ id: candidate.id, value: candidate.value })), outputContract: verifierOutputContract, ...(protocolFallback ? { protocolFallback } : {}) }), { decision: 'accept', selectedCandidateId: best.id, scores: candidates.map(candidate => ({ candidateId: candidate.id, score: 4, reason: 'Mock：示范候选验证记录，不代表真实模型判断。' })), reason: 'Mock 夹具选择；实际浏览器验收仍独立执行。' }, { verificationEngine: jevFallback ?? 'llm-rubric', ...(sourceJevCallId ? { sourceJevCallId } : {}) });
       let decision;
-      try { decision = parseVerifiedDecision(parseJson(response.text), candidates.map(candidate => candidate.id)); }
-      catch (error) { run.verifications.push({ phase, engine: jevFallback ?? 'llm-rubric', ...(sourceJevCallId ? { sourceJevCallId } : {}), candidateIds: candidates.map(candidate => candidate.id), selectedCandidateId: null, criteriaHash, scores: [], decision: 'abstain', reason: `Verifier 输出不合法：${error instanceof Error ? error.message : String(error)}` }); save(); throw new Error(`${phase} Verifier 校验失败，未默认为通过`); }
+      try { decision = parseVerifierDecisionText(response.text, candidates.map(candidate => candidate.id)); }
+      catch (error) {
+        // Only fixed protocol facts leave the parser. Do not expose V8/Zod's
+        // arbitrary provider text, keys or paths; do not retry the Verifier or
+        // turn a protocol failure into candidate regeneration.
+        const verifierDiagnostic = error instanceof VerifierDecisionError ? error.diagnostic : undefined;
+        const detail = error instanceof VerifierDecisionError ? error.message : 'Verifier decision validation failed';
+        response.call.error = detail;
+        if (verifierDiagnostic) response.call.verifierDiagnostic = structuredClone(verifierDiagnostic);
+        run.verifications.push({ phase, engine: jevFallback ?? 'llm-rubric', ...(sourceJevCallId ? { sourceJevCallId } : {}), candidateIds: candidates.map(candidate => candidate.id), selectedCandidateId: null, criteriaHash, scores: [], decision: 'abstain', reason: `Verifier 输出不合法：${detail}`, ...(verifierDiagnostic ? { verifierDiagnostic: structuredClone(verifierDiagnostic) } : {}) });
+        event(`${phase}:verify`, detail, 'verifier'); save();
+        throw new Error(`${phase} Verifier 校验失败，未默认为通过：${detail}`);
+      }
       run.verifications.push({ phase, engine: jevFallback ?? 'llm-rubric', ...(sourceJevCallId ? { sourceJevCallId } : {}), candidateIds: candidates.map(candidate => candidate.id), criteriaHash, ...decision }); save();
       if (decision.decision !== 'accept') throw new StageRejection(`${phase} Verifier 弃权：${decision.reason}`, attemptedCalls);
       const candidate = candidates.find(value => value.id === decision.selectedCandidateId)!; candidate.call.selected = true;

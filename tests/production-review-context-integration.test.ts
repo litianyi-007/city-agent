@@ -82,7 +82,12 @@ test('full injected pipeline keeps original regeneration for its role, projects 
     },
   }, source);
   const final = await execute();
-  assert.equal(final.status, 'completed', final.error); assert.equal(final.evidenceKind, 'injected-test'); assert.equal(testerCalls, 2); assert.equal(gates, 2); assert.equal(final.repairs, 2); assert.equal(dispatches, 8); assert.equal(verifierInputs.length, 8);
+  const requestSizes = final.jevCalls!.map(call => {
+    const request = call.evaluation.requestSnapshot!;
+    const stateBytes = Buffer.byteLength(JSON.stringify(request.state));
+    return { phase: call.phase, totalBytes: Buffer.byteLength(JSON.stringify(request)), maxPerQuestionBytes: stateBytes + Math.max(...Object.values(request.questions).map(question => Buffer.byteLength(JSON.stringify(question)))) };
+  });
+  assert.equal(final.status, 'completed', `${final.error ?? ''}; ${JSON.stringify(requestSizes)}`); assert.equal(final.evidenceKind, 'injected-test'); assert.equal(testerCalls, 2); assert.equal(gates, 2); assert.equal(final.repairs, 2); assert.equal(dispatches, 8); assert.equal(verifierInputs.length, 8);
   assert.deepEqual(final.repairHistory!.map(repair => repair.kind), ['stage-regeneration', 'gate-repair']);
   assert.equal(final.validationContract!.reviewContextVersion, REVIEW_CONTEXT_PROJECTION_VERSION);
   assert.equal(final.frozenContract!.validationContractHash, hash(final.validationContract));

@@ -146,7 +146,7 @@ test('actual CAMERA07 full outputs plus a counterfactual planning handoff fit cu
     const context = { ...oldRequest.state, reviewContext: { ...projection.reviewContext, reviewContextVersion: projection.version } };
     const request = buildJevCandidateRequest(oldRequest.model, context);
     const totalBytes = Buffer.byteLength(JSON.stringify(request)); const stateBytes = Buffer.byteLength(JSON.stringify(request.state)); const maxPerQuestionBytes = stateBytes + Math.max(...Object.values(request.questions).map(question => Buffer.byteLength(JSON.stringify(question))));
-    assert.ok(totalBytes <= 64000); assert.ok(maxPerQuestionBytes <= 32000); assert.equal(JSON.stringify(request.state.candidates), JSON.stringify(oldRequest.state.candidates));
+    assert.ok(totalBytes <= 64000, `${phase}: full request ${totalBytes} bytes exceeds unchanged 64000 cap`); assert.ok(maxPerQuestionBytes <= 32000, `${phase}: per-question request ${maxPerQuestionBytes} bytes exceeds unchanged 32000 cap`); assert.equal(JSON.stringify(request.state.candidates), JSON.stringify(oldRequest.state.candidates));
     for (const [key, value] of Object.entries(originalReview).filter(([key]) => key !== 'reviewContextVersion')) assert.deepEqual((request.state.reviewContext as Record<string, unknown>)[key], value);
     assert.equal((request.state.reviewContext as Record<string, unknown>).reviewContextVersion, projection.version, 'Counterfactual uses the new projection version; archived review bytes remain unchanged');
     measurements.push({ phase, generationContextBytes: Buffer.byteLength(JSON.stringify(generationContext)), totalBytes, maxPerQuestionBytes });

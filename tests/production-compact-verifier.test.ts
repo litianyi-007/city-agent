@@ -1,16 +1,19 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { parseVerifiedDecision, verifierSchema } from '../server/production/contracts.js';
-import { phaseVerifierSystemPrompt, productionPhaseRubric, VERIFIER_COMPACT_OUTPUT_POLICY } from '../shared/production-verifier-rubric.js';
+import { phaseVerifierSystemPrompt, productionPhaseRubric, PRODUCTION_VERIFIER_VERSION, VERIFIER_COMPACT_OUTPUT_POLICY } from '../shared/production-verifier-rubric.js';
 import { productionCoverageContract } from '../shared/production-coverage.js';
 
 test('compact prompt asks for short evidence without relaxing strict host lengths, candidate IDs or scores', () => {
   const prompt = phaseVerifierSystemPrompt(productionPhaseRubric('acceptance', 'camera-scene-v1')!);
-  assert.match(prompt, /每候选reason目标≤300字符/);
-  assert.match(prompt, /总reason目标≤400字符/);
+  assert.equal(PRODUCTION_VERIFIER_VERSION, 'verifier-phase-ordinal-v5');
+  assert.equal(VERIFIER_COMPACT_OUTPUT_POLICY.version, 'verifier-compact-output-v2');
+  assert.match(prompt, /每候选reason目标≤120字符/);
+  assert.match(prompt, /总reason目标≤160字符/);
   assert.match(prompt, /不会截断或修复非法输出/);
   assert.match(prompt, /"decision":"abstain","selectedCandidateId":null/);
   assert.equal(VERIFIER_COMPACT_OUTPUT_POLICY.hostCandidateReasonMaximum, 1000);
+  assert.equal(VERIFIER_COMPACT_OUTPUT_POLICY.hostOverallReasonMaximum, 1500);
   const decision = { decision: 'accept', selectedCandidateId: 'a', scores: [{ candidateId: 'a', score: 3, reason: 'a'.repeat(1000) }], reason: 'a'.repeat(1500) };
   assert.equal(parseVerifiedDecision(decision, ['a']).decision, 'accept');
   assert.equal(verifierSchema.safeParse({ ...decision, scores: [{ ...decision.scores[0], reason: 'a'.repeat(1001) }] }).success, false);

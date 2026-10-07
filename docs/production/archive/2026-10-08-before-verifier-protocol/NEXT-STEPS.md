@@ -2,8 +2,6 @@
 
 ## 下一批顺序（2026-10-08）
 
-最新状态：下表 1–4 的免费切片已实施并最终 **705/705＋45/45** 回归通过，见[修复及验收记录](BATCH-VERIFIER-PROTOCOL-CHECKS.md)和[输出契约](VERIFIER-OUTPUT-CONTRACT.md)。下一纵向切片是第 5 项，**先新冻结、预登记及集中确认预算，再启动真实对照**；[待确认提案](VERIFIER-NEXT-RUN-PROPOSAL.md)已列模型、调用数、时间、Token 和价值判定。旧 REAL-01 一次授权不延用，原失败不覆盖，首次通过也不称稳定 L5。[本次更新前全文留底](archive/2026-10-08-before-verifier-protocol/NEXT-STEPS.md)。
-
 控制面/只读迁移已完成；首次收费实验已结束，见[VERIFIER-REAL-01](experiments/VERIFIER-REAL-01/RESULT.md)。它是有原始记录的协议失败，不是完整对照；此前一次授权已消费，禁止自动重跑。以下旧计划按历史时点保留，当前优先级为：
 
 | 顺序 | 任务 | 免费验收/停止门限 |
