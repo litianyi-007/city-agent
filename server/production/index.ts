@@ -1,5 +1,5 @@
 import { createHash, randomUUID } from 'node:crypto';
-import { lstatSync, readFileSync, realpathSync } from 'node:fs';
+import { existsSync, lstatSync, readFileSync, realpathSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { Router, type Request, type Response } from 'express';
@@ -61,12 +61,43 @@ export function productionReport(runs: ProductionRun[]) {
   };
 }
 
+function validatedProductionDataDirectory(dataDir: string) {
+  if (dataDir.includes('\0') || !path.isAbsolute(dataDir) || path.normalize(dataDir) !== dataDir) throw new Error('生产数据目录必须为规范绝对路径');
+  let directory = dataDir;
+  // macOS exposes these exact OS aliases. Do not canonicalize arbitrary paths
+  // or TMPDIR: doing so would silently approve caller-created symlink escapes.
+  if (process.platform === 'darwin') {
+    for (const alias of ['/var', '/tmp']) {
+      if (directory === alias || directory.startsWith(`${alias}/`)) {
+        const physical = `/private${alias}`;
+        if (!lstatSync(alias).isSymbolicLink() || realpathSync(alias) !== physical) throw new Error('生产数据系统目录别名不合法');
+        directory = `${physical}${directory.slice(alias.length)}`;
+        break;
+      }
+    }
+  }
+  if (directory === path.parse(directory).root) throw new Error('生产数据目录不得为根目录');
+  // Check before ProductionStore can create state or read its encryption key.
+  const studyDirectory = path.join(directory, 'production', 'studies');
+  let ancestor = path.parse(studyDirectory).root;
+  for (const segment of studyDirectory.slice(ancestor.length).split(path.sep)) {
+    ancestor = path.join(ancestor, segment);
+    if (!existsSync(ancestor)) {
+      try { lstatSync(ancestor); } catch (error) { if ((error as NodeJS.ErrnoException).code === 'ENOENT') break; throw error; }
+    }
+    const stat = lstatSync(ancestor);
+    if (!stat.isDirectory() || stat.isSymbolicLink() || realpathSync(ancestor) !== ancestor) throw new Error('生产数据目录不得包含符号链接');
+  }
+  return directory;
+}
+
 export function createProductionService(dataDir: string, options: ProductionOptions = {}) {
+  const directory = validatedProductionDataDirectory(dataDir);
   const captured = captureProductionExecutionIdentity();
   const injected = Boolean(options.roleCall || options.jevCall || options.gate || options.cameraGate || options.acceptancePreflight);
   const executionIdentity = options.executionIdentity ?? captured.bootIdentity;
   const assertExecutionFresh = options.assertExecutionFresh ?? (injected ? undefined : captured.assertFresh);
-  const store = new ProductionStore(dataDir); const pipeline = new ProductionPipeline(store, { ...options, executionIdentity, assertExecutionFresh }); const preview = new ProductionPreview(store); const router = Router(); const commit = executionIdentity.commit ?? platformCommit(); const build = executionIdentity.buildSnapshot;
+  const store = new ProductionStore(directory); const pipeline = new ProductionPipeline(store, { ...options, executionIdentity, assertExecutionFresh }); const preview = new ProductionPreview(store); const router = Router(); const commit = executionIdentity.commit ?? platformCommit(); const build = executionIdentity.buildSnapshot;
   let benchmark: { controller: AbortController; completion: Promise<unknown> } | undefined;
   const studies = new VerifierStudyController({ directory: path.join(store.directory, 'studies'), bootId: executionIdentity.bootId,
     assertExecutionFresh: assertExecutionFresh ?? captured.assertFresh, isOtherBusy: () => pipeline.busy || Boolean(benchmark), store });

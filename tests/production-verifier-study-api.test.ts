@@ -1,12 +1,55 @@
 import assert from 'node:assert/strict';
 import { once } from 'node:events';
-import { mkdtempSync, rmSync } from 'node:fs';
+import { existsSync, mkdirSync, mkdtempSync, readdirSync, realpathSync, rmSync, symlinkSync } from 'node:fs';
 import { createServer } from 'node:http';
 import path from 'node:path';
+import os from 'node:os';
 import { fileURLToPath } from 'node:url';
 import { test, type TestContext } from 'node:test';
 import express from 'express';
 import { createProductionService } from '../server/production/index.js';
+
+test('production service supports the exact macOS system temporary alias without weakening study paths', { skip: process.platform !== 'darwin' }, async t => {
+  const directory = mkdtempSync(path.join(os.tmpdir(), 'city-study-system-alias-'));
+  t.after(() => rmSync(directory, { recursive: true, force: true }));
+  const service = createProductionService(directory, { assertExecutionFresh: () => {} });
+  t.after(() => service.close());
+  assert.equal(service.store.directory, path.join(realpathSync(directory), 'production'));
+  assert.ok(existsSync(path.join(service.store.directory, 'studies')));
+});
+
+test('production service rejects custom data symlinks before writing or reading Store state', () => {
+  const directory = mkdtempSync(path.join(realpathSync(os.tmpdir()), 'city-study-custom-link-'));
+  try {
+    const target = path.join(directory, 'target'); mkdirSync(target);
+    const link = path.join(directory, 'link'); symlinkSync(target, link, 'dir');
+    for (const candidate of [link, path.join(link, 'nested')]) {
+      assert.throws(() => createProductionService(candidate), /符号链接/);
+      assert.deepEqual(readdirSync(target), []);
+    }
+  } finally { rmSync(directory, { recursive: true, force: true }); }
+});
+
+test('production service rejects existing study and dangling symlinks before Store initialization', () => {
+  const directory = mkdtempSync(path.join(realpathSync(os.tmpdir()), 'city-study-existing-link-'));
+  try {
+    const data = path.join(directory, 'data'); const production = path.join(data, 'production'); mkdirSync(production, { recursive: true });
+    const target = path.join(directory, 'target'); mkdirSync(target);
+    symlinkSync(target, path.join(production, 'studies'), 'dir');
+    assert.throws(() => createProductionService(data), /符号链接/);
+    assert.deepEqual(readdirSync(production), ['studies']);
+    assert.deepEqual(readdirSync(target), []);
+    const dangling = path.join(directory, 'dangling'); symlinkSync(path.join(directory, 'missing'), dangling, 'dir');
+    assert.throws(() => createProductionService(dangling), /符号链接/);
+    assert.equal(existsSync(path.join(directory, 'missing')), false);
+  } finally { rmSync(directory, { recursive: true, force: true }); }
+});
+
+test('production service refuses relative or non-normalized roots instead of resolving away traversal', () => {
+  for (const directory of ['relative-data', '/', '/tmp/../tmp/example', '/var//folders/example', '/var\0/folders/example']) {
+    assert.throws(() => createProductionService(directory), /规范绝对路径|根目录/);
+  }
+});
 
 async function setup(t: TestContext) {
   const directory = mkdtempSync(path.join(fileURLToPath(new URL('../', import.meta.url)), '.city-agent-study-api-'));

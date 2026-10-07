@@ -30,6 +30,10 @@
 
 冻结前最终专项62/62（30.138秒，明确排除另跑的full-native用例）、TypeScript与Vite构建通过；独立安全/服务端最终19/19（26.726秒），没有未关闭P0/P1/P2。新增源码冻结后仍需完整工程/浏览器与native回归，不把上述分项当作全套证明。
 
+首次冻结 `f93dbd2` 的完整Node回归为645/672（926.288秒）：27项旧API用例在启动时被macOS `/var` 系统临时目录别名拒绝，包含研究API子进程用例；不是人口证据缺损或真实模型失败。完整浏览器45/45（约1.5分钟），原生18池工程内核用例通过（293.972秒）。日志保留在本分支忽略的 `output/production-html02/verifier-control-node-final.log`，不覆盖失败记录。
+
+修复只转换Darwin实际解析到固定 `/private/var`、`/private/tmp` 的系统前缀，其余路径保持字面值；在初始化Store读取密钥/写入状态之前检查所有既有祖先。控制器原no-symlink规则未放松。补充标准系统别名、自定义祖先/叶子、现有study链接及悬空链接反例；修复后另跑回归，旧真实准备作废，新clean源码重新prepare。此时真实付费调用仍为0。
+
 开发期间初次credential generation测试使用了不存在的Jev `threshold` 字段而失败；更正为实际支持的timeout设置，未放宽协议。初次tsc因公共pricing可空类型不匹配失败，改用strict公共schema规范化。
 
 三次未完成的免费native尝试均保留，不计成功：实现中源码变化导致source guard停止；旧170秒测试等待上限导致取消；独立审查误用negative测试名称过滤而纳入native、被后续源码变化停止。没有外部供应商请求/模型费用，模拟usage和不完整Oracle不作模型效益。最终600秒工程用例等待原生清理，不放宽真实预算或Oracle。
