@@ -1,5 +1,5 @@
 import { execFileSync } from 'node:child_process';
-import { mkdir, mkdtemp, writeFile } from 'node:fs/promises';
+import { mkdir, mkdtemp, rmdir, unlink, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import type { ProductionRun } from '../shared/production-schema.js';
@@ -23,6 +23,34 @@ export function preferredPublicVideo(files: ReadonlyMap<string, Buffer>): 'demo.
   if (files.has('demo.mp4')) return 'demo.mp4';
   if (files.has('demo.webm')) return 'demo.webm';
   throw new Error('Public materials need a registered MP4 or historical WebM recording.');
+}
+/** Probe the checked bytes, never the mutable original package path. A seekable
+ * private snapshot also avoids ffprobe closing a large stdin pipe early. */
+export async function probeCheckedVideoDuration(videoBytes: Buffer, root: string, ownedPublicationDirectory: string): Promise<number> {
+  if (!videoBytes.length || videoBytes.length > 30_000_000) throw new Error('Video snapshot exceeds the checked publication file bounds.');
+  const snapshot = Buffer.from(videoBytes);
+  await assertWorktreeDirectory(root, ownedPublicationDirectory, 'output/production-public');
+  const directory = await mkdtemp(path.join(ownedPublicationDirectory, '.video-probe-'));
+  const filename = path.join(directory, 'video.bin');
+  let failure: unknown;
+  try {
+    await writeFile(filename, snapshot, { flag: 'wx', mode: 0o600 });
+    const info = JSON.parse(execFileSync('ffprobe', ['-v', 'error', '-show_entries', 'format=duration', '-of', 'json', '-i', filename], { cwd: root, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'], timeout: 15000, maxBuffer: 1_000_000 })) as { format?: { duration?: string } };
+    const duration = Number(info?.format?.duration);
+    if (!Number.isFinite(duration) || duration <= 0 || duration > 86400) throw new Error('Video duration could not be verified.');
+    return duration;
+  } catch (error) {
+    failure = error;
+    throw error;
+  } finally {
+    try {
+      await unlink(filename).catch(error => { if (error.code !== 'ENOENT') throw error; });
+      await rmdir(directory);
+    } catch (cleanupError) {
+      if (failure !== undefined) throw new AggregateError([failure, cleanupError], 'Video probe failed and its owned snapshot could not be removed.');
+      throw cleanupError;
+    }
+  }
 }
 export function assertCurrentReviewedPackage(manifest: Record<string, unknown>, files: ReadonlyMap<string, Buffer>, commit: string): void {
   if (manifest.version !== 'mock-package-v2' || manifest.materialsVersion !== MATERIALS_VERSION || manifest.publisherCommit !== commit || !['REVIEW.md', 'materials-summary.json', 'REVIEWER-GUIDE.md', 'SUBMISSION-REPORT.md'].every(name => files.has(name))) throw new Error('Export the current reviewed material snapshot and reviewer documents before publication; a historical PDF cannot impersonate this report commit.');
@@ -85,9 +113,7 @@ export async function buildProductionPublic(source: string, root: string) {
   };
   for (const [name, bytes] of checked.files) await save(layout.materialsBase + publicPath(name), bytes, name);
   const videoName = preferredPublicVideo(checked.files);
-  const videoInfo = JSON.parse(execFileSync('ffprobe', ['-v', 'error', '-show_entries', 'format=duration', '-of', 'json', '-i', 'pipe:0'], { cwd: root, input: checked.files.get(videoName)!, encoding: 'utf8', timeout: 15000, maxBuffer: 1_000_000 })) as { format: { duration: string } };
-  const videoDurationSeconds = Number(videoInfo.format.duration);
-  if (!Number.isFinite(videoDurationSeconds) || videoDurationSeconds <= 0) throw new Error('Video duration could not be verified.');
+  const videoDurationSeconds = await probeCheckedVideoDuration(checked.files.get(videoName)!, root, destination);
   const generatedAt = new Date().toISOString();
   const videoSourceCommit = String(checked.manifest.videoSourceCommit ?? checked.manifest.platformCommit);
   const renderMetadata = { publisherCommit: commit, generatedAt, videoDurationSeconds, videoName, videoSourceCommit, sourcePackageManifestSha256: sha256(checked.files.get('package-manifest.json')!), ...layout, evidencePlatformCommit: checked.manifest.platformCommit, materialsVersion: checked.manifest.materialsVersion };
