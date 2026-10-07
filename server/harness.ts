@@ -3,6 +3,7 @@ import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { DeepSeekHarness, type DeepSeekHarnessOptions } from '@deepseek-ai/dsh-sdk-client';
 import { createUsageProxy, type ObservedUsage } from './usage-observer.js';
+export { HARNESS_JSON_OUTPUT_VERSION } from './usage-observer.js';
 
 export const HARNESS_VERSION = '0.1.5-rc.3';
 export const HARNESS_NAME = `DeepSeek Harness ${HARNESS_VERSION}`;
@@ -79,11 +80,12 @@ export async function runRole(
   userPrompt: string,
   signal: AbortSignal,
   onEvent?: (message: string) => void,
-  limits?: { maxOutputTokens: number; timeoutMs: number; reportUsage?: boolean },
+  limits?: { maxOutputTokens: number; timeoutMs: number; reportUsage?: boolean; responseMode?: 'json-object' },
 ): Promise<RoleResult> {
   signal.throwIfAborted();
   const baseUrl = validateModel(agent);
   const api = protocolFor(agent.provider);
+  if (limits?.responseMode !== undefined && (limits.responseMode !== 'json-object' || agent.provider !== 'deepseek' || api !== 'openai-completions')) throw new Error('Native JSON output requires the explicit DeepSeek Chat provider; unsupported modes do not fall back to text.');
   const maxTokens = limits?.maxOutputTokens ?? MAX_OUTPUT_TOKENS;
   const timeoutMs = limits?.timeoutMs ?? ROLE_TIMEOUT_MS;
   if (!Number.isInteger(maxTokens) || maxTokens < 128 || maxTokens > MAX_OUTPUT_TOKENS || !Number.isInteger(timeoutMs) || timeoutMs < 1000 || timeoutMs > ROLE_TIMEOUT_MS) throw new Error('Harness调用限额无效。');
@@ -103,7 +105,7 @@ export async function runRole(
   let usageProxy: Awaited<ReturnType<typeof createUsageProxy>> | undefined;
   const close = () => (closePromise ??= (async () => { const results = await Promise.allSettled([harness?.close() ?? Promise.resolve(), usageProxy?.close() ?? Promise.resolve()]); const failure = results.find(result => result.status === 'rejected'); if (failure?.status === 'rejected') throw failure.reason; })());
   try {
-    if (limits?.reportUsage) usageProxy = await createUsageProxy(baseUrl, api, agent.apiKey, signal);
+    if (limits?.reportUsage || limits?.responseMode) usageProxy = await createUsageProxy(baseUrl, api, agent.apiKey, signal, limits?.responseMode ? { provider: 'deepseek', modelId: agent.modelId } : undefined);
     const patchPath = join(workspace, 'role.patch.yml');
     // JSON is valid YAML. No executable interpolation and no key enters this file.
     const patch = [

@@ -116,22 +116,29 @@ test('real SDK and wire observer preserve exact system/user bytes, disabled tool
   for (const name of ownedDirectories) await assert.rejects(lstat(`${harnessRoot}/${name}`), { code: 'ENOENT' });
 });
 
-test('literal prompt transport keeps real SDK cancellation, provider abort and ephemeral cleanup unchanged', { timeout: 45_000 }, async () => {
+test('literal prompt transport keeps real SDK cancellation, provider abort and ephemeral cleanup unchanged', { timeout: 45_000 }, async t => {
   const before = await roleDirectories();
   const ownedDirectories = new Set<string>();
   const controller = new AbortController();
   let closed = false;
   let posts = 0;
-  await withLocalProvider(async (_request, response, body) => {
+  const startedAt = Date.now();
+  let providerAt: number | null = null; let abortedAt: number | null = null; let rejectedAt: number | null = null; let closedAt: number | null = null; let socketClosedAt: number | null = null;
+  let providerRequests: unknown; let providerResponse: ServerResponse | undefined;
+  const diagnostics = () => ({ elapsedMs: Date.now() - startedAt, providerAtMs: providerAt === null ? null : providerAt - startedAt, abortedAtMs: abortedAt === null ? null : abortedAt - startedAt, rejectedAtMs: rejectedAt === null ? null : rejectedAt - startedAt, closedAtMs: closedAt === null ? null : closedAt - startedAt, socketClosedAtMs: socketClosedAt === null ? null : socketClosedAt - startedAt, closed, responseDestroyed: providerResponse?.destroyed, responseWritableEnded: providerResponse?.writableEnded, providerRequests });
+  await withLocalProvider(async (request, response, body) => {
     posts++;
+    providerAt = Date.now(); providerResponse = response;
     assertWire(body);
     for (const name of await fixtureDirectories(before, 'literal-cancel-fixture')) ownedDirectories.add(name);
-    response.on('close', () => { closed = true; });
+    request.socket.on('close', () => { socketClosedAt = Date.now(); });
+    response.on('close', () => { closed = true; closedAt = Date.now(); });
     response.writeHead(200, { 'content-type': 'text/event-stream' });
     response.write(': free local pending fixture\n\n');
-    setTimeout(() => controller.abort(), 50);
+    setTimeout(() => { abortedAt = Date.now(); controller.abort(); }, 50);
   }, async baseUrl => {
     await assert.rejects(runRole({ provider: 'openai-compatible', baseUrl, modelId: 'literal-cancel-fixture', apiKey: 'synthetic-literal-cancel-key' }, systemText, userText, controller.signal, undefined, limits), (error: any) => {
+      rejectedAt = Date.now(); providerRequests = error.evidence?.providerRequests;
       assert.equal(error.name, 'AbortError');
       assert.equal(error.evidence.providerRequests.requests, 1);
       assert.equal(error.evidence.inputTokens, null);
@@ -140,7 +147,8 @@ test('literal prompt transport keeps real SDK cancellation, provider abort and e
     });
     const deadline = Date.now() + 1000;
     while (!closed && Date.now() < deadline) await new Promise(resolve => setTimeout(resolve, 10));
-    assert.equal(closed, true);
+    assert.equal(closed, true, JSON.stringify(diagnostics()));
+    t.diagnostic(`Local cancellation diagnostic: ${JSON.stringify(diagnostics())}`);
   });
   assert.equal(posts, 1);
   assert.ok(ownedDirectories.size >= 1);
