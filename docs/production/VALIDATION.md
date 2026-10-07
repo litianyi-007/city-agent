@@ -4,6 +4,8 @@
 
 VE-02/03 新[注入study合同](VERIFIER-STUDY-CONTRACT.md)增加先行manifest/intent、三策略、全盲决策先于Oracle及无答案缓存。免费工程与Mock实际Oracle的本批记录单独保存；不是新增真实模型/费用效益/自主交付成绩。旧 Phase-1 意见的[跨线交接](REVIEW-CONTRACT-HANDOFF.md)保留历史文件，不修改虚拟社会线。本次[留底](archive/2026-10-07-before-verifier-study/VALIDATION.md)。
 
+该切片冻结01ab356最终 **589/589、506.819秒**，独立浏览器 **38/38、1.3分钟**，TypeScript/diff/clean构建通过。[本批工程记录](BATCH-VERIFIER-STUDY-CHECKS.md)保留审查期间的非冻结失败；[VERIFIER-MOCK-01原件](experiments/VERIFIER-MOCK-01/RESULT.md)为131.547秒、54注入意图/36实际Oracle、0外部供应商请求。三策略固定首选各8通过10失败，合成Token/费用不得当模型效益。
+
 [Verifier挑战准备批次](BATCH-VERIFIER-CORPUS-CHECKS.md)继续免费VE-01，18池36候选的实际Oracle与标签全一致（16通过20业务负例），116.390秒、0模型请求；原manifest/intent/results[归档](experiments/VERIFIER-PREP-01/RESULT.md)。这不是正式收费选优或新自主交付结果；新的完整回归以该批次最终实际日志为准，下文515/38仍是前一源码时点。本次[留底](archive/2026-10-07-before-verifier-corpus/VALIDATION.md)。
 
 该新源码最终全量 **531/531、472.724秒**，独立浏览器 **38/38、1.3分钟**，TypeScript/diff通过；36份准备及15历史原件独立复核一致。新真实HTML、收费Verifier效益、物理相机与容器仍不由这些免费回归推定。

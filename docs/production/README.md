@@ -2,6 +2,8 @@
 
 本批新增 VE-02/03：[三策略注入执行器、先行不可覆写账本和无答案缓存合同](VERIFIER-STUDY-CONTRACT.md)。固定候选、相同 B/C 复核、全部盲选择先于 Oracle；写盘/unknown/超预算/取消停止，恢复不重放。免费验证与真实模型成绩分列，公开 v5 不变。两条旧 Phase-1 评审意见的[跨线交接](REVIEW-CONTRACT-HANDOFF.md)不直接修改虚拟社会 worktree；本次原文[留底](archive/2026-10-07-before-verifier-study/README.md)。
 
+本批最终工程 **589/589＋38/38浏览器**；[18池演练原件](experiments/VERIFIER-MOCK-01/RESULT.md)54注入调用、36实际Oracle、131.547秒，外部模型请求0；[批次审查/验证](BATCH-VERIFIER-STUDY-CHECKS.md)。免费Mock不计选优效益，下一门禁是VE-04真实传输及预算冻结。
+
 最新免费增量：[18池Verifier挑战集](VERIFIER-CHALLENGE-CORPUS.md)及[原始准备证据](experiments/VERIFIER-PREP-01/RESULT.md)。36结构合法候选实际Oracle与独立标签全一致（16通过/20业务负例），116.390秒、0模型请求；不是模型选优成绩或新自主交付。准备源码7755b4d，下一步VE-02/03同条件study执行器/账本；公开v5仍保持固定旧版本。本次[全文留底](archive/2026-10-07-before-verifier-corpus/production-README.md)。
 
 材料入口：[已提交离线主稿（v3原叙述保留）](SUBMISSION-REPORT.md)、[评委独立安装/自测指南](REVIEWER-GUIDE.md)、[最新进度](POST-SUBMISSION-PLAN.md)。在线production/是固定案例＋安装引导＋材料，不是新需求后端；公开版本以publication-manifest为准。新包使用reviews/<完整publisher commit>/固定入口，PDF/MD/JSON分别记录材料版本与原实验来源；历史MP4保持原视频commit，旧公开附件不覆盖。

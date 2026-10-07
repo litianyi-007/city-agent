@@ -1,0 +1,67 @@
+{
+  "version": "verifier-study-injected-v1",
+  "runId": "c80c6905-cc8f-44cc-9638-f3437896c9b7",
+  "executionSource": "injected-test",
+  "cachePolicy": "bypass",
+  "status": "completed",
+  "reason": null,
+  "startedAt": "2026-10-07T13:04:02.566Z",
+  "endedAt": "2026-10-07T13:06:14.113Z",
+  "durationMs": 131547,
+  "plannedDecisions": 54,
+  "attemptedDecisions": 54,
+  "notStartedDecisions": 0,
+  "plannedOracles": 36,
+  "attemptedOracles": 36,
+  "completedOracles": 36,
+  "callbackIntents": 54,
+  "actualProviderHttpAttempts": null,
+  "usage": {
+    "complete": true,
+    "knownInputTokens": 5454,
+    "knownOutputTokens": 378,
+    "knownEstimatedCost": 0.000076356,
+    "currency": "USD",
+    "unknownCalls": 0,
+    "scope": "injected-fixture-accounting-not-model-measurement"
+  },
+  "byStrategy": [
+    {
+      "strategy": "baseline",
+      "planned": 18,
+      "attempted": 18,
+      "accepted": 18,
+      "abstained": 0,
+      "errors": 0,
+      "notStarted": 0,
+      "selectedOraclePass": 8,
+      "selectedOracleFail": 10,
+      "selectedOracleUnknown": 0
+    },
+    {
+      "strategy": "llm",
+      "planned": 18,
+      "attempted": 18,
+      "accepted": 18,
+      "abstained": 0,
+      "errors": 0,
+      "notStarted": 0,
+      "selectedOraclePass": 8,
+      "selectedOracleFail": 10,
+      "selectedOracleUnknown": 0
+    },
+    {
+      "strategy": "jev-cascade",
+      "planned": 18,
+      "attempted": 18,
+      "accepted": 18,
+      "abstained": 0,
+      "errors": 0,
+      "notStarted": 0,
+      "selectedOraclePass": 8,
+      "selectedOracleFail": 10,
+      "selectedOracleUnknown": 0
+    }
+  ],
+  "ledgerTerminalPersisted": true
+}
