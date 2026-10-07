@@ -3,7 +3,8 @@ import { test } from 'node:test';
 import { mkdtemp, mkdir, rm, symlink, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { assertNoPublishedSecrets, assertUnrelatedTreesPreserved, assertWorktreeDirectory, checkedFile, isFrozenPackageVersion, packagePath, publicPath } from '../scripts/production-public-safety.js';
+import { assertNoPublishedSecrets, assertUnrelatedTreesPreserved, assertWorktreeDirectory, checkedFile, isFrozenPackageVersion, packageFileLimit, publicationFileLimit, packagePath, publicPath } from '../scripts/production-public-safety.js';
+import { VERIFIER_REAL02_MATERIAL_FILES } from '../scripts/production-study-materials.js';
 import { trustedFixturePreview } from '../scripts/production-public.js';
 import { PRODUCTION_DEMO_CASES } from '../shared/production-benchmarks.js';
 import { demoHtml } from '../server/production/fixtures.js';
@@ -22,6 +23,13 @@ test('publication paths cannot include runtime data or overwrite unrelated site 
 test('registered historical QA manifest is accepted without permitting arbitrary version suffixes', () => {
   for (const version of ['mock-package-v1', 'mock-package-v1-qa1', 'mock-package-v2']) assert.equal(isFrozenPackageVersion(version), true);
   for (const version of ['mock-package-v1-unreviewed', 'mock-package-v2-extra', 'mock-package-v3', null]) assert.equal(isFrozenPackageVersion(version), false);
+});
+test('v6 adds exactly ten selected public REAL02 files and version-specific counts without loosening legacy paths or bounds', () => {
+  assert.equal(VERIFIER_REAL02_MATERIAL_FILES.length, 10);
+  for (const name of VERIFIER_REAL02_MATERIAL_FILES) assert.equal(publicPath(name), name);
+  for (const name of ['VERIFIER-REAL-01/run-ledger.tar.gz', 'VERIFIER-REAL-03/metrics.json', 'VERIFIER-REAL-02/state.json', 'VERIFIER-REAL-02/control/encryption-key', 'VERIFIER-REAL-02/index.html', 'VERIFIER-REAL-02/run/manifest.json', 'VERIFIER-REAL-02/../state.json']) assert.throws(() => packagePath(name));
+  assert.equal(packageFileLimit('production-materials-v6'), 120); assert.equal(publicationFileLimit('production-materials-v6'), 130);
+  for (const version of [undefined, 'production-materials-v5', 'production-materials-v6-extra', 'production-materials-v7']) { assert.equal(packageFileLimit(version), 100); assert.equal(publicationFileLimit(version), 110); }
 });
 test('secret-like values and nonempty credential fields block publication', () => {
   assert.throws(() => assertNoPublishedSecrets(Buffer.from('apikey_' + 'a'.repeat(40)), 'note.txt'));

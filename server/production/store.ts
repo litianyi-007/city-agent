@@ -1,7 +1,7 @@
 import { createCipheriv, createDecipheriv, createHash, createHmac, randomBytes, randomUUID } from 'node:crypto';
 import { chmodSync, existsSync, lstatSync, mkdirSync, readFileSync, realpathSync, renameSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
-import { PRODUCTION_ROLES, PRODUCTION_ROLE_LABELS, productionAgentInputSchema, productionAgentPatchSchema, type ProductionAgent, type ProductionAgentInput, type ProductionRun } from '../../shared/production-schema.js';
+import { PRODUCTION_DEFAULT_MODEL_ID, PRODUCTION_ROLES, PRODUCTION_ROLE_LABELS, productionAgentInputSchema, productionAgentPatchSchema, type ProductionAgent, type ProductionAgentInput, type ProductionRun } from '../../shared/production-schema.js';
 import { DEFAULT_JEV_CONFIG, JEV_ENDPOINT, JEV_MODEL_ID, jevConfigPatchSchema, type JevConfig, type JevPublicConfig, type SecretJevConfig } from '../../shared/jev-schema.js';
 
 export type SecretAgent = ProductionAgent & { apiKey?: string };
@@ -10,7 +10,7 @@ interface StoredJev { public: JevConfig; secret?: string; }
 interface State { version: 1; agents: StoredAgent[]; runs: ProductionRun[]; snapshots: Record<string, StoredAgent[]>; jev?: StoredJev; jevSnapshots?: Record<string, StoredJev>; jevBenchmarks?: unknown[]; }
 export const hash = (value: unknown) => createHash('sha256').update(typeof value === 'string' ? value : JSON.stringify(value)).digest('hex');
 const STUDY_PUBLIC_CONTEXT = ['loopback-engineering', 'real-provider', 'localFixtureHttpAttempts', 'actualProviderHttpAttempts',
-  'single-new-study-no-auto-resume', 'frozenStudySha256', 'verifier-study-control-v1', 'verifier-study-source-v2', 'verifier-study-source-v3',
+  'single-new-study-no-auto-resume', 'frozenStudySha256', 'verifier-study-control-v1', 'verifier-study-source-v2', 'verifier-study-source-v3', 'verifier-study-source-v4',
   'estimatedBillingOnlyAcknowledged', 'jevOutputObservationOnlyAcknowledged', 'configurationSha256', 'ledgerTerminalPersisted'];
 
 /** Separate private store; parent CityStore supplies the single-process owner lock. */
@@ -35,7 +35,7 @@ export class ProductionStore {
       for (const entry of this.state.jevBenchmarks ?? []) { const benchmark = entry as { status: string; error?: string; finishedAt?: string; usage?: unknown }; if (['running', 'queued'].includes(benchmark.status)) { benchmark.status = 'failed'; benchmark.error = '服务重启导致基准中断；不自动重复请求。未完成调用用量 unknown。'; benchmark.finishedAt = new Date().toISOString(); benchmark.usage = { inputTokens: null, outputTokens: null, estimatedCost: null, providerRequests: null, complete: false, currency: 'USD' }; } }
     } else {
       this.state = { version: 1, agents: [], runs: [], snapshots: {} };
-      for (const role of PRODUCTION_ROLES) { const publicAgent: ProductionAgent = { id: randomUUID(), name: PRODUCTION_ROLE_LABELS[role], role, provider: 'deepseek', baseUrl: 'https://api.deepseek.com', modelId: 'deepseek-chat', enabled: true, hasApiKey: false }; this.state.agents.push({ public: publicAgent }); }
+      for (const role of PRODUCTION_ROLES) { const publicAgent: ProductionAgent = { id: randomUUID(), name: PRODUCTION_ROLE_LABELS[role], role, provider: 'deepseek', baseUrl: 'https://api.deepseek.com', modelId: PRODUCTION_DEFAULT_MODEL_ID, enabled: true, hasApiKey: false }; this.state.agents.push({ public: publicAgent }); }
     }
     this.persist();
   }

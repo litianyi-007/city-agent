@@ -72,12 +72,12 @@ test('Low concentration is uncertain, never an implied accuracy or automatic acc
   assert.equal(result.status, 'uncertain'); assert.equal(result.selectedCandidateId, null);
 });
 
-test('v3 preserves v2 two-decimal arithmetic and modal-tie validation without altering evidence', async () => {
+test('v4 preserves v2 two-decimal arithmetic and modal-tie validation without altering evidence', async () => {
   const body = responseBody();
   body.answers.c0_consistency = roundedScore(2.27, 0.11, { '0': 0.04, '1': 0.33, '2': 0.13, '3': 0.33, '4': 0.17 });
   body.answers.c0_scope = roundedScore(3.11, 0.26, { '0': 0.03, '1': 0.12, '2': 0.04, '3': 0.30, '4': 0.51 });
   const result = await evaluateJevCandidates(config, context, new AbortController().signal, { fetch: successfulFetch(body) });
-  assert.equal(JEV_POLICY_VERSION, 'jev-candidate-v3'); assert.equal(result.policyVersion, JEV_POLICY_VERSION);
+  assert.equal(JEV_POLICY_VERSION, 'jev-candidate-v4'); assert.equal(result.policyVersion, JEV_POLICY_VERSION);
   assert.equal(result.status, 'uncertain'); assert.equal(result.selectedCandidateId, null);
   assert.equal(result.scores[0].dimensions.consistency.score, 2.27);
   assert.equal(result.scores[0].dimensions.consistency.confidence, 0.11);

@@ -2,10 +2,10 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import test from 'node:test';
 import { evaluateJevCandidates } from '../server/production/jev.js';
-import type { JevCandidateContext } from '../shared/jev-schema.js';
+import { JEV_POLICY_VERSION, type JevCandidateContext } from '../shared/jev-schema.js';
 import type { ProductionRun } from '../shared/production-schema.js';
 
-test('CAMERA-03 raw response remains rejected but is counterfactually classified as arithmetic drift by v3, with old evidence unchanged', async () => {
+test('CAMERA-03 current v4 counterfactual retains arithmetic drift, with old evidence unchanged', async () => {
   const originalBytes = readFileSync(new URL('../docs/production/experiments/CAMERA-03/run.json', import.meta.url));
   const run: ProductionRun = JSON.parse(originalBytes.toString('utf8'));
   const original = run.jevCalls![0].evaluation;
@@ -44,7 +44,7 @@ test('CAMERA-03 raw response remains rejected but is counterfactually classified
   });
   assert.equal(injectedCalls, 1, 'injected transport only; no actual HTTP request');
   assert.equal(result.status, 'error');
-  assert.equal(result.policyVersion, 'jev-candidate-v3'); assert.equal(result.errorKind, 'arithmetic-drift');
+  assert.equal(result.policyVersion, JEV_POLICY_VERSION); assert.equal(result.errorKind, 'arithmetic-drift');
   assert.deepEqual(result.diagnostics, [{ code: 'score-mean-drift', answerId: 'c0_scope' }]); assert.deepEqual(result.scores, []); assert.equal(result.choice, null);
   assert.equal(result.selectedCandidateId, null);
   assert.match(result.reason, /c0_scope: score does not match any probability-weighted value within display rounding/);

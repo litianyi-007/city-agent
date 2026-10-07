@@ -8,6 +8,7 @@ import { productionRunInputSchema, type ProductionRun } from '../shared/producti
 import { demoHtml } from '../server/production/fixtures.js';
 import type { JevBenchmarkRun } from '../server/production/jev-benchmark.js';
 import type { JevEvaluation } from '../shared/jev-schema.js';
+import { VERIFIER_REAL02_MATERIAL_FILES, verifyVerifierReal02Materials } from '../scripts/production-study-materials.js';
 
 function fixtureRun(index: number): ProductionRun {
   const item = PRODUCTION_DEMO_CASES[index];
@@ -15,6 +16,29 @@ function fixtureRun(index: number): ProductionRun {
   return { id: `portal-fixture-${index}`, input, status: 'completed', createdAt: '2026-10-07T00:00:00Z', evidenceKind: 'fixture', agentSnapshot: [], events: [], calls: [], verifications: [], outputs: [{ role: 'developer', phase: 'implementation', value: { html: 'SOURCE_MUST_NOT_BE_EMBEDDED<script>unsafe()</script>' }, selectedCandidateId: 'mock' }], gateHistory: [], gate: { passed: true, checks: [{ name: '实际行为契约', passed: true }] }, repairs: 0, durationMs: 1200, usage: { inputTokens: 0, outputTokens: 0, estimatedCost: 0, currency: 'USD', complete: true }, interventions: [], artifacts: [{ name: 'index.html', type: 'text/html' }], frozenContract: { version: 'test-contract', hash: 'frozen-hash', requirementHash: 'input-hash', frozenAt: '2026-10-07T00:00:00Z', checks: [] } };
 }
 const portalInput = (): ProductionPortalInput => ({ packageManifest: { platformCommit: 'frozen-commit', generatedAt: '2026-10-07', files: [] }, report: {}, requirements: PRODUCTION_DEMO_CASES, runs: PRODUCTION_DEMO_CASES.map((_, index) => fixtureRun(index)), jevBenchmarks: [], mixedRuns: [], trustedFixtureIds: PRODUCTION_DEMO_CASES.map(item => item.id) });
+
+test('missing immutable install revision fails closed instead of offering mutable branch commands', () => {
+  const html = renderProductionPortal(portalInput());
+  assert.ok(html.includes('缺少完整固定安装 commit'));
+  assert.equal(html.includes('git clone --branch'), false); assert.equal(html.includes('data-copy-commands='), false);
+});
+test('v6 latest real study exposes verified ten-file evidence, failures and negative value verdict separately from software delivery', () => {
+  const input = portalInput(); const commit = 'e'.repeat(40);
+  input.packageManifest = { ...input.packageManifest, materialsVersion: 'production-materials-v6', publisherCommit: commit, files: VERIFIER_REAL02_MATERIAL_FILES.map(path => ({ path })) };
+  input.verifierStudy = verifyVerifierReal02Materials(new Map(VERIFIER_REAL02_MATERIAL_FILES.map(name => [name, readFileSync(new URL('../docs/production/experiments/' + name, import.meta.url))])));
+  input.submissionBase = `./reviews/${commit}/submission/`;
+  const html = renderProductionPortal(input);
+  for (const name of VERIFIER_REAL02_MATERIAL_FILES) assert.ok(html.includes(`href="./reviews/${commit}/submission/${name}"`));
+  for (const text of ['VERIFIER-REAL-02', '未满足（false）', '固定候选选优研究，不是研发软件良品率', 'Jev 算术漂移 12 次', '正常不确定 4 次', '1 次错弃权', '当前 Jev v4', '未做新的真实模型实测', '不是供应商账单']) assert.ok(html.includes(text), text);
+  assert.ok(html.includes('C 选中良品 11，B 12')); assert.ok(html.includes('52 / 36'));
+  for (const id of ['HTML-01', 'HTML-02']) assert.ok(html.includes(`href="https://github.com/litianyi-007/city-agent/blob/${commit}/docs/production/experiments/${id}/RESULT.md"`));
+  assert.ok(html.includes('与上述相机分母分开，不合并跨配置率'));
+  assert.equal(html.includes('fetch('), false); assert.equal(html.includes('type="password"'), false);
+  assert.equal(html.includes('data-src="./previews/VERIFIER'), false);
+  const commandBlock = html.split('<pre id="reviewer-install-commands"')[1].split('</pre>')[0];
+  assert.ok(commandBlock.includes(`git checkout --detach ${commit}`)); assert.ok(commandBlock.includes('set -eu')); assert.equal(commandBlock.includes('prepare-camera-assets'), false);
+  input.packageManifest.files = []; assert.throws(() => renderProductionPortal(input), /all verified registered/);
+});
 
 test('public onboarding prioritizes three honest entry points and fixed cases before installation and folded evidence', () => {
   const input = portalInput();
@@ -31,8 +55,8 @@ test('public onboarding prioritizes three honest entry points and fixed cases be
   assert.equal(html.includes('<details class="evidence-panel" open'), false);
   assert.ok(html.includes('在“需求原话”输入你的新需求'));
   assert.ok(html.includes('再点击“启动真实生产”'));
-  assert.ok(html.includes(`git checkout ${'b'.repeat(40)}`));
-  assert.equal(html.includes(`git checkout ${'a'.repeat(40)}`), false);
+  assert.ok(html.includes(`git checkout --detach ${'b'.repeat(40)}`));
+  assert.equal(html.includes(`git checkout --detach ${'a'.repeat(40)}`), false);
   assert.ok(html.includes('这里只展示案例快照，不能提交新需求'));
   assert.equal(html.includes('<textarea'), false);
   assert.equal(html.includes('href="http://127.0.0.1:'), false);
@@ -54,8 +78,8 @@ test('reviewer v3 highlights same-version Markdown, independent installation and
   assert.ok(html.includes('git clone --branch feature/autonomous-production --single-branch https://github.com/litianyi-007/city-agent.git city-agent-production-review'));
   assert.ok(html.includes('Node.js 22.19+'));
   assert.ok(html.includes('npx playwright install chromium'));
-  assert.ok(html.includes(`git checkout ${commit}`));
-  assert.ok(html.includes('npm ci\nnpx playwright install chromium\nnpm run build\nnpm start'));
+  assert.ok(html.includes(`git checkout --detach ${commit}`));
+  assert.ok(html.includes('npm ci --engine-strict\nnpx playwright install chromium\nnpm run build\nnpm start'));
   assert.ok(html.includes('公开页面不接收 Key、不运行 Harness、不进行实时生成'));
   assert.ok(html.includes('按评委指南准备并核验固定本地资产'));
 });
@@ -76,8 +100,8 @@ test('local onboarding starts a detached custom requirement before configuration
     previous = index;
   }
   for (const label of ['清空旧 Mock 原话、来源与验收', '不是任意仓库开发', 'offline-single-html', 'camera-scene-v1', '完整“业务验收要求”', '只是来源声明，不是平台认证', 'Key 仅填写在你的本地工作区，不上传到这个公开页面', '授权只供一次提交', '修改配置或重试须重新授权', '总用量 unknown 与已知小计分列', '不能把 unknown 当 0']) assert.ok(guide.includes(label));
-  assert.ok(guide.includes(`git checkout ${installationCommit}`));
-  assert.equal(guide.includes(`git checkout ${videoCommit}`), false);
+  assert.ok(guide.includes(`git checkout --detach ${installationCommit}`));
+  assert.equal(guide.includes(`git checkout --detach ${videoCommit}`), false);
   assert.ok(html.includes(`视频来源源码版本：<code>${videoCommit}</code>`));
   assert.ok(html.includes('静态交互演示 / 证据回放，非线上自主研发服务'));
   assert.ok(html.includes('公开页面不接收 Key、不运行 Harness、不进行实时生成'));
@@ -124,17 +148,17 @@ test('four different-version real camera failures remain separate from three zer
     calls: [], usage: { inputTokens: null, outputTokens: null, estimatedCost: null, currency: 'USD', complete: false }, error: 'engineering failed-state evidence',
   }));
   const html = renderProductionPortal(input);
-  assert.ok(html.includes('记录 4 次真实生成尝试；完整交付通过 0 / 4 次终态'));
-  assert.ok(html.includes('不同配置的调优账本，不是同一冻结配置下的稳定成功率实验'));
+  assert.ok(html.includes('本包归档 4 次相机场景调优；相机完整需求交付通过 0 / 4 次终态'));
+  assert.ok(html.includes('不同配置相机调优账本，不是全部历史生产分母，也不是同一冻结配置下的稳定成功率实验'));
   assert.ok(html.includes('3 / 3'));
   assert.ok(html.includes('0.0%'));
-  assert.ok(html.includes('0 个通过 / 4 次真实研发终态尝试'));
+  assert.ok(html.includes('0 个通过 / 4 次本包归档终态尝试'));
   assert.ok(html.includes('real-camera-runs.json'));
   assert.equal((html.match(/class="badge negative">失败 · 完整需求未验收<\/span>/g) ?? []).length, 4, 'Each archived failure has its own truthful full-requirement badge');
   for (const run of input.cameraRuns) assert.ok(html.includes(run.platformCommit!));
   const bounded = { ...input.cameraRuns[0], status: 'completed' as const, gate: { passed: true, checks: [] }, cameraVerification: { ...input.cameraRuns[0].cameraVerification!, boundedScenePassed: true } };
   const boundedHtml = renderProductionPortal({ ...input, cameraRuns: [bounded], mixedRuns: [bounded] });
-  assert.ok(boundedHtml.includes('0 个通过 / 1 次真实研发终态尝试'));
+  assert.ok(boundedHtml.includes('0 个通过 / 1 次本包归档终态尝试'));
   assert.ok(boundedHtml.includes('通过（不代表实机）'));
   assert.equal(boundedHtml.includes('完整需求已验收'), false);
   assert.ok(boundedHtml.includes('真实有界场景闭环已记录；摄像头实机 / 完整需求未验收'));
@@ -154,15 +178,15 @@ test('v5 archived CAMERA09 bounded delivery is traced through seven text-only fi
   input.recordedBuildInfo = { deploymentCommit: commit };
   input.submissionBase = `./reviews/${commit}/submission/`;
   const html = renderProductionPortal(input);
-  assert.ok(html.includes('记录 9 次真实生成尝试；完整交付通过 0 / 9 次终态'));
+  assert.ok(html.includes('本包归档 9 次相机场景调优；相机完整需求交付通过 0 / 9 次终态'));
   assert.ok(html.includes('有界场景行为 1 / 9 次终态；仅为异配置调优账本计数，非稳定成功率'));
   assert.ok(html.includes('真实有界场景闭环已记录；摄像头实机 / 完整需求未验收'));
   assert.ok(html.includes('模型场景 DSL＋平台可信 runtime，不是任意软件源码'));
   assert.ok(html.includes('每阶段候选数 N=1；N=1 仅验证单候选，不证明多候选选优或节费'));
-  assert.ok(html.includes('0 个通过 / 9 次真实研发终态尝试'));
+  assert.ok(html.includes('0 个通过 / 9 次本包归档终态尝试'));
   for (const name of names) assert.ok(html.includes(`href="./reviews/${commit}/submission/CAMERA-09/${name}"`), name);
   assert.ok(html.includes('24256f96165f0be3156be037a2fea42492e31117'));
-  assert.ok(html.includes(`git checkout ${commit}`)); assert.ok(html.includes(`视频来源源码版本：<code>${videoSource}</code>`));
+  assert.ok(html.includes(`git checkout --detach ${commit}`)); assert.ok(html.includes(`视频来源源码版本：<code>${videoSource}</code>`));
   assert.equal(html.includes('当前真实自主交付尚未通过'), false); assert.equal(html.includes('真实端到端交付未证实'), false);
   assert.equal(html.includes('真实端到端交付、稳定性与同范围人工效率对照尚未证实'), false);
   assert.equal(html.includes('完整需求已验收'), false); assert.equal(html.includes(`href="./reviews/${commit}/submission/CAMERA-09/index.html"`), false);
@@ -317,7 +341,7 @@ test('actual Chromium onboarding opens deep evidence links and only copies insta
     await page.getByRole('button', { name: '复制安装命令', exact: true }).click();
     assert.equal(await page.evaluate(() => (window as unknown as { copyCalls: number }).copyCalls), 1);
     assert.match(await page.locator('#copy-commands-status').innerText(), /剪贴板不可用，命令已选中/);
-    assert.match(await page.evaluate(() => window.getSelection()?.toString() ?? ''), new RegExp(`git checkout ${installedCommit}`));
+    assert.match(await page.evaluate(() => window.getSelection()?.toString() ?? ''), new RegExp(`git checkout --detach ${installedCommit}`));
     assert.equal(await page.locator('#reviewer-install-commands').evaluate(element => document.activeElement === element), true);
     assert.equal(await page.locator('.evidence-panel[open]').count(), 0);
     await page.getByRole('link', { name: '执行证据', exact: true }).click();

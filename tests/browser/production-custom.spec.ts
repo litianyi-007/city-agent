@@ -143,6 +143,44 @@ test('a custom live submit contains its own provenance, never demoCaseId, with r
   expect(writes[1].body).not.toHaveProperty('demoCaseId');
 });
 
+test('source-bound evidence is opt-in, revokes consent and is preserved in the submitted snapshot', async ({ page }) => {
+  const writes = await openWorkspace(page);
+  await fillCustom(page);
+  const evidence = page.getByLabel('启用条款证据门禁（LLM）', { exact: true });
+  await expect(evidence).not.toBeChecked();
+  await authorization(page).check();
+  await evidence.focus(); await page.keyboard.press('Space');
+  await expect(evidence).toBeChecked();
+  await expect(authorization(page)).not.toBeChecked();
+  await expect(page.getByRole('button', { name: '启动真实生产', exact: true })).toBeDisabled();
+  await expect(page.locator('#prod-evidence-explanation')).toContainText('引用核验不证明语义正确');
+  await authorization(page).check();
+  await page.getByRole('button', { name: '启动真实生产', exact: true }).click();
+  await expect.poll(() => writes.length).toBe(1);
+  expect(writes[0].body).toMatchObject({ implementationEvidencePolicy: 'source-bound-v1', mode: 'live', budgetAuthorized: true });
+  await evidence.uncheck();
+  await expect(authorization(page)).not.toBeChecked();
+  await authorization(page).check();
+  await page.getByRole('button', { name: '启动真实生产', exact: true }).click();
+  await expect.poll(() => writes.length).toBe(2);
+  expect(writes[1].body).toMatchObject({ implementationEvidencePolicy: 'legacy' });
+});
+
+test('evidence and Jev incompatibility blocks launch instead of silently changing the policy or adding paid calls', async ({ page }) => {
+  const writes = await openWorkspace(page);
+  await fillCustom(page);
+  await page.getByLabel('启用条款证据门禁（LLM）', { exact: true }).check();
+  await authorization(page).check();
+  await page.getByText('候选验证与有界执行预算', { exact: true }).click();
+  await page.getByLabel('候选验证引擎', { exact: true }).selectOption('jev-cascade');
+  await expect(authorization(page)).not.toBeChecked();
+  await expect(page.getByText(/条款证据模式仅支持 LLM 序数评审/)).toBeVisible();
+  await authorization(page).check();
+  await expect(page.getByRole('button', { name: '启动真实生产', exact: true })).toBeDisabled();
+  await expect(page.getByLabel('启用条款证据门禁（LLM）', { exact: true })).toBeChecked();
+  expect(writes).toEqual([]);
+});
+
 test('all requirement, execution, budget and team edits revoke old consent synchronously', async ({ page }) => {
   const writes = await openWorkspace(page);
   await fillCustom(page);

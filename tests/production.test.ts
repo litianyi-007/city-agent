@@ -8,7 +8,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { test, type TestContext } from 'node:test';
 import express from 'express';
-import { productionRunInputSchema, type ProductionRun, type ProductionRunInput } from '../shared/production-schema.js';
+import { PRODUCTION_DEFAULT_MODEL_ID, productionAgentInputSchema, productionRunInputSchema, type ProductionRun, type ProductionRunInput } from '../shared/production-schema.js';
 import { codeSchema, parseVerifiedDecision, productSchema, testsSchema } from '../server/production/contracts.js';
 import { demoChecks, demoHtml } from '../server/production/fixtures.js';
 import { createProductionService, productionReport } from '../server/production/index.js';
@@ -40,12 +40,34 @@ const injected: typeof runRole = async (_agent, system, prompt) => {
 
 test('production agent presets are separate, encrypted, cloneable and endpoint changes clear keys', async t => {
   const { service, directory, request } = await setup(t); assert.equal(service.store.agents().length, 6); const agent = service.store.agents()[0]; const secret = 'production-fixture-key-not-real';
-  await request(`/agents/${agent.id}`, { apiKey: secret }, 'PATCH'); assert.equal(service.store.secretAgents([agent.id])[0].apiKey, secret); assert.equal((await (await request('/agents')).text()).includes(secret), false);
-  const clone = await (await request(`/agents/${agent.id}/clone`, undefined, 'POST')).json(); assert.equal(clone.hasApiKey, true); assert.equal(service.store.secretAgents([clone.id])[0].apiKey, secret);
+  assert.equal(PRODUCTION_DEFAULT_MODEL_ID, 'deepseek-flash');
+  assert.ok(service.store.agents().every(value => value.modelId === PRODUCTION_DEFAULT_MODEL_ID && !value.hasApiKey && value.pricing === undefined));
+  assert.equal(productionAgentInputSchema.parse({ name: 'Schema default only', role: 'developer' }).modelId, PRODUCTION_DEFAULT_MODEL_ID);
+  const createdResponse = await request('/agents', { name: 'New API default only', role: 'researcher' }, 'POST'); assert.equal(createdResponse.status, 201);
+  const created = await createdResponse.json(); assert.equal(created.modelId, PRODUCTION_DEFAULT_MODEL_ID); assert.equal(created.hasApiKey, false); assert.equal(created.pricing, undefined);
+  await request(`/agents/${agent.id}`, { apiKey: secret, modelId: 'user-selected-model-v1' }, 'PATCH'); assert.equal(service.store.secretAgents([agent.id])[0].apiKey, secret); assert.equal((await (await request('/agents')).text()).includes(secret), false);
+  const clone = await (await request(`/agents/${agent.id}/clone`, undefined, 'POST')).json(); assert.equal(clone.hasApiKey, true); assert.equal(clone.modelId, 'user-selected-model-v1'); assert.equal(service.store.secretAgents([clone.id])[0].apiKey, secret);
   await request(`/agents/${agent.id}`, { name: 'renamed' }, 'PATCH'); assert.equal(service.store.secretAgents([agent.id])[0].apiKey, secret);
   await request(`/agents/${agent.id}`, { baseUrl: 'https://other.example/v1' }, 'PATCH'); assert.equal(service.store.secretAgents([agent.id])[0].apiKey, undefined);
   const state = readFileSync(path.join(directory, 'production', 'state.json'), 'utf8'); assert.equal(state.includes(secret), false); assert.equal(statSync(path.join(directory, 'production', 'encryption.key')).mode & 0o777, 0o600);
   assert.equal(service.store.sanitize({ output: `escaped ${secret}`, status: 'completed' }).output, 'escaped [REDACTED]');
+});
+
+test('fresh model defaults never migrate persisted legacy agents, credentials, prices or frozen run snapshots', async t => {
+  const { service, directory, input } = await setup(t);
+  const old = service.store.agents()[0]; const secret = 'legacy-default-fixture-not-a-real-key';
+  const pricing = { inputPerMillion: 7, outputPerMillion: 9, currency: 'CNY' as const };
+  service.store.patchAgent(old.id, { modelId: 'deepseek-chat', apiKey: secret, pricing, enabled: false });
+  const id = randomUUID(); const run: ProductionRun = { id, input: input(), status: 'failed', createdAt: '2026-10-07T00:00:00.000Z', evidenceKind: 'fixture', agentSnapshot: service.store.agents(), calls: [], verifications: [], outputs: [], events: [], gateHistory: [], repairs: 0, usage: { inputTokens: 0, outputTokens: 0, estimatedCost: 0, currency: 'USD', complete: true }, interventions: [], artifacts: [] };
+  service.store.addRun(run, run.input.agentIds);
+  const agentsBefore = service.store.agents(); const statePath = path.join(directory, 'production', 'state.json'); const stateBefore = readFileSync(statePath, 'utf8');
+  const restarted = new ProductionStore(directory);
+  assert.deepEqual(restarted.agents(), agentsBefore); assert.deepEqual(restarted.run(id), run);
+  assert.equal(readFileSync(statePath, 'utf8'), stateBefore, 'restart must not rewrite any terminal legacy state bytes');
+  assert.equal(restarted.runAgents(id)[0].modelId, 'deepseek-chat'); assert.equal(restarted.runAgents(id)[0].apiKey, secret);
+  const clone = restarted.cloneAgent(old.id); assert.equal(clone.modelId, 'deepseek-chat'); assert.deepEqual(clone.pricing, pricing); assert.equal(clone.enabled, false); assert.equal(restarted.secretAgents([clone.id])[0].apiKey, secret);
+  const added = restarted.addAgent({ name: 'Fresh post-restart Agent', role: 'researcher' }); assert.equal(added.modelId, PRODUCTION_DEFAULT_MODEL_ID); assert.equal(added.hasApiKey, false); assert.equal(added.pricing, undefined);
+  assert.deepEqual(restarted.run(id), run); assert.deepEqual(restarted.agents().find(agent => agent.id === old.id), agentsBefore[0]);
 });
 
 test('verifier requires every current candidate, verifies single candidate, abstains and rejects fake best', () => {

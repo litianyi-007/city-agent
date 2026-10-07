@@ -5,6 +5,7 @@ import { fileURLToPath } from 'node:url';
 import { Router, type Request, type Response } from 'express';
 import { z } from 'zod';
 import { PRODUCTION_CAPABILITIES, PRODUCTION_REPAIR_POLICY_VERSION, PRODUCTION_ROLES, productionRunInputSchema, type ProductionRun } from '../../shared/production-schema.js';
+import { assertImplementationEvidencePolicy } from '../../shared/production-implementation-evidence.js';
 import { PROMPT_VERSION, CRITERIA_VERSION, OUTPUT_CONTRACT_VERSION, contractProfile } from './contracts.js';
 import { cameraSceneSchema } from '../../shared/camera-scene-schema.js';
 import { CAMERA_RUNTIME_CSP_HASH, CAMERA_STYLE_CSP_HASH, renderCameraSceneHtml } from '../../shared/camera-scene-runtime.js';
@@ -145,7 +146,7 @@ export function createProductionService(dataDir: string, options: ProductionOpti
   router.get('/runs/:id', action((req, res) => { const run = store.run(String(req.params.id)); if (!run) throw new Error('运行不存在'); res.json(run); }));
   router.post('/runs', action((req, res) => {
     if (pipeline.busy || benchmark || studies.busy) throw new Error('已有运行中的生产任务');
-    const input = productionRunInputSchema.parse(req.body); const agents = store.secretAgents(input.agentIds);
+    const input = productionRunInputSchema.parse(req.body); assertImplementationEvidencePolicy(input); const agents = store.secretAgents(input.agentIds);
     if (input.mode !== 'live') { const fixture = PRODUCTION_DEMO_CASES.find(item => item.operation === input.demoCaseId); if (!fixture || fixture.brief !== input.brief || fixture.acceptance !== input.requirement.acceptance || input.requirement.kind !== 'illustrative') throw new Error('Mock 只允许明确登记的模拟需求；任意业务需求必须选择真实模式，不能套用固定夹具'); }
     if (new Set(input.agentIds).size !== 6 || PRODUCTION_ROLES.some(role => agents.filter(agent => agent.role === role).length !== 1) || agents.some(agent => !agent.enabled)) throw new Error('必须选择启用的六角色 Agent，每个角色恰好一个');
     if (input.mode === 'live') {

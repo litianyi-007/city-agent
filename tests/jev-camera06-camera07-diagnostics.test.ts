@@ -3,7 +3,7 @@ import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import test from 'node:test';
 import { evaluateJevCandidates } from '../server/production/jev.js';
-import type { JevCandidateContext, JevEvaluation } from '../shared/jev-schema.js';
+import { JEV_POLICY_VERSION, type JevCandidateContext, type JevEvaluation } from '../shared/jev-schema.js';
 import type { ProductionRun } from '../shared/production-schema.js';
 
 // Free, injected transport replay of six preserved evaluations, not new model
@@ -162,7 +162,7 @@ for (const name of archiveNames) for (const [index, phase] of PHASES.entries()) 
     });
     assert.equal(injectedDispatches, 1, 'pure in-memory dispatch; not an actual provider HTTP attempt');
     assert.equal(result.providerRequests, 1, 'the evaluator counter is simulated here and is not live HTTP evidence');
-    assert.equal(result.policyVersion, 'jev-candidate-v3'); assert.equal(original.policyVersion, 'jev-candidate-v3');
+    assert.equal(result.policyVersion, JEV_POLICY_VERSION); assert.equal(original.policyVersion, 'jev-candidate-v3');
     assert.equal(result.status, index === 0 ? 'uncertain' : 'error');
     assert.equal(result.errorKind, index === 0 ? undefined : 'arithmetic-drift');
     assert.equal(result.selectedCandidateId, null); assert.equal(original.selectedCandidateId, null);

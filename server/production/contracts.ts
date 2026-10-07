@@ -4,6 +4,7 @@ import type { ProductionCapability } from '../../shared/production-schema.js';
 import { PRODUCTION_VERIFIER_VERSION } from '../../shared/production-verifier-rubric.js';
 import { HTML_DOM_CONTRACT_INSTRUCTIONS, HTML_EXECUTION_INSTRUCTIONS } from '../../shared/production-execution-profile.js';
 import type { VerifierDecisionDiagnostic, VerifierDiagnosticPath, VerifierSchemaIssueCode } from './verifier-diagnostics.js';
+import { implementationEvidenceSchema } from '../../shared/production-implementation-evidence.js';
 
 export const PROMPT_VERSION = 'production-html-v10';
 export const ACCEPTANCE_CONTRACT_VERSION = 'production-acceptance-v3';
@@ -33,6 +34,9 @@ export const testsSchema = z.object({ checks: acceptanceSchema }).strict().super
 });
 export const codeSchema = z.object({ html: z.string().min(30).max(500000) }).strict().refine(value => /^\s*<!doctype\s+html\s*>/i.test(value.html) && /<\/html>\s*$/i.test(value.html), 'HTML 必须为完整 HTML5 文档，不能截断或包含 Markdown 围栏');
 export const verifierSchema = z.object({ decision: z.enum(['accept', 'abstain']), selectedCandidateId: z.string().nullable(), scores: z.array(z.object({ candidateId: z.string(), score: z.number().int().min(0).max(5), reason: z.string().min(1).max(1000) }).strict()).min(1).max(2), reason: z.string().min(1).max(1500) }).strict();
+// Legacy/study callers continue using verifierSchema byte-for-byte. Only the
+// explicit implementation profile may require this additional bounded field.
+export const implementationEvidenceVerifierSchema = verifierSchema.extend({ implementationEvidence: implementationEvidenceSchema });
 export const OUTPUT_CONTRACT_VERSION = 'production-output-contract-v1' as const;
 const MAX_OUTPUT_CONTRACT_BYTES = 32000;
 /** Describe the model's JSON before parsing it with the exact same Zod schema.

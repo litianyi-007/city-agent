@@ -6,7 +6,7 @@ import { buildJevCandidateRequest, evaluateJevCandidates } from '../server/produ
 import { inspectVerifierStudyArchive } from '../server/production/verifier-study-archive.js';
 import type { StudyUsage } from '../server/production/verifier-study.js';
 import type { VerifierStudyRequests, VerifierStudySelection } from '../server/production/verifier-study-strategy.js';
-import type { JevCandidateContext, JevEvaluation, JevPublicConfig, JevRequestSnapshot, JevScoreAnswer } from '../shared/jev-schema.js';
+import { JEV_POLICY_VERSION, type JevCandidateContext, type JevEvaluation, type JevPublicConfig, type JevRequestSnapshot, type JevScoreAnswer } from '../shared/jev-schema.js';
 import { readVerifierReal01Evidence, VERIFIER_REAL01_ARCHIVE_SHA256 as ARCHIVE_SHA256, VERIFIER_REAL01_ARCHIVE_URL as ARCHIVE_URL } from './fixtures/verifier-real01.js';
 
 const FIXTURE_KEY = 'real01-offline-replay-fixture-not-an-api-key';
@@ -72,6 +72,7 @@ for (const expected of EXPECTED) test(`VERIFIER-REAL-01 ${expected.poolId} origi
   // If evaluateJevCandidates ever ignores the injected transport, fail before network access.
   t.mock.method(globalThis, 'fetch', async () => { throw new Error('Real network fetch is forbidden in this replay'); });
   const { event, intent, response, request } = recorded(expected.poolId);
+  assert.equal(response.policyVersion, 'jev-candidate-v3', 'the historical evaluation retains its original policy');
   assert.equal(event.sequence, expected.sequence);
   assert.equal(jsonHash(response.rawResponse), expected.rawSha256);
   assert.equal(jsonHash(intent.payload.requestSnapshot), expected.contextSha256);
@@ -119,7 +120,7 @@ for (const expected of EXPECTED) test(`VERIFIER-REAL-01 ${expected.poolId} origi
       }) as typeof fetch,
     });
     assert.equal(injectedCalls, repetition + 1, 'one local dispatch per invocation; no retry or result cache');
-    assert.equal(result.policyVersion, 'jev-candidate-v3');
+    assert.equal(result.policyVersion, JEV_POLICY_VERSION, 'current policy replay does not rewrite the archived policy');
     assert.deepEqual(result.requestSnapshot, currentRequest);
     assert.equal(result.status, expected.status, result.reason);
     assert.equal(result.errorKind, expected.status === 'error' ? 'arithmetic-drift' : undefined, result.reason);

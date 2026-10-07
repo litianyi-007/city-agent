@@ -1,91 +1,107 @@
 # 评委安装、访问与自主测试指南
 
-工作分支更新说明：公开v5仍固定`967bbba15c92dc07cf40fd2b2f5affebf1493b12`，并非自动更新的线上后端。本Git分支在v5之后补充HTML01/02失败档、执行身份与语法诊断；想重现材料版本就checkout该publisherCommit，想试最新工程修补则保留刚克隆的`feature/autonomous-production` HEAD，先查[当前进度](POST-SUBMISSION-PLAN.md)。新源码/夹具通过不追认旧运行成功。[本次旧指南留底](archive/2026-10-07-before-html02/REVIEWER-GUIDE.md)。
+## 先选体验方式
 
-公开固定指南/材料为 `production-materials-v5`；部署是否已更新以publication-manifest为准，本工作分支的补充不会覆盖固定附件。公开页不需要 Key；本地真实运行需自备 Key、网络和明确预算。真实结果见 [CAMERA-09](experiments/CAMERA-09/RESULT.md)、[HTML02](experiments/HTML-02/RESULT.md)与[进度](POST-SUBMISSION-PLAN.md)。09已通过有界场景闭环，真实视觉/实体摄像头/完整需求分别验收；HTML探索失败保留，安装成功不保证任意新任务交付成功。
+| 我想做什么 | 入口 | 是否需要 Key |
+| --- | --- | --- |
+| 直接操作一个固定案例 | [在线体验](https://litianyi-007.github.io/city-agent/production/) → “在线体验固定案例” | 不需要 |
+| 查看最新实验、PDF、MP4、原始证据 | 同一页面 → “材料与复现”；使用页面给出的固定版本链接 | 不需要 |
+| 输入一句话需求，让六角色实际开发 | 自己设备安装 → `http://127.0.0.1:4420/#production` → “新建自定义需求” | 自备模型 Key、单价与本次预算 |
 
-v3/v4固定在线页、PDF/MD/ZIP和MP4保留；新材料加入09七份原证据，安装命令固定到本版publisherCommit。部署后核对publication-manifest完整commit，不把三Mock/旧录屏source c21c588或09运行source24256f9改成新导出版本。更新前全文[留底](archive/2026-10-07-before-camera09/REVIEWER-GUIDE.md)。
+GitHub Pages 是静态入口，不运行 Harness 后端、不收 Key、不启动新开发任务。在线交互只执行平台注册且字节一致的可信固定 Mock；不是实时模型产物。普通 HTML 模型产物仅提供受控截图与文本下载，不能在公开站点执行任意生成脚本。
 
-## A. 不安装：先看公开材料（约5分钟）
+本指南为 v6 工作版本；是否已经部署以在线 `publication-manifest.json` 为准。固定版本位于 `reviews/<完整 publisherCommit>/`，不要将“最新入口”当成旧实验配置。已提交 [MD 主稿](SUBMISSION-REPORT.md)保持原始申报时点；[最新质量合同](QUALITY-V6-DESIGN.md)、[本批审核记录](BATCH-QUALITY-V6-CHECKS.md)与 [REAL-02](experiments/VERIFIER-REAL-02/RESULT.md)分别说明增量。更新前完整指南[留底](archive/2026-10-08-before-quality-v6/REVIEWER-GUIDE.md)。
 
-1. 打开 [生产线评审入口](https://litianyi-007.github.io/city-agent/production/)，首屏三个入口区分固定案例、本地新需求与材料。已提交[MD主稿](SUBMISSION-REPORT.md)保持v3叙述，最新过程与结果以本版本实测附录为准。
-2. 当前可用：手动体验待办添加/完成/删除、筛选、空输入与两项提交；查看各 Mock 的实际Gate和输入。交互页面是平台注册的可信固定夹具，不是此时模型在线生成。
-3. 在线“材料与复现”查看该版PDF/ZIP/MP4，按各附件来源commit解释；历史录屏不证明后续版本或真实模型交付。
-4. 进入固定版本入口，下载主稿MD、PDF、指南、完整ZIP，核对 `package-manifest.json` 的发布commit、材料版本与SHA-256。正式评审使用PDF给出的 `reviews/<完整commit>/` URL。播放 `demo.mp4`，这是**免费Mock**历史录屏，不是六角色真实成功视频；不兼容可下载播放。
-5. 展开真实场景逐次账本，下载 `real-camera-runs.json`；仅含该包实际归档终态。v5的CAMERA-09含run/evidence、交付manifest、启动metadata、scene.json、runtime manifest与index.html.txt，11项实际Gate通过，0返修。摄像头模型交付声明数据，由固定可信运行时渲染，不是任意软件源码；TXT仅审查下载。不要混合Mock、合成行为、完整硬件需求或不同配置探索分母。
+## A. 无需安装的五分钟审阅
 
-公开 GitHub Pages 没有 Harness后端，不接收 Key、不开新生产任务、不申请摄像头。原虚拟社会入口另行保留，不表示本生产线获得了其人口与记忆的新能力。
+1. 在线固定待办案例可添加、完成、删除、筛选和测试空输入；查看三个 Mock 输入、冻结 Gate 和工程产物。它证明管线工程及行为验收，不计真实自主交付良品率。
+2. “材料与复现”下载 PDF、主稿 MD、安装指南、完整 ZIP 与 `package-manifest.json`；核对材料版本、来源 commit 和文件 SHA-256。
+3. MP4 是约 3 分 26 秒的历史免费 Mock 录屏，继承原始字节与来源 commit；不是最新代码或真实模型成功视频。不能播放时下载到本机。
+4. REAL-02 为 18 个候选池的三策略真实选优对照，52 HTTP、54 决策、36 次实际行为 Oracle。它不是完整需求研发实验：B 好12／坏4／弃权2；C 好11／坏2／弃权5。C 估算费用高于 B 3.26%，预登记的高性价比条件不成立。完整原件和复算入口在附录，不能把弃权或未知当成功。
+5. CAMERA-09 的声明式场景通过 11 项实际 Gate、0 返修，和实体摄像头／真实视觉／完整硬件需求分别验收。三 Mock、不同配置探索、选优对照分别使用自己的分母。
 
-## B. 自己设备安装：免费工程体验
+v3–v5 旧 PDF、视频、源码与负结果不覆盖；本次新材料和 Jev v4 工程修补不会追认 REAL-02 的 v3 策略成功。原虚拟社会入口独立保留。
 
-已验证的开发环境为 macOS、Node.js 22.22.3；最低要求 Node.js≥22.19、Git、npm、支持本机 localhost的现代浏览器，允许访问 GitHub/npm/Playwright浏览器下载源。以下为 macOS/Linux 的 POSIX shell 命令；Linux/Windows全新安装兼容性未在本批完成验证，不能视为承诺。Windows可使用已有 WSL环境，新增系统权限请自行审核。本项目不要求安装Docker，也不会因此允许宿主执行生成脚本。
+## B. 安装：在自己设备输入新需求
 
-在**新的空目录**执行，不覆盖已有 city-agent、数据库或配置：
+已验证环境为 macOS、Node.js 22.22.3；最低要求 Node.js ≥22.19、Git、npm、现代浏览器，以及 GitHub/npm/Chromium 下载网络。Linux、Windows/WSL 全新安装未在本批完成验证；不要求 Docker，不允许因此在宿主执行模型生成的 Node/shell 脚本。
+
+在线安装按钮**只复制命令，不执行命令**。其命令固定到该版完整 40 位 publisherCommit，并在新目录中失败即停止。已有同名目录时先另选新目录，不进入或清理旧目录。
+
+在新的空父目录执行：
 
 ```bash
-git clone --branch feature/autonomous-production --single-branch https://github.com/litianyi-007/city-agent.git city-agent-production-review
-cd city-agent-production-review
-node --version
-# 建议先 git checkout 本版PDF/manifest给出的完整publisherCommit，再安装。
-npm ci
-npx playwright install chromium
-npm run build
-npm start
+(
+  set -e
+  echo 'Paste the full 40-character publisherCommit from the public manifest (not an API Key):'
+  IFS= read -r production_review_commit
+  case "$production_review_commit" in ''|*[!a-f0-9]*) exit 1 ;; esac
+  if [ "${#production_review_commit}" -ne 40 ]; then exit 1; fi
+  if [ -e city-agent-production-review ] || [ -L city-agent-production-review ]; then
+    echo 'Install directory already exists; use a fresh parent directory.'
+    exit 1
+  fi
+  git clone --branch feature/autonomous-production --single-branch https://github.com/litianyi-007/city-agent.git city-agent-production-review
+  cd city-agent-production-review
+  git checkout --detach "$production_review_commit"
+  node --version
+  npm ci --engine-strict
+  npx playwright install chromium
+  npm run build
+  npm start
+)
 ```
 
-打开 `http://127.0.0.1:4420/#production`。首次下载依赖与 Chromium需要网络、时间及磁盘空间；失败时保留报错，不绕过 lockfile或用未知依赖替代。默认 Node20不足，请先自行安装满足要求的 Node。若端口占用，不停止其他服务，退出本项目后换一组端口，例如：
+该代码块会先要求输入完整 publisherCommit，缺失／格式错误时在克隆前退出，不默认安装浮动 HEAD。推荐首先使用公开页复制的**完整固定命令**重现该版，然后按自己的选择再试最新工程。
+
+打开 `http://127.0.0.1:4420/#production`。首次下载需要网络、时间和磁盘；失败保留报错，不绕 lockfile。默认 Node20 不足。默认独立数据目录为仓库 `.city-agent-production`；不复制作者数据库、Key、主密钥、日志，不共享可写目录。端口冲突不停止其他服务，可以换整组：
 
 ```bash
 PRODUCTION_API_PORT=4520 PRODUCTION_WEB_PORT=5520 PRODUCTION_PREVIEW_PORT=4522 PRODUCTION_E2E_PORT=4521 PRODUCTION_DATA_DIR=.city-agent-review npm start
-# 打开 http://127.0.0.1:4520/#production
+# http://127.0.0.1:4520/#production
 ```
 
-默认独立数据目录为本仓库 `.city-agent-production`；不复制原项目的任何数据、Key或日志，不建立可写目录符号链接。不同端口的开发/测试命令应使用同一组环境设置。
-
-最新分支的真实调用还要求启动时干净源码及与HEAD一致的构建。更新代码、checkout版本、准备资产或重新build后，退出**本项目**服务（Ctrl+C），在同一目录重新`npm start`；旧进程不会自动改成新身份。源码或dist漂移在下一付费阶段拒绝，不自动重放历史任务。缺/脏构建下仍可配置和运行免费Mock，但不代表真实任务可启动；不要删除历史证据或关闭身份检查来继续。
-
-在页面选择 `MOCK-01`，运行“工程演练/Mock”，再完成02/03。纯 Mock不需要六角色 Key或Jev，不产生模型费用；查看计划、候选、冻结契约、实际Gate、源码附件和原始证据。只把浏览器实际通过计为工程验证，不算模型自主完成。
-
-可另开终端，在同一仓库执行免费回归：
+先运行 MOCK-01／02／03，纯 Mock 不要 Key、没有模型费用。查看计划、候选、冻结契约、实际 Gate、源码和证据。另一个终端的免费回归：
 
 ```bash
 npm test
-npm run test:e2e
+npx playwright test --config docs/production/baseline.playwright.config.ts
 ```
 
-Playwright使用独立4421端口；不要把测试指向他人的服务。未完成的本地任务在重启后标为 interrupted，不自动继续收费。
+浏览器测试使用独立 4421（或 PRODUCTION_E2E_PORT）和独立测试数据。更新源码／checkout／准备资产／build 后退出**本项目**终端，再启动服务；真实任务要求启动时干净源码及 HEAD 一致的构建。旧进程不会自动获得新身份，不删除历史证据或关闭身份检查来继续。重启中的任务标为 interrupted，不自动恢复收费。
 
-## C. 真模型自测：自己的 Key、有限费用
+## C. 六角色真实任务自测
 
-1. 在本地“研发团队”页创建或复制 Agent，为产品、项目经理、研究、研发、测试、Verifier分别设置 Provider、Base URL、有效 Model ID、Key及输入/输出每百万Token单价与币种。同厂商同模型允许；不同ID不自动证明权重独立。公开页不能配置。
-2. Key只在页面密码字段填写；保存后看脱敏配置状态，不通过回显完整Key验证。不要写命令、Prompt、Git或提交附件。本项目不提供作者Key；会话暴露的临时Key需要持有人轮换。
-3. 本轮作者实测选择 deepseek-flash，端点 `https://api.deepseek.com`，费率为输入0.30/输出1.20 USD每百万Token的保守配置；这是本轮估算快照，不保证未来ID可用或供应商账单价格。请以自己服务账户的当前有效配置为准。
-4. “决策设置”可启用托管Jev，填写独立Key，固定版本本轮为 `jev-1.13.0`。未知usage、价格或协议错误会停止；不关闭安全检查伪装成功。建议先独立 LLM Verifier的小HTML任务，再比较Jev混合路径；两条路径分别记录。
-5. 返回“生产工作台”，先点“新建自定义需求”，选择受控能力，再填原话、编号、来源类型、背景和完整验收，不沿用Mock来源/验收。选择真实模型和验证引擎；预算示例为每环节1候选、30条调用、500000Token、600秒、共享2次修订/纠错/返修及1 USD估算限额。检查全部配置后才勾选本次授权，授权一次提交即消费；修改或重新启动需要重新确认。过低预算可能提前失败，不要设无限重试。
-6. 跟踪原始角色输出、来源、Verifier选择/弃权、冻结hash、功能Gate、返修和费用。真正成功须完整产物通过冻结行为Gate且没有外层修改；失败则下载证据、查看unknown与缺口。点击取消检查终止状态，不用重启当免费重试。
+1. 本地“研发团队”创建或复制 Agent，分别设置产品、项目经理、研究员、研发、测试、Verifier 的 Provider、Base URL、有效 Model ID、Key 和输入／输出每百万 Token 单价及币种。允许同厂商同模型；不同 ID 不证明权重独立。
+2. Key 只在页面密码字段输入；保存后看脱敏状态，不回显完整 Key。本项目不提供作者 Key；暴露过的临时 Key 需持有人轮换，不发到 Git、Prompt、录屏或申报附件。
+3. 新安装／新建 Agent 默认 deepseek-flash、`https://api.deepseek.com`；既有保存配置不会迁移。默认值不是可用性或费用承诺，仍需确认自己账户的有效 Model ID 和单价。作者已有实验输入0.30／输出1.20 USD每百万 Token仅为历史估算快照，不保证未来价格或账单；当前默认的官方依据见[API入门](https://api-docs.deepseek.com/en/)和[更新日志](https://api-docs.deepseek.com/updates/)（2026-10-08核查）。
+4. “决策设置”可填独立托管 Jev Key；已有实验是 `jev-1.13.0`。置信度是分布集中度，不是业务正确率；未知 usage、价格、协议错误按记录停止，不静默放宽。
+5. “新建自定义需求”填写原话、编号、实际来源类型、背景、完整验收，避免沿用 Mock 的来源。选择真实模型、受控能力和验证引擎。示例有限预算：每环节1候选、30条调用、500000 Token、600秒、共享最多2次修订／返修、1 USD估算停止阈值；不是供应商账单硬上限。
+6. 可选“启用条款证据门禁（LLM）”：仅 live 离线 HTML + LLM 引擎，研发和返修须提供候选 hash、原始要求／产品条款覆盖、短源码引用、冻结业务断言索引。引用校验不证明语义正确，最终浏览器 Gate 必需。与 Jev 不兼容时明确阻止提交；不静默降级，不追加隐形模型调用。该新配置本批工程验证和已有真实实验分别报告。
+7. 最后勾选本次有限预算授权，单次提交消费同意；配置变化需要重新确认。跟踪阶段原始输出、候选选择／弃权、冻结 hash、行为 Gate、返修、Token、费用和 unknown。只有实际交付通过冻结 Gate、没有外层改产物／模板回退才能记录成功。失败下载完整证据；取消停止相关调用与执行资源，不用重启当免费重试。
 
-HTML预览是平台受控截图，原始HTML下载为文本附件；在其他环境运行下载的源码不再受平台限制。未验证容器前不支持任意仓库的生成Node/shell/构建脚本与依赖安装，不能为了体验在宿主绕过。
+原始 HTML 下载为文本附件；在平台外运行不再受平台限制。任意仓库、生成 Node/shell、依赖安装与容器执行器属于下一阶段，不绕过宿主安全边界。
 
-## D. 摄像头场景：另有资产与实体设备验收
+## D. 摄像头（可选，不属于普通安装）
 
-只有主动选择 `camera-scene-v1` 才涉及摄像头需求；公开页不申请摄像头。先在仓库执行可信固定资产准备器：
+只有选择 camera-scene-v1 才准备固定可信资产；在线页不会申请摄像头。另在同一新仓库执行：
 
 ```bash
-npx tsx scripts/prepare-camera-assets.ts
-npx tsx scripts/prepare-camera-assets.ts --verify
-npm run build
+(
+  set -e
+  npx tsx scripts/prepare-camera-assets.ts
+  npx tsx scripts/prepare-camera-assets.ts --verify
+  npm run build
+)
 ```
 
-下载约30MB固定版本资产，逐文件验证hash并保留许可证；需访问官方源。准备器拒绝已有错误/不完整资产目录，不在本指南指导强制覆盖；查看 [CAMERA-ASSETS.md](CAMERA-ASSETS.md)。准备后重建以包含资产。只有真实任务产出并通过场景数据Gate，才进入本机可信运行时主动点击启动摄像头；需要HTTPS或localhost安全上下文、用户授权及实体摄像头。以所选真实run的scene/Gate为准，不能拿默认/演示场景冒充交付。
+约30MB固定版本资产逐文件验 hash、保留许可证；需访问官方源。错误／不完整目录拒绝而非覆盖，见源码 [CAMERA-ASSETS.md](CAMERA-ASSETS.md)。准备后重启本项目。
 
-合成手势场景行为、假摄像头SDK集成、真实视觉模型、实体硬件、完整原需求是分开的证明层次；假摄像头通过不能勾选完整硬件通过。相机拒绝、资产缺失、视觉未验证均须保留而非删去。
+真实任务通过声明式场景 Gate 后才进入可信运行时。先用手动按钮，设备持有人再主动启动摄像头；需要 localhost／HTTPS、用户授权和实体硬件。假摄像头／合成手势不能代表完整视觉验收。新安装不带作者运行数据库；重做需求会新建任务并产生新费用，不等于回放 CAMERA-09。
 
-独立安装不会复制作者本地运行数据库，也不会自动出现CAMERA-09历史。可以先审查该版归档与固定源码；页面重新输入需求并启动真模型会创建新运行、产生新费用，不等同于回放历史。作者机器保留原运行时，可选CAMERA-09→“门禁与交付”→“打开受控场景预览”，先用手动按钮，再由设备持有人主动开启摄像头。
+## E. 可复现与问题反馈
 
-## E. 离线审阅与故障排查
-
-- ZIP内可独立阅读主稿/PDF、播放历史Mock MP4、检查三个Mock、九次真实场景探索及09有界交付证据。离线材料不是可执行的完整后端安装包，历史视频不是09真实研发录屏。
-- 文件校验：macOS `shasum -a 256 文件名`，Linux `sha256sum 文件名`，对照manifest相应条目；hash证明字节一致，不证明结论真实或日志防篡改。
-- 安装故障：检查Node版本、依赖下载、Chromium安装及端口；模型故障：检查有效ID、端点、单价、Key状态和预算。报错可脱敏反馈，不截图/发送Key。
-- 退出服务用本次终端Ctrl+C，不停止其他项目。需要保留数据时不要清理数据目录；分享材料时排除整个控制面数据、主密钥、配置、私人日志。
-- 材料结论与在线内容不一致时，优先核对材料版本/commit，不以“最新页”覆盖旧实验。每次新实验需要新配置版本和单独原始记录。
+- 对照 manifest 做 `shasum -a 256 文件名` 或 `sha256sum 文件名`；hash 证明字节一致，不证明日志防篡改或结论真实。
+- 归档中的 REAL-02 可用源码的只读核验器检查，不会重放收费请求：`npx tsx scripts/inspect-production-verifier-study.ts --archive <归档路径> --sha256 <RESULT.md给出的SHA>`。
+- 安装问题检查 Node、lockfile、下载与端口；模型问题检查端点、有效 ID、Key 状态、单价与预算。脱敏反馈，不发送 Key。
+- 用本次终端 Ctrl+C 退出，不停止他人服务；分享材料排除整个控制面私有数据目录。材料有分歧先核对版本／commit，不回写历史失败。

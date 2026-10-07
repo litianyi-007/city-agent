@@ -1,13 +1,5 @@
 # 六角色自主软件生产工作区
 
-## 最新质量版本 v6（本节优先，2026-10-08）
-
-新增 Jev v4 弱证据弃权分流、默认关闭的 source-bound-v1 条款证据、精确版本／库存／可信HTML／压缩包／历史不覆盖发布门禁，以及更直接的[评委安装指南](REVIEWER-GUIDE.md)。[设计与权限](QUALITY-V6-DESIGN.md)、[本批工程及独立对抗审查](BATCH-QUALITY-V6-CHECKS.md)分列；没有新收费模型运行，不用免费工程结果追认旧模型效果。
-
-本版发布工具生成 v6 新衍生 PDF、保留历史录屏和原件；实际部署 commit 以[公开入口的 publication-manifest](https://litianyi-007.github.io/city-agent/production/publication-manifest.json)为准。评委在线操作可信固定案例／下载材料，输入新的开发需求请按指南本地安装六角色后端。旧申报 MD 不改写。
-
-下文“公开v5不变”“待实现”“前批测试数”等是各自历史时点。REAL-02仍是v3的真实18池选优对照，不是新v4／条款门禁实测或完整软件良品率。[更新前全文留底](archive/2026-10-08-before-quality-v6/README.md)。后续顺序以[NEXT-STEPS](NEXT-STEPS.md)首段为准。
-
 ## 当前结论（2026-10-08）
 
 最新真实结果：[VERIFIER-REAL-02 完整对照](experiments/VERIFIER-REAL-02/RESULT.md)已经按一次新授权完成：54/54 盲决策、36/36 实际 Oracle、52 次 HTTP、370.649 秒，342,986 输入／8,557 输出 Token，声明价估算 **0.077296446 USD**（账单 unknown）。B 好选中 12/18、坏放行 4/18；C 好选中 11/18、坏放行 2/18，费用高 3.258721%，**未满足预登记高性价比条件**。Jev 2 次直接弃权（1 次正确、1 次错弃权），16 次升级（12 drift＋4 uncertain），原诊断保留。completed 不是自主软件交付或稳定 L5。

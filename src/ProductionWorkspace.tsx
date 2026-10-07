@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState, type FormEvent } from 'react';
 import type { ProductionAgent, ProductionAgentInput, ProductionCapability, ProductionRole, ProductionRun, ProductionRunInput, ProductionVerification } from '../shared/production-schema';
+import { PRODUCTION_DEFAULT_MODEL_ID } from '../shared/production-schema';
 import { PRODUCTION_DEMO_CASES } from '../shared/production-benchmarks';
 import { isUnresolvedJevIntent, productionRequestCounts, projectProductionLedger } from '../shared/production-ledger';
 import type { JevEvaluation, JevPublicConfig } from '../shared/jev-schema';
@@ -70,6 +71,7 @@ export default function ProductionWorkspace() {
   const [capability, setCapability] = useState<ProductionCapability>('offline-single-html');
   const [cameraBusinessConstraints, setCameraBusinessConstraints] = useState<CameraBusinessConstraints>({});
   const [verifierEngine, setVerifierEngine] = useState<'llm-rubric' | 'jev-cascade'>('llm-rubric');
+  const [requireImplementationEvidence, setRequireImplementationEvidence] = useState(false);
   const [jevConfig, setJevConfig] = useState<JevPublicConfig | null>(null);
   const [candidateCount, setCandidateCount] = useState<1 | 2>(1);
   const [limits, setLimits] = useState(DEFAULT_LIMITS);
@@ -149,7 +151,7 @@ export default function ProductionWorkspace() {
     const version = ++selectionRequest.current;
     setBusy(true); setError(''); setPreview(false); setBudgetAuthorized(false);
     try {
-      const next = await request<ProductionRun>('/runs', json({ brief, capability, mode, agentIds: ROLE_ORDER.map(role => selection[role]), candidateCount, limits, requirement, budgetAuthorized: mode !== 'demo' && authorized, ...(capability === 'camera-scene-v1' && mode === 'live' && Object.keys(cameraBusinessConstraints).length ? { cameraBusinessConstraints } : {}), ...(mode !== 'live' && demoCaseId ? { demoCaseId } : {}), ...(mode === 'mock-jev' || mode === 'live' && verifierEngine === 'jev-cascade' ? { verifierEngine: 'jev-cascade' } : {}) }));
+      const next = await request<ProductionRun>('/runs', json({ brief, capability, mode, implementationEvidencePolicy: mode === 'live' && capability === 'offline-single-html' && requireImplementationEvidence ? 'source-bound-v1' : 'legacy', agentIds: ROLE_ORDER.map(role => selection[role]), candidateCount, limits, requirement, budgetAuthorized: mode !== 'demo' && authorized, ...(capability === 'camera-scene-v1' && mode === 'live' && Object.keys(cameraBusinessConstraints).length ? { cameraBusinessConstraints } : {}), ...(mode !== 'live' && demoCaseId ? { demoCaseId } : {}), ...(mode === 'mock-jev' || mode === 'live' && verifierEngine === 'jev-cascade' ? { verifierEngine: 'jev-cascade' } : {}) }));
       if (!mounted.current) return;
       setRuns(previous => [next, ...previous.filter(item => item.id !== next.id)]);
       if (selectionRequest.current === version) {
@@ -223,7 +225,8 @@ export default function ProductionWorkspace() {
   const fixtureReady = capability === 'offline-single-html' && !!registeredCase && !!registeredRequirement && brief === registeredCase.brief && (Object.keys(registeredRequirement) as Array<keyof ProductionRunInput['requirement']>).every(key => requirement[key] === registeredRequirement[key]);
   const missingRequirement = [brief.trim().length < 3 ? '需求原话（至少 3 字）' : '', !requirement.id.trim() ? '编号' : '', !requirement.source.trim() ? '来源' : '', !requirement.acceptance.trim() ? '业务验收要求' : ''].filter(Boolean);
   const cameraConstraintConflict = capability === 'camera-scene-v1' && cameraBusinessConstraints.openPalm !== undefined && cameraBusinessConstraints.openPalm === cameraBusinessConstraints.closedFist;
-  const canLaunch = !loading && !busy && !anotherRunActive && teamReady && !cameraConstraintConflict && missingRequirement.length === 0 && (mode === 'demo' ? fixtureReady : mode === 'mock-jev' ? fixtureReady && budgetAuthorized && jevReady : budgetAuthorized && liveMissing.length === 0 && (verifierEngine === 'llm-rubric' || jevReady));
+  const evidencePolicyConflict = mode === 'live' && capability === 'offline-single-html' && requireImplementationEvidence && verifierEngine !== 'llm-rubric';
+  const canLaunch = !loading && !busy && !anotherRunActive && teamReady && !cameraConstraintConflict && !evidencePolicyConflict && missingRequirement.length === 0 && (mode === 'demo' ? fixtureReady : mode === 'mock-jev' ? fixtureReady && budgetAuthorized && jevReady : budgetAuthorized && liveMissing.length === 0 && (verifierEngine === 'llm-rubric' || jevReady));
   const realRuns = runs.filter(item => item.evidenceKind === 'real-model');
   const realTerminal = realRuns.filter(item => !['queued', 'running'].includes(item.status));
   const realPassed = realRuns.filter(item => item.status === 'completed' && item.gate?.passed && (item.input.capability !== 'camera-scene-v1' || Boolean(item.cameraVerification?.fullRequirementVerified)));
@@ -268,6 +271,7 @@ export default function ProductionWorkspace() {
             {missingRequirement.length ? <p className="prod-caption prod-required-guidance" role="status">启动前请补齐：{missingRequirement.join('、')}。不会用旧 Mock 材料自动补全。</p> : null}
 <div className="prod-mode-row"><fieldset className="prod-mode"><legend className="prod-visually-hidden">执行模式</legend><label><input type="radio" name="prod-mode" disabled={capability === 'camera-scene-v1'} checked={mode === 'demo'} onChange={() => setMode('demo')} />工程夹具 / Mock</label><label><input type="radio" name="prod-mode" disabled={capability === 'camera-scene-v1'} checked={mode === 'mock-jev'} onChange={() => setMode('mock-jev')} />Mock + 真实 Jev</label><label><input type="radio" name="prod-mode" checked={mode === 'live'} onChange={() => setMode('live')} />真实模型</label></fieldset><span className="prod-caption">{mode === 'demo' ? '不产生模型费用' : mode === 'mock-jev' ? '仅决策层为真实调用' : '使用本工作区页面配置'}</span></div>
 {mode === 'live' ? <label className="prod-verifier-engine" htmlFor="prod-verifier-engine">候选验证引擎<select id="prod-verifier-engine" aria-label="候选验证引擎" value={verifierEngine} onChange={e => setVerifierEngine(e.target.value as 'llm-rubric' | 'jev-cascade')}><option value="llm-rubric">LLM 序数评审</option><option value="jev-cascade">Jev 决策 → 有界独立 LLM 复核</option></select></label> : null}
+{mode === 'live' && capability === 'offline-single-html' ? <div className="prod-live-notice"><label className="prod-checkbox" htmlFor="prod-implementation-evidence"><input id="prod-implementation-evidence" name="implementationEvidencePolicy" type="checkbox" aria-describedby="prod-evidence-explanation" checked={requireImplementationEvidence} onChange={event => setRequireImplementationEvidence(event.target.checked)} />启用条款证据门禁（LLM）</label><p id="prod-evidence-explanation" className="prod-caption">研发／返修评审逐条提供当前候选的短源码引用和冻结业务断言索引；缺项或引用不符则拒绝。引用核验不证明语义正确，最终浏览器 Gate 仍必需。默认保留兼容模式；新门禁的工程验证与真实模型效果分别记录。</p>{evidencePolicyConflict ? <p role="status">条款证据模式仅支持 LLM 序数评审，请切换引擎或明确关闭此门禁；不会静默降级或追加 Jev 费用。</p> : null}</div> : null}
             <details className="prod-settings"><summary>候选验证与有界执行预算</summary><p className="prod-caption">默认本地单次上限 5 USD，用于控制性价比；不是用户指定的总预算。双候选增加模型调用，Verifier 分数为序数评分，不是正确率。</p><div className="prod-fields">
               <label htmlFor="prod-candidates">每环节候选数<select id="prod-candidates" aria-label="每环节候选数" value={candidateCount} onChange={e => setCandidateCount(Number(e.target.value) as 1 | 2)}><option value="1">1 个（仍需验证）</option><option value="2">2 个（比较后选择）</option></select></label>
               <label htmlFor="prod-max-calls">最多模型调用<input id="prod-max-calls" type="number" required min={12} max={80} value={limits.maxCalls} onChange={e => setLimits(previous => ({ ...previous, maxCalls: Number(e.target.value) }))} /></label>
@@ -464,7 +468,7 @@ function AgentEditor({ agent, onClose, onSaved }: { agent?: ProductionAgent; onC
   const [role, setRole] = useState<ProductionRole>(agent?.role ?? 'developer');
   const [provider, setProvider] = useState<ProductionAgent['provider']>(agent?.provider ?? 'deepseek');
   const [baseUrl, setBaseUrl] = useState(agent?.baseUrl ?? 'https://api.deepseek.com');
-  const [modelId, setModelId] = useState(agent?.modelId ?? 'deepseek-chat');
+  const [modelId, setModelId] = useState(agent?.modelId ?? PRODUCTION_DEFAULT_MODEL_ID);
   const [apiKey, setApiKey] = useState('');
   const [clearKey, setClearKey] = useState(false);
   const [enabled, setEnabled] = useState(agent?.enabled ?? true);

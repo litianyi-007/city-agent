@@ -47,9 +47,11 @@ test('production agents configure and clone without revealing keys, and endpoint
   await page.goto('/#production');
   await page.getByRole('button', { name: '研发团队', exact: true }).click();
   await page.getByRole('button', { name: '创建 Agent', exact: true }).click();
+  await expect(page.getByLabel('Model ID', { exact: true })).toHaveValue('deepseek-flash');
   const name = `Browser test agent ${Date.now()}`;
   const secret = 'fixture-browser-secret-not-a-real-key';
   await page.getByLabel('Agent 名称').fill(name);
+  await page.getByLabel('Model ID', { exact: true }).fill('browser-user-selected-model-v1');
   await page.getByLabel(/API Key（/).fill('short');
   expect(await page.getByLabel(/API Key（/).evaluate(input => (input as HTMLInputElement).checkValidity())).toBe(false);
   await page.getByLabel(/API Key（/).fill('fixture-invalid-token-"quote');
@@ -63,7 +65,10 @@ test('production agents configure and clone without revealing keys, and endpoint
   expect(JSON.stringify(await (await request.get('/api/production/agents')).json())).not.toContain(secret);
   await card.getByRole('button', { name: '复制', exact: true }).click();
   await expect(page.getByRole('heading', { name: `${name} 副本`, exact: true })).toBeVisible();
+  const copiedAgents = await (await request.get('/api/production/agents')).json();
+  expect(copiedAgents.find((agent: { name: string }) => agent.name === `${name} 副本`).modelId).toBe('browser-user-selected-model-v1');
   await card.getByRole('button', { name: '编辑', exact: true }).click();
+  await expect(page.getByLabel('Model ID', { exact: true })).toHaveValue('browser-user-selected-model-v1');
   await expect(page.getByLabel(/API Key（/)).toHaveValue('');
   await page.getByLabel('Base URL', { exact: true }).fill('https://changed.example/v1');
   await page.getByRole('button', { name: '保存配置', exact: true }).click();

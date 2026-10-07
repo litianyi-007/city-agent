@@ -1,11 +1,5 @@
 # 申报后的开发进度与任务顺序
 
-## 2026-10-08 最新质量与发布切片
-
-最新状态优先读取[本批记录](BATCH-QUALITY-V6-CHECKS.md)和[任务清单](NEXT-STEPS.md)首段：REAL-02真实对照已完成；当前免费增量是Jev v4、可选源码绑定条款证据、v6最新实验附录与失败即停安装命令。只更新独立production发布，实际线上版本以manifest为准。旧模型／视频／申报主稿不改写，不自动开展新付费实验。
-
-下文18池“未测”“适配器待做”和公开v5状态为历史计划，不代表最新进度；保留以审计过程。未来主要门限：新配置HTML真实冻结Gate、条款证据／v4新对照预算、实体摄像头、容器及固定配置泛化。更新前原文[留底](archive/2026-10-08-before-quality-v6/POST-SUBMISSION-PLAN.md)。
-
 日期：2026-10-07。申报已由用户提交；本文件管理后续工程推进，不覆盖已提交版本和历史证据。工作区为 `city-agent-autonomous-production`，分支为 `feature/autonomous-production`，原虚拟社会主线继续独立执行。
 
 ## 当前进度

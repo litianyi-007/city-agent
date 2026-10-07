@@ -4,6 +4,7 @@ import { mkdir, mkdtemp, readFile, rm, symlink, writeFile } from 'node:fs/promis
 import path from 'node:path';
 import { benchmarkMaterialRows, CAMERA_DELIVERY_NOTICE, CAMERA_DELIVERY_SCOPE, CAMERA_MATERIAL_ARCHIVES, cameraMaterialAppendPlan, cameraMaterialFiles, formatMaterialCost, immutableSourceLink, inheritedMaterialFile, materialAccounting, materialInheritancePaths, MATERIALS_VERSION, OPTIONAL_PACKAGE_DOCS, packageDocLinks, publicMaterialUrl, realGenerationMaterialRecords, realGenerationMaterialRows, reviewerInstallInstructions, SUBMISSION_BASELINE } from '../scripts/production-materials.js';
 import { readCheckedPackage, sha256 } from '../scripts/production-public-safety.js';
+import { VERIFIER_REAL02_MATERIAL_FILES } from '../scripts/production-study-materials.js';
 import { createJevBenchmarkSnapshot } from '../server/production/jev-benchmark.js';
 import { DEFAULT_JEV_CONFIG, type JevEvaluation } from '../shared/jev-schema.js';
 import { productionRunInputSchema, type ProductionRun } from '../shared/production-schema.js';
@@ -150,9 +151,31 @@ test('ordinary manifest, every registered hash, and bounded count are mandatory 
 
 test('reviewer instructions pin the complete report commit and document correct independent installation and camera preparation', () => {
   const instructions = reviewerInstallInstructions(originalCommit);
-  for (const clause of ['Node.js >=22.19', '--branch feature/autonomous-production --single-branch', `git checkout ${originalCommit}`, 'npm ci', 'npx playwright install chromium', 'npm run build', 'npm start', 'http://127.0.0.1:4420/#production', 'npx tsx scripts/prepare-camera-assets.ts', '--verify', 'public GitHub Pages neither receives keys nor runs this backend']) assert.ok(instructions.includes(clause), clause);
+  for (const clause of ['Node.js >=22.19', '--branch feature/autonomous-production --single-branch', `git checkout --detach ${originalCommit}`, 'npm ci', 'npx playwright install chromium', 'npm run build', 'npm start', 'http://127.0.0.1:4420/#production', 'npx tsx scripts/prepare-camera-assets.ts', '--verify', 'public GitHub Pages neither receives keys nor runs this backend']) assert.ok(instructions.includes(clause), clause);
   assert.throws(() => reviewerInstallInstructions('main'), /complete report commit/); assert.throws(() => reviewerInstallInstructions(originalCommit.slice(0, 7)), /complete report commit/);
-  assert.equal(MATERIALS_VERSION, 'production-materials-v5'); assert.ok(OPTIONAL_PACKAGE_DOCS.includes('REVIEWER-GUIDE.md')); assert.ok(OPTIONAL_PACKAGE_DOCS.includes('SUBMISSION-REPORT.md'));
+  assert.equal(MATERIALS_VERSION, 'production-materials-v6'); assert.ok(OPTIONAL_PACKAGE_DOCS.includes('REVIEWER-GUIDE.md')); assert.ok(OPTIONAL_PACKAGE_DOCS.includes('SUBMISSION-REPORT.md'));
+});
+test('v6 checked package requires complete pinned REAL02 appendix, while historical materials retain their smaller contract', async t => {
+  const directory = await mkdtemp(path.join(process.cwd(), '.city-agent-materials-test-'));
+  t.after(() => rm(directory, { recursive: true, force: true }));
+  const source = path.join(directory, 'source'); await mkdir(source); await evidencePackage(source);
+  const manifest = JSON.parse(await readFile(path.join(source, 'package-manifest.json'), 'utf8'));
+  for (const name of VERIFIER_REAL02_MATERIAL_FILES) {
+    const bytes = await readFile(new URL('../docs/production/experiments/' + name, import.meta.url));
+    await mkdir(path.dirname(path.join(source, name)), { recursive: true }); await writeFile(path.join(source, name), bytes);
+    manifest.files.push({ path: name, sha256: sha256(bytes) });
+  }
+  await writeFile(path.join(source, 'package-manifest.json'), JSON.stringify(manifest));
+  await assert.rejects(readCheckedPackage(source), /requires the reviewed v6/);
+  manifest.version = 'mock-package-v2'; manifest.materialsVersion = 'production-materials-v6';
+  await writeFile(path.join(source, 'package-manifest.json'), JSON.stringify(manifest));
+  const result = await readCheckedPackage(source); assert.equal(result.verifierStudy?.valueVerdict.highValue, false);
+  manifest.files = manifest.files.filter((file: { path: string }) => file.path !== 'VERIFIER-REAL-02/control/terminal.confirmed.json');
+  await writeFile(path.join(source, 'package-manifest.json'), JSON.stringify(manifest));
+  await assert.rejects(readCheckedPackage(source), /pinned actual ledger/);
+  manifest.files = Array.from({ length: 121 }, () => ({ path: 'requirements.json', sha256: '0'.repeat(64) }));
+  await writeFile(path.join(source, 'package-manifest.json'), JSON.stringify(manifest));
+  await assert.rejects(readCheckedPackage(source), /registered frozen/);
 });
 
 test('four archived real camera failures are represented without changing input/raw bytes or claiming stable success', async () => {

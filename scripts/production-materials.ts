@@ -4,13 +4,14 @@ import type { JevEvaluation } from '../shared/jev-schema.js';
 import type { JevBenchmarkRun } from '../server/production/jev-benchmark.js';
 import { isUnresolvedJevIntent, projectProductionLedger } from '../shared/production-ledger.js';
 import { packagePath } from './production-public-safety.js';
+import { reviewerInstallCommands, REVIEWER_CAMERA_PREPARATION_COMMANDS, REVIEWER_SOFTWARE_REQUIREMENTS } from './production-install.js';
 
 export const SUBMISSION_BASELINE = 'b66122c21604fdb2ecdcbafb89c3d5ad8cde1466';
-export const MATERIALS_VERSION = 'production-materials-v5';
+export const MATERIALS_VERSION = 'production-materials-v6';
 const SOURCE_REPOSITORY = 'https://github.com/litianyi-007/city-agent';
 export const PACKAGE_DOCS = ['README.md', 'RUNBOOK.md', 'DESIGN.md', 'EVALUATION.md', 'REQUIREMENTS.md', 'EXPERIMENTS.md', 'VALIDATION.md', 'ISOLATION.md', 'SUBMISSION.md', 'NEXT-STEPS.md', 'REVIEW.md'] as const;
 /** New reviewer documents are optional for historical packages. */
-export const OPTIONAL_PACKAGE_DOCS = ['REVIEWER-GUIDE.md', 'SUBMISSION-REPORT.md', 'SUBMISSION-INTRODUCTION.md', 'POST-SUBMISSION-PLAN.md', 'CAMERA-04-RESULT.md', 'JEV-RESILIENCE-V3-DESIGN.md', 'JEV-PROTOCOL-AUDIT-CAMERA-03.md', 'BATCH-CAMERA03-CHECKS.md', 'BATCH-CAMERA04-CHECKS.md'] as const;
+export const OPTIONAL_PACKAGE_DOCS = ['REVIEWER-GUIDE.md', 'SUBMISSION-REPORT.md', 'SUBMISSION-INTRODUCTION.md', 'POST-SUBMISSION-PLAN.md', 'CAMERA-04-RESULT.md', 'JEV-RESILIENCE-V3-DESIGN.md', 'JEV-PROTOCOL-AUDIT-CAMERA-03.md', 'BATCH-CAMERA03-CHECKS.md', 'BATCH-CAMERA04-CHECKS.md', 'QUALITY-V6-DESIGN.md', 'BATCH-QUALITY-V6-CHECKS.md'] as const;
 export const CAMERA_MATERIAL_ARCHIVES = ['01', '02', '03', '04', '05', '06', '07', '08', '09'] as const;
 export const CAMERA_DELIVERY_SCOPE = 'Model-generated declarative scene DSL plus a fixed trusted platform runtime; synthetic scene behavior only, not arbitrary software source, verified vision, physical camera acceptance or full requirement delivery.';
 export const CAMERA_DELIVERY_NOTICE = '真实摄像头研发产物是模型生成的声明式场景 DSL＋平台可信 runtime，不是任意软件源码。只记录合成场景行为 Gate；真实视觉、实体摄像头和完整需求仍未验收，不认证稳定 L4/L5。';
@@ -36,8 +37,7 @@ export function cameraMaterialAppendPlan(inherited: ReadonlyMap<string, Buffer> 
   });
 }
 export function reviewerInstallInstructions(reportCommit: string): string {
-  if (!/^[a-f0-9]{40}$/.test(reportCommit)) throw new Error('Reviewer installation requires the immutable complete report commit');
-  return `Node.js >=22.19 (validated 22.22.3); an available local port 4420.\ngit clone --branch feature/autonomous-production --single-branch ${SOURCE_REPOSITORY}.git city-agent-production-review\ncd city-agent-production-review\ngit checkout ${reportCommit}\nnpm ci\nnpx playwright install chromium\n# Optional camera-scene-v1: prepare pinned assets BEFORE a paid run\nnpx tsx scripts/prepare-camera-assets.ts\nnpx tsx scripts/prepare-camera-assets.ts --verify\n# Mock/offline review may skip the two camera preparation commands\nnpm run build\nnpm start\nOpen http://127.0.0.1:4420/#production\nModel/JeV keys are newly entered on the LOCAL page; public GitHub Pages neither receives keys nor runs this backend. Do not run generated Node/shell scripts or reuse another worktree's credentials.`;
+  return `${REVIEWER_SOFTWARE_REQUIREMENTS}\n\n${reviewerInstallCommands(reportCommit)}\n\nOptional camera-scene-v1 only: prepare pinned assets BEFORE a paid run (downloads fixed official assets, not a model call):\n${REVIEWER_CAMERA_PREPARATION_COMMANDS}\n\nModel/JeV keys are newly entered on the LOCAL page; public GitHub Pages neither receives keys nor runs this backend. Do not run generated Node/shell scripts or reuse another worktree's credentials.`;
 }
 export function realGenerationMaterialRecords(runs: ProductionRun[]) {
   return runs.filter(run => run.evidenceKind === 'real-model').map(run => {

@@ -55,7 +55,7 @@ test('derived arithmetic failure has exactly one independent review, source link
   assert.deepEqual(independent.candidates, source.evaluation.requestSnapshot!.state.candidates); assert.equal(independent.criteria.minimumOrdinalScore, 3);
   const link = run.verifications.find(item => item.engine === 'jev-llm-protocol-fallback')!; assert.equal(link.sourceJevCallId, source.id); assert.equal(link.decision, 'accept'); assert.equal(run.verifications[0].engine, 'jev'); assert.equal(run.verifications[0].decision, 'abstain');
   const evidence = JSON.parse(service.store.readArtifact(run.id, 'evidence.json')); assert.deepEqual(evidence.jevCalls[0].evaluation, source.evaluation); assert.deepEqual(evidence.verifications, run.verifications);
-  const manifest = JSON.parse(service.store.readArtifact(run.id, 'delivery-manifest.json')); assert.equal(manifest.jevPolicyVersion, 'jev-candidate-v3'); assert.equal(manifest.outputContractVersion, OUTPUT_CONTRACT_VERSION);
+  const manifest = JSON.parse(service.store.readArtifact(run.id, 'delivery-manifest.json')); assert.equal(manifest.jevPolicyVersion, JEV_POLICY_VERSION); assert.equal(manifest.outputContractVersion, OUTPUT_CONTRACT_VERSION);
 });
 
 test('all six roles receive actual schema snapshots; Verifier receives its own schema, not the candidate schema', async t => {
@@ -127,7 +127,7 @@ test('protocol fallback consumes original Token, cost and request budgets, not e
 
 test('arithmetic drift cannot synthesize LLM fallback in mock-jev mode and new protocol labels cannot be credentials', async t => {
   const { start } = setup(t); const run = await start({ mode: 'mock-jev', demoCaseId: 'create' }); assert.equal(run.status, 'failed'); assert.equal(run.calls.filter(call => call.role === 'verifier').length, 0); assert.equal(run.repairs, 0); assert.equal(run.jevCalls!.length, 1);
-  for (const label of ['jev-candidate-v3', 'production-output-contract-v1', 'production-output-contract-v9', 'jev-llm-protocol-fallback', 'score-concentration-drift', 'choice-concentration-drift', 'arithmetic-drift', 'additionalProperties', 'outputContractVersion', 'jevPolicyVersion', 'protocolFallback', 'sourceJevCallId', 'verificationEngine', 'jev-llm-fallback']) assert.equal(productionApiKeySchema.safeParse(label).success, false, 'protocol metadata must not become a redaction secret');
+  for (const label of ['jev-candidate-v3', JEV_POLICY_VERSION, 'production-output-contract-v1', 'production-output-contract-v9', 'jev-llm-protocol-fallback', 'score-concentration-drift', 'choice-concentration-drift', 'arithmetic-drift', 'additionalProperties', 'outputContractVersion', 'jevPolicyVersion', 'protocolFallback', 'sourceJevCallId', 'verificationEngine', 'jev-llm-fallback']) assert.equal(productionApiKeySchema.safeParse(label).success, false, 'protocol metadata must not become a redaction secret');
 });
 
 test('credentials cannot rename actual control-plane rubric fields or redact the native JSON Schema dialect URI', async t => {

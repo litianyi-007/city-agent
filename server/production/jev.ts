@@ -246,7 +246,11 @@ export async function evaluateJevCandidates(config: SecretJevConfig, context: Je
     const highestQualifiedScore = Math.max(...result.scores.filter(candidate => candidate.qualified).map(candidate => candidate.meanScore), -Infinity);
     if (result.scores.every(candidate => candidate.stronglyRejected)) { result.status = 'rejected'; result.reason = 'All candidates have a high-concentration failure on a predeclared criterion; Gate cannot be weakened.'; }
     else if (chosen?.qualified && chosen.meanScore >= highestQualifiedScore - TOLERANCE && result.choice.confidence >= config.minConfidence) { result.status = 'accepted'; result.selectedCandidateId = chosen.candidateId; result.reason = 'Selected candidate clears every threshold and has a highest composite score among qualified candidates; actual behavior Gate remains mandatory.'; }
-    else if (result.choice.choice === 'abstain' && result.choice.confidence >= config.minConfidence && !result.scores.some(candidate => candidate.qualified)) { result.status = 'rejected'; result.reason = 'Jev selected abstain and no candidate clears the predeclared criteria.'; }
+    // Choice abstain also covers insufficient evidence. Lack of qualification
+    // is not positive rejection evidence: direct rejection above requires a
+    // high-concentration Score/Noul failure for EVERY candidate. Otherwise the
+    // existing uncertain path permits one bounded independent LLM review.
+    else if (result.choice.choice === 'abstain' && result.choice.confidence >= config.minConfidence && !result.scores.some(candidate => candidate.qualified)) { result.status = 'uncertain'; result.reason = 'Jev selected abstain without qualified candidates, but not every candidate has strong rejection evidence; require independent fallback verification, never assume acceptance.'; }
     else { result.status = 'uncertain'; result.reason = 'Candidate or Choice does not clear concentration/quality thresholds; require independent fallback verification, never assume acceptance.'; }
   } catch (error) {
     const message = timedOut ? 'Jev request timed out; no automatic retry' : signal.aborted ? 'Jev request cancelled; no automatic retry' : error instanceof Error ? error.message : String(error);
