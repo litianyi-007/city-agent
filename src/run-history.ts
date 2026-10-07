@@ -1,4 +1,4 @@
-import { fingerprint, residentPrompt, validateAnswers, validateProfileEligibility, checkCoherence, summarize, type SurveyRun } from '../shared/survey-engine';
+import { fingerprint, residentPrompt, RESIDENT_PROMPT_VERSION, RESIDENT_SYSTEM_PROMPT, validateAnswers, validateProfileEligibility, checkCoherence, summarize, type SurveyRun } from '../shared/survey-engine';
 import { buildAnalysis, samplingReport } from '../shared/survey-analysis';
 import { researchTaskSchema } from '../shared/research-schema';
 import { auditPack, compilePopulation, hashPopulationPack, regionPackSchema } from '../server/population/model';
@@ -35,10 +35,11 @@ export function parseSurveyEvidence(input: unknown): SurveyRun {
   const run = input as SurveyRun;
   if (typeof run.id !== 'string' || typeof run.startedAt !== 'string' || !['fixture', 'live'].includes(run.mode) || !Array.isArray(run.profiles) || run.profiles.length < 1 || run.profiles.length > 30 || !Array.isArray(run.responses) || !Array.isArray(run.summaries) || !run.metrics || !Array.isArray(run.limitations)) throw new Error('证据包结构无效。');
   researchTaskSchema.parse(run.task);
-  if (!['coverage-survey-2.0', 'coverage-survey-2.1-persona-layers'].includes(run.version) || run.hashAlgorithm !== 'sha256-canonical-json-v1') throw new Error('仅导入已登记v2证据；旧版样例保留为原始附件，不自动升级实验结论。');
+  if (!['coverage-survey-2.0', 'coverage-survey-2.1-persona-layers', 'coverage-survey-2.2-json-contract'].includes(run.version) || run.hashAlgorithm !== 'sha256-canonical-json-v1') throw new Error('仅导入已登记v2证据；旧版样例保留为原始附件，不自动升级实验结论。');
   if (fingerprint(run.task) !== run.taskHash || fingerprint(run.profiles) !== run.profileHash || !run.populationSnapshot || hashPopulationPack(regionPackSchema.parse(run.populationSnapshot)) !== run.populationHash) throw new Error('证据指纹不一致，拒绝导入。');
   const population = compilePopulation(run.populationSnapshot);
   if (!run.prompt || fingerprint(run.prompt.system) !== run.prompt.systemHash || run.prompt.users.some(user => fingerprint(user.text) !== user.hash)) throw new Error('Prompt指纹不一致，拒绝导入。');
+  if (run.version === 'coverage-survey-2.2-json-contract' && (run.parameters?.residentPromptVersion !== RESIDENT_PROMPT_VERSION || run.prompt.system !== RESIDENT_SYSTEM_PROMPT)) throw new Error('2.2答卷须保留登记的居民Prompt版本与完整system契约；不自动升级旧Prompt。');
   if (!Array.isArray(run.prompt.users) || run.prompt.users.length !== run.profiles.length || new Set(run.profiles.map(profile => profile.id)).size !== run.profiles.length || new Set(run.responses.map(response => response.residentId)).size !== run.responses.length) throw new Error('画像/答卷映射重复或缺失。');
   if (run.presetSnapshots !== undefined && (!Array.isArray(run.presetSnapshots) || new Set(run.presetSnapshots.map(preset => preset.id)).size !== run.presetSnapshots.length)) throw new Error('冻结人群预设重复或格式无效。');
   for (const profile of run.profiles) {
@@ -46,7 +47,7 @@ export function parseSurveyEvidence(input: unknown): SurveyRun {
     if (run.presetSnapshots !== undefined && !preset) throw new Error('画像缺少对应的冻结人群预设。');
     validateProfileEligibility(run.task, profile, population, preset);
     if (profile.persona !== undefined) residentPersonaSchema.parse(profile.persona);
-    if (run.version === 'coverage-survey-2.1-persona-layers') {
+    if (['coverage-survey-2.1-persona-layers', 'coverage-survey-2.2-json-contract'].includes(run.version)) {
       if (!preset || fingerprint(profile.persona ?? null) !== fingerprint(preset.persona ?? null)) throw new Error('五层画像与冻结预设快照不一致，拒绝导入。');
     }
     if (run.prompt.users.find(user => user.residentId === profile.id)?.text !== residentPrompt(run.task, profile, run.exposure ?? 'full')) throw new Error('Prompt与冻结画像/问卷不一致。');

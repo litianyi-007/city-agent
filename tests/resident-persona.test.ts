@@ -167,5 +167,5 @@ test('profiles freeze full persona and include it in hashes/prompts; ablations o
   profiles[0].persona!.personality.openness = 1;
   assert.equal(profiles[1].persona!.personality.openness, 65);
   assert.equal(preset.persona!.personality.openness, 65);
-  assert.equal(SURVEY_VERSION, 'coverage-survey-2.1-persona-layers');
+  assert.equal(SURVEY_VERSION, 'coverage-survey-2.2-json-contract');
 });

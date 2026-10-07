@@ -4,7 +4,7 @@ import type { ResearchTask } from './research-schema';
 import { HASH_ALGORITHM, fingerprint } from './evidence';
 import { containsKnownSecret, redactKnownSecret } from './redaction';
 import { buildAnalysis, samplingReport } from './survey-analysis';
-import { buildProfiles, checkCoherence, fixtureAnswers, residentPrompt, RESIDENT_SYSTEM_PROMPT, summarize, SURVEY_VERSION, validateAnswers, validateProfileEligibility, type Profile, type ResponseRecord, type SurveyRun } from './survey-engine';
+import { buildProfiles, checkCoherence, fixtureAnswers, residentPrompt, RESIDENT_PROMPT_VERSION, RESIDENT_SYSTEM_PROMPT, summarize, SURVEY_VERSION, validateAnswers, validateProfileEligibility, type Profile, type ResponseRecord, type SurveyRun } from './survey-engine';
 
 export interface SurveyExecution {
   task: ResearchTask; population: CompiledPopulation; pack: RegionPack; presets: ResidentAgentPublic[]; count: number; seed: number; mode: 'fixture' | 'live';
@@ -59,7 +59,7 @@ export async function executeSurvey(input: SurveyExecution): Promise<SurveyRun> 
       sampling: samplingReport(profiles), exposure, experiment: input.experiment,
       presetSnapshots: presets.map(({ hasApiKey: _hasApiKey, ...publicPreset }) => publicPreset),
       models: presets.map(agent => ({ presetId: agent.id, provider: agent.provider, baseUrl: agent.baseUrl, modelId: agent.modelId })),
-      parameters: { maxOutputTokens: 3000, timeoutMs: 90000, retries: 0, concurrency: 1, temperature: null, providerSeed: null, answerCache: false, reasoning: presets.every(agent => agent.provider === 'deepseek') ? 'DeepSeek thinking disabled' : 'DeepSeek disabled; others provider default', ...(input.fixturePolicyId ? { fixturePolicyId: input.fixturePolicyId } : {}) },
+      parameters: { residentPromptVersion: RESIDENT_PROMPT_VERSION, maxOutputTokens: 3000, timeoutMs: 90000, retries: 0, concurrency: 1, temperature: null, providerSeed: null, answerCache: false, reasoning: presets.every(agent => agent.provider === 'deepseek') ? 'DeepSeek thinking disabled' : 'DeepSeek disabled; others provider default', ...(input.fixturePolicyId ? { fixturePolicyId: input.fixturePolicyId } : {}) },
       timingBasis: '从构建画像之前到当前统计/分析完成；包含模型等待与诊断，不含渲染、持久化及导出；running记录为部分进度。',
       pricing: { ...input.pricing },
       prompt: { system: RESIDENT_SYSTEM_PROMPT, systemHash: fingerprint(RESIDENT_SYSTEM_PROMPT), users },

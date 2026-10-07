@@ -1,8 +1,10 @@
 # City Agent
 
+2026-10-07追加：JSON契约修复后的第二轮真实调查已完成，仍未通过两个10人门限；小学0/10、宠物3/10联合通过，15未启动。5次确认请求、17,032 Token，保守估算¥0.042032；按授权停止整场景，规划/CORS未再启动。旧RC1、原PDF和旧账本保持不变。[独立测试与下一步](docs/research/CONTRACT-TRIAL-2026-10-07.md)。本轮已关账，不以未用余额自动重试或扩容。
+
 公开评审版 RC1 已发布：`feature/virtual-society-next`，固定 Tag `society-review-2026-10-07-rc1`（源码 `0600eb067fa74a448c96610f7f47ca9176d56760`）。[源码/材料下载](https://github.com/litianyi-007/city-agent/releases/tag/society-review-2026-10-07-rc1) · [发布实证记录](docs/research/PUBLIC-RELEASE-2026-10-07.md)。`main`、旧 Tag 与并行 L4/L5 分支不改，正式比赛尚未提交。[合并待办与真实状态](docs/SOCIETY-NEXT.md) · [五层人群方法与在线依据](docs/research/RESIDENT-CONSTRUCTION-METHOD.md) · [历史16题/12人工程自证](docs/research/PERSONA-PROOF.md) · [评测预登记](docs/research/EVALUATION-NEXT.md)。
 
-本轮已实施真实 API 合成居民调查，不是 mock：计划两场景各10名；小学17题实际1名、联合通过0/10，宠物18题实际2名、联合通过1/10，合计17名未启动；两场景均未达到扩容门限。另2次自然语言规划均未产出可应用的 schema 候选；2次浏览器跨域请求 HTTP200 仅证明协议路径，不是新版页面完整流程或额外独立居民。全部7次确认请求 input15,418/output6,881 Token，按冻结高峰非缓存价保守估算¥0.085884，不是供应商账单。¥5/24次授权未用满也不自动重试或扩容。
+历史RC1轮已实施真实 API 合成居民调查，不是 mock：计划两场景各10名；小学17题实际1名、联合通过0/10，宠物18题实际2名、联合通过1/10，合计17名未启动；两场景均未达到扩容门限。另2次自然语言规划均未产出可应用的 schema 候选；2次浏览器跨域请求 HTTP200 仅证明协议路径，不是新版页面完整流程或额外独立居民。全部7次确认请求 input15,418/output6,881 Token，按冻结高峰非缓存价保守估算¥0.085884，不是供应商账单。¥5/24次授权未用满也不自动重试或扩容。
 
 截至本候选文档更新，284项单元测试、19项浏览器回归（37.0秒）及本机/Pages两种构建通过；最新事实与发布封板见[本轮真实测试与发布审查](docs/research/LIVE-REVIEW-2026-10-07.md)。历史188/14阶段见[初批交接](docs/research/NEXT-BATCH-REPORT-2026-10-07.md)，历史239/19阶段见[评审补齐交接](docs/research/REVIEW-COMPLETION-2026-10-07.md)；不把旧工程结果改写成新的模型质量。
 

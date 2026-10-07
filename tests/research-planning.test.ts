@@ -1,10 +1,12 @@
 import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
+import { readFile } from 'node:fs/promises';
 import { createServer } from 'node:http';
 import test from 'node:test';
 import { fingerprint } from '../shared/evidence.ts';
 import { researchPlanningInputSchema, researchPlanningModelOutputSchema } from '../shared/research-planning.ts';
 import { getResearchTemplates } from '../server/research/templates.ts';
-import { planResearch, ResearchPlanningError, RESEARCH_PLANNING_SYSTEM_PROMPT } from '../server/research/planning.ts';
+import { planResearch, ResearchPlanningError, RESEARCH_PLANNER_VERSION, RESEARCH_PLANNING_FORMAT_EXAMPLE_JSON, RESEARCH_PLANNING_SYSTEM_PROMPT } from '../server/research/planning.ts';
 import { HarnessCallError, type RoleModelConfig, type RoleResult, type runRole } from '../server/harness.ts';
 
 const input = { request: '希望了解儿童照护者对零食的顾虑，不能当儿童本人调查。', population: { regionCode: 'binjiang', period: '2020-11-01', unit: 'person' as const }, maxQuestions: 12 };
@@ -12,6 +14,106 @@ const agent: RoleModelConfig = { provider: 'openai-compatible', baseUrl: 'https:
 const output = () => ({ task: getResearchTemplates()[0], assumptions: ['照护者身份是假设'], clarifications: ['规格和价格待确认'], dataGaps: ['照护资格分母缺失'] });
 const result = (text: string, usageReported?: boolean): RoleResult => ({ text, inputTokens: 0, outputTokens: 0, harness: 'fixture only', ...(usageReported !== undefined ? { usageReported } : {}) });
 const fixture = (value = output()): typeof runRole => async () => result(JSON.stringify(value));
+
+test('planner 1.1 teaches a complete strict JSON example with all five flat question types, not business defaults', () => {
+  assert.equal(RESEARCH_PLANNER_VERSION, 'candidate-planner-1.1');
+  const embedded = RESEARCH_PLANNING_SYSTEM_PROMPT.match(/<format-example-json>\n([\s\S]+)\n<\/format-example-json>/)?.[1];
+  assert.equal(embedded, RESEARCH_PLANNING_FORMAT_EXAMPLE_JSON);
+  const example = researchPlanningModelOutputSchema.parse(JSON.parse(embedded!));
+  assert.deepEqual(example.task.questionnaire.questions.map(question => question.type), ['single', 'multiple', 'scale', 'number', 'text']);
+  assert.deepEqual(example.task.population.filters, []);
+  assert.deepEqual(example.task.requestedOutputs, ['questionnaire-review']);
+  for (const question of example.task.questionnaire.questions) {
+    assert.equal(typeof question.required, 'boolean');
+    assert.equal(typeof question.id, 'string');
+    assert.equal(typeof question.prompt, 'string');
+    for (const wrapper of ['single', 'multiple', 'scale', 'number', 'text']) assert.equal(Object.hasOwn(question, wrapper), false);
+  }
+  assert.ok(example.task.declarations.every(declaration => declaration.provenance === 'generated' && !declaration.sourceIds.length && !declaration.observationIds.length));
+  assert.match(RESEARCH_PLANNING_SYSTEM_PROMPT, /不强制五题或五种题型/);
+  assert.match(RESEARCH_PLANNING_SYSTEM_PROMPT, /不得从示例推断价格、商品喜好或实际人口事实/);
+  assert.match(RESEARCH_PLANNING_SYSTEM_PROMPT, /population地域\/时点\/单位必须从输入逐字取值/);
+});
+
+test('new flat injected output remains unverified, unapplied and resident-free; legacy wrappers are never coerced', async () => {
+  const flat = JSON.parse(RESEARCH_PLANNING_FORMAT_EXAMPLE_JSON);
+  const before = JSON.stringify(flat);
+  let calls = 0;
+  const runner: typeof runRole = async (_agent, system, user) => {
+    calls++;
+    assert.equal(system, RESEARCH_PLANNING_SYSTEM_PROMPT);
+    assert.equal(JSON.parse(user).plannerVersion, 'candidate-planner-1.1');
+    return result(before);
+  };
+  const planned = await planResearch(input, agent, new AbortController().signal, runner);
+  assert.equal(calls, 1);
+  assert.equal(planned.evidence.plannerVersion, 'candidate-planner-1.1');
+  assert.equal(planned.evidence.execution, 'injected-runner');
+  assert.equal(planned.evidence.rawResponse, before);
+  assert.deepEqual(planned.task, flat.task);
+  assert.equal(planned.candidate, true);
+  assert.equal(planned.marketResearchValidated, false);
+  assert.equal(planned.semanticValidation, 'not-performed');
+  assert.equal(planned.residentCalls, 0);
+  assert.match(planned.limitations.join('\n'), /没有保存草稿或调用居民/);
+  assert.equal(JSON.stringify(flat), before);
+  for (const [index, question] of flat.task.questionnaire.questions.entries()) {
+    const legacy = structuredClone(flat);
+    const { id, prompt, required, ...typeFields } = question;
+    legacy.task.questionnaire.questions[index] = { id, prompt, required, [question.type]: typeFields };
+    assert.equal(researchPlanningModelOutputSchema.safeParse(legacy).success, false);
+    let legacyCalls = 0;
+    const legacyRaw = JSON.stringify(legacy);
+    await assert.rejects(planResearch(input, agent, new AbortController().signal, async () => { legacyCalls++; return result(legacyRaw); }), (error: unknown) => {
+      assert.ok(error instanceof ResearchPlanningError);
+      assert.equal(error.evidence.state, 'failed');
+      assert.equal(error.evidence.rawResponse, legacyRaw);
+      assert.equal(error.evidence.responseHash, fingerprint(legacyRaw));
+      assert.equal(error.evidence.modelCalls, 1);
+      return true;
+    });
+    assert.equal(legacyCalls, 1);
+  }
+});
+
+// Committed byte-identical public copies of the actual paid 2026-10-07 failures:
+// portable offline replay, not a fresh provider call or corrected historical answer.
+for (const archived of [
+  { name: 'child', fileHash: 'b846988b15d410728d992009a504f6381fda6c61bf269edfa2a2325f3894d5c0', responseHash: 'b784e192eb36d0b856a0837b07621b323c54d841a7920dd38b39be237fa582b5' },
+  { name: 'pet', fileHash: '2e1e93cbde46aac6d90c0e8989c9c76e016147cdc2d2cabbbcdc5d3f96ec5c12', responseHash: '00c93376e9b87a26a02d61c3be10b9617ff3892a890649e2eb843d26fb8bdb6d' },
+]) {
+  test(`actual archived ${archived.name} planning failure stays rejected verbatim without retry or file mutation`, async () => {
+    const path = new URL(`../public/submission-next/live-proof/planning-${archived.name}.json`, import.meta.url);
+    const bytes = await readFile(path);
+    const fileHash = createHash('sha256').update(bytes).digest('hex');
+    assert.equal(fileHash, archived.fileHash);
+    const historical = JSON.parse(bytes.toString('utf8'));
+    assert.equal(historical.state, 'failed');
+    assert.equal(historical.evidence.plannerVersion, 'candidate-planner-1.0');
+    assert.equal(historical.evidence.responseHash, archived.responseHash);
+    assert.equal(fingerprint(historical.evidence.rawResponse), archived.responseHash);
+    const raw = JSON.parse(historical.evidence.rawResponse);
+    assert.equal(researchPlanningModelOutputSchema.safeParse(raw).success, false);
+    assert.equal(Object.hasOwn(raw.task.questionnaire.questions[0], 'single'), true);
+    assert.equal(Object.hasOwn(raw.task.questionnaire.questions[0], 'type'), false);
+    let calls = 0;
+    await assert.rejects(planResearch(historical.evidence.input, agent, new AbortController().signal, async () => {
+      calls++;
+      return result(historical.evidence.rawResponse);
+    }), (error: unknown) => {
+      assert.ok(error instanceof ResearchPlanningError);
+      assert.equal(error.evidence.execution, 'injected-runner');
+      assert.equal(error.evidence.plannerVersion, 'candidate-planner-1.1');
+      assert.equal(error.evidence.state, 'failed');
+      assert.equal(error.evidence.modelCalls, 1);
+      assert.equal(error.evidence.rawResponse, historical.evidence.rawResponse);
+      assert.equal(error.evidence.responseHash, archived.responseHash);
+      return true;
+    });
+    assert.equal(calls, 1);
+    assert.equal(createHash('sha256').update(await readFile(path)).digest('hex'), fileHash);
+  });
+}
 
 test('planning inputs and outputs are strict and bounded with the shared ResearchTask contract', () => {
   assert.equal(researchPlanningInputSchema.parse({ ...input, maxQuestions: undefined }).maxQuestions, 12);

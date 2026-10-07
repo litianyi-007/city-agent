@@ -6,6 +6,7 @@ import { fingerprint } from './evidence';
 import type { ResidentAgentPublic } from '../server/research/residents';
 
 export const LIVE_BUSINESS_PROTOCOL = 'live-business-smoke-1.0';
+export const LIVE_BUSINESS_CONTRACT_PROTOCOL = 'live-business-smoke-1.1';
 export function createLiveBusinessProtocol(id: BusinessDemoId, model: Pick<ResidentAgentPublic, 'provider' | 'baseUrl' | 'modelId'>) {
   const original = getBusinessDemos().find(demo => demo.id === id)!;
   const task = structuredClone(original.task);
@@ -22,6 +23,15 @@ export function createLiveBusinessProtocol(id: BusinessDemoId, model: Pick<Resid
       ? ['adult-caregiver-primary-assumptions', 'eligibility-agrees-with-profile', 'child-own-taste-null']
       : ['adult-owner-purchase-assumptions', 'pet-type-agrees-with-ownsCat-ownsDog', 'purchase-role-agrees-with-participation'] },
     sourceQuestionnaireHash: fingerprint(original.task), sourceRulesHash: fingerprint(original.logicRules) };
+}
+/** A separate protocol for the new authorization; never relabel or rewrite v1.0 evidence. */
+export function createLiveBusinessContractProtocol(id: BusinessDemoId, model: Pick<ResidentAgentPublic, 'provider' | 'baseUrl' | 'modelId'>) {
+  const protocol = createLiveBusinessProtocol(id, model);
+  protocol.protocolVersion = LIVE_BUSINESS_CONTRACT_PROTOCOL;
+  protocol.task.id = `live-${id}-review-2`;
+  protocol.task.questionnaire.version = LIVE_BUSINESS_CONTRACT_PROTOCOL;
+  // The 17/18 questions, eligibility and logical gates stay the same; only generation instructions change.
+  return { ...protocol, task: researchTaskSchema.parse(protocol.task) };
 }
 export function checkLiveQualification(id: BusinessDemoId, profile: Profile, response: ResponseRecord) {
   const values = new Map(response.answers.map(answer => [answer.questionId, answer.value]));

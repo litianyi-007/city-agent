@@ -8,14 +8,20 @@ import type { RegionPack, auditPack } from '../server/population/model';
 import type { SurveyAnalysis, samplingReport } from './survey-analysis';
 import { residentPersonaSchema, type ResidentPersona } from './resident-persona';
 
-export const SURVEY_VERSION = 'coverage-survey-2.1-persona-layers';
+export const SURVEY_VERSION = 'coverage-survey-2.2-json-contract';
+export const RESIDENT_PROMPT_VERSION = 'resident-json-contract-1.1';
 export const RESIDENT_SYSTEM_PROMPT = `你是虚拟受访者。只代表本次给定的合成画像回答问卷，不代表滨江真人。
+输出契约版本：${RESIDENT_PROMPT_VERSION}。
 画像中人口归属为统计约束，细分年龄、职业、家庭和资格为显式假设；未知信息可回答不确定，不编造外部事实。
 可选五层人格、成长、教育、当前家庭、工作/收入仅为用户情景假设，不是DNA、遗传、真实测量或人口证据。未知不得补成默认中间值；不得据学历或婚姻自动推断购买意愿。
 不能读取其他受访者回答。不得把年龄、性别或街道直接等同于收入、人格或商品偏好。
 请仅输出JSON：{"residentId":"给定ID","answers":[{"questionId":"给定题目ID","value":答案}]}。
-单选用选项ID，多选用不重复选项ID数组，量表用整数，数值用有限数值，开放题用字符串；遵守题目范围和选项数。
-回答全部必答题，保留题目ID，不改变问卷，不输出Markdown。`;
+每题返回一个且仅一个 {"questionId":"实际题目ID","value":答案}，所有字段平铺；不能把 type、single、multiple、label 或解释作为答案包装。题型以本次问卷的 type 为准，不以选项数量猜题型。
+single：value 是一个已有选项ID字符串；multiple：value 始终是不重复的已有选项ID数组，即使只选一项、未知或不购买也不能改成字符串。只有问卷确实提供这些ID时，单选未知为 "unknown"，多选未知为 ["unknown"]，多选不购买为 ["none"]；错误的多选 value:"unknown" 或 value:"none" 必须避免。题目中声明为排他的未知/不购买选项不得与其他选项一起选；遵守本题 minSelections、maxSelections 和选项数。
+scale：value 是本题范围内的整数；number：value 是本题范围内的有限数字，不用带单位的字符串；text：value 是符合本题长度限制的字符串。不改变或编造选项ID。
+可选题缺乏依据或没有采集时 value:null，不能写 "null"、"unknown"、0 或空字符串来伪造数值/原文。null 是未知，不等于0；只有题意和情景明确支持零值才回答0。必答题不能省略/null，使用已有未知选项时仍遵守该题型；不能凭空增加未知选项。
+结构化画像已明确的照护/养宠/采购参与资格仅用于核对本情景，不能认证真人身份；不与明确画像资格自相矛盾。儿童本人口味原文未采集时必须null，不把照护者意见或人格设定当作儿童原文。
+回答全部必答题，可选题也显式给value（未知为null）；保留实际居民ID和题目ID，不重复、不增题、不改变问卷，不输出Markdown或额外说明。`;
 type Scalar = string | number | boolean;
 const profileText = z.string().min(1).max(2000).refine(value => value.trim().length > 0, '画像标识不可为空白');
 export const profileSchema = z.object({
@@ -215,7 +221,7 @@ export interface SurveyRun {
   state?: 'running' | 'completed' | 'cancelled' | 'stopped'; hashAlgorithm?: string;
   populationSnapshot?: RegionPack; populationAudit?: ReturnType<typeof auditPack>;
   pricing?: { currency: 'CNY'; inputPerMillion: number | null; outputPerMillion: number | null; suppliedAt: string; source: string };
-  timingBasis?: string; parameters?: { maxOutputTokens: number; timeoutMs: number; retries: number; concurrency: number; temperature: null; providerSeed: null; answerCache: false; reasoning?: string; fixturePolicyId?: string };
+  timingBasis?: string; parameters?: { maxOutputTokens: number; timeoutMs: number; retries: number; concurrency: number; temperature: null; providerSeed: null; answerCache: false; reasoning?: string; fixturePolicyId?: string; residentPromptVersion?: string };
   presetSnapshots?: Omit<ResidentAgentPublic, 'hasApiKey'>[];
   sampling?: ReturnType<typeof samplingReport>; analysis?: SurveyAnalysis;
   exposure?: 'full' | 'no-persona' | 'demographics-only'; experiment?: { id: string; arm: string };
