@@ -5,7 +5,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { types as utilTypes } from 'node:util';
 
-export const VERIFIER_STUDY_SOURCE_VERSION = 'verifier-study-source-v1' as const;
+export const VERIFIER_STUDY_SOURCE_VERSION = 'verifier-study-source-v2' as const;
 const BRANCH = 'feature/autonomous-production';
 const BASELINE = 'b66122c21604fdb2ecdcbafb89c3d5ad8cde1466';
 // There is deliberately no caller-selected root, filename, Git command or ref.
@@ -27,6 +27,9 @@ export const VERIFIER_STUDY_SOURCE_FILES = Object.freeze([
   'server/production/verifier-study-source.ts', 'server/production/verifier-study-observed-policy.ts',
   'server/production/verifier-study-transport.ts', 'scripts/run-production-verifier-study-engineering.ts',
   'server/production/store.ts', 'shared/camera-hand-worker.ts',
+  'server/production/verifier-study-control.ts', 'server/production/verifier-study-engineering-fixture.ts',
+  'server/production/index.ts', 'server/production/provenance.ts', 'config/production-environment.ts',
+  'server/production/verifier-study-archive.ts', 'shared/verifier-study-control-schema.ts',
 ] as const);
 
 export interface VerifierStudySourceSnapshot {

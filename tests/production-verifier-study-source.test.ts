@@ -13,7 +13,7 @@ const mutate = (value: VerifierStudySourceSnapshot) => structuredClone(value);
 
 test('source snapshot is fixed, complete, immutable actual repository SHA evidence', () => {
   const value = snapshot();
-  assert.equal(VERIFIER_STUDY_SOURCE_VERSION, 'verifier-study-source-v1');
+  assert.equal(VERIFIER_STUDY_SOURCE_VERSION, 'verifier-study-source-v2');
   assert.deepEqual(Object.keys(value).sort(), ['clean', 'commit', 'hashes']);
   assert.match(value.commit, /^[a-f0-9]{40}$/); assert.equal(typeof value.clean, 'boolean');
   assert.deepEqual(Object.keys(value.hashes), [...VERIFIER_STUDY_SOURCE_FILES]);
@@ -21,6 +21,9 @@ test('source snapshot is fixed, complete, immutable actual repository SHA eviden
   assert.ok(VERIFIER_STUDY_SOURCE_FILES.includes('server/production/verifier-study-source.ts'));
   assert.ok(VERIFIER_STUDY_SOURCE_FILES.includes('scripts/run-production-verifier-study-engineering.ts'));
   assert.ok(VERIFIER_STUDY_SOURCE_FILES.includes('shared/camera-hand-worker.ts'));
+  assert.ok(VERIFIER_STUDY_SOURCE_FILES.includes('server/production/verifier-study-control.ts'));
+  assert.ok(VERIFIER_STUDY_SOURCE_FILES.includes('server/production/index.ts'));
+  assert.ok(VERIFIER_STUDY_SOURCE_FILES.includes('shared/verifier-study-control-schema.ts'));
   assert.equal(Object.isFrozen(value), true); assert.equal(Object.isFrozen(value.hashes), true);
   assert.throws(() => { value.hashes['server/harness.ts'] = 'a'.repeat(64); }, TypeError);
   assert.throws(() => { value.clean = !value.clean; }, TypeError);

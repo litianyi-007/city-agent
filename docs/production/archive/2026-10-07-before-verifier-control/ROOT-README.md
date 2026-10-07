@@ -1,7 +1,5 @@
 # City Agent
 
-最新生产分支切片：[Verifier评估控制面与跨设备只读证据核验](docs/production/VERIFIER-CONTROL-PLANE.md)。本机 **决策设置 → Verifier对照评估** 默认免费工程演练；软件需求仍在 **生产工作台 → 新建自定义需求**。真实评估必须新的冻结配置与页面明确同意，不自动继承旧预算。GitHub静态入口/已提交申报稿不随本批源码自动更新。[更新前全文留底](docs/production/archive/2026-10-07-before-verifier-control/ROOT-README.md)。
-
 ## 当前分支：自主软件生产
 
 `feature/autonomous-production` 使用独立 worktree、数据和端口；虚拟社会主线不变。入口为 [线上固定案例与材料](https://litianyi-007.github.io/city-agent/production/)、[评委安装指南](docs/production/REVIEWER-GUIDE.md)、[最新进度与待办](docs/production/POST-SUBMISSION-PLAN.md)。线上是静态门户，不能提交新需求或填写 Key；实际需求编辑器在 **http://127.0.0.1:4420/#production**。

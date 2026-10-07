@@ -1,4 +1,4 @@
-import { createCipheriv, createDecipheriv, createHash, randomBytes, randomUUID } from 'node:crypto';
+import { createCipheriv, createDecipheriv, createHash, createHmac, randomBytes, randomUUID } from 'node:crypto';
 import { chmodSync, existsSync, lstatSync, mkdirSync, readFileSync, realpathSync, renameSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { PRODUCTION_ROLES, PRODUCTION_ROLE_LABELS, productionAgentInputSchema, productionAgentPatchSchema, type ProductionAgent, type ProductionAgentInput, type ProductionRun } from '../../shared/production-schema.js';
@@ -9,6 +9,9 @@ interface StoredAgent { public: ProductionAgent; secret?: string; }
 interface StoredJev { public: JevConfig; secret?: string; }
 interface State { version: 1; agents: StoredAgent[]; runs: ProductionRun[]; snapshots: Record<string, StoredAgent[]>; jev?: StoredJev; jevSnapshots?: Record<string, StoredJev>; jevBenchmarks?: unknown[]; }
 export const hash = (value: unknown) => createHash('sha256').update(typeof value === 'string' ? value : JSON.stringify(value)).digest('hex');
+const STUDY_PUBLIC_CONTEXT = ['loopback-engineering', 'real-provider', 'localFixtureHttpAttempts', 'actualProviderHttpAttempts',
+  'single-new-study-no-auto-resume', 'frozenStudySha256', 'verifier-study-control-v1', 'verifier-study-source-v2',
+  'estimatedBillingOnlyAcknowledged', 'jevOutputObservationOnlyAcknowledged', 'configurationSha256', 'ledgerTerminalPersisted'];
 
 /** Separate private store; parent CityStore supplies the single-process owner lock. */
 export class ProductionStore {
@@ -43,10 +46,64 @@ export class ProductionStore {
   private assertCredentialContext(secret: string | null | undefined, extra: string[] = []) {
     if (!secret) return;
     const publicAgents = [...this.state.agents, ...Object.values(this.state.snapshots).flat()].flatMap(agent => [agent.public.id, agent.public.name, agent.public.baseUrl, agent.public.modelId]);
-    if ([...extra, ...publicAgents, ...this.state.runs.map(run => run.id), JEV_ENDPOINT, JEV_MODEL_ID].some(value => value.includes(secret))) throw new Error('API Key 不得包含在 Agent 标识、公开名称、模型、服务地址或运行 ID 中');
+    if ([...extra, ...publicAgents, ...this.state.runs.map(run => run.id), JEV_ENDPOINT, JEV_MODEL_ID, ...STUDY_PUBLIC_CONTEXT].some(value => value.includes(secret))) throw new Error('API Key 不得包含在公开标识、模型、服务地址、运行 ID 或评估契约中');
   }
   private assertPublicMetadata(values: string[]) { if (values.some(value => this.redact(value) !== value)) throw new Error('公开 Agent 名称、模型及服务地址不得包含已配置 API Key'); }
   agents() { return this.state.agents.map(agent => this.publicCopy(agent.public)); }
+  /** Private control-plane equality token, never an API/ledger field. Includes
+   * encrypted credential generations so even same-public-config key rotation
+   * invalidates a prepared study, without decrypting or exporting a Key hash. */
+  studyConfigurationIdentity(agentId: string): string {
+    const agent = this.state.agents.find(value => value.public.id === agentId);
+    if (!agent) throw new Error('Agent 不存在');
+    return createHmac('sha256', this.key).update(JSON.stringify({ agent, jev: this.state.jev ?? null })).digest('hex');
+  }
+  /** Detect public-text collisions with legacy configured credentials
+   * WITHOUT decrypting them. Re-encrypt only already-public candidate strings
+   * using each stored IV and compare authenticated bytes; never export a Key
+   * digest or use this as an authorization test. No general encoding claim. */
+  assertStudyPublicSafe(value: unknown): void {
+    const text = JSON.stringify(value);
+    if (typeof text !== 'string' || Buffer.byteLength(text) > 1024 * 1024) throw new Error('评估公开数据无效或超限');
+    const publicStrings = new Set(text.split(/[\s"'\\]+/));
+    let nodes = 0;
+    const collect = (current: unknown, depth: number) => {
+      if (++nodes > 100000 || depth > 40) throw new Error('评估公开数据结构超限');
+      if (typeof current === 'string') { publicStrings.add(current); return; }
+      if (typeof current === 'number') { publicStrings.add(JSON.stringify(current)); return; }
+      if (current && typeof current === 'object') for (const [name, descriptor] of Object.entries(Object.getOwnPropertyDescriptors(current))) {
+        if (descriptor.get || descriptor.set) throw new Error('评估公开数据不可包含访问器');
+        publicStrings.add(name); collect(descriptor.value, depth + 1);
+      }
+    };
+    // JSON serialization escapes quotes/backslashes. Inspect decoded values
+    // AND property names so legacy escaped credentials cannot hide there.
+    collect(value, 0);
+    const runs = [...publicStrings].map(part => Buffer.from(part, 'utf8')).filter(part => part.length >= 16);
+    const encryptedSecrets = new Set([...this.state.agents, ...Object.values(this.state.snapshots).flat(),
+      ...(this.state.jev ? [this.state.jev] : []), ...Object.values(this.state.jevSnapshots ?? {})].flatMap(entry => entry.secret ? [entry.secret] : []));
+    let scanWork = 0; let cryptoWork = 0;
+    for (const secret of encryptedSecrets) {
+      const encoded = Buffer.from(secret, 'base64');
+      const length = encoded.length - 28;
+      if (length < 16 || length > 500) throw new Error('旧凭据格式需先在页面重新设置');
+      const candidates = new Set(runs.flatMap(part => {
+        const result: string[] = [];
+        for (let index = 0; index + length <= part.length; index++) {
+          if (++scanWork > 100000) throw new Error('评估凭据碰撞检查超限，请精简配置');
+          result.push(part.subarray(index, index + length).toString('base64'));
+        }
+        return result;
+      }));
+      for (const encodedCandidate of candidates) {
+        if (++cryptoWork > 100000) throw new Error('评估凭据碰撞检查超限，请精简配置');
+        const candidate = Buffer.from(encodedCandidate, 'base64');
+        const cipher = createCipheriv('aes-256-gcm', this.key, encoded.subarray(0, 12));
+        const encrypted = Buffer.concat([cipher.update(candidate), cipher.final()]);
+        if (encrypted.equals(encoded.subarray(28)) && cipher.getAuthTag().equals(encoded.subarray(12, 28))) throw new Error('凭据与评估公开契约冲突，请在页面轮换');
+      }
+    }
+  }
   jevConfig(): JevPublicConfig { const config = this.state.jev ?? { public: DEFAULT_JEV_CONFIG }; return { ...this.publicCopy(config.public), hasApiKey: Boolean(config.secret) }; }
   secretJevConfig(runId?: string): SecretJevConfig { const config = (runId ? this.state.jevSnapshots?.[runId] : this.state.jev) ?? { public: DEFAULT_JEV_CONFIG }; return { ...this.publicCopy(config.public), apiKey: this.decrypt(config.secret) }; }
   patchJevConfig(input: unknown) { const parsed = jevConfigPatchSchema.parse(input); const patch = Object.fromEntries(Object.entries(parsed).filter(([field]) => Object.hasOwn(input as object, field))) as typeof parsed; const { apiKey, ...config } = patch; this.assertCredentialContext(apiKey); const old = this.state.jev ?? { public: DEFAULT_JEV_CONFIG }; this.state.jev = { public: { ...old.public, ...config }, secret: apiKey === undefined ? old.secret : apiKey ? this.encrypt(apiKey) : undefined }; this.persist(); return this.jevConfig(); }

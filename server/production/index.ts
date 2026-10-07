@@ -19,6 +19,7 @@ import { PRODUCTION_DEMO_CASES } from '../../shared/production-benchmarks.js';
 import { ProductionPreview } from './preview.js';
 import { JEV_POLICY_VERSION } from '../../shared/jev-schema.js';
 import { productionRequestCounts } from '../../shared/production-ledger.js';
+import { VerifierStudyController } from './verifier-study-control.js';
 export { isUnresolvedJevIntent, productionRequestCounts } from '../../shared/production-ledger.js';
 
 // Source is a download, never an execution-capable document in the UI browser.
@@ -67,17 +68,19 @@ export function createProductionService(dataDir: string, options: ProductionOpti
   const assertExecutionFresh = options.assertExecutionFresh ?? (injected ? undefined : captured.assertFresh);
   const store = new ProductionStore(dataDir); const pipeline = new ProductionPipeline(store, { ...options, executionIdentity, assertExecutionFresh }); const preview = new ProductionPreview(store); const router = Router(); const commit = executionIdentity.commit ?? platformCommit(); const build = executionIdentity.buildSnapshot;
   let benchmark: { controller: AbortController; completion: Promise<unknown> } | undefined;
+  const studies = new VerifierStudyController({ directory: path.join(store.directory, 'studies'), bootId: executionIdentity.bootId,
+    assertExecutionFresh: assertExecutionFresh ?? captured.assertFresh, isOtherBusy: () => pipeline.busy || Boolean(benchmark), store });
   const action = (handler: (req: Request, res: Response) => unknown) => (req: Request, res: Response) => { try { handler(req, res); } catch (error) { const message = store.redact(error instanceof Error ? error.message : String(error)); res.status(error instanceof z.ZodError ? 400 : /不存在/.test(message) ? 404 : /运行中/.test(message) ? 409 : 400).json({ error: message }); } };
   router.get('/agents', action((_req, res) => res.json(store.agents())));
   router.get('/metadata', action((_req, res) => { let assets: { ready: boolean; version: string }; try { assets = verifyCameraAssets(); } catch { assets = { ready: false, version: CAMERA_ASSET_MANIFEST.version }; } res.json({ platformCommit: commit, build, executionIdentity, repairPolicyVersion: PRODUCTION_REPAIR_POLICY_VERSION, jevPolicyVersion: JEV_POLICY_VERSION, verifierVersion: CRITERIA_VERSION, outputContractVersion: OUTPUT_CONTRACT_VERSION, frozenBaseline: 'b66122c21604fdb2ecdcbafb89c3d5ad8cde1466', capabilities: PRODUCTION_CAPABILITIES.map(capability => ({ id: capability, promptVersion: contractProfile(capability).promptVersion, acceptanceVersion: contractProfile(capability).acceptanceVersion, ...(capability === 'camera-scene-v1' ? { runtime: cameraRuntimeMetadata(), assets, evidenceScope: 'scene-behavior-synthetic', physicalCameraVerified: false } : {}) })) }); }));
   router.get('/camera-assets/:filename', action((req, res) => { const { pin, value } = readPinnedCameraAsset(String(req.params.filename)); res.setHeader('X-Content-Type-Options', 'nosniff'); res.setHeader('Cache-Control', 'no-store'); res.setHeader('X-Asset-SHA256', pin.sha256); res.setHeader('Cross-Origin-Resource-Policy', 'same-origin'); res.type(pin.contentType).send(value); }));
   router.get('/camera-runtime/worker.js', action((req, res) => { const origin = cameraOrigin(req); res.setHeader('Content-Security-Policy', `default-src 'none'; script-src ${origin}/api/production/camera-assets/ 'wasm-unsafe-eval'; connect-src ${origin}/api/production/camera-assets/; object-src 'none'; base-uri 'none'; frame-ancestors 'none'`); res.setHeader('Cache-Control', 'no-store'); res.setHeader('X-Content-Type-Options', 'nosniff'); res.setHeader('Cross-Origin-Resource-Policy', 'same-origin'); res.type('text/javascript').send(renderCameraHandWorkerSource()); }));
   router.get('/jev/config', action((_req, res) => { res.setHeader('Cache-Control', 'no-store'); res.json(store.jevConfig()); }));
-  router.patch('/jev/config', action((req, res) => { if (pipeline.busy || benchmark) throw new Error('已有运行中的任务，配置修改暂时禁止'); res.setHeader('Cache-Control', 'no-store'); res.json(store.patchJevConfig(req.body)); }));
+  router.patch('/jev/config', action((req, res) => { if (pipeline.busy || benchmark || studies.busy) throw new Error('已有运行中的任务，配置修改暂时禁止'); res.setHeader('Cache-Control', 'no-store'); res.json(store.patchJevConfig(req.body)); }));
   router.get('/jev/benchmarks', action((_req, res) => res.json(store.jevBenchmarks())));
   router.post('/jev/benchmarks', action((req, res) => {
     z.object({ budgetAuthorized: z.literal(true) }).strict().parse(req.body);
-    if (pipeline.busy || benchmark) throw new Error('已有运行中的任务');
+    if (pipeline.busy || benchmark || studies.busy) throw new Error('已有运行中的任务');
     const config = store.secretJevConfig(); if (!config.enabled || !config.apiKey) throw new Error('请先在页面配置并启用 Jev');
     assertExecutionFresh?.();
     const id = randomUUID(); const controller = new AbortController();
@@ -85,14 +88,32 @@ export function createProductionService(dataDir: string, options: ProductionOpti
     benchmark = { controller, completion }; res.status(202).json({ id });
   }));
   router.post('/jev/benchmarks/cancel', action((_req, res) => { if (!benchmark) throw new Error('没有运行中的基准'); benchmark.controller.abort(); res.status(202).json({ cancelling: true }); }));
-  router.post('/agents', action((req, res) => res.status(201).json(store.addAgent(req.body))));
-  router.patch('/agents/:id', action((req, res) => res.json(store.patchAgent(String(req.params.id), req.body))));
-  router.post('/agents/:id/clone', action((req, res) => res.status(201).json(store.cloneAgent(String(req.params.id)))));
-  router.delete('/agents/:id', action((req, res) => { store.deleteAgent(String(req.params.id)); res.status(204).end(); }));
+  const assertStudyIdle = () => { if (studies.busy) throw new Error('已有运行中的评估，配置修改暂时禁止'); };
+  router.post('/agents', action((req, res) => { assertStudyIdle(); res.status(201).json(store.addAgent(req.body)); }));
+  router.patch('/agents/:id', action((req, res) => { assertStudyIdle(); res.json(store.patchAgent(String(req.params.id), req.body)); }));
+  router.post('/agents/:id/clone', action((req, res) => { assertStudyIdle(); res.status(201).json(store.cloneAgent(String(req.params.id))); }));
+  router.delete('/agents/:id', action((req, res) => { assertStudyIdle(); store.deleteAgent(String(req.params.id)); res.status(204).end(); }));
+  // These routes must not decrypt configured Keys just to sanitize an error in
+  // a free/rejected preparation. Public errors are fixed, not untrusted text.
+  const studyAction = (handler: (req: Request, res: Response) => unknown) => (req: Request, res: Response) => {
+    res.setHeader('Cache-Control', 'no-store');
+    try { handler(req, res); }
+    catch { res.status(400).json({ error: '评估请求被拒绝：请检查运行互斥、配置、凭据公开契约冲突、源码/构建新鲜度或重新准备；不会自动重试。' }); }
+  };
+  const studyJson = (res: Response, value: unknown, status = 200) => { store.assertStudyPublicSafe(value); res.status(status).json(value); };
+  router.get('/verifier-studies', studyAction((_req, res) => studyJson(res, studies.list())));
+  router.get('/verifier-studies/:id', studyAction((req, res) => { const run = studies.get(String(req.params.id)); if (!run) throw new Error('评估不存在'); studyJson(res, run); }));
+  router.post('/verifier-studies/prepare', studyAction((req, res) => studyJson(res, studies.prepare(req.body), 201)));
+  router.post('/verifier-studies/start', studyAction((req, res) => studyJson(res, studies.start(req.body), 202)));
+  router.post('/verifier-studies/:id/cancel', async (req, res) => {
+    res.setHeader('Cache-Control', 'no-store');
+    try { z.object({}).strict().parse(req.body); const run = await studies.cancel(String(req.params.id)); if (!run) throw new Error('评估不存在'); studyJson(res, run); }
+    catch { res.status(400).json({ error: '取消请求未确认；请读取最新状态。不会自动恢复或重复调用。' }); }
+  });
   router.get('/runs', action((_req, res) => res.json(store.runs())));
   router.get('/runs/:id', action((req, res) => { const run = store.run(String(req.params.id)); if (!run) throw new Error('运行不存在'); res.json(run); }));
   router.post('/runs', action((req, res) => {
-    if (pipeline.busy || benchmark) throw new Error('已有运行中的生产任务');
+    if (pipeline.busy || benchmark || studies.busy) throw new Error('已有运行中的生产任务');
     const input = productionRunInputSchema.parse(req.body); const agents = store.secretAgents(input.agentIds);
     if (input.mode !== 'live') { const fixture = PRODUCTION_DEMO_CASES.find(item => item.operation === input.demoCaseId); if (!fixture || fixture.brief !== input.brief || fixture.acceptance !== input.requirement.acceptance || input.requirement.kind !== 'illustrative') throw new Error('Mock 只允许明确登记的模拟需求；任意业务需求必须选择真实模式，不能套用固定夹具'); }
     if (new Set(input.agentIds).size !== 6 || PRODUCTION_ROLES.some(role => agents.filter(agent => agent.role === role).length !== 1) || agents.some(agent => !agent.enabled)) throw new Error('必须选择启用的六角色 Agent，每个角色恰好一个');
@@ -138,5 +159,5 @@ export function createProductionService(dataDir: string, options: ProductionOpti
   });
   router.get('/runs/:id/artifacts/:name', action((req, res) => { const id = String(req.params.id); const name = String(req.params.name); const value = store.readArtifact(id, name); res.setHeader('Cache-Control', 'no-store'); res.setHeader('X-Content-Type-Options', 'nosniff'); if (name === 'index.html') { res.setHeader('Content-Security-Policy', PRODUCTION_ARTIFACT_CSP); res.setHeader('Content-Disposition', 'attachment; filename="index.html"'); res.type('text/plain').send(value); } else { res.type('json').send(value); } }));
   router.get('/report', action((_req, res) => res.json({ ...productionReport(store.runs()), jevBenchmarks: store.jevBenchmarks() })));
-  return { router, store, pipeline, preview, close: async () => { benchmark?.controller.abort(); await Promise.all([pipeline.stop(), benchmark?.completion, preview.close()]); } };
+  return { router, store, pipeline, preview, studies, close: async () => { benchmark?.controller.abort(); await Promise.all([pipeline.stop(), benchmark?.completion, preview.close(), studies.close()]); } };
 }

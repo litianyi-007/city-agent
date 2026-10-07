@@ -1,7 +1,5 @@
 # 自主软件生产任务清单
 
-当前纵向切片已接入[评估控制面及只读归档核验](VERIFIER-CONTROL-PLANE.md)，免费验证与真实实验分列；下文待办入口描述保留为旧时点。接下来依次：确认当前公开配置与完整18池1USD估算停止额度→新clean源码/plan冻结及页面同意→真实A/B/C观察、失败与成本归因→反馈提示修订的新版本→真实HTML需求闭环。实际仓库/容器、实体相机、未见泛化分别验收，不用选优工程完成替代。[更新前全文留底](archive/2026-10-07-before-verifier-control/NEXT-STEPS.md)。
-
 最新增量：VE-04 [原生观测适配与预算/清理契约](VERIFIER-OBSERVED-TRANSPORT.md)已实施，[完整18池演练](experiments/VERIFIER-OBSERVED-01/RESULT.md)54决策/36实际Oracle，267.672秒，原件与独立审计留证。下一纵向切片是本评估的控制面收费启动/用户同意持久化、boot＋公开配置＋凭据轮换失效、完整新配置冻结；之后取得明确新额度才做 VE-05/06真实对照。现有factory不直接暴露到API或页面，禁止添加免费CLI的 `--live` 开关。1 USD只是估算停止额度，Jev4096是响应后观测门限，不是供应商账单/输出硬上界。[本次原文留底](archive/2026-10-07-before-verifier-observed/NEXT-STEPS.md)。
 
 以下“下一免费适配器”等段落保留前批时间点，新优先级以本文首段为准。

@@ -203,6 +203,61 @@ function replay(manifest: StudyLedgerManifest, events: StudyLedgerEvent[]): Ledg
   return state;
 }
 
+/** Portable, PURE archive integrity validation. Recorded directory hashes must
+ * agree, but are never interpreted as a local path or a permission to append.
+ * Content hashes are not signatures/authentication or proof of fsync/receipt.
+ * `open()` deliberately retains its original absolute-directory binding.
+ */
+export function inspectVerifierStudyLedgerEvidence(input: { manifestText: string; eventTexts: string[]; commitTexts: string[] }) {
+  assertExactKeys(input, ['manifestText', 'eventTexts', 'commitTexts']);
+  if (!Array.isArray(input.eventTexts) || !Array.isArray(input.commitTexts) || input.eventTexts.length > LIMITS.maxEvents
+    || input.eventTexts.length !== input.commitTexts.length) throw new Error('Archive ledger has excessive or unconfirmed/orphan records');
+  let totalBytes = 0;
+  const parse = (text: string, maximum: number): StudyRecord => {
+    if (typeof text !== 'string' || !text.endsWith('\n') || Buffer.from(text, 'utf8').toString('utf8') !== text || Buffer.byteLength(text) > maximum) throw new Error('Archive ledger text is invalid, lossy, truncated or excessive');
+    totalBytes += Buffer.byteLength(text); if (totalBytes > LIMITS.maxTotalBytes) throw new Error('Archive ledger total size limit exceeded');
+    const record = publicRecord(JSON.parse(text));
+    // v2 persists this exact representation. Refuse duplicate JSON properties,
+    // whitespace/padding and serialization loss rather than rehashing a rewrite.
+    if (`${JSON.stringify(record)}\n` !== text) throw new Error('Archive ledger JSON is not its exact canonical persisted representation');
+    return record;
+  };
+  const record = parse(input.manifestText, LIMITS.maxManifestBytes);
+  assertExactKeys(record, ['version', 'createdAt', 'runId', 'status', 'manifest', 'limits']);
+  if (record.version !== VERIFIER_STUDY_LEDGER_VERSION || record.status !== 'running' || JSON.stringify(record.limits) !== JSON.stringify(LIMITS)) throw new Error('Archive ledger manifest envelope is invalid');
+  assertTime(record.createdAt); identifier(record.runId, 'runId');
+  const manifest = record as unknown as StudyLedgerManifest;
+  if (manifest.manifest.runId !== manifest.runId || manifest.manifest.status !== 'running') throw new Error('Archive ledger manifest identity is inconsistent');
+  const manifestHash = hash(input.manifestText); let previousHash = manifestHash; let previousCommitHash = manifestHash; let recordedDirectoryHash: string | null = null;
+  const events: StudyLedgerEvent[] = [];
+  for (let index = 0; index < input.eventTexts.length; index++) {
+    const sequence = index + 1; const eventRecord = parse(input.eventTexts[index], LIMITS.maxFileBytes);
+    assertExactKeys(eventRecord, ['version', 'sequence', 'time', 'type', 'payload', 'previousHash', 'hash']);
+    const event = eventRecord as unknown as StudyLedgerEvent;
+    if (event.version !== VERIFIER_STUDY_EVENT_VERSION || event.sequence !== sequence || !STUDY_EVENT_TYPES.includes(event.type)
+      || event.previousHash !== previousHash || !/^[a-f0-9]{64}$/.test(event.hash)) throw new Error('Archive ledger event envelope or chain is invalid');
+    assertTime(event.time); publicRecord(event.payload);
+    const { hash: recordedHash, ...body } = event;
+    if (hash(JSON.stringify(body)) !== recordedHash) throw new Error('Archive ledger event content hash does not match');
+    const marker = parse(input.commitTexts[index], LIMITS.maxFileBytes);
+    assertExactKeys(marker, ['version', 'sequence', 'runId', 'directoryHash', 'manifestHash', 'eventHash', 'previousCommitHash', 'hash']);
+    if (typeof marker.directoryHash !== 'string' || !/^[a-f0-9]{64}$/.test(marker.directoryHash)) throw new Error('Archive ledger recorded directory hash is invalid');
+    recordedDirectoryHash ??= marker.directoryHash;
+    if (marker.directoryHash !== recordedDirectoryHash) throw new Error('Archive ledger mixes recorded directory scopes');
+    const markerBody = { version: VERIFIER_STUDY_COMMIT_VERSION, sequence, runId: event.payload.runId,
+      directoryHash: recordedDirectoryHash, manifestHash, eventHash: event.hash, previousCommitHash };
+    const expected = { ...markerBody, hash: hash(JSON.stringify(markerBody)) };
+    if (JSON.stringify(marker) !== JSON.stringify(expected)) throw new Error('Archive ledger commit marker scope, sequence or content is invalid');
+    previousHash = event.hash; previousCommitHash = expected.hash; events.push(event);
+  }
+  replay(manifest, events);
+  const evidence = { mode: 'read-only-archive-integrity' as const, integrityVerified: true as const,
+    authenticity: 'not-signed-or-independently-authenticated' as const, resumed: false as const,
+    manifestHash, recordedDirectoryHash, manifest, events };
+  const immutable = (value: unknown) => { if (value && typeof value === 'object') { Object.values(value).forEach(immutable); Object.freeze(value); } };
+  immutable(evidence); return evidence;
+}
+
 /** Append-only local study evidence. Synchronous file and directory fsync precede return, so
  * callers must create/append intent successfully BEFORE any model or Oracle callback.
  * `open` only validates and reads. Recovery is explicit, never replays calls and never writes

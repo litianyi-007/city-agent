@@ -1,7 +1,5 @@
 # 六角色自主软件生产工作区
 
-最新切片：[评估准备/显式同意/启动/进度/取消与归档只读核验](VERIFIER-CONTROL-PLANE.md)。软件开发需求仍在生产工作台输入；固定18池选优评估在决策设置页，默认本地替身，不代表自主交付或模型质量。新的源码契约为source-v2，不复用原实验39项source freeze；GitHub静态v5和已提交申报稿不变。下文“尚无API入口”属于上一批时间点。[本次原文留底](archive/2026-10-07-before-verifier-control/README.md)。
-
 最新 VE-04 增量：[原生观测适配器、一次性冻结同意、分引擎预算和取消清理](VERIFIER-OBSERVED-TRANSPORT.md)已经实现，共用旧 study 内核而非另起系统。工程640/640＋浏览器38/38通过，52项专项及独立安全/预算审查另列；真实供应商实验不从提案自动启动。公开v5和已提交申报稿保持不变。本次修改前[全文留底](archive/2026-10-07-before-verifier-observed/README.md)。
 
 冻结 `3a1bedf` 的[完整免费演练](experiments/VERIFIER-OBSERVED-01/RESULT.md)已完成：54决策、36实际浏览器Oracle、267.672秒，36网络loopback POST＋18内存Jev dispatch、0外部供应商请求。模拟usage不是模型Token/收费；[审查/回归](BATCH-VERIFIER-OBSERVED-CHECKS.md)分列。
