@@ -1,0 +1,451 @@
+{
+  "version": "production-delivery-v1",
+  "runId": "fb6e1e6a-d8b8-4f50-80c8-c557793fbddd",
+  "platformCommit": "967bbba15c92dc07cf40fd2b2f5affebf1493b12",
+  "status": "failed",
+  "evidenceKind": "real-model",
+  "capability": "offline-single-html",
+  "requirement": {
+    "id": "HTML-01",
+    "source": "用户授权自拟模拟需求，2026-10-07；没有真实提出者或工单",
+    "background": "最小协作工具新建网页路径；用通用自定义输入验证真实角色链路，不使用模板或已有源码。",
+    "acceptance": "初始无任务；添加“准备发布”后仅出现一条同名任务；输入框清空；能标记完成并显示完成统计；删除后列表与统计归零。",
+    "difficulty": "low",
+    "kind": "illustrative"
+  },
+  "frozenContract": {
+    "version": "production-acceptance-v3",
+    "validationContractHash": "59be99387e63dcdc38e0dbccbdfea06199c8afb3bd892c03094f3188bec14822",
+    "hash": "555cb6dcd506cf17ecfe9f73e4e7ff581e4efed9ea628c81f02ad24aea8d48be",
+    "requirementHash": "51ce56b5eab843806d0c5636223ef031b676333342936b18a4f80bc3b1a724ee",
+    "checks": [
+      {
+        "name": "初始状态为空",
+        "steps": [
+          {
+            "action": "assertCount",
+            "selector": "#todo-list li",
+            "count": 0
+          },
+          {
+            "action": "assertTextExact",
+            "selector": "#total-count",
+            "text": "总数:0"
+          },
+          {
+            "action": "assertTextExact",
+            "selector": "#done-count",
+            "text": "已完成:0"
+          }
+        ]
+      },
+      {
+        "name": "添加任务后出现唯一同名任务且输入框清空",
+        "steps": [
+          {
+            "action": "assertCount",
+            "selector": "#todo-list li",
+            "count": 0
+          },
+          {
+            "action": "fill",
+            "selector": "#task-input",
+            "value": "准备发布"
+          },
+          {
+            "action": "click",
+            "selector": "#add-btn"
+          },
+          {
+            "action": "assertCount",
+            "selector": "#todo-list li",
+            "count": 1
+          },
+          {
+            "action": "assertTextExact",
+            "selector": "#todo-list li.todo-text",
+            "text": "准备发布"
+          },
+          {
+            "action": "assertValue",
+            "selector": "#task-input",
+            "value": ""
+          },
+          {
+            "action": "assertTextExact",
+            "selector": "#total-count",
+            "text": "总数:1"
+          },
+          {
+            "action": "assertTextExact",
+            "selector": "#done-count",
+            "text": "已完成:0"
+          }
+        ]
+      },
+      {
+        "name": "标记完成后呈现已完成状态且统计更新",
+        "steps": [
+          {
+            "action": "fill",
+            "selector": "#task-input",
+            "value": "准备发布"
+          },
+          {
+            "action": "click",
+            "selector": "#add-btn"
+          },
+          {
+            "action": "assertCount",
+            "selector": "#todo-list li",
+            "count": 1
+          },
+          {
+            "action": "click",
+            "selector": "#todo-list li .toggle-btn"
+          },
+          {
+            "action": "assertTextExact",
+            "selector": "#done-count",
+            "text": "已完成:1"
+          },
+          {
+            "action": "assertTextExact",
+            "selector": "#todo-list li",
+            "text": "准备发布 ✓"
+          }
+        ]
+      },
+      {
+        "name": "删除任务后列表与统计归零",
+        "steps": [
+          {
+            "action": "fill",
+            "selector": "#task-input",
+            "value": "准备发布"
+          },
+          {
+            "action": "click",
+            "selector": "#add-btn"
+          },
+          {
+            "action": "click",
+            "selector": "#todo-list li .toggle-btn"
+          },
+          {
+            "action": "assertTextExact",
+            "selector": "#done-count",
+            "text": "已完成:1"
+          },
+          {
+            "action": "click",
+            "selector": "#todo-list li .delete-btn"
+          },
+          {
+            "action": "assertCount",
+            "selector": "#todo-list li",
+            "count": 0
+          },
+          {
+            "action": "assertTextExact",
+            "selector": "#total-count",
+            "text": "总数:0"
+          },
+          {
+            "action": "assertTextExact",
+            "selector": "#done-count",
+            "text": "已完成:0"
+          }
+        ]
+      }
+    ],
+    "frozenAt": "2026-10-07T09:42:33.049Z"
+  },
+  "promptVersion": "production-html-v8",
+  "validationContract": {
+    "planningLoopVersion": "production-planning-loop-v1",
+    "reviewContextVersion": "production-review-context-v1",
+    "harnessPromptTransportVersion": "harness-literal-prompt-v1",
+    "harnessJsonOutputVersion": "harness-json-output-v1",
+    "responseFormatPolicy": "deepseek-json-object-other-prompt-only",
+    "semanticsVersion": "production-acceptance-semantic-v2",
+    "jevRequestLayoutVersion": "jev-request-layout-v2",
+    "coverage": {
+      "version": "production-coverage-owners-v1",
+      "capability": "offline-single-html",
+      "owners": {
+        "hostSchema": {
+          "required": true,
+          "scope": "Complete inline HTML and strict test/verifier schemas; not business correctness."
+        },
+        "roleCss": {
+          "required": true,
+          "scope": "All in-scope business behavior independently frozen and actually executed in restricted Chromium, including exact numeric results and edge cases. No platform template is evidence for generated code."
+        },
+        "platformMandatoryGate": {
+          "required": true,
+          "scope": "Restricted browser network/navigation/error/timeout policies; no host execution or arbitrary repository support."
+        }
+      },
+      "evidenceRule": "This contract assigns obligations only. A claimed owner or engineering fixture does not pass a business requirement. Final delivery requires actual immutable checks; unknown and deferred coverage never become true automatically."
+    }
+  },
+  "validationContractHash": "59be99387e63dcdc38e0dbccbdfea06199c8afb3bd892c03094f3188bec14822",
+  "compactOutputPolicy": {
+    "version": "verifier-compact-output-v1",
+    "candidateReasonTargetCharacters": 300,
+    "overallReasonTargetCharacters": 400,
+    "hostCandidateReasonMaximum": 1000,
+    "hostOverallReasonMaximum": 1500
+  },
+  "verifierVersion": "verifier-phase-ordinal-v4",
+  "outputContractVersion": "production-output-contract-v1",
+  "repairPolicyVersion": "production-global-repair-v1",
+  "repairHistory": [
+    {
+      "id": "edf482f8-e13b-44b8-85f4-a601a2e14d7e",
+      "time": "2026-10-07T09:43:04.327Z",
+      "role": "developer",
+      "phase": "repair-1",
+      "kind": "gate-repair",
+      "attempt": 1,
+      "reason": "Gate失败；{\"passed\":false,\"checks\":[{\"name\":\"页面加载、可见内容与 JavaScript\",\"passed\":true},{\"name\":\"初始状态为空\",\"passed\":true},{\"name\":\"添加任务后出现唯一同名任务且输入框清空\",\"passed\":false,\"detail\":\"#todo-list li 元素数量不等于 1\"},{\"name\":\"标记完成后呈现已完成状态且统计更新\",\"passed\":false,\"detail\":\"#todo-list li 元素数量不等于 1\"},{\"name\":\"删除任务后列表与统计归零\",\"passed\":false,\"detail\":\"locator.click: Timeout 1500ms exceeded.\\nCall log:\\n\\u001b[2m  - waiting for locator('#todo-list li .toggle-btn')\\u001b[22m\\n\"}],\"summary\":\"浏览器验收未通过，需修复失败项。\"}",
+      "rejectedCandidateIds": [
+        "06fe22b2-24f4-4917-aef7-1bcdc54f071a"
+      ],
+      "frozenHash": "555cb6dcd506cf17ecfe9f73e4e7ff581e4efed9ea628c81f02ad24aea8d48be"
+    }
+  ],
+  "credentialPolicyVersion": "visible-token-v2",
+  "jevPolicyVersion": "jev-candidate-v3",
+  "jevConfig": {
+    "enabled": true,
+    "modelId": "jev-1.13.0",
+    "minConfidence": 0.5,
+    "minScore": 3,
+    "inputPerMillion": 0.042,
+    "outputPerMillion": 0,
+    "currency": "USD",
+    "maxRequests": 24,
+    "timeoutMs": 30000,
+    "hasApiKey": true
+  },
+  "usageObserverVersion": "raw-wire-usage-v1",
+  "runtime": "DeepSeek Harness 0.1.5-rc.3 + restricted Chromium Gate",
+  "environment": {
+    "generatedExecution": "restricted short-lived Chromium; no generated Node/shell execution",
+    "localPreview": "controlled screenshot, not a generated-code iframe",
+    "dependencyLock": "repository package-lock.json; no generated dependencies",
+    "targetBaseCommit": null,
+    "targetBaseCommitReason": "single HTML generation; no target Git repository was modified",
+    "platformFrozenBaseline": "b66122c21604fdb2ecdcbafb89c3d5ad8cde1466"
+  },
+  "source": null,
+  "sourceSha256": null,
+  "models": [
+    {
+      "id": "58b2f492-52c1-49ee-8936-53e5c8c6cc89",
+      "name": "产品经理",
+      "role": "product",
+      "provider": "deepseek",
+      "baseUrl": "https://api.deepseek.com",
+      "modelId": "deepseek-flash",
+      "enabled": true,
+      "hasApiKey": true,
+      "pricing": {
+        "inputPerMillion": 0.3,
+        "outputPerMillion": 1.2,
+        "currency": "USD"
+      }
+    },
+    {
+      "id": "65e308f1-8582-4b41-b485-92911d44ed0f",
+      "name": "项目经理",
+      "role": "project-manager",
+      "provider": "deepseek",
+      "baseUrl": "https://api.deepseek.com",
+      "modelId": "deepseek-flash",
+      "enabled": true,
+      "hasApiKey": true,
+      "pricing": {
+        "inputPerMillion": 0.3,
+        "outputPerMillion": 1.2,
+        "currency": "USD"
+      }
+    },
+    {
+      "id": "8abcf5e4-a5f3-44a5-b58b-4f7aa83d8834",
+      "name": "研究员",
+      "role": "researcher",
+      "provider": "deepseek",
+      "baseUrl": "https://api.deepseek.com",
+      "modelId": "deepseek-flash",
+      "enabled": true,
+      "hasApiKey": true,
+      "pricing": {
+        "inputPerMillion": 0.3,
+        "outputPerMillion": 1.2,
+        "currency": "USD"
+      }
+    },
+    {
+      "id": "5e6500fe-48d3-4646-a412-d0bfaacffacc",
+      "name": "研发",
+      "role": "developer",
+      "provider": "deepseek",
+      "baseUrl": "https://api.deepseek.com",
+      "modelId": "deepseek-flash",
+      "enabled": true,
+      "hasApiKey": true,
+      "pricing": {
+        "inputPerMillion": 0.3,
+        "outputPerMillion": 1.2,
+        "currency": "USD"
+      }
+    },
+    {
+      "id": "299e00c3-cf0c-4f3f-814d-6c33e723a9d7",
+      "name": "测试",
+      "role": "tester",
+      "provider": "deepseek",
+      "baseUrl": "https://api.deepseek.com",
+      "modelId": "deepseek-flash",
+      "enabled": true,
+      "hasApiKey": true,
+      "pricing": {
+        "inputPerMillion": 0.3,
+        "outputPerMillion": 1.2,
+        "currency": "USD"
+      }
+    },
+    {
+      "id": "cc18586a-8d6b-4c19-950f-308034a0c0b1",
+      "name": "Verifier",
+      "role": "verifier",
+      "provider": "deepseek",
+      "baseUrl": "https://api.deepseek.com",
+      "modelId": "deepseek-flash",
+      "enabled": true,
+      "hasApiKey": true,
+      "pricing": {
+        "inputPerMillion": 0.3,
+        "outputPerMillion": 1.2,
+        "currency": "USD"
+      }
+    }
+  ],
+  "reproduce": "Run frozen checks against delivered index.html in request-denying isolated Chromium; raw records are in evidence.json. Downloaded HTML opened outside this controlled environment is not network isolated.",
+  "limitations": [
+    "Offline single HTML only",
+    "No calibrated verifier confidence",
+    "Cost based on declared pricing, not provider invoice",
+    "No arbitrary repository execution; verified container unavailable",
+    "Chromium timeout and heap bounds are not OS CPU/memory/disk hard limits"
+  ],
+  "usage": {
+    "inputTokens": null,
+    "outputTokens": null,
+    "estimatedCost": null,
+    "currency": "USD",
+    "complete": false
+  },
+  "durationMs": 79544,
+  "repairs": 1,
+  "interventions": [],
+  "failure": "Jev 用量未知或非法，费用记 unknown，停止后续调用",
+  "harnessJsonOutputVersion": "harness-json-output-v1",
+  "responseFormatPolicy": "deepseek-json-object-other-prompt-only",
+  "responseFormats": [
+    {
+      "callId": "2f180f4b-4a40-471d-be7e-45114ed42dee",
+      "executionSource": "harness",
+      "version": "harness-json-output-v1",
+      "mode": "json-object",
+      "evidence": "wire-observed"
+    },
+    {
+      "callId": "82d6f18e-d493-460b-8ab1-fb80c0dc5d6e",
+      "executionSource": "harness",
+      "version": "harness-json-output-v1",
+      "mode": "json-object",
+      "evidence": "wire-observed"
+    },
+    {
+      "callId": "4d47c264-30b1-4185-b8db-ee2a2bedcd08",
+      "executionSource": "harness",
+      "version": "harness-json-output-v1",
+      "mode": "json-object",
+      "evidence": "wire-observed"
+    },
+    {
+      "callId": "cc1f7f49-a1ff-4021-8046-a623355410be",
+      "executionSource": "harness",
+      "version": "harness-json-output-v1",
+      "mode": "json-object",
+      "evidence": "wire-observed"
+    },
+    {
+      "callId": "d5fa9cf7-0490-4f46-b563-8635039ca868",
+      "executionSource": "harness",
+      "version": "harness-json-output-v1",
+      "mode": "json-object",
+      "evidence": "wire-observed"
+    },
+    {
+      "callId": "4bc27674-9d6a-483f-aac2-644ef526376a",
+      "executionSource": "harness",
+      "version": "harness-json-output-v1",
+      "mode": "json-object",
+      "evidence": "wire-observed"
+    },
+    {
+      "callId": "5d4dfa0f-7a1c-4e5d-813c-63ec4d7d4bb8",
+      "executionSource": "harness",
+      "version": "harness-json-output-v1",
+      "mode": "json-object",
+      "evidence": "wire-observed"
+    },
+    {
+      "callId": "e83e5bbf-e821-44a9-851e-59234170937d",
+      "executionSource": "harness",
+      "version": "harness-json-output-v1",
+      "mode": "json-object",
+      "evidence": "wire-observed"
+    },
+    {
+      "callId": "711e0ba4-195d-488c-a53d-72fc5b3a6e4e",
+      "executionSource": "harness",
+      "version": "harness-json-output-v1",
+      "mode": "json-object",
+      "evidence": "wire-observed"
+    },
+    {
+      "callId": "41c4e9e8-f427-4dec-99db-48450ce601d2",
+      "executionSource": "harness",
+      "version": "harness-json-output-v1",
+      "mode": "json-object",
+      "evidence": "wire-observed"
+    },
+    {
+      "callId": "40c06954-7702-4aac-b138-ad4cf5366c18",
+      "executionSource": "harness",
+      "version": "harness-json-output-v1",
+      "mode": "json-object",
+      "evidence": "wire-observed"
+    },
+    {
+      "callId": "3041067a-3474-44b5-a399-0d8774b51bb3",
+      "executionSource": "harness",
+      "version": "harness-json-output-v1",
+      "mode": "json-object",
+      "evidence": "wire-observed"
+    },
+    {
+      "callId": "ba480b55-144b-4652-a10b-4f7fc1f28f49",
+      "executionSource": "harness",
+      "version": "harness-json-output-v1",
+      "mode": "json-object",
+      "evidence": "wire-observed"
+    }
+  ]
+}
