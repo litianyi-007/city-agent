@@ -82,7 +82,7 @@ export class ProductionPipeline {
         if (call.executionSource !== 'harness') delete call.providerRequests.responseFormat;
         if (call.executionSource === 'harness' && responseFormat.mode === 'json-object' && observation.responseFormat?.version === HARNESS_JSON_OUTPUT_VERSION && observation.responseFormat.mode === 'json-object' && observation.responseFormat.evidence === 'wire-observed') call.responseFormat!.evidence = 'wire-observed';
       };
-      run.calls.push(call); event(phase, `${PRODUCTION_ROLE_LABELS[role]}：${run.input.mode !== 'live' ? 'Mock 夹具响应' : '开始模型请求'}`, role);
+      run.calls.push(call); aggregate(); event(phase, `${PRODUCTION_ROLE_LABELS[role]}：${run.input.mode !== 'live' ? 'Mock 夹具响应' : '开始模型请求'}`, role);
       try {
         let result: RoleResult;
         if (run.input.mode !== 'live') { if (fixture === undefined) throw new Error('本能力不存在演示夹具，不允许模板回退'); result = { text: JSON.stringify(fixture), inputTokens: 0, outputTokens: 0, usageReported: true, harness: 'engineering fixture / no model call' }; }
@@ -163,7 +163,7 @@ export class ProductionPipeline {
         if ((run.usage.inputTokens ?? 0) + (run.usage.outputTokens ?? 0) + 65536 > run.input.limits.maxTokens || (run.usage.estimatedCost ?? 0) + 65536 * jev.inputPerMillion / 1e6 > run.input.limits.maxCost) throw new Error('预算不足以预留 Jev 决策请求');
         const pending: JevEvaluation = { policyVersion: JEV_POLICY_VERSION, status: 'error', selectedCandidateId: null, reason: '请求已登记，尚未获得结果', requestSnapshot: null, rawResponse: null, scores: [], choice: null, usage: { inputTokens: null, outputTokens: null, estimatedCost: null, currency: 'USD', complete: false }, modelIdRequested: jev.modelId, modelIdReturned: null, httpStatus: null, providerRequests: 0, durationMs: 0 };
         const entry = { id: randomUUID(), phase, startedAt: new Date().toISOString(), configHash: hash({ config: run.jevSnapshot, policy: JEV_POLICY_VERSION, repairPolicyVersion: PRODUCTION_REPAIR_POLICY_VERSION, credentialPolicyVersion: PRODUCTION_CREDENTIAL_POLICY_VERSION, criteria }), evaluation: pending };
-        (run.jevCalls ??= []).push(entry); event(`${phase}:jev`, 'Jev 批量评估独立维度；概率集中度不等于业务正确率。', 'verifier');
+        (run.jevCalls ??= []).push(entry); aggregate(); event(`${phase}:jev`, 'Jev 批量评估独立维度；概率集中度不等于业务正确率。', 'verifier');
         entry.evaluation = this.store.sanitize(await (this.options.jevCall ?? evaluateJevCandidates)(jev, { phase, goal: run.input.brief, acceptance: run.input.requirement.acceptance, frozenHash: run.frozenContract?.hash ?? null, candidates: candidates.map(candidate => ({ id: candidate.id, value: candidate.value })), reviewContext, ...(camera ? { capability } : {}) }, signal), id);
         aggregate(); save(); signal.throwIfAborted();
         if (!entry.evaluation.usage.complete || !Number.isSafeInteger(entry.evaluation.usage.inputTokens) || !Number.isSafeInteger(entry.evaluation.usage.outputTokens) || entry.evaluation.usage.inputTokens! < 0 || entry.evaluation.usage.outputTokens! < 0 || entry.evaluation.usage.estimatedCost === null || !Number.isFinite(entry.evaluation.usage.estimatedCost) || entry.evaluation.usage.estimatedCost < 0) { unknownUsage = true; throw new Error('Jev 用量未知或非法，费用记 unknown，停止后续调用'); }
