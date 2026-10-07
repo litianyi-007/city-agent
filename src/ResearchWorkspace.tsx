@@ -20,6 +20,7 @@ const checkLabels: Record<string, string> = { ready: '配置与人口框检查�
 const json = (value: unknown) => JSON.stringify(value, null, 2);
 const pagesMode = import.meta.env.MODE === 'pages';
 const publicReviewBase = 'https://litianyi-007.github.io/city-agent/submission-next/';
+const publicTrialBase = 'https://litianyi-007.github.io/city-agent/submission-contract11/';
 const PagesSurveyPanel = lazy(() => import('./PagesSurveyPanel').then(module => ({ default: module.PagesSurveyPanel })));
 const ResidentAgentEditor = lazy(() => import('./ResidentAgentEditor').then(module => ({ default: module.ResidentAgentEditor })));
 const BusinessEvidencePanel = lazy(() => import('./BusinessEvidencePanel').then(module => ({ default: module.BusinessEvidencePanel })));
@@ -123,12 +124,13 @@ export function ResearchWorkspace({ section, onSectionChange, onDirtyChange, onB
           <button type="button" className="secondary" disabled={busy} aria-expanded={showPlanning} onClick={() => setShowPlanning(value => !value)}>从自然语言规划调查</button>
           <button type="button" className="secondary" disabled={busy} aria-expanded={showEvidence} onClick={() => setShowEvidence(value => !value)}>检查业务证据包</button>
           <a className="text-button" href={`${import.meta.env.BASE_URL}review-guide.html`} target="_blank" rel="noreferrer">评委本机复现说明 ↗</a>
-          <a className="text-button" href={`${publicReviewBase}index.html`} target="_blank" rel="noreferrer">新版公开评审材料 ↗</a>
-          <a className="text-button" href={`${publicReviewBase}live-proof/report.md`} target="_blank" rel="noreferrer">本轮真实 API 调查报告 ↗</a>
-          <a className="text-button" href={`${publicReviewBase}live-proof/report.json`} target="_blank" rel="noreferrer">本轮真实 API 证据 JSON ↗</a>
+          <a className="text-button" href={`${publicTrialBase}index.html`} target="_blank" rel="noreferrer">最新真实测试补充 ↗</a>
+          <a className="text-button" href={`${publicTrialBase}report.md`} target="_blank" rel="noreferrer">本轮真实 API 调查报告 ↗</a>
+          <a className="text-button" href={`${publicTrialBase}report.json`} target="_blank" rel="noreferrer">本轮真实 API 证据 JSON ↗</a>
+          <a className="text-button" href={`${publicReviewBase}index.html`} target="_blank" rel="noreferrer">RC1完整申报材料 · 历史保留 ↗</a>
           {!pagesMode && <a className="text-button" href={`${import.meta.env.BASE_URL}submission-next/index.html`} target="_blank" rel="noreferrer">本机公开审查材料副本 ↗</a>}
         </div>
-        <p className="research-note">本轮真实 API 合成居民调查，原文与失败同册；不是真人。通过率、执行状态和成本请查看本轮报告。下方“完整业务示例”仍为0次模型调用的规则工程夹具，旧实测历史与本轮真实调查分别留档。</p>
+        <p className="research-note">本轮契约1.1真实调查：小学联合0/10、宠物3/10，15未启动；5请求，保守估算¥0.042032。两个十人门限仍失败，规划/CORS未启动，账本closed，不自动重试或扩容。合成居民不是真人，不能推断实际开店结论；下方完整业务示例仍是0模型调用夹具。原文、RC1失败与本轮分别留档。</p>
         {section === 'projects' && showBusinessDemos && <Suspense fallback={<p>加载完整业务问卷与五层情景…</p>}><BusinessDemoPanel busy={busy} onBusyChange={setBusy} onApplyDemo={async (next, presets) => {
           if (dirty && !window.confirm('当前问卷有未保存修改。是否放弃修改，应用完整业务问卷并新增四份无 Key 情景预设？不会删除既有预设。')) return false;
           setBusy(true); setError('');

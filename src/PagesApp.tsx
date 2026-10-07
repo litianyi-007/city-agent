@@ -35,7 +35,7 @@ export function PagesApp() {
       <p>前一轮7请求、小学0/10与宠物1/10联合通过、17未启动；规划0/2可应用、CORS两次HTTP200只证明协议。新旧轮次分列，原PDF与零费用录屏保持原样，不因新版修复改写历史结果。</p>
       <div className="research-save-bar">
         <a className="primary" href={`${publicReviewBase}index.html`} target="_blank" rel="noreferrer">新版公开评审材料 · 非提交回执 ↗</a>
-        <a className="secondary" href={`${publicReviewBase}project-materials.pdf`} target="_blank" rel="noreferrer">新版评审 PDF ↗</a>
+        <a className="secondary" href={`${publicReviewBase}project-materials.pdf`} target="_blank" rel="noreferrer">RC1历史评审 PDF ↗</a>
         <a className="secondary" href={`${publicReviewBase}live-proof/report.md`} target="_blank" rel="noreferrer">RC1真实 API 调查报告 ↗</a>
         <a className="secondary" href={`${publicReviewBase}live-proof/report.json`} target="_blank" rel="noreferrer">RC1真实 API 证据 JSON ↗</a>
         <a className="secondary" href={`${publicReviewBase}manifest.json`} target="_blank" rel="noreferrer">公开证据索引 ↗</a>

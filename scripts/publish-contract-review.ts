@@ -52,7 +52,7 @@ if (!execute) {
 }
 const deployment = mkdtempSync(path.join(tmpdir(), 'city-agent-contract11-pages-'));
 const run = (program: string, args: string[]) => execFileSync(program, args, { cwd: deployment, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 }).trim();
-run('git', ['clone', '--single-branch', '--branch', 'gh-pages', 'https://github.com/litianyi-007/city-agent.git', deployment]);
+run('git', ['clone', '--depth', '1', '--single-branch', '--branch', 'gh-pages', 'https://github.com/litianyi-007/city-agent.git', deployment]);
 const previousHead = run('git', ['rev-parse', 'HEAD']);
 for (const file of preserved) if (!readFileSync(path.join(deployment, file.name)).equals(localGit(['show', `${file.tag}:public/${file.name}`]))) throw new Error(`远端历史材料漂移：${file.name}`);
 if (existsSync(path.join(deployment, 'submission-contract11'))) throw new Error('新实验已发布，禁止覆盖/自动重发。');
