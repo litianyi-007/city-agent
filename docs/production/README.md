@@ -4,7 +4,7 @@
 
 新增 Jev v4 弱证据弃权分流、默认关闭的 source-bound-v1 条款证据、精确版本／库存／可信HTML／压缩包／历史不覆盖发布门禁，以及更直接的[评委安装指南](REVIEWER-GUIDE.md)。[设计与权限](QUALITY-V6-DESIGN.md)、[本批工程及独立对抗审查](BATCH-QUALITY-V6-CHECKS.md)分列；没有新收费模型运行，不用免费工程结果追认旧模型效果。
 
-本版发布工具生成 v6 新衍生 PDF、保留历史录屏和原件；实际部署 commit 以[公开入口的 publication-manifest](https://litianyi-007.github.io/city-agent/production/publication-manifest.json)为准。评委在线操作可信固定案例／下载材料，输入新的开发需求请按指南本地安装六角色后端。旧申报 MD 不改写。
+v6 已发布：[固定在线版本](https://litianyi-007.github.io/city-agent/production/reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/index.html)提供新衍生 PDF、历史录屏和原件；[发布验收回执](PUBLICATION-V6-2026-10-08.md)记录实际 gh-pages 部署 commit、独立安装与线上实操结果，[publication-manifest](https://litianyi-007.github.io/city-agent/production/publication-manifest.json)记录材料 publisher 与文件 hash。评委在线操作可信固定案例／下载材料，输入新的开发需求请按指南本地安装六角色后端。旧申报 MD 不改写。
 
 下文“公开v5不变”“待实现”“前批测试数”等是各自历史时点。REAL-02仍是v3的真实18池选优对照，不是新v4／条款门禁实测或完整软件良品率。[更新前全文留底](archive/2026-10-08-before-quality-v6/README.md)。后续顺序以[NEXT-STEPS](NEXT-STEPS.md)首段为准。
 
