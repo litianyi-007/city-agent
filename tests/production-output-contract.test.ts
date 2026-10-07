@@ -145,9 +145,9 @@ test('snapshots reject recursive, non-JSON and oversized contracts instead of cl
 });
 
 test('versioned role and Verifier prompts disclose output authority and retain generic Tester examples and final Gate versions', () => {
-  assert.equal(PROMPT_VERSION, 'production-html-v6'); assert.equal(CAMERA_PROMPT_VERSION, 'production-camera-scene-v5');
-  assert.equal(CRITERIA_VERSION, 'verifier-phase-ordinal-v3'); assert.equal(PRODUCTION_VERIFIER_VERSION, CRITERIA_VERSION);
-  assert.equal(ACCEPTANCE_CONTRACT_VERSION, 'production-acceptance-v2'); assert.equal(CAMERA_ACCEPTANCE_VERSION, 'production-camera-acceptance-v1'); assert.equal(CAMERA_MANDATORY_CHECKS_VERSION, 'camera-scene-behavior-v1');
+  assert.equal(PROMPT_VERSION, 'production-html-v7'); assert.equal(CAMERA_PROMPT_VERSION, 'production-camera-scene-v6');
+  assert.equal(CRITERIA_VERSION, 'verifier-phase-ordinal-v4'); assert.equal(PRODUCTION_VERIFIER_VERSION, CRITERIA_VERSION);
+  assert.equal(ACCEPTANCE_CONTRACT_VERSION, 'production-acceptance-v3'); assert.equal(CAMERA_ACCEPTANCE_VERSION, 'production-camera-acceptance-v2'); assert.equal(CAMERA_MANDATORY_CHECKS_VERSION, 'camera-scene-behavior-v2');
   for (const capability of ['offline-single-html', 'camera-scene-v1'] as const) {
     for (const instruction of Object.values(contractProfile(capability).instructions)) {
       assert.ok(instruction.includes(OUTPUT_CONTRACT_INSTRUCTIONS));
@@ -168,8 +168,9 @@ test('schema-valid reversed/disabled mappings remain semantic counterexamples, n
   for (const phase of ['product', 'research', 'think-design', 'acceptance', 'implement', 'repair-2', 'feedback-2']) {
     const rubric = productionPhaseRubric(phase, 'camera-scene-v1')!;
     for (const dimension of Object.values(rubric.dimensions)) {
-      assert.match(dimension, /Platform-allowed enum values describe capabilities, not permission/);
-      assert.match(dimension, /Reject making a required behavior optional, reversed, none or omitted/);
+      assert.match(dimension, /Preserve ALL explicit goal\/acceptance constraints/);
+      assert.match(dimension, /Schema enums never authorize optionalizing, reversing, disabling \(none\) or omitting required behavior/);
+      assert.match(dimension, /unsupported requirements block, never silently weaken the goal/);
     }
     assert.equal(rubric.minimumOrdinalScore, 3);
   }

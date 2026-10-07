@@ -54,7 +54,7 @@ test('old capability remains default/v2; camera requires live and uses its own s
   const base = { brief: 'Free schema fixture', agentIds: Array(6).fill('00000000-0000-4000-8000-000000000001'), requirement: { id: 'unit', source: 'unit', acceptance: 'unit' } };
   assert.equal(productionRunInputSchema.parse(base).capability, 'offline-single-html'); assert.equal(productionRunInputSchema.safeParse({ ...base, capability: 'camera-scene-v1', mode: 'demo' }).success, false);
   const request = buildJevCandidateRequest('jev-1.13.0', { phase: 'implement', goal: 'camera', acceptance: 'physical camera required', frozenHash: 'frozen', capability: 'camera-scene-v1', candidates: [{ id: 'valid', value: { scene } }] });
-  assert.match(request.questions.c0_scope.instructions, /physical camera/); assert.match(request.questions.c0_safe.instructions, /model code/); assert.match(request.questions.best.instructions, /unverified/);
+  assert.match(request.questions.c0_scope.instructions, /state.phaseReview.dimensions.scope/); assert.match(request.state.phaseReview!.evidenceBoundary, /physical camera/); assert.match(request.questions.c0_safe.instructions, /model code/); assert.match(request.questions.best.instructions, /state.phaseReview.evidenceBoundary|evidenceBoundary/);
 });
 
 test('real restricted Chromium verifies Canvas, particles, manual actions and synthetic landmark geometry without camera grant', async () => {
@@ -91,6 +91,31 @@ test('invalid camera developer code is retained as rejected raw evidence without
   // not a prompt prefix that changes when generic contract guidance is added.
   const invalid: typeof runRole = async (...args) => { if (JSON.parse(args[2]).outputContract?.jsonSchema?.properties?.scene) return { text: JSON.stringify({ scene, html: '<script>evil()</script>' }), inputTokens: 100, outputTokens: 100, usageReported: true, harness: 'Injected' }; return roleCall(...args); };
   const { request, input, wait } = await setup(t, { roleCall: invalid }); const run = await wait((await (await request('/runs', input, 'POST')).json()).id); assert.equal(run.status, 'failed'); assert.match(run.error!, /全部候选非法/); assert.equal(run.artifacts.some(artifact => artifact.name === 'scene.json' || artifact.name === 'index.html'), false); assert.ok(run.calls.some(call => call.rawOutput.includes('evil()') && call.error?.includes('候选契约拒绝')));
+});
+
+test('explicit generic gesture requirements reject missing test coverage before evaluation and freeze only original tester correction', async t => {
+  let attempts = 0;
+  const corrected = [...checks, { name: 'Explicit gesture contract', steps: [{ action: 'assertText', selector: '#gesture-map', text: '张掌 → scatter；握拳 → gather；手掌横移 → 旋转' }] }] as AcceptanceCheck[];
+  const { request, input, wait, service } = await setup(t, { roleCall: async (...args) => {
+    const payload = JSON.parse(args[2]);
+    if (!args[1].startsWith('你是独立质量Verifier') && payload.outputContract?.jsonSchema?.properties?.checks) {
+      attempts++;
+      return { text: JSON.stringify({ checks: attempts === 1 ? checks : corrected }), inputTokens: 100, outputTokens: 100, usageReported: true, harness: 'Injected camera constraint test, no provider call' };
+    }
+    return roleCall(...args);
+  } });
+  const constraints = { openPalm: 'scatter', closedFist: 'gather', palmX: 'rotate' };
+  const response = await request('/runs', { ...input, cameraBusinessConstraints: constraints }, 'POST');
+  assert.equal(response.status, 202, await response.clone().text()); const run = await wait((await response.json()).id);
+  assert.equal(run.status, 'completed', run.error); assert.equal(run.repairs, 1); assert.equal(attempts, 2);
+  assert.equal(run.calls.filter(call => call.phase === 'acceptance:verify').length, 1, 'Rejected coverage cannot consume a paid evaluator request');
+  const tester = run.calls.filter(call => call.role === 'tester'); assert.match(tester[0].error!, /camera-business-mapping-coverage/);
+  assert.deepEqual(JSON.parse(tester[0].rawOutput).checks, checks); assert.deepEqual(run.frozenContract!.checks, corrected);
+  assert.deepEqual(JSON.parse(tester[1].userPrompt).context.cameraBusinessConstraints, constraints);
+  assert.equal(run.gate!.passed, true); assert.equal(run.cameraVerification!.fullRequirementVerified, false);
+  const manifest = JSON.parse(service.store.readArtifact(run.id, 'delivery-manifest.json'));
+  assert.equal(manifest.validationContract.semanticsVersion, 'production-acceptance-semantic-v2');
+  assert.equal(manifest.validationContract.jevRequestLayoutVersion, 'jev-request-layout-v2');
 });
 
 test('camera repairs stay bounded with identical frozen tests/runtime and cannot convert hardware pending into verified', async t => {

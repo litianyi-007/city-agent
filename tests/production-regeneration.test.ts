@@ -61,6 +61,46 @@ test('actual invalid CSS preflight rejects then regenerates the tester, not a si
   const run = await start(); assert.equal(run.status, 'completed', run.error); assert.equal(attempts, 2); assert.match(run.calls.find(call => call.role === 'tester')!.error!, /非法 CSS/); assert.equal(run.repairs, 1); assert.deepEqual(run.frozenContract!.checks, demoChecks('create'));
 });
 
+test('semantic rejection regenerates the original tester, preserves raw placeholder and freezes a versioned coverage hash', async t => {
+  let testerCalls = 0; let gates = 0; const hashes: string[] = [];
+  const { service, start } = setup(t, { roleCall: async (...args) => {
+    const data = JSON.parse(args[2]);
+    assert.equal((data.context ?? data.state.reviewContext).coverageContract.version, 'production-coverage-owners-v1');
+    if (!args[1].startsWith('你是独立质量Verifier') && args[1].includes('"checks"') && ++testerCalls === 1) {
+      const checks = demoChecks('create'); checks[0].steps.push({ action: 'assertTextExact', selector: '#total-count', text: '{{totalCount}}' });
+      return result({ checks });
+    }
+    if (data.context?.frozenContract) hashes.push(data.context.frozenContract.hash);
+    return injected(...args);
+  }, gate: async () => ({ passed: ++gates > 1, checks: [{ name: 'Injected behavior Gate for global-pool test', passed: gates > 1 }] }) });
+  const run = await start(); assert.equal(run.status, 'completed', run.error);
+  assert.equal(testerCalls, 2); assert.equal(run.repairs, 2);
+  const testers = run.calls.filter(call => call.role === 'tester');
+  assert.match(testers[0].rawOutput, /\{\{totalCount\}\}/); assert.match(testers[0].error!, /unbound-expectation/);
+  assert.match(JSON.parse(testers[1].userPrompt).context.regeneration.reason, /unbound-expectation/);
+  assert.deepEqual(run.frozenContract!.checks, demoChecks('create'));
+  assert.equal(run.frozenContract!.validationContractHash, hash(run.validationContract));
+  assert.equal(new Set(hashes).size, 1);
+  const manifest = JSON.parse(service.store.readArtifact(run.id, 'delivery-manifest.json'));
+  assert.deepEqual(manifest.validationContract, run.validationContract);
+  assert.equal(manifest.validationContractHash, run.frozenContract!.validationContractHash);
+  assert.equal(manifest.compactOutputPolicy.version, 'verifier-compact-output-v1');
+  assert.equal(run.repairHistory![0].kind, 'stage-regeneration'); assert.equal(run.repairHistory![1].kind, 'gate-repair');
+});
+
+test('overlong Verifier reason stays a fatal protocol error with full raw output, not a truncated success or role retry', async t => {
+  const { start } = setup(t, { roleCall: async (...args) => {
+    if (args[1].startsWith('你是独立质量Verifier')) {
+      const data = JSON.parse(args[2]);
+      return result({ decision: 'abstain', selectedCandidateId: null, scores: [{ candidateId: data.candidates[0].id, score: 2, reason: 'x'.repeat(1428) }], reason: 'Original role needs correction, but this protocol is illegal.' });
+    }
+    return injected(...args);
+  } });
+  const run = await start(); assert.equal(run.status, 'failed'); assert.equal(run.repairs, 0);
+  assert.equal(JSON.parse(run.calls.at(-1)!.rawOutput).scores[0].reason.length, 1428);
+  assert.match(run.error!, /Verifier 校验失败/); assert.equal(run.frozenContract, undefined);
+});
+
 test('valid LLM abstention regenerates the original role under the same phase rubric', async t => {
   let denied = false; const { start } = setup(t, { roleCall: async (...args) => { if (args[1].startsWith('你是独立质量Verifier') && JSON.parse(args[2]).criteria.phase === 'research' && !denied) { denied = true; return abstain(args[2]); } return injected(...args); } });
   const run = await start(); assert.equal(run.status, 'completed', run.error); assert.equal(run.calls.filter(call => call.role === 'researcher').length, 2); assert.equal(run.repairs, 1); const history = run.repairHistory![0]; assert.equal(history.phase, 'research'); assert.equal(history.role, 'researcher');

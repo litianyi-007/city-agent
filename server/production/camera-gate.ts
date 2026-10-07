@@ -1,4 +1,6 @@
 import { chromium, type Browser } from 'playwright';
+import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
 import { cameraSceneSchema, type CameraSceneConfig } from '../../shared/camera-scene-schema.js';
 import { CAMERA_RUNTIME_VERSION, CAMERA_RUNTIME_SOURCE, CAMERA_GATE_RUNTIME_SOURCE, CAMERA_RUNTIME_STYLE, CAMERA_GEOMETRY_VERSION, renderCameraSceneHtml } from '../../shared/camera-scene-runtime.js';
 import { CAMERA_HAND_WORKER_VERSION, CAMERA_HAND_WORKER_SOURCE } from '../../shared/camera-hand-worker.js';
@@ -9,8 +11,9 @@ import { CAMERA_MANDATORY_CHECKS_VERSION } from './contracts.js';
 import { hash } from './store.js';
 
 export function cameraRuntimeMetadata() {
-  const inputs = { renderer: CAMERA_RUNTIME_SOURCE, gateRenderer: CAMERA_GATE_RUNTIME_SOURCE, style: CAMERA_RUNTIME_STYLE, worker: CAMERA_HAND_WORKER_SOURCE, geometryVersion: CAMERA_GEOMETRY_VERSION, workerVersion: CAMERA_HAND_WORKER_VERSION, assets: CAMERA_ASSET_MANIFEST, mandatoryChecksVersion: CAMERA_MANDATORY_CHECKS_VERSION };
-  return { version: CAMERA_RUNTIME_VERSION, hash: hash(inputs), rendererHash: hash(CAMERA_RUNTIME_SOURCE), gateRendererHash: hash(CAMERA_GATE_RUNTIME_SOURCE), styleHash: hash(CAMERA_RUNTIME_STYLE), workerVersion: CAMERA_HAND_WORKER_VERSION, workerHash: hash(CAMERA_HAND_WORKER_SOURCE), geometryVersion: CAMERA_GEOMETRY_VERSION, assetManifest: CAMERA_ASSET_MANIFEST, mandatoryChecksVersion: CAMERA_MANDATORY_CHECKS_VERSION };
+  const gateSourceHash = hash(readFileSync(fileURLToPath(import.meta.url), 'utf8'));
+  const inputs = { renderer: CAMERA_RUNTIME_SOURCE, gateRenderer: CAMERA_GATE_RUNTIME_SOURCE, style: CAMERA_RUNTIME_STYLE, worker: CAMERA_HAND_WORKER_SOURCE, geometryVersion: CAMERA_GEOMETRY_VERSION, workerVersion: CAMERA_HAND_WORKER_VERSION, assets: CAMERA_ASSET_MANIFEST, mandatoryChecksVersion: CAMERA_MANDATORY_CHECKS_VERSION, gateSourceHash };
+  return { version: CAMERA_RUNTIME_VERSION, hash: hash(inputs), gateSourceHash, rendererHash: hash(CAMERA_RUNTIME_SOURCE), gateRendererHash: hash(CAMERA_GATE_RUNTIME_SOURCE), styleHash: hash(CAMERA_RUNTIME_STYLE), workerVersion: CAMERA_HAND_WORKER_VERSION, workerHash: hash(CAMERA_HAND_WORKER_SOURCE), geometryVersion: CAMERA_GEOMETRY_VERSION, assetManifest: CAMERA_ASSET_MANIFEST, mandatoryChecksVersion: CAMERA_MANDATORY_CHECKS_VERSION };
 }
 
 /** Owned synthetic landmarks, not real model detections or real human footage. */
@@ -39,6 +42,7 @@ export async function runCameraSceneGate(input: CameraSceneConfig, checks: Accep
   abortListener = stop; signal?.addEventListener('abort', abortListener, { once: true });
   const timeout = setTimeout(() => { timedOut = true; stop(); }, 15_000);
   const url = 'https://city-agent-camera-gate.invalid/';
+  const objectsOnlyUrl = 'https://city-agent-camera-gate.invalid/objects-only-diagnostic';
   // No assets, media permissions or arbitrary model code are admitted in Gate mode.
   const csp = "default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src 'none'; worker-src 'none'; frame-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'; sandbox allow-scripts";
   try {
@@ -47,8 +51,41 @@ export async function runCameraSceneGate(input: CameraSceneConfig, checks: Accep
       browser.on('disconnected', () => { if (!stopping) browserDisconnected = true; });
       if (stopping || signal?.aborted) { await close(); throw new DOMException('场景Gate已停止', 'AbortError'); }
       const context = await browser.newContext({ viewport: { width: 1280, height: 900 }, reducedMotion: 'reduce', acceptDownloads: false });
-      const faults: string[] = []; let served = false;
-      await context.route('**/*', async route => { const request = route.request(); if (!served && request.isNavigationRequest() && request.url() === url) { served = true; await route.fulfill({ contentType: 'text/html', headers: { 'content-security-policy': csp }, body: html }); } else { faults.push('未授权网络或导航'); await route.abort('blockedbyclient'); } });
+      // The fixed renderer clears the entire Canvas, then paints its background
+      // glow before painting particles. Capture those real background-only
+      // bytes in the trusted Gate before any page code runs. A multi-colour
+      // gradient alone is not evidence that any initial particle is visible.
+      // This instrumentation never changes the frozen CSS checks or renderer.
+      await context.addInitScript({ content: `(() => {
+        const backgrounds = new WeakMap();
+        const fillRect = CanvasRenderingContext2D.prototype.fillRect;
+        CanvasRenderingContext2D.prototype.fillRect = function (x, y, width, height) {
+          fillRect.call(this, x, y, width, height);
+          const canvas = this.canvas;
+          if (canvas.id !== 'scene-canvas' || x !== 0 || y !== 0 || width !== canvas.width || height !== canvas.height || !width || !height) return;
+          const previous = backgrounds.get(canvas);
+          backgrounds.set(canvas, { width, height, fullRectCount: (previous?.fullRectCount ?? 0) + 1, bytes: this.getImageData(0, 0, width, height).data });
+        };
+        Object.defineProperty(window, '__cameraGateBackgroundEvidence', { writable: false, configurable: false, value: Object.freeze({
+          difference(canvas) {
+            const background = backgrounds.get(canvas);
+            if (!background || background.width !== canvas.width || background.height !== canvas.height || background.fullRectCount < 2) return null;
+            const actual = canvas.getContext('2d').getImageData(0, 0, canvas.width, canvas.height).data;
+            let changedPixels = 0;
+            for (let index = 0; index < actual.length; index += 4) {
+              if (actual[index] !== background.bytes[index] || actual[index + 1] !== background.bytes[index + 1] || actual[index + 2] !== background.bytes[index + 2] || actual[index + 3] !== background.bytes[index + 3]) changedPixels++;
+            }
+            return { changedPixels };
+          }
+        }) });
+      })();` });
+      const faults: string[] = []; let served = false; let objectsOnlyServed = false; let objectsOnlyHtml: string | undefined;
+      await context.route('**/*', async route => {
+        const request = route.request();
+        if (!served && request.isNavigationRequest() && request.url() === url) { served = true; await route.fulfill({ contentType: 'text/html', headers: { 'content-security-policy': csp }, body: html }); }
+        else if (objectsOnlyHtml !== undefined && !objectsOnlyServed && request.isNavigationRequest() && request.url() === objectsOnlyUrl && request.frame() === page.mainFrame()) { objectsOnlyServed = true; await route.fulfill({ contentType: 'text/html', headers: { 'content-security-policy': csp }, body: objectsOnlyHtml }); }
+        else { faults.push('未授权网络或导航'); await route.abort('blockedbyclient'); }
+      });
       const page = await context.newPage(); page.setDefaultTimeout(2000);
       environmentReady = true;
       context.on('page', popup => { faults.push('弹窗'); void popup.close().catch(() => undefined); });
@@ -58,9 +95,11 @@ export async function runCameraSceneGate(input: CameraSceneConfig, checks: Accep
       await page.goto(url, { waitUntil: 'load', timeout: 3000 });
       const snapshot = () => page.evaluate(() => (window as unknown as { __cameraSceneTest: { snapshot: () => { state: string; rotation: number; particleCount: number; particles: number[][]; cameraActive: boolean } } }).__cameraSceneTest.snapshot());
       const pixels = () => page.evaluate(() => { const canvas = document.querySelector<HTMLCanvasElement>('#scene-canvas')!; const bytes = canvas.getContext('2d')!.getImageData(0, 0, canvas.width, canvas.height).data; let checksum = 2166136261; const colors = new Set<number>(); for (let i = 0; i < bytes.length; i += 4) { const color = (bytes[i] << 16) | (bytes[i + 1] << 8) | bytes[i + 2]; colors.add(color); checksum = Math.imul(checksum ^ color, 16777619) >>> 0; } return { width: canvas.width, height: canvas.height, checksum, colors: colors.size }; });
+      const backgroundDifference = () => page.evaluate(() => (window as unknown as { __cameraGateBackgroundEvidence: { difference: (canvas: HTMLCanvasElement) => { changedPixels: number } | null } }).__cameraGateBackgroundEvidence.difference(document.querySelector<HTMLCanvasElement>('#scene-canvas')!));
       const ensure = (condition: boolean, message: string) => { if (!condition) throw new Error(message); };
       const initial = await snapshot(); const initialPixels = await pixels();
-      ensure(initialPixels.width >= 300 && initialPixels.height >= 200 && initialPixels.colors > 1, 'Canvas必须实际绘制可见粒子而非仅状态文本');
+      const initialBackgroundDifference = await backgroundDifference();
+      ensure(initialPixels.width >= 300 && initialPixels.height >= 200 && initialPixels.colors > 1 && !!initialBackgroundDifference && initialBackgroundDifference.changedPixels > 0, 'Canvas初始实际像素必须与可信背景基线不同；背景渐变、裁剪到画布外的粒子或仅状态文本不能作为可见粒子绘制证据');
       ensure(initial.particleCount === scene.objects.reduce((sum, object) => sum + object.count, scene.snowCount) && initial.particles.length > 0 && initial.particles.length <= 32 && initial.particles.every(point => point.length === 3 && point.every(Number.isFinite)), '实际粒子数或有界坐标快照不符合场景配置');
       ensure(initial.cameraActive === false, '合成Gate不得启动摄像头');
       results.push({ name: '强制：真实Canvas绘制与有界粒子配置', passed: true });
@@ -80,6 +119,21 @@ export async function runCameraSceneGate(input: CameraSceneConfig, checks: Accep
       ensure(scene.mappings.palmX === 'rotate' ? horizontal.rotation > 0 : horizontal.rotation === 0, '横向手掌旋转必须遵守rotate/none配置');
       ensure(horizontal.cameraActive === false && !faults.length && page.url() === url, 'Gate访问了摄像头、网络或导航');
       results.push({ name: '强制：合成21点手势分类/去抖/横向映射（非真实识别）', passed: true });
+      if (scene.snowCount > 0) {
+        // A few visible snow particles must not conceal an entirely invisible
+        // object scene. Render the same objects/mappings with snowCount=0 in a
+        // fresh, strictly allowlisted document; do not mutate delivery data,
+        // frozen CSS or the already-executed mandatory actions. A new document
+        // also resets immutable runtime globals and reinjects the baseline hook.
+        // The deterministic seed includes snowCount: this is an objects-only
+        // derived visibility diagnostic, not proof of identical particle points.
+        objectsOnlyHtml = renderCameraSceneHtml({ ...scene, snowCount: 0 }, { mode: 'gate' });
+        await page.goto(objectsOnlyUrl, { waitUntil: 'load', timeout: 3000 });
+        const objectsOnlyPixels = await pixels(); const objectsOnlyDifference = await backgroundDifference();
+        ensure(objectsOnlyPixels.width >= 300 && objectsOnlyPixels.height >= 200 && !!objectsOnlyDifference && objectsOnlyDifference.changedPixels > 0, '无雪派生对象初态必须实际可见；可见雪不能替代完全不可见对象的绘制证据（未修改交付scene或冻结CSS）');
+        ensure((await snapshot()).cameraActive === false && !faults.length && page.url() === objectsOnlyUrl, '无雪派生诊断访问了摄像头、网络或未授权导航');
+      }
+      results.push({ name: '强制：无雪对象初态可见性（派生诊断，非交付修改）', passed: true, detail: scene.snowCount > 0 ? '相同objects/mappings、snowCount=0的可信派生场景像素不同于背景；scene seed会变化，不证明粒子坐标逐点一致。' : '原场景无雪，初始背景像素对照直接证明对象可见；未修改scene或冻结CSS。' });
     })();
     if (signal?.aborted) stop();
     await Promise.race([operation, stopped]);

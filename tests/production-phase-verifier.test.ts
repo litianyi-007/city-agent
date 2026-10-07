@@ -68,13 +68,13 @@ function setup(t: TestContext, options: ProductionOptions = {}) {
 }
 
 test('six production stages and bounded repair phases have a versioned rubric; independent benchmark remains whole-answer', () => {
-  assert.equal(PROMPT_VERSION, 'production-html-v6'); assert.equal(CAMERA_PROMPT_VERSION, 'production-camera-scene-v5'); assert.equal(CRITERIA_VERSION, 'verifier-phase-ordinal-v3');
+  assert.equal(PROMPT_VERSION, 'production-html-v7'); assert.equal(CAMERA_PROMPT_VERSION, 'production-camera-scene-v6'); assert.equal(CRITERIA_VERSION, 'verifier-phase-ordinal-v4');
   for (const [phase, stage] of [['product', 'product'], ['research', 'research'], ['think-design', 'plan'], ['acceptance', 'acceptance'], ['implement', 'implementation'], ['repair-2', 'implementation'], ['feedback-2', 'feedback']]) {
     const rubric = productionPhaseRubric(phase)!; assert.equal(rubric.stage, stage); assert.equal(rubric.minimumOrdinalScore, 3); assert.equal(rubric.version, PRODUCTION_VERIFIER_VERSION);
   }
   for (const phase of ['developer', 'whole-answer', 'repair-3', 'feedback-3']) assert.equal(productionPhaseRubric(phase), null);
   const legacy = buildJevCandidateRequest(JEV_MODEL_ID, { phase: 'developer', goal: 'benchmark', acceptance: 'complete answer', frozenHash: null, candidates: [{ id: 'a', value: 'answer' }] });
-  assert.equal(legacy.state.phaseReview, undefined); assert.doesNotMatch(JSON.stringify(legacy), /verifier-phase-ordinal-v3/);
+  assert.equal(legacy.state.phaseReview, undefined); assert.doesNotMatch(JSON.stringify(legacy), /verifier-phase-ordinal-v4/);
 });
 
 test('Jev and LLM share exact stage dimensions and context path, without asking research for future artifacts', () => {
@@ -83,7 +83,7 @@ test('Jev and LLM share exact stage dimensions and context path, without asking 
     const context = { phase, goal: 'scene', acceptance: 'camera still pending', frozenHash: null, capability: 'camera-scene-v1' as const, reviewContext: { product: { goal: 'scene' }, knownPlatform: { fullRequirementVerified: false } }, candidates: [{ id: 'a', value: phase === 'research' ? groundedResearch : {} }] };
     const request = buildJevCandidateRequest(JEV_MODEL_ID, context); assert.deepEqual(request.state.phaseReview, rubric); assert.deepEqual(request.state.reviewContext, context.reviewContext);
     for (const dimension of ['coverage', 'consistency', 'scope'] as const) {
-      assert.ok(request.questions[`c0_${dimension}`].instructions.includes(rubric.dimensions[dimension])); assert.ok(phaseVerifierSystemPrompt(rubric).includes(rubric.dimensions[dimension]));
+      assert.ok(request.questions[`c0_${dimension}`].instructions.includes(`state.phaseReview.dimensions.${dimension}`)); assert.equal(request.state.phaseReview!.dimensions[dimension], rubric.dimensions[dimension]); assert.ok(phaseVerifierSystemPrompt(rubric).includes(rubric.dimensions[dimension]));
     }
   }
   const research = productionPhaseRubric('research', 'camera-scene-v1')!;

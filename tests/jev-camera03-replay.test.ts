@@ -38,7 +38,7 @@ test('CAMERA-03 raw response remains rejected but is counterfactually classified
       const currentRequest = JSON.parse(String(init?.body));
       assert.deepEqual(currentRequest.state.candidates, original.requestSnapshot!.state.candidates);
       assert.equal(currentRequest.state.goal, state.goal); assert.deepEqual(currentRequest.state.acceptance, state.acceptance); assert.deepEqual(currentRequest.state.reviewContext, state.reviewContext);
-      assert.equal(currentRequest.state.phaseReview.version, 'verifier-phase-ordinal-v3', 'new request criteria, not a retrospective rewrite of v2');
+      assert.equal(currentRequest.state.phaseReview.version, 'verifier-phase-ordinal-v4', 'new request criteria, not a retrospective rewrite of v2');
       return new Response(JSON.stringify(body), { status: 200, headers: { 'Content-Type': 'application/json' } });
     }) as typeof fetch,
   });

@@ -11,6 +11,13 @@
 @media(max-width:600px){.prod-jev-form,.prod-jev-explainer{padding:20px}.prod-jev-candidate{padding:12px}.prod-jev-candidate dl{grid-template-columns:minmax(0,1fr);gap:12px}.prod-jev-candidate dd span{font-size:.7rem}.prod-mode label{flex-basis:40%}}
 @media(prefers-reduced-motion:reduce){.production-root *{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 .prod-capability { display: block; margin: 18px 0; }
+.prod-request > .prod-section-heading { flex-wrap: wrap; }
+.prod-custom-guidance { margin-top: 12px !important; }
+.prod-required-guidance { padding: 12px; margin-top: 14px !important; border: 1px solid #cbd5e1; border-radius: 7px; background: #f8fafc; overflow-wrap: anywhere; }
+.prod-camera-constraints { min-width: 0; padding: 16px; margin: 18px 0; border: 1px solid #cbd5e1; border-radius: 8px; background: #f8fafc; }
+.prod-camera-constraints legend { padding: 0 6px; font-size: .8rem; color: #334155; }
+.prod-camera-constraints .prod-fields { margin-top: 14px; }
+.prod-constraint-error { margin-top: 14px !important; color: #991b1b; font-size: .78rem; overflow-wrap: anywhere; }
 .prod-camera-boundary { padding: 16px; margin: 16px 0; border: 1px solid #93c5fd; border-left: 3px solid #2563eb; border-radius: 10px; background: #eff6ff; color: #1e3a8a; line-height: 1.65; overflow-wrap: anywhere; }
 .prod-camera-boundary p { margin: 8px 0; }
 .prod-camera-delivery { padding: 20px; border: 1px solid #cbd5e1; border-radius: 14px; margin-top: 20px; }

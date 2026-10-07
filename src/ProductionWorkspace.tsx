@@ -21,6 +21,10 @@ function caseRequirement(item: (typeof PRODUCTION_DEMO_CASES)[number]): Producti
 }
 const DEFAULT_REQUIREMENT = caseRequirement(PRODUCTION_DEMO_CASES[0]);
 const DEFAULT_BRIEF = PRODUCTION_DEMO_CASES[0].brief;
+type CameraBusinessConstraints = NonNullable<ProductionRunInput['cameraBusinessConstraints']>;
+function emptyRequirement(): ProductionRunInput['requirement'] {
+  return { id: '', source: '', background: '', acceptance: '', difficulty: 'low', kind: 'illustrative' };
+}
 const format = (value: number | null | undefined) => value == null ? 'unknown' : new Intl.NumberFormat('zh-CN').format(value);
 const displayScore = (value: number | null | undefined) => typeof value === 'number' && Number.isFinite(value) ? value.toFixed(2) : 'unknown';
 const active = (run: ProductionRun | null) => !!run && ['queued', 'running'].includes(run.status);
@@ -61,15 +65,18 @@ export default function ProductionWorkspace() {
   const [demoCaseId, setDemoCaseId] = useState<string | undefined>(PRODUCTION_DEMO_CASES[0].operation);
   const [mode, setMode] = useState<'demo' | 'mock-jev' | 'live'>('demo');
   const [capability, setCapability] = useState<ProductionCapability>('offline-single-html');
+  const [cameraBusinessConstraints, setCameraBusinessConstraints] = useState<CameraBusinessConstraints>({});
   const [verifierEngine, setVerifierEngine] = useState<'llm-rubric' | 'jev-cascade'>('llm-rubric');
   const [jevConfig, setJevConfig] = useState<JevPublicConfig | null>(null);
   const [candidateCount, setCandidateCount] = useState<1 | 2>(1);
   const [limits, setLimits] = useState(DEFAULT_LIMITS);
   const [budgetAuthorized, setBudgetAuthorized] = useState(false);
+  const [requirementOpen, setRequirementOpen] = useState(false);
   const [detail, setDetail] = useState<'events' | 'verifier' | 'delivery' | 'calls'>('events');
   const [preview, setPreview] = useState(false);
   const mounted = useRef(true);
   const selectionRequest = useRef(0);
+  const briefInput = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
     mounted.current = true;
@@ -110,6 +117,7 @@ export default function ProductionWorkspace() {
     const team = await request<ProductionAgent[]>('/agents');
     if (!mounted.current) return;
     setAgents(team);
+    setBudgetAuthorized(false);
     setSelection(previous => Object.fromEntries(ROLE_ORDER.map(role => [role, team.find(agent => agent.id === previous[role] && agent.role === role && agent.enabled)?.id ?? team.find(agent => agent.role === role && agent.enabled)?.id])));
   }
   async function changeAgent(action: 'clone' | 'delete', agent: ProductionAgent) {
@@ -126,9 +134,11 @@ export default function ProductionWorkspace() {
     catch (e) { if (version === selectionRequest.current) setError(e instanceof Error ? e.message : '读取运行失败'); }
   }
   async function start(event: FormEvent) {
-    event.preventDefault(); ++selectionRequest.current; setBusy(true); setError(''); setPreview(false);
+    event.preventDefault();
+    if (!canLaunch) { setError('请补齐需求来源与验收、角色配置，并在当前配置下重新确认有限预算；自定义需求不能运行固定 Mock。'); return; }
+    ++selectionRequest.current; setBusy(true); setError(''); setPreview(false);
     try {
-      const next = await request<ProductionRun>('/runs', json({ brief, capability, mode, agentIds: ROLE_ORDER.map(role => selection[role]), candidateCount, limits, requirement, budgetAuthorized: mode !== 'demo' && budgetAuthorized, ...(mode !== 'live' && demoCaseId ? { demoCaseId } : {}), ...(mode === 'mock-jev' || mode === 'live' && verifierEngine === 'jev-cascade' ? { verifierEngine: 'jev-cascade' } : {}) }));
+      const next = await request<ProductionRun>('/runs', json({ brief, capability, mode, agentIds: ROLE_ORDER.map(role => selection[role]), candidateCount, limits, requirement, budgetAuthorized: mode !== 'demo' && budgetAuthorized, ...(capability === 'camera-scene-v1' && mode === 'live' && Object.keys(cameraBusinessConstraints).length ? { cameraBusinessConstraints } : {}), ...(mode !== 'live' && demoCaseId ? { demoCaseId } : {}), ...(mode === 'mock-jev' || mode === 'live' && verifierEngine === 'jev-cascade' ? { verifierEngine: 'jev-cascade' } : {}) }));
       if (!mounted.current) return;
       setRun(next); setRuns(previous => [next, ...previous.filter(item => item.id !== next.id)]); setDetail('events');
       setNotice(mode === 'demo' ? '已启动工程夹具：不会调用真实模型，不计入自主交付良品率。' : mode === 'mock-jev' ? '已启动混合验证：固定研发夹具 + 真实 Jev 决策，产生 Jev 费用，但不计为自主研发交付。' : '已启动真实模型任务；预算、返修与时间限制已冻结。');
@@ -143,12 +153,60 @@ export default function ProductionWorkspace() {
     finally { if (mounted.current) setBusy(false); }
   }
 
+  function detachMock() {
+    setDemoCaseId(undefined);
+    setRequirementOpen(true);
+    setNotice('已解除固定 Mock 关联，旧编号、来源、背景与验收已清空。请重新填写自定义需求材料；自拟需求不会自动标为真实业务需求。');
+  }
+  function editBrief(value: string) {
+    setBrief(value); setBudgetAuthorized(false);
+    if (demoCaseId) { setRequirement(emptyRequirement()); detachMock(); }
+  }
+  function editRequirement(patch: Partial<ProductionRunInput['requirement']>) {
+    setBudgetAuthorized(false);
+    if (demoCaseId) { setRequirement({ ...emptyRequirement(), ...patch }); detachMock(); }
+    else setRequirement(previous => ({ ...previous, ...patch }));
+  }
+  function newCustomRequirement() {
+    setBrief(''); setRequirement(emptyRequirement()); setDemoCaseId(undefined);
+    setCameraBusinessConstraints({});
+    setMode('live'); setBudgetAuthorized(false); setRequirementOpen(true); setError('');
+    setNotice('已新建自定义需求，尚未启动或产生费用。请填写原话、编号、来源和验收；当前仅支持受限 HTML / 声明式摄像头场景，不是任意仓库开发。');
+    briefInput.current?.focus();
+  }
+  function changeCapability(next: ProductionCapability) {
+    setCapability(next); setBudgetAuthorized(false); setCameraBusinessConstraints({});
+    if (next === 'camera-scene-v1') {
+      setMode('live');
+      if (demoCaseId) { setBrief(''); setRequirement(emptyRequirement()); setDemoCaseId(undefined); setRequirementOpen(true); }
+      setNotice('已选择受控摄像头场景。HTML Mock 不会继承为摄像头需求或来源；请填写对应需求与验收，重新确认有限预算。场景行为与实机验收分别记录。');
+    }
+  }
+  function invalidateAuthorization(event: FormEvent<HTMLFormElement>) {
+    // Consent applies only to the current input/configuration. Keep this tied
+    // to the user event, rather than an effect that could reset a fresh click.
+    if ((event.target as HTMLInputElement).id !== 'prod-budget-authorization') setBudgetAuthorized(false);
+  }
+  function changeCameraConstraint<K extends keyof CameraBusinessConstraints>(key: K, value: CameraBusinessConstraints[K] | '') {
+    setBudgetAuthorized(false);
+    setCameraBusinessConstraints(previous => {
+      const next = { ...previous };
+      if (value === '') delete next[key]; else next[key] = value;
+      return next;
+    });
+  }
+
   const selectedAgents = ROLE_ORDER.map(role => agents.find(agent => agent.id === selection[role] && agent.role === role && agent.enabled));
   const teamReady = selectedAgents.every(Boolean);
   const liveMissing = selectedAgents.filter(agent => !agent?.hasApiKey || !agent.pricing || agent.pricing.currency !== limits.currency);
   const anotherRunActive = runs.some(item => ['queued', 'running'].includes(item.status));
   const jevReady = !!jevConfig?.enabled && jevConfig.hasApiKey && limits.currency === 'USD';
-  const canLaunch = !loading && !busy && !anotherRunActive && teamReady && (mode === 'demo' ? !!demoCaseId : mode === 'mock-jev' ? !!demoCaseId && budgetAuthorized && jevReady : budgetAuthorized && liveMissing.length === 0 && (verifierEngine === 'llm-rubric' || jevReady));
+  const registeredCase = PRODUCTION_DEMO_CASES.find(item => item.operation === demoCaseId);
+  const registeredRequirement = registeredCase ? caseRequirement(registeredCase) : null;
+  const fixtureReady = capability === 'offline-single-html' && !!registeredCase && !!registeredRequirement && brief === registeredCase.brief && (Object.keys(registeredRequirement) as Array<keyof ProductionRunInput['requirement']>).every(key => requirement[key] === registeredRequirement[key]);
+  const missingRequirement = [brief.trim().length < 3 ? '需求原话（至少 3 字）' : '', !requirement.id.trim() ? '编号' : '', !requirement.source.trim() ? '来源' : '', !requirement.acceptance.trim() ? '业务验收要求' : ''].filter(Boolean);
+  const cameraConstraintConflict = capability === 'camera-scene-v1' && cameraBusinessConstraints.openPalm !== undefined && cameraBusinessConstraints.openPalm === cameraBusinessConstraints.closedFist;
+  const canLaunch = !loading && !busy && !anotherRunActive && teamReady && !cameraConstraintConflict && missingRequirement.length === 0 && (mode === 'demo' ? fixtureReady : mode === 'mock-jev' ? fixtureReady && budgetAuthorized && jevReady : budgetAuthorized && liveMissing.length === 0 && (verifierEngine === 'llm-rubric' || jevReady));
   const realRuns = runs.filter(item => item.evidenceKind === 'real-model');
   const realTerminal = realRuns.filter(item => !['queued', 'running'].includes(item.status));
   const realPassed = realRuns.filter(item => item.status === 'completed' && item.gate?.passed && (item.input.capability !== 'camera-scene-v1' || Boolean(item.cameraVerification?.fullRequirementVerified)));
@@ -171,12 +229,26 @@ export default function ProductionWorkspace() {
       {view === 'workbench' ? <>
         <div className="prod-workflow" aria-label="六角色工作流程">{ROLE_ORDER.map((role, index) => <div className="prod-flow-role" key={role}><span className={`prod-role prod-role-${role}`}>{ROLE_INFO[role].initials}</span><div><b>{ROLE_INFO[role].label}</b><small>{ROLE_INFO[role].responsibility}</small></div><span className="prod-flow-number">{String(index + 1).padStart(2, '0')}</span></div>)}</div>
         <div className="prod-compose">
-          <form className="prod-panel prod-request" onSubmit={start}>
-            <div className="prod-section-heading"><h2>提出一个软件需求</h2><span className="prod-pill">一句话也可以开始</span></div>
-            <label className="prod-capability" htmlFor="prod-capability">受控交付能力<select id="prod-capability" value={capability} onChange={event => { const next = event.target.value as ProductionCapability; setCapability(next); if (next === 'camera-scene-v1') { setMode('live'); setDemoCaseId(undefined); setBudgetAuthorized(false); setNotice('已选择受控摄像头场景。请填写对应需求与验收；原有 Mock 文本不会自动变成真实业务需求。场景行为与摄像头实机验收分别记录。'); } }}><option value="offline-single-html">离线单页 HTML 小型应用</option><option value="camera-scene-v1">摄像头交互 · 声明式三维粒子场景 v1</option></select></label>
-            {capability === 'offline-single-html' ? <><div className="prod-presets" aria-label="三个 Mock 需求">{PRODUCTION_DEMO_CASES.map(item => <button type="button" key={item.id} aria-pressed={demoCaseId === item.operation} onClick={() => { setDemoCaseId(item.operation); setBrief(item.brief); setRequirement(caseRequirement(item)); }}>{item.title}</button>)}</div><p className="prod-caption">以上是团队自拟 Mock，不是来自实际业务的真实需求。夹具仅验证工程链路。</p></> : <p className="prod-camera-boundary">模型只生成受限场景 JSON，固定可信运行时负责渲染与本地摄像头识别。支持 cone / sphere / ring / star、聚散与旋转；不执行模型 HTML / JS。合成场景 Gate 不等于真实摄像头或完整需求通过。</p>}
-            <label htmlFor="prod-brief">需求原话<textarea id="prod-brief" required minLength={3} maxLength={6000} value={brief} onChange={e => { setBrief(e.target.value); setDemoCaseId(undefined); }} placeholder="例如：做一个能筛选、统计和管理待办的页面…" /></label>
-            <details className="prod-settings"><summary>需求来源与验收材料</summary><div className="prod-fields"><label htmlFor="prod-requirement-id">编号<input id="prod-requirement-id" required maxLength={80} value={requirement.id} onChange={e => setRequirement(previous => ({ ...previous, id: e.target.value }))} /></label><label htmlFor="prod-difficulty">难度<select id="prod-difficulty" aria-label="难度" value={requirement.difficulty} onChange={e => setRequirement(previous => ({ ...previous, difficulty: e.target.value as 'low' | 'medium' | 'high' }))}><option value="low">低：单页确定性功能</option><option value="medium">中：多状态交互</option><option value="high">高：复合逻辑</option></select></label><label className="prod-full" htmlFor="prod-source">来源<input id="prod-source" required maxLength={300} value={requirement.source} onChange={e => setRequirement(previous => ({ ...previous, source: e.target.value }))} /></label><label className="prod-full" htmlFor="prod-background">背景<textarea id="prod-background" maxLength={3000} value={requirement.background} onChange={e => setRequirement(previous => ({ ...previous, background: e.target.value }))} /></label><label className="prod-full" htmlFor="prod-acceptance">业务验收要求<textarea id="prod-acceptance" required maxLength={3000} value={requirement.acceptance} onChange={e => { setRequirement(previous => ({ ...previous, acceptance: e.target.value })); setDemoCaseId(undefined); }} /></label></div></details>
+          <form className="prod-panel prod-request" onSubmit={start} onChangeCapture={invalidateAuthorization}>
+            <div className="prod-section-heading"><h2>提出一个软件需求</h2><button className="prod-button" type="button" onClick={newCustomRequirement}>新建自定义需求</button></div>
+            <p className="prod-caption prod-custom-guidance">固定案例可免费运行工程链路；你的新需求仅在真实模型模式执行，补齐来源、验收和配置并授权有限预算后才会启动。</p>
+            <label className="prod-capability" htmlFor="prod-capability">受控交付能力<select id="prod-capability" aria-label="受控交付能力" value={capability} onChange={event => changeCapability(event.target.value as ProductionCapability)}><option value="offline-single-html">离线单页 HTML 小型应用</option><option value="camera-scene-v1">摄像头交互 · 声明式三维粒子场景 v1</option></select></label>
+            {capability === 'offline-single-html' ? <><div className="prod-presets" aria-label="三个 Mock 需求">{PRODUCTION_DEMO_CASES.map(item => <button type="button" key={item.id} aria-pressed={fixtureReady && demoCaseId === item.operation} onClick={() => { setDemoCaseId(item.operation); setBrief(item.brief); setRequirement(caseRequirement(item)); setBudgetAuthorized(false); setNotice('已载入固定 Mock 快照，来源与验收属于该案例；编辑后将解除关联，真实调用需重新授权。'); }}>{item.title}</button>)}</div><p className="prod-caption">以上是团队自拟 Mock，不是来自实际业务的真实需求。夹具仅验证工程链路。</p></> : <p className="prod-camera-boundary">模型只生成受限场景 JSON，固定可信运行时负责渲染与本地摄像头识别。支持 cone / sphere / ring / star、聚散与旋转；不执行模型 HTML / JS。合成场景 Gate 不等于真实摄像头或完整需求通过。</p>}
+            {capability === 'camera-scene-v1' ? <fieldset className="prod-camera-constraints"><legend>明确的手势动作要求（可选）</legend><p className="prod-caption">填写明确要求；未指定的动作允许 Agent 选择，实际验收须冻结相应映射。不会从原话自动猜测或改写来源；合成行为检查仍不代表实机验收。</p><div className="prod-fields">
+              <label htmlFor="prod-open-palm">张掌动作要求<select id="prod-open-palm" aria-label="张掌动作要求" value={cameraBusinessConstraints.openPalm ?? ''} onChange={e => changeCameraConstraint('openPalm', e.target.value as 'scatter' | 'gather' | '')}><option value="">未指定，由 Agent 选择</option><option value="scatter">散开（scatter）</option><option value="gather">聚合（gather）</option></select></label>
+              <label htmlFor="prod-closed-fist">握拳动作要求<select id="prod-closed-fist" aria-label="握拳动作要求" value={cameraBusinessConstraints.closedFist ?? ''} onChange={e => changeCameraConstraint('closedFist', e.target.value as 'scatter' | 'gather' | '')}><option value="">未指定，由 Agent 选择</option><option value="scatter">散开（scatter）</option><option value="gather">聚合（gather）</option></select></label>
+              <label htmlFor="prod-palm-x">横移动作要求<select id="prod-palm-x" aria-label="横移动作要求" value={cameraBusinessConstraints.palmX ?? ''} onChange={e => changeCameraConstraint('palmX', e.target.value as 'rotate' | 'none' | '')}><option value="">未指定，由 Agent 选择</option><option value="rotate">旋转（rotate）</option><option value="none">不启用旋转（none）</option></select></label>
+            </div>{cameraConstraintConflict ? <p className="prod-constraint-error" role="alert">张掌与握拳的要求不能相同。请选择相反动作，或将其中一项设为未指定；当前不能启动。</p> : null}</fieldset> : null}
+            <label htmlFor="prod-brief">需求原话<textarea id="prod-brief" aria-label="需求原话" ref={briefInput} required minLength={3} maxLength={6000} value={brief} onChange={e => editBrief(e.target.value)} placeholder="例如：做一个能筛选、统计和管理待办的页面…" /></label>
+            <details className="prod-settings" open={requirementOpen} onToggle={event => setRequirementOpen(event.currentTarget.open)}><summary>需求来源与验收材料</summary><p className="prod-caption">“真实业务需求”是你的来源声明，不是平台认证；自拟题或改写的 Mock 请保留“自拟 / 演示需求”。</p><div className="prod-fields">
+              <label htmlFor="prod-requirement-kind">需求来源类型<select id="prod-requirement-kind" aria-label="需求来源类型" value={requirement.kind} onChange={e => editRequirement({ kind: e.target.value as 'illustrative' | 'user-declared-real' })}><option value="illustrative">自拟 / 演示需求（illustrative）</option><option value="user-declared-real">用户声明的真实业务需求（user-declared-real）</option></select></label>
+              <label htmlFor="prod-requirement-id">编号<input id="prod-requirement-id" required maxLength={80} value={requirement.id} onChange={e => editRequirement({ id: e.target.value })} placeholder="例如：CUSTOM-001" /></label>
+              <label htmlFor="prod-difficulty">难度<select id="prod-difficulty" aria-label="难度" value={requirement.difficulty} onChange={e => editRequirement({ difficulty: e.target.value as 'low' | 'medium' | 'high' })}><option value="low">低：单页确定性功能</option><option value="medium">中：多状态交互</option><option value="high">高：复合逻辑</option></select></label>
+              <label className="prod-full" htmlFor="prod-source">来源<input id="prod-source" required maxLength={300} value={requirement.source} onChange={e => editRequirement({ source: e.target.value })} placeholder="自拟验证题，或工单 / 用户反馈及出处" /></label>
+              <label className="prod-full" htmlFor="prod-background">背景<textarea id="prod-background" aria-label="背景" maxLength={3000} value={requirement.background} onChange={e => editRequirement({ background: e.target.value })} /></label>
+              <label className="prod-full" htmlFor="prod-acceptance">业务验收要求<textarea id="prod-acceptance" aria-label="业务验收要求" required maxLength={3000} value={requirement.acceptance} onChange={e => editRequirement({ acceptance: e.target.value })} placeholder="写出可观察的功能行为与通过条件…" /></label>
+            </div></details>
+            {missingRequirement.length ? <p className="prod-caption prod-required-guidance" role="status">启动前请补齐：{missingRequirement.join('、')}。不会用旧 Mock 材料自动补全。</p> : null}
 <div className="prod-mode-row"><fieldset className="prod-mode"><legend className="prod-visually-hidden">执行模式</legend><label><input type="radio" name="prod-mode" disabled={capability === 'camera-scene-v1'} checked={mode === 'demo'} onChange={() => setMode('demo')} />工程夹具 / Mock</label><label><input type="radio" name="prod-mode" disabled={capability === 'camera-scene-v1'} checked={mode === 'mock-jev'} onChange={() => setMode('mock-jev')} />Mock + 真实 Jev</label><label><input type="radio" name="prod-mode" checked={mode === 'live'} onChange={() => setMode('live')} />真实模型</label></fieldset><span className="prod-caption">{mode === 'demo' ? '不产生模型费用' : mode === 'mock-jev' ? '仅决策层为真实调用' : '使用本工作区页面配置'}</span></div>
 {mode === 'live' ? <label className="prod-verifier-engine" htmlFor="prod-verifier-engine">候选验证引擎<select id="prod-verifier-engine" aria-label="候选验证引擎" value={verifierEngine} onChange={e => setVerifierEngine(e.target.value as 'llm-rubric' | 'jev-cascade')}><option value="llm-rubric">LLM 序数评审</option><option value="jev-cascade">Jev 决策 → 有界独立 LLM 复核</option></select></label> : null}
             <details className="prod-settings"><summary>候选验证与有界执行预算</summary><p className="prod-caption">默认本地单次上限 5 USD，用于控制性价比；不是用户指定的总预算。双候选增加模型调用，Verifier 分数为序数评分，不是正确率。</p><div className="prod-fields">
@@ -189,15 +261,15 @@ export default function ProductionWorkspace() {
               <label htmlFor="prod-cost-limit">单次估算费用上限<input id="prod-cost-limit" type="number" required min={0.01} max={10000} step={0.01} value={limits.maxCost} onChange={e => setLimits(previous => ({ ...previous, maxCost: Number(e.target.value) }))} /></label>
               <label htmlFor="prod-currency">币种<select id="prod-currency" aria-label="币种" value={limits.currency} onChange={e => setLimits(previous => ({ ...previous, currency: e.target.value as 'USD' | 'CNY' }))}><option value="USD">USD</option><option value="CNY">CNY</option></select></label>
             </div></details>
-            {mode !== 'demo' ? <div className="prod-live-notice"><p>{mode === 'mock-jev' ? '研发与项目经理产物来自固定夹具；只有 Jev 决策真实，不能计为自主研发或良品率。' : liveMissing.length ? `请先在研发团队配置所有已选角色的 Key，以及与 ${limits.currency} 一致的每百万 Token 单价。当前 ${liveMissing.length} 个角色不满足。` : '六角色配置齐备。价格由你提供，账本为估算，不是供应商最终账单。'}</p>{mode === 'mock-jev' || verifierEngine === 'jev-cascade' ? <p>{jevReady ? `Jev 已启用：每维最低 ${jevConfig!.minScore}/4，分布集中度 ≥ ${jevConfig!.minConfidence}；这些门限尚未校准，不是正确率。` : '请在决策设置启用并配置 Jev Key；当前 Jev 预算只支持 USD。'}{mode === 'mock-jev' && !demoCaseId ? ' 自定义需求不适用固定夹具，请重新选择 Mock 需求。' : ''}</p> : null}<label className="prod-checkbox"><input type="checkbox" checked={budgetAuthorized} onChange={e => setBudgetAuthorized(e.target.checked)} />我授权本次在上述有限预算内执行真实调用；不迁移原项目 Key。</label></div> : !demoCaseId ? <p className="prod-live-notice">自定义需求或验收需要真实模型处理。请重新选择上方 Mock 需求运行对应的固定工程夹具，或切换真实模型。</p> : null}
+            {mode !== 'demo' ? <div className="prod-live-notice"><p>{mode === 'mock-jev' ? '研发与项目经理产物来自固定夹具；只有 Jev 决策真实，不能计为自主研发或良品率。' : liveMissing.length ? `请先在研发团队配置所有已选角色的 Key，以及与 ${limits.currency} 一致的每百万 Token 单价。当前 ${liveMissing.length} 个角色不满足。` : '六角色配置齐备。价格由你提供，账本为估算，不是供应商最终账单。'}</p>{mode === 'mock-jev' || verifierEngine === 'jev-cascade' ? <p>{jevReady ? `Jev 已启用：每维最低 ${jevConfig!.minScore}/4，分布集中度 ≥ ${jevConfig!.minConfidence}；这些门限尚未校准，不是正确率。` : '请在决策设置启用并配置 Jev Key；当前 Jev 预算只支持 USD。'}{mode === 'mock-jev' && !demoCaseId ? ' 自定义需求不适用固定夹具，请重新选择 Mock 需求。' : ''}</p> : null}<label className="prod-checkbox"><input id="prod-budget-authorization" type="checkbox" checked={budgetAuthorized} onChange={e => setBudgetAuthorized(e.target.checked)} />我授权本次在上述有限预算内执行真实调用；不迁移原项目 Key。</label></div> : !demoCaseId ? <p className="prod-live-notice">自定义需求或验收需要真实模型处理。请重新选择上方 Mock 需求运行对应的固定工程夹具，或切换真实模型。</p> : null}
             <div className="prod-launch"><p className="prod-caption">全局最多 {limits.maxRepairCycles} 次自动返修：阶段生成纠错与 Gate 返修共用该预算；超限、超时、验证拒绝会保存失败证据，不会无限循环。</p><button className="prod-button prod-primary" disabled={!canLaunch} type="submit"><Mark />{busy ? '正在处理…' : mode === 'demo' ? '运行 Mock 链路' : mode === 'mock-jev' ? '运行 Mock + Jev 验证' : '启动真实生产'}</button></div>
           </form>
-          <aside className="prod-panel prod-team-selector"><div className="prod-section-heading"><h2>本次研发团队</h2><button className="prod-link-button" type="button" onClick={() => setView('team')}>配置团队</button></div>{ROLE_ORDER.map(role => { const chosen = agents.find(agent => agent.id === selection[role]); return <div className="prod-team-slot" key={role}><span className={`prod-role prod-role-${role}`}>{ROLE_INFO[role].initials}</span><div><label htmlFor={`prod-agent-${role}`}>{ROLE_INFO[role].label}<select id={`prod-agent-${role}`} aria-label={`${ROLE_INFO[role].label} Agent`} value={selection[role] ?? ''} onChange={e => setSelection(previous => ({ ...previous, [role]: e.target.value }))}><option value="" disabled>请选择启用的角色 Agent</option>{agents.filter(agent => agent.role === role && agent.enabled).map(agent => <option key={agent.id} value={agent.id}>{agent.name}</option>)}</select></label><small>{chosen ? `${chosen.provider} · ${chosen.modelId}` : '尚未配置'}</small></div><span className={`prod-key-status ${chosen?.hasApiKey ? 'ready' : ''}`}>{chosen?.hasApiKey ? 'Key 已配置' : '无 Key'}</span></div>; })}<p className="prod-caption prod-team-footnote">每个角色可使用独立模型。不同 Model ID 仅说明配置不同，不证明底层权重独立。Key 不会在页面回显。</p></aside>
+          <aside className="prod-panel prod-team-selector"><div className="prod-section-heading"><h2>本次研发团队</h2><button className="prod-link-button" type="button" onClick={() => setView('team')}>配置团队</button></div>{ROLE_ORDER.map(role => { const chosen = agents.find(agent => agent.id === selection[role]); return <div className="prod-team-slot" key={role}><span className={`prod-role prod-role-${role}`}>{ROLE_INFO[role].initials}</span><div><label htmlFor={`prod-agent-${role}`}>{ROLE_INFO[role].label}<select id={`prod-agent-${role}`} aria-label={`${ROLE_INFO[role].label} Agent`} value={selection[role] ?? ''} onChange={e => { setSelection(previous => ({ ...previous, [role]: e.target.value })); setBudgetAuthorized(false); }}><option value="" disabled>请选择启用的角色 Agent</option>{agents.filter(agent => agent.role === role && agent.enabled).map(agent => <option key={agent.id} value={agent.id}>{agent.name}</option>)}</select></label><small>{chosen ? `${chosen.provider} · ${chosen.modelId}` : '尚未配置'}</small></div><span className={`prod-key-status ${chosen?.hasApiKey ? 'ready' : ''}`}>{chosen?.hasApiKey ? 'Key 已配置' : '无 Key'}</span></div>; })}<p className="prod-caption prod-team-footnote">每个角色可使用独立模型。不同 Model ID 仅说明配置不同，不证明底层权重独立。Key 不会在页面回显。</p></aside>
         </div>
         <div className="prod-section-heading prod-history-heading"><div><h2>执行与交付</h2><span className="prod-caption">全部启动尝试保留在账本</span></div><label className="prod-history-select" htmlFor="prod-history">选择运行<select id="prod-history" aria-label="选择运行" value={run?.id ?? ''} onChange={e => void selectRun(e.target.value)}><option value="" disabled>暂无运行</option>{runs.map(item => <option key={item.id} value={item.id}>{item.input.requirement.id} · {item.evidenceKind === 'real-model' ? '真实' : 'Mock'} · {STATUS[item.status]} · {item.createdAt.slice(11, 19)}</option>)}</select></label></div>
         {run ? <RunDetail run={run} detail={detail} setDetail={setDetail} preview={preview} setPreview={setPreview} cancel={cancel} busy={busy} /> : <div className="prod-empty"><Mark /><h3>等待第一份交付证据</h3><p>先运行 Mock 查看端到端流程；真实模型通过冻结 Gate 后，才会计入自主交付成功。</p></div>}
       </> : null}
-      {view === 'decision' ? <JevSettings onConfigChange={setJevConfig} /> : null}
+      {view === 'decision' ? <JevSettings onConfigChange={value => { setJevConfig(value); setBudgetAuthorized(false); }} /> : null}
       {view === 'team' ? <><div className="prod-section-heading"><p className="prod-muted">预设角色可复制与重配。API Key 仅写入本分支控制面，不写入 Prompt、源码、日志或导出。</p><button className="prod-button prod-primary" type="button" onClick={() => setEditing('new')}>创建 Agent</button></div><div className="prod-agent-grid">{agents.map(agent => <article className="prod-panel prod-agent-card" key={agent.id}><div className="prod-agent-top"><span className={`prod-role prod-role-${agent.role}`}>{ROLE_INFO[agent.role].initials}</span><span className={`prod-pill ${agent.enabled ? '' : 'prod-pill-muted'}`}>{agent.enabled ? '已启用' : '已停用'}</span></div><h2>{agent.name}</h2><p className="prod-muted">{ROLE_INFO[agent.role].label} · {ROLE_INFO[agent.role].responsibility}</p><dl><div><dt>Provider / Model</dt><dd>{agent.provider} / {agent.modelId}</dd></div><div><dt>Base URL</dt><dd>{agent.baseUrl}</dd></div><div><dt>API Key</dt><dd>{agent.hasApiKey ? '已配置 · 仅显示脱敏状态' : '未配置'}</dd></div><div><dt>每百万 Token 估算单价</dt><dd>{agent.pricing ? `输入 ${agent.pricing.inputPerMillion} / 输出 ${agent.pricing.outputPerMillion} ${agent.pricing.currency}` : 'unknown · 未填写价格'}</dd></div></dl><div className="prod-agent-actions"><button className="prod-button" type="button" onClick={() => setEditing(agent)}>编辑</button><button className="prod-button" disabled={busy} type="button" onClick={() => void changeAgent('clone', agent)}>复制</button><button className="prod-button prod-danger" disabled={busy} type="button" onClick={() => void changeAgent('delete', agent)}>删除</button></div></article>)}</div></> : null}
 {view === 'report' ? <section className="prod-report"><div className="prod-metrics"><Metric label="真实模型启动尝试" value={String(realRuns.length)} note="包括失败、取消与中断" /><Metric label="真实自主交付良品率" value={goodRate} note={`${realPassed.length} 次完整验收通过 / ${realTerminal.length} 次终态尝试（含失败、取消、中断与摄像头完整验收待验证）`} /><Metric label="工程 / Mock 尝试" value={String(fixtureRuns.length)} note="不计入真实模型良品率" /><Metric label="实际业务需求" value={String(new Set(realRuns.filter(item => item.input.requirement.kind === 'user-declared-real').map(item => item.input.requirement.id)).size)} note="当前三个需求明确为 Mock" /></div><div className="prod-panel prod-report-body"><h2>七项申报材料的证据入口</h2><p>输入快照、模型配置、Prompt、候选评审、冻结契约、浏览器 Gate、原始调用和成本口径按运行留存。预测增效与未来能力须单独标注，不能充当实测。</p><a className="prod-button" href="/api/production/report" target="_blank" rel="noreferrer noopener">查看申报证据汇总 JSON</a><ol><li>基本信息与团队：六角色配置、管线类型与范围。</li><li>管线设计：项目经理有限闭环、候选 Verifier 与不可绕过的行为门禁。</li><li>需求清单：至少三项自拟 Mock；不冒充真实业务需求。</li><li>执行记录：从工作台选择运行，下载输入、证据与最终交付物。</li><li>指标统计：真实模型与工程夹具分开统计，unknown 不记作零。</li><li>归因改进：失败运行与 Gate 原始结果保留，不覆盖负结果。</li><li>L4 自评：依据有界操作定义；无官方参考文件，不宣称官方认证。</li></ol><aside className="prod-boundary">已接入 TypeSafe Jev HTTP 类型化决策，实测质量与用量以原始记录为准。开源 AnyJev 的本地推断与标注校准仍是下一阶段参考；LLM 序数评审不是原论文 score-token 算法的复现。</aside></div></section> : null}
       <footer className="prod-footer"><span>独立生产研发线 · 不修改冻结申报基线</span><span>实测 / 夹具 / 预测 / 待办分别标注</span></footer>

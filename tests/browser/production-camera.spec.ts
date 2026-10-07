@@ -23,7 +23,9 @@ test('camera capability is live-only and explicitly budgeted; its bounded Gate n
   await expect(page.getByLabel('Mock + 真实 Jev', { exact: true })).toBeDisabled();
   await expect(page.getByRole('button', { name: '启动真实生产' })).toBeDisabled();
   await page.getByLabel('需求原话').fill('制作一个可通过本机摄像头控制聚散与旋转的通用粒子场景');
-  await page.getByText('需求来源与验收材料', { exact: true }).click();
+  await expect(page.getByLabel('编号', { exact: true })).toBeVisible();
+  await page.getByLabel('编号', { exact: true }).fill('UI-CAMERA-CUSTOM');
+  await page.getByLabel('来源', { exact: true }).fill('工程浏览器自拟摄像头需求，非真实业务来源');
   await page.getByLabel('业务验收要求').fill('固定可信运行时；摄像头默认关闭且只在本机识别；场景行为和实机验收分开记录');
   await page.getByLabel(/我授权本次在上述有限预算/).check();
   await expect(page.getByRole('button', { name: '启动真实生产' })).toBeEnabled();

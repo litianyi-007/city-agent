@@ -10,7 +10,7 @@ const mirror: AcceptanceCheck[] = [
 ];
 
 test('v2 production contract refuses selector aliases that only mirror the native input value', () => {
-  assert.equal(PROMPT_VERSION, 'production-html-v6'); assert.equal(ACCEPTANCE_CONTRACT_VERSION, 'production-acceptance-v2');
+  assert.equal(PROMPT_VERSION, 'production-html-v7'); assert.equal(ACCEPTANCE_CONTRACT_VERSION, 'production-acceptance-v3');
   assert.throws(() => testsSchema.parse({ checks: mirror }), /业务结果/);
   assert.throws(() => testsSchema.parse({ checks: [mirror[0], { name: 'Focus and echo only', steps: [{ action: 'click', selector: '#input' }, { action: 'assertValue', selector: 'input', value: '' }] }] }), /业务结果/);
 });

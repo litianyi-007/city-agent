@@ -26,7 +26,7 @@ export type JevDimension = 'coverage' | 'consistency' | 'scope';
 export interface JevScoreAnswer { score: number; probabilities: Record<string, number>; confidence: number; legend: Record<string, string>; }
 export interface JevCandidateScore { candidateId: string; dimensions: Record<JevDimension, JevScoreAnswer>; meanScore: number; minimumScore: number; scopeProbability: number; scopeCertainty: number; qualified: boolean; stronglyRejected: boolean; }
 export interface JevChoiceAnswer { choice: string; probabilities: Record<string, number>; confidence: number; }
-export interface JevRequestSnapshot { model: string; state: JevCandidateContext & { trustBoundary: string; phaseReview?: ProductionPhaseRubric }; questions: Record<string, { type: 'score' | 'choice' | 'noul'; instructions: string; criteria?: string[] | Record<string, string> }>; }
+export interface JevRequestSnapshot { model: string; state: JevCandidateContext & { requestLayoutVersion?: string; trustBoundary: string; phaseReview?: ProductionPhaseRubric }; questions: Record<string, { type: 'score' | 'choice' | 'noul'; instructions: string; criteria?: string[] | Record<string, string> }>; }
 export interface JevEvaluation {
   policyVersion: string;
   status: 'accepted' | 'uncertain' | 'rejected' | 'error';
