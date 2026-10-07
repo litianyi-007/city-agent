@@ -6,20 +6,36 @@ import type { CompiledPopulation } from '../server/population/model';
 import type { ResidentAgentPublic } from '../server/research/residents';
 import type { RegionPack, auditPack } from '../server/population/model';
 import type { SurveyAnalysis, samplingReport } from './survey-analysis';
+import { residentPersonaSchema, type ResidentPersona } from './resident-persona';
 
-export const SURVEY_VERSION = 'coverage-survey-2.0';
+export const SURVEY_VERSION = 'coverage-survey-2.1-persona-layers';
 export const RESIDENT_SYSTEM_PROMPT = `你是虚拟受访者。只代表本次给定的合成画像回答问卷，不代表滨江真人。
 画像中人口归属为统计约束，细分年龄、职业、家庭和资格为显式假设；未知信息可回答不确定，不编造外部事实。
+可选五层人格、成长、教育、当前家庭、工作/收入仅为用户情景假设，不是DNA、遗传、真实测量或人口证据。未知不得补成默认中间值；不得据学历或婚姻自动推断购买意愿。
 不能读取其他受访者回答。不得把年龄、性别或街道直接等同于收入、人格或商品偏好。
 请仅输出JSON：{"residentId":"给定ID","answers":[{"questionId":"给定题目ID","value":答案}]}。
 单选用选项ID，多选用不重复选项ID数组，量表用整数，数值用有限数值，开放题用字符串；遵守题目范围和选项数。
 回答全部必答题，保留题目ID，不改变问卷，不输出Markdown。`;
 type Scalar = string | number | boolean;
+const profileText = z.string().min(1).max(2000).refine(value => value.trim().length > 0, '画像标识不可为空白');
+export const profileSchema = z.object({
+  id: profileText, presetId: profileText, presetName: profileText,
+  street: profileText, streetName: profileText, ageBand: profileText, sex: profileText,
+  age: z.number().int().min(0).max(Number.MAX_SAFE_INTEGER),
+  attributes: z.array(z.object({
+    key: z.string().regex(/^[a-zA-Z][a-zA-Z0-9_.-]{0,63}$/),
+    value: z.union([z.string().min(1).max(2000), z.number().finite(), z.boolean()]),
+    provenance: z.enum(['infer', 'assumption']), evidenceIds: z.array(profileText).max(100),
+  }).strict()).max(100),
+  description: z.string().max(2000), assumptions: z.array(z.string().max(2000)).max(100), behaviorNotes: z.string().max(2000),
+  persona: residentPersonaSchema.optional(),
+}).strict();
 export interface Profile {
   id: string; presetId: string; presetName: string;
   street: string; streetName: string; ageBand: string; sex: string; age: number;
   attributes: { key: string; value: Scalar; provenance: 'infer' | 'assumption'; evidenceIds: string[] }[];
   description: string; assumptions: string[]; behaviorNotes: string;
+  persona?: ResidentPersona;
 }
 export interface Answer { questionId: string; value: string | string[] | number | null }
 export interface ResponseRecord {
@@ -28,13 +44,39 @@ export interface ResponseRecord {
   structureValid?: boolean; coherence?: ReturnType<typeof checkCoherence>;
 }
 function rng(seed: number) { let n = seed >>> 0; return () => { n = (Math.imul(n, 1664525) + 1013904223) >>> 0; return n / 4294967296; }; }
-function matches(value: Scalar | undefined, filter: ResearchTask['population']['filters'][number]) {
+export function matchesPopulationFilter(value: Scalar | undefined, filter: ResearchTask['population']['filters'][number]) {
   if (filter.op === 'eq') return value === filter.value;
   if (filter.op === 'in') return filter.values.includes(value as Scalar);
   if (typeof value !== 'number') return false;
   if (filter.op === 'gte') return value >= filter.value;
   if (filter.op === 'lte') return value <= filter.value;
   return filter.op === 'between' && value >= filter.min && value <= filter.max;
+}
+
+/** Internal frozen-frame consistency only; not a certification of a real resident or qualification. */
+export function validateProfileEligibility(task: ResearchTask, profile: Profile, model: CompiledPopulation, preset?: Pick<ResidentAgentPublic, 'population'>): void {
+  profileSchema.parse(profile);
+  const compatible = (frame: ResearchTask['population']) => frame.regionCode === model.region.code && frame.period === model.period && frame.unit === 'person';
+  if (!compatible(task.population) || preset && !compatible(researchTaskSchema.shape.population.parse(preset.population))) throw new Error('画像、问卷或冻结预设的人口框不一致。');
+  const area = model.areas.find(item => item.code === profile.street);
+  const band = model.ageBands.find(item => item.id === profile.ageBand);
+  const cell = model.cells.find(item => item.areaCode === profile.street && item.ageBand === profile.ageBand && item.sex === profile.sex);
+  if (!area || profile.streetName !== area.name || !band || profile.age < band.minAge || band.maxAge !== null && profile.age > band.maxAge
+    || !cell || !cell.eligible || cell.population <= 0) throw new Error('画像年龄、街道、性别或人口单元不符合冻结人口快照。');
+  const attributes = new Map(profile.attributes.map(attribute => [attribute.key, attribute]));
+  if (attributes.size !== profile.attributes.length) throw new Error('画像属性不能重复。');
+  for (const field of ['street', 'ageBand', 'sex', 'age'] as const) {
+    if (attributes.get(field)?.value !== profile[field]) throw new Error(`画像 ${field} 与属性镜像不一致。`);
+  }
+  const evidence = [...cell.evidenceIds].sort();
+  for (const attribute of profile.attributes) {
+    if (new Set(attribute.evidenceIds).size !== attribute.evidenceIds.length) throw new Error('画像属性证据引用不能重复。');
+    if (['street', 'ageBand', 'sex'].includes(attribute.key)) {
+      if (attribute.provenance !== 'infer' || fingerprint([...attribute.evidenceIds].sort()) !== fingerprint(evidence)) throw new Error('人口归属属性须保留推断标记与冻结单元的证据链。');
+    } else if (attribute.provenance !== 'assumption' || attribute.evidenceIds.length) throw new Error('具体年龄与其他资格属性必须保留为无人口证据的情景假设，不得升级为事实或推断。');
+  }
+  const values = Object.fromEntries(profile.attributes.map(attribute => [attribute.key, attribute.value]));
+  if (![...task.population.filters, ...(preset?.population.filters ?? [])].every(filter => matchesPopulationFilter(values[filter.field], filter))) throw new Error('画像不满足问卷与冻结预设的资格筛选交集；未知资格不能充当已满足。');
 }
 
 /** Coverage sampling for engineering experiments, deliberately without population weights. */
@@ -47,6 +89,7 @@ export function buildProfiles(taskInput: ResearchTask, model: CompiledPopulation
   if (task.requestedOutputs.some(value => ['site-recommendation', 'market-forecast', 'deploy', 'backend-service'].includes(value))) throw new Error('当前问卷执行不支持真实选址、预测、部署或后端服务输出。');
   const random = rng(seed);
   const plans = presets.map(preset => {
+    const persona = preset.persona ? residentPersonaSchema.parse(preset.persona) : undefined;
     if (preset.population.regionCode !== task.population.regionCode || preset.population.period !== task.population.period || preset.population.unit !== 'person') throw new Error('人群预设与问卷统计框不一致。');
     const filters = [...task.population.filters, ...preset.population.filters];
     const draw = (cell: CompiledPopulation['cells'][number]) => {
@@ -67,13 +110,13 @@ export function buildProfiles(taskInput: ResearchTask, model: CompiledPopulation
           const value = filter.op === 'eq' ? filter.value : filter.op === 'in' ? filter.values[Math.floor(random() * filter.values.length)] : filter.op === 'between' ? filter.min : filter.value;
           if (!(filter.field in attributes)) (attributes as Record<string, Scalar>)[filter.field] = value;
         }
-        if (filters.every(filter => matches((attributes as Record<string, Scalar>)[filter.field], filter))) return attributes;
+        if (filters.every(filter => matchesPopulationFilter((attributes as Record<string, Scalar>)[filter.field], filter))) return attributes;
       }
       return null;
     };
     const candidates = model.cells.filter(cell => cell.eligible && cell.population > 0 && draw(cell) !== null);
     if (!candidates.length) throw new Error(`预设“${preset.name}”的条件交集为空或无法形成合成画像。`);
-    return { preset, candidates, draw };
+    return { preset, persona, candidates, draw };
   });
   const cellCounts = new Map<string, number>(); const streetCounts = new Map<string, number>(); const seen = new Set<string>();
   return Array.from({ length: count }, (_, index) => {
@@ -82,14 +125,15 @@ export function buildProfiles(taskInput: ResearchTask, model: CompiledPopulation
       (cellCounts.get(a.cell.id) ?? 0) - (cellCounts.get(b.cell.id) ?? 0) || (streetCounts.get(a.cell.areaCode) ?? 0) - (streetCounts.get(b.cell.areaCode) ?? 0) || a.tie - b.tie);
     const cell = ranked[0].cell;
     let attributes = plan.draw(cell)!;
-    for (let attempt = 0; attempt < 100 && seen.has(fingerprint({ attributes, description: plan.preset.description, behaviorNotes: plan.preset.behaviorNotes })); attempt++) attributes = plan.draw(cell)!;
-    seen.add(fingerprint({ attributes, description: plan.preset.description, behaviorNotes: plan.preset.behaviorNotes }));
+    for (let attempt = 0; attempt < 100 && seen.has(fingerprint({ attributes, description: plan.preset.description, behaviorNotes: plan.preset.behaviorNotes, persona: plan.persona })); attempt++) attributes = plan.draw(cell)!;
+    seen.add(fingerprint({ attributes, description: plan.preset.description, behaviorNotes: plan.preset.behaviorNotes, persona: plan.persona }));
     cellCounts.set(cell.id, (cellCounts.get(cell.id) ?? 0) + 1); streetCounts.set(cell.areaCode, (streetCounts.get(cell.areaCode) ?? 0) + 1);
     const { street, ageBand, sex, age } = attributes;
     return { id: `resident-${String(index + 1).padStart(3, '0')}`, presetId: plan.preset.id, presetName: plan.preset.name,
       street: String(street), streetName: model.areas.find(area => area.code === street)!.name, ageBand: String(ageBand), sex: String(sex), age: Number(age),
       attributes: Object.entries(attributes).map(([key, value]) => ({ key, value, provenance: ['street', 'ageBand', 'sex'].includes(key) ? 'infer' as const : 'assumption' as const, evidenceIds: ['street', 'ageBand', 'sex'].includes(key) ? cell.evidenceIds : [] })),
       description: plan.preset.description,
+      ...(plan.persona ? { persona: structuredClone(plan.persona) } : {}),
       assumptions: [...plan.preset.assumptions, '画像说明与行为均为用户情景假设，不是人口事实；与明确年龄/街道冲突时以结构化画像为准。', '具体年龄为年龄档内的情景赋值；60+生成上限90岁不是人口事实。', '覆盖抽样无人口权重；预设资格不能赋予总体代表性。'], behaviorNotes: plan.preset.behaviorNotes };
   });
 }
@@ -125,7 +169,7 @@ export function validateAnswers(task: ResearchTask, profileId: string, raw: stri
       : question.type === 'multiple' ? Array.isArray(value) && new Set(value).size === value.length && value.length >= question.minSelections && value.length <= question.maxSelections && value.every(id => question.options.some(option => option.id === id))
       : question.type === 'scale' ? typeof value === 'number' && Number.isInteger(value) && value >= question.min && value <= question.max
       : question.type === 'number' ? typeof value === 'number' && value >= question.min && value <= question.max
-      : typeof value === 'string' && value.length > 0 && value.length <= question.maxLength;
+      : typeof value === 'string' && value.trim().length > 0 && value.length <= question.maxLength;
     if (!valid) throw new Error(`答卷值违反题目契约：${question.id}`);
   }
   return result.answers;
@@ -171,7 +215,7 @@ export interface SurveyRun {
   state?: 'running' | 'completed' | 'cancelled' | 'stopped'; hashAlgorithm?: string;
   populationSnapshot?: RegionPack; populationAudit?: ReturnType<typeof auditPack>;
   pricing?: { currency: 'CNY'; inputPerMillion: number | null; outputPerMillion: number | null; suppliedAt: string; source: string };
-  timingBasis?: string; parameters?: { maxOutputTokens: number; timeoutMs: number; retries: number; concurrency: number; temperature: null; providerSeed: null; answerCache: false; reasoning?: string };
+  timingBasis?: string; parameters?: { maxOutputTokens: number; timeoutMs: number; retries: number; concurrency: number; temperature: null; providerSeed: null; answerCache: false; reasoning?: string; fixturePolicyId?: string };
   presetSnapshots?: Omit<ResidentAgentPublic, 'hasApiKey'>[];
   sampling?: ReturnType<typeof samplingReport>; analysis?: SurveyAnalysis;
   exposure?: 'full' | 'no-persona' | 'demographics-only'; experiment?: { id: string; arm: string };

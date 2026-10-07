@@ -1,0 +1,33 @@
+{
+  "checks": [
+    {
+      "id": "child-snacks",
+      "origin": "https://litianyi-007.github.io",
+      "execution": "actual-browser-provider-fetch",
+      "sourceRunId": "fa25fdc0-1621-434c-97f0-ca2e3db4053b",
+      "repeatedProfileId": "resident-001",
+      "countedInResidentCohort": false,
+      "state": "completed",
+      "status": 200,
+      "raw": "{\"residentId\":\"resident-001\",\"answers\":[{\"questionId\":\"eligibility\",\"value\":\"eligible\"},{\"questionId\":\"purchase-role\",\"value\":[\"purchaser\",\"permission\",\"shared\"]},{\"questionId\":\"child-evidence\",\"value\":\"not-collected\"},{\"questionId\":\"past-frequency\",\"value\":\"unknown\"},{\"questionId\":\"past-categories\",\"value\":\"unknown\"},{\"questionId\":\"permission-factors\",\"value\":[\"ingredients\",\"portion\",\"traceability\",\"school-rules\"]},{\"questionId\":\"child-own-taste\",\"value\":null},{\"questionId\":\"purchase-intent\",\"value\":\"maybe\"},{\"questionId\":\"monthly-budget\",\"value\":null},{\"questionId\":\"package-size\",\"value\":\"unknown\"},{\"questionId\":\"price-per20g\",\"value\":\"unknown\"},{\"questionId\":\"planned-channels\",\"value\":[\"unknown\"]},{\"questionId\":\"travel-minutes\",\"value\":null},{\"questionId\":\"reachable-streets\",\"value\":[\"puyan\"]},{\"questionId\":\"traceability-importance\",\"value\":5},{\"questionId\":\"purchase-barriers\",\"value\":[\"allergen\",\"rules\",\"freshness\",\"availability\"]},{\"questionId\":\"needed-evidence\",\"value\":\"需要确认成分与过敏提示、生产日期与来源、份量，以及学校与家庭对零食的具体规定；孩子本人口味尚未采集，不能替代。\"}]}",
+      "finishReason": "stop",
+      "inputTokens": 2701,
+      "outputTokens": 287
+    },
+    {
+      "id": "pet-snacks",
+      "origin": "https://litianyi-007.github.io",
+      "execution": "actual-browser-provider-fetch",
+      "sourceRunId": "0348ca4c-ad0c-4545-b17b-eabb3463a549",
+      "repeatedProfileId": "resident-001",
+      "countedInResidentCohort": false,
+      "state": "completed",
+      "status": 200,
+      "raw": "{\n  \"residentId\": \"resident-001\",\n  \"answers\": [\n    {\n      \"questionId\": \"pet-type\",\n      \"value\": \"cat\"\n    },\n    {\n      \"questionId\": \"purchase-role\",\n      \"value\": [\n        \"purchaser\",\n        \"shared\"\n      ]\n    },\n    {\n      \"questionId\": \"snack-boundary\",\n      \"value\": \"understood\"\n    },\n    {\n      \"questionId\": \"past-frequency\",\n      \"value\": \"unknown\"\n    },\n    {\n      \"questionId\": \"past-snack-categories\",\n      \"value\": [\n        \"unknown\"\n      ]\n    },\n    {\n      \"questionId\": \"purchase-intent\",\n      \"value\": \"maybe\"\n    },\n    {\n      \"questionId\": \"monthly-budget\",\n      \"value\": null\n    },\n    {\n      \"questionId\": \"package-size\",\n      \"value\": \"g50\"\n    },\n    {\n      \"questionId\": \"price-per50g\",\n      \"value\": \"ten-twenty\"\n    },\n    {\n      \"questionId\": \"planned-channels\",\n      \"value\": [\n        \"online\",\n        \"pet-shop\",\n        \"pickup\"\n      ]\n    },\n    {\n      \"questionId\": \"online-handoff\",\n      \"value\": \"both\"\n    },\n    {\n      \"questionId\": \"travel-minutes\",\n      \"value\": 15\n    },\n    {\n      \"questionId\": \"reachable-streets\",\n      \"value\": [\n        \"puyan\",\n        \"xixing\",\n        \"changhe\"\n      ]\n    },\n    {\n      \"questionId\": \"purchase-barriers\",\n      \"value\": [\n        \"suitability\",\n        \"ingredients\",\n        \"freshness\",\n        \"traceability\"\n      ]\n    },\n    {\n      \"questionId\": \"price10-intent\",\n      \"value\": \"yes\"\n    },\n    {\n      \"questionId\": \"price20-intent\",\n      \"value\": \"maybe\"\n    },\n    {\n      \"questionId\": \"traceability-importance\",\n      \"value\": null\n    },\n    {\n      \"questionId\": \"needed-evidence\",\n      \"value\": \"不确定\"\n    }\n  ]\n}",
+      "finishReason": "stop",
+      "inputTokens": 2828,
+      "outputTokens": 476
+    }
+  ],
+  "note": "真实Pages origin的模型协议/CORS检查；不等于新版页面长问卷输入全流程，不增加独立居民分母。"
+}

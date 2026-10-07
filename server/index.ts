@@ -1,6 +1,8 @@
 import express from 'express';
 import type { ErrorRequestHandler, Request, Response } from 'express';
 import { existsSync, realpathSync, statSync } from 'node:fs';
+import { mkdir, writeFile } from 'node:fs/promises';
+import { randomUUID } from 'node:crypto';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { z } from 'zod';
@@ -14,6 +16,10 @@ import { preflightResearchTask, researchTaskSchema } from './research/contract.j
 import { getResearchTemplates } from './research/templates.js';
 import { getResidentTemplates, residentCreateSchema, residentPatchSchema, researchProjectInputSchema } from './research/residents.js';
 import { createSurveyService } from './research/surveys.js';
+import { runRole } from './harness.js';
+import { planResearch, ResearchPlanningError } from './research/planning.js';
+import { researchPlanningInputSchema } from '../shared/research-planning.js';
+import { createBusinessEvidenceTemplate, validateBusinessEvidence } from '../shared/business-evidence.js';
 
 const agentFields = {
   name: z.string().trim().min(1).max(100),
@@ -40,6 +46,10 @@ const runSchema = z.object({
   seed: z.number().int().min(0).max(2147483647).default(42),
   researchSurveyId: z.string().uuid().optional(),
 }).strict();
+const planningRequestSchema = researchPlanningInputSchema.extend({
+  agentId: z.string().uuid(), acknowledgeCost: z.literal(true),
+}).strict();
+const businessEvidenceRequestSchema = z.object({ pack: z.unknown(), requirements: z.unknown().optional() }).strict();
 
 function parameter(request: Request, name: string): string {
   const value = request.params[name];
@@ -58,10 +68,13 @@ function rejectUnsupportedAgentOptions(body: unknown): void {
 }
 
 /** Exported app factory permits exercising the actual HTTP API without model calls. */
-export function createApp(store: CityStore, suppliedRunner?: Runner) {
+export function createApp(store: CityStore, suppliedRunner?: Runner, planningRunner: typeof runRole = runRole) {
   const app = express();
   const runner = suppliedRunner ?? createRunner(store);
   const surveys = createSurveyService(store);
+  let planningActive = false;
+  const webPort = process.env.CITY_AGENT_WEB_PORT || '5180';
+  if (!/^\d+$/.test(webPort) || Number(webPort) < 1 || Number(webPort) > 65535) throw new Error('CITY_AGENT_WEB_PORT must be a valid TCP port.');
   app.disable('x-powered-by');
   app.use((request, response, next) => {
     response.setHeader('X-Content-Type-Options', 'nosniff');
@@ -79,7 +92,7 @@ export function createApp(store: CityStore, suppliedRunner?: Runner) {
       try {
         const origin = new URL(originHeader);
         allowed = ['http:', 'https:'].includes(origin.protocol) && isLoopback(origin.hostname)
-          && (origin.host === host.host || ['5173', '4173'].includes(origin.port));
+          && (origin.host === host.host || ['5173', '4173', webPort].includes(origin.port));
       } catch { /* Invalid and opaque origins are denied. */ }
       if (!allowed) { response.status(403).json({ error: '不允许此来源的请求。' }); return; }
     }
@@ -111,6 +124,58 @@ export function createApp(store: CityStore, suppliedRunner?: Runner) {
     schemaVersion: '1.0', stage: 'preflight', executorAvailable: false,
     templates: getResearchTemplates(),
   }));
+  app.get('/api/research/business-evidence/template', (_request, response) => response.json(createBusinessEvidenceTemplate()));
+  app.post('/api/research/business-evidence/validate', (request, response) => {
+    const input = businessEvidenceRequestSchema.parse(request.body);
+    response.json(validateBusinessEvidence(input.pack, input.requirements));
+  });
+  app.get('/api/research/planning/agents', (_request, response) => response.json(
+    store.getAgents().filter(agent => agent.enabled && ['product', 'researcher'].includes(agent.role)),
+  ));
+  app.post('/api/research/planning', async (request, response) => {
+    const { agentId, acknowledgeCost: _acknowledgeCost, ...input } = planningRequestSchema.parse(request.body);
+    const agent = store.getAgent(agentId, true);
+    if (!agent) throw new StoreError('规划 Agent 不存在。', 404);
+    if (!agent.enabled || !['product', 'researcher'].includes(agent.role)) throw new StoreError('请选择已启用的产品或研究员 Agent。');
+    if (!agent.apiKey?.trim()) throw new StoreError('规划 Agent 尚未配置 API Key；未发出模型请求。');
+    if (planningActive) throw new StoreError('已有候选规划正在运行；不自动重试。', 409);
+    planningActive = true;
+    const controller = new AbortController();
+    const disconnect = () => { if (!response.writableEnded) controller.abort(); };
+    request.once('aborted', disconnect);
+    response.once('close', disconnect);
+    const recordId = randomUUID();
+    const persist = async (record: unknown) => {
+      const directory = path.join(store.dataDir, 'planning');
+      await mkdir(directory, { recursive: true, mode: 0o700 });
+      await writeFile(path.join(directory, `${recordId}.json`), JSON.stringify(record, null, 2), { flag: 'wx', mode: 0o600 });
+    };
+    try {
+      const pack = getPopulationPack();
+      const integrity = await validatePopulationIntake(pack);
+      if (integrity.status !== 'ready') throw new StoreError('冻结人口证据完整性未通过；未发出模型请求。', 409);
+      const candidate = await planResearch(input, { ...agent, apiKey: agent.apiKey }, controller.signal, planningRunner);
+      const result = { ...candidate, recordId, preflight: preflightResearchTask(candidate.task, pack) };
+      try { await persist({ schemaVersion: '1.0', recordId, result }); }
+      catch {
+        if (!controller.signal.aborted) response.status(503).json({ error: '模型已经调用，但本机证据保存失败。请先导出返回证据，不要盲目重试。', code: 'planning-evidence-write-failed', recordId, result });
+        return;
+      }
+      if (!controller.signal.aborted) response.json(result);
+    } catch (error) {
+      if (!(error instanceof ResearchPlanningError)) throw error;
+      let recorded = true;
+      try { await persist({ schemaVersion: '1.0', recordId, evidence: error.evidence }); } catch { recorded = false; }
+      if (!controller.signal.aborted) response.status(error.evidence.state === 'timed-out' ? 504 : 422).json({
+        error: error.message, recordId, evidence: error.evidence, recorded,
+        ...(recorded ? {} : { warning: '本机证据保存失败，请导出本响应。模型可能已计费；不要盲目重试。' }),
+      });
+    } finally {
+      request.removeListener('aborted', disconnect);
+      response.removeListener('close', disconnect);
+      planningActive = false;
+    }
+  });
   app.post('/api/research/validate', async (request, response) => {
     const task = researchTaskSchema.parse(request.body);
     const pack = getPopulationPack();
@@ -274,7 +339,7 @@ export function createApp(store: CityStore, suppliedRunner?: Runner) {
 const entryPath = process.argv[1] ? path.resolve(process.argv[1]) : '';
 if (entryPath === fileURLToPath(import.meta.url)) {
   const store = new CityStore();
-  const port = Number(process.env.PORT || 4310);
+  const port = Number(process.env.PORT || 4320);
   if (!Number.isInteger(port) || port < 1 || port > 65535) throw new Error('PORT must be a valid TCP port.');
   const server = createApp(store).listen(port, '127.0.0.1', () => console.log(`City Agent: http://127.0.0.1:${port}`));
   const shutdown = () => server.close(() => { store.close(); process.exit(0); });

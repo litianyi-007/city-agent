@@ -144,3 +144,37 @@ test('Anthropic native messages protocol uses its own endpoint, key and SSE usag
     assert.equal(result.outputTokens, 5);
   });
 });
+
+test('local Harness fixture masks escaped credentials in outbound prompts, complete JSON and failed partial evidence', { timeout: 45_000 }, async () => {
+  const key = 'harness-private-AbC123';
+  const encoded = key.split('').map(character => `\\u${character.charCodeAt(0).toString(16).padStart(4, '0')}`).join('');
+  let calls = 0;
+  await withProvider((request, response, body) => {
+    calls++;
+    assert.equal(request.headers.authorization, `Bearer ${key}`);
+    const messages = body.messages as { role: string; content: string }[];
+    assert.equal(messages[0].content, 'System [REDACTED]');
+    assert.equal(JSON.parse(messages[1].content).description, '[REDACTED]');
+    if (calls === 1) complete(response, `{"answers":[{"value":"${encoded}"}],"${encoded}":"object key"}`);
+    else {
+      response.writeHead(200, { 'content-type': 'text/event-stream' });
+      response.write(`data: ${JSON.stringify({ choices: [{ delta: { role: 'assistant', content: `{"unfinished":"${encoded}` }, index: 0, finish_reason: null }] })}\n\n`);
+      response.write(`data: ${JSON.stringify({ choices: [{ delta: {}, index: 0, finish_reason: 'length' }], usage: { prompt_tokens: 13, completion_tokens: 3000 } })}\n\n`);
+      response.end('data: [DONE]\n\n');
+    }
+  }, async baseUrl => {
+    const config = { provider: 'openai-compatible', baseUrl, modelId: 'redaction-local-fixture', apiKey: key };
+    const result = await runRole(config, `System ${encoded}`, `{"description":"${encoded}"}`, new AbortController().signal);
+    assert.deepEqual(JSON.parse(result.text), { answers: [{ value: '[REDACTED]' }], '[REDACTED]': 'object key' });
+    await assert.rejects(runRole(config, `System ${key}`, `{"description":"${encoded}"}`, new AbortController().signal), (error: unknown) => {
+      const failure = error as Error & { evidence: { text: string; inputTokens: number; outputTokens: number } };
+      assert.ok(failure.evidence.text.includes('[REDACTED]'));
+      assert.ok(!failure.evidence.text.includes(key));
+      assert.ok(!failure.evidence.text.includes(encoded));
+      assert.equal(failure.evidence.inputTokens, 13);
+      assert.equal(failure.evidence.outputTokens, 3000);
+      return true;
+    });
+  });
+  assert.equal(calls, 2);
+});

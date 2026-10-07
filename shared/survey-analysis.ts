@@ -3,7 +3,7 @@ import { fingerprint, summarize, type Profile, type ResponseRecord } from './sur
 
 export function samplingReport(profiles: Profile[]) {
   const counts = (field: 'streetName' | 'ageBand' | 'sex' | 'presetName') => [...new Set(profiles.map(profile => profile[field]))].map(value => ({ value, planned: profiles.filter(profile => profile[field] === value).length }));
-  const identities = profiles.map(profile => fingerprint({ street: profile.street, age: profile.age, sex: profile.sex, attributes: profile.attributes, description: profile.description, assumptions: profile.assumptions, behaviorNotes: profile.behaviorNotes }));
+  const identities = profiles.map(profile => fingerprint({ street: profile.street, age: profile.age, sex: profile.sex, attributes: profile.attributes, description: profile.description, assumptions: profile.assumptions, behaviorNotes: profile.behaviorNotes, ...(profile.persona ? { persona: profile.persona } : {}) }));
   return { method: 'seeded-cell-coverage-fresh-draw-v2', populationWeighted: false, planned: profiles.length, uniqueProfiles: new Set(identities).size, duplicateProfiles: profiles.length - new Set(identities).size,
     coveredCells: new Set(profiles.map(profile => `${profile.street}:${profile.ageBand}:${profile.sex}`)).size,
     streets: counts('streetName'), ageBands: counts('ageBand'), sexes: counts('sex'), presets: counts('presetName'),

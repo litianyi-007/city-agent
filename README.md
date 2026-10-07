@@ -1,10 +1,18 @@
 # City Agent
 
+公开评审发布候选：`feature/virtual-society-next`，拟固定 Tag `society-review-2026-10-07-rc1`。源码推送、Tag 创建和公网部署是否完成，以发布记录为准；本文不预先宣称已上线。`main`、旧 Tag 与并行 L4/L5 分支不改，正式比赛尚未提交。[合并待办与真实状态](docs/SOCIETY-NEXT.md) · [五层人群方法与在线依据](docs/research/RESIDENT-CONSTRUCTION-METHOD.md) · [历史16题/12人工程自证](docs/research/PERSONA-PROOF.md) · [评测预登记](docs/research/EVALUATION-NEXT.md)。
+
+本轮已实施真实 API 合成居民调查，不是 mock：计划两场景各10名；小学17题实际1名、联合通过0/10，宠物18题实际2名、联合通过1/10，合计17名未启动；两场景均未达到扩容门限。另2次自然语言规划均未产出可应用的 schema 候选；2次浏览器跨域请求 HTTP200 仅证明协议路径，不是新版页面完整流程或额外独立居民。全部7次确认请求 input15,418/output6,881 Token，按冻结高峰非缓存价保守估算¥0.085884，不是供应商账单。¥5/24次授权未用满也不自动重试或扩容。
+
+截至本候选文档更新，284项单元测试、19项浏览器回归（37.0秒）及本机/Pages两种构建通过；最新事实与发布封板见[本轮真实测试与发布审查](docs/research/LIVE-REVIEW-2026-10-07.md)。历史188/14阶段见[初批交接](docs/research/NEXT-BATCH-REPORT-2026-10-07.md)，历史239/19阶段见[评审补齐交接](docs/research/REVIEW-COMPLETION-2026-10-07.md)；不把旧工程结果改写成新的模型质量。
+
 [阶段里程碑汇报](docs/MILESTONE-SUBMISSION-2026-10-07.md)：封板截至2026-10-07 03:19:40（北京时间），四项申报附件及外部观测映射、记忆/wiki/dream的未实施规划齐备。冻结Tag：`submission-milestone-2026-10-07`；后续新任务从此Tag分支。申报完成不代表原产品M1/M2全部验收通过。
 
-公开问卷 Demo：**https://litianyi-007.github.io/city-agent/** · [申报材料](https://litianyi-007.github.io/city-agent/submission/index.html) · [4分钟录屏](https://litianyi-007.github.io/city-agent/submission/demo.mp4)。
+公开问卷 Demo：**https://litianyi-007.github.io/city-agent/**。新版目标入口：[公开评审材料](https://litianyi-007.github.io/city-agent/submission-next/index.html) · [真实测试轮报告](https://litianyi-007.github.io/city-agent/submission-next/live-proof/report.md) · [原文/失败总账JSON](https://litianyi-007.github.io/city-agent/submission-next/live-proof/report.json)；部署完成须另验上述地址。原冻结[申报材料](https://litianyi-007.github.io/city-agent/submission/index.html)及[录屏](https://litianyi-007.github.io/city-agent/submission/demo.mp4)保持不变。新版4分33秒视频是前次零费用 UI 操作，不冒充本轮真实 API 录像。
 
-外网版可直接点击「查看已发布实测 · 无需Key」。已附12人15题真实问卷，以及49次居民实验的重复/价格/消融与失败记录；当前批次44/49有效，稳定性未全面通过。自备Key在页面填写，只保留本次会话，刷新后清除。GitHub Pages不托管Harness后端，真人市场效度仍未验证。[本轮补齐与剩余门限](docs/research/AUDIT-FIXES-2026-10-07.md)。
+**评委入口：[完整快速开始与故障排查](docs/guides/JUDGE-QUICKSTART.md) · [静态说明页](public/review-guide.html)。** 三条路径：浏览器无Key看快照/规则；页面自备Key直接请求供应商（需CORS、不经过Harness）；下载候选固定源码后本机通过Harness复现。`doctor/start:review`属于新候选，旧冻结Tag只有原基本启动；材料ZIP不是安装包。Windows/Linux尚未完成本项目干净机器实测。
+
+外网版可直接点击「查看已发布实测 · 无需Key」读取旧12人15题真实问卷及49次居民实验；旧44/49有效、稳定性未全面通过的记录保留，不能与新增7次请求拼成新的通过率。完整业务工程示例始终0次模型调用，规则答案不算人格效度。自备Key在页面填写，只保留本次会话，刷新后清除。GitHub Pages不托管Harness后端，真人市场效度仍未验证。[历史审查补齐](docs/research/AUDIT-FIXES-2026-10-07.md)。
 
 本地 demo 已实现四角色有界自主研发流程：配置角色和模型、提交任务、拆解、研究、实现、独立验收与自动返修。规则夹具可完成交付，但本轮六次真实模型交付均未通过最终Gate；不能将流程存在或生成了HTML当作L5交付已完成。居民问卷的真实实测与该失败分开记录。
 
@@ -16,16 +24,27 @@
 
 Node.js 22.19+（已验证 22.22.3），不要使用Node 20；使用nvm时先执行`nvm install && nvm use`读取`.nvmrc`。首次安装：
 
+评审候选应下载发布记录确认的固定 Tag/完整 commit SHA，而非浮动分支。在发布确认后，可在新目录执行以下取得源码命令，再执行安装；若拟定 Tag 尚不存在，先使用原冻结版或等待发布，不把缺 ref 当安装成功：
+
+```bash
+git clone --branch society-review-2026-10-07-rc1 --depth 1 https://github.com/litianyi-007/city-agent.git city-agent-review-rc1
+cd city-agent-review-rc1
+git rev-parse HEAD
+```
+
 ```bash
 npm ci
 npm run setup
 npm run build
-npm start
+npm run doctor
+npm run start:review
 ```
 
-打开 **http://127.0.0.1:4310**。
+本续作打开 **http://127.0.0.1:4320/#research**。`doctor`只读检查，不读Key/私有配置，不创建数据库，不安装或请求模型；退出码0=前提就绪、1=检查失败、2=参数错误。`npm run doctor -- --json`输出报告；启动器自检失败不启动，不自动换端口。跨平台覆盖：`npm run start:review -- --port 4330 --data-dir .city-agent-review-4330`。默认数据目录为专用`.city-agent-review/`。Ctrl+C正常停止。
 
-开发模式：`npm run dev`，前端 http://127.0.0.1:5173，API 4310。运行数据保存在被 Git 忽略的 `.city-agent/`；可用 `CITY_AGENT_DATA_DIR` 指定其他目录，`PORT` 修改生产端口。同一数据目录只允许一个服务进程。
+开发模式：`npm run dev`，本续作前端 http://127.0.0.1:5180，API 4320，浏览器回归默认4321；可用`CITY_AGENT_WEB_PORT`、`PORT`、`CITY_AGENT_TEST_PORT`显式覆盖，API代理跟随PORT，不静默连接原项目4310。`npm start`仍可作为直接开发入口，默认数据目录`.city-agent/`；可用`CITY_AGENT_DATA_DIR`指定独立目录。同一数据目录只允许一个服务进程。评委优先使用上面的专用启动器。
+
+复现已公开旧冻结Tag时，请按[评委指南A路径](docs/guides/JUDGE-QUICKSTART.md#a-现在就能下载的旧冻结版源码)使用原`npm start`及4310端口；旧Tag没有新增自检/评委启动工具。新候选使用独立固定ref，不移动旧Tag。
 
 ## 本机版使用
 
@@ -38,6 +57,9 @@ npm start
 7. 一键选择“小学生零食店”或“宠物零食网点”验收例子。流程会交付条件研究页面、数据缺口与假设；商业决策保持 `needs-data`，不将通用15+规则接受率套到学生或养宠人群。
 8. “虚拟社会调查”（`/#research`）：编辑五题型、导入/导出、选择人群、预检和保存草稿。下方可运行规则夹具或通过Harness真实作答；冻结分析、原文、硬约束诊断和成本，导航/刷新后恢复历史。完成后点击「交给四角色生成交付页」连接真实研发线，不再用旧价格公式替代问卷。
 9. 调查页内“人群 Agent 预设”（`/#residents`）提供一般成年居民、小学生照护者、养猫家庭购买者、养犬家庭购买者，可新增、自定义、编辑、复制、启停和删除。独立配置模型与 Key；与研发四角色不混用，预设不是实际居民记录，也不预填商品偏好。
+10. 续作支持五层情景构建：Big Five倾向、成长照护与多选经历、教育、当前关系/同住/照护、工作社会角色/明确口径的月收入。默认未知、可自定义，全部assumption，旧记录不自动补推；人口资格筛选仍独立。完整Prompt和新版本快照保留这些字段，两种消融则移除。
+11. 调查页“从自然语言规划调查”可显式选择已配置的产品/研究员进行单次Harness候选规划，确认费用后启动，支持取消/下载/应用草稿；不自动启动居民、不认证事实。90秒/6000输出Token；失败及取消证据保存在专用数据目录的`planning/<UUID>.json`，勿公开私人研究文本或日志。
+12. “检查业务证据包”导入/编辑来源、观测与研究要求，纯只读校验地域、时期、单位、分母、冲突和来源引用；不抓网址、不调用模型、不激活人口或经营推荐。结构就绪仍须人工审核原件与授权。
 
 升级已有运行实例时须重启后端才能加载新增接口；仅刷新浏览器不足。重启前先结束正在运行的任务。调查草稿保存在同一 SQLite 数据目录；导出的问卷不含人群连接信息或 Key。界面/接口与阶段限制见[本批交付记录](docs/research/WORKSPACE-2026-09-24.md)。
 
@@ -94,4 +116,4 @@ npm run test:e2e
 - [原始文档留底](docs/archive/2026-09-23-before-demo/)：对应 Git 基线 `111027d`，不覆盖原文。
 - [人口增强前的Demo留底](docs/archive/2026-09-23-before-population/)：README、产品/架构/路线及原city模块。
 
-本轮用户指示将 L5 提升为核心方向，覆盖旧文档“等待评审、不开始实现”和“研发角色不得执行”的限制。统计评审作为有效性改进继续保留，不再阻塞工程 demo。
+最初用户指示将 L5 提升为方向并允许工程 Demo；当前此分支专注虚拟社会调查，L4/L5由另一会话并行推进，不宣称本分支已完成 L5。真实调查已执行但10人质量门限失败，人格贡献与经营效度仍待验；现实桥MCP、长期记忆、wiki/dream和有限居民接管均为未实施规划。

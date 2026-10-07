@@ -1,0 +1,341 @@
+{
+  "schemaVersion": "1.0",
+  "id": "persona-proof-pet-snack-concept",
+  "title": "五层画像与宠物零食网点概念工程自证",
+  "objective": "purchase-concerns",
+  "decisionContext": {
+    "offering": "适用宠物的袋装零食概念。配料、适用性、品牌与试售均待确认；不是猫粮或狗粮等主粮，不支持根据此卷决定主营主粮。价格题以100g袋装零食作假设单位，不是真实成交报价。",
+    "buyer": "18岁以上、假设参与猫或狗零食购买的照护购买者。成年、养宠、购买资格均为本次场景假设，目标分母未知。",
+    "endUser": "猫或狗，购买者描述采购考虑而不是宠物本人或滨江真实居民意见。",
+    "channel": "线上销售配套线下网点的概念比较。具体铺位、客流、订单、租金、履约成本和网点服务能力均未核验。"
+  },
+  "population": {
+    "regionCode": "binjiang",
+    "period": "2020-11-01",
+    "unit": "person",
+    "filters": [
+      {
+        "field": "age",
+        "op": "gte",
+        "value": 18
+      },
+      {
+        "field": "petOwner",
+        "op": "eq",
+        "value": true
+      }
+    ]
+  },
+  "questionnaire": {
+    "id": "persona-proof-pet-snack-16",
+    "version": "1.0",
+    "questions": [
+      {
+        "id": "purchase-qualification",
+        "prompt": "仅按本次合成设定，您参与哪类宠物零食的购买？不清楚资格时可回答未知，不能据此更新人口事实。",
+        "required": true,
+        "type": "single",
+        "options": [
+          {
+            "id": "cat",
+            "label": "猫"
+          },
+          {
+            "id": "dog",
+            "label": "狗"
+          },
+          {
+            "id": "both",
+            "label": "猫和狗"
+          },
+          {
+            "id": "none",
+            "label": "不参与购买"
+          },
+          {
+            "id": "unknown",
+            "label": "资格未知或不适用"
+          }
+        ]
+      },
+      {
+        "id": "purchase-role",
+        "prompt": "本次设定中，您在采购决策里是什么角色？",
+        "required": true,
+        "type": "single",
+        "options": [
+          {
+            "id": "decider",
+            "label": "通常自己决定"
+          },
+          {
+            "id": "shared",
+            "label": "与他人商量决定"
+          },
+          {
+            "id": "helper",
+            "label": "只协助或收集信息"
+          },
+          {
+            "id": "none",
+            "label": "不负责采购"
+          },
+          {
+            "id": "unknown",
+            "label": "未知或不适用"
+          }
+        ]
+      },
+      {
+        "id": "occupation-context",
+        "prompt": "您的日常工作或家庭采购安排有哪些与此次考虑相关的信息？画像未给出职业/家庭时请写未知，不从年龄、街道或性别推断。",
+        "required": true,
+        "type": "text",
+        "maxLength": 600
+      },
+      {
+        "id": "personality-context",
+        "prompt": "给定人格倾向中，是否有与收集信息、商量或作决定的方式相关的设定？未设置请写未知。不能由人格分数直接推出品类、价位或购买意愿。",
+        "required": true,
+        "type": "text",
+        "maxLength": 600
+      },
+      {
+        "id": "upbringing-context",
+        "prompt": "给定成长经历中，是否有您认为与本次考虑相关的信息？没有给定或无明显关系可写未知/不相关，不编造经历，不把照护结构当消费结论。",
+        "required": true,
+        "type": "text",
+        "maxLength": 600
+      },
+      {
+        "id": "education-context",
+        "prompt": "给定教育层的信息是否足够描述本次收集商品信息的需要？学历未知可写未知；学历本身不证明收入、知识水平或产品偏好。",
+        "required": true,
+        "type": "text",
+        "maxLength": 600
+      },
+      {
+        "id": "household-context",
+        "prompt": "给定当前家庭关系和同住/照护角色中，哪些与本次采购协作有关？未设置请保留未知，不从年龄或性别补编婚育关系。",
+        "required": true,
+        "type": "text",
+        "maxLength": 600
+      },
+      {
+        "id": "routine",
+        "prompt": "在本次设定中，您通常如何安排宠物零食的采购？不是询问主粮采购。",
+        "required": true,
+        "type": "single",
+        "options": [
+          {
+            "id": "planned",
+            "label": "有计划地采购"
+          },
+          {
+            "id": "occasion",
+            "label": "遇到特定需要才采购"
+          },
+          {
+            "id": "other-person",
+            "label": "通常由他人采购"
+          },
+          {
+            "id": "none",
+            "label": "不采购零食"
+          },
+          {
+            "id": "unknown",
+            "label": "画像信息不足，未知"
+          }
+        ]
+      },
+      {
+        "id": "value-priority",
+        "prompt": "如果考虑一款宠物零食，您首先需要确认哪些信息？最多3项。没有明确偏好时可选择信息不足。",
+        "required": true,
+        "type": "multiple",
+        "options": [
+          {
+            "id": "ingredient",
+            "label": "配料与适用性信息"
+          },
+          {
+            "id": "acceptance",
+            "label": "宠物接受程度"
+          },
+          {
+            "id": "price",
+            "label": "明确规格下的价格"
+          },
+          {
+            "id": "convenience",
+            "label": "购买与收货便利"
+          },
+          {
+            "id": "traceability",
+            "label": "来源与质量信息"
+          },
+          {
+            "id": "unknown",
+            "label": "信息不足或暂无优先项"
+          }
+        ],
+        "minSelections": 1,
+        "maxSelections": 3
+      },
+      {
+        "id": "risk-attitude",
+        "prompt": "仅在成分、适用性及规格已经明确的假设下，您会倾向先尝试还是先收集更多信息？此量表不是医学安全评价。",
+        "required": true,
+        "type": "scale",
+        "min": 1,
+        "max": 5,
+        "minLabel": "愿意在信息明确后尝试",
+        "maxLabel": "需要更多信息才考虑"
+      },
+      {
+        "id": "price-range",
+        "prompt": "假设是一袋100g、适用性与规格已明确的宠物零食，您会优先了解哪个报价范围？这是询价情景，不是成交价；信息不足可不选择价位。",
+        "required": true,
+        "type": "single",
+        "options": [
+          {
+            "id": "below-10",
+            "label": "10元以下"
+          },
+          {
+            "id": "10-19",
+            "label": "10–19元"
+          },
+          {
+            "id": "20-39",
+            "label": "20–39元"
+          },
+          {
+            "id": "40-plus",
+            "label": "40元及以上"
+          },
+          {
+            "id": "none",
+            "label": "不考虑购买"
+          },
+          {
+            "id": "unknown",
+            "label": "信息不足，不能确定"
+          }
+        ]
+      },
+      {
+        "id": "trial-budget",
+        "prompt": "如果本次设定中已有明确预算，一次试购愿意考虑的总金额是多少？不买填0，预算未知可不回答；不是每月消费或真实支付。",
+        "required": false,
+        "type": "number",
+        "min": 0,
+        "max": 500,
+        "unit": "元/一次试购"
+      },
+      {
+        "id": "snack-category",
+        "prompt": "如果需要进一步比较零食概念，您想了解哪些类别？最多3项；选择只表示候选信息需求，不证明需求或适用性。",
+        "required": true,
+        "type": "multiple",
+        "options": [
+          {
+            "id": "dried-meat",
+            "label": "肉类干制零食"
+          },
+          {
+            "id": "freeze-dried",
+            "label": "冻干零食"
+          },
+          {
+            "id": "soft-snack",
+            "label": "软质零食"
+          },
+          {
+            "id": "chew",
+            "label": "咀嚼类零食"
+          },
+          {
+            "id": "none",
+            "label": "不考虑零食"
+          },
+          {
+            "id": "unknown",
+            "label": "信息不足或其他"
+          }
+        ],
+        "minSelections": 1,
+        "maxSelections": 3
+      },
+      {
+        "id": "outlet-function",
+        "prompt": "若线上销售设置线下网点，哪项用途值得您进一步了解？具体位置和服务尚未确定，不要求推荐街道或铺位。",
+        "required": true,
+        "type": "single",
+        "options": [
+          {
+            "id": "pickup",
+            "label": "订单自提"
+          },
+          {
+            "id": "try-info",
+            "label": "了解商品和试购"
+          },
+          {
+            "id": "nearby-buy",
+            "label": "就近直接购买"
+          },
+          {
+            "id": "delivery",
+            "label": "仍更关注配送"
+          },
+          {
+            "id": "none",
+            "label": "不需要线下网点"
+          },
+          {
+            "id": "unknown",
+            "label": "条件不足，不能判断"
+          }
+        ]
+      },
+      {
+        "id": "scenario-boundary",
+        "prompt": "请说明哪些尚缺信息或情境限制会阻止您作选择。未知职业、家庭、宠物适用性、预算或服务条件都可以保留未知，不必补编。",
+        "required": true,
+        "type": "text",
+        "maxLength": 800
+      },
+      {
+        "id": "open-reason",
+        "prompt": "说明您的考虑或不确定之处。不要给真实铺位、市场规模、猫狗比例或利润预测；主粮结论不能从零食选择推出。",
+        "required": true,
+        "type": "text",
+        "maxLength": 1000
+      }
+    ]
+  },
+  "declarations": [
+    {
+      "id": "five-layer-candidate",
+      "claim": "人口归属是历史统计约束；人格倾向、成长经历、教育、当前家庭、工作与社会角色五层均为情景假设，未提供者为unknown。不得从这些层直接推出偏好。问卷与答案为工程自证，不是真实偏好证据。",
+      "provenance": "assumption",
+      "sourceIds": [],
+      "observationIds": []
+    },
+    {
+      "id": "pet-qualification",
+      "claim": "养猫/养犬/参与购买资格为显式假设，没有滨江总体分母。轮转分配猫狗预设不构成市场占比；价格范围和网点是概念条件。",
+      "provenance": "assumption",
+      "sourceIds": [],
+      "observationIds": []
+    }
+  ],
+  "requestedOutputs": [
+    "questionnaire-review",
+    "synthetic-analysis",
+    "group-comparison",
+    "hypothesis-report"
+  ]
+}

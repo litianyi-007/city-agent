@@ -10,7 +10,7 @@ import { buildCaseHtml, buildDemoHtml, DEMO_ACCEPTANCE, DEMO_CASE_ACCEPTANCE } f
 import { acceptanceSchema, runGate, type AcceptanceCheck } from './gate.js';
 import { runRole, HARNESS_NAME, HARNESS_VERSION } from './harness.js';
 import type { CityStore } from './store.js';
-import type { Role, Run, RunInput, Runner, GateResult } from './types.js';
+import type { Agent, Role, Run, RunInput, Runner, GateResult } from './types.js';
 import { analyzeResearchCase, RESEARCH_CASE_RULES, type ResearchCaseReport } from './research-cases.js';
 import { buildExecutionEvidence } from './execution-evidence.js';
 
@@ -72,12 +72,17 @@ export function createRunner(store: CityStore, dependencies: RunnerDependencies 
     const controller = new AbortController();
     controllers.set(runId, controller);
     let resolveCompletion!: () => void;
-    completions.set(runId, new Promise<void>(resolve => { resolveCompletion = resolve; }));
+    let rejectCompletion!: (error: unknown) => void;
+    const completion = new Promise<void>((resolve, reject) => { resolveCompletion = resolve; rejectCompletion = reject; });
+    // A start caller might never request cancellation; retain rejection for
+    // actual waiters without producing an unhandled rejection in that case.
+    void completion.catch(() => undefined);
+    completions.set(runId, completion);
     const signal = controller.signal;
     let timedOut = false;
     const timeout = setTimeout(() => { timedOut = true; controller.abort(); }, MAX_RUN_MS);
-    const agentSnapshot = store.getRunAgents(runId, true);
-    const secrets = agentSnapshot.map(agent => agent.apiKey).filter((key): key is string => Boolean(key));
+    let agentSnapshot: Agent[] = [];
+    let secrets: string[] = [];
     const redact = (text: string) => secrets.reduce((value, secret) => value.split(secret).join('[REDACTED]'), text);
     let calls = 0;
     let modelResponses = 0;
@@ -87,8 +92,14 @@ export function createRunner(store: CityStore, dependencies: RunnerDependencies 
     let caseReadiness: ResearchCaseReport | null = null;
     let populationSnapshot: { packId: string; version: string; datasetHash: string; artifact: string; sourceHashes: Record<string, string> } | null = null;
     const artifactHashes: Record<string, string> = {};
-    const dir = store.runDir(runId);
-    const save = () => store.saveRun(run);
+    let dir = path.join(store.dataDir, 'runs', runId);
+    let finalized = false;
+    // Keep the real outcome in memory for the manifest, but do not publish a
+    // terminal snapshot until its execution record has been written. Readers
+    // otherwise stop polling in the gap between the final event and manifest.
+    const save = () => store.saveRun(finalized ? run : {
+      ...run, status: run.status === 'queued' ? 'queued' : 'running', finishedAt: undefined,
+    });
     const event = (message: string, role?: Role, type = 'info') => {
       run.events.push({ id: randomUUID(), time: new Date().toISOString(), type, message: redact(message), ...(role ? { role } : {}) });
       save();
@@ -161,6 +172,11 @@ export function createRunner(store: CityStore, dependencies: RunnerDependencies 
     }
 
     try {
+      // All potentially throwing initialization after waiter registration is
+      // covered by the same failure/finalization/cleanup path as execution.
+      agentSnapshot = store.getRunAgents(runId, true);
+      secrets = agentSnapshot.map(agent => agent.apiKey).filter((key): key is string => Boolean(key));
+      dir = store.runDir(runId);
       await mkdir(dir, { recursive: true, mode: 0o700 });
       run.status = 'running'; run.stages.sort((a, b) => order.indexOf(a.role) - order.indexOf(b.role)); save();
       event(run.mode === 'demo' ? '流程演示开始：使用固定计划与模板，不调用模型，不计为真实 L5。' : `${HARNESS_NAME} · 四角色自主研发开始，单角色 180 秒、整次 15 分钟上限。`);
@@ -305,43 +321,57 @@ export function createRunner(store: CityStore, dependencies: RunnerDependencies 
       event(run.error, undefined, cancelled ? 'cancelled' : 'error');
     } finally {
       clearTimeout(timeout);
-      run.finishedAt = new Date().toISOString();
-      const executionEvidence = buildExecutionEvidence({
-        mode: run.mode, status: run.status, modelCalls: calls, modelResponses,
-        usesInjectedModel: dependencies.runRole !== undefined,
-        usesInjectedGate: dependencies.runGate !== undefined,
-        gateExecuted, gatePassed: run.gate?.passed === true,
-        acceptanceFrozen: acceptanceHash !== null,
-        artifactDelivered: run.artifacts.some(item => item.name === 'index.html'),
-        agentSnapshot: run.agentSnapshot,
-      });
-      const manifest = {
-        runId, mode: run.mode, status: run.status, createdAt: run.createdAt, finishedAt: run.finishedAt,
-        harness: run.mode === 'live' && dependencies.runRole === undefined ? { name: 'deepseek-harness', version: HARNESS_VERSION } : null,
-        generatedBy: run.mode === 'demo' ? 'versioned-demo-template' : dependencies.runRole ? 'injected-role-adapter' : 'four-role-llm-pipeline',
-        humanIntervention: false,
-        // Deprecated: callers must inspect the scoped evidence, not infer a
-        // general L5 or authentic-provider claim from the selected run mode.
-        realL5Evidence: executionEvidence.realL5Evidence,
-        executionEvidence, marketResearchValidated: false,
-        taskHash: hash(input.task), acceptanceHash, artifactHashes: { ...artifactHashes },
-        agents: run.agentSnapshot, usage: run.usage, modelCalls: calls, repairCount,
-        elapsedMs: Date.now() - Date.parse(run.createdAt),
-        data: run.survey?.manifest ?? null,
-        population: populationSnapshot,
-        ...(run.questionnaireSurvey ? { questionnaire: { runId: run.questionnaireSurvey.id, taskHash: run.questionnaireSurvey.taskHash, profileHash: run.questionnaireSurvey.profileHash, artifact: 'questionnaire-survey.json', valid: run.questionnaireSurvey.metrics.valid, mode: run.questionnaireSurvey.mode } } : {}),
-        ...(caseReadiness && caseReadiness.kind !== 'generic' ? { researchCase: { kind: caseReadiness.kind, decisionStatus: caseReadiness.decisionStatus, surveyApplicableToTask: false, marketResearchValidated: false, report: 'case-report.json' } } : {}),
-        limitations: ['Gate 仅证明当前冻结断言通过，不证明任意需求完备性。', '规则人口调研不是 LLM 居民回答或真实市场预测。', '实际供应商凭证与模型质量需要各自实测。', '未配置单价，模型费用未知。'],
-        error: run.error,
-      };
-      try { await jsonArtifact('manifest.json', manifest); }
-      catch (error) {
-        run.status = 'failed'; run.error = `无法保存执行清单：${redact((error as Error).message)}`;
+      try {
+        run.finishedAt = new Date().toISOString();
+        const executionEvidence = buildExecutionEvidence({
+          mode: run.mode, status: run.status, modelCalls: calls, modelResponses,
+          usesInjectedModel: dependencies.runRole !== undefined,
+          usesInjectedGate: dependencies.runGate !== undefined,
+          gateExecuted, gatePassed: run.gate?.passed === true,
+          acceptanceFrozen: acceptanceHash !== null,
+          artifactDelivered: run.artifacts.some(item => item.name === 'index.html'),
+          agentSnapshot: run.agentSnapshot,
+        });
+        const manifest = {
+          runId, mode: run.mode, status: run.status, createdAt: run.createdAt, finishedAt: run.finishedAt,
+          harness: run.mode === 'live' && dependencies.runRole === undefined ? { name: 'deepseek-harness', version: HARNESS_VERSION } : null,
+          generatedBy: run.mode === 'demo' ? 'versioned-demo-template' : dependencies.runRole ? 'injected-role-adapter' : 'four-role-llm-pipeline',
+          humanIntervention: false,
+          // Deprecated: callers must inspect the scoped evidence, not infer a
+          // general L5 or authentic-provider claim from the selected run mode.
+          realL5Evidence: executionEvidence.realL5Evidence,
+          executionEvidence, marketResearchValidated: false,
+          taskHash: hash(input.task), acceptanceHash, artifactHashes: { ...artifactHashes },
+          agents: run.agentSnapshot, usage: run.usage, modelCalls: calls, repairCount,
+          elapsedMs: Date.now() - Date.parse(run.createdAt),
+          data: run.survey?.manifest ?? null,
+          population: populationSnapshot,
+          ...(run.questionnaireSurvey ? { questionnaire: { runId: run.questionnaireSurvey.id, taskHash: run.questionnaireSurvey.taskHash, profileHash: run.questionnaireSurvey.profileHash, artifact: 'questionnaire-survey.json', valid: run.questionnaireSurvey.metrics.valid, mode: run.questionnaireSurvey.mode } } : {}),
+          ...(caseReadiness && caseReadiness.kind !== 'generic' ? { researchCase: { kind: caseReadiness.kind, decisionStatus: caseReadiness.decisionStatus, surveyApplicableToTask: false, marketResearchValidated: false, report: 'case-report.json' } } : {}),
+          limitations: ['Gate 仅证明当前冻结断言通过，不证明任意需求完备性。', '规则人口调研不是 LLM 居民回答或真实市场预测。', '实际供应商凭证与模型质量需要各自实测。', '未配置单价，模型费用未知。'],
+          error: run.error,
+        };
+        // The manifest is the publication boundary, not an ordinary incremental
+        // artifact: avoid an intermediate save which could publish a terminal
+        // outcome before the record is registered in the final public snapshot.
+        try {
+          const content = redact(JSON.stringify(manifest, null, 2));
+          await writeFile(path.join(dir, 'manifest.json'), content, { mode: 0o600 });
+          run.artifacts.push({ name: 'manifest.json', path: 'manifest.json', type: 'application/json' });
+        }
+        catch (error) {
+          run.status = 'failed'; run.error = `无法保存执行清单：${redact((error as Error).message)}`;
+        }
+        finalized = true;
+        save();
+        resolveCompletion();
+      } catch (error) {
+        rejectCompletion(error);
+        throw error;
+      } finally {
+        controllers.delete(runId);
+        completions.delete(runId);
       }
-      save();
-      controllers.delete(runId);
-      resolveCompletion();
-      completions.delete(runId);
     }
   }
 

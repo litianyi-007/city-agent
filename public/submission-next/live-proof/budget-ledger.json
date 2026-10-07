@@ -1,0 +1,172 @@
+{
+  "schemaVersion": "experiment-budget-1.0",
+  "experimentId": "approved-2026-10-07-cny5-24",
+  "createdAt": "2026-10-07T12:37:13.056Z",
+  "updatedAt": "2026-10-07T12:37:51.986Z",
+  "state": "closed",
+  "budgetCny": 5,
+  "budgetNanoCny": 5000000000,
+  "maxProviderRequests": 24,
+  "pricing": {
+    "provider": "deepseek",
+    "modelId": "deepseek-flash",
+    "currency": "CNY",
+    "inputCnyPerMillionTokens": 2,
+    "outputCnyPerMillionTokens": 8,
+    "sourceUrl": "https://api-docs.deepseek.com/zh-cn/quick_start/pricing/",
+    "checkedAt": "2026-10-07T12:37:12.970Z"
+  },
+  "inputNanoCnyPerToken": 2000,
+  "outputNanoCnyPerToken": 8000,
+  "reservations": [
+    {
+      "reservationId": "08bd0b81-dead-4e77-b073-a984fde331df",
+      "requestId": "child-snacks.resident-001",
+      "purpose": "resident",
+      "reservedAt": "2026-10-07T12:37:13.130Z",
+      "promptUtf8Bytes": 11710,
+      "inputEnvelopeTokens": 16384,
+      "reservedInputTokens": 28094,
+      "maxOutputTokens": 3000,
+      "reservationNanoCny": 80188000,
+      "committedNanoCny": 7714000,
+      "state": "settled",
+      "finishedAt": "2026-10-07T12:37:15.545Z",
+      "outcome": "succeeded",
+      "usage": {
+        "inputTokens": 2701,
+        "outputTokens": 289
+      },
+      "actualNanoCny": 7714000
+    },
+    {
+      "reservationId": "096d6e06-34aa-432f-be77-53c42b1a37c2",
+      "requestId": "pet-snacks.resident-001",
+      "purpose": "resident",
+      "reservedAt": "2026-10-07T12:37:15.793Z",
+      "promptUtf8Bytes": 12164,
+      "inputEnvelopeTokens": 16384,
+      "reservedInputTokens": 28548,
+      "maxOutputTokens": 3000,
+      "reservationNanoCny": 81096000,
+      "committedNanoCny": 8128000,
+      "state": "settled",
+      "finishedAt": "2026-10-07T12:37:17.992Z",
+      "outcome": "succeeded",
+      "usage": {
+        "inputTokens": 2828,
+        "outputTokens": 309
+      },
+      "actualNanoCny": 8128000
+    },
+    {
+      "reservationId": "a8c943c1-6cbe-4d1d-8418-318a5028e9fc",
+      "requestId": "pet-snacks.resident-002",
+      "purpose": "resident",
+      "reservedAt": "2026-10-07T12:37:18.098Z",
+      "promptUtf8Bytes": 12019,
+      "inputEnvelopeTokens": 16384,
+      "reservedInputTokens": 28403,
+      "maxOutputTokens": 3000,
+      "reservationNanoCny": 80806000,
+      "committedNanoCny": 7682000,
+      "state": "settled",
+      "finishedAt": "2026-10-07T12:37:20.608Z",
+      "outcome": "succeeded",
+      "usage": {
+        "inputTokens": 2781,
+        "outputTokens": 265
+      },
+      "actualNanoCny": 7682000
+    },
+    {
+      "reservationId": "e13767f7-b550-4dab-898c-1f9b06713a93",
+      "requestId": "planning.child-snacks",
+      "purpose": "planning",
+      "reservedAt": "2026-10-07T12:37:20.769Z",
+      "promptUtf8Bytes": 3383,
+      "inputEnvelopeTokens": 16384,
+      "reservedInputTokens": 19767,
+      "maxOutputTokens": 6000,
+      "reservationNanoCny": 87534000,
+      "committedNanoCny": 23098000,
+      "state": "settled",
+      "finishedAt": "2026-10-07T12:37:33.439Z",
+      "outcome": "succeeded",
+      "usage": {
+        "inputTokens": 789,
+        "outputTokens": 2690
+      },
+      "actualNanoCny": 23098000
+    },
+    {
+      "reservationId": "930ee92e-31b0-4e3c-9a58-e1da4e7f68d6",
+      "requestId": "planning.pet-snacks",
+      "purpose": "planning",
+      "reservedAt": "2026-10-07T12:37:33.456Z",
+      "promptUtf8Bytes": 3395,
+      "inputEnvelopeTokens": 16384,
+      "reservedInputTokens": 19779,
+      "maxOutputTokens": 6000,
+      "reservationNanoCny": 87558000,
+      "committedNanoCny": 22100000,
+      "state": "settled",
+      "finishedAt": "2026-10-07T12:37:44.970Z",
+      "outcome": "succeeded",
+      "usage": {
+        "inputTokens": 790,
+        "outputTokens": 2565
+      },
+      "actualNanoCny": 22100000
+    },
+    {
+      "reservationId": "c0758e85-774b-4728-b49e-459572ed6691",
+      "requestId": "cors.child-snacks",
+      "purpose": "browser-cors",
+      "reservedAt": "2026-10-07T12:37:48.184Z",
+      "promptUtf8Bytes": 11710,
+      "inputEnvelopeTokens": 16384,
+      "reservedInputTokens": 28094,
+      "maxOutputTokens": 3000,
+      "reservationNanoCny": 80188000,
+      "committedNanoCny": 7698000,
+      "state": "settled",
+      "finishedAt": "2026-10-07T12:37:49.990Z",
+      "outcome": "succeeded",
+      "usage": {
+        "inputTokens": 2701,
+        "outputTokens": 287
+      },
+      "actualNanoCny": 7698000
+    },
+    {
+      "reservationId": "389eb222-2fa6-4e4f-ae86-1ad76fe6b59b",
+      "requestId": "cors.pet-snacks",
+      "purpose": "browser-cors",
+      "reservedAt": "2026-10-07T12:37:50.009Z",
+      "promptUtf8Bytes": 12164,
+      "inputEnvelopeTokens": 16384,
+      "reservedInputTokens": 28548,
+      "maxOutputTokens": 3000,
+      "reservationNanoCny": 81096000,
+      "committedNanoCny": 9464000,
+      "state": "settled",
+      "finishedAt": "2026-10-07T12:37:51.944Z",
+      "outcome": "succeeded",
+      "usage": {
+        "inputTokens": 2828,
+        "outputTokens": 476
+      },
+      "actualNanoCny": 9464000
+    }
+  ],
+  "requestCount": 7,
+  "committedNanoCny": 85884000,
+  "committedCny": 0.085884,
+  "knownUsageCostCny": 0.085884,
+  "knownUsageRequestCount": 7,
+  "usageStatus": "reported",
+  "storageStatus": "durable",
+  "remainingCny": 4.914116,
+  "limitation": "Local conservative pre-call reservation, not a provider billing guarantee. Input tokens are bounded by outgoing UTF8 bytes plus registered protocol overhead; unknown, failed or excess usage halts and retains the reservation. No auto-retry, cache discount, top-up, fallback, or ledger resume."
+}

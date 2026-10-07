@@ -4,9 +4,10 @@ import path from 'node:path';
 import { DatabaseSync } from 'node:sqlite';
 import { PROVIDERS, ROLES } from './types.js';
 import type { Agent, AgentInput, AgentPatch, AgentPublic, NormalizedRunInput, Run, RunInput } from './types.js';
-import { getResidentTemplates, residentCreateSchema, residentPatchSchema, residentPublic, residentInput, researchProjectInputSchema } from './research/residents.js';
+import { assertPublicMetadataSafe, getResidentTemplates, residentCreateSchema, residentPatchSchema, residentPublic, residentInput, researchProjectInputSchema } from './research/residents.js';
 import type { ResidentAgent, ResidentAgentInput, ResidentAgentPatch, ResidentAgentPublic, ResearchProject, ResearchProjectInput } from './research/residents.js';
 import type { SurveyRun } from '../shared/survey-engine.js';
+import { redactKnownSecret } from '../shared/redaction.js';
 
 export class StoreError extends Error {
   constructor(message: string, public statusCode = 400) {
@@ -168,10 +169,23 @@ export class CityStore {
     return Buffer.concat([decipher.update(payload.subarray(28)), decipher.final()]).toString('utf8');
   }
 
+  /** Credentials stay in the control plane; never attach them to public data. */
+  private knownSecrets(extra: readonly string[] = []): string[] {
+    const rows = [...this.db.prepare('SELECT secret FROM agents WHERE secret IS NOT NULL').all(),
+      ...this.db.prepare('SELECT secret FROM resident_agents WHERE secret IS NOT NULL').all()] as unknown as { secret: string }[];
+    return [...new Set([...extra, ...rows.map(row => this.decrypt(row.secret))].filter(Boolean))];
+  }
+
+  private assertPublicSafe(value: unknown, extra: readonly string[] = [], label = '公开配置'): void {
+    try { assertPublicMetadataSafe(value, this.knownSecrets(extra), label); }
+    catch (error) { throw new StoreError((error as Error).message); }
+  }
+
   getAgents(includeSecrets = false): Agent[] {
     return (this.db.prepare('SELECT data, secret FROM agents ORDER BY rowid').all() as unknown as AgentRow[]).map(row => {
       const agent = JSON.parse(row.data) as Agent;
       if (includeSecrets && row.secret) agent.apiKey = this.decrypt(row.secret);
+      if (!includeSecrets) this.assertPublicSafe(agent, [], '智能体公开配置');
       return agent;
     });
   }
@@ -181,6 +195,7 @@ export class CityStore {
     if (!row) return undefined;
     const agent = JSON.parse(row.data) as Agent;
     if (includeSecrets && row.secret) agent.apiKey = this.decrypt(row.secret);
+    if (!includeSecrets) this.assertPublicSafe(agent, [], '智能体公开配置');
     return agent;
   }
 
@@ -195,6 +210,7 @@ export class CityStore {
       provider: normalized.provider!, enabled: normalized.enabled!, hasApiKey: Boolean(normalized.apiKey),
       apiKey: undefined,
     });
+    this.assertPublicSafe(agent, normalized.apiKey ? [normalized.apiKey] : [], '智能体公开配置');
     this.db.prepare('INSERT INTO agents (id, data, secret) VALUES (?, ?, ?)')
       .run(agent.id, JSON.stringify(agent), normalized.apiKey ? this.encrypt(normalized.apiKey) : null);
     return agent;
@@ -205,8 +221,11 @@ export class CityStore {
     if (!existing) throw new StoreError('Agent 不存在。', 404);
     const merged = { ...existing, ...patch };
     validateAgent(merged);
+    const endpointChanged = merged.provider !== existing.provider || merged.baseUrl.replace(/\/+$/, '') !== existing.baseUrl;
+    if (endpointChanged && patch.apiKey === undefined) merged.apiKey = undefined;
     const agent = publicAgent({ ...merged, name: merged.name.trim(), modelId: merged.modelId.trim(),
       baseUrl: merged.baseUrl.replace(/\/+$/, ''), hasApiKey: Boolean(merged.apiKey), apiKey: undefined });
+    this.assertPublicSafe(agent, [existing.apiKey ?? '', merged.apiKey ?? ''], '智能体公开配置');
     this.db.prepare('UPDATE agents SET data = ?, secret = ? WHERE id = ?')
       .run(JSON.stringify(agent), merged.apiKey ? this.encrypt(merged.apiKey) : null, id);
     return agent;
@@ -224,17 +243,21 @@ export class CityStore {
 
   getResidentAgents(): ResidentAgentPublic[] {
     return (this.db.prepare('SELECT data, secret FROM resident_agents ORDER BY rowid').all() as unknown as AgentRow[])
-      .map(row => ({ ...JSON.parse(row.data), hasApiKey: Boolean(row.secret) }));
+      .map(row => { const agent = { ...JSON.parse(row.data), hasApiKey: Boolean(row.secret) }; this.assertPublicSafe(agent, [], '人群公开配置'); return agent; });
   }
 
   getResidentAgent(id: string, includeSecrets = false): ResidentAgent | undefined {
     const row = this.db.prepare('SELECT data, secret FROM resident_agents WHERE id = ?').get(id) as unknown as AgentRow | undefined;
     if (!row) return undefined;
-    return { ...JSON.parse(row.data), hasApiKey: Boolean(row.secret), ...(includeSecrets && row.secret ? { apiKey: this.decrypt(row.secret) } : {}) };
+    const agent = { ...JSON.parse(row.data), hasApiKey: Boolean(row.secret), ...(includeSecrets && row.secret ? { apiKey: this.decrypt(row.secret) } : {}) };
+    if (!includeSecrets) this.assertPublicSafe(agent, [], '人群公开配置');
+    return agent;
   }
 
   createResidentAgent(input: ResidentAgentInput): ResidentAgentPublic {
     const normalized = residentCreateSchema.parse(input);
+    const { apiKey: _key, ...publicInput } = normalized;
+    this.assertPublicSafe(publicInput, normalized.apiKey ? [normalized.apiKey] : [], '人群公开配置');
     const agent = residentPublic(normalized, randomUUID(), new Date().toISOString(), Boolean(normalized.apiKey));
     this.db.prepare('INSERT INTO resident_agents (id, data, secret) VALUES (?, ?, ?)')
       .run(agent.id, JSON.stringify(agent), normalized.apiKey ? this.encrypt(normalized.apiKey) : null);
@@ -249,6 +272,8 @@ export class CityStore {
     const endpointChanged = merged.provider !== existing.provider || merged.baseUrl.replace(/\/+$/, '') !== existing.baseUrl;
     // A saved credential must never follow an edited endpoint without being explicitly resubmitted.
     if (endpointChanged && patch.apiKey === undefined) merged.apiKey = null;
+    const { apiKey: _key, ...publicInput } = merged;
+    this.assertPublicSafe(publicInput, [existing.apiKey ?? '', merged.apiKey ?? ''], '人群公开配置');
     const agent = residentPublic(merged, id, existing.createdAt, Boolean(merged.apiKey));
     this.db.prepare('UPDATE resident_agents SET data = ?, secret = ? WHERE id = ?')
       .run(JSON.stringify(agent), merged.apiKey ? this.encrypt(merged.apiKey) : null, id);
@@ -270,18 +295,20 @@ export class CityStore {
 
   listResearchProjects(): ResearchProject[] {
     return (this.db.prepare('SELECT data FROM research_projects ORDER BY rowid DESC').all() as unknown as { data: string }[])
-      .map(row => JSON.parse(row.data));
+      .map(row => { const project = JSON.parse(row.data); this.assertPublicSafe(project, [], '调查草稿'); return project; });
   }
 
   listSurveyRuns(): SurveyRun[] {
-    return (this.db.prepare('SELECT data FROM survey_runs ORDER BY rowid DESC').all() as unknown as { data: string }[]).map(row => JSON.parse(row.data));
+    return (this.db.prepare('SELECT data FROM survey_runs ORDER BY rowid DESC').all() as unknown as { data: string }[]).map(row => { const run = JSON.parse(row.data); this.assertPublicSafe(run, [], '问卷运行证据'); return run; });
   }
   saveSurveyRun(run: SurveyRun): void {
+    this.assertPublicSafe(run, [], '问卷运行证据');
     this.db.prepare('INSERT INTO survey_runs (id, data) VALUES (?, ?) ON CONFLICT(id) DO UPDATE SET data = excluded.data').run(run.id, JSON.stringify(run));
   }
 
   saveResearchProject(input: ResearchProjectInput, id?: string): ResearchProject {
     const normalized = researchProjectInputSchema.parse(input);
+    this.assertPublicSafe(normalized, [], '调查草稿');
     if (normalized.residentAgentIds.some(agentId => !this.getResidentAgent(agentId))) throw new StoreError('所选人群预设不存在，请刷新后重新选择。');
     const existing = id ? this.listResearchProjects().find(project => project.id === id) : undefined;
     if (id && !existing) throw new StoreError('调查草稿不存在。', 404);
@@ -317,6 +344,7 @@ export class CityStore {
     const now = new Date().toISOString();
     const questionnaireSurvey = input.researchSurveyId ? this.listSurveyRuns().find(value => value.id === input.researchSurveyId) : undefined;
     if (input.researchSurveyId && (input.mode !== 'live' || !questionnaireSurvey || questionnaireSurvey.state !== 'completed' || questionnaireSurvey.metrics.valid < 1)) throw new StoreError('问卷交付须选择已完成且有有效答卷的运行，并使用四角色真实模式。');
+    this.assertPublicSafe({ normalized, questionnaireSurvey, agentSnapshot: selected.map(publicAgent) }, selected.flatMap(agent => agent.apiKey ? [agent.apiKey] : []), '任务及冻结快照');
     const run: Run = {
       id: randomUUID(), task: normalized.task, mode: normalized.mode, input: normalized, status: 'queued', createdAt: now,
       stages: ROLES.map(role => ({ role, status: 'pending', output: '', attempt: 0, agentId: selected.find(agent => agent.role === role)!.id })),
@@ -333,20 +361,23 @@ export class CityStore {
 
   getRun(id: string): Run | undefined {
     const row = this.db.prepare('SELECT data FROM runs WHERE id = ?').get(id) as unknown as RunRow | undefined;
-    return row ? JSON.parse(row.data) as Run : undefined;
+    if (!row) return undefined;
+    const run = JSON.parse(row.data) as Run;
+    this.assertPublicSafe(run, this.getRunAgents(id, true).flatMap(agent => agent.apiKey ? [agent.apiKey] : []), '运行证据');
+    return run;
   }
 
   listRuns(): Run[] {
     return (this.db.prepare('SELECT data FROM runs ORDER BY rowid DESC').all() as unknown as RunRow[])
-      .map(row => JSON.parse(row.data) as Run);
+      .map(row => { const run = JSON.parse(row.data) as Run; this.assertPublicSafe(run, this.getRunAgents(run.id, true).flatMap(agent => agent.apiKey ? [agent.apiKey] : []), '运行证据'); return run; });
   }
 
   getRunAgents(id: string, includeSecrets = false): Agent[] {
     const row = this.db.prepare('SELECT data, secrets FROM runs WHERE id = ?').get(id) as unknown as RunRow | undefined;
     if (!row) throw new StoreError('运行不存在。', 404);
     const run = JSON.parse(row.data) as Run;
-    if (!includeSecrets) return run.agentSnapshot;
     const secrets = JSON.parse(this.decrypt(row.secrets)) as Record<string, string>;
+    if (!includeSecrets) { this.assertPublicSafe(run.agentSnapshot, Object.values(secrets), '冻结智能体快照'); return run.agentSnapshot; }
     return run.agentSnapshot.map(agent => ({ ...agent, ...(secrets[agent.id] ? { apiKey: secrets[agent.id] } : {}) }));
   }
 
@@ -355,15 +386,18 @@ export class CityStore {
     const original = this.getRun(run.id);
     if (!original) throw new StoreError('运行不存在。', 404);
     const secrets = this.getRunAgents(run.id, true).flatMap(agent => agent.apiKey ? [agent.apiKey] : []);
+    this.assertPublicSafe({ input: original.input, agentSnapshot: original.agentSnapshot, questionnaireSurvey: run.questionnaireSurvey }, secrets, '冻结运行快照');
     const clean = (value: unknown): unknown => {
-      if (typeof value === 'string') return secrets.reduce((text, secret) => text.split(secret).join('[REDACTED]'), value);
+      if (typeof value === 'string') return secrets.reduce((text, secret) => redactKnownSecret(text, secret), value);
       if (Array.isArray(value)) return value.map(clean);
       if (value && typeof value === 'object') return Object.fromEntries(Object.entries(value)
         .filter(([key]) => !['apikey', 'api_key', 'authorization', 'secret'].includes(key.toLowerCase()))
         .map(([key, entry]) => [key, clean(entry)]));
       return value;
     };
-    const safe = clean({ ...run, input: original.input, agentSnapshot: original.agentSnapshot }) as Run;
+    const serialized = JSON.stringify(clean({ ...run, input: original.input, agentSnapshot: original.agentSnapshot }));
+    const safe = JSON.parse(secrets.reduce((text, secret) => redactKnownSecret(text, secret), serialized)) as Run;
+    this.assertPublicSafe(safe, secrets, '运行证据');
     this.db.prepare('UPDATE runs SET data = ? WHERE id = ?').run(JSON.stringify(safe), run.id);
   }
 

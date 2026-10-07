@@ -25,6 +25,7 @@ const post = (value: unknown): RequestInit => ({ method: 'POST', body: JSON.stri
 const fmt = (n: number) => new Intl.NumberFormat('zh-CN').format(n);
 const pct = (n: number) => `${(n * 100).toFixed(1)}%`;
 const activeRun = (r: Run | null) => r && ['running', 'queued'].includes(r.status);
+const needsRunRefresh = (r: Run | null) => activeRun(r) || Boolean(r && ['completed', 'failed', 'cancelled'].includes(r.status) && !r.finishedAt);
 type View = 'workspace' | 'agents' | 'city' | 'research' | 'residents';
 const isResearchView = (view: View) => view === 'research' || view === 'residents';
 const readView = (): View => {
@@ -91,7 +92,7 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    if (!activeRun(run)) return;
+    if (!needsRunRefresh(run)) return;
     const version = ++pollVersion.current;
     let stopped = false;
     let timer: ReturnType<typeof setTimeout>;
@@ -100,12 +101,12 @@ export default function App() {
         const [next, history] = await Promise.all([api<Run>(`/runs/${run!.id}`), api<Run[]>('/runs')]);
         if (stopped || version !== pollVersion.current) return;
         setRun(next); setRuns(history);
-        if (activeRun(next)) timer = setTimeout(poll, 1000);
+        if (needsRunRefresh(next)) timer = setTimeout(poll, 1000);
       } catch (e) { if (!stopped) { setError((e as Error).message); timer = setTimeout(poll, 3000); } }
     };
     timer = setTimeout(poll, 500);
     return () => { stopped = true; clearTimeout(timer); };
-  }, [run?.id, run?.status]);
+  }, [run?.id, run?.status, run?.finishedAt]);
 
   const refreshAgents = async () => {
     const list = await api<AgentPublic[]>('/agents'); setAgents(list);
@@ -203,7 +204,21 @@ function AgentEditor({ agent, onClose, onSave }: { agent: AgentPublic | 'new'; o
   const dialog = useRef<HTMLDialogElement>(null);
   useEffect(() => { dialog.current?.showModal(); }, []);
   const set = <K extends keyof AgentInput>(field: K, value: AgentInput[K]) => setForm(current => ({ ...current, [field]: value }));
-  return <dialog ref={dialog} className="agent-dialog" onCancel={onClose}><form onSubmit={async e => { e.preventDefault(); setBusy(true); setError(''); try { await onSave({ ...form, ...(key ? { apiKey: key } : clearKey ? { apiKey: null } : {}) }); } catch (e) { setError((e as Error).message); setBusy(false); } }}><div className="dialog-heading"><div><div className="eyebrow">AGENT CONFIGURATION</div><h2>{agent === 'new' ? '新建智能体' : '编辑智能体'}</h2></div><button type="button" className="close-button" aria-label="关闭配置" onClick={onClose}>×</button></div>{error && <div className="alert error" role="alert">{error}</div>}<div className="form-two"><label>名称<input autoFocus value={form.name} onChange={e => set('name', e.target.value)} maxLength={80} required /></label><label>角色<select value={form.role} onChange={e => set('role', e.target.value as Role)}>{roleOrder.map(r => <option key={r} value={r}>{roles[r].name}</option>)}</select></label></div><label>Provider<select value={form.provider} onChange={e => { const provider = e.target.value as AgentInput['provider']; setForm(f => ({ ...f, provider, baseUrl: provider === 'anthropic' ? 'https://api.anthropic.com' : provider === 'deepseek' ? 'https://api.deepseek.com' : 'https://api.openai.com/v1', modelId: provider === 'anthropic' ? '' : provider === 'deepseek' ? 'deepseek-flash' : '' })); }}><option value="deepseek">DeepSeek</option><option value="openai-compatible">OpenAI Compatible（含自定义服务）</option><option value="anthropic">Anthropic</option></select></label><label>Base URL<input type="url" value={form.baseUrl} onChange={e => set('baseUrl', e.target.value)} required placeholder="https://your-provider.example/v1" /></label><label>Model ID<input value={form.modelId} onChange={e => set('modelId', e.target.value)} required placeholder="填写服务商提供的模型 ID" /></label><label>API Key<input type="password" value={key} onChange={e => { setKey(e.target.value); setClearKey(false); }} autoComplete="new-password" placeholder={agent !== 'new' && agent.hasApiKey ? '已保存，留空表示保持原 Key' : '输入后加密保存到本机'} /></label>{agent !== 'new' && agent.hasApiKey && <label className="checkbox-label"><input type="checkbox" checked={clearKey} onChange={e => { setClearKey(e.target.checked); setKey(''); }} />清除已保存的 Key</label>}<div className="form-two"><label className="checkbox-label enabled-label"><input type="checkbox" checked={form.enabled} onChange={e => set('enabled', e.target.checked)} />启用这个智能体</label></div><div className="dialog-note">连接信息只在本机后端使用。请填写你信任的模型服务地址。</div><div className="dialog-actions"><button type="button" className="secondary" onClick={onClose}>取消</button><button className="primary" disabled={busy}>{busy ? '保存中…' : '保存配置'}</button></div></form></dialog>;
+  const endpointChanged = agent !== 'new' && (form.provider !== agent.provider || form.baseUrl?.replace(/\/+$/, '') !== agent.baseUrl);
+  return <dialog ref={dialog} className="agent-dialog" onCancel={onClose}><form onSubmit={async e => { e.preventDefault(); setBusy(true); setError(''); try { await onSave({ ...form, ...(key ? { apiKey: key } : clearKey ? { apiKey: null } : {}) }); } catch (e) { setError((e as Error).message); setBusy(false); } }}>
+    <div className="dialog-heading"><div><div className="eyebrow">AGENT CONFIGURATION</div><h2>{agent === 'new' ? '新建智能体' : '编辑智能体'}</h2></div><button type="button" className="close-button" aria-label="关闭配置" onClick={onClose}>×</button></div>
+    {error && <div className="alert error" role="alert">{error}</div>}
+    <div className="form-two"><label>名称<input autoFocus value={form.name} onChange={e => set('name', e.target.value)} maxLength={80} required /></label><label>角色<select value={form.role} onChange={e => set('role', e.target.value as Role)}>{roleOrder.map(r => <option key={r} value={r}>{roles[r].name}</option>)}</select></label></div>
+    <label>Provider<select value={form.provider} onChange={e => { const provider = e.target.value as AgentInput['provider']; setForm(f => ({ ...f, provider, baseUrl: provider === 'anthropic' ? 'https://api.anthropic.com' : provider === 'deepseek' ? 'https://api.deepseek.com' : 'https://api.openai.com/v1', modelId: provider === 'anthropic' ? '' : provider === 'deepseek' ? 'deepseek-flash' : '' })); }}><option value="deepseek">DeepSeek</option><option value="openai-compatible">OpenAI Compatible（含自定义服务）</option><option value="anthropic">Anthropic</option></select></label>
+    <label>Base URL<input type="url" value={form.baseUrl} onChange={e => set('baseUrl', e.target.value)} required placeholder="https://your-provider.example/v1" /></label>
+    <label>Model ID<input value={form.modelId} onChange={e => set('modelId', e.target.value)} required placeholder="填写服务商提供的模型 ID" /></label>
+    <label>API Key<input type="password" value={key} onChange={e => { setKey(e.target.value); setClearKey(false); }} autoComplete="new-password" placeholder={endpointChanged ? '填写新服务Key；留空将清除原Key' : agent !== 'new' && agent.hasApiKey ? '已保存，留空表示保持原 Key' : '输入后加密保存到本机'} /></label>
+    {endpointChanged && <p className="research-note warning">已更换提供方或地址；如未明确填写新 Key，保存时会清除原 Key，避免发送给另一服务。</p>}
+    {agent !== 'new' && agent.hasApiKey && <label className="checkbox-label"><input type="checkbox" checked={clearKey} onChange={e => { setClearKey(e.target.checked); setKey(''); }} />清除已保存的 Key</label>}
+    <div className="form-two"><label className="checkbox-label enabled-label"><input type="checkbox" checked={form.enabled} onChange={e => set('enabled', e.target.checked)} />启用这个智能体</label></div>
+    <div className="dialog-note">连接信息只在本机后端使用。请填写你信任的模型服务地址；不要将 Key 粘贴到名称或其他公开字段。</div>
+    <div className="dialog-actions"><button type="button" className="secondary" onClick={onClose}>取消</button><button className="primary" disabled={busy}>{busy ? '保存中…' : '保存配置'}</button></div>
+  </form></dialog>;
 }
 
 function ResearchView({ survey }: { survey: Run['survey'] }) {

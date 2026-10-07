@@ -44,3 +44,12 @@ test('survey API service checkpoints failure usage, never leaks keys and stops l
   for (let tick = 0; tick < 100 && store.listSurveyRuns().find(run => run.id === id)?.state === 'running'; tick++) await new Promise(resolve => setTimeout(resolve, 10));
   const run = store.listSurveyRuns().find(run => run.id === id)!; assert.equal(run.state, 'stopped'); assert.equal(calls, 1); assert.equal(run.metrics.inputTokens, 123); assert.equal(run.metrics.notStarted, 2); assert.equal(run.responses[0].raw, '{partial'); assert.equal(JSON.stringify(run).includes('do-not-leak'), false);
 });
+test('survey service rejects credentials pasted into public inputs synchronously without phantom runs', t => {
+  const directory = mkdtempSync(path.join(tmpdir(), 'city-survey-credential-test-')); const store = new CityStore(directory);
+  t.after(() => { store.close(); rmSync(directory, { recursive: true, force: true }); });
+  const preset = store.getResidentAgents()[0]; store.updateResidentAgent(preset.id, { apiKey: 'snapshot-test-secret' }); let calls = 0;
+  const service = createSurveyService(store, async () => { calls++; throw new Error('must not call'); });
+  const task = getResearchTemplates()[2];
+  assert.throws(() => service.start({ task: { ...task, decisionContext: { ...task.decisionContext, offering: 'snapshot-test-secret' } }, residentAgentIds: [preset.id], mode: 'live', count: 1, seed: 42, assumptionsAccepted: true, pricing: { currency: 'CNY', inputPerMillion: null, outputPerMillion: null, suppliedAt: '', source: 'test' } }), /凭据/);
+  assert.equal(calls, 0); assert.equal(store.listSurveyRuns().length, 0);
+});

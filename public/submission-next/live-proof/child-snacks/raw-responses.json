@@ -1,0 +1,103 @@
+[
+  {
+    "residentId": "resident-001",
+    "status": "invalid",
+    "structureValid": false,
+    "answers": [],
+    "raw": "{\"residentId\":\"resident-001\",\"answers\":[{\"questionId\":\"eligibility\",\"value\":\"eligible\"},{\"questionId\":\"purchase-role\",\"value\":[\"purchaser\",\"permission\",\"shared\"]},{\"questionId\":\"child-evidence\",\"value\":\"not-collected\"},{\"questionId\":\"past-frequency\",\"value\":\"unknown\"},{\"questionId\":\"past-categories\",\"value\":\"unknown\"},{\"questionId\":\"permission-factors\",\"value\":[\"ingredients\",\"traceability\",\"school-rules\",\"price\"]},{\"questionId\":\"child-own-taste\",\"value\":null},{\"questionId\":\"purchase-intent\",\"value\":\"maybe\"},{\"questionId\":\"monthly-budget\",\"value\":null},{\"questionId\":\"package-size\",\"value\":\"unknown\"},{\"questionId\":\"price-per20g\",\"value\":\"unknown\"},{\"questionId\":\"planned-channels\",\"value\":[\"unknown\"]},{\"questionId\":\"travel-minutes\",\"value\":null},{\"questionId\":\"reachable-streets\",\"value\":[\"puyan\"]},{\"questionId\":\"traceability-importance\",\"value\":5},{\"questionId\":\"purchase-barriers\",\"value\":[\"allergen\",\"rules\",\"freshness\"]},{\"questionId\":\"needed-evidence\",\"value\":\"需要确认孩子本人是否接受该口味，但本轮没有采集；还需明确成分与过敏原、生产日期和来源、学校及家庭对零食的规定，以及合适份量。\"}]}",
+    "error": "答卷值违反题目契约：past-categories",
+    "durationMs": 2460.833166,
+    "inputTokens": 2701,
+    "outputTokens": 289
+  },
+  {
+    "residentId": "resident-002",
+    "status": "not-started",
+    "answers": [],
+    "raw": "",
+    "error": "预登记质量停止：原始答卷不能完整复核；余下保留not-started，不重试。",
+    "durationMs": 0,
+    "inputTokens": 0,
+    "outputTokens": 0
+  },
+  {
+    "residentId": "resident-003",
+    "status": "not-started",
+    "answers": [],
+    "raw": "",
+    "error": "预登记质量停止：原始答卷不能完整复核；余下保留not-started，不重试。",
+    "durationMs": 0,
+    "inputTokens": 0,
+    "outputTokens": 0
+  },
+  {
+    "residentId": "resident-004",
+    "status": "not-started",
+    "answers": [],
+    "raw": "",
+    "error": "预登记质量停止：原始答卷不能完整复核；余下保留not-started，不重试。",
+    "durationMs": 0,
+    "inputTokens": 0,
+    "outputTokens": 0
+  },
+  {
+    "residentId": "resident-005",
+    "status": "not-started",
+    "answers": [],
+    "raw": "",
+    "error": "预登记质量停止：原始答卷不能完整复核；余下保留not-started，不重试。",
+    "durationMs": 0,
+    "inputTokens": 0,
+    "outputTokens": 0
+  },
+  {
+    "residentId": "resident-006",
+    "status": "not-started",
+    "answers": [],
+    "raw": "",
+    "error": "预登记质量停止：原始答卷不能完整复核；余下保留not-started，不重试。",
+    "durationMs": 0,
+    "inputTokens": 0,
+    "outputTokens": 0
+  },
+  {
+    "residentId": "resident-007",
+    "status": "not-started",
+    "answers": [],
+    "raw": "",
+    "error": "预登记质量停止：原始答卷不能完整复核；余下保留not-started，不重试。",
+    "durationMs": 0,
+    "inputTokens": 0,
+    "outputTokens": 0
+  },
+  {
+    "residentId": "resident-008",
+    "status": "not-started",
+    "answers": [],
+    "raw": "",
+    "error": "预登记质量停止：原始答卷不能完整复核；余下保留not-started，不重试。",
+    "durationMs": 0,
+    "inputTokens": 0,
+    "outputTokens": 0
+  },
+  {
+    "residentId": "resident-009",
+    "status": "not-started",
+    "answers": [],
+    "raw": "",
+    "error": "预登记质量停止：原始答卷不能完整复核；余下保留not-started，不重试。",
+    "durationMs": 0,
+    "inputTokens": 0,
+    "outputTokens": 0
+  },
+  {
+    "residentId": "resident-010",
+    "status": "not-started",
+    "answers": [],
+    "raw": "",
+    "error": "预登记质量停止：原始答卷不能完整复核；余下保留not-started，不重试。",
+    "durationMs": 0,
+    "inputTokens": 0,
+    "outputTokens": 0
+  }
+]

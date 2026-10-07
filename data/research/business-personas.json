@@ -1,0 +1,46 @@
+[
+  {
+    "id": "work-context", "label": "受雇与共同生活情景", "description": "受雇、与伴侣及子女同住为明确假设；没有消费偏好、品牌、预算或购买答案。",
+    "persona": {
+      "schemaVersion": "1.0", "provenance": "assumption",
+      "personality": { "openness": 65, "conscientiousness": 70, "extraversion": 40, "agreeableness": null, "emotionalStability": null, "customTraits": [] },
+      "upbringing": { "primaryCaregiving": "unknown", "experiences": ["relocated"], "customExperiences": [] },
+      "education": { "level": "bachelor", "customDetail": "专业与院校未知；不是滨江本科人口占比" },
+      "household": { "relationship": "married", "livingRoles": ["with-partner", "with-children"], "customRoles": [] },
+      "work": { "employment": "employed", "occupation": "信息服务情景角色，具体工作未知", "socialRoles": ["employee"], "customRoles": [], "income": { "currency": "CNY", "period": "month", "basis": "unknown", "lower": null, "upper": null } }
+    }
+  },
+  {
+    "id": "unknown-context", "label": "五层未知对照情景", "description": "只设目标资格，五层均保留未知，不自动填中等人格、学历、收入或消费能力。",
+    "persona": {
+      "schemaVersion": "1.0", "provenance": "assumption",
+      "personality": { "openness": null, "conscientiousness": null, "extraversion": null, "agreeableness": null, "emotionalStability": null, "customTraits": [] },
+      "upbringing": { "primaryCaregiving": "unknown", "experiences": [], "customExperiences": [] },
+      "education": { "level": "unknown", "customDetail": "" },
+      "household": { "relationship": "unknown", "livingRoles": [], "customRoles": [] },
+      "work": { "employment": "unknown", "occupation": "", "socialRoles": [], "customRoles": [], "income": { "currency": "CNY", "period": "month", "basis": "unknown", "lower": null, "upper": null } }
+    }
+  },
+  {
+    "id": "extended-care-context", "label": "退休与多代照护情景", "description": "退休、多代同住、照护及60岁以上均为各自明确假设，不能从年龄自动推出退休或喜好。",
+    "persona": {
+      "schemaVersion": "1.0", "provenance": "assumption",
+      "personality": { "openness": null, "conscientiousness": null, "extraversion": 55, "agreeableness": null, "emotionalStability": null, "customTraits": [] },
+      "upbringing": { "primaryCaregiving": "grandparents", "experiences": ["urban", "extended-family"], "customExperiences": [] },
+      "education": { "level": "unknown", "customDetail": "" },
+      "household": { "relationship": "unknown", "livingRoles": ["multi-generation", "caregiver"], "customRoles": [] },
+      "work": { "employment": "retired", "occupation": "", "socialRoles": ["caregiver", "community-member"], "customRoles": [], "income": { "currency": "CNY", "period": "month", "basis": "unknown", "lower": null, "upper": null } }
+    }
+  },
+  {
+    "id": "self-employed-context", "label": "自雇与照护情景", "description": "自雇、共同照护与成长经历只用于上下文传递，不指定主营、价格、购买意向或网点位置。",
+    "persona": {
+      "schemaVersion": "1.0", "provenance": "assumption",
+      "personality": { "openness": null, "conscientiousness": 60, "extraversion": null, "agreeableness": null, "emotionalStability": null, "customTraits": [] },
+      "upbringing": { "primaryCaregiving": "single-caregiver", "experiences": ["rural", "relocated"], "customExperiences": [] },
+      "education": { "level": "associate", "customDetail": "专业未知" },
+      "household": { "relationship": "divorced", "livingRoles": ["with-children", "caregiver"], "customRoles": [] },
+      "work": { "employment": "self-employed", "occupation": "情景中的独立服务工作者，具体岗位未知", "socialRoles": ["business-owner", "caregiver"], "customRoles": [], "income": { "currency": "CNY", "period": "month", "basis": "unknown", "lower": null, "upper": null } }
+    }
+  }
+]

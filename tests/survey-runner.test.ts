@@ -18,6 +18,8 @@ test('same task uses canonical hash across preflight/run and object insertion or
   assert.equal(parseSurveyEvidence(run).id, run.id);
   assert.throws(() => parseSurveyEvidence({ ...run, taskHash: 'forged' }), /指纹/);
   assert.throws(() => parseSurveyEvidence({ ...run, metrics: { ...run.metrics, valid: 999 } }), /汇总/);
+  for (const durationMs of [-1, Infinity, NaN]) assert.throws(() => parseSurveyEvidence({ ...run, durationMs }), /耗时/);
+  assert.throws(() => parseSurveyEvidence({ ...run, responses: run.responses.map((response, index) => index ? response : { ...response, durationMs: -1 }) }), /耗时/);
 });
 test('four presets cover all streets, draw new ages rather than cycling twelve fixed people', () => {
   const four = buildProfiles(task, population, presets, 12, 42); assert.equal(new Set(four.map(profile => profile.street)).size, 3);
@@ -49,4 +51,31 @@ test('group and paired transitions reconcile and absent comparison configuration
   assert.equal(groups.reduce((sum, group) => sum + group.valid, 0), run.metrics.valid);
   for (const comparison of run.analysis!.comparisons) assert.equal(comparison.transitions.reduce((sum, pair) => sum + pair.count, 0), comparison.denominator);
   const noPlan = buildAnalysis({ ...task, comparisons: [] }, run.profiles, run.responses); assert.equal(noPlan.outputs.find(output => output.output === 'price-comparison')?.status, 'needs-config');
+});
+test('known credentials in questionnaire/persona are rejected before hashes, checkpoints or model calls', async () => {
+  let calls = 0; let checkpoints = 0; const secret = 'snapshot-test-secret';
+  const context = { knownSecrets: [secret], mode: 'live' as const, count: 1,
+    checkpoint: async () => { checkpoints++; }, call: async () => { calls++; throw new Error('must not call'); } };
+  await assert.rejects(execute({ ...context, task: { ...task, decisionContext: { ...task.decisionContext, offering: secret } } }), /凭据/);
+  await assert.rejects(execute({ ...context, presets: [{ ...presets[0], description: '\\u0073napshot-test-secret' }] }), /凭据/);
+  assert.equal(calls, 0); assert.equal(checkpoints, 0);
+});
+test('injected response and error evidence are redacted before answer parsing or persistence', async () => {
+  const secret = 'echo-test-secret'; const profile = buildProfiles(task, population, [presets[0]], 1, 42)[0];
+  const valid = JSON.parse(fixtureAnswers(task, profile, 42));
+  const freeText = task.questionnaire.questions.find(question => question.type === 'text')!;
+  valid.answers.find((answer: { questionId: string }) => answer.questionId === freeText.id).value = secret;
+  const raw = JSON.stringify(valid).replace(secret, '\\u0065cho-test-secret');
+  const success = await execute({ mode: 'live', count: 1, knownSecrets: [secret], call: async () => ({ text: raw, inputTokens: 1, outputTokens: 1 }) });
+  assert.equal(success.responses[0].status, 'valid');
+  assert.match(success.responses[0].raw, /REDACTED/);
+  assert.equal(JSON.stringify(success).includes(secret), false);
+  assert.equal(JSON.stringify(success).includes('\\u0065cho-test-secret'), false);
+  parseSurveyEvidence(success);
+  const failure = await execute({ mode: 'live', count: 2, knownSecrets: [secret], call: async () => { throw Object.assign(new Error('failed \\u0065cho-test-secret'), { evidence: { text: '{"partial":"\\u0065cho-test-secret', inputTokens: 10, outputTokens: null } }); } });
+  assert.match(failure.responses[0].error!, /REDACTED/);
+  assert.equal(JSON.stringify(failure).includes(secret), false);
+  assert.equal(JSON.stringify(failure).includes('\\u0065cho-test-secret'), false);
+  assert.equal(failure.metrics.notStarted, 1);
+  parseSurveyEvidence(failure);
 });

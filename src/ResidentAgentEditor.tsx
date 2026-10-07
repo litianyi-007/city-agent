@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import type { ResidentAgentInput, ResidentAgentPublic } from '../server/research/residents';
 import { researchTaskSchema } from '../shared/research-schema';
+import { residentPersonaSchema, createDefaultPersona } from '../shared/resident-persona';
+import { ResidentPersonaBuilder } from './ResidentPersonaBuilder';
 
 interface Props {
   agent: ResidentAgentPublic | null;
@@ -14,9 +16,10 @@ export function ResidentAgentEditor({ agent, templates, onClose, onSave, onDirty
   const pagesMode = import.meta.env.MODE === 'pages';
   const [form, setForm] = useState<ResidentAgentInput>(() => ({
     ...templates[0], provider: 'deepseek', baseUrl: 'https://api.deepseek.com', modelId: 'deepseek-flash', enabled: true, behaviorNotes: '',
+    persona: createDefaultPersona(),
     ...(agent ? { name: agent.name, templateId: agent.templateId, description: agent.description, population: agent.population,
       assumptions: agent.assumptions, behaviorNotes: agent.behaviorNotes, provider: agent.provider,
-      baseUrl: agent.baseUrl, modelId: agent.modelId, enabled: agent.enabled } : {}),
+      baseUrl: agent.baseUrl, modelId: agent.modelId, enabled: agent.enabled, persona: agent.persona ?? createDefaultPersona() } : {}),
   }));
   const [filters, setFilters] = useState(JSON.stringify(form.population.filters, null, 2));
   const [assumptions, setAssumptions] = useState((form.assumptions ?? []).join('\n'));
@@ -40,7 +43,9 @@ export function ResidentAgentEditor({ agent, templates, onClose, onSave, onDirty
       event.preventDefault(); setError(''); setBusy(true);
       try {
         const population = researchTaskSchema.shape.population.parse({ ...form.population, filters: JSON.parse(filters) });
-        await onSave({ ...form, population, assumptions: assumptions.split('\n').map(line => line.trim()).filter(Boolean),
+        const checked = residentPersonaSchema.safeParse(form.persona);
+        if (!checked.success) throw new Error(`五层设定无效：${checked.error.issues.map(issue => `${issue.path.join('.')}：${issue.message}`).join('；')}`);
+        await onSave({ ...form, persona: checked.data, population, assumptions: assumptions.split('\n').map(line => line.trim()).filter(Boolean),
           ...(apiKey ? { apiKey } : clearKey ? { apiKey: null } : {}) });
       } catch (error) { setError(error instanceof SyntaxError ? '筛选条件不是有效 JSON，请检查括号与引号。' : (error as Error).message); }
       finally { setBusy(false); }
@@ -54,7 +59,7 @@ export function ResidentAgentEditor({ agent, templates, onClose, onSave, onDirty
           <label>人群模板<select value={form.templateId} onChange={event => {
             const template = templates.find(item => item.templateId === event.target.value);
             if (template) {
-              setForm(previous => ({ ...previous, ...template, behaviorNotes: '' }));
+              setForm(previous => ({ ...previous, ...template, persona: template.persona ?? createDefaultPersona(), behaviorNotes: '' }));
               setFilters(JSON.stringify(template.population.filters, null, 2)); setAssumptions((template.assumptions ?? []).join('\n'));
             } else set('templateId', 'custom');
           }}>{templates.map(template => <option key={template.templateId} value={template.templateId}>{template.name}</option>)}<option value="custom">自定义人群</option></select></label>
@@ -65,6 +70,7 @@ export function ResidentAgentEditor({ agent, templates, onClose, onSave, onDirty
         <label>人口与资格筛选（JSON，所有条件取交集）<textarea className="json-input" rows={6} value={filters} onChange={event => setFilters(event.target.value)} /></label>
         <label>情景假设（每行一项）<textarea rows={3} maxLength={20000} value={assumptions} onChange={event => setAssumptions(event.target.value)} /></label>
         <label>行为设定（可留空，均按情景假设处理）<textarea rows={2} maxLength={2000} value={form.behaviorNotes || ''} onChange={event => set('behaviorNotes', event.target.value)} placeholder="不预填待研究的商品偏好、可接受价格或购买答案" /></label>
+        <ResidentPersonaBuilder value={form.persona ?? createDefaultPersona()} onChange={persona => { set('persona', persona); setDirty(true); }} />
         <h3 className="resident-model-heading">独立模型配置</h3>
         <label>Provider<select value={form.provider} onChange={event => setForm(previous => ({ ...previous, provider: event.target.value as ResidentAgentInput['provider'] }))}><option value="deepseek">DeepSeek</option><option value="openai-compatible">OpenAI Compatible（含自定义服务）</option><option value="anthropic">Anthropic</option></select></label>
         <label>Base URL<input required type="url" maxLength={2048} value={form.baseUrl} onChange={event => set('baseUrl', event.target.value)} /></label>

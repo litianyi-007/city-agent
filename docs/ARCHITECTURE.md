@@ -1,5 +1,7 @@
 # Demo 实现架构
 
+> F001续作（2026-10-07，本地 `feature/virtual-society-next`，尚未发布/用户验收）：新增单次候选研究规划、业务证据预检、可选五层情景画像、共享凭据脱敏及评委自检/独立启动。五层是独立信息轴，不是DNA因果模型；只进入新2.1问卷的快照/Prompt，不自动更新人口事实或旧2.0证据。具体契约与状态见 [F001设计](prd/F001-society-next/F001-society-next-design.md) 与 [当前唯一计划](SOCIETY-NEXT.md)。本文旧版完整留底于 [原架构](archive/2026-10-07-before-society-next/ARCHITECTURE.md)。
+
 > 2026-10-07增量：`shared/survey-runner.ts`统一浏览器/本机问卷执行，`server/research/surveys.ts`通过Harness，SQLite/IndexedDB存冻结历史；`researchSurveyId`把完成问卷接入四角色并添加不可删的ID、有效分母、合成标记、分组交互Gate。完整记录见[审查补齐](research/AUDIT-FIXES-2026-10-07.md)。旧规则分支仍独立保留，不进入新问卷交付上下文。
 
 按 2026-09-23 用户指示，将执行 Agent 与模拟居民分离。[旧架构与 ADR](archive/2026-09-23-before-demo/ARCHITECTURE.md)留底；旧 C4/C9/C10 和 ADR-004 在当前 demo 中由下文覆盖。
@@ -27,7 +29,7 @@ flowchart LR
 
 原“双叉互不调用”不再是调度规则：L5 团队可以将城市数据工具作为任务上下文。居民仍是样本数据对象，不拥有工具或开发职责。
 
-2026-09-24 增量：新增独立调查工作区与 `ResidentAgentPreset` 配置对象；“居民样本”“人群预设”“研发执行 Agent”三者分离。当前预设只描述筛选、显式假设和模型连接，尚未启动自主居民。问卷工作区不接旧 `/api/runs`，居民执行器仍待实现。
+2026-09-24 历史增量：新增独立调查工作区与 `ResidentAgentPreset` 配置对象；“居民样本”“人群预设”“研发执行 Agent”三者分离。该阶段尚无居民执行器。2026-10-07已由共享问卷执行器和 `researchSurveyId` 交付衔接替代这个待实现状态；长期自主居民、记忆、dream仍未实施。
 
 ## 2. 模块与文件
 
@@ -51,6 +53,12 @@ flowchart LR
 | `server/research-cases.ts` / `src/ResearchCaseView.tsx` | 两类任务的适用性、缺口与条件假设；区别工程交付与商业结论 |
 | `server/demo-artifact.ts` | 仅 demo 模式使用的显式页面模板 |
 | `server/types.ts` | API、Agent、Run、Gate 数据类型 |
+| `shared/resident-persona.ts` / `persona-scenarios.ts` | 五层情景契约与无权重探索组合；字段默认未知，资格独立 |
+| `src/ResidentPersonaBuilder.tsx` | 五层勾选、连续参数、自定义及收入口径；编辑器按需加载 |
+| `server/research/planning.ts` / `shared/research-planning.ts` | 单次有界候选规划；脱敏日志，不自动保存或执行问卷 |
+| `shared/business-evidence.ts` | 本地业务来源/观测契约与预检；不抓取URL、不发布人口包 |
+| `shared/redaction.ts` / `shared/research-evaluation.ts` | 已知凭据脱敏、账本与计划分母离线评分；自报身份不作认证 |
+| `scripts/doctor.mjs` / `launch-review.mjs` | 只读前提检查、明确端口和独立数据目录启动 |
 
 ## 3. Harness 决策
 
@@ -79,7 +87,7 @@ flowchart LR
 
 新增 `resident_agents(id,data,secret)` 与 `research_projects(id,data)` 表。预设公开 JSON 不含 Key，`secret` 复用 AES-GCM；提供方或地址变化且未明确重填新 Key 时清除旧 Key。草稿仅引用预设 ID，无运行快照或已验证状态；被草稿引用的预设不能删除。后续执行阶段必须冻结问卷、画像、模型配置与证据版本，不能直接把这些可编辑草稿当不可变运行记录。
 
-`POST /api/research/projects/validate` 对问卷及每个人群预设与问卷的 AND 交集分别预检，区域/时期/单位必须相容。返回 `executorAvailable:false`、`modelCalls:0`、`marketResearchValidated:false`；Key 存在和资格通过互不替代。预设复制只复制配置，不增加任何实际或逻辑人口数量。接口详见[工作区交付记录](research/WORKSPACE-2026-09-24.md)。
+`POST /api/research/projects/validate` 对问卷及每个人群预设与问卷的 AND 交集分别预检，区域/时期/单位必须相容。返回 `executorAvailable:false`、`modelCalls:0`、`marketResearchValidated:false` 描述该预检路径不执行问卷，不是当前产品没有独立问卷执行器；Key 存在和资格通过互不替代。预设复制只复制配置，不增加任何实际或逻辑人口数量。历史接口详见[工作区交付记录](research/WORKSPACE-2026-09-24.md)。
 
 API 绑定 127.0.0.1，校验 Host 与 Origin，不开放通配 CORS。SQLite owner lock 防止第二服务进程误中断现有运行；服务启动识别已退出进程的未完成工作。
 

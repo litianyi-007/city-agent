@@ -2,6 +2,7 @@ import { mkdtemp, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { DeepSeekHarness, type DeepSeekHarnessOptions } from '@deepseek-ai/dsh-sdk-client';
+import { redactKnownSecret } from '../shared/redaction.js';
 
 export const HARNESS_VERSION = '0.1.5-rc.3';
 export const HARNESS_NAME = `DeepSeek Harness ${HARNESS_VERSION}`;
@@ -54,11 +55,11 @@ function validateModel(agent: RoleModelConfig): URL {
 
 function safeError(error: unknown, key: string): Error {
   const raw = error instanceof Error ? error.message : String(error);
-  const message = key ? raw.split(key).join('[REDACTED]') : raw;
+  const message = redactKnownSecret(raw, key);
   const result = error instanceof HarnessCallError
-    ? new HarnessCallError(message.slice(0, 2000), { ...error.evidence, text: error.evidence.text.split(key).join('[REDACTED]') })
+    ? new HarnessCallError(message.slice(0, 2000), { ...error.evidence, text: redactKnownSecret(error.evidence.text, key) })
     : new Error(message.slice(0, 2000));
-  result.name = error instanceof Error ? error.name : 'Error';
+  result.name = redactKnownSecret(error instanceof Error ? error.name : 'Error', key).slice(0, 100);
   return result;
 }
 
@@ -76,9 +77,12 @@ export async function runRole(
   onEvent?: (message: string) => void,
   limits?: { maxOutputTokens: number; timeoutMs: number; reportUsage?: boolean },
 ): Promise<RoleResult> {
-  signal.throwIfAborted();
-  const baseUrl = validateModel(agent);
+  let baseUrl: URL;
+  try { signal.throwIfAborted(); baseUrl = validateModel(agent); }
+  catch (error) { throw safeError(error, agent.apiKey); }
   const api = protocolFor(agent.provider);
+  const safeSystemPrompt = redactKnownSecret(systemPrompt, agent.apiKey);
+  const safeUserPrompt = redactKnownSecret(userPrompt, agent.apiKey);
   const maxTokens = limits?.maxOutputTokens ?? MAX_OUTPUT_TOKENS;
   const timeoutMs = limits?.timeoutMs ?? ROLE_TIMEOUT_MS;
   if (!Number.isInteger(maxTokens) || maxTokens < 128 || maxTokens > MAX_OUTPUT_TOKENS || !Number.isInteger(timeoutMs) || timeoutMs < 1000 || timeoutMs > ROLE_TIMEOUT_MS) throw new Error('Harness调用限额无效。');
@@ -101,7 +105,7 @@ export async function runRole(
       ].map((id) => ({ id, disabled: true })),
       {
         id: 'system-prompt',
-        config: { includeHarnessIdentity: false, includeRuntimeContext: false, personaPrefix: systemPrompt },
+        config: { includeHarnessIdentity: false, includeRuntimeContext: false, personaPrefix: safeSystemPrompt },
       },
       {
         insert: [{
@@ -161,7 +165,7 @@ export async function runRole(
     });
     onEvent?.('DeepSeek Harness 已启动，正在请求模型。');
     const result = await Promise.race([
-      harness.run(userPrompt, {
+      harness.run(safeUserPrompt, {
         onNotification(notification) {
           const event = notification.params.event as { type?: string } | undefined;
           if (notification.method === 'session.event' && event?.type === 'assistant/message') {
@@ -187,13 +191,17 @@ export async function runRole(
       const reason = end?.type === 'turn/end' ? JSON.stringify(end.data.reason) : '没有完成事件';
       throw new HarnessCallError(`模型执行未完成或返回空内容: ${reason}`, { text: result.finalResponse, inputTokens: usageReported ? inputTokens : null, outputTokens: usageReported ? outputTokens : null });
     }
-    return { text: result.finalResponse.split(agent.apiKey).join('[REDACTED]'), inputTokens, outputTokens, harness: HARNESS_NAME, ...(limits?.reportUsage ? { usageReported } : {}) };
+    return { text: redactKnownSecret(result.finalResponse, agent.apiKey), inputTokens, outputTokens, harness: HARNESS_NAME, ...(limits?.reportUsage ? { usageReported } : {}) };
   } catch (error) {
     throw safeError(stopError ?? error, agent.apiKey);
   } finally {
     if (timeout) clearTimeout(timeout);
     if (abortListener) signal.removeEventListener('abort', abortListener);
     try { await close(); }
-    finally { await rm(workspace, { recursive: true, force: true }); }
+    catch (error) { throw safeError(error, agent.apiKey); }
+    finally {
+      try { await rm(workspace, { recursive: true, force: true }); }
+      catch (error) { throw safeError(error, agent.apiKey); }
+    }
   }
 }

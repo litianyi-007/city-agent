@@ -44,12 +44,13 @@ export function PagesSurveyPanel({ readDraft, busy, onBusyChange, draftVersion }
       const input = readDraft(); const allPresets = pagesMode ? browserPresets() : await researchApi<ResidentAgentPublic[]>('/resident-agents');
       const presets = input.residentAgentIds.map(id => { const preset = allPresets.find(agent => agent.id === id); if (!preset) throw new Error('请先选择人群预设。'); return preset; });
       const configurations = pagesMode && mode === 'live' ? new Map(presets.map(agent => [agent.id, getBrowserModel(agent.id)])) : new Map();
+      const knownSecrets = pagesMode ? presets.filter(agent => agent.enabled && agent.hasApiKey).map(agent => getBrowserModel(agent.id).apiKey) : [];
       const priceIn = inputPrice.trim() ? Number(inputPrice) : null; const priceOut = outputPrice.trim() ? Number(outputPrice) : null;
       if ([priceIn, priceOut].some(price => price !== null && (!Number.isFinite(price) || price < 0))) throw new Error('单价须为非负数；未知请留空。');
       if (mode === 'live' && count > 12) throw new Error('真实模型首批最多12位受访者。');
       const pricing = { currency: 'CNY' as const, inputPerMillion: priceIn, outputPerMillion: priceOut, source: '页面用户填写，未经账单认证', suppliedAt: new Date().toISOString() };
       const result = pagesMode ? await executeSurvey({ task: input.task, population: pagesPopulation, pack: pagesPack, presets, count, seed, mode, signal: controller.current.signal,
-        pricing, progress: setProgress, checkpoint: keep, call: (profile, system, user, signal) => callBrowserModel(configurations.get(profile.presetId)!, system, user, signal) })
+        knownSecrets, pricing, progress: setProgress, checkpoint: keep, call: (profile, system, user, signal) => callBrowserModel(configurations.get(profile.presetId)!, system, user, signal) })
         : await runLocalSurvey({ ...input, mode, count, seed, pricing, assumptionsAccepted: true }, controller.current.signal, value => { void keep(value); setProgress(`已完成 ${value.responses.length}/${value.metrics.planned} · Harness问卷`); });
       await keep(result); setProgress(`运行已自动保存到${pagesMode ? '本机浏览器证据库' : '本机SQLite'}；导航或刷新后可从历史运行恢复。请同时导出备份。`);
     } catch (error) { setError((error as Error).message); }

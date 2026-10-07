@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <title>City Agent · 评委体验指南</title>
+  <style>
+    :root{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color:#213347;background:#f4f7fb;line-height:1.7}
+    body{margin:0}main{max-width:880px;margin:auto;padding:32px 20px 64px}h1,h2,h3{line-height:1.3}a{color:#125ca8;text-underline-offset:3px}a:focus-visible{outline:3px solid #bd721d;outline-offset:4px}section{margin:22px 0;padding:22px;background:white;border:1px solid #d9e2eb;border-radius:12px}pre{overflow:auto;padding:16px;background:#edf3f8;border-radius:8px;font-size:14px}code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;overflow-wrap:anywhere}.note{border-left:4px solid #a26915;padding:12px 16px;background:#fff5dd}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.grid article{border:1px solid #d9e2eb;border-radius:10px;padding:16px}ul,ol{padding-left:22px}@media(max-width:680px){.grid{grid-template-columns:1fr}main{padding:20px 14px 40px}section{padding:16px}h1{font-size:27px}}
+  </style>
+</head>
+<body><main>
+  <a href="./#research">← 返回调查工作区</a>
+  <h1>评委体验指南</h1>
+  <p>当前公开评审版固定源码Tag：<code>society-review-2026-10-07-rc1</code>。先选体验路径，再查看本轮真实测试的失败与未启动记录；安装成功不等于质量验收通过。</p>
+  <p><a href="./submission-next/index.html">最新申报材料</a> · <a href="./submission-next/project-materials.pdf">完整PDF</a> · <a href="./submission-next/live-proof/report.md">本轮真实测试报告</a> · <a href="./submission-next/demo-next.mp4">4分33秒零费用UI录屏</a></p>
+  <div class="grid">
+    <article><h2>无需安装</h2><p><a href="https://litianyi-007.github.io/city-agent/">公开 Demo</a>提供两套17/18题、各12人的完整工程示例，以及人口来源和历史记录。不需要Key；规则夹具为0模型调用，不是本轮真实LLM答卷。</p></article>
+    <article><h2>浏览器新调用</h2><p>页面填自己的模型连接和Key，直接请求供应商，<strong>不经过Harness</strong>。本轮从Pages来源完成2次实际CORS/HTTP200检查，仅证明该配置的协议可达，不等于新版界面全流程或问卷质量通过。</p></article>
+    <article><h2>本机Harness</h2><p>安装固定Tag源码、Node22.22.3及依赖；页面验收另需Chromium。真实调用在页面填自己的Key并主动确认预算。无需GPU、模型权重或全局dsh。</p></article>
+  </div>
+  <section>
+    <h2>当前公开评审版：固定Tag安装与启动</h2>
+    <p>准备Git、Node和npm下载网络。仅macOS/Node22.22.3完成本机工程验证；不代表评委独立干净电脑或Windows/Linux已经验证。请在新目录执行，保留运行终端：</p>
+    <pre><code>git clone --branch society-review-2026-10-07-rc1 --depth 1 https://github.com/litianyi-007/city-agent.git city-agent-society-review
+cd city-agent-society-review
+node --version
+npm ci
+npm run setup
+npm run build
+npm run doctor
+npm run start:review</code></pre>
+    <p>打开 <code>http://127.0.0.1:4320/#research</code>，Ctrl+C停止。Node最低22.19.0，建议实测22.22.3；使用Unix nvm时可先执行 <code>nvm install &amp;&amp; nvm use</code>。SDK和dsh由锁文件安装，无需单独下载或全局安装。</p>
+    <p>默认独立数据目录 <code>.city-agent-review/</code>。启动器不安装、不构建、不换端口、不复制Key、不请求模型。安装或运行零费用示例无需API Key；实际新调用另需自己的有效Key、模型权限、供应商余额和显式预算确认。</p>
+    <p><a href="https://github.com/litianyi-007/city-agent/tree/society-review-2026-10-07-rc1">固定Tag源码</a> · <a href="https://github.com/litianyi-007/city-agent/blob/society-review-2026-10-07-rc1/README.md">该版README</a> · <a href="./submission-next/index.html">对应申报材料</a></p>
+    <pre><code>npm run doctor -- --json
+npm run start:review -- --port 4330 --data-dir .city-agent-review-4330</code></pre>
+    <p>自检退出码：0前提就绪；1检查失败；2参数错误。只检查本机前提，不读私有配置、不创建数据库。Chromium文件存在不保证Linux共享库可用，dist存在不保证与当前源码同步。</p>
+    <p class="note">申报材料ZIP不是程序包。请核对下载的源码Tag与指南一致；不要把旧冻结Tag的启动方式用于新版，或把本机安装完成当成供应商连接、真实样本与现实选址已验收。</p>
+  </section>
+  <section>
+    <h2>本轮真实测试：质量门限未通过</h2>
+    <p>模型为DeepSeek <code>deepseek-flash</code>，调用实际API，没有用mock替代。受访者仍是五层假设构建的合成居民，不是滨江真人。本轮7次API请求均确认上游传输并有已报告usage，但不是7份有效居民问卷：</p>
+    <ul>
+      <li>居民调查计划20人，实际请求3人：小学照护者17题为0/10有效，宠物采购者18题为1/10有效；合计1份有效、2份结构无效、17人未启动。</li>
+      <li>自然语言规划实际调用2次，结构可用候选为0/2；没有替换固定问卷或据此生成选址结论。</li>
+      <li>另2次是Pages来源的实际CORS协议检查，均HTTP200；重复首画像，不计入独立居民分母，也不是新版页面全流程验收。</li>
+    </ul>
+    <p>多选题将未知值返回为标量而非数组，触发逐场景停止；保留原文，不重试、不补答、不换样本。两场景均未达到首批10/10门限，没有自动扩样。已报告输入15418、输出6881，共22299Token；保守估价¥0.085884，未独立核对供应商账单。一次性¥5/最多24次授权账本已关闭，剩余额度未继续使用。</p>
+    <p><a href="./submission-next/live-proof/report.json">结构化测试总账</a> · <a href="./submission-next/live-proof/budget-ledger.json">预算与逐次结算</a> · <a href="./submission-next/live-proof/plan.json">预登记计划</a> · <a href="./submission-next/live-proof/child-snacks/raw-responses.json">小学原始答卷</a> · <a href="./submission-next/live-proof/pet-snacks/raw-responses.json">宠物原始答卷</a></p>
+    <p class="note">零费用工程示例、历史12人15题真实快照和本轮真实测试分开记账。录屏展示之前零费用UI操作，不冒充本轮付费调用实录。当前材料自证可追溯工程和负结果，不自证儿童口味、猫犬市场占比、铺位或盈利。</p>
+  </section>
+  <section>
+    <h2>第一次操作</h2>
+    <ol><li>选择问卷与目标人群，查看资格和数据预检。</li><li>在“完整业务示例 · 零费用体验”选择小学17题或宠物18题，运行完整业务自证，核对12人原始答卷、未知、分母和登记规则，导出后刷新回查。</li><li>如需自己新做真实运行，在人群Agent页面填写连接和Key，限定样本/Token预算后主动启动。自行调用不属于上面的已关闭测试轮。</li><li>核对原文、失败答卷、未启动、Token/费用未知项，再导出证据。结构有效不等于现实可信；不要在题目里粘贴Key。</li></ol>
+    <p>Pages Key仅当前内存会话，刷新清除；本机Key加密存储，但不防同机账号。服务只供回环访问，不可直接公开到公网。不要发送数据库、加密Key或本机日志。</p>
+  </section>
+  <section>
+    <h2>历史冻结版：仅用于回放旧里程碑</h2>
+    <p>下列旧Tag和旧申报材料保留原样，不是本次公开评审版。旧版本使用4310端口，<strong>没有doctor/start:review命令</strong>；若需回放，请另建目录，不覆盖新版数据：</p>
+    <pre><code>git clone --branch submission-milestone-2026-10-07 --depth 1 https://github.com/litianyi-007/city-agent.git city-agent-review-history
+cd city-agent-review-history
+node --version
+npm ci
+npm run setup
+npm run build
+npm start</code></pre>
+    <p>打开 <code>http://127.0.0.1:4310/#research</code>，Ctrl+C停止。平台与Node限制同上。</p>
+    <p><a href="https://github.com/litianyi-007/city-agent/blob/submission-milestone-2026-10-07/README.md#启动">历史冻结版README</a> · <a href="./submission/index.html">历史申报材料</a></p>
+  </section>
+  <section>
+    <h2>遇到阻碍</h2>
+    <ul>
+      <li>Node20或缺SQLite：切换22.22.3，重新npm ci。SDK和dsh均锁定0.1.5-rc.3，不要单独升级或安装全局dsh。</li>
+      <li>缺dist：npm run build；dist-pages不是本机应用。缺Chromium：操作者显式执行npm run setup。</li>
+      <li>端口冲突：指定新端口和专用数据目录，不杀其他服务、不删除数据库锁。</li>
+      <li>Linux共享库：由管理员参考<a href="https://playwright.dev/docs/browsers">Playwright系统依赖说明</a>检查；install-deps可能需要管理员权限，不由启动器自动运行。</li>
+      <li>原生模块安装回退：按<a href="https://github.com/nodejs/node-gyp#installation">node-gyp官方说明</a>准备Python/C++工具链，仅在确需编译时安装。</li>
+      <li>CORS或模型权限错误：改用本机Harness或正确供应商配置；不要关闭浏览器安全或使用公共Key代理。</li>
+    </ul>
+  </section>
+  <p class="note">安装成功不代表模型或产品验收通过。历史四角色真实最终Gate为0/6通过，L4/L5在另一分支推进；当前居民调查也未过首批质量门限。仿Chainlink的MCP现实桥、居民记忆/dream及自主成长是后续规划，不是本版已交付能力。两个开店案例不能替代现实选址、销量与盈利证据。</p>
+</main></body></html>

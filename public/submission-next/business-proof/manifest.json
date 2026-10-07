@@ -1,0 +1,91 @@
+{
+  "schemaVersion": "1.0",
+  "proofVersion": "business-engineering-proof-1.1",
+  "id": "96709127-8c76-4a18-bdd6-3bdbd5755a9f",
+  "mode": "fixture",
+  "policyId": "business-consistent-synthetic-v1",
+  "modelCalls": 0,
+  "notice": "明确synthetic工程夹具：不调用LLM，不是真实调研、人格效度、市场率或经营选址建议。",
+  "files": [
+    {
+      "name": "business-proof.json",
+      "bytes": 28214,
+      "sha256": "a5db230a7b0358fa4478a400e60b960117766f3e4282c11adb69c7c153606d00"
+    },
+    {
+      "name": "proof-report.md",
+      "bytes": 12127,
+      "sha256": "99ef779fd69bff4be5d8fe112346999e368132c450032a3bc54bc156490677a3"
+    },
+    {
+      "name": "child-snacks/questionnaire.json",
+      "bytes": 13067,
+      "sha256": "80d4c3cb4af90be19681b90a8fed92e620bceee81fc6368b5a836409304ff846"
+    },
+    {
+      "name": "child-snacks/presets.json",
+      "bytes": 10335,
+      "sha256": "2b00f1ac802ca7b842c4d5af36a1e6e66ace3db84f32baae1585104e73bb1e64"
+    },
+    {
+      "name": "child-snacks/survey-run.json",
+      "bytes": 418040,
+      "sha256": "a2bbe2a3907142c3dd0a6ed58f0b579f2f1d30c792fae9121a291a4327b50004"
+    },
+    {
+      "name": "child-snacks/logic-audit.json",
+      "bytes": 13563,
+      "sha256": "2f4a058c0ef93c6c19447e5e2f9fd1c881e13ae74c75fbda0c634f338e9310f1"
+    },
+    {
+      "name": "child-snacks/raw-responses.json",
+      "bytes": 39216,
+      "sha256": "ec18893ee70c033ebd4c7f4cb19bf849e334e162dba0a938e6d9872aee244067"
+    },
+    {
+      "name": "child-snacks/statistics.json",
+      "bytes": 148062,
+      "sha256": "15ac2dfd1f0bbd337e026de296b9ebedbff34971284cc53a5f5a11ebe8f57c08"
+    },
+    {
+      "name": "child-snacks/prompts.txt",
+      "bytes": 115136,
+      "sha256": "c9c24928a414f4003286d7c3e5c3e51db2be796057d4ae0c18121af11e579e6b"
+    },
+    {
+      "name": "pet-snacks/questionnaire.json",
+      "bytes": 14002,
+      "sha256": "1821c16aff7e0730edacc6e8a9daa3cd6a35368ae90989d59546a51a409eccaf"
+    },
+    {
+      "name": "pet-snacks/presets.json",
+      "bytes": 11157,
+      "sha256": "12f0b44e5833d15b6d7e022e55f60683dd19f4f4eca644bcd5aec39ef499d612"
+    },
+    {
+      "name": "pet-snacks/survey-run.json",
+      "bytes": 443884,
+      "sha256": "647c0f36dbbe8a612a37389836eb0e0c8218686b1c054d2ca2eba23c7c25cb83"
+    },
+    {
+      "name": "pet-snacks/logic-audit.json",
+      "bytes": 13823,
+      "sha256": "b2162ee1384a07ad6eb313a01b69851c4a9c52fb13acfcaea46a02a555417d79"
+    },
+    {
+      "name": "pet-snacks/raw-responses.json",
+      "bytes": 39977,
+      "sha256": "def5dad2f91c0949745ba0c89450f4a244ea70387e2e5b074a9823199af76b74"
+    },
+    {
+      "name": "pet-snacks/statistics.json",
+      "bytes": 162235,
+      "sha256": "6735f8b49f3a21f4aae65d5ccb09300948b7fdf5d6a4277eacf2a008de6b22df"
+    },
+    {
+      "name": "pet-snacks/prompts.txt",
+      "bytes": 119519,
+      "sha256": "c289f8bdd6eb523513c9aabf9048c94a4d63ecec0d562df4c99baaa40e937f66"
+    }
+  ]
+}

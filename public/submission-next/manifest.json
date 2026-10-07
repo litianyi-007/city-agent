@@ -1,0 +1,435 @@
+{
+  "schemaVersion": "1.0",
+  "kind": "city-agent-review-candidate",
+  "generatedAt": "2026-10-07T12:40:46.114Z",
+  "proofId": "96709127-8c76-4a18-bdd6-3bdbd5755a9f",
+  "sourceHead": "b66122c21604fdb2ecdcbafb89c3d5ad8cde1466",
+  "sourceDirty": true,
+  "branch": "feature/virtual-society-next",
+  "releaseStatus": "public-reviewed-candidate",
+  "formalSubmission": "not-confirmed",
+  "realModelCallsThisBatch": 7,
+  "publishedDemo": "https://litianyi-007.github.io/city-agent/",
+  "frozenTag": "submission-milestone-2026-10-07",
+  "historicalArtifactsModified": false,
+  "businessArtifactsVerification": {
+    "verifierVersion": "submission-artifacts-verifier-1.0",
+    "registeredFiles": [
+      "business-proof.json",
+      "proof-report.md",
+      "child-snacks/questionnaire.json",
+      "child-snacks/presets.json",
+      "child-snacks/survey-run.json",
+      "child-snacks/logic-audit.json",
+      "child-snacks/raw-responses.json",
+      "child-snacks/statistics.json",
+      "child-snacks/prompts.txt",
+      "pet-snacks/questionnaire.json",
+      "pet-snacks/presets.json",
+      "pet-snacks/survey-run.json",
+      "pet-snacks/logic-audit.json",
+      "pet-snacks/raw-responses.json",
+      "pet-snacks/statistics.json",
+      "pet-snacks/prompts.txt"
+    ],
+    "sourceAndExecutionAuthenticity": "not-independently-attested",
+    "marketResearchValidated": false,
+    "rawEvidenceModified": false
+  },
+  "checksumMeaning": "byte-integrity-not-source-or-execution-attestation",
+  "files": [
+    {
+      "name": "business-proof/business-proof.json",
+      "bytes": 28214,
+      "sha256": "a5db230a7b0358fa4478a400e60b960117766f3e4282c11adb69c7c153606d00"
+    },
+    {
+      "name": "business-proof/child-snacks/logic-audit.json",
+      "bytes": 13563,
+      "sha256": "2f4a058c0ef93c6c19447e5e2f9fd1c881e13ae74c75fbda0c634f338e9310f1"
+    },
+    {
+      "name": "business-proof/child-snacks/presets.json",
+      "bytes": 10335,
+      "sha256": "2b00f1ac802ca7b842c4d5af36a1e6e66ace3db84f32baae1585104e73bb1e64"
+    },
+    {
+      "name": "business-proof/child-snacks/prompts.txt",
+      "bytes": 115136,
+      "sha256": "c9c24928a414f4003286d7c3e5c3e51db2be796057d4ae0c18121af11e579e6b"
+    },
+    {
+      "name": "business-proof/child-snacks/questionnaire.json",
+      "bytes": 13067,
+      "sha256": "80d4c3cb4af90be19681b90a8fed92e620bceee81fc6368b5a836409304ff846"
+    },
+    {
+      "name": "business-proof/child-snacks/raw-responses.json",
+      "bytes": 39216,
+      "sha256": "ec18893ee70c033ebd4c7f4cb19bf849e334e162dba0a938e6d9872aee244067"
+    },
+    {
+      "name": "business-proof/child-snacks/statistics.json",
+      "bytes": 148062,
+      "sha256": "15ac2dfd1f0bbd337e026de296b9ebedbff34971284cc53a5f5a11ebe8f57c08"
+    },
+    {
+      "name": "business-proof/child-snacks/survey-run.json",
+      "bytes": 418040,
+      "sha256": "a2bbe2a3907142c3dd0a6ed58f0b579f2f1d30c792fae9121a291a4327b50004"
+    },
+    {
+      "name": "business-proof/manifest.json",
+      "bytes": 2959,
+      "sha256": "93920ecc3730adf8416c5ea5439ea0f4b2bbb56c07cb3928b3c69f8d1dcbe6f9"
+    },
+    {
+      "name": "business-proof/pet-snacks/logic-audit.json",
+      "bytes": 13823,
+      "sha256": "b2162ee1384a07ad6eb313a01b69851c4a9c52fb13acfcaea46a02a555417d79"
+    },
+    {
+      "name": "business-proof/pet-snacks/presets.json",
+      "bytes": 11157,
+      "sha256": "12f0b44e5833d15b6d7e022e55f60683dd19f4f4eca644bcd5aec39ef499d612"
+    },
+    {
+      "name": "business-proof/pet-snacks/prompts.txt",
+      "bytes": 119519,
+      "sha256": "c289f8bdd6eb523513c9aabf9048c94a4d63ecec0d562df4c99baaa40e937f66"
+    },
+    {
+      "name": "business-proof/pet-snacks/questionnaire.json",
+      "bytes": 14002,
+      "sha256": "1821c16aff7e0730edacc6e8a9daa3cd6a35368ae90989d59546a51a409eccaf"
+    },
+    {
+      "name": "business-proof/pet-snacks/raw-responses.json",
+      "bytes": 39977,
+      "sha256": "def5dad2f91c0949745ba0c89450f4a244ea70387e2e5b074a9823199af76b74"
+    },
+    {
+      "name": "business-proof/pet-snacks/statistics.json",
+      "bytes": 162235,
+      "sha256": "6735f8b49f3a21f4aae65d5ccb09300948b7fdf5d6a4277eacf2a008de6b22df"
+    },
+    {
+      "name": "business-proof/pet-snacks/survey-run.json",
+      "bytes": 443884,
+      "sha256": "647c0f36dbbe8a612a37389836eb0e0c8218686b1c054d2ca2eba23c7c25cb83"
+    },
+    {
+      "name": "business-proof/proof-report.md",
+      "bytes": 12127,
+      "sha256": "99ef779fd69bff4be5d8fe112346999e368132c450032a3bc54bc156490677a3"
+    },
+    {
+      "name": "captions.json",
+      "bytes": 3151,
+      "sha256": "da35f369a5303c2933d54e8347ce13c85f883380133ed764957e1888c0e93881"
+    },
+    {
+      "name": "demo-next.mp4",
+      "bytes": 7317922,
+      "sha256": "d3817e9c8a3ceffc502bf449b6b62a26f657727dc23450b872110d261d91aaff"
+    },
+    {
+      "name": "demo-next.vtt",
+      "bytes": 2743,
+      "sha256": "84ffed3108c596a6e0d2fb87318c4df1b15d5cd8aa8b21e5b0c3676e2ebfc1c2"
+    },
+    {
+      "name": "historical/delivery-attempts.json",
+      "bytes": 2360099,
+      "sha256": "43eae631103b10d67d77d73f9ebb6a0ab2f558cf1b8617f93963e546677f3484"
+    },
+    {
+      "name": "historical/evaluation-summary.json",
+      "bytes": 133812,
+      "sha256": "7eb9ac68043752c12cbff47ed2cdbc1f1c11e9ba82602542a1c46a3a5a3881f8"
+    },
+    {
+      "name": "historical/experiment-runs.json",
+      "bytes": 2408439,
+      "sha256": "20a42eceec511d4bbcea84f290bc58b46d9a9a686512fc51cb42e6e9e4c9ba57"
+    },
+    {
+      "name": "historical/live-run.json",
+      "bytes": 325830,
+      "sha256": "ecd7a3385f706a27cd06034926ee250fded61f6626cf09a69ec7704fb6c57b5f"
+    },
+    {
+      "name": "historical/metrics.json",
+      "bytes": 1383,
+      "sha256": "3b830b761a715d7b36b3d7ba9a4829593e49b529cfcd2456802b7548bc75d4d0"
+    },
+    {
+      "name": "historical/milestone.json",
+      "bytes": 1905,
+      "sha256": "9c6cf8f11e6390167ae1ae0b718ea5e6a924f7afba78ef6e7e84e02117ad86d4"
+    },
+    {
+      "name": "historical/persona-proof/manifest.json",
+      "bytes": 1052,
+      "sha256": "c74801cd2948a13670f77c1be44f4cda8e0b6f17948b79dca5caed0644ffb425"
+    },
+    {
+      "name": "historical/persona-proof/persona-proof.json",
+      "bytes": 10538,
+      "sha256": "36ebbd3375399a1fec032c1484aab49b8d92d489ed15ab3b72eb8723228ef79d"
+    },
+    {
+      "name": "historical/persona-proof/presets.json",
+      "bytes": 9642,
+      "sha256": "a423698c6f565d41183615d96e03649886b75af04459f8dd5ccedaccd719e776"
+    },
+    {
+      "name": "historical/persona-proof/proof-report.md",
+      "bytes": 3629,
+      "sha256": "a62239362eb6933131094f9ae3165747b0694625aa24cd44de3cf6184dd5b75f"
+    },
+    {
+      "name": "historical/persona-proof/questionnaire.json",
+      "bytes": 10959,
+      "sha256": "9b1a01053ab0b27de9c4b27e08d7ec6fa209a811b1ccd6b533a81c04f1c8f247"
+    },
+    {
+      "name": "historical/persona-proof/survey-run.json",
+      "bytes": 379045,
+      "sha256": "547b4958a93610d70a73bfe9509df886e2e08448f94a8b3df5d5921213b2eccf"
+    },
+    {
+      "name": "historical/prior-attempts.json",
+      "bytes": 2712088,
+      "sha256": "350e697f46a22b59cf0c1175979fd0a1fba3ab5bd9db1a514f7ce91d6f7c6282"
+    },
+    {
+      "name": "index.html",
+      "bytes": 55824,
+      "sha256": "db55d7725ad7d1b926bf6524b3d262a09578c1e092c39662c6b1bcca77e8daa2"
+    },
+    {
+      "name": "live-proof/budget-ledger.json",
+      "bytes": 5576,
+      "sha256": "768b9f47274fc8130ed80190a94a42cf38682434dd1204637a168605fe2995f5"
+    },
+    {
+      "name": "live-proof/child-snacks/logic-audit.json",
+      "bytes": 15778,
+      "sha256": "ce815b79da6598dbb973d51afda1a7ecf80d0dfa7924700b219c83f1ffe0342e"
+    },
+    {
+      "name": "live-proof/child-snacks/presets.json",
+      "bytes": 10336,
+      "sha256": "adf7cf8e03215d4459dc8d41aaf3a0df9fe5c7ead83814c0f0e951d8e2e0e908"
+    },
+    {
+      "name": "live-proof/child-snacks/prompts.txt",
+      "bytes": 97802,
+      "sha256": "e73e662f9bd2e3469913f561efb9204f0a13eca48a202717e3ff3f52b5f246b7"
+    },
+    {
+      "name": "live-proof/child-snacks/qualification-audit.json",
+      "bytes": 5131,
+      "sha256": "687730d91dcb4cf0b502ba3e301e46278ebb82c24dae70de369e8b8e5f2655b4"
+    },
+    {
+      "name": "live-proof/child-snacks/questionnaire.json",
+      "bytes": 13266,
+      "sha256": "6aa692f9a660c3a37e6302b884c6707db8d2d618f80c68f9a65bc76107ac66c7"
+    },
+    {
+      "name": "live-proof/child-snacks/raw-responses.json",
+      "bytes": 4135,
+      "sha256": "8a1fe71b424e26a6f35b58641b9cc45c8a3295e0a9a81d005a89fe5248afa1c5"
+    },
+    {
+      "name": "live-proof/child-snacks/statistics.json",
+      "bytes": 145386,
+      "sha256": "225e06d9ac6e937eeb79541522a2f3a84884b96d6cff83885dbfead01e91ad42"
+    },
+    {
+      "name": "live-proof/child-snacks/survey-run.json",
+      "bytes": 350476,
+      "sha256": "8d621ffc4004bcd9d240bca3db5d2f054e43098443be766899a42e4fc0c27595"
+    },
+    {
+      "name": "live-proof/cors-checks.json",
+      "bytes": 4256,
+      "sha256": "6c8d8291c689b88aa818426919e8e06d04d91691e0afb8c45aa920fd09952c35"
+    },
+    {
+      "name": "live-proof/pet-snacks/logic-audit.json",
+      "bytes": 15639,
+      "sha256": "0ec79d4d07c8c5fa733a44a68c0ea368f83a4df8bd23cecc845850985c6da125"
+    },
+    {
+      "name": "live-proof/pet-snacks/presets.json",
+      "bytes": 11158,
+      "sha256": "db25e39ba522d46c525033640cc02f49d90961dd05443ac70fd8a57cfffb1d80"
+    },
+    {
+      "name": "live-proof/pet-snacks/prompts.txt",
+      "bytes": 101452,
+      "sha256": "e80b399c063a6953717ef9e23e6725ec08eee5e9ce622977a609c12e18c2569e"
+    },
+    {
+      "name": "live-proof/pet-snacks/qualification-audit.json",
+      "bytes": 4645,
+      "sha256": "13f170d8a57d043ef93aa814209d0dc985686f7b1a15260525398388ffd4b867"
+    },
+    {
+      "name": "live-proof/pet-snacks/questionnaire.json",
+      "bytes": 14191,
+      "sha256": "1d5b1822c465ea15c9abfc72bea88d49cf5262ef10ad884a1f39fc8daf743a5b"
+    },
+    {
+      "name": "live-proof/pet-snacks/raw-responses.json",
+      "bytes": 7484,
+      "sha256": "dbca152cfa2b955c8207d0d96b737d68b14fdd7f5594a3140ea63b08008984c9"
+    },
+    {
+      "name": "live-proof/pet-snacks/statistics.json",
+      "bytes": 160508,
+      "sha256": "8ada851fb3361fd319ac33fec72fc9d224c957f83dc592dd946cdc56678f7414"
+    },
+    {
+      "name": "live-proof/pet-snacks/survey-run.json",
+      "bytes": 378519,
+      "sha256": "739f2054c9cf7528b55359e901ebf7e200b806041bfbee2bff17b14161bf4e15"
+    },
+    {
+      "name": "live-proof/plan.json",
+      "bytes": 377236,
+      "sha256": "fb1f03b56daff26000cb6afb9037aaab5e2c3a6003730552f468bf244bcb714e"
+    },
+    {
+      "name": "live-proof/planning-child.json",
+      "bytes": 20550,
+      "sha256": "b846988b15d410728d992009a504f6381fda6c61bf269edfa2a2325f3894d5c0"
+    },
+    {
+      "name": "live-proof/planning-pet.json",
+      "bytes": 20633,
+      "sha256": "2e1e93cbde46aac6d90c0e8989c9c76e016147cdc2d2cabbbcdc5d3f96ec5c12"
+    },
+    {
+      "name": "live-proof/pricing-source.json",
+      "bytes": 671,
+      "sha256": "c5eee3d82240a513ce48d2e0af5a737d32eb9ec19032b6a00dcd97eacd41c7a1"
+    },
+    {
+      "name": "live-proof/report.json",
+      "bytes": 11263,
+      "sha256": "2bc30b2d4d5f234386089ff03493aba7052ce345ee88b0237c4453995cea4efd"
+    },
+    {
+      "name": "live-proof/report.md",
+      "bytes": 1187,
+      "sha256": "6b0df912337e2a358f85d559fac815fbc5850a70a5f11867827260531f78759b"
+    },
+    {
+      "name": "methods/business-proof.md",
+      "bytes": 12741,
+      "sha256": "8bbac2c122f319ad36d9e3d18dd8364ba2d99c9658c13caf00df924837010256"
+    },
+    {
+      "name": "methods/evaluation-next.md",
+      "bytes": 13917,
+      "sha256": "13b45e80413cf32d18f3ece3dcaadbc8141ed03104c5d0d9487370d43f7b1b57"
+    },
+    {
+      "name": "methods/judge-quickstart.md",
+      "bytes": 9716,
+      "sha256": "bc334e04736712d3a4ac13fc2908802f1458f4e28b2ca01db1276427637aeda0"
+    },
+    {
+      "name": "methods/old-persona-proof.md",
+      "bytes": 6876,
+      "sha256": "c658c80d83d4dd501327578a7ebdb56ca95d40c5c91258d3bc9f1c158e62db8b"
+    },
+    {
+      "name": "methods/population-methodology.md",
+      "bytes": 10367,
+      "sha256": "a1f4ef6d3a942fdb21ec586565f9df8dad5ad90c16c29abaa352e37a8a9c7b87"
+    },
+    {
+      "name": "methods/resident-construction.md",
+      "bytes": 12048,
+      "sha256": "c6be5212df55cc9b8c693c40a7f0ff6b68be92edaf66f987be9904afbb527033"
+    },
+    {
+      "name": "persona-source-register.json",
+      "bytes": 27813,
+      "sha256": "d72077047f740d850a4f9c3ed4204963d25cf0be8935f9354d70e426eb6c716d"
+    },
+    {
+      "name": "population-pack.json",
+      "bytes": 20972,
+      "sha256": "b23aaf30c015381f7b102b71848ee97ecb64756829e7edf98c24db1bf59068d7"
+    },
+    {
+      "name": "population-sources.json",
+      "bytes": 36171,
+      "sha256": "a17630438396f3228d17a822d58dc68acf5056197d92140d8cbfd053412f3831"
+    },
+    {
+      "name": "project-materials.md",
+      "bytes": 46885,
+      "sha256": "4919d4062b009b151632e0a16d2a56b5b38593bb6d3f4845f931aebc87552698"
+    },
+    {
+      "name": "project-materials.pdf",
+      "bytes": 1588810,
+      "sha256": "6fcd0a0a4e9f2d463ca773eeba3f5a4710f26d39f857b6b4385d18db3cff3b47"
+    },
+    {
+      "name": "README.md",
+      "bytes": 17130,
+      "sha256": "4100f6b5cbbc43c1c42d469494840fb8fb804e912352ebeb002cf7b693691c69"
+    },
+    {
+      "name": "recorded-child-proof.json",
+      "bytes": 451021,
+      "sha256": "e49552a25083a2ee098d8fff8362161649968df57fe89587d9ef1605e00d3394"
+    },
+    {
+      "name": "recorded-pet-proof.json",
+      "bytes": 478821,
+      "sha256": "6b0799a77949aebc2854d3c737e033e3096bdf3cd843c872dbbd8dee9eb85060"
+    },
+    {
+      "name": "sources/binjiang-2023-yearbook.pdf",
+      "bytes": 1354816,
+      "sha256": "338886a362ca60640ce999f185bb120e33922dedee9bc31dbbad57a0a4088134"
+    },
+    {
+      "name": "sources/binjiang-2024-communique.pdf",
+      "bytes": 2583332,
+      "sha256": "7825d0efe321c224aaef04fa3afce1a255dfe8144d79a36651407e959c640876"
+    },
+    {
+      "name": "sources/binjiang-2025-communique.pdf",
+      "bytes": 2443591,
+      "sha256": "78f948305d953b3bef24ef4731fd043d321267401361cc54c81fd50c18b4ad11"
+    },
+    {
+      "name": "sources/binjiang-census-yearbook.pdf",
+      "bytes": 2048236,
+      "sha256": "70119b88dc3209909f237921ae9efc764c5011d7e6f6032d1d27c2a1949fb966"
+    },
+    {
+      "name": "verification.json",
+      "bytes": 925,
+      "sha256": "995e72d3ddc60d69f1f0310bd2aa2e439ebc51b580b09103b699aae16ebfa085"
+    }
+  ],
+  "publicationReview": {
+    "status": "public-reviewed",
+    "reviewedAt": "2026-10-07T12:40:46.114Z",
+    "localPathsRemoved": true,
+    "internalLinksRemoved": true,
+    "credentialsRemoved": true,
+    "privateDataExcluded": true
+  }
+}

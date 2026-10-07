@@ -1,11 +1,11 @@
 import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import { researchTaskSchema, type ResearchTask } from '../shared/research-schema';
-import type { ResidentAgentInput, ResidentAgentPublic, ResearchProject, ResearchProjectInput } from '../server/research/residents';
-import { ResidentAgentEditor } from './ResidentAgentEditor';
+import { residentInput, type ResidentAgentInput, type ResidentAgentPublic, type ResearchProject, type ResearchProjectInput } from '../server/research/residents';
 import { QuestionEditor, newQuestion, questionTypes, type Question } from './QuestionEditor';
 import { researchApi, downloadJson, type ProjectCheck } from './research-client';
 import { createBlankResearchTask, readResearchDraft } from './research-draft';
 import './research.css';
+import './research-next.css';
 
 const objectives: Record<ResearchTask['objective'], string> = {
   'demand-validation': '需求验证', 'feature-priority': '功能优先级', 'price-benefits': '价格与权益',
@@ -19,7 +19,12 @@ const outputs: Record<ResearchTask['requestedOutputs'][number], string> = {
 const checkLabels: Record<string, string> = { ready: '配置与人口框检查通过', 'needs-data': '人群资格或证据待补充', unsupported: '请求的输出超出当前范围' };
 const json = (value: unknown) => JSON.stringify(value, null, 2);
 const pagesMode = import.meta.env.MODE === 'pages';
+const publicReviewBase = 'https://litianyi-007.github.io/city-agent/submission-next/';
 const PagesSurveyPanel = lazy(() => import('./PagesSurveyPanel').then(module => ({ default: module.PagesSurveyPanel })));
+const ResidentAgentEditor = lazy(() => import('./ResidentAgentEditor').then(module => ({ default: module.ResidentAgentEditor })));
+const BusinessEvidencePanel = lazy(() => import('./BusinessEvidencePanel').then(module => ({ default: module.BusinessEvidencePanel })));
+const ResearchPlanningPanel = lazy(() => import('./ResearchPlanningPanel').then(module => ({ default: module.ResearchPlanningPanel })));
+const BusinessDemoPanel = lazy(() => import('./BusinessDemoPanel').then(module => ({ default: module.BusinessDemoPanel })));
 
 export function ResearchWorkspace({ section, onSectionChange, onDirtyChange, onBusyChange }: {
   section: 'projects' | 'residents'; onSectionChange: (section: 'projects' | 'residents') => void; onDirtyChange: (dirty: boolean) => void;
@@ -44,6 +49,9 @@ export function ResearchWorkspace({ section, onSectionChange, onDirtyChange, onB
   const [notice, setNotice] = useState('');
   const [reload, setReload] = useState(0);
   const [editing, setEditing] = useState<ResidentAgentPublic | 'new' | null>(null);
+  const [showEvidence, setShowEvidence] = useState(false);
+  const [showPlanning, setShowPlanning] = useState(false);
+  const [showBusinessDemos, setShowBusinessDemos] = useState(false);
   const revision = useRef(0);
 
   useEffect(() => {
@@ -110,6 +118,34 @@ export function ResearchWorkspace({ section, onSectionChange, onDirtyChange, onB
     {loading ? <p className="research-note">正在加载问卷与人群预设…</p> : !task ? <div className="panel research-panel"><p>调查配置暂不可用，已有资料不会被覆盖。</p><button className="secondary" onClick={() => setReload(value => value + 1)}>重新加载</button></div> : <>
       <div className="research-stage-note"><strong>{pagesMode ? '公开体验 · 问卷与仿真' : '本机问卷与自主交付'}</strong><span>{pagesMode ? '草稿保存在本机浏览器；Key仅存本次会话。下方可运行演示或连接真实模型。' : '可通过Harness独立作答、保存分析，再交给四角色生成并验收离线页面；不使用旧版价格公式替代答卷。'}</span></div>
       <div hidden={section !== 'projects'}>
+        <div className="research-toolbar research-next-tools">
+          <button type="button" className="secondary" disabled={busy} aria-expanded={showBusinessDemos} onClick={() => setShowBusinessDemos(value => !value)}>完整业务示例 · 零费用体验</button>
+          <button type="button" className="secondary" disabled={busy} aria-expanded={showPlanning} onClick={() => setShowPlanning(value => !value)}>从自然语言规划调查</button>
+          <button type="button" className="secondary" disabled={busy} aria-expanded={showEvidence} onClick={() => setShowEvidence(value => !value)}>检查业务证据包</button>
+          <a className="text-button" href={`${import.meta.env.BASE_URL}review-guide.html`} target="_blank" rel="noreferrer">评委本机复现说明 ↗</a>
+          <a className="text-button" href={`${publicReviewBase}index.html`} target="_blank" rel="noreferrer">新版公开评审材料 ↗</a>
+          <a className="text-button" href={`${publicReviewBase}live-proof/report.md`} target="_blank" rel="noreferrer">本轮真实 API 调查报告 ↗</a>
+          <a className="text-button" href={`${publicReviewBase}live-proof/report.json`} target="_blank" rel="noreferrer">本轮真实 API 证据 JSON ↗</a>
+          {!pagesMode && <a className="text-button" href={`${import.meta.env.BASE_URL}submission-next/index.html`} target="_blank" rel="noreferrer">本机公开审查材料副本 ↗</a>}
+        </div>
+        <p className="research-note">本轮真实 API 合成居民调查，原文与失败同册；不是真人。通过率、执行状态和成本请查看本轮报告。下方“完整业务示例”仍为0次模型调用的规则工程夹具，旧实测历史与本轮真实调查分别留档。</p>
+        {section === 'projects' && showBusinessDemos && <Suspense fallback={<p>加载完整业务问卷与五层情景…</p>}><BusinessDemoPanel busy={busy} onBusyChange={setBusy} onApplyDemo={async (next, presets) => {
+          if (dirty && !window.confirm('当前问卷有未保存修改。是否放弃修改，应用完整业务问卷并新增四份无 Key 情景预设？不会删除既有预设。')) return false;
+          setBusy(true); setError('');
+          const created: ResidentAgentPublic[] = [];
+          try {
+            for (const preset of presets) created.push(await researchApi<ResidentAgentPublic>('/resident-agents', 'POST', { ...residentInput(preset), apiKey: null }));
+            setResidents(previous => [...previous, ...created]);
+            revision.current++; setTask(structuredClone(next)); setProjectId(''); setSelectedIds(created.map(preset => preset.id));
+            setFilters(json(next.population.filters)); setDeclarations(json(next.declarations)); setCheck(null); setStale(false); setDirty(true);
+            return true;
+          } catch (cause) {
+            if (created.length) setResidents(previous => [...previous, ...created]);
+            throw new Error(`${(cause as Error).message}${created.length ? ` 已新增${created.length}份无 Key 预设，其余未应用；请在预设页检查。未覆盖原问卷。` : ''}`);
+          } finally { setBusy(false); }
+        }} /></Suspense>}
+        {section === 'projects' && showPlanning && <Suspense fallback={<p>加载候选研究规划…</p>}><ResearchPlanningPanel population={task.population} draftVersion={revision.current} disabled={busy} onBusyChange={setBusy} onApply={next => replace(next)} /></Suspense>}
+        {section === 'projects' && showEvidence && <Suspense fallback={<p>加载业务证据预检…</p>}><BusinessEvidencePanel /></Suspense>}
         <div className="research-toolbar"><label>已保存的调查<select disabled={busy} value={projectId} onChange={event => {
           const project = projects.find(item => item.id === event.target.value);
           if (project) replace(project.task, project.id, project.residentAgentIds);
@@ -182,11 +218,11 @@ export function ResearchWorkspace({ section, onSectionChange, onDirtyChange, onB
                 }}>删除</button></div></article>)}</div>
       </section>
     </>}
-    {editing && <ResidentAgentEditor key={editing === 'new' ? 'new' : editing.id} agent={editing === 'new' ? null : editing} templates={residentTemplates} onClose={() => setEditing(null)} onDirtyChange={setResidentDirty} onSave={async input => {
+    {editing && <Suspense fallback={<p role="status">加载人群配置…</p>}><ResidentAgentEditor key={editing === 'new' ? 'new' : editing.id} agent={editing === 'new' ? null : editing} templates={residentTemplates} onClose={() => setEditing(null)} onDirtyChange={setResidentDirty} onSave={async input => {
       const saved = await researchApi<ResidentAgentPublic>(editing === 'new' ? '/resident-agents' : `/resident-agents/${editing.id}`, editing === 'new' ? 'POST' : 'PATCH', input);
       setResidents(previous => previous.some(item => item.id === saved.id) ? previous.map(item => item.id === saved.id ? saved : item) : [...previous, saved]);
       invalidate(false); setEditing(null); setNotice('人群预设已保存；尚未启动调查。');
-    }} />}
+    }} /></Suspense>}
   </div>;
 }
 

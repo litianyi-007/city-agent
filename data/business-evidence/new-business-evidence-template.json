@@ -1,0 +1,58 @@
+{
+  "schemaVersion": "1.0",
+  "id": "new-business-evidence",
+  "version": "draft-1",
+  "createdAt": null,
+  "region": { "code": "new-region", "name": "待核验区域", "boundaryVintage": "unverified-boundary" },
+  "period": { "start": null, "end": null },
+  "sources": [
+    {
+      "id": "uncollected-source",
+      "title": "尚未采集的来源",
+      "publisher": "待登记",
+      "provenance": "other",
+      "url": null,
+      "exportOwner": null,
+      "publishedAt": null,
+      "retrievedAt": null,
+      "coveredRegionCodes": ["new-region"],
+      "periodStart": null,
+      "periodEnd": null,
+      "snapshot": { "sha256": null, "bytes": null, "mediaType": null },
+      "license": null,
+      "shareScope": null,
+      "verificationStatus": "pending",
+      "verificationRecord": null,
+      "useLimit": "尚未采集，不支持任何经营结论。"
+    }
+  ],
+  "observations": [
+    {
+      "id": "uncollected-observation",
+      "metric": "requiredMetric",
+      "value": null,
+      "unit": "待明确单位",
+      "populationBasis": "待明确目标人群、去重与覆盖口径",
+      "geography": {
+        "regionCode": "new-region",
+        "level": "district",
+        "code": "new-region",
+        "name": "待核验区域",
+        "boundaryVintage": "unverified-boundary"
+      },
+      "periodStart": null,
+      "periodEnd": null,
+      "sourceId": "uncollected-source",
+      "locator": "待采集并登记原表或导出字段",
+      "provenance": "assumption",
+      "verificationStatus": "pending",
+      "missingReason": "尚未采集",
+      "useLimit": "仅为录入占位，不当人口或业务事实；不得把null替换为0。",
+      "denominatorObservationId": null,
+      "derivation": null,
+      "modelEvidence": null
+    }
+  ],
+  "claims": [],
+  "limitations": ["空模板，不含现实观测。需独立来源核验、授权审查和任务证据要求。"]
+}

@@ -1,0 +1,260 @@
+{
+  "schemaVersion": "1.0",
+  "proofVersion": "five-layer-fixture-proof-1.0",
+  "id": "abfe1fd7-e1aa-4aba-a7ea-207088e9f14d",
+  "createdAt": "2026-10-06T20:46:49.058Z",
+  "mode": "fixture",
+  "notice": "工程规则夹具；没有LLM调用，不是真实居民偏好、人格效度或经营建议。",
+  "modelCalls": 0,
+  "realResidentPreferenceValidated": false,
+  "personaBehaviorValidated": false,
+  "marketResearchValidated": false,
+  "sourceFiles": [
+    {
+      "path": "data/research/persona-proof-questionnaire.json",
+      "sha256": "0d214a1ff8d4f72f535508481f2ff975cb1f63caef61266995fb2ea2f523dcb8"
+    },
+    {
+      "path": "data/research/persona-proof-presets.json",
+      "sha256": "808ee12c4e11ebf998c2884fc7e9117ee67dbd8549f9d15ede5ffe677ef716f4"
+    }
+  ],
+  "taskHash": "c2dda3e7c2635ca9e43d2b387052f70752bb149b50a9ccbfdc43a91d8d0b0a00",
+  "populationHash": "46433cba846a0a5314a26809e166b8203520188490bdd98b7ca52db98e16b6a0",
+  "profilesHash": "f824761fbe7c71ec3b37911b812c5b1c222b115ed94a59bbb14c54dded3a0476",
+  "surveyVersion": "coverage-survey-2.1-persona-layers",
+  "personaSchemaVersion": "1.0",
+  "personaProvenance": "assumption",
+  "questions": {
+    "total": 16,
+    "required": 15,
+    "types": [
+      "single",
+      "text",
+      "multiple",
+      "scale",
+      "number"
+    ],
+    "layerQuestions": {
+      "personality": "personality-context",
+      "upbringing": "upbringing-context",
+      "education": "education-context",
+      "household": "household-context",
+      "work": "occupation-context"
+    }
+  },
+  "promptLinks": [
+    {
+      "residentId": "resident-001",
+      "presetId": "00000000-0000-4000-8000-000000000001",
+      "personaHash": "858e41895667fd26cf630b783833393cda27c460ae8eed27dd8d72b5ac9ff249",
+      "promptHash": "c26ea6d77b1feee2e03f6f78c465624916ac488159cee4359cda50eb67bd506f",
+      "matchesFrozenPersona": true
+    },
+    {
+      "residentId": "resident-002",
+      "presetId": "00000000-0000-4000-8000-000000000002",
+      "personaHash": "ff731ac31cb5d2fdba2a2ac59bd7034710bb4ce1ec45e997df147d06f55d1a18",
+      "promptHash": "a8e5d61b83a2446cbe43f5d86a1ed54c24b9276a67d0fe592580885a0376c2f8",
+      "matchesFrozenPersona": true
+    },
+    {
+      "residentId": "resident-003",
+      "presetId": "00000000-0000-4000-8000-000000000003",
+      "personaHash": "a6422dd2b5efef6926727d15f760f19e718af8829687b2eb66b36be33f1445f1",
+      "promptHash": "e0f926d1dc86f6707b1460ec6922bb56b2adac16a68c9fe445a147f8b28e54e2",
+      "matchesFrozenPersona": true
+    },
+    {
+      "residentId": "resident-004",
+      "presetId": "00000000-0000-4000-8000-000000000004",
+      "personaHash": "955bcef6fed494348c7141746be66ad16f2a01a32092a488b895168e49070335",
+      "promptHash": "ec1ed34cb98503ff2960d905b523108288cbd74d8db0fe25906b42a0c9112e08",
+      "matchesFrozenPersona": true
+    },
+    {
+      "residentId": "resident-005",
+      "presetId": "00000000-0000-4000-8000-000000000001",
+      "personaHash": "858e41895667fd26cf630b783833393cda27c460ae8eed27dd8d72b5ac9ff249",
+      "promptHash": "c872da0d29ea5b8244c01937d32b907805af99bd8a1d25c6068fdaffa20f8879",
+      "matchesFrozenPersona": true
+    },
+    {
+      "residentId": "resident-006",
+      "presetId": "00000000-0000-4000-8000-000000000002",
+      "personaHash": "ff731ac31cb5d2fdba2a2ac59bd7034710bb4ce1ec45e997df147d06f55d1a18",
+      "promptHash": "d21b0558564b1fcbc45bda3f9cea2bd5566060bfe4eb449b1afa03dca1d6e0d9",
+      "matchesFrozenPersona": true
+    },
+    {
+      "residentId": "resident-007",
+      "presetId": "00000000-0000-4000-8000-000000000003",
+      "personaHash": "a6422dd2b5efef6926727d15f760f19e718af8829687b2eb66b36be33f1445f1",
+      "promptHash": "2164229d5a5fc34aa93623592f0f20d22b0f2859dfdb917a4eea8782b239f1af",
+      "matchesFrozenPersona": true
+    },
+    {
+      "residentId": "resident-008",
+      "presetId": "00000000-0000-4000-8000-000000000004",
+      "personaHash": "955bcef6fed494348c7141746be66ad16f2a01a32092a488b895168e49070335",
+      "promptHash": "f866f61b536e1aba158d804e3fef66af51882439c09974100d3f023679d81ced",
+      "matchesFrozenPersona": true
+    },
+    {
+      "residentId": "resident-009",
+      "presetId": "00000000-0000-4000-8000-000000000001",
+      "personaHash": "858e41895667fd26cf630b783833393cda27c460ae8eed27dd8d72b5ac9ff249",
+      "promptHash": "ac5ad96ab5a2416c717bfa01e0865d36e2af5d80d6f008385bff2c95b33111fe",
+      "matchesFrozenPersona": true
+    },
+    {
+      "residentId": "resident-010",
+      "presetId": "00000000-0000-4000-8000-000000000002",
+      "personaHash": "ff731ac31cb5d2fdba2a2ac59bd7034710bb4ce1ec45e997df147d06f55d1a18",
+      "promptHash": "deddd388b9cab485e064a40f2e941c25a1c1b4f24f4ec462ed1754fa8cfcaa70",
+      "matchesFrozenPersona": true
+    },
+    {
+      "residentId": "resident-011",
+      "presetId": "00000000-0000-4000-8000-000000000003",
+      "personaHash": "a6422dd2b5efef6926727d15f760f19e718af8829687b2eb66b36be33f1445f1",
+      "promptHash": "89ef212eaa5a1e5f4a629bc52f7447f8e0443800c16bf46b04104b53d7c4bba5",
+      "matchesFrozenPersona": true
+    },
+    {
+      "residentId": "resident-012",
+      "presetId": "00000000-0000-4000-8000-000000000004",
+      "personaHash": "955bcef6fed494348c7141746be66ad16f2a01a32092a488b895168e49070335",
+      "promptHash": "d891067428895a154fa8d125c69442c642238bd55d9808eb03c052eb95a691c4",
+      "matchesFrozenPersona": true
+    }
+  ],
+  "metrics": {
+    "planned": 12,
+    "valid": 12,
+    "structurallyValid": 12,
+    "contradictions": 0,
+    "failed": 0,
+    "notStarted": 0,
+    "modelCalls": 0,
+    "inputTokens": 0,
+    "outputTokens": 0,
+    "apiCostCny": 0,
+    "pricingBasis": "没有API请求，API费用为0；不含本机计算成本。"
+  },
+  "sampling": {
+    "method": "seeded-cell-coverage-fresh-draw-v2",
+    "populationWeighted": false,
+    "planned": 12,
+    "uniqueProfiles": 12,
+    "duplicateProfiles": 0,
+    "coveredCells": 11,
+    "streets": [
+      {
+        "value": "浦沿街道",
+        "planned": 4
+      },
+      {
+        "value": "长河街道",
+        "planned": 4
+      },
+      {
+        "value": "西兴街道",
+        "planned": 4
+      }
+    ],
+    "ageBands": [
+      {
+        "value": "15-59",
+        "planned": 5
+      },
+      {
+        "value": "60+",
+        "planned": 7
+      }
+    ],
+    "sexes": [
+      {
+        "value": "female",
+        "planned": 6
+      },
+      {
+        "value": "male",
+        "planned": 6
+      }
+    ],
+    "presets": [
+      {
+        "value": "工程情景 养猫采购参与者A",
+        "planned": 3
+      },
+      {
+        "value": "工程情景 养猫采购参与者B 未知层",
+        "planned": 3
+      },
+      {
+        "value": "工程情景 养犬共同照护者",
+        "planned": 3
+      },
+      {
+        "value": "工程情景 养犬社区参与者",
+        "planned": 3
+      }
+    ],
+    "limitations": [
+      "优先覆盖未抽取的可行单元；每次重新赋值具体年龄，受约束时仍可能重复。",
+      "重复画像不自动成为独立居民；画像数量不是目标群体人口分母。",
+      "预设按轮转分配，无总体权重；低样本数不保证每个预设覆盖所有单元。"
+    ]
+  },
+  "qualificationPreflight": {
+    "schemaVersion": "1.0",
+    "taskHash": "c2dda3e7c2635ca9e43d2b387052f70752bb149b50a9ccbfdc43a91d8d0b0a00",
+    "populationHash": "46433cba846a0a5314a26809e166b8203520188490bdd98b7ca52db98e16b6a0",
+    "status": "needs-data",
+    "missingEvidence": [
+      "字段 petOwner 没有登记人口观测；职业、收入、家庭阶段、照护、养宠或租户等资格不能由年龄/性别/街道推出。",
+      "年龄精度不足：条件切分登记年龄档 15-59；例如 18+ 不能从 15–59 岁档中识别，不可将 15+ 冒充成年人。"
+    ],
+    "warnings": [
+      "ready 仅代表任务契约与登记人口框预检通过；不表示已执行居民作答或验证市场结论。",
+      "本预检不读取原件或核验文件指纹；登记引用存在不等于其内容支持客户端陈述。",
+      "所有回答和偏好仍须标注生成来源；不得把人口框拟合或合成回答外推为真实需求、人数或权重。",
+      "此预检不执行问卷；请在独立执行区显式启动。allowedOutputs 仅声明输出范围，不表示分析已经执行。",
+      "filters 全部按 AND 取交集；不支持隐式 OR、家庭成员关联或自动解释题目文本中的人群资格。",
+      "decisionContext 描述研究设定，文字中的购买者、使用者和渠道不构成已核验资格或业务证据。",
+      "仅校验结构、登记筛选与引用；未自动理解题意、题目与单位量纲、decisionContext 与 filters 的语义一致性。",
+      "街道内年龄×性别联合来自独立性假设，属于 infer，不是已观测联合或真实个人记录。",
+      "声明 five-layer-candidate 是显式假设，可用于假设预演；它不会补齐目标群体资格或赋予总体代表性。",
+      "声明 pet-qualification 是显式假设，可用于假设预演；它不会补齐目标群体资格或赋予总体代表性。"
+    ],
+    "allowedOutputs": [
+      "questionnaire-review",
+      "synthetic-analysis",
+      "group-comparison",
+      "hypothesis-report"
+    ],
+    "semanticValidation": "not-performed",
+    "marketResearchValidated": false,
+    "modelCalls": 0,
+    "executorAvailable": false
+  },
+  "capabilityChecks": {
+    "fiveLayersInFrozenProfilesAndPrompts": true,
+    "questionnaireParsed": true,
+    "individualResponsesRetained": true,
+    "deterministicStatisticsAvailable": true,
+    "unknownLayersRetained": true,
+    "realModelQuality": "not-tested",
+    "externalValidity": "not-validated"
+  },
+  "limitations": [
+    "工程规则夹具；没有LLM调用，不是真实居民偏好、人格效度或经营建议。",
+    "fixtureAnswers根据seed生成合法答卷，不根据五层画像推导消费偏好；完整率由工程规则保证。",
+    "猫狗人数来自预设轮转，不是滨江养宠比例；人口历史框不提供目标购买者分母。",
+    "价格和品类选项分布只验证数表与追溯能力，不支持选址、主营、定价、主粮或利润结论。",
+    "五层画像均为情景假设，不是DNA、测量人格或真实成长/家庭/教育/工作记录。",
+    "没有声明式职业/家庭/跨题规则，不把JSON通过当语义自洽盲评通过。",
+    "此自证不升级S03的真实10→30人完整率，也不升级S04或S13。"
+  ]
+}

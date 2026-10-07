@@ -1,0 +1,6 @@
+.evidence-audit-json{max-height:420px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;font:0.8125rem/1.65 ui-monospace,monospace;background:#f5f8f9;border:1px solid #dfe8e9;border-radius:6px;padding:16px;color:#314955}
+.research-next-tools{padding:14px;background:#f7fafb;border:1px solid #dfe8e9;border-radius:8px}
+.research-next-tools>button,.research-next-tools>a{margin-left:0!important;min-height:44px}
+.research-next-tools>a{display:inline-flex;align-items:center}
+.research-workspace button:focus-visible,.research-workspace a:focus-visible{outline:3px solid #159681;outline-offset:3px}
+@media(max-width:650px){.research-next-tools{align-items:stretch}.research-next-tools>button,.research-next-tools>a{width:100%}.evidence-audit-json{padding:12px}}
