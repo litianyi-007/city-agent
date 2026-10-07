@@ -26,7 +26,7 @@ const argument = (name: string) => {
 const inheritedSource = argument('--from-package');
 if (inheritedSource && record) throw new Error('Offline inheritance cannot record or start new runs. Keep historical video separate from a new experiment.');
 const publicDemoUrl = publicMaterialUrl(argument('--public-demo-url') ?? process.env.PRODUCTION_PUBLIC_DEMO_URL);
-const auditDoc = argument('--audit-doc') ?? 'JUDGE-AUDIT-2026-10-07.md';
+const auditDoc = argument('--audit-doc') ?? 'SUPPLEMENTAL-REVIEW-2026-10-07.md';
 if (!/^[a-zA-Z0-9._-]{1,150}\.md$/.test(auditDoc) || auditDoc.includes('..') || PACKAGE_DOCS.includes(auditDoc as typeof PACKAGE_DOCS[number])) throw new Error('Audit document must be a distinct Markdown filename in docs/production.');
 const optionalDocs: string[] = [];
 for (const name of OPTIONAL_PACKAGE_DOCS) {
@@ -82,7 +82,7 @@ const supplementalRuns = sourceDirectory ? JSON.parse(readInherited('mixed-and-l
 if (supplementalRuns.some(run => ['queued', 'running'].includes(run.status))) throw new Error('Wait for paid/mixed runs to finish before packaging.');
 const cameraRuns: ProductionRun[] = [];
 const cameraEvidence: Array<{ path: string; bytes: Buffer; sourcePath: string }> = [];
-for (const number of ['01', '02', '03', '04', '05', '06', '07']) {
+for (const number of ['01', '02', '03', '04', '05', '06', '07', '08']) {
   for (const name of ['run.json', 'evidence.json', 'delivery-manifest.json', 'platform-metadata.json']) {
     const sourcePath = `docs/production/experiments/CAMERA-${number}/${name}`;
     try {

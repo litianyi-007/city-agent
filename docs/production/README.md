@@ -4,7 +4,7 @@
 
 v3静态页/PDF/MP4/ZIP已发布；v4准备更新安装源码与新实验账本，不以本地修改或源码push冒充部署。本轮原文[留底](archive/2026-10-07-before-planning-loop/README.md)。实际新需求在本机4420页面点“新建自定义需求”，完整填写来源/验收、配置六角色与可选Jev，然后一次明确有限预算授权启动。
 
-最近真实尝试：[06](experiments/CAMERA-06/RESULT.md)完成测试角色一次语义纠错后容量拒绝；[07](experiments/CAMERA-07/RESULT.md)因初始PM修订计划未执行而停止；[08预登记](experiments/CAMERA-08/PRE-REGISTRATION.md)验证研发前有限再规划。工程测试、真实有界场景与完整硬件交付分列；不同配置调优不合并成稳定成功率。旧04结论与附件保持原版本。
+最近真实尝试：[06](experiments/CAMERA-06/RESULT.md)完成测试角色一次语义纠错后容量拒绝；[07](experiments/CAMERA-07/RESULT.md)因初始PM修订计划未执行而停止；[08结果](experiments/CAMERA-08/RESULT.md)两次真实角色纠错后最终Verifier JSON非法，57.688秒、14次HTTP、估算0.030952776 USD，未冻结/研发/Gate。本轮PM proceed，不当成真实再规划验证。工程测试、真实有界场景与完整硬件交付分列；不同配置调优不合并成稳定成功率。旧04结论与附件保持原版本。
 
 本线已进入第一批实施：产品经理、项目经理、研究员、研发、测试与 Verifier 共同执行有界软件生产。首批采用离线单 HTML 和受限 Chromium Gate，不执行生成的宿主脚本，不新增虚拟社会能力。用户允许自拟三个模拟需求；真实业务需求条款与官方 L4 认证不在本批完成范围内。
 
