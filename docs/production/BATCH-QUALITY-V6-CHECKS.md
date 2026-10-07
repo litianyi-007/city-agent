@@ -28,7 +28,7 @@
 
 全量首轮764/771，972.949秒，7项失败均为当前Jev回放结果版本已v4而两旧测试硬编码v3；不是行为Gate被放宽。只更新当前结果标记和counterfactual标题，历史v2/v3原件版本／hash／状态／数值门限保留，Jev子集98/98（24.271秒）和独立两文件10/10通过。用于抓取失败详情的第二轮在定位7项后主动停止，仅终止本worktree自建测试进程并保留TAP；不排除或追认该中断轮。
 
-第三轮769/771，747.534秒；执行期间安排了上述新安装配置修补，两个原生loopback实验正确发现冻结源码漂移并停止，实际供应商请求为0。不降低源码身份校验，也不将该轮追认为通过。保留full.tap与full-v4-final.tap，并在全部源码冻结后另开最终全量轮次，最终结果待追加。
+第三轮769/771，747.534秒；执行期间安排了上述新安装配置修补，两个原生loopback实验正确发现冻结源码漂移并停止，实际供应商请求为0。不降低源码身份校验，也不将该轮追认为通过。保留full.tap与full-v4-final.tap；以下最终轮次使用已冻结源码独立重跑。
 
 浏览器全量47/47（约1.5分钟），包括原人口／学校／宠物／问卷功能；新增表单专项9/9（15.0秒）。首次新表单2失败因服务使用旧dist，重建后通过；材料专项初轮54/55是旧npm ci文本断言，随engine-strict安全安装更新后重跑。最终材料/发布专项61/61（2.921秒），其他独立专项66/66、94/94、29/29及广域186/186分列，存在重叠不合计为独立样本。TypeScript、build和diff-check通过；最终发布前干净build另核验。
 
@@ -40,4 +40,14 @@
 
 ## 发布边界
 
-待回归与审查完成后，干净源commit导出新v6衍生PDF、继承旧视频，普通推送feature/autonomous-production，并只追加gh-pages:production/reviews/<commit>/及更新两个入口指针。发布回执保留production外root SHA与既有内部叶子不变的结果。实际部署URL和SHA在独立发布回执中记录，不能先写成完成。
+回归与审查已完成，干净publisher commit将导出新v6衍生PDF、继承旧视频，普通推送feature/autonomous-production，并只追加gh-pages:production/reviews/<commit>/及更新两个入口指针。发布回执保留production外root SHA与既有内部叶子不变的结果。实际部署URL和SHA在独立发布回执中记录，不能先写成完成。
+
+## 最终冻结验收
+
+冻结源码 afebed18501eeb2afb2bd5d3966ae562276f2e95 已提交普通推送；最终单元／集成全量773/773，922.520秒，0失败／取消／跳过。浏览器重新全量47/47，约1.5分钟；tsc、Vite构建、源码／构建／启动身份匹配且ready=true。最终PDF发布工具版本只追加本节等文档验收记录，源代码与上述冻结commit保持相同；原实验与旧申报不修改。
+
+免费复现（Node22、新目录独立安装后）为`npm test`与`npx playwright test --config docs/production/baseline.playwright.config.ts`。本地原TAP在ignored output/production-quality-final-dYjZML/full-frozen-afebed1.tap，SHA-256为575955c639c88aa88280ae02ae193608811286b8fd499b7e448bf1c7889e06b1，未冒充公开供应商日志。统计不合计重叠专项、不排除前三轮失败／中断，也不把本次工程通过计为真实自主交付。
+
+独立GitHub全新克隆安装验证：608独立依赖、官方Chromium独立缓存，未复制数据库或Key；固定afebed1完整SHA，端口4520／5520／4522／4521，clean、build、HEAD及服务身份一致。六个Agent均deepseek-flash且无Key／费率；首次Mock-01实际Chromium Gate3/3，1397毫秒、0返修。随后浏览器实操Mock-02，Gate3/3、1206毫秒、0返修。两者仅夹具、0模型请求。新需求编辑器可输入费用记录题，缺来源／验收／Key／预算时启动被明确阻止，不套用旧Mock通过；截图保留本地验收目录。
+
+真实HTML新配置、Jev v4与source-bound-v1的效果仍需新的明确预算和预登记；本批新收费模型请求为0，不沿用已消费REAL-02授权。外层开发Token、机器费用和供应商最终账单unknown。

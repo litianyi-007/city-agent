@@ -10,7 +10,7 @@
 
 GitHub Pages 是静态入口，不运行 Harness 后端、不收 Key、不启动新开发任务。在线交互只执行平台注册且字节一致的可信固定 Mock；不是实时模型产物。普通 HTML 模型产物仅提供受控截图与文本下载，不能在公开站点执行任意生成脚本。
 
-本指南为 v6 工作版本；是否已经部署以在线 `publication-manifest.json` 为准。固定版本位于 `reviews/<完整 publisherCommit>/`，不要将“最新入口”当成旧实验配置。已提交 [MD 主稿](SUBMISSION-REPORT.md)保持原始申报时点；[最新质量合同](QUALITY-V6-DESIGN.md)、[本批审核记录](BATCH-QUALITY-V6-CHECKS.md)与 [REAL-02](experiments/VERIFIER-REAL-02/RESULT.md)分别说明增量。更新前完整指南[留底](archive/2026-10-08-before-quality-v6/REVIEWER-GUIDE.md)。
+本指南对应 v6 评委材料；实际部署版本以在线 `publication-manifest.json` 为准。固定版本位于 `reviews/<完整 publisherCommit>/`，不要将“最新入口”当成旧实验配置。已提交 [MD 主稿](SUBMISSION-REPORT.md)保持原始申报时点；[最新质量合同](QUALITY-V6-DESIGN.md)、[本批审核记录](BATCH-QUALITY-V6-CHECKS.md)与 [REAL-02](experiments/VERIFIER-REAL-02/RESULT.md)分别说明增量。更新前完整指南[留底](archive/2026-10-08-before-quality-v6/REVIEWER-GUIDE.md)。
 
 ## A. 无需安装的五分钟审阅
 
