@@ -123,7 +123,7 @@ test('cancel during replanning aborts the current role and never proceeds to res
 test('planning uses the original request budget and the generic prompts distinguish free design choices from missing authority', async t => {
   const f = await fixture(t, { maxCalls: 12 }); f.start(); const run = await f.wait();
   assert.equal(run.status, 'failed'); assert.match(run.error!, /请求次数预算耗尽/); assert.equal(run.calls.length, 12); assert.equal(run.repairs, 1); assert.equal(run.frozenContract, undefined); assert.equal(f.counts().gateCalls, 0);
-  assert.equal(PROMPT_VERSION, 'production-html-v8'); assert.equal(CAMERA_PROMPT_VERSION, 'production-camera-scene-v7');
+  assert.equal(PROMPT_VERSION, 'production-html-v9'); assert.equal(CAMERA_PROMPT_VERSION, 'production-camera-scene-v7');
   for (const capability of ['offline-single-html', 'camera-scene-v1'] as const) { const profile = contractProfile(capability); assert.match(profile.instructions.product, /自主选择具体默认值/); assert.match(profile.instructions['project-manager'], /真正超出能力、缺权限或外部必需输入时stop/); }
   for (const value of ['planningLoopVersion', PRODUCTION_PLANNING_LOOP_VERSION, 'planningFeedback', 'planningReviewContext', 'sourceRoleCallId', 'sourceCandidateId']) assert.equal(productionApiKeySchema.safeParse(value).success, false);
 });
@@ -147,7 +147,8 @@ test('actual CAMERA07 full outputs plus a counterfactual planning handoff fit cu
     const request = buildJevCandidateRequest(oldRequest.model, context);
     const totalBytes = Buffer.byteLength(JSON.stringify(request)); const stateBytes = Buffer.byteLength(JSON.stringify(request.state)); const maxPerQuestionBytes = stateBytes + Math.max(...Object.values(request.questions).map(question => Buffer.byteLength(JSON.stringify(question))));
     assert.ok(totalBytes <= 64000); assert.ok(maxPerQuestionBytes <= 32000); assert.equal(JSON.stringify(request.state.candidates), JSON.stringify(oldRequest.state.candidates));
-    for (const [key, value] of Object.entries(originalReview)) assert.deepEqual((request.state.reviewContext as Record<string, unknown>)[key], value);
+    for (const [key, value] of Object.entries(originalReview).filter(([key]) => key !== 'reviewContextVersion')) assert.deepEqual((request.state.reviewContext as Record<string, unknown>)[key], value);
+    assert.equal((request.state.reviewContext as Record<string, unknown>).reviewContextVersion, projection.version, 'Counterfactual uses the new projection version; archived review bytes remain unchanged');
     measurements.push({ phase, generationContextBytes: Buffer.byteLength(JSON.stringify(generationContext)), totalBytes, maxPerQuestionBytes });
   }
   assert.deepEqual(readFileSync(file), bytes);

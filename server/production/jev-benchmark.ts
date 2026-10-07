@@ -71,6 +71,8 @@ export interface JevBenchmarkOptions {
   id?: string;
   evaluate?: typeof evaluateJevCandidates;
   gate?: typeof runGate;
+  /** Control-plane disk freshness, not an injected evaluator or model result. */
+  assertExecutionFresh?: () => void;
   /** Awaited before any evaluation, then after every meaningful state change. */
   onSnapshot?: (run: JevBenchmarkRun) => void | Promise<void>;
 }
@@ -142,6 +144,7 @@ export async function runJevBenchmark(config: SecretJevConfig, signal: AbortSign
   let stopReason: string | null = null;
   try {
     signal.throwIfAborted();
+    if (!options.evaluate && !options.assertExecutionFresh) throw new Error('缺少生产启动身份门禁，拒绝真实Jev基准请求');
     if (run.limits.maxProviderRequests * run.limits.maxInputTokensPerRequest * run.config.inputPerMillion / 1e6 > run.limits.maxCost) throw new Error('The preregistered three-request conservative input reserve exceeds the 1 USD batch cap.');
     if (run.config.outputPerMillion !== 0) throw new Error('This bounded Jev benchmark requires the documented zero output fee; a nonzero fee needs a validated provider output bound.');
     Object.freeze(frozenSecretConfig); run.status = 'running'; await snapshot();
@@ -152,7 +155,11 @@ export async function runJevBenchmark(config: SecretJevConfig, signal: AbortSign
       assertFrozen(); item.status = 'evaluating'; item.attempted = true; item.startedAt = new Date().toISOString(); await snapshot();
       const context: JevCandidateContext = { phase: 'developer', goal: item.goal, acceptance: item.acceptance, frozenHash: item.frozenChecksHash, candidates: item.candidates.map(candidate => ({ id: candidate.id, value: { html: candidate.html } })) };
       try {
+        options.assertExecutionFresh?.();
         signal.throwIfAborted(); item.evaluationInvoked = true; await snapshot(); signal.throwIfAborted();
+        // Persistence may yield. A second refusal is still a local preflight,
+        // not an invoked evaluator or unknown provider request.
+        try { options.assertExecutionFresh?.(); } catch (error) { item.evaluationInvoked = false; throw error; }
         item.evaluation = sanitized(copy(await (options.evaluate ?? evaluateJevCandidates)(frozenSecretConfig, context, signal)));
         if (item.evaluation.status === 'accepted') {
           if (!item.candidates.some(candidate => candidate.id === item.evaluation!.selectedCandidateId)) throw new Error('Jev selected a candidate outside the frozen pool.');

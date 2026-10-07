@@ -2,8 +2,9 @@ import { z } from 'zod';
 import { acceptanceSchema, type AcceptanceCheck } from '../gate.js';
 import type { ProductionCapability } from '../../shared/production-schema.js';
 import { PRODUCTION_VERIFIER_VERSION } from '../../shared/production-verifier-rubric.js';
+import { HTML_DOM_CONTRACT_INSTRUCTIONS, HTML_EXECUTION_INSTRUCTIONS } from '../../shared/production-execution-profile.js';
 
-export const PROMPT_VERSION = 'production-html-v8';
+export const PROMPT_VERSION = 'production-html-v9';
 export const ACCEPTANCE_CONTRACT_VERSION = 'production-acceptance-v3';
 export const CRITERIA_VERSION = PRODUCTION_VERIFIER_VERSION;
 export const CAMERA_PROMPT_VERSION = 'production-camera-scene-v7';
@@ -72,7 +73,9 @@ export const TESTER_VALID_JSON_EXAMPLE = JSON.stringify({ checks: [
   { name: '提交后验证真实结果', steps: [{ action: 'fill', selector: '#input', value: '示例输入' }, { action: 'click', selector: '#submit' }, { action: 'assertTextExact', selector: '#result', text: '提交成功' }, { action: 'assertCount', selector: '#items li', count: 1 }, { action: 'assertValue', selector: '#input', value: '' }] },
   { name: '更新后验证结果变化', steps: [{ action: 'assertVisible', selector: '#result' }, { action: 'assertChanged', selector: '#result', after: { action: 'click', selector: '#update' } }, { action: 'assertTextExact', selector: '#result', text: '已更新' }] },
 ] });
-export const CONTRACT_INSTRUCTIONS = {
+// Keep the shared role/output instructions stable for the separate camera
+// profile. HTML-only execution facts must not leak into that trusted runtime.
+const BASE_CONTRACT_INSTRUCTIONS = {
   product: roleInstructions('返回严格JSON：{"goal":"可操作目标","scope":"offline-single-html","acceptance":["业务标准"],"exclusions":["不支持范围"]}。只能离线单HTML应用，不运行Node、shell、不联网；不能虚构已交付。需求明确要求无法支持的后端/仓库能力时，不能偷偷缩减为相同目标，须拒绝。'),
   researcher: roleInstructions('返回严格JSON：{"observations":["基于已提供信息的具体判断与可执行设计/验证建议"],"constraints":["真实边界与对实施的影响"],"unknowns":["blocking: 必须补充的信息；或deferred: 后续验证项"]}。根据context.product与context.knownPlatform区分已知事实、建议和未知；给出可执行方向，不只复述需求或把全部内容列为unknown。研究阶段无需生成代码、冻结测试或提供尚未进行的实机证明；不得虚构这些成果。诚实deferred未知可以保留；有必需blocking输入应明确建议停止/询问。本角色没有外部搜索工具；不能虚构已搜索或已验证来源。'),
   'project-manager': roleInstructions('返回严格JSON：{"decision":"proceed|revise|stop","summary":"简短决策依据而非隐藏思维过程","tasks":[{"id":"任务ID","owner":"product|researcher|developer|tester","description":"具体任务"}],"risks":["风险"]}。研发前proceed仅批准可执行规划，不声称最终交付；发现可在授权范围内补齐的设计缺口时revise，summary/tasks明确交给原产品与研究员具体化后重新评审。真正超出能力、缺权限或外部必需输入时stop，不要求人来决定可自主选择的设计默认值。不得改变需求、冻结验收或预算。Gate失败只能revise或stop，不能声称通过；Gate通过可proceed交付。'),
@@ -80,15 +83,24 @@ export const CONTRACT_INSTRUCTIONS = {
   developer: roleInstructions('返回严格JSON {"html":"<!doctype html>...完整闭合文档... </html>"}。实现用户业务目标及全部冻结检查，所有JS/CSS内联；禁止外部网络、弹窗、下载、iframe、worker、后端或shell。不能删除失败测试或修改冻结检查。不能把静态通过文案当功能。'),
 } as const;
 
+const htmlInstructions = (instructions: string) => `${instructions} ${HTML_EXECUTION_INSTRUCTIONS} ${HTML_DOM_CONTRACT_INSTRUCTIONS}`;
+export const CONTRACT_INSTRUCTIONS = Object.freeze({
+  product: htmlInstructions(BASE_CONTRACT_INSTRUCTIONS.product),
+  researcher: htmlInstructions(BASE_CONTRACT_INSTRUCTIONS.researcher),
+  'project-manager': htmlInstructions(BASE_CONTRACT_INSTRUCTIONS['project-manager']),
+  tester: htmlInstructions(BASE_CONTRACT_INSTRUCTIONS.tester),
+  developer: htmlInstructions(BASE_CONTRACT_INSTRUCTIONS.developer),
+});
+
 export function contractProfile(capability: ProductionCapability = 'offline-single-html') {
   if (capability === 'offline-single-html') return { promptVersion: PROMPT_VERSION, acceptanceVersion: ACCEPTANCE_CONTRACT_VERSION, instructions: CONTRACT_INSTRUCTIONS, productSchema: productSchema.extend({ scope: z.literal(capability) }) };
   const scope = '平台固定可信摄像头桥/本地识别/Canvas渲染，模型仅生成严格JSON场景配置，绝不生成可执行JS/HTML、URL或改变权限。人工授权摄像头是产品使用动作；本批Gate仅验证合成手势场景行为，识别模型、物理摄像头及完整需求验收仍待实测，不能声称已完成。';
   return { promptVersion: CAMERA_PROMPT_VERSION, acceptanceVersion: CAMERA_ACCEPTANCE_VERSION, productSchema: productSchema.extend({ scope: z.literal(capability) }), instructions: {
-    ...CONTRACT_INSTRUCTIONS,
+    ...BASE_CONTRACT_INSTRUCTIONS,
     product: roleInstructions(`返回严格JSON：{"goal":"可操作目标","scope":"camera-scene-v1","acceptance":["业务标准"],"exclusions":["本次未验证部分"]}。${scope} 保留完整原始需求，不得把真实摄像头验收偷偷改成Mock通过；如超出受控场景配置能力则拒绝。`),
-    researcher: `${CONTRACT_INSTRUCTIONS.researcher} ${scope}`,
-    'project-manager': `${CONTRACT_INSTRUCTIONS['project-manager']} ${scope}`,
-    tester: `${CONTRACT_INSTRUCTIONS.tester} 可信场景DOM固定：Canvas #scene-canvas；散开按钮 #scatter、聚合按钮 #gather、旋转 #rotate-left/#rotate-right、复位 #reset-btn；#scene-state 精确文本gather/scatter；#particle-count 是总粒子数（所有对象粒子加雪）；#rotation 数值文本；#camera-status 表示摄像头状态。context.cameraBusinessConstraints指定的每项映射必须在#gesture-map用assertText冻结；标签包含“张掌 → scatter”或“张掌 → gather”、“握拳 → scatter”或“握拳 → gather”、“手掌横移 → 旋转”或“手掌横移 → 不启用旋转”，逐项选择用户指定的值，不要求未指定项。scatter/gather只改变粒子位置和状态，不改变#particle-count，禁止要求聚合后粒子数量发生变化。手动旋转按钮每次步进π/8，格式toFixed(4)：从0右转一次0.3927、左转一次-0.3927；palmX则连续映射[0,1]到[-π,π]，不是按钮步进，合成手势由平台强制Gate验证，CSS步骤不得注入摄像头或要求识别结果。使用context.knownPlatform.fixedDom的准确Gate模式文本/属性，不能把预览off状态断言套在synthetic Gate。测试不得要求自动获得真实camera权限；用户完整摄像头验收由已有产品exclusions和平台证据单列待验证，不向严格{checks}添加非法字段，不能删掉或宣称通过。平台另强制独立Canvas/粒子状态/手动按钮/合成手势Gate。`,
+    researcher: `${BASE_CONTRACT_INSTRUCTIONS.researcher} ${scope}`,
+    'project-manager': `${BASE_CONTRACT_INSTRUCTIONS['project-manager']} ${scope}`,
+    tester: `${BASE_CONTRACT_INSTRUCTIONS.tester} 可信场景DOM固定：Canvas #scene-canvas；散开按钮 #scatter、聚合按钮 #gather、旋转 #rotate-left/#rotate-right、复位 #reset-btn；#scene-state 精确文本gather/scatter；#particle-count 是总粒子数（所有对象粒子加雪）；#rotation 数值文本；#camera-status 表示摄像头状态。context.cameraBusinessConstraints指定的每项映射必须在#gesture-map用assertText冻结；标签包含“张掌 → scatter”或“张掌 → gather”、“握拳 → scatter”或“握拳 → gather”、“手掌横移 → 旋转”或“手掌横移 → 不启用旋转”，逐项选择用户指定的值，不要求未指定项。scatter/gather只改变粒子位置和状态，不改变#particle-count，禁止要求聚合后粒子数量发生变化。手动旋转按钮每次步进π/8，格式toFixed(4)：从0右转一次0.3927、左转一次-0.3927；palmX则连续映射[0,1]到[-π,π]，不是按钮步进，合成手势由平台强制Gate验证，CSS步骤不得注入摄像头或要求识别结果。使用context.knownPlatform.fixedDom的准确Gate模式文本/属性，不能把预览off状态断言套在synthetic Gate。测试不得要求自动获得真实camera权限；用户完整摄像头验收由已有产品exclusions和平台证据单列待验证，不向严格{checks}添加非法字段，不能删掉或宣称通过。平台另强制独立Canvas/粒子状态/手动按钮/合成手势Gate。`,
     developer: roleInstructions('返回严格JSON {"scene":{"version":"camera-scene-v1","title":"1–80字符无标记","background":"#RRGGBB","palette":["#RRGGBB"],"objects":[{"id":"以小写字母开始的唯一a-z0-9-标识1–40字符","primitive":"cone|sphere|ring|star","position":[0,0,0],"scale":[1,1,1],"count":200,"color":"#RRGGBB"}],"snowCount":40,"mappings":{"openPalm":"scatter|gather","closedFist":"scatter|gather","palmX":"rotate|none"}}}。所有对象严格禁止额外字段：palette1–6色，objects1–12个，position每项-12..12，scale每项0.1..6，count整数20..1000，snowCount整数0..160，所有对象+雪总粒子<=2400；openPalm与closedFist必须不同。不得返回HTML、JS、URL、资源路径；由固定可信平台代码渲染。按原始业务目标设计场景布局、颜色、粒子量和手势映射并满足冻结测试；不能修改门禁或虚构物理摄像头已验收。'),
   } };
 }

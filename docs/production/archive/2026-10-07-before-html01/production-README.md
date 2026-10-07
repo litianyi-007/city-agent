@@ -2,13 +2,11 @@
 
 材料入口：[已提交离线主稿（v3原叙述保留）](SUBMISSION-REPORT.md)、[评委独立安装/自测指南](REVIEWER-GUIDE.md)、[最新进度](POST-SUBMISSION-PLAN.md)。在线production/是固定案例＋安装引导＋材料，不是新需求后端；公开版本以publication-manifest为准。新包使用reviews/<完整publisher commit>/固定入口，PDF/MD/JSON分别记录材料版本与原实验来源；历史MP4保持原视频commit，旧公开附件不覆盖。
 
-v5静态页/PDF/MP4/ZIP已发布并[核验](PUBLICATION-V5-2026-10-07.md)，安装源码固定967bbba，纳入CAMERA09七原档；旧v3/v4附件和历史视频保留。后续源码修改不等于该固定公开版本已更新。本轮原文[留底](archive/2026-10-07-before-html01/production-README.md)。实际新需求在本机4420页面点“新建自定义需求”，完整填写来源/验收、配置六角色与可选Jev，然后一次明确有限预算授权启动。
+v4静态页/PDF/MP4/ZIP已发布并[核验](PUBLICATION-V4-2026-10-07.md)，安装源码固定c7b4f2e；旧v3附件和历史视频保留。后续源码修改不等于该固定公开版本已更新。本轮原文[留底](archive/2026-10-07-before-planning-loop/README.md)。实际新需求在本机4420页面点“新建自定义需求”，完整填写来源/验收、配置六角色与可选Jev，然后一次明确有限预算授权启动。
 
 最新成果：[CAMERA-09](experiments/CAMERA-09/RESULT.md)在干净冻结24256f9完成第一次真实六角色有界场景交付：76.602秒、18次供应商HTTP、143680输入/8715输出Token、估算0.037964112 USD，11/11实际浏览器检查通过，0返修、0已记录中途人工干预。模型交付严格场景JSON，平台固定可信运行时渲染，不冒称任意源码或完整摄像头交付。场景通过1次；真实视觉、实体设备、完整需求仍单独验收。01～09不同配置探索不合并成稳定成功率，原始失败保持不变。
 
 当前切片：[原生JSON请求模式](HARNESS-JSON-OUTPUT-V1.md)、[完整工程验证过程](BATCH-JSON-OUTPUT-CHECKS.md)、[CAMERA-09预登记](experiments/CAMERA-09/PRE-REGISTRATION.md)及七份原始交付；新增[三池Verifier开发语料](VERIFIER-DEV-CORPUS.md)，免费浏览器Oracle验证六份候选，但未启动模型选优效益评估。不修补旧回答或降低Gate；结构化请求、严格响应校验和最终行为验收分别留证。本次更新前全文[留底](archive/2026-10-07-before-camera09/README.md)。
-
-后续[HTML01真实探索](experiments/HTML-01/RESULT.md)失败、1次自动返修、19次实际POST、总费用unknown，原四档保持不变。[免费修补批次](BATCH-HTML01-CHECKS.md)公开HTML执行事实、分离生成与独立评审上下文、加入[启动磁盘身份与付费前漂移检查](EXECUTION-IDENTITY.md)，不放宽CSP/容量/Gate。HTML02须按独立预登记与干净构建/重启后再验证，不将免费接线当真实交付。
 
 本线已进入第一批实施：产品经理、项目经理、研究员、研发、测试与 Verifier 共同执行有界软件生产。首批采用离线单 HTML 和受限 Chromium Gate，不执行生成的宿主脚本，不新增虚拟社会能力。用户允许自拟三个模拟需求；真实业务需求条款与官方 L4 认证不在本批完成范围内。
 

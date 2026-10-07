@@ -1,15 +1,5 @@
 # City Agent
 
-## 当前分支：自主软件生产
-
-`feature/autonomous-production` 使用独立 worktree、数据和端口；虚拟社会主线不变。入口为 [线上固定案例与材料](https://litianyi-007.github.io/city-agent/production/)、[评委安装指南](docs/production/REVIEWER-GUIDE.md)、[最新进度与待办](docs/production/POST-SUBMISSION-PLAN.md)。线上是静态门户，不能提交新需求或填写 Key；实际需求编辑器在 **http://127.0.0.1:4420/#production**。
-
-Node 22.19+，依次 `npm ci` → `npx playwright install chromium` → `npm run build` → `npm start`。打开“新建自定义需求”，填写原话、来源与验收，在页面配置六角色模型和费率，再授权单次预算。真实调用要求干净源码、对应构建并重启服务；漂移会在下一付费阶段前停止，不自动重跑。工程 Mock 无需 Key。
-
-CAMERA09 已通过真实有界场景 Gate，但不等于实体摄像头或完整需求验收；[HTML01通用网页实测](docs/production/experiments/HTML-01/RESULT.md)失败且保留原档。当前只执行受限 HTML 或声明场景，不运行模型生成的宿主 Node/shell。新修补的免费回归与真实模型结果分列，不宣称通用 L5。
-
-以下保留虚拟社会的冻结背景与历史启动说明；本生产分支以4420 API、5420 Vite、4421 E2E、4422预览及 `.city-agent-production` 数据目录为准，不使用原目录的数据或服务。[本次修改前原文](docs/production/archive/2026-10-07-before-html01/README.md)。
-
 [阶段里程碑汇报](docs/MILESTONE-SUBMISSION-2026-10-07.md)：封板截至2026-10-07 03:19:40（北京时间），四项申报附件及外部观测映射、记忆/wiki/dream的未实施规划齐备。冻结Tag：`submission-milestone-2026-10-07`；后续新任务从此Tag分支。申报完成不代表原产品M1/M2全部验收通过。
 
 公开问卷 Demo：**https://litianyi-007.github.io/city-agent/** · [申报材料](https://litianyi-007.github.io/city-agent/submission/index.html) · [4分钟录屏](https://litianyi-007.github.io/city-agent/submission/demo.mp4)。

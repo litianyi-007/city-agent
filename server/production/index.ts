@@ -13,7 +13,7 @@ import { CAMERA_ASSET_MANIFEST } from '../../shared/camera-asset-manifest.js';
 import { cameraRuntimeMetadata } from './camera-gate.js';
 import { ProductionPipeline, type ProductionOptions } from './pipeline.js';
 import { hash, ProductionStore } from './store.js';
-import { platformCommit, buildProvenance } from './provenance.js';
+import { platformCommit, captureProductionExecutionIdentity } from './provenance.js';
 import { runJevBenchmark } from './jev-benchmark.js';
 import { PRODUCTION_DEMO_CASES } from '../../shared/production-benchmarks.js';
 import { ProductionPreview } from './preview.js';
@@ -61,11 +61,15 @@ export function productionReport(runs: ProductionRun[]) {
 }
 
 export function createProductionService(dataDir: string, options: ProductionOptions = {}) {
-  const store = new ProductionStore(dataDir); const pipeline = new ProductionPipeline(store, options); const preview = new ProductionPreview(store); const router = Router(); const commit = platformCommit(); const build = buildProvenance();
+  const captured = captureProductionExecutionIdentity();
+  const injected = Boolean(options.roleCall || options.jevCall || options.gate || options.cameraGate || options.acceptancePreflight);
+  const executionIdentity = options.executionIdentity ?? captured.bootIdentity;
+  const assertExecutionFresh = options.assertExecutionFresh ?? (injected ? undefined : captured.assertFresh);
+  const store = new ProductionStore(dataDir); const pipeline = new ProductionPipeline(store, { ...options, executionIdentity, assertExecutionFresh }); const preview = new ProductionPreview(store); const router = Router(); const commit = executionIdentity.commit ?? platformCommit(); const build = executionIdentity.buildSnapshot;
   let benchmark: { controller: AbortController; completion: Promise<unknown> } | undefined;
   const action = (handler: (req: Request, res: Response) => unknown) => (req: Request, res: Response) => { try { handler(req, res); } catch (error) { const message = store.redact(error instanceof Error ? error.message : String(error)); res.status(error instanceof z.ZodError ? 400 : /不存在/.test(message) ? 404 : /运行中/.test(message) ? 409 : 400).json({ error: message }); } };
   router.get('/agents', action((_req, res) => res.json(store.agents())));
-  router.get('/metadata', action((_req, res) => { let assets: { ready: boolean; version: string }; try { assets = verifyCameraAssets(); } catch { assets = { ready: false, version: CAMERA_ASSET_MANIFEST.version }; } res.json({ platformCommit: commit, build, repairPolicyVersion: PRODUCTION_REPAIR_POLICY_VERSION, jevPolicyVersion: JEV_POLICY_VERSION, verifierVersion: CRITERIA_VERSION, outputContractVersion: OUTPUT_CONTRACT_VERSION, frozenBaseline: 'b66122c21604fdb2ecdcbafb89c3d5ad8cde1466', capabilities: PRODUCTION_CAPABILITIES.map(capability => ({ id: capability, promptVersion: contractProfile(capability).promptVersion, acceptanceVersion: contractProfile(capability).acceptanceVersion, ...(capability === 'camera-scene-v1' ? { runtime: cameraRuntimeMetadata(), assets, evidenceScope: 'scene-behavior-synthetic', physicalCameraVerified: false } : {}) })) }); }));
+  router.get('/metadata', action((_req, res) => { let assets: { ready: boolean; version: string }; try { assets = verifyCameraAssets(); } catch { assets = { ready: false, version: CAMERA_ASSET_MANIFEST.version }; } res.json({ platformCommit: commit, build, executionIdentity, repairPolicyVersion: PRODUCTION_REPAIR_POLICY_VERSION, jevPolicyVersion: JEV_POLICY_VERSION, verifierVersion: CRITERIA_VERSION, outputContractVersion: OUTPUT_CONTRACT_VERSION, frozenBaseline: 'b66122c21604fdb2ecdcbafb89c3d5ad8cde1466', capabilities: PRODUCTION_CAPABILITIES.map(capability => ({ id: capability, promptVersion: contractProfile(capability).promptVersion, acceptanceVersion: contractProfile(capability).acceptanceVersion, ...(capability === 'camera-scene-v1' ? { runtime: cameraRuntimeMetadata(), assets, evidenceScope: 'scene-behavior-synthetic', physicalCameraVerified: false } : {}) })) }); }));
   router.get('/camera-assets/:filename', action((req, res) => { const { pin, value } = readPinnedCameraAsset(String(req.params.filename)); res.setHeader('X-Content-Type-Options', 'nosniff'); res.setHeader('Cache-Control', 'no-store'); res.setHeader('X-Asset-SHA256', pin.sha256); res.setHeader('Cross-Origin-Resource-Policy', 'same-origin'); res.type(pin.contentType).send(value); }));
   router.get('/camera-runtime/worker.js', action((req, res) => { const origin = cameraOrigin(req); res.setHeader('Content-Security-Policy', `default-src 'none'; script-src ${origin}/api/production/camera-assets/ 'wasm-unsafe-eval'; connect-src ${origin}/api/production/camera-assets/; object-src 'none'; base-uri 'none'; frame-ancestors 'none'`); res.setHeader('Cache-Control', 'no-store'); res.setHeader('X-Content-Type-Options', 'nosniff'); res.setHeader('Cross-Origin-Resource-Policy', 'same-origin'); res.type('text/javascript').send(renderCameraHandWorkerSource()); }));
   router.get('/jev/config', action((_req, res) => { res.setHeader('Cache-Control', 'no-store'); res.json(store.jevConfig()); }));
@@ -75,8 +79,9 @@ export function createProductionService(dataDir: string, options: ProductionOpti
     z.object({ budgetAuthorized: z.literal(true) }).strict().parse(req.body);
     if (pipeline.busy || benchmark) throw new Error('已有运行中的任务');
     const config = store.secretJevConfig(); if (!config.enabled || !config.apiKey) throw new Error('请先在页面配置并启用 Jev');
+    assertExecutionFresh?.();
     const id = randomUUID(); const controller = new AbortController();
-    const completion = runJevBenchmark(config, controller.signal, { id, onSnapshot: value => { store.saveJevBenchmark({ ...value, platformCommit: commit }); } }).catch(error => { const previous = (store.jevBenchmarks() as Array<{ id: string; status: string }>).find(item => item.id === id); try { store.saveJevBenchmark({ ...previous, id, platformCommit: commit, status: 'failed', error: store.redact(error instanceof Error ? error.message : String(error)), note: '基准或证据写入失败；保留已记录原始证据，没有隐式重试' }); } catch { /* Do not erase previous evidence or falsely claim successful persistence. */ } }).finally(() => { benchmark = undefined; });
+    const completion = runJevBenchmark(config, controller.signal, { id, assertExecutionFresh, onSnapshot: value => { store.saveJevBenchmark({ ...value, platformCommit: commit, executionIdentity }); } }).catch(error => { const previous = (store.jevBenchmarks() as Array<{ id: string; status: string }>).find(item => item.id === id); try { store.saveJevBenchmark({ ...previous, id, platformCommit: commit, executionIdentity, status: 'failed', error: store.redact(error instanceof Error ? error.message : String(error)), note: '基准或证据写入失败；保留已记录原始证据，没有隐式重试' }); } catch { /* Do not erase previous evidence or falsely claim successful persistence. */ } }).finally(() => { benchmark = undefined; });
     benchmark = { controller, completion }; res.status(202).json({ id });
   }));
   router.post('/jev/benchmarks/cancel', action((_req, res) => { if (!benchmark) throw new Error('没有运行中的基准'); benchmark.controller.abort(); res.status(202).json({ cancelling: true }); }));
@@ -103,6 +108,8 @@ export function createProductionService(dataDir: string, options: ProductionOpti
     const usesJev = input.mode === 'mock-jev' || input.mode === 'live' && input.verifierEngine === 'jev-cascade';
     if (usesJev) { const config = store.jevConfig(); if (!config.enabled || !config.hasApiKey) throw new Error('请在本分支页面启用并配置 Jev'); if (!input.budgetAuthorized || input.limits.currency !== 'USD') throw new Error('Jev 需要明确授权的 USD 预算'); if (config.outputPerMillion !== 0) throw new Error('本版 Jev 预留策略仅支持官方当前免费输出；非零输出费用需要另行验证上界'); input.verifierEngine = 'jev-cascade'; }
     const run: ProductionRun = { id: randomUUID(), input, status: 'queued', createdAt: new Date().toISOString(), platformCommit: commit, ...(usesJev ? { jevSnapshot: store.jevConfig(), jevCalls: [] } : {}), evidenceKind: options.acceptancePreflight ? 'injected-test' : input.mode === 'demo' ? 'fixture' : options.roleCall || options.gate || options.cameraGate || options.jevCall ? 'injected-test' : input.mode === 'mock-jev' ? 'fixture-with-real-jev' : 'real-model', agentSnapshot: agents.map(({ apiKey: _, ...agent }) => agent), events: [], calls: [], verifications: [], outputs: [], gateHistory: [], repairs: 0, repairPolicyVersion: PRODUCTION_REPAIR_POLICY_VERSION, repairHistory: [], usage: { inputTokens: input.mode === 'demo' ? 0 : null, outputTokens: input.mode === 'demo' ? 0 : null, estimatedCost: input.mode === 'demo' ? 0 : null, currency: input.limits.currency, complete: input.mode === 'demo' }, interventions: [], artifacts: [] };
+    if (input.mode !== 'demo') assertExecutionFresh?.();
+    run.executionIdentity = structuredClone(executionIdentity);
     store.addRun(run, input.agentIds); pipeline.start(store.run(run.id)!); res.status(202).json(store.run(run.id));
   }));
   router.post('/runs/:id/cancel', action((req, res) => { const id = String(req.params.id); const run = store.run(id); if (!run) throw new Error('运行不存在'); if (!['queued', 'running'].includes(run.status)) throw new Error('任务不在运行中，不能再次取消'); pipeline.cancel(id); res.json(store.run(id)); }));

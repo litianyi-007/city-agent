@@ -2,10 +2,6 @@
 
 ## 当前补充（2026-10-07，历史段落不回写）
 
-[v5公开材料](PUBLICATION-V5-2026-10-07.md)已发布，11页PDF逐页检查及13个公网文件HTTP/SHA读回通过。[HTML01](experiments/HTML-01/RESULT.md)通用网页真实运行失败，1自动返修、19次HTTP、总费用unknown，原失败不覆盖。其后免费工程修补的HTML执行事实v1/Prompt v9、返修review-context v2、boot-disk v1身份门禁与旧模型实测分列，新的源码尚须新实验验证。本文更新前[留底](archive/2026-10-07-before-html01/VALIDATION.md)。
-
-本批冻结源码最终工程验证480/480（343.702秒），独立4421浏览器38/38（1.3分钟），TypeScript及diff格式通过，详见[BATCH-HTML01-CHECKS](BATCH-HTML01-CHECKS.md)。工程夹具/注入结果不计真实自主交付；HTML02按新预登记仅启动一次。
-
 [CAMERA-09](experiments/CAMERA-09/RESULT.md)已完成一次最小真实有界场景交付，冻结source24256f9、11/11行为Gate、0返修，76.602秒、18实际HTTP、估算0.037964112 USD。完整摄像头/真实视觉/实体设备仍分别验收，不算完整良品或稳定L5。
 
 后续pending计量修补、Verifier开发语料与历史证据验证见[BATCH-CAMERA09-CHECKS](BATCH-CAMERA09-CHECKS.md)，当前六角色Key已由用户配置在本分支页面，未迁移别线。新公开材料以publication-manifest/receipt为准，旧段落的Key未配置、当时未调用/未发布与189/229项工程数字均是历史时点，不是现在状态。[本文更新前留底](archive/2026-10-07-before-camera09/VALIDATION.md)。
