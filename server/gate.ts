@@ -77,6 +77,10 @@ const CSP = [
 const HTML_MAX_BYTES = 500_000;
 const CHECK_TIMEOUT_MS = 5000;
 const TOTAL_TIMEOUT_MS = 60_000;
+/** Raised only around trusted browser setup, never from generated page text. */
+export class GateInfrastructureError extends Error {
+  constructor(stage: string, cause: unknown) { super(`${stage}：${detail(cause)}`); }
+}
 
 function detail(error: unknown): string {
   return (error instanceof Error ? error.message : String(error)).slice(0, 700);
@@ -162,6 +166,8 @@ export async function runGate(html: string, checks: AcceptanceCheck[], signal?: 
   }
   let browser: Browser | undefined;
   let stopping = false;
+  let totalTimedOut = false;
+  let browserDisconnected = false;
   let closePromise: Promise<void> | undefined;
   const closeBrowser = () => (closePromise ??= browser?.close() ?? Promise.resolve());
   let cancelListener: (() => void) | undefined;
@@ -174,11 +180,12 @@ export async function runGate(html: string, checks: AcceptanceCheck[], signal?: 
     };
     cancelListener = () => stop(new DOMException('浏览器验收已取消。', 'AbortError'));
     signal?.addEventListener('abort', cancelListener, { once: true });
-    totalTimer = setTimeout(() => stop(new Error('浏览器验收超过 60 秒，已停止。')), TOTAL_TIMEOUT_MS);
+    totalTimer = setTimeout(() => { totalTimedOut = true; stop(new Error('浏览器验收超过 60 秒，已停止。')); }, TOTAL_TIMEOUT_MS);
   });
 
   const checkInPage = async (name: string, check: (page: Page) => Promise<void>) => {
     let context: BrowserContext | undefined;
+    let initializingBrowserContext = true;
     const faults: string[] = [];
     const recordFault = (message: string) => { if (faults.length < 16) faults.push(message); };
     try {
@@ -201,6 +208,7 @@ export async function runGate(html: string, checks: AcceptanceCheck[], signal?: 
           }
         });
         const page = await context.newPage();
+        initializingBrowserContext = false;
         page.setDefaultTimeout(1500);
         page.setDefaultNavigationTimeout(2000);
         context.on('page', (popup) => {
@@ -223,6 +231,7 @@ export async function runGate(html: string, checks: AcceptanceCheck[], signal?: 
       results.push({ name, passed: true });
     } catch (error) {
       if (signal?.aborted || stopping) throw error;
+      if (initializingBrowserContext || browserDisconnected) throw new GateInfrastructureError('Chromium 上下文初始化或连接失败', error);
       results.push({ name, passed: false, detail: detail(error) });
     } finally { await context?.close().catch(() => undefined); }
   };
@@ -230,9 +239,10 @@ export async function runGate(html: string, checks: AcceptanceCheck[], signal?: 
   try {
     const launch = chromium.launch({ headless: true, timeout: 15_000, args: ['--js-flags=--max-old-space-size=128'] }).then(async (launched) => {
       browser = launched;
+      launched.on('disconnected', () => { if (!stopping) browserDisconnected = true; });
       if (stopping) { await closeBrowser(); throw new Error('浏览器验收已停止。'); }
       return launched;
-    });
+    }).catch(error => { throw new GateInfrastructureError('Chromium 启动失败', error); });
     await Promise.race([launch, stopped]);
     await checkInPage('页面加载、可见内容与 JavaScript', async (page) => {
       if (!(await page.title()).trim()) throw new Error('页面缺少非空 title。');
@@ -247,7 +257,7 @@ export async function runGate(html: string, checks: AcceptanceCheck[], signal?: 
     if (signal?.aborted) throw new DOMException('浏览器验收已取消。', 'AbortError');
     const message = detail(error);
     results.push({ name: 'Chromium 运行环境', passed: false, detail: /Executable doesn't exist|playwright install/.test(message) ? '缺少 Playwright Chromium。请运行 npm run setup 后重试。' : message });
-    return { passed: false, checks: results, summary: '浏览器未完成验收；没有将交付标记为通过。' };
+    return { passed: false, ...(totalTimedOut ? { failureKind: 'timeout' as const } : error instanceof GateInfrastructureError || browserDisconnected ? { failureKind: 'infrastructure' as const } : {}), checks: results, summary: '浏览器未完成验收；没有将交付标记为通过。' };
   } finally {
     if (totalTimer) clearTimeout(totalTimer);
     if (cancelListener) signal?.removeEventListener('abort', cancelListener);

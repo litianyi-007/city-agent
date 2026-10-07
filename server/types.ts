@@ -68,6 +68,7 @@ export interface Artifact {
 
 export interface GateResult {
   passed: boolean;
+  failureKind?: 'infrastructure' | 'timeout';
   checks: Array<{ name: string; passed: boolean; detail?: string }>;
   summary?: string;
 }
