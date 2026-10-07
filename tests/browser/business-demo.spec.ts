@@ -31,6 +31,17 @@ test('two complete business demos run locally without a key or model request and
     expect(run.presetSnapshots).toHaveLength(4); expect(proof.logicAudit.passed).toBe(12);
     expect(proof.logicAudit.failed).toBe(0); expect(run.parameters?.fixturePolicyId).toBe('business-consistent-synthetic-v1');
     expect(run.profiles.every(profile => profile.persona?.provenance === 'assumption')).toBe(true);
+    const diagnostics = panel.getByRole('region', { name: '研究内容与执行状态诊断', exact: true });
+    await expect(diagnostics).toContainText('计划 12 个合成个人；已检查 12、未启动 0、结构阻断 0、未知 0');
+    await expect(diagnostics).toContainText('合法未知不会被强行补成偏好');
+    const diagnosticDownload = page.waitForEvent('download');
+    await diagnostics.getByRole('button', { name: '导出独立研究诊断 · 不修改原证据', exact: true }).click();
+    const diagnosticFile = await (await diagnosticDownload).path();
+    const diagnosticReport = JSON.parse(await readFile(diagnosticFile!, 'utf8'));
+    expect(diagnosticReport.version).toBe('research-diagnostics-1.0');
+    expect(diagnosticReport.sourceRunId).toBe(run.id);
+    expect(diagnosticReport.planned).toBe(12); expect(diagnosticReport.summary.checked).toBe(12);
+    expect(diagnosticReport.marketResearchValidated).toBe(false);
   }
   await expect(page.getByLabel('调查标题', { exact: true })).toHaveValue(title);
   expect(writes).toEqual([]); expect(external).toEqual([]); expect(errors).toEqual([]);
@@ -51,6 +62,7 @@ test('two complete business demos run locally without a key or model request and
   await panel.getByLabel('业务自证历史').selectOption(historicalId!);
   await expect(panel.getByRole('heading', { name: '工程演示结果 · 规则答卷 · 12/12 有效', exact: true })).toBeVisible();
   await expect(panel.getByRole('button', { name: '导出运行与跨题自证', exact: true })).toBeEnabled();
+  await expect(panel.getByRole('region', { name: '研究内容与执行状态诊断', exact: true })).toContainText('计划 12 个合成个人');
 });
 
 test('applying a complete example requires draft confirmation, creates four keyless presets, and never runs a survey', async ({ page }) => {

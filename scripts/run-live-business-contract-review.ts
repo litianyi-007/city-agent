@@ -4,9 +4,10 @@ import { readFile, writeFile, mkdir, lstat, realpath } from 'node:fs/promises';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { chromium } from 'playwright';
-import { runRole, HarnessCallError, HARNESS_NAME, type RoleModelConfig } from '../server/harness';
+import { runRole, HARNESS_NAME, type RoleModelConfig } from '../server/harness';
 import { createExperimentBudget, type ExperimentBudgetGuard } from '../server/research/experiment-budget';
-import { createSingleRequestRelay } from '../server/research/single-request-relay';
+import { runBoundedHarness } from '../server/research/bounded-harness';
+import { providerJsonUsageWitness } from '../server/research/provider-usage-witness';
 import { getPopulationPack, getPopulationModel } from '../server/population/service';
 import { createLiveBusinessContractProtocol, checkLiveQualification, liveResponseStop, LIVE_BUSINESS_CONTRACT_PROTOCOL } from '../shared/live-business-protocol';
 import { executeSurvey } from '../shared/survey-runner';
@@ -60,7 +61,7 @@ if (!sourceHtml.includes(Buffer.from('deepseek-flash')) || !sourceHtml.includes(
 const sourceHtmlSha256 = createHash('sha256').update(sourceHtml).digest('hex');
 const sources = ['scripts/run-live-business-contract-review.ts', 'shared/live-trial-authorization.ts', 'shared/live-business-protocol.ts', 'shared/survey-runner.ts',
   'shared/survey-engine.ts', 'src/run-history.ts', 'server/research/planning.ts', 'shared/research-planning.ts', 'server/harness.ts',
-  'server/research/experiment-budget.ts', 'server/research/single-request-relay.ts', 'shared/questionnaire-logic.ts',
+  'server/research/experiment-budget.ts', 'server/research/single-request-relay.ts', 'server/research/provider-usage-witness.ts', 'server/research/bounded-harness.ts', 'shared/questionnaire-logic.ts',
   'shared/research-demo.ts', 'shared/survey-analysis.ts', 'shared/research-schema.ts', 'shared/resident-persona.ts',
   'server/population/model.ts', 'server/population/service.ts', 'scripts/population.ts', 'shared/evidence.ts', 'shared/redaction.ts', 'package.json', 'package-lock.json'];
 const sourceFiles = await Promise.all(sources.map(async name => ({ path: name, sha256: createHash('sha256').update(await readFile(path.join(root, name))).digest('hex') })));
@@ -172,26 +173,8 @@ const pendingTransports = new Set<Promise<unknown>>();
 const performBoundedHarness = (requestId: string, purpose: string): typeof runRole => async (agent, system, user, signal, event, limits) => {
   const maxOutputTokens = limits?.maxOutputTokens ?? 3000;
   admitRequest(requestId, purpose as TrialRequest['purpose'], agent, system, user, maxOutputTokens);
-  const reservation = guard.reserve({ requestId, purpose, inputText: JSON.stringify({ system, user }), maxOutputTokens, inputEnvelopeTokens: 16384 });
-  let relay: Awaited<ReturnType<typeof createSingleRequestRelay>> | undefined;
-  try {
-    relay = await createSingleRequestRelay({ model: agent, maxOutputTokens, reservedInputTokens: reservation.reservedInputTokens });
-    const result = await runRole({ ...agent, baseUrl: relay.baseUrl }, system, user, signal, event, { maxOutputTokens, timeoutMs: 90_000, reportUsage: true });
-    const ledger = guard.settle(reservation.reservationId, { outcome: 'succeeded', usage: result.usageReported ? { inputTokens: result.inputTokens, outputTokens: result.outputTokens } : null });
-    if (ledger.state === 'halted') throw new HarnessCallError('预算检查停止后续请求：用量未知或超预留。', { text: result.text, inputTokens: result.usageReported ? result.inputTokens : null, outputTokens: result.usageReported ? result.outputTokens : null });
-    return result;
-  } catch (error) {
-    if (guard.snapshot().reservations.some(entry => entry.reservationId === reservation.reservationId && entry.state === 'reserved')) {
-      const evidence = error instanceof HarnessCallError ? error.evidence : undefined;
-      guard.settle(reservation.reservationId, { outcome: signal.aborted ? 'cancelled' : 'failed', usage: evidence?.inputTokens != null && evidence.outputTokens != null
-        ? { inputTokens: evidence.inputTokens, outputTokens: evidence.outputTokens } : null });
-    }
-    throw error;
-  } finally {
-    transport.push({ requestId, kind: purpose, ...(relay?.snapshot() ?? { forwardedRequests: 0, deniedRequests: 0, providerStatus: null }) });
-    try { await relay?.close(); }
-    catch (error) { if (guard.snapshot().state === 'active') guard.stop('transport-cleanup-failed'); throw error; }
-  }
+  return runBoundedHarness({ guard, requestId, purpose, model: agent, system, user, signal, onEvent: event, maxOutputTokens,
+    onTransport: snapshot => transport.push({ requestId, kind: purpose, ...snapshot }) });
 };
 // The planner treats this adapter as injected and may return before its abort cleanup.
 // Drain real transport settlement before starting another request or closing the journal.
@@ -273,14 +256,17 @@ try {
               headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${apiKey}` },
               body: JSON.stringify({ model: 'deepseek-flash', messages: [{ role: 'system', content: system }, { role: 'user', content: user }], max_tokens: 3000, thinking: { type: 'disabled' }, stream: false }) });
             const body = await response.json(); return { state: response.ok ? 'completed' : 'failed', status: response.status, raw: body.choices?.[0]?.message?.content ?? '',
-              finishReason: body.choices?.[0]?.finish_reason ?? null, inputTokens: body.usage?.prompt_tokens ?? null, outputTokens: body.usage?.completion_tokens ?? null };
-          } catch { return { state: 'failed', status: null, raw: '', finishReason: null, inputTokens: null, outputTokens: null }; }
+              finishReason: body.choices?.[0]?.finish_reason ?? null, providerUsage: body.usage ?? null };
+          } catch { return { state: 'failed', status: null, raw: '', finishReason: null, providerUsage: null }; }
         }, { apiKey, system, user });
-        const usage = Number.isSafeInteger(result.inputTokens) && Number.isSafeInteger(result.outputTokens) && result.inputTokens >= 0 && result.outputTokens >= 0
-          ? { inputTokens: result.inputTokens, outputTokens: result.outputTokens } : null;
+        const usageWitness = providerJsonUsageWitness(result.providerUsage);
+        const usage = usageWitness.usage ? { inputTokens: usageWitness.usage.inputTokens, outputTokens: usageWitness.usage.outputTokens } : null;
         guard.settle(reservation.reservationId, { outcome: result.state === 'completed' && result.finishReason === 'stop' ? 'succeeded' : 'failed', usage });
+        const { providerUsage: _rawUsage, ...safeResult } = result;
         cors.push({ id: protocol.id, origin: 'https://litianyi-007.github.io', execution: 'actual-browser-provider-fetch', sourceRunId: run.id,
-          repeatedProfileId: run.profiles[0].id, countedInResidentCohort: false, ...result });
+          repeatedProfileId: run.profiles[0].id, countedInResidentCohort: false, ...safeResult,
+          inputTokens: usage?.inputTokens ?? null, outputTokens: usage?.outputTokens ?? null,
+          providerUsageWitness: { ...usageWitness, source: 'browser-provider-json' } });
       }
     }
   } catch (error) {

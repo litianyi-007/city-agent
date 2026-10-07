@@ -7,6 +7,7 @@ const readView = (): View => ['research', 'residents', 'city', 'submission'].inc
 const names: Record<View, string> = { research: '虚拟社会调查', residents: '人群 Agent 预设', city: '人口来源与方法', submission: '申报材料与演示' };
 const publicReviewBase = 'https://litianyi-007.github.io/city-agent/submission-next/';
 const publicTrialBase = 'https://litianyi-007.github.io/city-agent/submission-contract11/';
+const publicUpdateBase = 'https://litianyi-007.github.io/city-agent/review-updates/2026-10-08/';
 export function PagesApp() {
   const [view, setView] = useState<View>(readView); const [dirty, setDirty] = useState(false); const [busy, setBusy] = useState(false);
   useEffect(() => {
@@ -19,17 +20,20 @@ export function PagesApp() {
     addEventListener('hashchange', change); return () => removeEventListener('hashchange', change);
   }, [view, dirty, busy]);
   return <div className="app-shell pages-shell"><aside className="sidebar"><a className="brand" href="#research"><span className="brand-mark">c<span>·</span>a</span><span>city agent<small>VIRTUAL SOCIETY</small></span></a><div className="nav-caption">公开体验</div><nav aria-label="主导航">{(Object.keys(names) as View[]).map((value, index) => <a key={value} className={`nav-item ${value === view ? 'selected' : ''}`} href={`#${value}`}><span className="nav-icon">{['◎', '◈', '▥', '▤'][index]}</span>{names[value]}<span className="nav-key">0{index + 1}</span></a>)}</nav><div className="sidebar-project"><div className="tiny-label">EVIDENCE FIRST</div><strong>滨江 · 问卷仿真</strong><p>人口证据、情景画像、答卷与成本记录一起回查。</p><span className="outline-tag">API Key · 页面输入</span></div></aside>
-  <main className="main-area"><header className="topbar"><div><span className="breadcrumb">CITY AGENT</span><span className="slash">/</span>{names[view]}</div><span className="local-badge">GITHUB PAGES · 浏览器体验</span></header><div className="content"><div className="page-heading"><div><div className="eyebrow">TRACEABLE SURVEY SIMULATION</div><h1>{names[view]}</h1><p>准备问卷与人群，运行合成实验，回查每一份画像、答卷和运行记录。</p></div><a className="primary" href={`${publicTrialBase}index.html`} target="_blank" rel="noreferrer">最新真实测试补充 ↗</a></div>
+  <main className="main-area"><header className="topbar"><div><span className="breadcrumb">CITY AGENT</span><span className="slash">/</span>{names[view]}</div><span className="local-badge">GITHUB PAGES · 浏览器体验</span></header><div className="content"><div className="page-heading"><div><div className="eyebrow">TRACEABLE SURVEY SIMULATION</div><h1>{names[view]}</h1><p>准备问卷与人群，运行合成实验，回查每一份画像、答卷和运行记录。</p></div><a className="primary" href={`${publicUpdateBase}index.html`} target="_blank" rel="noreferrer">最新进展与评委指南 ↗</a></div>
     {(view === 'research' || view === 'residents') && <ResearchWorkspace section={view === 'research' ? 'projects' : 'residents'} onSectionChange={section => { if (!busy) location.hash = section === 'projects' ? 'research' : 'residents'; }} onDirtyChange={setDirty} onBusyChange={setBusy} />}
     {view === 'city' && <section className="panel research-panel pages-evidence"><h2>2020 七普 · 可追溯人口框</h2><p>历史常住人口 {pagesPopulation.population.toLocaleString()} 人；15+框 {pagesPopulation.eligiblePopulation.toLocaleString()} 人，包含15–17岁。最新区级总量与历史街道结构分别记录。</p><div className="pages-metrics">{pagesPopulation.areas.map(area => <span key={area.code}>{area.name}<strong>{area.population.toLocaleString()} 人</strong></span>)}</div><h3>人群构建路径</h3><ol><li>冻结地区、时期、常住口径与统计单位。</li><li>官方原表逐格转录，保留页表行列、原件与SHA-256。</li><li>街道内年龄×性别采用明确独立性假设，生成24个逻辑单元。</li><li>从符合问卷与预设交集的单元进行覆盖抽样；细分年龄与业务资格标为假设。</li><li>逐画像独立作答，按题型校验，确定性汇总并保存失败分母。</li></ol><p>覆盖实验无总体权重，当前没有把合成偏好校准为滨江真人偏好。</p>{pagesPopulation.sources.map(source => <p key={source.id}><a href={source.url} target="_blank" rel="noreferrer">{source.title}</a><br/><code>{source.sha256}</code></p>)}<a className="secondary" href={`${import.meta.env.BASE_URL}submission/sources.json`} target="_blank" rel="noreferrer">下载来源清单</a></section>}
     {view === 'submission' && <section className="panel research-panel">
-      <h2>最新真实测试 · 契约1.1独立补充</h2>
+      <h2>2026-10-08 · 独立工程与接口能力记录</h2>
+      <p>五层人群、完整问卷、只读研究诊断与协议能力分别核验。候选 Responses 的探测、修复和历史调查分开留档，不把接口接受或合规答卷升级为市场偏好、选址或人格效度。页面仍使用既有浏览器直连路径，不自动启用实验CLI或复跑旧账本。</p>
+      <div className="research-save-bar"><a className="primary" href={`${publicUpdateBase}index.html`} target="_blank" rel="noreferrer">最新公开进展与体验路径 ↗</a><a className="secondary" href={`${publicUpdateBase}status.json`} target="_blank" rel="noreferrer">独立工程与实网摘要 JSON ↗</a><a className="secondary" href={`${import.meta.env.BASE_URL}review-guide.html`} target="_blank" rel="noreferrer">评委安装与费用说明 ↗</a></div>
+      <h3>历史真实测试 · 契约1.1独立补充</h3>
       <p>小学联合通过0/10、宠物3/10；15未启动。5次真实请求、17,032 Token，保守估算¥0.042032（非账单）。两个10人门限仍失败；规划/CORS未启动，账本已关闭，不重试、不补样、不扩容。合成居民不是真人，不能据此推荐店址、价位或猫狗占比。</p>
       <div className="research-save-bar">
-        <a className="primary" href={`${publicTrialBase}index.html`} target="_blank" rel="noreferrer">本轮独立补充材料 ↗</a>
-        <a className="secondary" href={`${publicTrialBase}appendix.pdf`} target="_blank" rel="noreferrer">本轮2页PDF补充 ↗</a>
-        <a className="secondary" href={`${publicTrialBase}report.md`} target="_blank" rel="noreferrer">本轮真实 API 调查报告 ↗</a>
-        <a className="secondary" href={`${publicTrialBase}report.json`} target="_blank" rel="noreferrer">本轮真实 API 证据 JSON ↗</a>
+        <a className="primary" href={`${publicTrialBase}index.html`} target="_blank" rel="noreferrer">历史契约1.1补充材料 ↗</a>
+        <a className="secondary" href={`${publicTrialBase}appendix.pdf`} target="_blank" rel="noreferrer">历史2页PDF补充 ↗</a>
+        <a className="secondary" href={`${publicTrialBase}report.md`} target="_blank" rel="noreferrer">契约1.1真实 API 调查报告 ↗</a>
+        <a className="secondary" href={`${publicTrialBase}report.json`} target="_blank" rel="noreferrer">契约1.1真实 API 证据 JSON ↗</a>
       </div>
       <h3>历史RC1公开评审证据包（未覆盖）</h3>
       <p>前一轮7请求、小学0/10与宠物1/10联合通过、17未启动；规划0/2可应用、CORS两次HTTP200只证明协议。新旧轮次分列，原PDF与零费用录屏保持原样，不因新版修复改写历史结果。</p>

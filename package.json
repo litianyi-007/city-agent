@@ -21,6 +21,10 @@
     "start:review": "node --no-warnings scripts/launch-review.mjs",
     "test": "tsx --test tests/*.test.ts",
     "test:e2e": "playwright test",
+    "review:offline": "tsx scripts/run-offline-research-review.ts",
+    "review:responses:offline": "tsx scripts/run-offline-responses-review.ts",
+    "review:system:offline": "tsx scripts/run-offline-system-review.ts",
+    "review:responses:live": "tsx scripts/run-live-responses-probe.ts",
     "setup": "playwright install chromium",
     "population": "tsx scripts/population.ts"
   },

@@ -1,5 +1,13 @@
 # Demo 实现架构
 
+> 2026-10-08最新：候选文本见证1.1 / Prompt1.1 / 注册1.3通过独立真实2请求、完整17/18题能力2/2，typed unknown保留缺资料出口；不将定义已提供视为理解已观察，不从住址推可达范围。原研究员Key仅只读用于独立实验、不复制到Demo；原0-call和两失败批以原件hash链封存，旧账本不resume。默认API/UI仍原路径，候选不静默激活，能力成功不认证市场/人格效果。[知识契约与实证](research/KNOWLEDGE-CONTRACT-REVIEW-2026-10-08.md)。下文543/0-call/原phase失败为历史。
+
+> 2026-10-08 T28增量：独立live capability CLI和完整17/18题对象Prompt/unknown审计、授权绑定/价格/源码封印、只读加密DB/WAL凭据及实际EOF原文记录实现。首异常停止全部、0-call状态单列；543单测/19浏览器/122专项通过，但当前review实例无Key，实网未启动。候选仍不导入API/UI；详见[设计](prd/F001-society-next/F001-responses-live-design.md)和[当前工程/执行记录](research/RESPONSES-LIVE-READINESS-2026-10-08.md)。
+
+> 2026-10-08 T27候选：新增增量文本Responses parser、冻结完整body relay及真实DSH单dispatch wrapper，EOF前不发布、原包/SDK双见证，清理后封存再结算。模块未被API/UI导入，不静默迁移旧路径；详细设计见[F001 T27](prd/F001-society-next/F001-responses-boundary-design.md)，验证/局限见[候选报告](research/RESPONSES-BOUNDARY-2026-10-08.md)。
+
+> 2026-10-08增量（本地候选）：受预算实验新增 `bounded-harness` / 冻结单请求relay / provider原包usage见证，普通Harness归一化计数不自动升级；`research-diagnostics`与结果页作独立只读审计；`answer-contract`是版本化keyed schema候选，不改旧生产数组答卷。`structured-capability`及自有adapter只连接localhost fixture，不允许实网Key/endpoint；默认离线CLI不依赖私有output。实现与门限见[本批报告](research/OFFLINE-NEXT-2026-10-08.md)，既有架构段落与历史结果保留。
+
 > F001续作（2026-10-07，本地 `feature/virtual-society-next`，尚未发布/用户验收）：新增单次候选研究规划、业务证据预检、可选五层情景画像、共享凭据脱敏及评委自检/独立启动。五层是独立信息轴，不是DNA因果模型；只进入新2.1问卷的快照/Prompt，不自动更新人口事实或旧2.0证据。具体契约与状态见 [F001设计](prd/F001-society-next/F001-society-next-design.md) 与 [当前唯一计划](SOCIETY-NEXT.md)。本文旧版完整留底于 [原架构](archive/2026-10-07-before-society-next/ARCHITECTURE.md)。
 
 > 2026-10-07增量：`shared/survey-runner.ts`统一浏览器/本机问卷执行，`server/research/surveys.ts`通过Harness，SQLite/IndexedDB存冻结历史；`researchSurveyId`把完成问卷接入四角色并添加不可删的ID、有效分母、合成标记、分组交互Gate。完整记录见[审查补齐](research/AUDIT-FIXES-2026-10-07.md)。旧规则分支仍独立保留，不进入新问卷交付上下文。

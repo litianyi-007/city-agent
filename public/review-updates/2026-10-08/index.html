@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="referrer" content="no-referrer">
+  <title>City Agent · 评委体验与可追溯研究</title>
+  <style>
+    :root{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color:#213347;background:#f4f7fb;line-height:1.75}body{margin:0}main{max-width:920px;margin:auto;padding:32px 20px 64px}h1,h2,h3{line-height:1.35;text-wrap:balance}a{color:#125ca8;text-underline-offset:3px}a:focus-visible{outline:3px solid #bd721d;outline-offset:4px}.actions{display:flex;gap:12px;flex-wrap:wrap}.actions a{display:inline-block;border:1px solid #b5c9de;border-radius:8px;padding:9px 14px;text-decoration:none}.primary{background:#125ca8;color:#fff}section{margin:22px 0;padding:22px;background:#fff;border:1px solid #d9e2eb;border-radius:12px}.note{border-left:4px solid #a26915;padding:12px 16px;background:#fff5dd}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.grid article{border:1px solid #d9e2eb;border-radius:10px;padding:16px}pre{overflow:auto;padding:16px;background:#edf3f8;border-radius:8px;font-size:14px}code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;overflow-wrap:anywhere}.metrics{font-variant-numeric:tabular-nums}ul,ol{padding-left:22px}@media(max-width:680px){.grid{grid-template-columns:1fr}main{padding:20px 14px 40px}section{padding:16px}h1{font-size:27px}}
+  </style>
+</head>
+<body><main>
+  <p>2026-10-08独立评审更新 · 旧材料与实验各自留档</p>
+  <h1>City Agent：把虚拟调查变成可回查的研究流程</h1>
+  <p>以滨江区官方人口底座为框架，构建五层可解释人群，冻结完整问卷、逐人作答与确定性统计。每项结果都能回到来源、情景假设、Prompt、原文和运行账目；工程体验、模型能力与现实有效性分别验收。</p>
+  <nav class="actions" aria-label="评委主要入口"><a class="primary" href="../../#research">打开 Demo · 无需安装</a><a href="../../#residents">编辑五层人群</a><a href="../../review-guide.html">安装与费用说明</a><a href="https://github.com/litianyi-007/city-agent/releases/tag/society-responses-review-2026-10-08-rc3">固定版本下载</a></nav>
+  <section>
+    <h2>建议先用3分钟体验核心闭环</h2>
+    <ol><li>进入调查页，点击“完整业务示例 · 零费用体验”。</li><li>分别选择小学生零食17题、宠物零食18题，运行完整业务自证；每场景12个画像，0模型调用。</li><li>核对五层假设、各题分母、未知回答、跨题规则和独立研究诊断；下载完整证据，刷新后恢复历史。</li><li>点击“应用问卷与五层预设”只创建可编辑草稿。到人群页面自定义、复制预设和配置模型；不会自动发起调查。</li></ol>
+    <p class="note">规则工程示例明确为fixture，不冒充真人或本次LLM生成。查看真实接口能力请读下方独立摘要；页面新调用需要自己的Key及费用确认，不会复跑已关闭实验。</p>
+  </section>
+  <section>
+    <h2>重点一：五层构建，而不是给人口贴刻板标签</h2>
+    <ol><li><strong>基础人格倾向：</strong>采用Big Five的可解释维度，不把人格说成可由DNA直接确定；允许未知和自定义。</li><li><strong>成长环境：</strong>照护结构与迁移等经历多选，保留不同阶段，避免单个标签决定消费偏好。</li><li><strong>教育：</strong>与年龄和人口资格分别登记，不从学历直接推导预算或品牌。</li><li><strong>当前家庭：</strong>关系、同住与照护角色分别建模；购买者与使用者不混作一个单位。</li><li><strong>社会分工与收入：</strong>工作角色、收入时期与统计口径明确，允许未知。</li></ol>
+    <p>官方统计事实、年龄×性别联合推断、五层情景假设与模型回答分栏。人口筛选采用问卷与预设的交集，资格独立检查；支持新建、复制和消融。可追溯不等于人格效度已获真人校准。</p>
+    <p><a href="../../submission-next/methods/resident-construction.md">完整构建方法与科学依据</a> · <a href="../../submission-next/persona-source-register.json">方法来源登记</a> · <a href="../../#city">人口原件与区域录入方法</a></p>
+  </section>
+  <section>
+    <h2>重点二：完整问卷与研究结果自证</h2>
+    <p>不是生成一段“调研结论”，而是交付完整题库、画像、原始回答、结构与跨题检查、资格审计、逐题统计、失败/未启动分母和费用口径。独立诊断区分已检查、结构阻断、未知及信息不足；合法未知不被强行填成偏好。</p>
+    <div class="grid"><article><h3>小学生零食</h3><p>17题。拆开成年照护者的许可/购买角色与儿童自身口味；儿童原文未采集时不借成人或人格代答。</p></article><article><h3>宠物零食网点</h3><p>18题。区分猫犬情景、采购者与宠物单位，明确辅助零食与主粮/医疗的边界；价格、渠道与可达街道分别记录。</p></article><article><h3>通用研究配置</h3><p>同一任务与问卷契约支持单选、多选、量表、数值、开放题。版本化输入与稳定ID，不靠新增场景关键词硬编码结论。</p></article></div>
+    <p><a href="../../submission-next/business-proof/proof-report.md">两场景工程自证</a> · <a href="../../submission-contract11/">历史真实调查与原始负结果</a> · <a href="../../submission-next/historical/live-run.json">历史12人真实问卷</a></p>
+  </section>
+  <section>
+    <h2>本批工程与真实接口能力：分层摘要</h2>
+    <p>候选Responses包含完整schema透传、有界SSE/EOF见证、完整输入预留、持久预算与原始响应hash。它尚不是本页默认执行器；关键字强制执行、市场预测和人格贡献不由一次接口成功认证。</p>
+    <p class="metrics" id="engineering" role="status" aria-live="polite">正在读取独立工程计数…</p>
+    <ul id="live-runs" aria-label="独立真实探测记录"></ul>
+    <p><a href="status.json">下载审查后的工程/实网摘要JSON</a> · <a href="README.md">证据含义、技术参数与可追溯说明</a></p>
+    <p class="note">首份协议失败的原记录永久保留；修复后的复验单独编号。原始SSE、授权、Key和数据库不公开上传；公开摘要hash供获授权后的原件核对，hash本身不认证供应商账单或现实真值。</p>
+  </section>
+  <section>
+    <h2>评委在自己电脑使用Harness</h2>
+    <p>Git、Node22.22.3（最低22.19）、npm下载网络。SDK由锁文件安装，不需要GPU、模型权重或全局dsh。请新建目录，并与GitHub Release中的完整源码SHA核对：</p>
+    <pre><code>git clone --branch society-responses-review-2026-10-08-rc3 --depth 1 https://github.com/litianyi-007/city-agent.git city-agent-review-rc3
+cd city-agent-review-rc3
+git rev-parse HEAD
+npm ci
+npm run setup
+npm run build
+npm run doctor
+npm run start:review</code></pre>
+    <p>打开 <code>http://127.0.0.1:4320/#research</code>；Ctrl+C停止。零费用工程示例无需Key。真实运行请在页面填写自己的连接、模型和Key，先选1人并确认费用。Pages是浏览器直连，不经过Harness；本机服务才使用Harness。</p>
+  </section>
+  <section>
+    <h2>汇报材料、视频与业务价值</h2>
+    <nav class="actions" aria-label="材料与历史附件"><a href="../../submission-next/project-materials.pdf">历史项目PDF</a><a href="../../submission-next/demo-next.mp4">2026-10-07零费用流程视频 · 4分33秒</a><a href="../../submission-next/">来源/方法/Prompt完整附件</a></nav>
+    <p>价值是让选址、品类与价格方案先经过可解释的研究预演，暴露目标分母、知识缺口和题目矛盾，缩小现实补采与试售范围。后续通过版本化MCP现实桥、独立居民记忆和有界dream对接外部观测；这些为延展设计，不冒称已实现。虚拟回答不能替代真人调研、销量、租金、客流和留出验证。</p>
+    <p>旧PDF/视频/账本保持原样；本页为独立进展说明，不是正式比赛提交回执。Windows/Linux或他人电脑安装不因本机工程通过自动认证。</p>
+  </section>
+</main>
+<script>
+  fetch('./status.json').then(response=>{if(!response.ok)throw new Error('摘要暂不可读取');return response.json()}).then(status=>{
+    const e=status.engineering;document.getElementById('engineering').textContent=`离线单测 ${e.unit.passed}/${e.unit.total} · 浏览器 ${e.browser.passed}/${e.browser.total} · Responses专项 ${e.responses.passed}/${e.responses.total}；${e.historicalFiles}份历史原件不变。工程复核0供应商请求。`;
+    const list=document.getElementById('live-runs');for(const run of status.liveRuns){const item=document.createElement('li');item.textContent=`独立记录 ${run.experimentId}：${run.providerRequests}次真实转发，能力通过${run.passed}、失败${run.failed}、未启动${run.notStarted}；用量${run.usageStatus==='reported'?'已报告':'未获本次协议接纳'}。账本已闭合，不重开。`;list.appendChild(item)}
+  }).catch(()=>{document.getElementById('engineering').textContent='摘要暂不可读取，请通过JSON链接或固定源码版本核对；不将缺失数据记成通过。'});
+</script>
+</body></html>

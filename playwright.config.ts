@@ -16,7 +16,9 @@ export default defineConfig({
   use: { baseURL, trace: 'retain-on-failure', screenshot: 'only-on-failure' },
   projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
   webServer: {
-    command: 'npm start', url: `${baseURL}/api/health`, timeout: 30_000,
+    // Build inside the browser job before listening; a stale dist must never certify new UI source.
+    // Pages uses dist-pages, so the parallel Pages job cannot rewrite the served local bundle.
+    command: 'npm run build && npm start', url: `${baseURL}/api/health`, timeout: 60_000,
     reuseExistingServer: false,
     env: { PORT: portText, CITY_AGENT_DATA_DIR: path.join(mkdtempSync(path.join(tmpdir(), 'city-agent-ui-test-')), '.city-agent') },
   },

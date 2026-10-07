@@ -1,5 +1,7 @@
 # 虚拟调查结构化输出和未知知识处理的下一步方案
 
+> 2026-10-07复核追加：本页保留原议案，当前优先级与接口边界以[下一批对抗性审查及任务门限](NEXT-ROUTE-ADVERSARIAL-REVIEW-2026-10-07.md)为准。首段“DeepSeek官方接口没有json_schema”仅适用于这里调查的Chat Completions路径，不适用于现已文档化的Responses API `text.format: json_schema`。不将Beta路线预先指定为唯一方案；原文留底于`docs/archive/2026-10-07-before-materials-resume/`，历史试验保持原版本。
+
 当前建议先完成离线结构化适配器和知识状态设计，再另行授权最小能力探测；不要直接再跑整轮居民调查。现行 DeepSeek 官方接口没有文档化的 `response_format: json_schema` 严格内容输出，JSON mode 不能保证多选数组。可研究保留 Harness SDK、增加固定自定义 LLM adapter，使用 Beta strict function arguments 作为纯答卷数据；这仍是待验证方案，不是本轮已交付能力。
 
 ## 最新真实失败揭示的两个独立问题

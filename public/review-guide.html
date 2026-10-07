@@ -13,8 +13,16 @@
 <body><main>
   <a href="./#research">← 返回调查工作区</a>
   <h1>评委体验指南</h1>
+  <section class="note"><h2>2026-10-08独立评委体验更新</h2><p><a href="./review-updates/2026-10-08/">最新工程/接口能力摘要与三分钟体验</a> · <a href="https://github.com/litianyi-007/city-agent/releases/tag/society-responses-review-2026-10-08-rc3">本批固定源码下载</a>。本批Tag <code>society-responses-review-2026-10-08-rc3</code>，完整SHA以Release/Tag核对；下面RC1/RC2调查保持历史口径，不是新的接口能力轮。</p><p>零费用两场景完整工程流程无需Key。页面真实模式默认1人，并单独确认费用；变更问卷/样本/seed/单价会撤销同意。Pages是浏览器直连，不经过Harness；没有供应商钱包金额硬限额，结构无效不会自动停止后续居民。受控Responses实验是独立候选，不会自动在页面启动或复跑旧账本。</p><pre><code>git clone --branch society-responses-review-2026-10-08-rc3 --depth 1 https://github.com/litianyi-007/city-agent.git city-agent-review-rc3
+cd city-agent-review-rc3
+git rev-parse HEAD
+npm ci
+npm run setup
+npm run build
+npm run doctor
+npm run start:review</code></pre><p>Node22.22.3（最低22.19）；打开 <code>http://127.0.0.1:4320/#research</code>。SDK依锁文件安装，无需GPU或全局dsh。以下旧安装段仅用于对应历史版本，不替代此版本。</p></section>
   <section class="note"><h2>追加：契约1.1真实调查补充</h2><p>2026-10-07新增真实测试：小学联合0/10、宠物3/10，15未启动。实际5请求、17,032 Token，保守估算¥0.042032，两个十人门限仍失败。质量停止后规划/CORS未启动，不重试、不补样、不扩容。工程通过不等于市场有效。</p><p><a href="./submission-contract11/">独立结果、原文与2页PDF补充</a>。下面RC1安装和材料保持独立历史口径，未被此次结果替换；新版页面已采用居民1.1输出契约。</p><p>需要最新源码请选独立Tag <code>society-contract-review-2026-10-07-rc2-ui1</code>，替换下面clone命令的Tag与新目录名；npm安装、构建、自检和回环启动步骤相同。此版修正了调查工作区的历史报告命名，旧RC2 Tag不移动。新版未完成他人电脑或跨OS安装验收，不自动继承RC1的同机新目录安装结果。</p></section>
-  <p>当前公开评审版固定源码Tag：<code>society-review-2026-10-07-rc1</code>。先选体验路径，再查看本轮真实测试的失败与未启动记录；安装成功不等于质量验收通过。</p>
+  <p>历史RC1固定源码Tag：<code>society-review-2026-10-07-rc1</code>。以下对应前轮记录；安装成功不等于质量验收通过。</p>
   <p><a href="./submission-next/index.html">最新申报材料</a> · <a href="./submission-next/project-materials.pdf">完整PDF</a> · <a href="./submission-next/live-proof/report.md">本轮真实测试报告</a> · <a href="./submission-next/demo-next.mp4">4分33秒零费用UI录屏</a></p>
   <div class="grid">
     <article><h2>无需安装</h2><p><a href="https://litianyi-007.github.io/city-agent/">公开 Demo</a>提供两套17/18题、各12人的完整工程示例，以及人口来源和历史记录。不需要Key；规则夹具为0模型调用，不是本轮真实LLM答卷。</p></article>
@@ -22,7 +30,7 @@
     <article><h2>本机Harness</h2><p>安装固定Tag源码、Node22.22.3及依赖；页面验收另需Chromium。真实调用在页面填自己的Key并主动确认预算。无需GPU、模型权重或全局dsh。</p></article>
   </div>
   <section>
-    <h2>当前公开评审版：固定Tag安装与启动</h2>
+    <h2>历史RC1：固定Tag安装与启动</h2>
     <p>准备Git、Node和npm下载网络。仅macOS/Node22.22.3完成本机工程验证；不代表评委独立干净电脑或Windows/Linux已经验证。请在新目录执行，保留运行终端：</p>
     <pre><code>git clone --branch society-review-2026-10-07-rc1 --depth 1 https://github.com/litianyi-007/city-agent.git city-agent-society-review
 cd city-agent-society-review

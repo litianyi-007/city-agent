@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import { getBusinessDemos, createBusinessDemoRun } from '../shared/research-demo';
 import type { ResearchTask } from '../shared/research-schema';
 import type { SurveyRun } from '../shared/survey-engine';
@@ -10,6 +10,7 @@ import { readBusinessProofHistory, saveBusinessProofSnapshot, type BusinessProof
 import { SurveyResults } from './SurveyResults';
 
 const demos = getBusinessDemos();
+const ResearchDiagnosticsPanel = lazy(() => import('./ResearchDiagnosticsPanel').then(module => ({ default: module.ResearchDiagnosticsPanel })));
 
 export function BusinessDemoPanel({ busy, onBusyChange, onApplyDemo }: {
   busy: boolean;
@@ -73,6 +74,7 @@ export function BusinessDemoPanel({ busy, onBusyChange, onApplyDemo }: {
     {run && <>
       <p className="research-note warning">以下是独立冻结的业务示例结果，不会随当前草稿或示例选择改变。规则合法不等于市场或人格效度通过。</p>
       <SurveyResults run={run} />
+      <Suspense fallback={<p className="research-note">正在加载独立研究诊断…</p>}><ResearchDiagnosticsPanel run={run} logicAudit={logicAudit} /></Suspense>
       {logicAudit !== null && <details open><summary>显式跨题与互斥约束检查 · 非全面语义认证</summary><pre className="evidence-audit-json">{JSON.stringify(logicAudit, null, 2)}</pre></details>}
       <button type="button" className="secondary" disabled={busy || logicAudit === null} onClick={() => downloadJson({ schemaVersion: '1.0', kind: 'business-demo-proof', execution: 'fixture-only', realModelCalls: 0, run, logicAudit }, `business-proof-${run.id}.json`)}>导出运行与跨题自证</button>
     </>}

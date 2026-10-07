@@ -1,8 +1,10 @@
 # City Agent
 
+2026-10-08独立评委体验更新：[Demo](https://litianyi-007.github.io/city-agent/#research) · [最新工程/接口记录与体验指南](https://litianyi-007.github.io/city-agent/review-updates/2026-10-08/) · [固定版下载](https://github.com/litianyi-007/city-agent/releases/tag/society-responses-review-2026-10-08-rc3)。本批版本 `society-responses-review-2026-10-08-rc3`，完整源码SHA以Release/Tag核对。新增只读研究诊断、未知信息出口、页面费用确认与1人起步，以及独立Responses候选；真实接口探测与离线回归分层记录，不将能力探测称为市场调查。旧材料/Tag/账本不覆盖，Pages不会自动调用模型。以下2026-10-07发布记录保持历史口径。
+
 2026-10-07追加：JSON契约修复后的第二轮真实调查已完成，仍未通过两个10人门限；小学0/10、宠物3/10联合通过，15未启动。5次确认请求、17,032 Token，保守估算¥0.042032；按授权停止整场景，规划/CORS未再启动。旧RC1、原PDF和旧账本保持不变。[独立测试与下一步](docs/research/CONTRACT-TRIAL-2026-10-07.md)。本轮已关账，不以未用余额自动重试或扩容。
 
-最新公开固定版：`society-contract-review-2026-10-07-rc2-ui1`（源码 `a1fe400a1a2e06879081caecb6afe15d7d0e7373`）。[最新独立补充材料](https://litianyi-007.github.io/city-agent/submission-contract11/) · [固定源码/附件下载](https://github.com/litianyi-007/city-agent/releases/tag/society-contract-review-2026-10-07-rc2-ui1) · [最新发布实证](docs/research/CONTRACT-PUBLIC-RELEASE-2026-10-07.md)。303单测、19浏览器回归（37.7秒）、双构建通过；公网浏览器34项通过，155文件实际字节一致性由151项初检＋4项独立补验覆盖，原传输失败记录保留。界面已修复新旧报告入口混淆，不把工程通过升级为真实质量通过。
+历史RC2 UI1公开固定版：`society-contract-review-2026-10-07-rc2-ui1`（源码 `a1fe400a1a2e06879081caecb6afe15d7d0e7373`）。[历史独立补充材料](https://litianyi-007.github.io/city-agent/submission-contract11/) · [固定源码/附件下载](https://github.com/litianyi-007/city-agent/releases/tag/society-contract-review-2026-10-07-rc2-ui1) · [历史发布实证](docs/research/CONTRACT-PUBLIC-RELEASE-2026-10-07.md)。303单测、19浏览器回归（37.7秒）、双构建通过；公网浏览器34项通过，155文件实际字节一致性由151项初检＋4项独立补验覆盖，原传输失败记录保留。界面已修复新旧报告入口混淆，不把工程通过升级为真实质量通过。
 
 历史公开评审版 RC1：固定 Tag `society-review-2026-10-07-rc1`（源码 `0600eb067fa74a448c96610f7f47ca9176d56760`）。[历史源码/材料下载](https://github.com/litianyi-007/city-agent/releases/tag/society-review-2026-10-07-rc1) · [历史发布实证记录](docs/research/PUBLIC-RELEASE-2026-10-07.md)。`main`、旧 Tag 与并行 L4/L5 分支未由本批修改，正式比赛尚未提交。[合并待办与真实状态](docs/SOCIETY-NEXT.md) · [五层人群方法与在线依据](docs/research/RESIDENT-CONSTRUCTION-METHOD.md) · [历史16题/12人工程自证](docs/research/PERSONA-PROOF.md) · [评测预登记](docs/research/EVALUATION-NEXT.md)。
 
@@ -31,12 +33,12 @@ Node.js 22.19+（已验证 22.22.3），不要使用Node 20；使用nvm时先执
 评审应下载上面已发布的固定 Tag/完整 commit SHA，而非浮动分支。在新目录取得源码，再执行安装：
 
 ```bash
-git clone --branch society-contract-review-2026-10-07-rc2-ui1 --depth 1 https://github.com/litianyi-007/city-agent.git city-agent-review-rc2-ui1
-cd city-agent-review-rc2-ui1
+git clone --branch society-responses-review-2026-10-08-rc3 --depth 1 https://github.com/litianyi-007/city-agent.git city-agent-review-rc3
+cd city-agent-review-rc3
 git rev-parse HEAD
 ```
 
-应输出 `a1fe400a1a2e06879081caecb6afe15d7d0e7373`。此固定Tag可下载；本轮没有重新完成其干净机器安装验收，历史RC1下载方式仍保留在评委指南。
+将完整输出与本批GitHub Release/Tag核对，勿与历史RC2 UI1的 `a1fe400a1a2e06879081caecb6afe15d7d0e7373` 混用。历史RC1下载方式保留在评委指南；同机新目录安装不代表他人电脑或跨OS验收。
 
 ```bash
 npm ci

@@ -1,5 +1,9 @@
 # 评委快速开始：选择正确的体验路径
 
+**2026-10-08独立更新：[直接体验](https://litianyi-007.github.io/city-agent/#research) · [最新工程/接口摘要和三分钟路径](https://litianyi-007.github.io/city-agent/review-updates/2026-10-08/) · [本批固定版本下载](https://github.com/litianyi-007/city-agent/releases/tag/society-responses-review-2026-10-08-rc3)。** 本批固定Tag为 `society-responses-review-2026-10-08-rc3`，完整SHA以Release/Tag核对。以下RC1/RC2实测各自保持历史记录，不再称为本批接口探测；新Responses仍是候选而不是页面默认路径。新增页面费用确认，真实模式默认1人，变更问卷/样本/seed/单价会撤销同意；无Key核心流程保持零费用。
+
+原始响应、授权及本机 `output/` 证据不在GitHub源码中；公开白名单摘要提供各轮运行ID/hash，不以404的私有原件链接作为评委入口。旧PDF和视频保持原样，来源及五层方法可通过上面的公开页直接访问。
+
 **无需安装即可查看：[公开 Demo](https://litianyi-007.github.io/city-agent/) · [新版公开评审材料目标入口](https://litianyi-007.github.io/city-agent/submission-next/index.html) · [本轮真实测试报告](https://litianyi-007.github.io/city-agent/submission-next/live-proof/report.md)。** 新入口部署状态以[发布审查记录](../research/LIVE-REVIEW-2026-10-07.md)为准；[旧冻结材料](https://litianyi-007.github.io/city-agent/submission/index.html)保留。
 
 本指南随虚拟社会续作 F001 公开评审候选提供。新工具源码分支为`feature/virtual-society-next`，拟固定Tag为`society-review-2026-10-07-rc1`；须在发布记录确认Tag和完整commit SHA后下载，不把浮动分支或拟定Tag写成已验证安装来源。旧Tag`submission-milestone-2026-10-07`只有原基本启动方式，**没有`doctor`或`start:review`命令**。材料ZIP是材料及证据，不是程序安装包；源码ZIP须另核对它的版本/清单。
@@ -37,13 +41,13 @@ npm start
 
 打开 `http://127.0.0.1:4310/#research`。保持终端运行；用Ctrl+C停止。若该端口占用，不要终止别人的服务，可按下文显式配置独立端口、专用数据目录。冻结版仍使用原启动入口，不能运行下节新增的 npm 命令。[冻结版源码说明](https://github.com/litianyi-007/city-agent/blob/submission-milestone-2026-10-07/README.md#启动)。
 
-## B. 候选固定源码的评委启动（确认发布后）
+## B. 本批独立固定源码的评委启动
 
-先核对发布记录是否确认`society-review-2026-10-07-rc1`已创建、对应哪一完整commit SHA。如尚未确认，先使用A或公开页面；不要把“拟发布”当“已取得源码”。确认发布后在新的目录执行：
+先核对本批GitHub Release的 `society-responses-review-2026-10-08-rc3` 与完整commit SHA。如尚未取得该固定版本，先用公开页面或历史A路径，不下载同名浮动分支。确认发布后在新的目录执行：
 
 ```bash
-git clone --branch society-review-2026-10-07-rc1 --depth 1 https://github.com/litianyi-007/city-agent.git city-agent-review-rc1
-cd city-agent-review-rc1
+git clone --branch society-responses-review-2026-10-08-rc3 --depth 1 https://github.com/litianyi-007/city-agent.git city-agent-review-rc3
+cd city-agent-review-rc3
 git rev-parse HEAD
 ```
 
@@ -81,7 +85,7 @@ npm run start:review -- --port 4330 --data-dir .city-agent-review-4330
 4. 明确限定样本数、调用与Token预算，主动点击真实运行。不要将Key输入研究文本或问卷题目。
 5. 检查逐份原文、无效与失败答卷、usage与费用口径，导出证据。usage未返回不等于免费，统计成功不等于真人市场有效。
 
-页面中费用确认不是供应商钱包硬限额。此次授权自动实验另用了持久预算账本和单请求代理，未知/超限/失败会停止；不能把该专用实验保护宣称为任意页面调用都受¥5硬限制。不要直接运行源码中的付费实验脚本来“自动复现”：新预算、授权范围和模型配置须另确认，旧账本不可自动恢复或清除重跑。
+页面中费用确认不是供应商钱包硬限额，结构无效也不会自动停止所有后续居民。受控实验CLI另用持久预算账本、冻结计划和单请求代理，未知/超限/失败会全停；不能把此保护宣称为任意页面调用都受金额硬限制。请先选1人，核对价格和原文后再自行决定下一轮。不要直接运行付费实验脚本来“自动复现”：该脚本需要操作者专用注册材料与授权，不是普通安装入口，旧账本不可自动恢复或清除重跑。
 
 本机Key由服务端加密保存；同机账号仍可访问密钥文件。不要公开监听该服务，也不要复制数据库、密钥或本地日志到申报附件。
 
