@@ -20,7 +20,7 @@ export type JevConfig = z.infer<typeof jevConfigSchema>;
 export type JevPublicConfig = JevConfig & { hasApiKey: boolean };
 export type SecretJevConfig = JevConfig & { apiKey?: string; hasApiKey?: boolean };
 export const DEFAULT_JEV_CONFIG: JevConfig = jevConfigSchema.parse({});
-export interface JevCandidateContext { phase: string; goal: string; acceptance: string | string[]; frozenHash: string | null; candidates: Array<{ id: string; value: unknown }>; }
+export interface JevCandidateContext { phase: string; goal: string; acceptance: string | string[]; frozenHash: string | null; candidates: Array<{ id: string; value: unknown }>; capability?: 'offline-single-html' | 'camera-scene-v1'; }
 export type JevDimension = 'coverage' | 'consistency' | 'scope';
 export interface JevScoreAnswer { score: number; probabilities: Record<string, number>; confidence: number; legend: Record<string, string>; }
 export interface JevCandidateScore { candidateId: string; dimensions: Record<JevDimension, JevScoreAnswer>; meanScore: number; minimumScore: number; scopeProbability: number; scopeCertainty: number; qualified: boolean; stronglyRejected: boolean; }

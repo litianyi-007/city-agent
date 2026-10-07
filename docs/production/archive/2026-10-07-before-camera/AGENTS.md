@@ -25,13 +25,3 @@
 ## 本轮评委对抗审查
 
 主文档修改前在 `docs/production/archive/2026-10-07-before-judge-review/` 留底。已复现旧 iframe 可自导航外联，以及特殊字符凭据日志脱敏/弱输入镜像验收问题；生成 HTML 不再在用户浏览器执行，仅下载源码附件与受控 Chromium 截图。固定可信 Mock 的公开交互必须比对 `demoHtml(run.input)` 原始字节，不能将该策略扩展到模型生成代码。新 Prompt/验收契约为 v2；旧运行、旧视频和负结果保持原配置并披露限制，不作为新版安全证据。
-
-## 用户摄像头测试需求（2026-10-07）
-
-用户已明确确认受控摄像头能力扩展，已在本分支页面设置六角色 Key，并另行选择 `deepseek-flash` 与输入/输出 0.30/1.20 USD 每百万 Token 的保守估算。只更新模型/费率元数据，不回显或迁移 Key；本轮仍每任务 5 USD、首批合计 15 USD，最多两次返修。
-
-新 `camera-scene-v1` 独立契约：内部 Agent 只生成严格场景 JSON，平台固定可信代码持有相机、本地识别和 Canvas 渲染；不得让任意模型脚本获得媒体权限，不恢复旧生成 HTML iframe。模型资产本地准备、官方固定来源/hash/许可证，无 CDN 回退；缺损资产在真实请求前失败关闭。
-
-场景 Gate 只证明实际 Canvas、几何交互及合成21点状态机；独立假摄像头测试真实加载 MediaPipe，也不证明实际手势准确率或实体设备兼容。`cameraVerification` 的真实视觉、实体摄像头与完整需求为未验证，不能用模型自述置为 true，不进入完整良品分子；全部真实终态仍纳入分母。实机授权须由用户明确操作。
-
-规格见 `docs/prd/FP001-camera-scene.md`，预登记/实测追加见 `docs/production/CAMERA-EXPERIMENT.md`。旧实验与申报附件不改写；本次关键文档旧版在 `docs/production/archive/2026-10-07-before-camera/` 留底。

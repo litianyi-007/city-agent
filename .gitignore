@@ -12,3 +12,5 @@ playwright-report/
 tmp/pdfs/
 .DS_Store
 *.log
+# Reproducible prepared camera models/WASM; pins and preparation script tracked.
+public/camera-assets/
