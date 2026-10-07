@@ -1,5 +1,7 @@
 # City Agent
 
+[2026-10-08发布实证与安装基线](docs/research/PUBLIC-REVIEW-RELEASE-2026-10-08.md)：源码 `f12293c81632a930842d2545fc2f7cf98e06f5fb`，589单测/20浏览器/149协议专项通过，61公网文件实际字节核对和两场景完整零费用操作、新目录安装已验证。新17/18题真实接口能力2/2通过（¥0.02218保守估价），与现实市场效度、旧失败和fixture演示分开。
+
 2026-10-08独立评委体验更新：[Demo](https://litianyi-007.github.io/city-agent/#research) · [最新工程/接口记录与体验指南](https://litianyi-007.github.io/city-agent/review-updates/2026-10-08/) · [固定版下载](https://github.com/litianyi-007/city-agent/releases/tag/society-responses-review-2026-10-08-rc3)。本批版本 `society-responses-review-2026-10-08-rc3`，完整源码SHA以Release/Tag核对。新增只读研究诊断、未知信息出口、页面费用确认与1人起步，以及独立Responses候选；真实接口探测与离线回归分层记录，不将能力探测称为市场调查。旧材料/Tag/账本不覆盖，Pages不会自动调用模型。以下2026-10-07发布记录保持历史口径。
 
 2026-10-07追加：JSON契约修复后的第二轮真实调查已完成，仍未通过两个10人门限；小学0/10、宠物3/10联合通过，15未启动。5次确认请求、17,032 Token，保守估算¥0.042032；按授权停止整场景，规划/CORS未再启动。旧RC1、原PDF和旧账本保持不变。[独立测试与下一步](docs/research/CONTRACT-TRIAL-2026-10-07.md)。本轮已关账，不以未用余额自动重试或扩容。
