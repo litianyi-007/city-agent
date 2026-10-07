@@ -1,10 +1,10 @@
 # 六角色自主软件生产工作区
 
-当前源码与封包工具为production-materials-v4：[已提交离线主稿（v3原叙述保留）](SUBMISSION-REPORT.md)、[评委独立安装/自测指南](REVIEWER-GUIDE.md)、[最新进度](POST-SUBMISSION-PLAN.md)。在线production/是固定案例＋安装引导＋材料，不是新需求后端；公开版本以publication-manifest为准。新包使用reviews/<完整publisher commit>/固定入口，PDF/MD/JSON分别记录材料版本与原实验来源；历史MP4保持原视频commit，旧公开附件不覆盖。
+当前评审材料v3：[完整离线申报主稿](SUBMISSION-REPORT.md)、[评委独立安装/自测指南](REVIEWER-GUIDE.md)、[材料对抗审查](REVIEW-MATERIALS-2026-10-07.md)。在线最新入口仍为 production/；正式提交用导出清单给出的 reviews/<完整报告commit>/ 版本入口，同版MP4、PDF、MD、原始证据与ZIP。旧公开submission文件保留不覆盖。
 
-v3静态页/PDF/MP4/ZIP已发布；v4准备更新安装源码与新实验账本，不以本地修改或源码push冒充部署。本轮原文[留底](archive/2026-10-07-before-planning-loop/README.md)。实际新需求在本机4420页面点“新建自定义需求”，完整填写来源/验收、配置六角色与可选Jev，然后一次明确有限预算授权启动。
+发布状态：v3先交付MD与指南，配套PDF/MP4/ZIP和版本在线页尚待生成/部署；当前公开production页是旧版Mock/WebM。以下旧阶段入口描述需按其版本解读，不代表新版已经发布。
 
-最近真实尝试：[06](experiments/CAMERA-06/RESULT.md)完成测试角色一次语义纠错后容量拒绝；[07](experiments/CAMERA-07/RESULT.md)因初始PM修订计划未执行而停止；[08预登记](experiments/CAMERA-08/PRE-REGISTRATION.md)验证研发前有限再规划。工程测试、真实有界场景与完整硬件交付分列；不同配置调优不合并成稳定成功率。旧04结论与附件保持原版本。
+[CAMERA-04结果](CAMERA-04-RESULT.md)：11次真实请求，验收Verifier结构拒绝，完整交付失败。四次真实调优均未完整通过，不用三个Mock替代。此前“本批不发布”是该实验启动时边界；用户随后优先要求材料与在线录屏，按独立材料修订执行。入口刷新前全文 [留底](archive/2026-10-07-before-materials-refresh/README.md)。
 
 本线已进入第一批实施：产品经理、项目经理、研究员、研发、测试与 Verifier 共同执行有界软件生产。首批采用离线单 HTML 和受限 Chromium Gate，不执行生成的宿主脚本，不新增虚拟社会能力。用户允许自拟三个模拟需求；真实业务需求条款与官方 L4 认证不在本批完成范围内。
 
@@ -45,8 +45,8 @@ Key 在新页面重新填写，不迁移原配置。生产 Agent 使用独立六
 
 [规格](../prd/FP001-camera-scene.md) 与 [第一轮实验](CAMERA-EXPERIMENT.md) 分别描述冻结验收和实测。合成场景 Gate、假摄像头 SDK 集成、真实视觉与实体设备验收分列；前两项通过不代表完整摄像头需求交付。旧“仅截图”的描述仍适用于任意模型生成 HTML，不能借此新能力恢复旧不安全 iframe。
 
-## 历史批次：Jev v3 与实际输出契约
+## 当前批次：Jev v3 与实际输出契约
 
 [设计与安全边界](JEV-RESILIENCE-V3-DESIGN.md)、[CAMERA-04 预登记](CAMERA-04-PREGISTRATION.md)、[免费回归/独立审查](BATCH-CAMERA04-CHECKS.md)。本配置不重写旧失败；Jev 派生算术异常只能弃用决策、在原预算内进行一次独立 LLM 复核，不能变为 Jev 通过。角色及 Verifier 使用实际 schema 导出的输出契约，语义和最终行为 Gate 仍独立执行。
 
-本段更新前全文已按 `20f61eb` [留底](archive/2026-10-07-before-jev-v3/README.md)。该历史批次仅推送源码、未发布Pages/PDF；不是本轮已授权production子树发布的状态声明。
+本段更新前全文已按 `20f61eb` [留底](archive/2026-10-07-before-jev-v3/README.md)。本批仅推送生产源码分支，不重新发布 Pages/PDF；公开入口仍是旧阶段静态回放，不能用来运行本地 CAMERA-04。

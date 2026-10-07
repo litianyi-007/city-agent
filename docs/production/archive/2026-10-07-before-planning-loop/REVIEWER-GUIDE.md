@@ -1,16 +1,16 @@
 # 评委安装、访问与自主测试指南
 
-本指南对应当前源码 `production-materials-v4`。公开页不需要 Key；本地真实运行需自备 Key、网络和明确预算。最新真实尝试与工程结果见 [进度](POST-SUBMISSION-PLAN.md) 及原始实验档；安装成功不保证新任务交付成功。
+本指南对应 `production-materials-v3`。公开页不需要 Key；本地真实运行需自备 Key、网络和明确预算。当前四次真实摄像头任务均失败，安装成功不保证新任务交付成功。
 
-v3固定在线页、PDF/MD/ZIP和MP4已发布；本轮v4将安装命令固定到含“新建自定义需求”、一次性授权、真实请求账本与有限再规划的新源码。部署前仍可看旧版案例；部署后核对页面publication-manifest的完整publisherCommit，不把旧证据/录屏的sourceCommit改成新版本。原指南[留底](archive/2026-10-07-before-planning-loop/REVIEWER-GUIDE.md)。
+发布状态：本次优先交付MD主稿与本指南，v3 PDF/MP4/ZIP及固定在线版本入口尚待生成和部署。当前公开页是旧版，已有三个Mock、旧PDF/ZIP与WebM；它没有本轮四次摄像头失败的新版汇总。先按下面“当前可用”体验；标为“v3部署后”的步骤待页面显示对应版本才执行，不能将旧附件认作本版。
 
 ## A. 不安装：先看公开材料（约5分钟）
 
-1. 打开 [生产线评审入口](https://litianyi-007.github.io/city-agent/production/)，首屏三个入口区分固定案例、本地新需求与材料。已提交[MD主稿](SUBMISSION-REPORT.md)保持v3叙述，最新过程与结果以本版本实测附录为准。
+1. 当前可用：打开 [生产线评审入口](https://litianyi-007.github.io/city-agent/production/)，先读静态边界；[本版MD主稿](SUBMISSION-REPORT.md)与 [CAMERA-04结果](CAMERA-04-RESULT.md)先由仓库文档/离线文件阅读。
 2. 当前可用：手动体验待办添加/完成/删除、筛选、空输入与两项提交；查看各 Mock 的实际Gate和输入。交互页面是平台注册的可信固定夹具，不是此时模型在线生成。
-3. 在线“材料与复现”查看该版PDF/ZIP/MP4，按各附件来源commit解释；历史录屏不证明后续版本或真实模型交付。
-4. 进入固定版本入口，下载主稿MD、PDF、指南、完整ZIP，核对 `package-manifest.json` 的发布commit、材料版本与SHA-256。正式评审使用PDF给出的 `reviews/<完整commit>/` URL。播放 `demo.mp4`，这是**免费Mock**历史录屏，不是六角色真实成功视频；不兼容可下载播放。
-5. 展开真实场景逐次账本，下载 `real-camera-runs.json`；仅含该包实际归档终态。部署前先在 [GitHub生产文档](https://github.com/litianyi-007/city-agent/tree/feature/autonomous-production/docs/production) 查看新结果。不要混合Mock、合成行为、完整硬件需求或不同配置探索分母。
+3. 当前可用：在线“材料与复现”可查看旧PDF/ZIP/WebM，按旧附件标注的commit解释；旧iframe录屏不证明后续安全修复。
+4. v3部署后：进入本版固定版本入口，下载主稿MD、PDF、指南、完整ZIP，核对 `package-manifest.json` 的发布commit、材料版本与SHA-256。正式评审使用PDF给出的 `reviews/<完整commit>/` URL。播放 `demo.mp4`，这是**免费Mock**录屏，不是六角色真实成功视频；不兼容可下载播放。
+5. v3部署后：展开 CAMERA-01～04，下载 `real-camera-runs.json`。部署前先在 [GitHub生产文档](https://github.com/litianyi-007/city-agent/tree/feature/autonomous-production/docs/production) 查看各结果与原始附件。不要将三个Mock通过与四次真实失败混算良品率。
 
 公开 GitHub Pages 没有 Harness后端，不接收 Key、不开新生产任务、不申请摄像头。原虚拟社会入口另行保留，不表示本生产线获得了其人口与记忆的新能力。
 
@@ -57,7 +57,7 @@ Playwright使用独立4421端口；不要把测试指向他人的服务。未完
 2. Key只在页面密码字段填写；保存后看脱敏配置状态，不通过回显完整Key验证。不要写命令、Prompt、Git或提交附件。本项目不提供作者Key；会话暴露的临时Key需要持有人轮换。
 3. 本轮作者实测选择 deepseek-flash，端点 `https://api.deepseek.com`，费率为输入0.30/输出1.20 USD每百万Token的保守配置；这是本轮估算快照，不保证未来ID可用或供应商账单价格。请以自己服务账户的当前有效配置为准。
 4. “决策设置”可启用托管Jev，填写独立Key，固定版本本轮为 `jev-1.13.0`。未知usage、价格或协议错误会停止；不关闭安全检查伪装成功。建议先独立 LLM Verifier的小HTML任务，再比较Jev混合路径；两条路径分别记录。
-5. 返回“生产工作台”，先点“新建自定义需求”，选择受控能力，再填原话、编号、来源类型、背景和完整验收，不沿用Mock来源/验收。选择真实模型和验证引擎；预算示例为每环节1候选、30条调用、500000Token、600秒、共享2次修订/纠错/返修及1 USD估算限额。检查全部配置后才勾选本次授权，授权一次提交即消费；修改或重新启动需要重新确认。过低预算可能提前失败，不要设无限重试。
+5. 选择真实模型模式、受限HTML范围，输入自己的需求和验收。先仅一个候选，单次最大24请求、500000Token、600秒、最多两次全局返修及5 USD估算限额；明确勾选预算授权。预算值可调低，低预算可能提前失败；不要设无限重试。
 6. 跟踪原始角色输出、来源、Verifier选择/弃权、冻结hash、功能Gate、返修和费用。真正成功须完整产物通过冻结行为Gate且没有外层修改；失败则下载证据、查看unknown与缺口。点击取消检查终止状态，不用重启当免费重试。
 
 HTML预览是平台受控截图，原始HTML下载为文本附件；在其他环境运行下载的源码不再受平台限制。未验证容器前不支持任意仓库的生成Node/shell/构建脚本与依赖安装，不能为了体验在宿主绕过。
@@ -72,7 +72,7 @@ npx tsx scripts/prepare-camera-assets.ts --verify
 npm run build
 ```
 
-下载约30MB固定版本资产，逐文件验证hash并保留许可证；需访问官方源。准备器拒绝已有错误/不完整资产目录，不在本指南指导强制覆盖；查看 [CAMERA-ASSETS.md](CAMERA-ASSETS.md)。准备后重建以包含资产。只有真实任务产出并通过场景数据Gate，才进入本机可信运行时主动点击启动摄像头；需要HTTPS或localhost安全上下文、用户授权及实体摄像头。以所选真实run的scene/Gate为准，不能拿默认/演示场景冒充交付。
+下载约30MB固定版本资产，逐文件验证hash并保留许可证；需访问官方源。准备器拒绝已有错误/不完整资产目录，不在本指南指导强制覆盖；查看 [CAMERA-ASSETS.md](CAMERA-ASSETS.md)。准备后重建以包含资产。只有真实任务产出并通过场景数据Gate，才进入本机可信运行时主动点击启动摄像头；需要HTTPS或localhost安全上下文、用户授权及实体摄像头。当前四次真实任务无可用最终场景，不能拿默认/演示场景冒充交付。
 
 合成手势场景行为、假摄像头SDK集成、真实视觉模型、实体硬件、完整原需求是分开的证明层次；假摄像头通过不能勾选完整硬件通过。相机拒绝、资产缺失、视觉未验证均须保留而非删去。
 

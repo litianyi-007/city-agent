@@ -8,6 +8,7 @@ import { PRODUCTION_DEMO_CASES } from '../shared/production-benchmarks.js';
 import { demoHtml } from '../server/production/fixtures.js';
 import { productionEnvironment } from '../config/production-environment.js';
 import { historicalIframeVideo, renderProductionPortal, type ProductionPortalRequirement } from './production-portal.js';
+import { MATERIALS_VERSION } from './production-materials.js';
 import { assertNoPublishedSecrets, assertWorktreeDirectory, PUBLIC_PROJECT_ID, publicPath, readCheckedPackage, sha256 } from './production-public-safety.js';
 
 export const PREVIEW_CSP = "default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; connect-src 'none'; worker-src 'none'; frame-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'";
@@ -20,6 +21,9 @@ export function preferredPublicVideo(files: ReadonlyMap<string, Buffer>): 'demo.
   if (files.has('demo.mp4')) return 'demo.mp4';
   if (files.has('demo.webm')) return 'demo.webm';
   throw new Error('Public materials need a registered MP4 or historical WebM recording.');
+}
+export function assertCurrentReviewedPackage(manifest: Record<string, unknown>, files: ReadonlyMap<string, Buffer>, commit: string): void {
+  if (manifest.version !== 'mock-package-v2' || manifest.materialsVersion !== MATERIALS_VERSION || manifest.publisherCommit !== commit || !['REVIEW.md', 'materials-summary.json', 'REVIEWER-GUIDE.md', 'SUBMISSION-REPORT.md'].every(name => files.has(name))) throw new Error('Export the current reviewed material snapshot and reviewer documents before publication; a historical PDF cannot impersonate this report commit.');
 }
 export function trustedFixturePreview(run: ProductionRun, original: Buffer) {
   const demo = PRODUCTION_DEMO_CASES.find(item => item.id === run.input.requirement.id);
@@ -34,7 +38,7 @@ export async function buildProductionPublic(source: string, root: string) {
   const commit = execFileSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' }).trim();
   const branch = execFileSync('git', ['branch', '--show-current'], { cwd: root, encoding: 'utf8' }).trim();
   if (branch !== 'feature/autonomous-production' || execFileSync('git', ['status', '--porcelain'], { cwd: root, encoding: 'utf8' }).trim()) throw new Error('Commit and freeze the clean production branch before public packaging.');
-  if (checked.manifest.version !== 'mock-package-v2' || checked.manifest.materialsVersion !== 'production-materials-v3' || checked.manifest.publisherCommit !== commit || !checked.files.has('REVIEW.md') || !checked.files.has('materials-summary.json') || !checked.files.has('REVIEWER-GUIDE.md') || !checked.files.has('SUBMISSION-REPORT.md')) throw new Error('Export the current reviewed v3 material snapshot and reviewer documents before publication; a historical PDF cannot impersonate this report commit.');
+  assertCurrentReviewedPackage(checked.manifest, checked.files, commit);
   const layout = productionReviewLayout(commit);
   const json = <T>(name: string) => JSON.parse(checked.files.get(name)!.toString('utf8')) as T;
   const runs = ['01', '02', '03'].map(id => json<ProductionRun>('MOCK-' + id + '/run.json'));

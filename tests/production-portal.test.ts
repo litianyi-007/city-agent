@@ -57,6 +57,30 @@ test('reviewer v3 highlights same-version Markdown, independent installation and
   assert.ok(html.includes('按评委指南准备并核验固定本地资产'));
 });
 
+test('local onboarding starts a detached custom requirement before configuration, one-shot budget and honest Gate accounting', () => {
+  const input = portalInput();
+  const installationCommit = 'd'.repeat(40); const videoCommit = '891fedcab0f3c5994c7e92f7874e610b3b6354b8';
+  input.packageManifest = { ...input.packageManifest, publisherCommit: 'a'.repeat(40), videoSourceCommit: videoCommit, files: [{ path: 'demo.webm' }] };
+  input.recordedBuildInfo = { deploymentCommit: installationCommit, videoSourceCommit: videoCommit };
+  const html = renderProductionPortal(input);
+  const guide = html.match(/<section id="reviewer-start"[\s\S]*?<\/section>/)?.[0];
+  assert.ok(guide);
+  const orderedLabels = ['先点击“新建自定义需求”', '选择“受控交付能力”', '填写编号、需求来源类型', '在“研发团队”配置六角色', '可选：在“决策设置”配置 Jev', '选择“真实模型”', '再点击“启动真实生产”', '核对冻结契约与 hash'];
+  let previous = -1;
+  for (const label of orderedLabels) {
+    const index = guide.indexOf(label);
+    assert.ok(index > previous, `Local onboarding must place ${label} after the previous step`);
+    previous = index;
+  }
+  for (const label of ['清空旧 Mock 原话、来源与验收', '不是任意仓库开发', 'offline-single-html', 'camera-scene-v1', '完整“业务验收要求”', '只是来源声明，不是平台认证', 'Key 仅填写在你的本地工作区，不上传到这个公开页面', '授权只供一次提交', '修改配置或重试须重新授权', '总用量 unknown 与已知小计分列', '不能把 unknown 当 0']) assert.ok(guide.includes(label));
+  assert.ok(guide.includes(`git checkout ${installationCommit}`));
+  assert.equal(guide.includes(`git checkout ${videoCommit}`), false);
+  assert.ok(html.includes(`视频来源源码版本：<code>${videoCommit}</code>`));
+  assert.ok(html.includes('静态交互演示 / 证据回放，非线上自主研发服务'));
+  assert.ok(html.includes('公开页面不接收 Key、不运行 Harness、不进行实时生成'));
+  assert.equal(/<textarea|<input|href="http:\/\/127\.0\.0\.1:/.test(html), false);
+});
+
 test('registered MP4 is preferred without relabeling historical footage as a new real delivery experiment', () => {
   const input = portalInput();
   const originalCommit = '891fedcab0f3c5994c7e92f7874e610b3b6354b8';
