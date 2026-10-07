@@ -3,7 +3,7 @@ import type { JevEvaluation, JevPublicConfig } from './jev-schema.js';
 import type { CameraVerification } from './camera-scene-schema.js';
 import type { productionCoverageContract } from './production-coverage.js';
 
-export interface ProductionValidationContract { harnessPromptTransportVersion?: string; semanticsVersion: string; jevRequestLayoutVersion?: string; cameraTestSemanticsVersion?: string; coverage: ReturnType<typeof productionCoverageContract>; }
+export interface ProductionValidationContract { reviewContextVersion?: string; harnessPromptTransportVersion?: string; semanticsVersion: string; jevRequestLayoutVersion?: string; cameraTestSemanticsVersion?: string; coverage: ReturnType<typeof productionCoverageContract>; }
 
 export const PRODUCTION_CAPABILITIES = ['offline-single-html', 'camera-scene-v1'] as const;
 export type ProductionCapability = (typeof PRODUCTION_CAPABILITIES)[number];
@@ -18,6 +18,11 @@ const reservedCredentialValues = new Set(['fullPinsLocation', 'jev-request-layou
 export const productionApiKeySchema = z.string().min(16, credentialMessage).max(500, credentialMessage).refine(value => /^[\x21-\x7e]+$/.test(value) && !/["'\\]/.test(value), credentialMessage).refine(value => !reservedCredentialValues.has(value) && !/^(?:production-(?:html|acceptance|acceptance-semantic|coverage-owners|delivery|submission|global-repair|output-contract)-v\d+|production-camera-(?:scene|acceptance|delivery)-v\d+|raw-wire-usage-v\d+|verifier-(?:(?:phase-)?ordinal|compact-output)-v\d+|camera-(?:scene-runtime|hand-worker|scene-behavior|test-semantics)-v\d+|hand-geometry-v\d+|mediapipe-hand-v\d+|jev-candidate-v\d+|visible-token-v\d+|mock-package-v\d+|city-agent-autonomous-production-public-v\d+)$/.test(value), 'API Key 不得与平台协议字段、状态或版本标识相同');
 reservedCredentialValues.add('harnessPromptTransportVersion');
 reservedCredentialValues.add('harness-literal-prompt-v1');
+reservedCredentialValues.add('reviewContextVersion');
+reservedCredentialValues.add('production-review-context-v1');
+reservedCredentialValues.add('generationFeedbackReference');
+reservedCredentialValues.add('sourceRoleCallIds');
+reservedCredentialValues.add('role-call.userPrompt.context.regeneration');
 export const pricingSchema = z.object({ inputPerMillion: z.number().finite().nonnegative().max(10000), outputPerMillion: z.number().finite().nonnegative().max(10000), currency: z.enum(['USD', 'CNY']) }).strict();
 const baseUrl = z.string().trim().url().max(500).refine(value => { const u = new URL(value); return ['http:', 'https:'].includes(u.protocol) && !u.username && !u.password && !u.search && !u.hash; }, 'Base URL 必须是无凭据/查询参数的 HTTP(S) 地址');
 export const productionAgentInputSchema = z.object({ name: z.string().trim().min(1).max(80), role: z.enum(PRODUCTION_ROLES), provider: z.enum(['openai-compatible', 'anthropic', 'deepseek']).default('deepseek'), baseUrl: baseUrl.default('https://api.deepseek.com'), modelId: z.string().trim().min(1).max(150).default('deepseek-chat'), apiKey: productionApiKeySchema.nullable().optional(), enabled: z.boolean().default(true), pricing: pricingSchema.nullable().optional() }).strict();
