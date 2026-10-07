@@ -2,17 +2,6 @@
 
 内部六角色真实代码生成与托管 Jev 的真实决策是两种证据。三个业务题均为用户授权 MOCK；不得标成三个真实需求。
 
-## 最新真实对照索引（2026-10-08）
-
-| 实验 | 冻结源码 | 终态 | HTTP | 盲决策／实际 Oracle | 声明价估算 USD |
-| --- | --- | --- | ---: | --- | ---: |
-| [REAL-01](experiments/VERIFIER-REAL-01/RESULT.md) | aaaac613 | failed，JSON 协议停止 | 10 | 11／0 | 0.017598132 |
-| [REAL-02](experiments/VERIFIER-REAL-02/RESULT.md) | 7899b979 | completed，完整对照 | 52 | 54／36 | 0.077296446 |
-
-REAL-02：B 好选中 12/18、坏放行 4/18、费用 0.038028600 USD；C 好选中 11/18、坏放行 2/18、费用 0.039267846 USD。C 多费 3.258721%、1 次错弃权，预登记高性价比条件不成立；12 Jev drift 与 4 uncertain 升级保留，不能将评测 completed 当软件交付。两个实验配置不同且各自单次授权，不合并成固定配置成功率；账单均 unknown。只读完整性核验和每池实际行为／费用见各报告。
-
-六角色软件任务独立留证：[CAMERA-09](experiments/CAMERA-09/RESULT.md)为首次真实有界场景 Gate 通过（非完整摄像头），[HTML-01](experiments/HTML-01/RESULT.md)和[HTML-02](experiments/HTML-02/RESULT.md)为真实失败；不与选优池合计良品率。本次只追加索引，后文保留其历史时间点；[更新前全文](archive/2026-10-08-before-verifier-real02/EXPERIMENTS.md)留底。
-
 以下v1/v2决策章节保留初始批次原貌，其中“尚无Key/真实生成为0”是当时状态，不是当前配置。后续真实摄像头任务见文末；追加前全文在 [留底](archive/2026-10-07-before-camera03-result/EXPERIMENTS.md) 保存。
 
 ## v1 · 首次适配失败

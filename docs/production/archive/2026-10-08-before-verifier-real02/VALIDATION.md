@@ -2,12 +2,6 @@
 
 ## 当前实际结果（2026-10-08）
 
-本批 [REAL-02](experiments/VERIFIER-REAL-02/RESULT.md) **completed**：54 盲决策均先于 36 实际行为 Oracle，52 供应商 HTTP（34 LLM＋18 Jev）、286 事件、370.649 秒、342,986／8,557 Token、声明价估算 **0.077296446 USD**；unknown usage 0，实际账单 unknown。B 好选中 12/18、坏放行 4/18；C 好 11/18、坏 2/18、5 次弃权中 1 次错弃权，完整费用比 B 高 3.258721%，预登记高性价比条件不成立。12 drift 和 4 uncertain 升级有原始诊断，不冒称全响应协议通过。
-
-先行预登记提交 7899b979 的 47 项执行源码与已回归 7345fdaa 相同；4 份控制原件及 573 JSON 原生包只读核验、独立费用／源码／盲时序／安全审查一致。全部调用 cleanupAwaited=true 仅是原生等待记录，不证明供应商账单或独立残留进程审计。此批只追加文档／证据，不把评测 completed 当作研发产品 Gate 通过。[更新前全文留底](archive/2026-10-08-before-verifier-real02/VALIDATION.md)。
-
-### 上一免费修复与更早验证记录
-
 最新免费协议修复以 [BATCH-VERIFIER-PROTOCOL-CHECKS](BATCH-VERIFIER-PROTOCOL-CHECKS.md)为准：首轮 702/705 及中间 12/13 的失败均保留；最终完整 Node **705/705、910.929 秒、零 skip**，独立浏览器 **45/45、约1.4分钟**，复杂上下文/输出契约 20/20，TypeScript/Vite通过。新 source-v3 不复用旧 source-v2 冻结。没有新增供应商请求或实际模型 Token，新 Prompt 质量/效益待新授权实测。[本次全文留底](archive/2026-10-08-before-verifier-protocol/VALIDATION.md)。以下旧源码成绩按各自时间点保留。
 
 源码 `eb83022` 完整免费Node **676/676，906.263秒，零skip**；完整浏览器 **45/45，约1.5分钟**，TypeScript/Vite通过。其后的`aaaac61`仅预登记文义/判定补正，执行源码46项hash不变，从clean HEAD构建、重启后通过实际页面启动唯一已授权真实实验。

@@ -2,12 +2,6 @@
 
 ## 当前结论（2026-10-08）
 
-最新真实结果：[VERIFIER-REAL-02 完整对照](experiments/VERIFIER-REAL-02/RESULT.md)已经按一次新授权完成：54/54 盲决策、36/36 实际 Oracle、52 次 HTTP、370.649 秒，342,986 输入／8,557 输出 Token，声明价估算 **0.077296446 USD**（账单 unknown）。B 好选中 12/18、坏放行 4/18；C 好选中 11/18、坏放行 2/18，费用高 3.258721%，**未满足预登记高性价比条件**。Jev 2 次直接弃权（1 次正确、1 次错弃权），16 次升级（12 drift＋4 uncertain），原诊断保留。completed 不是自主软件交付或稳定 L5。
-
-实际页面：本机 4420 → 决策设置 → Verifier A/B/C 评测 → 展开 → 记录 **6eaf79ac**；无 Key 的跨设备[归档核验](experiments/VERIFIER-REAL-02/RESULT.md#6-无-key-跨设备核验)不会外呼。本次新证据／报告推送到生产分支，公开 v5、已提交申报原稿与主线不更新；[更新前全文](archive/2026-10-08-before-verifier-real02/README.md)留底。下一步按失败证据推进免费语义／Jev 契约分析，再回到 HTML 闭环；不追加本次收费授权。
-
-### 上一批免费修复与更早历史
-
 最新免费修复：[Verifier 协议诊断、紧凑输出与边界 Gate](BATCH-VERIFIER-PROTOCOL-CHECKS.md)已实现，最终 **705/705 Node＋45/45 浏览器**、构建通过；[Jev 原响应回放](VERIFIER-JEV-COMPATIBILITY.md)保持原数值门限，仍为 2 drift / 1 uncertain。没有新增收费请求，也不以新提示工程通过冒充模型质量提升。[下一次真实对照提案](VERIFIER-NEXT-RUN-PROPOSAL.md)待新授权；[此次更新前全文留底](archive/2026-10-08-before-verifier-protocol/README.md)。下段 676/676 是首次真实实验前源码的历史成绩。
 
 本机已有可操作的Verifier评测控制面与跨设备只读核验；工程 **676/676 Node＋45/45浏览器**通过。[第一次真实对照](experiments/VERIFIER-REAL-01/RESULT.md)已执行一次，10请求后因非法JSON按协议停止，估算0.017598132USD、无Oracle、无重试；不称模型提升或自主交付成功。主线/Pages/申报原稿不变。
