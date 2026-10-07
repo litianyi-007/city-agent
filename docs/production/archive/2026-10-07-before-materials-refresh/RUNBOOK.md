@@ -1,7 +1,5 @@
 # 自主软件生产启动与复现
 
-评委在自己的设备首次安装，请优先使用 [可移植安装与自测指南](REVIEWER-GUIDE.md)，不复制下文作者机器路径。下面保留本worktree的开发复现命令；刷新前原文见 [留底](archive/2026-10-07-before-materials-refresh/RUNBOOK.md)。同版在线入口、MP4与完整材料关系见 [申报主稿](SUBMISSION-REPORT.md)。
-
 所有命令在 `/Users/litianyi/Documents/Code/_ai-goods/city-agent-autonomous-production` 执行。原目录不安装、不运行测试、不修改服务；新目录依赖与数据独立。默认 Node 20 不满足要求，下列命令使用已安装 Node 22.22.3，不更改系统默认配置。
 
 ## 启动

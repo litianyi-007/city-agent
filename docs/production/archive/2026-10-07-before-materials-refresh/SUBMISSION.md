@@ -1,11 +1,5 @@
 # 自主软件生产申报材料索引
 
-## 当前v3主稿与体验路径
-
-[离线申报主稿](SUBMISSION-REPORT.md)包含完整七栏目；[评委指南](REVIEWER-GUIDE.md)说明公开静态体验、独立设备安装、页面自备Key及有限预算测试。在线同版MP4/可信Mock/原始账本只丰富证据，不替代主稿的失败与限制。正式提交使用导出包给出的完整commit版本入口；旧 `production/submission/` 附件保留，不再当成本版链接。
-
-当前真实结果：CAMERA-01～04均失败，完整自主交付0；[第四轮结果](CAMERA-04-RESULT.md)和[本版对抗审查](REVIEW-MATERIALS-2026-10-07.md)为最新结论。下文旧阶段数据为历史披露；原文已在 [材料刷新前留底](archive/2026-10-07-before-materials-refresh/SUBMISSION.md) 保存，不能把旧“尚未实测”当成当前状态。
-
 本批材料按用户给出的七项栏目组织，明确为三项模拟需求的工程演练，不冒充真实业务需求。材料包通过 `npm run production:package -- --record` 从本机服务生成，保留新批次的全部尝试、原始记录、源码、PDF 和实际浏览器录屏；只有冻结实现 commit 后才能运行导出，避免不明确的源码血缘。
 
 | 栏目 | 入口与证据 | 当前申报限制 |
@@ -18,11 +12,11 @@
 | 归因与改进 | 原始失败、工程反例与 NEXT-STEPS | 不混并旧六次不同配置的负结果 |
 | L4 自评与推广 | EVALUATION、PDF 第七节、Jev 快速层及 AnyJev SDK 待办 | 无官方标准，不宣称官方认证或稳定通用 L5 |
 
-公开入口为 https://litianyi-007.github.io/city-agent/production/；当前仍为旧版，`submission/production-mock-submission.pdf` 是历史附件，不是v3。本次先交付 [MD主稿](SUBMISSION-REPORT.md) 和 [评委指南](REVIEWER-GUIDE.md)，v3 PDF/MP4/ZIP尚待生成部署。公开版仅可信固定Mock与证据回放，不能配置Key、发起真实研发或运行Harness。独立production/子树发布不覆盖原虚拟社会入口或旧附件。本机入口为 http://127.0.0.1:4420/#production，前提是按评委指南安装启动并配置模型。
+显眼的公开入口为 https://litianyi-007.github.io/city-agent/production/；PDF 为该入口下的 submission/production-mock-submission.pdf。公开版仅可信固定 Mock 交互与证据回放，不能配置 Key、发起真实研发或运行 Harness 后端。用户本轮授权独立 production/ 子树，不覆盖原虚拟社会入口或旧附件。本机完整入口为 http://127.0.0.1:4420/#production，前提是按 RUNBOOK 启动并配置模型。
 
 ## 实测与预测
 
-实际浏览器交互、工程测试、耗时和 Mock 零供应商调用可由记录复现。当前四次真实摄像头尝试均失败且配置不同，不合并成稳定成功率；自主环节占比与同范围人工对照仍 unknown。fixture 不进入真实分母。预测人工工时按每项区间单列，不能以预测人日除以 Mock 秒数宣传增效。
+实际浏览器交互、工程测试、耗时和 Mock 零供应商调用可由记录复现。真实模型自主良品率与自主环节占比在未运行前为 unknown；fixture 不进入这些分母。预测人工工时按每项区间单列，不能以预测人日除以 Mock 秒数宣传增效。
 
 ## 参考概念
 
@@ -38,4 +32,4 @@
 
 全包真实 Jev 共 5 请求、输入 15027 / 输出 874 Token、按快照估算 0.000631134 USD，包含旧协议失败与混合失败；三项 Mock 生成费用为零，两者 scope 不混淆。v2 选择覆盖及选中通过均 2/3，仅选中条件通过为 2/2；不只选最后一个分母宣传成功。
 
-历史 891fedc 视频展示旧 iframe，现已撤下该执行模式。保留历史视频不作为新版本安全验证；新截图与负例证据在当前工程测试中。当前六角色路径已真实尝试但未完整交付；三项真实工单、同范围人工/无Verifier成本对照、正式团队成员与官方 L4 标准仍缺，必须保留这些硬缺口。
+历史 891fedc 视频展示旧 iframe，现已撤下该执行模式。保留历史视频不作为新版本安全验证；新截图与负例证据在当前工程测试中。六角色真实生成仍未实测、没有三项真实工单及同范围人工/无Verifier成本对照、正式团队成员与官方 L4 标准仍缺，必须保留这些硬缺口。

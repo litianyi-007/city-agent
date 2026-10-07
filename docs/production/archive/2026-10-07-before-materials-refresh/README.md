@@ -1,11 +1,5 @@
 # 六角色自主软件生产工作区
 
-当前评审材料v3：[完整离线申报主稿](SUBMISSION-REPORT.md)、[评委独立安装/自测指南](REVIEWER-GUIDE.md)、[材料对抗审查](REVIEW-MATERIALS-2026-10-07.md)。在线最新入口仍为 production/；正式提交用导出清单给出的 reviews/<完整报告commit>/ 版本入口，同版MP4、PDF、MD、原始证据与ZIP。旧公开submission文件保留不覆盖。
-
-发布状态：v3先交付MD与指南，配套PDF/MP4/ZIP和版本在线页尚待生成/部署；当前公开production页是旧版Mock/WebM。以下旧阶段入口描述需按其版本解读，不代表新版已经发布。
-
-[CAMERA-04结果](CAMERA-04-RESULT.md)：11次真实请求，验收Verifier结构拒绝，完整交付失败。四次真实调优均未完整通过，不用三个Mock替代。此前“本批不发布”是该实验启动时边界；用户随后优先要求材料与在线录屏，按独立材料修订执行。入口刷新前全文 [留底](archive/2026-10-07-before-materials-refresh/README.md)。
-
 本线已进入第一批实施：产品经理、项目经理、研究员、研发、测试与 Verifier 共同执行有界软件生产。首批采用离线单 HTML 和受限 Chromium Gate，不执行生成的宿主脚本，不新增虚拟社会能力。用户允许自拟三个模拟需求；真实业务需求条款与官方 L4 认证不在本批完成范围内。
 
 ## 工作边界
