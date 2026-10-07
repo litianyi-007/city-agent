@@ -6,6 +6,8 @@ import { createUsageProxy, type ObservedUsage } from './usage-observer.js';
 
 export const HARNESS_VERSION = '0.1.5-rc.3';
 export const HARNESS_NAME = `DeepSeek Harness ${HARNESS_VERSION}`;
+/** Literal system text enters the registry as a non-recursively rendered value. */
+export const HARNESS_PROMPT_TRANSPORT_VERSION = 'harness-literal-prompt-v1';
 
 export interface RoleModelConfig {
   provider: string;
@@ -111,10 +113,16 @@ export async function runRole(
       ].map((id) => ({ id, disabled: true })),
       {
         id: 'system-prompt',
-        config: { includeHarnessIdentity: false, includeRuntimeContext: false, personaPrefix: systemPrompt },
+        // The registry treats personaPrefix as a strict template, not literal
+        // text. Its substituted variable values are deliberately not rescanned.
+        config: { includeHarnessIdentity: false, includeRuntimeContext: false, personaPrefix: '{{city_agent_literal_prompt}}' },
       },
       {
         insert: [{
+          id: 'city-literal-prompt',
+          name: new URL('./harness-literal-prompt.mjs', import.meta.url).href,
+          config: { literalPrompt: systemPrompt },
+        }, {
           id: 'city-llm',
           name: '@deepseek-ai/dsh-llm-pi-ai',
           config: {
