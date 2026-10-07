@@ -1,0 +1,39 @@
+{
+  "version": "verifier-study-archive-inspection-v1",
+  "mode": "read-only-archive-integrity",
+  "archiveVerified": true,
+  "hashVerified": true,
+  "archiveSha256": "d18da1d95aa0e47e0a7a05d5ba7451824fe20dd2b1d2ef76be54b9b9a897d9e8",
+  "expectedSha256": "d18da1d95aa0e47e0a7a05d5ba7451824fe20dd2b1d2ef76be54b9b9a897d9e8",
+  "authenticity": "not-signed-or-independently-authenticated",
+  "extracted": false,
+  "resumed": false,
+  "repaired": false,
+  "inventory": {
+    "physicalEntries": 1164,
+    "ledgerJsonFiles": 581,
+    "directories": 1,
+    "paxHeaders": 582,
+    "appleDoubleFiles": 0
+  },
+  "runId": "8c42fd10-ed6d-401e-b37c-1ab699aafa46",
+  "recordedExecutionSource": "loopback-engineering",
+  "sourceCommit": "f93dbd2d9dfd1cbf20c45a5c650d84e4ee0dafdf",
+  "recordedDirectorySha256": "bcb8a37a60921eaf84c1c0f613c6bf34ec37dd77df5dd8f9aff80696a26e2ab3",
+  "directoryScope": "recorded-only-not-current-extraction-path",
+  "state": "terminal",
+  "terminalStatus": "completed",
+  "eventCount": 290,
+  "decisionCount": 54,
+  "callbackIntents": 54,
+  "oracleCount": 36,
+  "usage": {
+    "complete": true,
+    "knownInputTokens": 5454,
+    "knownOutputTokens": 378,
+    "knownEstimatedCost": 0.0014695560000000006,
+    "currency": "USD",
+    "unknownCalls": 0,
+    "boundary": "recorded-fixture-accounting-not-model-measurement"
+  }
+}

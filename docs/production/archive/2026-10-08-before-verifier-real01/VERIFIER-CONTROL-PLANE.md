@@ -56,8 +56,6 @@ npx tsx scripts/inspect-production-verifier-study.ts --archive docs/production/e
 
 ## 本批与下一步
 
-本批免费工程676/676、浏览器45/45已通过；[首次真实评测](experiments/VERIFIER-REAL-01/RESULT.md)已按页面授权执行一次并在H04非法JSON门禁停止：10请求、43.874秒、声明价估算0.017598132USD、0Oracle。完整配置有18池，但没有完成完整对照，不用free fixture或已有标签填补结果；不自动消费新额度重试。
-
-评委在新设备无需Key即可用结果页的命令核验该真实failed账本；本机运行记录不自动导入/恢复。新模型任务仍需自己在页面填Key、准备并明确启动。真实输出与本批工程分列，旧结论更新前[全文留底](archive/2026-10-08-before-verifier-real01/VERIFIER-CONTROL-PLANE.md)。
+本批仅免费工程/API/浏览器和原归档核验。真实18池对照仍需一次性确认该次完整公开配置及估算额度，再生成新的clean source freeze；不要继承历史任务额度或用本切片的free fixture成绩宣称模型效果。
 
 之后对真实A/B/C的有效选中率、错误接受、弃权、升级比例和完整/未知费用进行归因，再回到真实软件需求交付验证。容器仓库执行、实体摄像头和通用L5不由本评估替代。

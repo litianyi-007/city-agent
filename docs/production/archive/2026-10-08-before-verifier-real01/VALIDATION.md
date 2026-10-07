@@ -1,13 +1,5 @@
 # 第一批工程验证与真实验证
 
-## 当前实际结果（2026-10-08）
-
-源码 `eb83022` 完整免费Node **676/676，906.263秒，零skip**；完整浏览器 **45/45，约1.5分钟**，TypeScript/Vite通过。其后的`aaaac61`仅预登记文义/判定补正，执行源码46项hash不变，从clean HEAD构建、重启后通过实际页面启动唯一已授权真实实验。
-
-[VERIFIER-REAL-01](experiments/VERIFIER-REAL-01/RESULT.md)：10dispatch、73,632/2,505 Token、声明价估算0.017598132USD、43.874秒，11决策后协议失败、43未启动、0Oracle、无重试。完整已知usage不等于质量验证或供应商账单；Jev三个尝试全部升级，不能声称高性价比。原始控制授权/全plan/先行running/终态确认及账本包可跨设备只读核验，独立审计一致。
-
-下列“未调用/尚无入口/Key未配置/待批”均是各自提交的历史状态，不作为当前结论；已提交申报原稿和公开v5保持不变。[此次全文留底](archive/2026-10-08-before-verifier-real01/VALIDATION.md)。
-
 ## 当前补充（2026-10-07，历史段落不回写）
 
 最新[控制面与跨设备只读核验](VERIFIER-CONTROL-PLANE.md)按新source-v2验证；本批没有真实供应商对照，旧640/38仅表示上一提交。新结果在[BATCH-VERIFIER-CONTROL-CHECKS](BATCH-VERIFIER-CONTROL-CHECKS.md)单独追加。原tar包含受限macOS元数据，补充说明不修改原归档/SHA或旧实验结果。[本文更新前留底](archive/2026-10-07-before-verifier-control/VALIDATION.md)。

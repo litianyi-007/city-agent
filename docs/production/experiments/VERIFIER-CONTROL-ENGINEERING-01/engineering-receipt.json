@@ -1,0 +1,8 @@
+{
+  "externalProviderHttpAttempts": 0,
+  "loopbackHttpPosts": 36,
+  "inMemoryJevFetchDispatches": 18,
+  "rejectedFixtureRequests": 0,
+  "actualModelUsage": null,
+  "evidenceBoundary": "Pinned SDK to loopback fake SSE provider, in-memory Jev JSON, native Chromium Oracles. Synthetic decisions/usage, not real model quality or fee evidence."
+}

@@ -1,0 +1,287 @@
+{
+  "version": "verifier-study-control-v1",
+  "preparationId": "c47bbf76-5e8f-42f1-9088-9cb71a4161ff",
+  "run": {
+    "id": "06f0db8b-9dfc-4a5d-94d6-0b3486a7f8db",
+    "status": "running",
+    "executionSource": "real-provider",
+    "bootId": "2be44482-53c5-416c-9c17-16e2694f5d32",
+    "frozenStudySha256": "40e930f3fe815b8809e9016b1a86daba3102df86324c592dd804415ed8049032",
+    "createdAt": "2026-10-07T16:53:10.704Z",
+    "finishedAt": null,
+    "progress": {
+      "ledgerEvents": null,
+      "decisions": null,
+      "calls": null,
+      "oracles": null
+    },
+    "summary": null,
+    "error": null
+  },
+  "consent": {
+    "id": "0ae7dd2c-d9be-4876-a3c9-359d357bc8bb",
+    "frozenStudySha256": "40e930f3fe815b8809e9016b1a86daba3102df86324c592dd804415ed8049032",
+    "status": "granted",
+    "scope": "single-new-study-no-auto-resume",
+    "approvedAt": "2026-10-07T16:53:10.704Z",
+    "estimatedBillingOnlyAcknowledged": true,
+    "jevOutputObservationOnlyAcknowledged": true
+  },
+  "frozenPlan": {
+    "version": "verifier-study-observed-policy-v1",
+    "planId": "b0f43fac-bf5c-44b0-9764-8e815e3f9cdc",
+    "executionSource": "real-provider",
+    "configuration": {
+      "verifier": {
+        "name": "Verifier",
+        "role": "verifier",
+        "provider": "deepseek",
+        "baseUrl": "https://api.deepseek.com",
+        "modelId": "deepseek-flash",
+        "enabled": true,
+        "pricing": {
+          "inputPerMillion": 0.3,
+          "outputPerMillion": 1.2,
+          "currency": "USD"
+        },
+        "id": "cc18586a-8d6b-4c19-950f-308034a0c0b1",
+        "hasApiKey": true
+      },
+      "jev": {
+        "enabled": true,
+        "modelId": "jev-1.13.0",
+        "minConfidence": 0.5,
+        "minScore": 3,
+        "inputPerMillion": 0.042,
+        "outputPerMillion": 0,
+        "currency": "USD",
+        "maxRequests": 24,
+        "timeoutMs": 30000,
+        "hasApiKey": true
+      }
+    },
+    "configurationSha256": "8bb89fb2c812e8b8daf8f95d66589221c0dd179c1a67d52cb2efabad69fd8560",
+    "source": {
+      "commit": "aaaac613cea5c15b3ba0a546457a7eb96e3fd936",
+      "clean": true,
+      "hashes": {
+        "server/production/verifier-wire-preflight.ts": "b76decb0df59c0f211ff50ebf05099b465193de36a4b6be48c60387e856d6c65",
+        "server/production/verifier-study-preflight.ts": "7e2e3e855bcaff9674bf022d22aa30bedec3ebd1e1e56055182b5a595ecd46f4",
+        "scripts/prepare-production-verifier-study.ts": "dddfd933fd2c5ed52cdf56baea42e33cb3a6837708280d40c40033db55f61647",
+        "server/production/verifier-study.ts": "1645358921205c69e6326fd93461c52d1914490bade3979a63ecbca28626ca01",
+        "server/production/verifier-study-ledger.ts": "c90619c55230264ecd309ee5f917ece5f65171514803ee96a66bad3121c7a9c2",
+        "server/production/verifier-study-strategy.ts": "3aae19c39b2dccd48514dd609f8c03ccdd2f03350e77efb909aed23c04c0a924",
+        "server/production/verifier-corpus-preparation.ts": "fd7fbc08c0b33dc6c9f126551f71e6f6576a4674d8a986a9377e2c97824a632a",
+        "server/production/jev.ts": "c8f8315461e739dd00c1f340a27998d759937f79a06430683a27d6aa62e129ca",
+        "server/production/contracts.ts": "e623bf16b3a3ec2204c229ce71d8d6b414d08587a6c43f7a27a8600dc3d87683",
+        "server/production/review-context.ts": "92e2fe0f08dd6bb4ba534dccd93775f0830e947556eea6512f7cffc7afe02074",
+        "server/production/acceptance-preflight.ts": "111c8218c85af5484b5c1472dbf51d91291fa6e41efcdb92a589049ff89d415a",
+        "server/production/output-diagnostics.ts": "52b2059d8617e40bf4ec0f4d6960d960996ba05696b6be4d64ddf599cb5cdd06",
+        "server/production/verifier-scene-oracle.ts": "9358e57df8ab0672d99b613b3a88b01f69079038087113a201fd584180d5f34b",
+        "server/production/camera-gate.ts": "9d4826052d66afe5a3e8e4bbb2a0278520439ebd90b9c9b549103e09fd1e4345",
+        "server/gate.ts": "edb8e5f76a6c9690639f42d06fcf924b03fc4fd05726132d0079c71961125b63",
+        "server/harness.ts": "ba8d14b147760015d36f4fa573bab55f90cc2386b38ffd0f5403f90df8be5007",
+        "server/harness-literal-prompt.mjs": "6c04f63db159bec675069ea72939bbbc225f1d1fcb08200848dc00aef3aa31d2",
+        "server/usage-observer.ts": "1fba7f0ff518b775dd331976eb2996563250cd0593690792cf9283219d6d4f98",
+        "shared/production-verifier-challenge-corpus.ts": "4a7f51692974f9e24f9b73f00ba4de18ad19aa480902f8342d4ea12b53d431a7",
+        "shared/production-verifier-html-corpus-a.ts": "316d992458ea60afed08799b0753a00598a20bea95b2f84eb158b095f4053885",
+        "shared/production-verifier-html-corpus-b.ts": "5a377442dbc4a080d48469791790c11ee379657608c9e5ff7e97b5d317086b42",
+        "shared/production-verifier-scene-corpus.ts": "97bc07440f164981dfda0826564a8b34f01b0c1a8160197ca551cd132a20a761",
+        "shared/production-verifier-rubric.ts": "c14fc32120594b5be815cfc541acfdfff4069ef868f1336ee8a5a63e6030eeca",
+        "shared/production-schema.ts": "05a4883fef91ad1d064460b99e4857528abe4845f25f74a0da421e692c2a1963",
+        "shared/production-coverage.ts": "e007e25af2eeb7aa73788a07a171c92519cd5ef806a32b47a7e45eecd8606333",
+        "shared/production-execution-profile.ts": "b2831b50b710dda61c044da88bdc599329dfec710de51dc9d4f1b2458663b4fb",
+        "shared/jev-schema.ts": "7ceb9518920396c36cc928c788816ad2b75d2388cea18b74c44a6fd4f97137be",
+        "shared/camera-scene-schema.ts": "3c1920ba2fafb0230c40ecc63fbcba5da33fcc7e5f1cf8c08604b0fff97162d1",
+        "shared/camera-scene-runtime.ts": "8c1e88e4e37dfcb8b18f4f9cb82c16affd37f98b7012c90b2e9d8bd2e48a7233",
+        "shared/camera-test-semantics.ts": "139845ba925af107fd49a29b44a681143e84a82278945d74acca8cef9eebc7fd",
+        "shared/camera-asset-manifest.ts": "952ff1fe03cf164d0ec8e155a17303842b2ff7e59e003ab1dfbf93ea98db39ca",
+        "package.json": "8dab70403153a1d8f52a3ddb11fcfcd3ffa92754c8a04df27c6dfa42a30a86e8",
+        "package-lock.json": "e278b75c619b286a72fb8c545863080a5112627669a9fec9202473bb2d92938e",
+        "server/production/verifier-study-source.ts": "ab01aa3ada8ac690bce2abe81344d884c4d9ac72cfccc561f73eb2eced62cd1f",
+        "server/production/verifier-study-observed-policy.ts": "5ebc00c090c4e8b0a42cd1804346b3178fbc3c16e60ec425c6035e14363a5bc4",
+        "server/production/verifier-study-transport.ts": "abd929832863be7c2ded4fa8a9db1af455c51bd29e737e62264786a824861939",
+        "scripts/run-production-verifier-study-engineering.ts": "ac8e9893093033274722f6c55a5b7db4cb0121c8a58362b57cc57fdc114d8ad5",
+        "server/production/store.ts": "ec06c8a66eee374d75de77ee136dd5d2d2586a2a2b1e7d0570e49fe8920a79d7",
+        "shared/camera-hand-worker.ts": "32c535e2ed5827f66d8886543faec3e97e1e7aa9aba673fd50c5ce4458bda540",
+        "server/production/verifier-study-control.ts": "d79d9d6f7414272400b9022bd4a009ef20a484ba3370e39f1aa6f12bdce772e4",
+        "server/production/verifier-study-engineering-fixture.ts": "39304ccea28f3a3d58c574d07596057bf58487e3b198218d19a44f1ee3d4703a",
+        "server/production/index.ts": "d9c93b70e1d4d211514ed1876803efa34687c35f8c3fdb7fd0e73354757ad800",
+        "server/production/provenance.ts": "8253fd5023eb8fcb9eae59feb24411891c987ddf3f3928084800166d4de96357",
+        "config/production-environment.ts": "9f80b92fddbd8d3b1a6b35d427d2bf95e63dc83752670ecfb029646e5afb67fa",
+        "server/production/verifier-study-archive.ts": "c0be74b52ae625126db8333f0782f7360fcf3d1be73e1e8325fc9f3d6cd10cd9",
+        "shared/verifier-study-control-schema.ts": "5a5060df6b3b2f615fa195f08172f6b3ba58af039b69d468f4eb33cb22505467"
+      }
+    },
+    "sourceSha256": "2820a865a5ae7f39c85c8700b5fdded610ce81ae154ede31a73f6f93337e45aa",
+    "poolIds": [
+      "H01",
+      "H02",
+      "H03",
+      "H04",
+      "H05",
+      "H06",
+      "H07",
+      "H08",
+      "H09",
+      "H10",
+      "H11",
+      "H12",
+      "C13",
+      "C14",
+      "C15",
+      "C16",
+      "C17",
+      "C18"
+    ],
+    "strategies": [
+      "baseline",
+      "llm",
+      "jev-cascade"
+    ],
+    "limits": {
+      "maxCalls": 54,
+      "maxInputTokens": 3391488,
+      "maxObservedOutputTokens": 221184,
+      "maxEstimatedCostUsd": 1,
+      "maxDurationMs": 1800000,
+      "oracleTimeoutMs": 120000,
+      "llmTimeoutMs": 120000,
+      "jevTimeoutMs": 30000
+    },
+    "reservations": {
+      "llm": {
+        "inputTokens": 61440,
+        "outputTokens": 4096,
+        "timeoutMs": 120000,
+        "estimatedCostUsd": 0.023347200000000002,
+        "outputPolicy": "vendor-request-max_tokens-4096-and-observed-stop"
+      },
+      "jev": {
+        "inputTokens": 65536,
+        "outputTokens": 4096,
+        "timeoutMs": 30000,
+        "estimatedCostUsd": 0.0027525120000000004,
+        "outputPolicy": "4096-post-response-observation-stop-only; vendor-output-limit-unknown"
+      }
+    },
+    "limitsSha256": "22fa4f62fcf32ea449a38096ec223c7827baa01715d28df38b91820c735b4eb3",
+    "requestSetSha256": "c5e61dcdffd312546e44658e7fd47852d91070551f34dd144ceeb152fb070b64",
+    "poolBindings": [
+      {
+        "poolId": "H01",
+        "requestSha256": "fc707fdf8dd9be2361f381422b19e65041d893532bc8e4573a79cc31e02b6af3",
+        "logicalLlmSha256": "1273f3c028b0681f18082ff43d0fee5a5047cd12f2d3ad5e7b90f3ebf77eeda2",
+        "jevRequestSha256": "63389783192a90fe72a8771c43df9513935a2eaec17e2f308dabf96e311a6562"
+      },
+      {
+        "poolId": "H02",
+        "requestSha256": "0a25ba289192360864ca213d541c4d0aec03a62b3b790cef131ce1d1bc985504",
+        "logicalLlmSha256": "c30089d853fa832938f9463a29928af556111e3f8967b8efb958365d3d464cf5",
+        "jevRequestSha256": "a980aad69cf7279a4b16febe4af9ff59d3a7d0fa77058eb219ba78c1599068f2"
+      },
+      {
+        "poolId": "H03",
+        "requestSha256": "8c895732290a8d71e7e3826e63b726e6344ae37818e0b9256e1e685ae28e914f",
+        "logicalLlmSha256": "9de7208adb6bc614644c0478e3cb26df1360055844f37f503869ef83a2c0291b",
+        "jevRequestSha256": "9db94c076d7544e83cb4f23d841836942201ef29bba9c8c9ede5f9fa65380327"
+      },
+      {
+        "poolId": "H04",
+        "requestSha256": "8b1d932175af8ca9e350201143b488d110a158bac9db15cd371e1f5309225954",
+        "logicalLlmSha256": "a656296a956eb599a7dd3ead13e6dae9f825846ffa1c14bb34082768e39b6af1",
+        "jevRequestSha256": "1094fd09f1842f74137e48c80a9509c812f8cc23471cc3afdb076ff1d4d93657"
+      },
+      {
+        "poolId": "H05",
+        "requestSha256": "0a1737d011dd8105d84034e0c8d4672fff103ffbb1caa1c009eab5e099c71a41",
+        "logicalLlmSha256": "d0a0e0cf2eb09047999d8f86eeca10508b9c8ff8744448502852e135f9f58049",
+        "jevRequestSha256": "746792700c0b0990a602730c3e47c5960c4592dc3f19bfc1b2abcda36e469a90"
+      },
+      {
+        "poolId": "H06",
+        "requestSha256": "885e3d7ca38a0ac1abf66b7e7fdc68ca5e5a77a5acd28b7887bccf4d972f47b9",
+        "logicalLlmSha256": "e8c37a9c38f99b5fc6ff54cfe43dcbbf3ed7927e59718d8f4d746ceec779f361",
+        "jevRequestSha256": "b6f42d7d756842a01e53cc8198b05917c4124fddf41a5f08bedfc24b8693dca9"
+      },
+      {
+        "poolId": "H07",
+        "requestSha256": "f6907640a41490601390886520b1da2244e6dd2be78b25a31575607f76e36a0a",
+        "logicalLlmSha256": "16d881326b3fba1d2594e4f783bf99b492d00519eedef148b9fbac49c9149e80",
+        "jevRequestSha256": "607f1ca078709a05ba7b0bd0a6ebd575dfd5d95fca97f97d92ca4daa8dc97a75"
+      },
+      {
+        "poolId": "H08",
+        "requestSha256": "d7d3b6d1fe718c8f4216a22773b8a296fdfca886f00671dfd8bbfbd8e6fdcd05",
+        "logicalLlmSha256": "8b88efb3ac72bcd1c0160e21591cd2b52da3aab04f0be38b67b2f084a2466fbf",
+        "jevRequestSha256": "6f80a950f04fd0961d15b61b4cf17f332c15adf49e35d95bcc81310bac8c7e89"
+      },
+      {
+        "poolId": "H09",
+        "requestSha256": "b16926f03ed33c5ade580650a6675c556bf5969e5cba9463de318dfed6f23d6b",
+        "logicalLlmSha256": "4bc3b71aa6cc3af6770d74b16d8b2a2d14d706156dd75e3d188e93adc002ab32",
+        "jevRequestSha256": "2c4eec6434802646e3e02a09decfcf9d59be91e800229761bef111dc8add48c6"
+      },
+      {
+        "poolId": "H10",
+        "requestSha256": "44edc3a9499c056f1e0d9d467837a4a6eeb99055a6ebee316920cbc0e88e50e5",
+        "logicalLlmSha256": "92692e8d44f2510589062e33db86e2664f8ec6c781ca90cbeeac905e52f3441b",
+        "jevRequestSha256": "838e48a942ed97e85dbcf737ba1ffbc9d3f6cab308f4e788b0d6af3665c8b3e6"
+      },
+      {
+        "poolId": "H11",
+        "requestSha256": "c5f4d0dfdbb913dd3ec21df78c9a3471269b0b5dd9700336f024d7dee723bb3b",
+        "logicalLlmSha256": "87dd5062a4b1ace85ed9599c1e6f3b744945fe8418d59cc38fd3ccaf68749664",
+        "jevRequestSha256": "d12090dabaad0c82900ab528154bab61948c798b89608c25a9907b93789df0f5"
+      },
+      {
+        "poolId": "H12",
+        "requestSha256": "d89f26ac75a59623cc7e826dee0f43a92b66366273e56abb68a9a4812d8440f7",
+        "logicalLlmSha256": "9fa32a65cf641e9aa7492de752ef35e46b563a2d34ab82f51f2092d9e5a19b9b",
+        "jevRequestSha256": "ecc7162a79bf61cf8814ce984d6130eef4c239b597960fe21c1ba572579b928f"
+      },
+      {
+        "poolId": "C13",
+        "requestSha256": "65b76d6e9c6646a7bd99d250823cd4c9ea9d6e90be245b52b86b97f51e856388",
+        "logicalLlmSha256": "e4d5c69f4f250eb8067a14e38b3ce8a886ddca4bf41803a818e8a68dfc3112f1",
+        "jevRequestSha256": "0f646f83fc76f4915bed44944ab33cd0626e4720419a5c89ba2b99fa5f03a2e0"
+      },
+      {
+        "poolId": "C14",
+        "requestSha256": "7ee4df12abfa57d3bcd9a8742e19fdcd06caa701f1063ba4050da7eec7094372",
+        "logicalLlmSha256": "89691a9d69a7c8f645bd96a0f66b8b541a5e15f085e877858dda797629ee6198",
+        "jevRequestSha256": "1662a6cd386659cbf733ba32b7b6767493f7627cd8d8644c02c46590a0dedeb1"
+      },
+      {
+        "poolId": "C15",
+        "requestSha256": "d3474d5d7f6d6f1f95febb41af92b1352c2e834fe74f6cc1fd3b425058d758d5",
+        "logicalLlmSha256": "5d8a496a2dc6f7ff910d6741b107de6f54460ea05c222b280e3c0345e8e26394",
+        "jevRequestSha256": "0f5ed525137935c7d048d6130daa0035d067df3e288c66e226ee6d09716fb6da"
+      },
+      {
+        "poolId": "C16",
+        "requestSha256": "44d2eb718f5d7314ce1e59ef217335a40828f7d84329a9f82610cd0732ec26cd",
+        "logicalLlmSha256": "12293e135cbdcb952dce291dd6329197633cd52306b181a00b1d9d8c5263d25b",
+        "jevRequestSha256": "c8ec9350b76c36d43032a0f175edfa475630b87f95b11abd82401ceb61c1eff4"
+      },
+      {
+        "poolId": "C17",
+        "requestSha256": "bfb9e5389cd9fbb954646fb68f18f4aee3b63739b48d2a26ccfbd30d5dc16f06",
+        "logicalLlmSha256": "671149a862523775951da74e71204488f677a9d8ed2724221d43e15710602184",
+        "jevRequestSha256": "e3819f92c77434097422f9c3582036d54864a3199389b32a39726c5791d1fe0c"
+      },
+      {
+        "poolId": "C18",
+        "requestSha256": "bdd0744bc7f1ce6858b08db70f00374d126dd927e6dcbcc3cee4ae8185255270",
+        "logicalLlmSha256": "904c79b0cdec65d460d3e89d72e2e2eed7e54f6b3c6c54ce0295613a2b3540db",
+        "jevRequestSha256": "5b5e4aecef11e2d3fc7d826c81a14ae0dfa66f6630a1c18d93781d23692762ef"
+      }
+    ],
+    "consentScope": "single-new-study-no-auto-resume",
+    "candidateRandomization": "not-performed",
+    "seed": null,
+    "accountingBoundary": "Declared-rate estimates and engineering reservations, not guaranteed provider bill/token caps. Observed overrun is retained and stops subsequent requests.",
+    "httpBoundary": "Observed proxy/fetch dispatch attempts, not remote receipt or billing confirmation. In-flight missing observation remains unknown.",
+    "frozenStudySha256": "40e930f3fe815b8809e9016b1a86daba3102df86324c592dd804415ed8049032"
+  }
+}

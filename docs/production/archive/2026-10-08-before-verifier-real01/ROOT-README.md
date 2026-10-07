@@ -1,7 +1,5 @@
 # City Agent
 
-生产线最新实测（2026-10-08）：[控制面工程676/676＋浏览器45/45](docs/production/BATCH-VERIFIER-CONTROL-CHECKS.md)通过；[首次真实Verifier对照](docs/production/experiments/VERIFIER-REAL-01/RESULT.md)10请求后按非法JSON门禁停止，估算0.017598132USD、0Oracle，原件可无Key只读核验，不计模型提升或自主交付成功。[下一批任务](docs/production/NEXT-STEPS.md)优先格式诊断、边界验证与Jev兼容前提；收费授权不自动重用。下文历史记录保留，[本次原文留底](docs/production/archive/2026-10-08-before-verifier-real01/ROOT-README.md)。
-
 最新生产分支切片：[Verifier评估控制面与跨设备只读证据核验](docs/production/VERIFIER-CONTROL-PLANE.md)。本机 **决策设置 → Verifier对照评估** 默认免费工程演练；软件需求仍在 **生产工作台 → 新建自定义需求**。真实评估必须新的冻结配置与页面明确同意，不自动继承旧预算。GitHub静态入口/已提交申报稿不随本批源码自动更新。[更新前全文留底](docs/production/archive/2026-10-07-before-verifier-control/ROOT-README.md)。
 
 ## 当前分支：自主软件生产

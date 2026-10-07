@@ -1,0 +1,93 @@
+{
+  "version": "verifier-study-control-v1",
+  "grantSha256": "80cbe860cd68d7f70b5e238ba26ce27994b985130a027f4d356c96e74f8f8ccb",
+  "run": {
+    "id": "06f0db8b-9dfc-4a5d-94d6-0b3486a7f8db",
+    "status": "failed",
+    "executionSource": "real-provider",
+    "bootId": "2be44482-53c5-416c-9c17-16e2694f5d32",
+    "frozenStudySha256": "40e930f3fe815b8809e9016b1a86daba3102df86324c592dd804415ed8049032",
+    "createdAt": "2026-10-07T16:53:10.704Z",
+    "finishedAt": "2026-10-07T16:53:56.235Z",
+    "progress": {
+      "ledgerEvents": 44,
+      "decisions": 11,
+      "calls": 10,
+      "oracles": 0
+    },
+    "summary": {
+      "version": "verifier-study-observed-v1",
+      "runId": "3f0a88a8-b767-49c0-80d0-71a405e7b533",
+      "executionSource": "real-provider",
+      "cachePolicy": "bypass",
+      "status": "failed",
+      "reason": "Study stopped; inspect retained private ledger for the frozen failure evidence.",
+      "startedAt": "2026-10-07T16:53:11.986Z",
+      "endedAt": "2026-10-07T16:53:55.861Z",
+      "durationMs": 43874,
+      "plannedDecisions": 54,
+      "attemptedDecisions": 11,
+      "notStartedDecisions": 43,
+      "plannedOracles": 36,
+      "attemptedOracles": 0,
+      "completedOracles": 0,
+      "callbackIntents": 10,
+      "actualProviderHttpAttempts": 10,
+      "localFixtureHttpAttempts": null,
+      "actualModelUsage": {
+        "inputTokens": 73632,
+        "outputTokens": 2505,
+        "estimatedCostUsd": 0.017598132
+      },
+      "usage": {
+        "complete": true,
+        "knownInputTokens": 73632,
+        "knownOutputTokens": 2505,
+        "knownEstimatedCost": 0.017598132,
+        "currency": "USD",
+        "unknownCalls": 0,
+        "scope": "observed-provider-declared-rate-estimate-not-bill"
+      },
+      "byStrategy": [
+        {
+          "strategy": "baseline",
+          "planned": 18,
+          "attempted": 4,
+          "accepted": 4,
+          "abstained": 0,
+          "errors": 0,
+          "notStarted": 14,
+          "selectedOraclePass": 0,
+          "selectedOracleFail": 0,
+          "selectedOracleUnknown": 4
+        },
+        {
+          "strategy": "llm",
+          "planned": 18,
+          "attempted": 4,
+          "accepted": 3,
+          "abstained": 0,
+          "errors": 1,
+          "notStarted": 14,
+          "selectedOraclePass": 0,
+          "selectedOracleFail": 0,
+          "selectedOracleUnknown": 3
+        },
+        {
+          "strategy": "jev-cascade",
+          "planned": 18,
+          "attempted": 3,
+          "accepted": 3,
+          "abstained": 0,
+          "errors": 0,
+          "notStarted": 15,
+          "selectedOraclePass": 0,
+          "selectedOracleFail": 0,
+          "selectedOracleUnknown": 3
+        }
+      ],
+      "ledgerTerminalPersisted": true
+    },
+    "error": "Study ended without a completed verdict; retained observations are not a model success."
+  }
+}

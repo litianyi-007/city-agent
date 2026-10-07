@@ -1,13 +1,5 @@
 # 六角色自主软件生产工作区
 
-## 当前结论（2026-10-08）
-
-本机已有可操作的Verifier评测控制面与跨设备只读核验；工程 **676/676 Node＋45/45浏览器**通过。[第一次真实对照](experiments/VERIFIER-REAL-01/RESULT.md)已执行一次，10请求后因非法JSON按协议停止，估算0.017598132USD、无Oracle、无重试；不称模型提升或自主交付成功。主线/Pages/申报原稿不变。
-
-软件需求在[本机生产工作台](http://127.0.0.1:4420/#production)输入；固定18池评测在“决策设置 → Verifier A/B/C评测”。新设备按[安装与入口说明](VERIFIER-CONTROL-PLANE.md)启动，Key由页面自行填写。没有Key也能按[真实证据核验命令](experiments/VERIFIER-REAL-01/RESULT.md#5-核验体验与下一步)查看账本，不会产生模型费用。公开GitHub Pages不是需求研发后端。
-
-下面按历史批次保留状态；最新结果以上述链接为准。[此次修改前全文](archive/2026-10-08-before-verifier-real01/README.md)。
-
 最新切片：[评估准备/显式同意/启动/进度/取消与归档只读核验](VERIFIER-CONTROL-PLANE.md)。软件开发需求仍在生产工作台输入；固定18池选优评估在决策设置页，默认本地替身，不代表自主交付或模型质量。新的源码契约为source-v2，不复用原实验39项source freeze；GitHub静态v5和已提交申报稿不变。下文“尚无API入口”属于上一批时间点。[本次原文留底](archive/2026-10-07-before-verifier-control/README.md)。
 
 最新 VE-04 增量：[原生观测适配器、一次性冻结同意、分引擎预算和取消清理](VERIFIER-OBSERVED-TRANSPORT.md)已经实现，共用旧 study 内核而非另起系统。工程640/640＋浏览器38/38通过，52项专项及独立安全/预算审查另列；真实供应商实验不从提案自动启动。公开v5和已提交申报稿保持不变。本次修改前[全文留底](archive/2026-10-07-before-verifier-observed/README.md)。
