@@ -6,6 +6,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { test, type TestContext } from 'node:test';
 import express from 'express';
+import { chromium } from 'playwright';
 import { cameraSceneSchema, type CameraSceneConfig } from '../shared/camera-scene-schema.js';
 import { productionRunInputSchema } from '../shared/production-schema.js';
 import { CAMERA_ASSET_MANIFEST } from '../shared/camera-asset-manifest.js';
@@ -98,4 +99,15 @@ test('camera repairs stay bounded with identical frozen tests/runtime and cannot
 test('camera cancellation aborts pending Gate and preserves intervention, with no hidden continuation', async t => {
   let entered!: () => void; const started = new Promise<void>(resolve => { entered = resolve; }); let stopped = false;
   const { request, input, wait } = await setup(t, { cameraGate: async (_scene, _checks, signal) => { entered(); return new Promise((_resolve, reject) => signal!.addEventListener('abort', () => { stopped = true; reject(new DOMException('Cancelled', 'AbortError')); }, { once: true })); } }); const queued = await request('/runs', input, 'POST'); const id = (await queued.json()).id; await started; await request(`/runs/${id}/cancel`, undefined, 'POST'); const run = await wait(id); assert.equal(run.status, 'cancelled'); assert.equal(stopped, true); assert.equal(run.interventions.length, 1); assert.equal(run.cameraVerification?.boundedScenePassed, false); assert.equal(run.calls.some(call => call.phase === 'feedback-0'), false);
+});
+
+test('camera Gate preserves CSS environment failure and types its own mandatory-browser launch failure', async () => {
+  const original = chromium.launch;
+  try {
+    chromium.launch = async () => { throw new Error('Injected missing Chromium'); };
+    const inherited = await runCameraSceneGate(scene, checks); assert.equal(inherited.failureKind, 'infrastructure'); assert.equal(inherited.passed, false); assert.equal(inherited.evidenceScope, 'scene-behavior-synthetic');
+    let calls = 0;
+    chromium.launch = async options => { if (++calls === 2) throw new Error('Injected mandatory browser unavailable'); return original.call(chromium, options); };
+    const mandatory = await runCameraSceneGate(scene, checks); assert.equal(calls, 2); assert.equal(mandatory.failureKind, 'infrastructure'); assert.equal(mandatory.passed, false); assert.equal(mandatory.checks.at(-1)!.name, '强制场景行为Gate');
+  } finally { chromium.launch = original; }
 });

@@ -78,7 +78,7 @@ test('Jev unknown usage stops after one decision request and records unknown ins
 test('Jev rejection and errors fail closed, and uncertain mock decisions cannot fabricate LLM fallback', async t => {
   for (const status of ['rejected', 'error', 'uncertain'] as const) {
     const { request, input, configure, wait } = await setup(t, { jevCall: async (config, context) => evaluation(config, context, status), roleCall: async () => { throw new Error('Unwanted fallback model call'); } }); configure(); const run = await wait((await (await request('/runs', input(), 'POST')).json()).id);
-    assert.equal(run.status, 'failed'); assert.equal(run.jevCalls?.length, 1); assert.equal(run.calls.length, 1); assert.equal(run.calls.some(call => call.role === 'verifier'), false); assert.equal(run.verifications[0].decision, 'abstain'); assert.match(run.error!, new RegExp(status));
+    assert.equal(run.status, 'failed'); assert.equal(run.jevCalls?.length, status === 'rejected' ? 3 : 1); assert.equal(run.calls.length, status === 'rejected' ? 3 : 1); assert.equal(run.repairs, status === 'rejected' ? 2 : 0); assert.equal(run.calls.some(call => call.role === 'verifier'), false); assert.equal(run.verifications[0].decision, 'abstain'); assert.match(run.error!, new RegExp(status));
   }
 });
 

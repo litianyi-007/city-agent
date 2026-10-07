@@ -3,10 +3,10 @@ import { acceptanceSchema, type AcceptanceCheck } from '../gate.js';
 import type { ProductionCapability } from '../../shared/production-schema.js';
 import { PRODUCTION_VERIFIER_VERSION } from '../../shared/production-verifier-rubric.js';
 
-export const PROMPT_VERSION = 'production-html-v4';
+export const PROMPT_VERSION = 'production-html-v5';
 export const ACCEPTANCE_CONTRACT_VERSION = 'production-acceptance-v2';
 export const CRITERIA_VERSION = PRODUCTION_VERIFIER_VERSION;
-export const CAMERA_PROMPT_VERSION = 'production-camera-scene-v3';
+export const CAMERA_PROMPT_VERSION = 'production-camera-scene-v4';
 export const CAMERA_ACCEPTANCE_VERSION = 'production-camera-acceptance-v1';
 export const CAMERA_MANDATORY_CHECKS_VERSION = 'camera-scene-behavior-v1';
 export const productSchema = z.object({ goal: z.string().min(3).max(5000), scope: z.literal('offline-single-html'), acceptance: z.array(z.string().min(1).max(1000)).min(1).max(12), exclusions: z.array(z.string().max(500)).max(12) }).strict();

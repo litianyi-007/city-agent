@@ -4,7 +4,7 @@ import { CAMERA_RUNTIME_VERSION, CAMERA_RUNTIME_SOURCE, CAMERA_GATE_RUNTIME_SOUR
 import { CAMERA_HAND_WORKER_VERSION, CAMERA_HAND_WORKER_SOURCE } from '../../shared/camera-hand-worker.js';
 import { CAMERA_ASSET_MANIFEST } from '../../shared/camera-asset-manifest.js';
 import type { ProductionGate } from '../../shared/production-schema.js';
-import { runGate, type AcceptanceCheck } from '../gate.js';
+import { GateInfrastructureError, runGate, type AcceptanceCheck } from '../gate.js';
 import { CAMERA_MANDATORY_CHECKS_VERSION } from './contracts.js';
 import { hash } from './store.js';
 
@@ -30,7 +30,7 @@ export async function runCameraSceneGate(input: CameraSceneConfig, checks: Accep
   if (!cssGate.passed) return { ...cssGate, evidenceScope: 'scene-behavior-synthetic', summary: '冻结场景DOM验收未通过；没有声称识别模型或物理摄像头完成验收。' };
   const background = scene.background.toLowerCase();
   if (scene.objects.every(object => object.color.toLowerCase() === background) && (scene.snowCount === 0 || scene.palette.every(color => color.toLowerCase() === background))) return { passed: false, checks: [...cssGate.checks, { name: '强制：可见几何与背景分离', passed: false, detail: 'Canvas背景渐变不算粒子绘制证据；所有粒子颜色与背景相同，无法验收可见几何。' }], evidenceScope: 'scene-behavior-synthetic', summary: '场景缺少可验证的可见粒子；没有降低门禁。' };
-  const results = [...cssGate.checks]; let browser: Browser | undefined; let operation: Promise<void> | undefined; let stopping = false; let timedOut = false;
+  const results = [...cssGate.checks]; let browser: Browser | undefined; let operation: Promise<void> | undefined; let stopping = false; let timedOut = false; let environmentReady = false; let browserDisconnected = false;
   let abortListener: (() => void) | undefined; let closePromise: Promise<void> | undefined;
   const close = () => (closePromise ??= browser?.close() ?? Promise.resolve());
   let rejectStopped!: (error: Error) => void;
@@ -44,11 +44,13 @@ export async function runCameraSceneGate(input: CameraSceneConfig, checks: Accep
   try {
     operation = (async () => {
       browser = await chromium.launch({ headless: true, timeout: 8000, args: ['--js-flags=--max-old-space-size=128'] });
+      browser.on('disconnected', () => { if (!stopping) browserDisconnected = true; });
       if (stopping || signal?.aborted) { await close(); throw new DOMException('场景Gate已停止', 'AbortError'); }
       const context = await browser.newContext({ viewport: { width: 1280, height: 900 }, reducedMotion: 'reduce', acceptDownloads: false });
       const faults: string[] = []; let served = false;
       await context.route('**/*', async route => { const request = route.request(); if (!served && request.isNavigationRequest() && request.url() === url) { served = true; await route.fulfill({ contentType: 'text/html', headers: { 'content-security-policy': csp }, body: html }); } else { faults.push('未授权网络或导航'); await route.abort('blockedbyclient'); } });
       const page = await context.newPage(); page.setDefaultTimeout(2000);
+      environmentReady = true;
       context.on('page', popup => { faults.push('弹窗'); void popup.close().catch(() => undefined); });
       page.on('pageerror', () => faults.push('可信运行时JavaScript错误'));
       page.on('download', download => { faults.push('下载'); void download.cancel(); });
@@ -85,6 +87,6 @@ export async function runCameraSceneGate(input: CameraSceneConfig, checks: Accep
   } catch (error) {
     if (signal?.aborted) throw new DOMException('场景行为Gate已取消', 'AbortError');
     results.push({ name: '强制场景行为Gate', passed: false, detail: error instanceof Error ? error.message : String(error) });
-    return { passed: false, checks: results, evidenceScope: 'scene-behavior-synthetic', summary: '场景行为验收失败；没有放宽冻结门禁或替代真实摄像头验收。' };
+    return { passed: false, ...(timedOut ? { failureKind: 'timeout' as const } : !environmentReady || browserDisconnected || error instanceof GateInfrastructureError ? { failureKind: 'infrastructure' as const } : {}), checks: results, evidenceScope: 'scene-behavior-synthetic', summary: '场景行为验收失败；没有放宽冻结门禁或替代真实摄像头验收。' };
   } finally { stopping = true; clearTimeout(timeout); if (abortListener) signal?.removeEventListener('abort', abortListener); if (browser) await close().catch(() => undefined); await operation?.catch(() => undefined); }
 }

@@ -88,7 +88,7 @@ test('unknown usage stops live after the first paid call and remains unknown, ne
 
 test('invalid candidates cause abstention, not a template fallback or silent verifier approval', async t => {
   const { request, input, configure, wait } = await setup(t, { roleCall: async () => ({ text: '{bad-json', inputTokens: 10, outputTokens: 10, usageReported: true, harness: 'test' }) }); configure();
-  const queued = await (await request('/runs', input({ mode: 'live', budgetAuthorized: true }), 'POST')).json(); const run = await wait(queued.id); assert.equal(run.status, 'failed'); assert.equal(run.calls.length, 1); assert.equal(run.verifications[0].decision, 'abstain'); assert.equal(run.artifacts.some(artifact => artifact.name === 'index.html'), false);
+  const queued = await (await request('/runs', input({ mode: 'live', budgetAuthorized: true }), 'POST')).json(); const run = await wait(queued.id); assert.equal(run.status, 'failed'); assert.equal(run.calls.length, 3); assert.equal(run.repairs, 2); assert.equal(run.repairHistory?.length, 2); assert.match(run.error!, /全局自动返修次数耗尽/); assert.equal(run.verifications[0].decision, 'abstain'); assert.equal(run.artifacts.some(artifact => artifact.name === 'index.html'), false);
 });
 
 test('bounded PM feedback preserves frozen gate and stops after exactly two automatic repairs', async t => {
