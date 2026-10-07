@@ -1,0 +1,1332 @@
+{
+  "version": "verifier-challenge-preparation-v1",
+  "evidenceKind": "outer-authored-challenge-preparation",
+  "status": "corpus-only-not-a-funded-frozen-model-study",
+  "ordering": "preparation-source-order-not-final-randomization",
+  "poolCount": 18,
+  "candidateCount": 36,
+  "modelRequests": 0,
+  "actualModelEffect": null,
+  "actualModelUsage": null,
+  "actualModelCost": null,
+  "bytePreflight": {
+    "valid": true,
+    "limits": {
+      "jevPerQuestion": 32000,
+      "jevTotal": 64000,
+      "logicalLlm": 60000
+    },
+    "maxJevPerQuestion": 20223,
+    "maxJevTotal": 24992,
+    "maxLogicalLlm": 28708
+  },
+  "pools": [
+    {
+      "poolId": "H01",
+      "capability": "offline-single-html",
+      "frozenHash": "3c1eb38a703740c47b9e282311b4d1be780561ff0b3b890bb4c2cdb4f276f2e2",
+      "checksSha256": "e8b464e579bde92a45687c803fb55b11cb7090b995f47a14b44140404f929437",
+      "requirementsSha256": null,
+      "candidates": [
+        {
+          "id": "cand-f15c",
+          "candidateValueJsonSha256": "183baebe1dd9eb178384a7f76b14e60b2db6e93bef20dbe80f93b8c0e8d02fa3",
+          "candidateValueJsonBytes": 2129,
+          "sourceSerialization": "JSON.stringify(value)",
+          "htmlUtf8Sha256": "cddd08cca60439d2e8bfb2b9cafee9296f24d59625392a40f85f895c298a32ff",
+          "htmlUtf8Bytes": 2080
+        },
+        {
+          "id": "cand-62d8",
+          "candidateValueJsonSha256": "a1d05d5ef26baa65d645834df8f76bac03a0cefefe2592148d0f224261307b3f",
+          "candidateValueJsonBytes": 2129,
+          "sourceSerialization": "JSON.stringify(value)",
+          "htmlUtf8Sha256": "d0747326cd5b87951c4f79a29c7cae5eda2e524729c0c896446afde47c0576a2",
+          "htmlUtf8Bytes": 2080
+        }
+      ],
+      "promptVersion": "production-html-v10",
+      "acceptanceVersion": "production-acceptance-v3",
+      "validationContract": {
+        "planningLoopVersion": "production-planning-loop-v1",
+        "reviewContextVersion": "production-review-context-v2",
+        "htmlExecutionProfileVersion": "production-html-execution-v1",
+        "outputDiagnosticsVersion": "production-json-diagnostics-v1",
+        "harnessPromptTransportVersion": "harness-literal-prompt-v1",
+        "harnessJsonOutputVersion": "harness-json-output-v1",
+        "responseFormatPolicy": "deepseek-json-object-other-prompt-only",
+        "semanticsVersion": "production-acceptance-semantic-v2",
+        "jevRequestLayoutVersion": "jev-request-layout-v2",
+        "coverage": {
+          "version": "production-coverage-owners-v1",
+          "capability": "offline-single-html",
+          "owners": {
+            "hostSchema": {
+              "required": true,
+              "scope": "Complete inline HTML and strict test/verifier schemas; not business correctness."
+            },
+            "roleCss": {
+              "required": true,
+              "scope": "All in-scope business behavior independently frozen and actually executed in restricted Chromium, including exact numeric results and edge cases. No platform template is evidence for generated code."
+            },
+            "platformMandatoryGate": {
+              "required": true,
+              "scope": "Restricted browser network/navigation/error/timeout policies; no host execution or arbitrary repository support."
+            }
+          },
+          "evidenceRule": "This contract assigns obligations only. A claimed owner or engineering fixture does not pass a business requirement. Final delivery requires actual immutable checks; unknown and deferred coverage never become true automatically."
+        }
+      },
+      "validationContractSha256": "1429cc814e2be493f47b1add958182faabef466c1028495c8b9e853a4434eec1",
+      "rubricVersion": "verifier-phase-ordinal-v4",
+      "logicalLlmPromptBytes": 27384,
+      "logicalLlmPromptSha256": "1273f3c028b0681f18082ff43d0fee5a5047cd12f2d3ad5e7b90f3ebf77eeda2",
+      "jevStateBytes": 18208,
+      "jevMaxQuestionBytes": 691,
+      "jevPerQuestionBytes": 18899,
+      "jevTotalBytes": 23668,
+      "jevRequestSha256": "63389783192a90fe72a8771c43df9513935a2eaec17e2f308dabf96e311a6562",
+      "requestEvidence": "offline-serialized-never-dispatched",
+      "llmTransportBoundary": "logical system/user only; final provider/model parameters and full wire request are not frozen or measured"
+    },
+    {
+      "poolId": "H02",
+      "capability": "offline-single-html",
+      "frozenHash": "23a40aa069720a12f9b905a338e46c932c284f27841afb221ae149aa5e3e4731",
+      "checksSha256": "6789cad4faa41320450900ac63c27403b9c3470457a4292fea084e1a668252cc",
+      "requirementsSha256": null,
+      "candidates": [
+        {
+          "id": "cand-7ab2",
+          "candidateValueJsonSha256": "cd1114b9e1a1bb1b5ec078480942fbe9563af7cb3f0b602dcee57f198fa610f6",
+          "candidateValueJsonBytes": 2181,
+          "sourceSerialization": "JSON.stringify(value)",
+          "htmlUtf8Sha256": "41bf44e562a8d3cead2db08072878f199d171cc91b153b0869a9f31a85cee745",
+          "htmlUtf8Bytes": 2123
+        },
+        {
+          "id": "cand-d90e",
+          "candidateValueJsonSha256": "f4f700a716edc9db0965397ea3e6a96fb4aacc66ae29df0208c9e707388d6f9d",
+          "candidateValueJsonBytes": 2178,
+          "sourceSerialization": "JSON.stringify(value)",
+          "htmlUtf8Sha256": "f8b9ea8683b10b9480a9a096645d672a552e4375ac28deeb79bfbf3d52b2685b",
+          "htmlUtf8Bytes": 2120
+        }
+      ],
+      "promptVersion": "production-html-v10",
+      "acceptanceVersion": "production-acceptance-v3",
+      "validationContract": {
+        "planningLoopVersion": "production-planning-loop-v1",
+        "reviewContextVersion": "production-review-context-v2",
+        "htmlExecutionProfileVersion": "production-html-execution-v1",
+        "outputDiagnosticsVersion": "production-json-diagnostics-v1",
+        "harnessPromptTransportVersion": "harness-literal-prompt-v1",
+        "harnessJsonOutputVersion": "harness-json-output-v1",
+        "responseFormatPolicy": "deepseek-json-object-other-prompt-only",
+        "semanticsVersion": "production-acceptance-semantic-v2",
+        "jevRequestLayoutVersion": "jev-request-layout-v2",
+        "coverage": {
+          "version": "production-coverage-owners-v1",
+          "capability": "offline-single-html",
+          "owners": {
+            "hostSchema": {
+              "required": true,
+              "scope": "Complete inline HTML and strict test/verifier schemas; not business correctness."
+            },
+            "roleCss": {
+              "required": true,
+              "scope": "All in-scope business behavior independently frozen and actually executed in restricted Chromium, including exact numeric results and edge cases. No platform template is evidence for generated code."
+            },
+            "platformMandatoryGate": {
+              "required": true,
+              "scope": "Restricted browser network/navigation/error/timeout policies; no host execution or arbitrary repository support."
+            }
+          },
+          "evidenceRule": "This contract assigns obligations only. A claimed owner or engineering fixture does not pass a business requirement. Final delivery requires actual immutable checks; unknown and deferred coverage never become true automatically."
+        }
+      },
+      "validationContractSha256": "1429cc814e2be493f47b1add958182faabef466c1028495c8b9e853a4434eec1",
+      "rubricVersion": "verifier-phase-ordinal-v4",
+      "logicalLlmPromptBytes": 26651,
+      "logicalLlmPromptSha256": "c30089d853fa832938f9463a29928af556111e3f8967b8efb958365d3d464cf5",
+      "jevStateBytes": 17475,
+      "jevMaxQuestionBytes": 691,
+      "jevPerQuestionBytes": 18166,
+      "jevTotalBytes": 22935,
+      "jevRequestSha256": "a980aad69cf7279a4b16febe4af9ff59d3a7d0fa77058eb219ba78c1599068f2",
+      "requestEvidence": "offline-serialized-never-dispatched",
+      "llmTransportBoundary": "logical system/user only; final provider/model parameters and full wire request are not frozen or measured"
+    },
+    {
+      "poolId": "H03",
+      "capability": "offline-single-html",
+      "frozenHash": "4b0f411187e2e97e9137ab1d912c2b8bbe1dcf352303758c17165bdb9188f84f",
+      "checksSha256": "24b5858b7eb3eeaed1fc0f3c7d6319f0611e129d004a4b31bd4d81c84f68439b",
+      "requirementsSha256": null,
+      "candidates": [
+        {
+          "id": "cand-3e91",
+          "candidateValueJsonSha256": "7586f8daaee84119fc58b3665e84ac1399bcfce259c11ca9e9a5b05be18a9722",
+          "candidateValueJsonBytes": 2341,
+          "sourceSerialization": "JSON.stringify(value)",
+          "htmlUtf8Sha256": "dde54f20da86f75e7706c9c9e289f7223dd51e4b281d596bc8a022d0c621a6bc",
+          "htmlUtf8Bytes": 2281
+        },
+        {
+          "id": "cand-80c4",
+          "candidateValueJsonSha256": "49686c56a55b4721c48e992af8d5b59c3e981192c47a4d458b082cba0fec6bfd",
+          "candidateValueJsonBytes": 2341,
+          "sourceSerialization": "JSON.stringify(value)",
+          "htmlUtf8Sha256": "4d55dfe900d8f02ec99d312ed1ab8e54d4d1fcf47233fbb4413d63707b71a18b",
+          "htmlUtf8Bytes": 2281
+        }
+      ],
+      "promptVersion": "production-html-v10",
+      "acceptanceVersion": "production-acceptance-v3",
+      "validationContract": {
+        "planningLoopVersion": "production-planning-loop-v1",
+        "reviewContextVersion": "production-review-context-v2",
+        "htmlExecutionProfileVersion": "production-html-execution-v1",
+        "outputDiagnosticsVersion": "production-json-diagnostics-v1",
+        "harnessPromptTransportVersion": "harness-literal-prompt-v1",
+        "harnessJsonOutputVersion": "harness-json-output-v1",
+        "responseFormatPolicy": "deepseek-json-object-other-prompt-only",
+        "semanticsVersion": "production-acceptance-semantic-v2",
+        "jevRequestLayoutVersion": "jev-request-layout-v2",
+        "coverage": {
+          "version": "production-coverage-owners-v1",
+          "capability": "offline-single-html",
+          "owners": {
+            "hostSchema": {
+              "required": true,
+              "scope": "Complete inline HTML and strict test/verifier schemas; not business correctness."
+            },
+            "roleCss": {
+              "required": true,
+              "scope": "All in-scope business behavior independently frozen and actually executed in restricted Chromium, including exact numeric results and edge cases. No platform template is evidence for generated code."
+            },
+            "platformMandatoryGate": {
+              "required": true,
+              "scope": "Restricted browser network/navigation/error/timeout policies; no host execution or arbitrary repository support."
+            }
+          },
+          "evidenceRule": "This contract assigns obligations only. A claimed owner or engineering fixture does not pass a business requirement. Final delivery requires actual immutable checks; unknown and deferred coverage never become true automatically."
+        }
+      },
+      "validationContractSha256": "1429cc814e2be493f47b1add958182faabef466c1028495c8b9e853a4434eec1",
+      "rubricVersion": "verifier-phase-ordinal-v4",
+      "logicalLlmPromptBytes": 28266,
+      "logicalLlmPromptSha256": "9de7208adb6bc614644c0478e3cb26df1360055844f37f503869ef83a2c0291b",
+      "jevStateBytes": 19090,
+      "jevMaxQuestionBytes": 691,
+      "jevPerQuestionBytes": 19781,
+      "jevTotalBytes": 24550,
+      "jevRequestSha256": "9db94c076d7544e83cb4f23d841836942201ef29bba9c8c9ede5f9fa65380327",
+      "requestEvidence": "offline-serialized-never-dispatched",
+      "llmTransportBoundary": "logical system/user only; final provider/model parameters and full wire request are not frozen or measured"
+    },
+    {
+      "poolId": "H04",
+      "capability": "offline-single-html",
+      "frozenHash": "973a7dac5fef1f063968270a326efc82bb87cb1dadb6fff643d5b9f7b089faf4",
+      "checksSha256": "1175dbc9a0e73739ddbf51e857270a60a502da2eb198a09ae3a304fc14113674",
+      "requirementsSha256": null,
+      "candidates": [
+        {
+          "id": "cand-49fe",
+          "candidateValueJsonSha256": "c6d5a947ab219d58d34b62e5d6fd79bbb4b3f2b9d4e6e0a48387abd052b79ba2",
+          "candidateValueJsonBytes": 2532,
+          "sourceSerialization": "JSON.stringify(value)",
+          "htmlUtf8Sha256": "c5b621e48e15753e6cc8f122e0b8bf9c85716d5f00d9d19d9001d991385b6e8b",
+          "htmlUtf8Bytes": 2473
+        },
+        {
+          "id": "cand-ac26",
+          "candidateValueJsonSha256": "004884fe9b09bedb74b7836ef3f3c3b362c04f7d90ce6d44f51cdaa04bb6aecf",
+          "candidateValueJsonBytes": 2886,
+          "sourceSerialization": "JSON.stringify(value)",
+          "htmlUtf8Sha256": "974ace254b1fd8af2aa9bf2a9b9ad3f6fa0ad18d9ce78f7aea887b1f8a36922e",
+          "htmlUtf8Bytes": 2827
+        }
+      ],
+      "promptVersion": "production-html-v10",
+      "acceptanceVersion": "production-acceptance-v3",
+      "validationContract": {
+        "planningLoopVersion": "production-planning-loop-v1",
+        "reviewContextVersion": "production-review-context-v2",
+        "htmlExecutionProfileVersion": "production-html-execution-v1",
+        "outputDiagnosticsVersion": "production-json-diagnostics-v1",
+        "harnessPromptTransportVersion": "harness-literal-prompt-v1",
+        "harnessJsonOutputVersion": "harness-json-output-v1",
+        "responseFormatPolicy": "deepseek-json-object-other-prompt-only",
+        "semanticsVersion": "production-acceptance-semantic-v2",
+        "jevRequestLayoutVersion": "jev-request-layout-v2",
+        "coverage": {
+          "version": "production-coverage-owners-v1",
+          "capability": "offline-single-html",
+          "owners": {
+            "hostSchema": {
+              "required": true,
+              "scope": "Complete inline HTML and strict test/verifier schemas; not business correctness."
+            },
+            "roleCss": {
+              "required": true,
+              "scope": "All in-scope business behavior independently frozen and actually executed in restricted Chromium, including exact numeric results and edge cases. No platform template is evidence for generated code."
+            },
+            "platformMandatoryGate": {
+              "required": true,
+              "scope": "Restricted browser network/navigation/error/timeout policies; no host execution or arbitrary repository support."
+            }
+          },
+          "evidenceRule": "This contract assigns obligations only. A claimed owner or engineering fixture does not pass a business requirement. Final delivery requires actual immutable checks; unknown and deferred coverage never become true automatically."
+        }
+      },
+      "validationContractSha256": "1429cc814e2be493f47b1add958182faabef466c1028495c8b9e853a4434eec1",
+      "rubricVersion": "verifier-phase-ordinal-v4",
+      "logicalLlmPromptBytes": 27279,
+      "logicalLlmPromptSha256": "a656296a956eb599a7dd3ead13e6dae9f825846ffa1c14bb34082768e39b6af1",
+      "jevStateBytes": 18103,
+      "jevMaxQuestionBytes": 691,
+      "jevPerQuestionBytes": 18794,
+      "jevTotalBytes": 23563,
+      "jevRequestSha256": "1094fd09f1842f74137e48c80a9509c812f8cc23471cc3afdb076ff1d4d93657",
+      "requestEvidence": "offline-serialized-never-dispatched",
+      "llmTransportBoundary": "logical system/user only; final provider/model parameters and full wire request are not frozen or measured"
+    },
+    {
+      "poolId": "H05",
+      "capability": "offline-single-html",
+      "frozenHash": "e3e7e9fdb4632d27bb08de12af21f45a275e1e7797db06a9cccad7db5d5c017b",
+      "checksSha256": "d7b2d3122cb73b218d8a0f0a73c4eb19612197c3d537f5ca9030e32aba786be1",
+      "requirementsSha256": null,
+      "candidates": [
+        {
+          "id": "cand-6b07",
+          "candidateValueJsonSha256": "3d8ba57ded93248134d7b9c2f05c02042678e58337f8be8f9560a84beff0b0f9",
+          "candidateValueJsonBytes": 2493,
+          "sourceSerialization": "JSON.stringify(value)",
+          "htmlUtf8Sha256": "d932f384676dfa7d22c480043cb61a733cbcdeffbbe7c20a9d02dd8edc1e2730",
+          "htmlUtf8Bytes": 2441
+        },
+        {
+          "id": "cand-c8a3",
+          "candidateValueJsonSha256": "b4bccbeae2e922d1c4da34d81fbf029746ee912f90630807a8bfc48faf5b77be",
+          "candidateValueJsonBytes": 2526,
+          "sourceSerialization": "JSON.stringify(value)",
+          "htmlUtf8Sha256": "96e20334c206c60989255bd4c1ba1ade253c0c845d5d836c9dcb039804e900e9",
+          "htmlUtf8Bytes": 2474
+        }
+      ],
+      "promptVersion": "production-html-v10",
+      "acceptanceVersion": "production-acceptance-v3",
+      "validationContract": {
+        "planningLoopVersion": "production-planning-loop-v1",
+        "reviewContextVersion": "production-review-context-v2",
+        "htmlExecutionProfileVersion": "production-html-execution-v1",
+        "outputDiagnosticsVersion": "production-json-diagnostics-v1",
+        "harnessPromptTransportVersion": "harness-literal-prompt-v1",
+        "harnessJsonOutputVersion": "harness-json-output-v1",
+        "responseFormatPolicy": "deepseek-json-object-other-prompt-only",
+        "semanticsVersion": "production-acceptance-semantic-v2",
+        "jevRequestLayoutVersion": "jev-request-layout-v2",
+        "coverage": {
+          "version": "production-coverage-owners-v1",
+          "capability": "offline-single-html",
+          "owners": {
+            "hostSchema": {
+              "required": true,
+              "scope": "Complete inline HTML and strict test/verifier schemas; not business correctness."
+            },
+            "roleCss": {
+              "required": true,
+              "scope": "All in-scope business behavior independently frozen and actually executed in restricted Chromium, including exact numeric results and edge cases. No platform template is evidence for generated code."
+            },
+            "platformMandatoryGate": {
+              "required": true,
+              "scope": "Restricted browser network/navigation/error/timeout policies; no host execution or arbitrary repository support."
+            }
+          },
+          "evidenceRule": "This contract assigns obligations only. A claimed owner or engineering fixture does not pass a business requirement. Final delivery requires actual immutable checks; unknown and deferred coverage never become true automatically."
+        }
+      },
+      "validationContractSha256": "1429cc814e2be493f47b1add958182faabef466c1028495c8b9e853a4434eec1",
+      "rubricVersion": "verifier-phase-ordinal-v4",
+      "logicalLlmPromptBytes": 27485,
+      "logicalLlmPromptSha256": "d0a0e0cf2eb09047999d8f86eeca10508b9c8ff8744448502852e135f9f58049",
+      "jevStateBytes": 18309,
+      "jevMaxQuestionBytes": 691,
+      "jevPerQuestionBytes": 19000,
+      "jevTotalBytes": 23769,
+      "jevRequestSha256": "746792700c0b0990a602730c3e47c5960c4592dc3f19bfc1b2abcda36e469a90",
+      "requestEvidence": "offline-serialized-never-dispatched",
+      "llmTransportBoundary": "logical system/user only; final provider/model parameters and full wire request are not frozen or measured"
+    },
+    {
+      "poolId": "H06",
+      "capability": "offline-single-html",
+      "frozenHash": "e0e50c027a96277f82c89a8226bfe082b3b0203099669c517888ec432658a592",
+      "checksSha256": "a85fa0e4932f5fdbf6a759e355d7ff76fccac8184924c83e916b4c7443a4a1fe",
+      "requirementsSha256": null,
+      "candidates": [
+        {
+          "id": "cand-e5d2",
+          "candidateValueJsonSha256": "9bec4a9588ddfc8e74499be70ff7df41ce464c8b8b9b2674ee779d6e8b506f60",
+          "candidateValueJsonBytes": 2526,
+          "sourceSerialization": "JSON.stringify(value)",
+          "htmlUtf8Sha256": "a7cc256e02829920aea5579470f0b7fa5f89fab183674faa1607be51c3e30fbb",
+          "htmlUtf8Bytes": 2480
+        },
+        {
+          "id": "cand-19f4",
+          "candidateValueJsonSha256": "c4b0d27a785dfddfe28c50a06a49c17d194590c6af046306971f63f31cf6a324",
+          "candidateValueJsonBytes": 2535,
+          "sourceSerialization": "JSON.stringify(value)",
+          "htmlUtf8Sha256": "3fff00b13d1fbe9b091b6bb8b1027c96b5eaf2da431b9b785730d1ec93e074a0",
+          "htmlUtf8Bytes": 2489
+        }
+      ],
+      "promptVersion": "production-html-v10",
+      "acceptanceVersion": "production-acceptance-v3",
+      "validationContract": {
+        "planningLoopVersion": "production-planning-loop-v1",
+        "reviewContextVersion": "production-review-context-v2",
+        "htmlExecutionProfileVersion": "production-html-execution-v1",
+        "outputDiagnosticsVersion": "production-json-diagnostics-v1",
+        "harnessPromptTransportVersion": "harness-literal-prompt-v1",
+        "harnessJsonOutputVersion": "harness-json-output-v1",
+        "responseFormatPolicy": "deepseek-json-object-other-prompt-only",
+        "semanticsVersion": "production-acceptance-semantic-v2",
+        "jevRequestLayoutVersion": "jev-request-layout-v2",
+        "coverage": {
+          "version": "production-coverage-owners-v1",
+          "capability": "offline-single-html",
+          "owners": {
+            "hostSchema": {
+              "required": true,
+              "scope": "Complete inline HTML and strict test/verifier schemas; not business correctness."
+            },
+            "roleCss": {
+              "required": true,
+              "scope": "All in-scope business behavior independently frozen and actually executed in restricted Chromium, including exact numeric results and edge cases. No platform template is evidence for generated code."
+            },
+            "platformMandatoryGate": {
+              "required": true,
+              "scope": "Restricted browser network/navigation/error/timeout policies; no host execution or arbitrary repository support."
+            }
+          },
+          "evidenceRule": "This contract assigns obligations only. A claimed owner or engineering fixture does not pass a business requirement. Final delivery requires actual immutable checks; unknown and deferred coverage never become true automatically."
+        }
+      },
+      "validationContractSha256": "1429cc814e2be493f47b1add958182faabef466c1028495c8b9e853a4434eec1",
+      "rubricVersion": "verifier-phase-ordinal-v4",
+      "logicalLlmPromptBytes": 26344,
+      "logicalLlmPromptSha256": "e8c37a9c38f99b5fc6ff54cfe43dcbbf3ed7927e59718d8f4d746ceec779f361",
+      "jevStateBytes": 17168,
+      "jevMaxQuestionBytes": 691,
+      "jevPerQuestionBytes": 17859,
+      "jevTotalBytes": 22628,
+      "jevRequestSha256": "b6f42d7d756842a01e53cc8198b05917c4124fddf41a5f08bedfc24b8693dca9",
+      "requestEvidence": "offline-serialized-never-dispatched",
+      "llmTransportBoundary": "logical system/user only; final provider/model parameters and full wire request are not frozen or measured"
+    },
+    {
+      "poolId": "H07",
+      "capability": "offline-single-html",
+      "frozenHash": "7836a9914f22c19c5e7434026ea1a65631892780c273bd8bc4582047c1cd8ae9",
+      "checksSha256": "158269e61b1fa58ff7877a609ba15190cba071737a988b68307e0cedf8485814",
+      "requirementsSha256": null,
+      "candidates": [
+        {
+          "id": "cand-28c5",
+          "candidateValueJsonSha256": "78b3b7af97519589e94f025fa066f6c52077244df2131361e7745c3b77d0df5d",
+          "candidateValueJsonBytes": 2361,
+          "sourceSerialization": "JSON.stringify(value)",
+          "htmlUtf8Sha256": "5c67a82e2e5900bd15a38a6a8169be35aed3795328e90039240411f4bd6fc532",
+          "htmlUtf8Bytes": 2269
+        },
+        {
+          "id": "cand-a760",
+          "candidateValueJsonSha256": "060fc1adb54ed58caf241878976897d87004eb00a980ab26a68497d503f9f705",
+          "candidateValueJsonBytes": 2366,
+          "sourceSerialization": "JSON.stringify(value)",
+          "htmlUtf8Sha256": "c33e7cb10cb39414dd57ab91cdd3c9a0acce966769390fd1e234fa4a2c7b0bd8",
+          "htmlUtf8Bytes": 2276
+        }
+      ],
+      "promptVersion": "production-html-v10",
+      "acceptanceVersion": "production-acceptance-v3",
+      "validationContract": {
+        "planningLoopVersion": "production-planning-loop-v1",
+        "reviewContextVersion": "production-review-context-v2",
+        "htmlExecutionProfileVersion": "production-html-execution-v1",
+        "outputDiagnosticsVersion": "production-json-diagnostics-v1",
+        "harnessPromptTransportVersion": "harness-literal-prompt-v1",
+        "harnessJsonOutputVersion": "harness-json-output-v1",
+        "responseFormatPolicy": "deepseek-json-object-other-prompt-only",
+        "semanticsVersion": "production-acceptance-semantic-v2",
+        "jevRequestLayoutVersion": "jev-request-layout-v2",
+        "coverage": {
+          "version": "production-coverage-owners-v1",
+          "capability": "offline-single-html",
+          "owners": {
+            "hostSchema": {
+              "required": true,
+              "scope": "Complete inline HTML and strict test/verifier schemas; not business correctness."
+            },
+            "roleCss": {
+              "required": true,
+              "scope": "All in-scope business behavior independently frozen and actually executed in restricted Chromium, including exact numeric results and edge cases. No platform template is evidence for generated code."
+            },
+            "platformMandatoryGate": {
+              "required": true,
+              "scope": "Restricted browser network/navigation/error/timeout policies; no host execution or arbitrary repository support."
+            }
+          },
+          "evidenceRule": "This contract assigns obligations only. A claimed owner or engineering fixture does not pass a business requirement. Final delivery requires actual immutable checks; unknown and deferred coverage never become true automatically."
+        }
+      },
+      "validationContractSha256": "1429cc814e2be493f47b1add958182faabef466c1028495c8b9e853a4434eec1",
+      "rubricVersion": "verifier-phase-ordinal-v4",
+      "logicalLlmPromptBytes": 22692,
+      "logicalLlmPromptSha256": "16d881326b3fba1d2594e4f783bf99b492d00519eedef148b9fbac49c9149e80",
+      "jevStateBytes": 13516,
+      "jevMaxQuestionBytes": 691,
+      "jevPerQuestionBytes": 14207,
+      "jevTotalBytes": 18976,
+      "jevRequestSha256": "607f1ca078709a05ba7b0bd0a6ebd575dfd5d95fca97f97d92ca4daa8dc97a75",
+      "requestEvidence": "offline-serialized-never-dispatched",
+      "llmTransportBoundary": "logical system/user only; final provider/model parameters and full wire request are not frozen or measured"
+    },
+    {
+      "poolId": "H08",
+      "capability": "offline-single-html",
+      "frozenHash": "bf7ea0624a2ffef2cbc8021459de2eeeca7544b8955185421710a8b3941d2254",
+      "checksSha256": "e2c58ee00ad380b86f11cf6093af18c6e5be1ae20354c5e8ebd1395eb557f008",
+      "requirementsSha256": null,
+      "candidates": [
+        {
+          "id": "cand-73de",
+          "candidateValueJsonSha256": "bb68edb11b66eaa408ae290335981a168ba099354a71e20f175e97d1e8047896",
+          "candidateValueJsonBytes": 1897,
+          "sourceSerialization": "JSON.stringify(value)",
+          "htmlUtf8Sha256": "b3ca083b192f458a130c2d8d977aae8f5a3e9e266e3f6a4cddae99c60d08776f",
+          "htmlUtf8Bytes": 1827
+        },
+        {
+          "id": "cand-4b81",
+          "candidateValueJsonSha256": "3bfac7039675cb3c89e7eaed0742f73a840b42a95fa96ca15ed8d21224490ad4",
+          "candidateValueJsonBytes": 1912,
+          "sourceSerialization": "JSON.stringify(value)",
+          "htmlUtf8Sha256": "098b3e45cb316630c3baecf28a907aa66bcaa644dda0f6edaab634ab847405dd",
+          "htmlUtf8Bytes": 1842
+        }
+      ],
+      "promptVersion": "production-html-v10",
+      "acceptanceVersion": "production-acceptance-v3",
+      "validationContract": {
+        "planningLoopVersion": "production-planning-loop-v1",
+        "reviewContextVersion": "production-review-context-v2",
+        "htmlExecutionProfileVersion": "production-html-execution-v1",
+        "outputDiagnosticsVersion": "production-json-diagnostics-v1",
+        "harnessPromptTransportVersion": "harness-literal-prompt-v1",
+        "harnessJsonOutputVersion": "harness-json-output-v1",
+        "responseFormatPolicy": "deepseek-json-object-other-prompt-only",
+        "semanticsVersion": "production-acceptance-semantic-v2",
+        "jevRequestLayoutVersion": "jev-request-layout-v2",
+        "coverage": {
+          "version": "production-coverage-owners-v1",
+          "capability": "offline-single-html",
+          "owners": {
+            "hostSchema": {
+              "required": true,
+              "scope": "Complete inline HTML and strict test/verifier schemas; not business correctness."
+            },
+            "roleCss": {
+              "required": true,
+              "scope": "All in-scope business behavior independently frozen and actually executed in restricted Chromium, including exact numeric results and edge cases. No platform template is evidence for generated code."
+            },
+            "platformMandatoryGate": {
+              "required": true,
+              "scope": "Restricted browser network/navigation/error/timeout policies; no host execution or arbitrary repository support."
+            }
+          },
+          "evidenceRule": "This contract assigns obligations only. A claimed owner or engineering fixture does not pass a business requirement. Final delivery requires actual immutable checks; unknown and deferred coverage never become true automatically."
+        }
+      },
+      "validationContractSha256": "1429cc814e2be493f47b1add958182faabef466c1028495c8b9e853a4434eec1",
+      "rubricVersion": "verifier-phase-ordinal-v4",
+      "logicalLlmPromptBytes": 21324,
+      "logicalLlmPromptSha256": "8b88efb3ac72bcd1c0160e21591cd2b52da3aab04f0be38b67b2f084a2466fbf",
+      "jevStateBytes": 12148,
+      "jevMaxQuestionBytes": 691,
+      "jevPerQuestionBytes": 12839,
+      "jevTotalBytes": 17608,
+      "jevRequestSha256": "6f80a950f04fd0961d15b61b4cf17f332c15adf49e35d95bcc81310bac8c7e89",
+      "requestEvidence": "offline-serialized-never-dispatched",
+      "llmTransportBoundary": "logical system/user only; final provider/model parameters and full wire request are not frozen or measured"
+    },
+    {
+      "poolId": "H09",
+      "capability": "offline-single-html",
+      "frozenHash": "b5dc85ffd921cf47bd603a04eebd8fcaf38bfd7602789406ee80b30c1c35ec5b",
+      "checksSha256": "2fd0dcc818b130fed2e0482a5ba95d293c3728d2d183e0e1f64d9b9d117d210c",
+      "requirementsSha256": null,
+      "candidates": [
+        {
+          "id": "cand-e105",
+          "candidateValueJsonSha256": "8830664069bf2e63d8c8783756c75ec440e86ca8a5938a090a5c9987375ef15e",
+          "candidateValueJsonBytes": 2183,
+          "sourceSerialization": "JSON.stringify(value)",
+          "htmlUtf8Sha256": "de7e73d95a6f02c054de7cdb1e52daada07d528c64cb9413bd0f0ea137421f4c",
+          "htmlUtf8Bytes": 2123
+        },
+        {
+          "id": "cand-6f92",
+          "candidateValueJsonSha256": "c56ea870164438c625911a988702c9699d3cf680f7223fe4324e22acfdddf521",
+          "candidateValueJsonBytes": 2359,
+          "sourceSerialization": "JSON.stringify(value)",
+          "htmlUtf8Sha256": "678ae41be7d358ed94fb875c33531d20b934da6d7eca7bffecb1d6c8b675362e",
+          "htmlUtf8Bytes": 2299
+        }
+      ],
+      "promptVersion": "production-html-v10",
+      "acceptanceVersion": "production-acceptance-v3",
+      "validationContract": {
+        "planningLoopVersion": "production-planning-loop-v1",
+        "reviewContextVersion": "production-review-context-v2",
+        "htmlExecutionProfileVersion": "production-html-execution-v1",
+        "outputDiagnosticsVersion": "production-json-diagnostics-v1",
+        "harnessPromptTransportVersion": "harness-literal-prompt-v1",
+        "harnessJsonOutputVersion": "harness-json-output-v1",
+        "responseFormatPolicy": "deepseek-json-object-other-prompt-only",
+        "semanticsVersion": "production-acceptance-semantic-v2",
+        "jevRequestLayoutVersion": "jev-request-layout-v2",
+        "coverage": {
+          "version": "production-coverage-owners-v1",
+          "capability": "offline-single-html",
+          "owners": {
+            "hostSchema": {
+              "required": true,
+              "scope": "Complete inline HTML and strict test/verifier schemas; not business correctness."
+            },
+            "roleCss": {
+              "required": true,
+              "scope": "All in-scope business behavior independently frozen and actually executed in restricted Chromium, including exact numeric results and edge cases. No platform template is evidence for generated code."
+            },
+            "platformMandatoryGate": {
+              "required": true,
+              "scope": "Restricted browser network/navigation/error/timeout policies; no host execution or arbitrary repository support."
+            }
+          },
+          "evidenceRule": "This contract assigns obligations only. A claimed owner or engineering fixture does not pass a business requirement. Final delivery requires actual immutable checks; unknown and deferred coverage never become true automatically."
+        }
+      },
+      "validationContractSha256": "1429cc814e2be493f47b1add958182faabef466c1028495c8b9e853a4434eec1",
+      "rubricVersion": "verifier-phase-ordinal-v4",
+      "logicalLlmPromptBytes": 24298,
+      "logicalLlmPromptSha256": "4bc3b71aa6cc3af6770d74b16d8b2a2d14d706156dd75e3d188e93adc002ab32",
+      "jevStateBytes": 15122,
+      "jevMaxQuestionBytes": 691,
+      "jevPerQuestionBytes": 15813,
+      "jevTotalBytes": 20582,
+      "jevRequestSha256": "2c4eec6434802646e3e02a09decfcf9d59be91e800229761bef111dc8add48c6",
+      "requestEvidence": "offline-serialized-never-dispatched",
+      "llmTransportBoundary": "logical system/user only; final provider/model parameters and full wire request are not frozen or measured"
+    },
+    {
+      "poolId": "H10",
+      "capability": "offline-single-html",
+      "frozenHash": "6238566f324cf9b98904c0571d0f1319277c185fcb70a06aecd972a3fe024b91",
+      "checksSha256": "91f21699cc5cdf10d9d5293687b887c34fffd2a083ae480a1e60ea24ee8a8887",
+      "requirementsSha256": null,
+      "candidates": [
+        {
+          "id": "cand-90ac",
+          "candidateValueJsonSha256": "e326c1543a847ecd4e18593649f1f99727e5ac8dcb5b6a17feb9ea5ffb6c9540",
+          "candidateValueJsonBytes": 2943,
+          "sourceSerialization": "JSON.stringify(value)",
+          "htmlUtf8Sha256": "ef6bdbc6af2dba9e22e3d6232b036997cdab07947585e28a1023f0fa1089105c",
+          "htmlUtf8Bytes": 2888
+        },
+        {
+          "id": "cand-2d47",
+          "candidateValueJsonSha256": "ec8160c403d24e66d1bca0229fdf7cec1752ce7e5e7a0454df0bf46a0565a73b",
+          "candidateValueJsonBytes": 2919,
+          "sourceSerialization": "JSON.stringify(value)",
+          "htmlUtf8Sha256": "2b2b526f599c2e11cd8899ca3af67c8a97a70b68419cf4cf991a041321ad9373",
+          "htmlUtf8Bytes": 2864
+        }
+      ],
+      "promptVersion": "production-html-v10",
+      "acceptanceVersion": "production-acceptance-v3",
+      "validationContract": {
+        "planningLoopVersion": "production-planning-loop-v1",
+        "reviewContextVersion": "production-review-context-v2",
+        "htmlExecutionProfileVersion": "production-html-execution-v1",
+        "outputDiagnosticsVersion": "production-json-diagnostics-v1",
+        "harnessPromptTransportVersion": "harness-literal-prompt-v1",
+        "harnessJsonOutputVersion": "harness-json-output-v1",
+        "responseFormatPolicy": "deepseek-json-object-other-prompt-only",
+        "semanticsVersion": "production-acceptance-semantic-v2",
+        "jevRequestLayoutVersion": "jev-request-layout-v2",
+        "coverage": {
+          "version": "production-coverage-owners-v1",
+          "capability": "offline-single-html",
+          "owners": {
+            "hostSchema": {
+              "required": true,
+              "scope": "Complete inline HTML and strict test/verifier schemas; not business correctness."
+            },
+            "roleCss": {
+              "required": true,
+              "scope": "All in-scope business behavior independently frozen and actually executed in restricted Chromium, including exact numeric results and edge cases. No platform template is evidence for generated code."
+            },
+            "platformMandatoryGate": {
+              "required": true,
+              "scope": "Restricted browser network/navigation/error/timeout policies; no host execution or arbitrary repository support."
+            }
+          },
+          "evidenceRule": "This contract assigns obligations only. A claimed owner or engineering fixture does not pass a business requirement. Final delivery requires actual immutable checks; unknown and deferred coverage never become true automatically."
+        }
+      },
+      "validationContractSha256": "1429cc814e2be493f47b1add958182faabef466c1028495c8b9e853a4434eec1",
+      "rubricVersion": "verifier-phase-ordinal-v4",
+      "logicalLlmPromptBytes": 28087,
+      "logicalLlmPromptSha256": "92692e8d44f2510589062e33db86e2664f8ec6c781ca90cbeeac905e52f3441b",
+      "jevStateBytes": 18911,
+      "jevMaxQuestionBytes": 691,
+      "jevPerQuestionBytes": 19602,
+      "jevTotalBytes": 24371,
+      "jevRequestSha256": "838e48a942ed97e85dbcf737ba1ffbc9d3f6cab308f4e788b0d6af3665c8b3e6",
+      "requestEvidence": "offline-serialized-never-dispatched",
+      "llmTransportBoundary": "logical system/user only; final provider/model parameters and full wire request are not frozen or measured"
+    },
+    {
+      "poolId": "H11",
+      "capability": "offline-single-html",
+      "frozenHash": "c1b5ee05f0b7a1719cf206c0a0774c7c79cd04385dac7a641bd52ba2c349438c",
+      "checksSha256": "62f17019908843fc2f4b488dfb377ab377cb8fc06360caae5d3e9a570616b1ab",
+      "requirementsSha256": null,
+      "candidates": [
+        {
+          "id": "cand-c38e",
+          "candidateValueJsonSha256": "c377c2e6a671a492e276db22154940beedb64ba179ef93c5de27f5197235448f",
+          "candidateValueJsonBytes": 3724,
+          "sourceSerialization": "JSON.stringify(value)",
+          "htmlUtf8Sha256": "12b8d31113c2894352fdc1af8e3cd43eac992e1b9bfd4b5ab808300f19ca0ac3",
+          "htmlUtf8Bytes": 3663
+        },
+        {
+          "id": "cand-51b4",
+          "candidateValueJsonSha256": "d2ae7ddc5cc62ee353546640fb7371af595e00050c4a06d7d612e1a4b17ef2e1",
+          "candidateValueJsonBytes": 3739,
+          "sourceSerialization": "JSON.stringify(value)",
+          "htmlUtf8Sha256": "e022c3085d3923cbd6a19127cb2d304854f878ab8c6ceb1ca6d01b946f55ec61",
+          "htmlUtf8Bytes": 3678
+        }
+      ],
+      "promptVersion": "production-html-v10",
+      "acceptanceVersion": "production-acceptance-v3",
+      "validationContract": {
+        "planningLoopVersion": "production-planning-loop-v1",
+        "reviewContextVersion": "production-review-context-v2",
+        "htmlExecutionProfileVersion": "production-html-execution-v1",
+        "outputDiagnosticsVersion": "production-json-diagnostics-v1",
+        "harnessPromptTransportVersion": "harness-literal-prompt-v1",
+        "harnessJsonOutputVersion": "harness-json-output-v1",
+        "responseFormatPolicy": "deepseek-json-object-other-prompt-only",
+        "semanticsVersion": "production-acceptance-semantic-v2",
+        "jevRequestLayoutVersion": "jev-request-layout-v2",
+        "coverage": {
+          "version": "production-coverage-owners-v1",
+          "capability": "offline-single-html",
+          "owners": {
+            "hostSchema": {
+              "required": true,
+              "scope": "Complete inline HTML and strict test/verifier schemas; not business correctness."
+            },
+            "roleCss": {
+              "required": true,
+              "scope": "All in-scope business behavior independently frozen and actually executed in restricted Chromium, including exact numeric results and edge cases. No platform template is evidence for generated code."
+            },
+            "platformMandatoryGate": {
+              "required": true,
+              "scope": "Restricted browser network/navigation/error/timeout policies; no host execution or arbitrary repository support."
+            }
+          },
+          "evidenceRule": "This contract assigns obligations only. A claimed owner or engineering fixture does not pass a business requirement. Final delivery requires actual immutable checks; unknown and deferred coverage never become true automatically."
+        }
+      },
+      "validationContractSha256": "1429cc814e2be493f47b1add958182faabef466c1028495c8b9e853a4434eec1",
+      "rubricVersion": "verifier-phase-ordinal-v4",
+      "logicalLlmPromptBytes": 28708,
+      "logicalLlmPromptSha256": "87dd5062a4b1ace85ed9599c1e6f3b744945fe8418d59cc38fd3ccaf68749664",
+      "jevStateBytes": 19532,
+      "jevMaxQuestionBytes": 691,
+      "jevPerQuestionBytes": 20223,
+      "jevTotalBytes": 24992,
+      "jevRequestSha256": "d12090dabaad0c82900ab528154bab61948c798b89608c25a9907b93789df0f5",
+      "requestEvidence": "offline-serialized-never-dispatched",
+      "llmTransportBoundary": "logical system/user only; final provider/model parameters and full wire request are not frozen or measured"
+    },
+    {
+      "poolId": "H12",
+      "capability": "offline-single-html",
+      "frozenHash": "c4272a28764301cf6d6481a40af454b94bac61c14d05112fd15f6cdc1d85d5e7",
+      "checksSha256": "1c6d58fcea007182e1d1a7baa2e451aefe819a3ef752aa1ab09176fa3503a3ae",
+      "requirementsSha256": null,
+      "candidates": [
+        {
+          "id": "cand-8fa2",
+          "candidateValueJsonSha256": "77ac75c01ee7f89aec08ba67936701fdfa6c0c3ca75e419d43f10604bd07624c",
+          "candidateValueJsonBytes": 3086,
+          "sourceSerialization": "JSON.stringify(value)",
+          "htmlUtf8Sha256": "286a6c46774dfed8093715c5589010b5f6bffe2c76e118df21a09c76bbbfcf57",
+          "htmlUtf8Bytes": 3016
+        },
+        {
+          "id": "cand-36d9",
+          "candidateValueJsonSha256": "88ccc10d810dfeb3c8fbba9fb479ef79f223862931fdcc3bb40f647db6f3e771",
+          "candidateValueJsonBytes": 3060,
+          "sourceSerialization": "JSON.stringify(value)",
+          "htmlUtf8Sha256": "b6b715ed3b5458ecc74fb5a75d6a9e8b577747cdb0219aea537b92faceab7e34",
+          "htmlUtf8Bytes": 2990
+        }
+      ],
+      "promptVersion": "production-html-v10",
+      "acceptanceVersion": "production-acceptance-v3",
+      "validationContract": {
+        "planningLoopVersion": "production-planning-loop-v1",
+        "reviewContextVersion": "production-review-context-v2",
+        "htmlExecutionProfileVersion": "production-html-execution-v1",
+        "outputDiagnosticsVersion": "production-json-diagnostics-v1",
+        "harnessPromptTransportVersion": "harness-literal-prompt-v1",
+        "harnessJsonOutputVersion": "harness-json-output-v1",
+        "responseFormatPolicy": "deepseek-json-object-other-prompt-only",
+        "semanticsVersion": "production-acceptance-semantic-v2",
+        "jevRequestLayoutVersion": "jev-request-layout-v2",
+        "coverage": {
+          "version": "production-coverage-owners-v1",
+          "capability": "offline-single-html",
+          "owners": {
+            "hostSchema": {
+              "required": true,
+              "scope": "Complete inline HTML and strict test/verifier schemas; not business correctness."
+            },
+            "roleCss": {
+              "required": true,
+              "scope": "All in-scope business behavior independently frozen and actually executed in restricted Chromium, including exact numeric results and edge cases. No platform template is evidence for generated code."
+            },
+            "platformMandatoryGate": {
+              "required": true,
+              "scope": "Restricted browser network/navigation/error/timeout policies; no host execution or arbitrary repository support."
+            }
+          },
+          "evidenceRule": "This contract assigns obligations only. A claimed owner or engineering fixture does not pass a business requirement. Final delivery requires actual immutable checks; unknown and deferred coverage never become true automatically."
+        }
+      },
+      "validationContractSha256": "1429cc814e2be493f47b1add958182faabef466c1028495c8b9e853a4434eec1",
+      "rubricVersion": "verifier-phase-ordinal-v4",
+      "logicalLlmPromptBytes": 26230,
+      "logicalLlmPromptSha256": "9fa32a65cf641e9aa7492de752ef35e46b563a2d34ab82f51f2092d9e5a19b9b",
+      "jevStateBytes": 17054,
+      "jevMaxQuestionBytes": 691,
+      "jevPerQuestionBytes": 17745,
+      "jevTotalBytes": 22514,
+      "jevRequestSha256": "ecc7162a79bf61cf8814ce984d6130eef4c239b597960fe21c1ba572579b928f",
+      "requestEvidence": "offline-serialized-never-dispatched",
+      "llmTransportBoundary": "logical system/user only; final provider/model parameters and full wire request are not frozen or measured"
+    },
+    {
+      "poolId": "C13",
+      "capability": "camera-scene-v1",
+      "frozenHash": "60c5c4e6017de1e704463cc6983c03d587a9339000bf4bd18b14e4c95f98525c",
+      "checksSha256": "e6f08f38ce2d5f3fae118155df2406c892fafa7be6d4b34c476fdb7d74fb619d",
+      "requirementsSha256": "4fd426a6ac6f1ddb5248205e11e7f3f0b3881d225b0d398b842e752f5d7faf77",
+      "candidates": [
+        {
+          "id": "cand-f732",
+          "candidateValueJsonSha256": "601a0e4438911e98fb6c15ddaa8d39564639bd5eb5d554a55c72e23b9fbd5bd1",
+          "candidateValueJsonBytes": 313,
+          "sourceSerialization": "JSON.stringify(value)",
+          "sceneJsonSha256": "576c62c733f6e9e416cab4c4f298dbdacb9d7b655a73e5f247022060ad47e1fb",
+          "sceneJsonBytes": 303
+        },
+        {
+          "id": "cand-20c6",
+          "candidateValueJsonSha256": "2705751eadae025d758adfce66d86e4a4eeff923763489a26921ac6afc5f62ba",
+          "candidateValueJsonBytes": 313,
+          "sourceSerialization": "JSON.stringify(value)",
+          "sceneJsonSha256": "6675f3b73407a12b11c89442bdd63dd9915d21d613b38c7b1c410d01ec6a77c2",
+          "sceneJsonBytes": 303
+        }
+      ],
+      "promptVersion": "production-camera-scene-v7",
+      "acceptanceVersion": "production-camera-acceptance-v2",
+      "validationContract": {
+        "planningLoopVersion": "production-planning-loop-v1",
+        "reviewContextVersion": "production-review-context-v2",
+        "harnessPromptTransportVersion": "harness-literal-prompt-v1",
+        "harnessJsonOutputVersion": "harness-json-output-v1",
+        "responseFormatPolicy": "deepseek-json-object-other-prompt-only",
+        "semanticsVersion": "production-acceptance-semantic-v2",
+        "jevRequestLayoutVersion": "jev-request-layout-v2",
+        "cameraTestSemanticsVersion": "camera-test-semantics-v1",
+        "coverage": {
+          "version": "production-coverage-owners-v1",
+          "capability": "camera-scene-v1",
+          "owners": {
+            "hostSchema": {
+              "required": true,
+              "scope": "Strict non-executable fields, primitive/range/count bounds, distinct palm/fist actions. Schema does NOT prove design or business mapping."
+            },
+            "roleCss": {
+              "required": true,
+              "scope": "Independent frozen business state, precise rotation/reset and required concrete totals/title. Assert every explicit mapping at #gesture-map; mandatory Gate alone proves only self-consistency. No disabled camera clicks, unresolved values or count-change assertions."
+            },
+            "platformMandatoryGate": {
+              "required": true,
+              "scope": "Per-run real Canvas/pixels/particle snapshots; scatter/gather/rotation/reset; synthetic 21 points, three-frame debounce and configured palm-X. Must execute AND pass alongside role CSS; not real vision/camera proof."
+            },
+            "platformEngineering": {
+              "required": false,
+              "scope": "Separate versioned media start/stop, late permission, model/worker failure, release and asset regression. Not executed by per-run Gate or a role-declared pass."
+            },
+            "physicalAcceptance": {
+              "required": false,
+              "scope": "User-initiated real camera/hand, lighting/latency, permission/error/stop and subjective scene quality; unverified; full requirement stays false until independent real-device evidence."
+            }
+          },
+          "evidenceRule": "This contract assigns obligations only. A claimed owner or engineering fixture does not pass a business requirement. Final delivery requires actual immutable checks; unknown and deferred coverage never become true automatically."
+        }
+      },
+      "validationContractSha256": "e8892a319055a60d714fe0fc0bd0a57483f0b72665b46977379ad8af8a02a2bc",
+      "rubricVersion": "verifier-phase-ordinal-v4",
+      "logicalLlmPromptBytes": 23418,
+      "logicalLlmPromptSha256": "e4d5c69f4f250eb8067a14e38b3ce8a886ddca4bf41803a818e8a68dfc3112f1",
+      "jevStateBytes": 9276,
+      "jevMaxQuestionBytes": 691,
+      "jevPerQuestionBytes": 9967,
+      "jevTotalBytes": 15308,
+      "jevRequestSha256": "0f646f83fc76f4915bed44944ab33cd0626e4720419a5c89ba2b99fa5f03a2e0",
+      "requestEvidence": "offline-serialized-never-dispatched",
+      "llmTransportBoundary": "logical system/user only; final provider/model parameters and full wire request are not frozen or measured"
+    },
+    {
+      "poolId": "C14",
+      "capability": "camera-scene-v1",
+      "frozenHash": "25c6bcd85e2f754c5ffe737790db696ecc48139c074d0c4f5ba450836fe3338d",
+      "checksSha256": "9f8b805e593f88a11d97548ea9fac2f2ee54a40eefa2b1365100afbd013ecb9c",
+      "requirementsSha256": "c2aa97ccd5852279340335117d4c1f9f36a18e4dd6165e787c790df7a910d963",
+      "candidates": [
+        {
+          "id": "cand-57de",
+          "candidateValueJsonSha256": "1b516942c4919ed01490348b3bdcc73ac88ed57bd45bb192c7a2849087f6a627",
+          "candidateValueJsonBytes": 311,
+          "sourceSerialization": "JSON.stringify(value)",
+          "sceneJsonSha256": "87b8af4b11dc4d9ec67934edb028e8be5e02c07845fc207c1a5bcc80c3cabd77",
+          "sceneJsonBytes": 301
+        },
+        {
+          "id": "cand-aca4",
+          "candidateValueJsonSha256": "c522fc7dd59461c3e8bd8a70845e6f1e7c5c19b99eecc7b44923bb62419af65f",
+          "candidateValueJsonBytes": 313,
+          "sourceSerialization": "JSON.stringify(value)",
+          "sceneJsonSha256": "083b68a846b6f12c2eac7f8cd55cfffd0f7f0a491c5775de0695fc8dd3ee5fd3",
+          "sceneJsonBytes": 303
+        }
+      ],
+      "promptVersion": "production-camera-scene-v7",
+      "acceptanceVersion": "production-camera-acceptance-v2",
+      "validationContract": {
+        "planningLoopVersion": "production-planning-loop-v1",
+        "reviewContextVersion": "production-review-context-v2",
+        "harnessPromptTransportVersion": "harness-literal-prompt-v1",
+        "harnessJsonOutputVersion": "harness-json-output-v1",
+        "responseFormatPolicy": "deepseek-json-object-other-prompt-only",
+        "semanticsVersion": "production-acceptance-semantic-v2",
+        "jevRequestLayoutVersion": "jev-request-layout-v2",
+        "cameraTestSemanticsVersion": "camera-test-semantics-v1",
+        "coverage": {
+          "version": "production-coverage-owners-v1",
+          "capability": "camera-scene-v1",
+          "owners": {
+            "hostSchema": {
+              "required": true,
+              "scope": "Strict non-executable fields, primitive/range/count bounds, distinct palm/fist actions. Schema does NOT prove design or business mapping."
+            },
+            "roleCss": {
+              "required": true,
+              "scope": "Independent frozen business state, precise rotation/reset and required concrete totals/title. Assert every explicit mapping at #gesture-map; mandatory Gate alone proves only self-consistency. No disabled camera clicks, unresolved values or count-change assertions."
+            },
+            "platformMandatoryGate": {
+              "required": true,
+              "scope": "Per-run real Canvas/pixels/particle snapshots; scatter/gather/rotation/reset; synthetic 21 points, three-frame debounce and configured palm-X. Must execute AND pass alongside role CSS; not real vision/camera proof."
+            },
+            "platformEngineering": {
+              "required": false,
+              "scope": "Separate versioned media start/stop, late permission, model/worker failure, release and asset regression. Not executed by per-run Gate or a role-declared pass."
+            },
+            "physicalAcceptance": {
+              "required": false,
+              "scope": "User-initiated real camera/hand, lighting/latency, permission/error/stop and subjective scene quality; unverified; full requirement stays false until independent real-device evidence."
+            }
+          },
+          "evidenceRule": "This contract assigns obligations only. A claimed owner or engineering fixture does not pass a business requirement. Final delivery requires actual immutable checks; unknown and deferred coverage never become true automatically."
+        }
+      },
+      "validationContractSha256": "e8892a319055a60d714fe0fc0bd0a57483f0b72665b46977379ad8af8a02a2bc",
+      "rubricVersion": "verifier-phase-ordinal-v4",
+      "logicalLlmPromptBytes": 23389,
+      "logicalLlmPromptSha256": "89691a9d69a7c8f645bd96a0f66b8b541a5e15f085e877858dda797629ee6198",
+      "jevStateBytes": 9247,
+      "jevMaxQuestionBytes": 691,
+      "jevPerQuestionBytes": 9938,
+      "jevTotalBytes": 15279,
+      "jevRequestSha256": "1662a6cd386659cbf733ba32b7b6767493f7627cd8d8644c02c46590a0dedeb1",
+      "requestEvidence": "offline-serialized-never-dispatched",
+      "llmTransportBoundary": "logical system/user only; final provider/model parameters and full wire request are not frozen or measured"
+    },
+    {
+      "poolId": "C15",
+      "capability": "camera-scene-v1",
+      "frozenHash": "161f7a8d8d04655066db04b15ffc514ac7dc6ea1244cd8df2db1b2b6d16236b5",
+      "checksSha256": "b14987ab1f1fa8b18a9f5028721ca982d393fceb6b320eae116010fd0000593a",
+      "requirementsSha256": "2f43c3a032dec8397020d7b56c2c373ef6bab6654fd7ea6d047537c0f50e6489",
+      "candidates": [
+        {
+          "id": "cand-d180",
+          "candidateValueJsonSha256": "17eeba3eafb50c1bcc2153ae5764e802fc98dd6a47560cc2981094aefa76b48f",
+          "candidateValueJsonBytes": 313,
+          "sourceSerialization": "JSON.stringify(value)",
+          "sceneJsonSha256": "fd1044c1bf15806d08cdd4332e1a0b71cc7be5a8694d6c0d64d4285ab7658d9e",
+          "sceneJsonBytes": 303
+        },
+        {
+          "id": "cand-6ac9",
+          "candidateValueJsonSha256": "89b6a4964ba8625bd83cbddcd6cd71cab9c09d0f93df71f0532b3d4700276e85",
+          "candidateValueJsonBytes": 324,
+          "sourceSerialization": "JSON.stringify(value)",
+          "sceneJsonSha256": "bca976ffa6a30290b5576173135c4d936696b2d146a554ef31855aebcfe3f1d7",
+          "sceneJsonBytes": 314
+        }
+      ],
+      "promptVersion": "production-camera-scene-v7",
+      "acceptanceVersion": "production-camera-acceptance-v2",
+      "validationContract": {
+        "planningLoopVersion": "production-planning-loop-v1",
+        "reviewContextVersion": "production-review-context-v2",
+        "harnessPromptTransportVersion": "harness-literal-prompt-v1",
+        "harnessJsonOutputVersion": "harness-json-output-v1",
+        "responseFormatPolicy": "deepseek-json-object-other-prompt-only",
+        "semanticsVersion": "production-acceptance-semantic-v2",
+        "jevRequestLayoutVersion": "jev-request-layout-v2",
+        "cameraTestSemanticsVersion": "camera-test-semantics-v1",
+        "coverage": {
+          "version": "production-coverage-owners-v1",
+          "capability": "camera-scene-v1",
+          "owners": {
+            "hostSchema": {
+              "required": true,
+              "scope": "Strict non-executable fields, primitive/range/count bounds, distinct palm/fist actions. Schema does NOT prove design or business mapping."
+            },
+            "roleCss": {
+              "required": true,
+              "scope": "Independent frozen business state, precise rotation/reset and required concrete totals/title. Assert every explicit mapping at #gesture-map; mandatory Gate alone proves only self-consistency. No disabled camera clicks, unresolved values or count-change assertions."
+            },
+            "platformMandatoryGate": {
+              "required": true,
+              "scope": "Per-run real Canvas/pixels/particle snapshots; scatter/gather/rotation/reset; synthetic 21 points, three-frame debounce and configured palm-X. Must execute AND pass alongside role CSS; not real vision/camera proof."
+            },
+            "platformEngineering": {
+              "required": false,
+              "scope": "Separate versioned media start/stop, late permission, model/worker failure, release and asset regression. Not executed by per-run Gate or a role-declared pass."
+            },
+            "physicalAcceptance": {
+              "required": false,
+              "scope": "User-initiated real camera/hand, lighting/latency, permission/error/stop and subjective scene quality; unverified; full requirement stays false until independent real-device evidence."
+            }
+          },
+          "evidenceRule": "This contract assigns obligations only. A claimed owner or engineering fixture does not pass a business requirement. Final delivery requires actual immutable checks; unknown and deferred coverage never become true automatically."
+        }
+      },
+      "validationContractSha256": "e8892a319055a60d714fe0fc0bd0a57483f0b72665b46977379ad8af8a02a2bc",
+      "rubricVersion": "verifier-phase-ordinal-v4",
+      "logicalLlmPromptBytes": 23696,
+      "logicalLlmPromptSha256": "5d8a496a2dc6f7ff910d6741b107de6f54460ea05c222b280e3c0345e8e26394",
+      "jevStateBytes": 9554,
+      "jevMaxQuestionBytes": 691,
+      "jevPerQuestionBytes": 10245,
+      "jevTotalBytes": 15586,
+      "jevRequestSha256": "0f5ed525137935c7d048d6130daa0035d067df3e288c66e226ee6d09716fb6da",
+      "requestEvidence": "offline-serialized-never-dispatched",
+      "llmTransportBoundary": "logical system/user only; final provider/model parameters and full wire request are not frozen or measured"
+    },
+    {
+      "poolId": "C16",
+      "capability": "camera-scene-v1",
+      "frozenHash": "3314dbbd8f21bf22512643aacdbf28f0c783f75b170dbfb100e7dd0dc82a285a",
+      "checksSha256": "4fca3fb2556d1ed6b4821d938266c9f72bb5f31e4acb8a4d9674bca799565a1e",
+      "requirementsSha256": "7b41755ce578d56e3f30f0aeafc9829006f28fa6854bbc599c5cd081dfb70963",
+      "candidates": [
+        {
+          "id": "cand-e409",
+          "candidateValueJsonSha256": "f63404a1bccd1ea20433e8c3d67eb7d43b83b6445fb4fb97a75bd9afbe963c39",
+          "candidateValueJsonBytes": 318,
+          "sourceSerialization": "JSON.stringify(value)",
+          "sceneJsonSha256": "af08cc83ff9fb1fabfac8f55a918cb93fcf12a9f2a8cf0873aab36ffe87a2003",
+          "sceneJsonBytes": 308
+        },
+        {
+          "id": "cand-184f",
+          "candidateValueJsonSha256": "1082cce669687927163c4e30ce19f8e33a980930077d381c4c6dbce7d5b4b773",
+          "candidateValueJsonBytes": 318,
+          "sourceSerialization": "JSON.stringify(value)",
+          "sceneJsonSha256": "d7d111467f005652f56bee68827a4f868592e794610beeaf134a38cd6cab8d28",
+          "sceneJsonBytes": 308
+        }
+      ],
+      "promptVersion": "production-camera-scene-v7",
+      "acceptanceVersion": "production-camera-acceptance-v2",
+      "validationContract": {
+        "planningLoopVersion": "production-planning-loop-v1",
+        "reviewContextVersion": "production-review-context-v2",
+        "harnessPromptTransportVersion": "harness-literal-prompt-v1",
+        "harnessJsonOutputVersion": "harness-json-output-v1",
+        "responseFormatPolicy": "deepseek-json-object-other-prompt-only",
+        "semanticsVersion": "production-acceptance-semantic-v2",
+        "jevRequestLayoutVersion": "jev-request-layout-v2",
+        "cameraTestSemanticsVersion": "camera-test-semantics-v1",
+        "coverage": {
+          "version": "production-coverage-owners-v1",
+          "capability": "camera-scene-v1",
+          "owners": {
+            "hostSchema": {
+              "required": true,
+              "scope": "Strict non-executable fields, primitive/range/count bounds, distinct palm/fist actions. Schema does NOT prove design or business mapping."
+            },
+            "roleCss": {
+              "required": true,
+              "scope": "Independent frozen business state, precise rotation/reset and required concrete totals/title. Assert every explicit mapping at #gesture-map; mandatory Gate alone proves only self-consistency. No disabled camera clicks, unresolved values or count-change assertions."
+            },
+            "platformMandatoryGate": {
+              "required": true,
+              "scope": "Per-run real Canvas/pixels/particle snapshots; scatter/gather/rotation/reset; synthetic 21 points, three-frame debounce and configured palm-X. Must execute AND pass alongside role CSS; not real vision/camera proof."
+            },
+            "platformEngineering": {
+              "required": false,
+              "scope": "Separate versioned media start/stop, late permission, model/worker failure, release and asset regression. Not executed by per-run Gate or a role-declared pass."
+            },
+            "physicalAcceptance": {
+              "required": false,
+              "scope": "User-initiated real camera/hand, lighting/latency, permission/error/stop and subjective scene quality; unverified; full requirement stays false until independent real-device evidence."
+            }
+          },
+          "evidenceRule": "This contract assigns obligations only. A claimed owner or engineering fixture does not pass a business requirement. Final delivery requires actual immutable checks; unknown and deferred coverage never become true automatically."
+        }
+      },
+      "validationContractSha256": "e8892a319055a60d714fe0fc0bd0a57483f0b72665b46977379ad8af8a02a2bc",
+      "rubricVersion": "verifier-phase-ordinal-v4",
+      "logicalLlmPromptBytes": 23654,
+      "logicalLlmPromptSha256": "12293e135cbdcb952dce291dd6329197633cd52306b181a00b1d9d8c5263d25b",
+      "jevStateBytes": 9512,
+      "jevMaxQuestionBytes": 691,
+      "jevPerQuestionBytes": 10203,
+      "jevTotalBytes": 15544,
+      "jevRequestSha256": "c8ec9350b76c36d43032a0f175edfa475630b87f95b11abd82401ceb61c1eff4",
+      "requestEvidence": "offline-serialized-never-dispatched",
+      "llmTransportBoundary": "logical system/user only; final provider/model parameters and full wire request are not frozen or measured"
+    },
+    {
+      "poolId": "C17",
+      "capability": "camera-scene-v1",
+      "frozenHash": "74e038a19c95b1cd577e8a6f5f93e0817967e2c63eb2f2d421de2993ef6bbeb8",
+      "checksSha256": "81c70ea9ab79489fd878323cd4a5214c9c7c60f7720cd7b691a399c824ec654b",
+      "requirementsSha256": "33a45738be27f5dfc0add5add3959337d91c26f5014377060ec9746850af9b43",
+      "candidates": [
+        {
+          "id": "cand-61fb",
+          "candidateValueJsonSha256": "c5ef3645f3c979baac55939cb6c0f9f546cfee79e98431d519f10d6810ef4ec2",
+          "candidateValueJsonBytes": 316,
+          "sourceSerialization": "JSON.stringify(value)",
+          "sceneJsonSha256": "970f44f3a8da828ce828331b25af37167079e2db10201cfeab23d81b0f5a2d8c",
+          "sceneJsonBytes": 306
+        },
+        {
+          "id": "cand-834c",
+          "candidateValueJsonSha256": "de87186069976c06ba07e027001e7631c34167f3011e2834e3bfabf3e2ae2904",
+          "candidateValueJsonBytes": 314,
+          "sourceSerialization": "JSON.stringify(value)",
+          "sceneJsonSha256": "9e79850aa52de122ec3fd7604c303aa5908c50be841146df18b26286f115d474",
+          "sceneJsonBytes": 304
+        }
+      ],
+      "promptVersion": "production-camera-scene-v7",
+      "acceptanceVersion": "production-camera-acceptance-v2",
+      "validationContract": {
+        "planningLoopVersion": "production-planning-loop-v1",
+        "reviewContextVersion": "production-review-context-v2",
+        "harnessPromptTransportVersion": "harness-literal-prompt-v1",
+        "harnessJsonOutputVersion": "harness-json-output-v1",
+        "responseFormatPolicy": "deepseek-json-object-other-prompt-only",
+        "semanticsVersion": "production-acceptance-semantic-v2",
+        "jevRequestLayoutVersion": "jev-request-layout-v2",
+        "cameraTestSemanticsVersion": "camera-test-semantics-v1",
+        "coverage": {
+          "version": "production-coverage-owners-v1",
+          "capability": "camera-scene-v1",
+          "owners": {
+            "hostSchema": {
+              "required": true,
+              "scope": "Strict non-executable fields, primitive/range/count bounds, distinct palm/fist actions. Schema does NOT prove design or business mapping."
+            },
+            "roleCss": {
+              "required": true,
+              "scope": "Independent frozen business state, precise rotation/reset and required concrete totals/title. Assert every explicit mapping at #gesture-map; mandatory Gate alone proves only self-consistency. No disabled camera clicks, unresolved values or count-change assertions."
+            },
+            "platformMandatoryGate": {
+              "required": true,
+              "scope": "Per-run real Canvas/pixels/particle snapshots; scatter/gather/rotation/reset; synthetic 21 points, three-frame debounce and configured palm-X. Must execute AND pass alongside role CSS; not real vision/camera proof."
+            },
+            "platformEngineering": {
+              "required": false,
+              "scope": "Separate versioned media start/stop, late permission, model/worker failure, release and asset regression. Not executed by per-run Gate or a role-declared pass."
+            },
+            "physicalAcceptance": {
+              "required": false,
+              "scope": "User-initiated real camera/hand, lighting/latency, permission/error/stop and subjective scene quality; unverified; full requirement stays false until independent real-device evidence."
+            }
+          },
+          "evidenceRule": "This contract assigns obligations only. A claimed owner or engineering fixture does not pass a business requirement. Final delivery requires actual immutable checks; unknown and deferred coverage never become true automatically."
+        }
+      },
+      "validationContractSha256": "e8892a319055a60d714fe0fc0bd0a57483f0b72665b46977379ad8af8a02a2bc",
+      "rubricVersion": "verifier-phase-ordinal-v4",
+      "logicalLlmPromptBytes": 24077,
+      "logicalLlmPromptSha256": "671149a862523775951da74e71204488f677a9d8ed2724221d43e15710602184",
+      "jevStateBytes": 9935,
+      "jevMaxQuestionBytes": 691,
+      "jevPerQuestionBytes": 10626,
+      "jevTotalBytes": 15967,
+      "jevRequestSha256": "e3819f92c77434097422f9c3582036d54864a3199389b32a39726c5791d1fe0c",
+      "requestEvidence": "offline-serialized-never-dispatched",
+      "llmTransportBoundary": "logical system/user only; final provider/model parameters and full wire request are not frozen or measured"
+    },
+    {
+      "poolId": "C18",
+      "capability": "camera-scene-v1",
+      "frozenHash": "3a911b59176375125e22f35130d00d095522cd47dad8f452251d128155771baa",
+      "checksSha256": "d40603325c4bee972073c4cdf96cfbb3c0a11afe6b330ebdffe638134c5996d8",
+      "requirementsSha256": "2d52d729ca8c6d2002d68e94768a2f6dc1d3f6af070792fd0c0424629caac041",
+      "candidates": [
+        {
+          "id": "cand-9ec2",
+          "candidateValueJsonSha256": "658bb395cc3e5381879ac2df363231d4d4579f63a35430028c77ad4a8fc844f1",
+          "candidateValueJsonBytes": 318,
+          "sourceSerialization": "JSON.stringify(value)",
+          "sceneJsonSha256": "659e64ff49b44fff98516c8a6781dcf4e78d14e3cc87f182099b581d2a462e71",
+          "sceneJsonBytes": 308
+        },
+        {
+          "id": "cand-510b",
+          "candidateValueJsonSha256": "689dd2d6ab25b71da8daea3e062ef6a837dc9644705d330e430a147bd267fd84",
+          "candidateValueJsonBytes": 319,
+          "sourceSerialization": "JSON.stringify(value)",
+          "sceneJsonSha256": "b7b04e54edddba5e5e4df4f09c9181302ba61a3afc23a11835f47a06a1829a68",
+          "sceneJsonBytes": 309
+        }
+      ],
+      "promptVersion": "production-camera-scene-v7",
+      "acceptanceVersion": "production-camera-acceptance-v2",
+      "validationContract": {
+        "planningLoopVersion": "production-planning-loop-v1",
+        "reviewContextVersion": "production-review-context-v2",
+        "harnessPromptTransportVersion": "harness-literal-prompt-v1",
+        "harnessJsonOutputVersion": "harness-json-output-v1",
+        "responseFormatPolicy": "deepseek-json-object-other-prompt-only",
+        "semanticsVersion": "production-acceptance-semantic-v2",
+        "jevRequestLayoutVersion": "jev-request-layout-v2",
+        "cameraTestSemanticsVersion": "camera-test-semantics-v1",
+        "coverage": {
+          "version": "production-coverage-owners-v1",
+          "capability": "camera-scene-v1",
+          "owners": {
+            "hostSchema": {
+              "required": true,
+              "scope": "Strict non-executable fields, primitive/range/count bounds, distinct palm/fist actions. Schema does NOT prove design or business mapping."
+            },
+            "roleCss": {
+              "required": true,
+              "scope": "Independent frozen business state, precise rotation/reset and required concrete totals/title. Assert every explicit mapping at #gesture-map; mandatory Gate alone proves only self-consistency. No disabled camera clicks, unresolved values or count-change assertions."
+            },
+            "platformMandatoryGate": {
+              "required": true,
+              "scope": "Per-run real Canvas/pixels/particle snapshots; scatter/gather/rotation/reset; synthetic 21 points, three-frame debounce and configured palm-X. Must execute AND pass alongside role CSS; not real vision/camera proof."
+            },
+            "platformEngineering": {
+              "required": false,
+              "scope": "Separate versioned media start/stop, late permission, model/worker failure, release and asset regression. Not executed by per-run Gate or a role-declared pass."
+            },
+            "physicalAcceptance": {
+              "required": false,
+              "scope": "User-initiated real camera/hand, lighting/latency, permission/error/stop and subjective scene quality; unverified; full requirement stays false until independent real-device evidence."
+            }
+          },
+          "evidenceRule": "This contract assigns obligations only. A claimed owner or engineering fixture does not pass a business requirement. Final delivery requires actual immutable checks; unknown and deferred coverage never become true automatically."
+        }
+      },
+      "validationContractSha256": "e8892a319055a60d714fe0fc0bd0a57483f0b72665b46977379ad8af8a02a2bc",
+      "rubricVersion": "verifier-phase-ordinal-v4",
+      "logicalLlmPromptBytes": 23758,
+      "logicalLlmPromptSha256": "904c79b0cdec65d460d3e89d72e2e2eed7e54f6b3c6c54ce0295613a2b3540db",
+      "jevStateBytes": 9616,
+      "jevMaxQuestionBytes": 691,
+      "jevPerQuestionBytes": 10307,
+      "jevTotalBytes": 15648,
+      "jevRequestSha256": "5b5e4aecef11e2d3fc7d826c81a14ae0dfa66f6630a1c18d93781d23692762ef",
+      "requestEvidence": "offline-serialized-never-dispatched",
+      "llmTransportBoundary": "logical system/user only; final provider/model parameters and full wire request are not frozen or measured"
+    }
+  ],
+  "startedAt": "2026-10-07T11:29:56.574Z",
+  "sourceCommit": "7755b4ddf68fec211783717d256430642d89713e",
+  "sourceClean": true,
+  "nodeVersion": "v22.22.3",
+  "sourceHashes": {
+    "shared/production-verifier-html-corpus-a.ts": "316d992458ea60afed08799b0753a00598a20bea95b2f84eb158b095f4053885",
+    "shared/production-verifier-html-corpus-b.ts": "5a377442dbc4a080d48469791790c11ee379657608c9e5ff7e97b5d317086b42",
+    "shared/production-verifier-scene-corpus.ts": "97bc07440f164981dfda0826564a8b34f01b0c1a8160197ca551cd132a20a761",
+    "shared/production-verifier-challenge-corpus.ts": "4a7f51692974f9e24f9b73f00ba4de18ad19aa480902f8342d4ea12b53d431a7",
+    "server/production/verifier-corpus-preparation.ts": "fd7fbc08c0b33dc6c9f126551f71e6f6576a4674d8a986a9377e2c97824a632a",
+    "server/production/verifier-scene-oracle.ts": "9358e57df8ab0672d99b613b3a88b01f69079038087113a201fd584180d5f34b",
+    "server/gate.ts": "edb8e5f76a6c9690639f42d06fcf924b03fc4fd05726132d0079c71961125b63",
+    "server/production/camera-gate.ts": "9d4826052d66afe5a3e8e4bbb2a0278520439ebd90b9c9b549103e09fd1e4345",
+    "shared/camera-scene-runtime.ts": "8c1e88e4e37dfcb8b18f4f9cb82c16affd37f98b7012c90b2e9d8bd2e48a7233",
+    "shared/camera-scene-schema.ts": "3c1920ba2fafb0230c40ecc63fbcba5da33fcc7e5f1cf8c08604b0fff97162d1",
+    "shared/camera-asset-manifest.ts": "952ff1fe03cf164d0ec8e155a17303842b2ff7e59e003ab1dfbf93ea98db39ca",
+    "shared/camera-hand-worker.ts": "32c535e2ed5827f66d8886543faec3e97e1e7aa9aba673fd50c5ce4458bda540",
+    "shared/camera-test-semantics.ts": "139845ba925af107fd49a29b44a681143e84a82278945d74acca8cef9eebc7fd",
+    "shared/production-schema.ts": "05a4883fef91ad1d064460b99e4857528abe4845f25f74a0da421e692c2a1963",
+    "shared/production-coverage.ts": "e007e25af2eeb7aa73788a07a171c92519cd5ef806a32b47a7e45eecd8606333",
+    "shared/production-execution-profile.ts": "b2831b50b710dda61c044da88bdc599329dfec710de51dc9d4f1b2458663b4fb",
+    "shared/jev-schema.ts": "7ceb9518920396c36cc928c788816ad2b75d2388cea18b74c44a6fd4f97137be",
+    "server/production/contracts.ts": "e623bf16b3a3ec2204c229ce71d8d6b414d08587a6c43f7a27a8600dc3d87683",
+    "shared/production-verifier-rubric.ts": "c14fc32120594b5be815cfc541acfdfff4069ef868f1336ee8a5a63e6030eeca",
+    "server/production/jev.ts": "c8f8315461e739dd00c1f340a27998d759937f79a06430683a27d6aa62e129ca",
+    "server/production/acceptance-preflight.ts": "111c8218c85af5484b5c1472dbf51d91291fa6e41efcdb92a589049ff89d415a",
+    "server/production/review-context.ts": "92e2fe0f08dd6bb4ba534dccd93775f0830e947556eea6512f7cffc7afe02074",
+    "server/production/output-diagnostics.ts": "52b2059d8617e40bf4ec0f4d6960d960996ba05696b6be4d64ddf599cb5cdd06",
+    "server/production/store.ts": "028c25436c3ad87cddb1ed8509610cabfebea2bcb1d530e6be146fc987f6d562",
+    "server/harness.ts": "ba8d14b147760015d36f4fa573bab55f90cc2386b38ffd0f5403f90df8be5007",
+    "server/harness-literal-prompt.mjs": "6c04f63db159bec675069ea72939bbbc225f1d1fcb08200848dc00aef3aa31d2",
+    "server/usage-observer.ts": "1fba7f0ff518b775dd331976eb2996563250cd0593690792cf9283219d6d4f98",
+    "scripts/prepare-production-verifier-corpus.ts": "27023e05ca1f17ee8f6ac789ffd6f0d260f99b8b131473a0f5bca32f990b8b4d",
+    "package.json": "8dab70403153a1d8f52a3ddb11fcfcd3ffa92754c8a04df27c6dfa42a30a86e8",
+    "package-lock.json": "e278b75c619b286a72fb8c545863080a5112627669a9fec9202473bb2d92938e",
+    "tsconfig.json": "cd804651f6c2cff3f97f7b6acb7ff2df20d2a8056a98322e878ebee9a14cf39c"
+  },
+  "labelSha256": "c425383c79c1fececdfd4680123c612387f41252490ff7845a179b6eed48f74a",
+  "corpusSha256": "0d1889b075bba394cfa7dc5506d1a673d4b5fc01805f2ef541dd2019ca6c609f",
+  "localOnly": true,
+  "license": "Repository-authored synthetic fixtures; repository license applies; not business tickets"
+}

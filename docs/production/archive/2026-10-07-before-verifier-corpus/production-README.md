@@ -1,7 +1,5 @@
 # 六角色自主软件生产工作区
 
-最新免费增量：[18池Verifier挑战集](VERIFIER-CHALLENGE-CORPUS.md)及[原始准备证据](experiments/VERIFIER-PREP-01/RESULT.md)。36结构合法候选实际Oracle与独立标签全一致（16通过/20业务负例），116.390秒、0模型请求；不是模型选优成绩或新自主交付。准备源码7755b4d，下一步VE-02/03同条件study执行器/账本；公开v5仍保持固定旧版本。本次[全文留底](archive/2026-10-07-before-verifier-corpus/production-README.md)。
-
 材料入口：[已提交离线主稿（v3原叙述保留）](SUBMISSION-REPORT.md)、[评委独立安装/自测指南](REVIEWER-GUIDE.md)、[最新进度](POST-SUBMISSION-PLAN.md)。在线production/是固定案例＋安装引导＋材料，不是新需求后端；公开版本以publication-manifest为准。新包使用reviews/<完整publisher commit>/固定入口，PDF/MD/JSON分别记录材料版本与原实验来源；历史MP4保持原视频commit，旧公开附件不覆盖。
 
 v5静态页/PDF/MP4/ZIP已发布并[核验](PUBLICATION-V5-2026-10-07.md)，安装源码固定967bbba，纳入CAMERA09七原档；旧v3/v4附件和历史视频保留。后续源码修改不等于该固定公开版本已更新。本轮原文[留底](archive/2026-10-07-before-html01/production-README.md)。实际新需求在本机4420页面点“新建自定义需求”，完整填写来源/验收、配置六角色与可选Jev，然后一次明确有限预算授权启动。

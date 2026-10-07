@@ -1,0 +1,326 @@
+[
+  {
+    "poolId": "H01",
+    "candidateId": "cand-f15c",
+    "status": "completed",
+    "startedAt": "2026-10-07T11:29:56.799Z",
+    "candidateValueJsonSha256": "183baebe1dd9eb178384a7f76b14e60b2db6e93bef20dbe80f93b8c0e8d02fa3",
+    "checksSha256": "e8b464e579bde92a45687c803fb55b11cb7090b995f47a14b44140404f929437",
+    "endedAt": "2026-10-07T11:29:59.087Z"
+  },
+  {
+    "poolId": "H01",
+    "candidateId": "cand-62d8",
+    "status": "completed",
+    "startedAt": "2026-10-07T11:29:59.110Z",
+    "candidateValueJsonSha256": "a1d05d5ef26baa65d645834df8f76bac03a0cefefe2592148d0f224261307b3f",
+    "checksSha256": "e8b464e579bde92a45687c803fb55b11cb7090b995f47a14b44140404f929437",
+    "endedAt": "2026-10-07T11:30:04.280Z"
+  },
+  {
+    "poolId": "H02",
+    "candidateId": "cand-7ab2",
+    "status": "completed",
+    "startedAt": "2026-10-07T11:30:04.305Z",
+    "candidateValueJsonSha256": "cd1114b9e1a1bb1b5ec078480942fbe9563af7cb3f0b602dcee57f198fa610f6",
+    "checksSha256": "6789cad4faa41320450900ac63c27403b9c3470457a4292fea084e1a668252cc",
+    "endedAt": "2026-10-07T11:30:09.519Z"
+  },
+  {
+    "poolId": "H02",
+    "candidateId": "cand-d90e",
+    "status": "completed",
+    "startedAt": "2026-10-07T11:30:09.568Z",
+    "candidateValueJsonSha256": "f4f700a716edc9db0965397ea3e6a96fb4aacc66ae29df0208c9e707388d6f9d",
+    "checksSha256": "6789cad4faa41320450900ac63c27403b9c3470457a4292fea084e1a668252cc",
+    "endedAt": "2026-10-07T11:30:16.065Z"
+  },
+  {
+    "poolId": "H03",
+    "candidateId": "cand-3e91",
+    "status": "completed",
+    "startedAt": "2026-10-07T11:30:16.091Z",
+    "candidateValueJsonSha256": "7586f8daaee84119fc58b3665e84ac1399bcfce259c11ca9e9a5b05be18a9722",
+    "checksSha256": "24b5858b7eb3eeaed1fc0f3c7d6319f0611e129d004a4b31bd4d81c84f68439b",
+    "endedAt": "2026-10-07T11:30:25.752Z"
+  },
+  {
+    "poolId": "H03",
+    "candidateId": "cand-80c4",
+    "status": "completed",
+    "startedAt": "2026-10-07T11:30:25.777Z",
+    "candidateValueJsonSha256": "49686c56a55b4721c48e992af8d5b59c3e981192c47a4d458b082cba0fec6bfd",
+    "checksSha256": "24b5858b7eb3eeaed1fc0f3c7d6319f0611e129d004a4b31bd4d81c84f68439b",
+    "endedAt": "2026-10-07T11:30:28.325Z"
+  },
+  {
+    "poolId": "H04",
+    "candidateId": "cand-49fe",
+    "status": "completed",
+    "startedAt": "2026-10-07T11:30:28.399Z",
+    "candidateValueJsonSha256": "c6d5a947ab219d58d34b62e5d6fd79bbb4b3f2b9d4e6e0a48387abd052b79ba2",
+    "checksSha256": "1175dbc9a0e73739ddbf51e857270a60a502da2eb198a09ae3a304fc14113674",
+    "endedAt": "2026-10-07T11:30:31.113Z"
+  },
+  {
+    "poolId": "H04",
+    "candidateId": "cand-ac26",
+    "status": "completed",
+    "startedAt": "2026-10-07T11:30:31.139Z",
+    "candidateValueJsonSha256": "004884fe9b09bedb74b7836ef3f3c3b362c04f7d90ce6d44f51cdaa04bb6aecf",
+    "checksSha256": "1175dbc9a0e73739ddbf51e857270a60a502da2eb198a09ae3a304fc14113674",
+    "endedAt": "2026-10-07T11:30:33.678Z"
+  },
+  {
+    "poolId": "H05",
+    "candidateId": "cand-6b07",
+    "status": "completed",
+    "startedAt": "2026-10-07T11:30:33.710Z",
+    "candidateValueJsonSha256": "3d8ba57ded93248134d7b9c2f05c02042678e58337f8be8f9560a84beff0b0f9",
+    "checksSha256": "d7b2d3122cb73b218d8a0f0a73c4eb19612197c3d537f5ca9030e32aba786be1",
+    "endedAt": "2026-10-07T11:30:37.221Z"
+  },
+  {
+    "poolId": "H05",
+    "candidateId": "cand-c8a3",
+    "status": "completed",
+    "startedAt": "2026-10-07T11:30:37.245Z",
+    "candidateValueJsonSha256": "b4bccbeae2e922d1c4da34d81fbf029746ee912f90630807a8bfc48faf5b77be",
+    "checksSha256": "d7b2d3122cb73b218d8a0f0a73c4eb19612197c3d537f5ca9030e32aba786be1",
+    "endedAt": "2026-10-07T11:30:40.647Z"
+  },
+  {
+    "poolId": "H06",
+    "candidateId": "cand-e5d2",
+    "status": "completed",
+    "startedAt": "2026-10-07T11:30:40.670Z",
+    "candidateValueJsonSha256": "9bec4a9588ddfc8e74499be70ff7df41ce464c8b8b9b2674ee779d6e8b506f60",
+    "checksSha256": "a85fa0e4932f5fdbf6a759e355d7ff76fccac8184924c83e916b4c7443a4a1fe",
+    "endedAt": "2026-10-07T11:30:42.302Z"
+  },
+  {
+    "poolId": "H06",
+    "candidateId": "cand-19f4",
+    "status": "completed",
+    "startedAt": "2026-10-07T11:30:42.338Z",
+    "candidateValueJsonSha256": "c4b0d27a785dfddfe28c50a06a49c17d194590c6af046306971f63f31cf6a324",
+    "checksSha256": "a85fa0e4932f5fdbf6a759e355d7ff76fccac8184924c83e916b4c7443a4a1fe",
+    "endedAt": "2026-10-07T11:30:49.802Z"
+  },
+  {
+    "poolId": "H07",
+    "candidateId": "cand-28c5",
+    "status": "completed",
+    "startedAt": "2026-10-07T11:30:49.829Z",
+    "candidateValueJsonSha256": "78b3b7af97519589e94f025fa066f6c52077244df2131361e7745c3b77d0df5d",
+    "checksSha256": "158269e61b1fa58ff7877a609ba15190cba071737a988b68307e0cedf8485814",
+    "endedAt": "2026-10-07T11:30:51.604Z"
+  },
+  {
+    "poolId": "H07",
+    "candidateId": "cand-a760",
+    "status": "completed",
+    "startedAt": "2026-10-07T11:30:51.635Z",
+    "candidateValueJsonSha256": "060fc1adb54ed58caf241878976897d87004eb00a980ab26a68497d503f9f705",
+    "checksSha256": "158269e61b1fa58ff7877a609ba15190cba071737a988b68307e0cedf8485814",
+    "endedAt": "2026-10-07T11:30:53.386Z"
+  },
+  {
+    "poolId": "H08",
+    "candidateId": "cand-73de",
+    "status": "completed",
+    "startedAt": "2026-10-07T11:30:53.406Z",
+    "candidateValueJsonSha256": "bb68edb11b66eaa408ae290335981a168ba099354a71e20f175e97d1e8047896",
+    "checksSha256": "e2c58ee00ad380b86f11cf6093af18c6e5be1ae20354c5e8ebd1395eb557f008",
+    "endedAt": "2026-10-07T11:30:59.686Z"
+  },
+  {
+    "poolId": "H08",
+    "candidateId": "cand-4b81",
+    "status": "completed",
+    "startedAt": "2026-10-07T11:30:59.715Z",
+    "candidateValueJsonSha256": "3bfac7039675cb3c89e7eaed0742f73a840b42a95fa96ca15ed8d21224490ad4",
+    "checksSha256": "e2c58ee00ad380b86f11cf6093af18c6e5be1ae20354c5e8ebd1395eb557f008",
+    "endedAt": "2026-10-07T11:31:04.575Z"
+  },
+  {
+    "poolId": "H09",
+    "candidateId": "cand-e105",
+    "status": "completed",
+    "startedAt": "2026-10-07T11:31:04.597Z",
+    "candidateValueJsonSha256": "8830664069bf2e63d8c8783756c75ec440e86ca8a5938a090a5c9987375ef15e",
+    "checksSha256": "2fd0dcc818b130fed2e0482a5ba95d293c3728d2d183e0e1f64d9b9d117d210c",
+    "endedAt": "2026-10-07T11:31:10.314Z"
+  },
+  {
+    "poolId": "H09",
+    "candidateId": "cand-6f92",
+    "status": "completed",
+    "startedAt": "2026-10-07T11:31:10.349Z",
+    "candidateValueJsonSha256": "c56ea870164438c625911a988702c9699d3cf680f7223fe4324e22acfdddf521",
+    "checksSha256": "2fd0dcc818b130fed2e0482a5ba95d293c3728d2d183e0e1f64d9b9d117d210c",
+    "endedAt": "2026-10-07T11:31:11.763Z"
+  },
+  {
+    "poolId": "H10",
+    "candidateId": "cand-90ac",
+    "status": "completed",
+    "startedAt": "2026-10-07T11:31:11.785Z",
+    "candidateValueJsonSha256": "e326c1543a847ecd4e18593649f1f99727e5ac8dcb5b6a17feb9ea5ffb6c9540",
+    "checksSha256": "91f21699cc5cdf10d9d5293687b887c34fffd2a083ae480a1e60ea24ee8a8887",
+    "endedAt": "2026-10-07T11:31:18.227Z"
+  },
+  {
+    "poolId": "H10",
+    "candidateId": "cand-2d47",
+    "status": "completed",
+    "startedAt": "2026-10-07T11:31:18.255Z",
+    "candidateValueJsonSha256": "ec8160c403d24e66d1bca0229fdf7cec1752ce7e5e7a0454df0bf46a0565a73b",
+    "checksSha256": "91f21699cc5cdf10d9d5293687b887c34fffd2a083ae480a1e60ea24ee8a8887",
+    "endedAt": "2026-10-07T11:31:23.227Z"
+  },
+  {
+    "poolId": "H11",
+    "candidateId": "cand-c38e",
+    "status": "completed",
+    "startedAt": "2026-10-07T11:31:23.251Z",
+    "candidateValueJsonSha256": "c377c2e6a671a492e276db22154940beedb64ba179ef93c5de27f5197235448f",
+    "checksSha256": "62f17019908843fc2f4b488dfb377ab377cb8fc06360caae5d3e9a570616b1ab",
+    "endedAt": "2026-10-07T11:31:25.302Z"
+  },
+  {
+    "poolId": "H11",
+    "candidateId": "cand-51b4",
+    "status": "completed",
+    "startedAt": "2026-10-07T11:31:25.325Z",
+    "candidateValueJsonSha256": "d2ae7ddc5cc62ee353546640fb7371af595e00050c4a06d7d612e1a4b17ef2e1",
+    "checksSha256": "62f17019908843fc2f4b488dfb377ab377cb8fc06360caae5d3e9a570616b1ab",
+    "endedAt": "2026-10-07T11:31:27.344Z"
+  },
+  {
+    "poolId": "H12",
+    "candidateId": "cand-8fa2",
+    "status": "completed",
+    "startedAt": "2026-10-07T11:31:27.361Z",
+    "candidateValueJsonSha256": "77ac75c01ee7f89aec08ba67936701fdfa6c0c3ca75e419d43f10604bd07624c",
+    "checksSha256": "1c6d58fcea007182e1d1a7baa2e451aefe819a3ef752aa1ab09176fa3503a3ae",
+    "endedAt": "2026-10-07T11:31:29.519Z"
+  },
+  {
+    "poolId": "H12",
+    "candidateId": "cand-36d9",
+    "status": "completed",
+    "startedAt": "2026-10-07T11:31:29.549Z",
+    "candidateValueJsonSha256": "88ccc10d810dfeb3c8fbba9fb479ef79f223862931fdcc3bb40f647db6f3e771",
+    "checksSha256": "1c6d58fcea007182e1d1a7baa2e451aefe819a3ef752aa1ab09176fa3503a3ae",
+    "endedAt": "2026-10-07T11:31:33.173Z"
+  },
+  {
+    "poolId": "C13",
+    "candidateId": "cand-f732",
+    "status": "completed",
+    "startedAt": "2026-10-07T11:31:33.199Z",
+    "candidateValueJsonSha256": "601a0e4438911e98fb6c15ddaa8d39564639bd5eb5d554a55c72e23b9fbd5bd1",
+    "checksSha256": "e6f08f38ce2d5f3fae118155df2406c892fafa7be6d4b34c476fdb7d74fb619d",
+    "endedAt": "2026-10-07T11:31:34.498Z"
+  },
+  {
+    "poolId": "C13",
+    "candidateId": "cand-20c6",
+    "status": "completed",
+    "startedAt": "2026-10-07T11:31:34.520Z",
+    "candidateValueJsonSha256": "2705751eadae025d758adfce66d86e4a4eeff923763489a26921ac6afc5f62ba",
+    "checksSha256": "e6f08f38ce2d5f3fae118155df2406c892fafa7be6d4b34c476fdb7d74fb619d",
+    "endedAt": "2026-10-07T11:31:35.856Z"
+  },
+  {
+    "poolId": "C14",
+    "candidateId": "cand-57de",
+    "status": "completed",
+    "startedAt": "2026-10-07T11:31:35.888Z",
+    "candidateValueJsonSha256": "1b516942c4919ed01490348b3bdcc73ac88ed57bd45bb192c7a2849087f6a627",
+    "checksSha256": "9f8b805e593f88a11d97548ea9fac2f2ee54a40eefa2b1365100afbd013ecb9c",
+    "endedAt": "2026-10-07T11:31:37.167Z"
+  },
+  {
+    "poolId": "C14",
+    "candidateId": "cand-aca4",
+    "status": "completed",
+    "startedAt": "2026-10-07T11:31:37.188Z",
+    "candidateValueJsonSha256": "c522fc7dd59461c3e8bd8a70845e6f1e7c5c19b99eecc7b44923bb62419af65f",
+    "checksSha256": "9f8b805e593f88a11d97548ea9fac2f2ee54a40eefa2b1365100afbd013ecb9c",
+    "endedAt": "2026-10-07T11:31:38.508Z"
+  },
+  {
+    "poolId": "C15",
+    "candidateId": "cand-d180",
+    "status": "completed",
+    "startedAt": "2026-10-07T11:31:38.529Z",
+    "candidateValueJsonSha256": "17eeba3eafb50c1bcc2153ae5764e802fc98dd6a47560cc2981094aefa76b48f",
+    "checksSha256": "b14987ab1f1fa8b18a9f5028721ca982d393fceb6b320eae116010fd0000593a",
+    "endedAt": "2026-10-07T11:31:39.816Z"
+  },
+  {
+    "poolId": "C15",
+    "candidateId": "cand-6ac9",
+    "status": "completed",
+    "startedAt": "2026-10-07T11:31:39.837Z",
+    "candidateValueJsonSha256": "89b6a4964ba8625bd83cbddcd6cd71cab9c09d0f93df71f0532b3d4700276e85",
+    "checksSha256": "b14987ab1f1fa8b18a9f5028721ca982d393fceb6b320eae116010fd0000593a",
+    "endedAt": "2026-10-07T11:31:41.125Z"
+  },
+  {
+    "poolId": "C16",
+    "candidateId": "cand-e409",
+    "status": "completed",
+    "startedAt": "2026-10-07T11:31:41.155Z",
+    "candidateValueJsonSha256": "f63404a1bccd1ea20433e8c3d67eb7d43b83b6445fb4fb97a75bd9afbe963c39",
+    "checksSha256": "4fca3fb2556d1ed6b4821d938266c9f72bb5f31e4acb8a4d9674bca799565a1e",
+    "endedAt": "2026-10-07T11:31:42.412Z"
+  },
+  {
+    "poolId": "C16",
+    "candidateId": "cand-184f",
+    "status": "completed",
+    "startedAt": "2026-10-07T11:31:42.438Z",
+    "candidateValueJsonSha256": "1082cce669687927163c4e30ce19f8e33a980930077d381c4c6dbce7d5b4b773",
+    "checksSha256": "4fca3fb2556d1ed6b4821d938266c9f72bb5f31e4acb8a4d9674bca799565a1e",
+    "endedAt": "2026-10-07T11:31:43.689Z"
+  },
+  {
+    "poolId": "C17",
+    "candidateId": "cand-61fb",
+    "status": "completed",
+    "startedAt": "2026-10-07T11:31:43.718Z",
+    "candidateValueJsonSha256": "c5ef3645f3c979baac55939cb6c0f9f546cfee79e98431d519f10d6810ef4ec2",
+    "checksSha256": "81c70ea9ab79489fd878323cd4a5214c9c7c60f7720cd7b691a399c824ec654b",
+    "endedAt": "2026-10-07T11:31:46.580Z"
+  },
+  {
+    "poolId": "C17",
+    "candidateId": "cand-834c",
+    "status": "completed",
+    "startedAt": "2026-10-07T11:31:46.607Z",
+    "candidateValueJsonSha256": "de87186069976c06ba07e027001e7631c34167f3011e2834e3bfabf3e2ae2904",
+    "checksSha256": "81c70ea9ab79489fd878323cd4a5214c9c7c60f7720cd7b691a399c824ec654b",
+    "endedAt": "2026-10-07T11:31:49.416Z"
+  },
+  {
+    "poolId": "C18",
+    "candidateId": "cand-9ec2",
+    "status": "completed",
+    "startedAt": "2026-10-07T11:31:49.462Z",
+    "candidateValueJsonSha256": "658bb395cc3e5381879ac2df363231d4d4579f63a35430028c77ad4a8fc844f1",
+    "checksSha256": "d40603325c4bee972073c4cdf96cfbb3c0a11afe6b330ebdffe638134c5996d8",
+    "endedAt": "2026-10-07T11:31:51.697Z"
+  },
+  {
+    "poolId": "C18",
+    "candidateId": "cand-510b",
+    "status": "completed",
+    "startedAt": "2026-10-07T11:31:51.740Z",
+    "candidateValueJsonSha256": "689dd2d6ab25b71da8daea3e062ef6a837dc9644705d330e430a147bd267fd84",
+    "checksSha256": "d40603325c4bee972073c4cdf96cfbb3c0a11afe6b330ebdffe638134c5996d8",
+    "endedAt": "2026-10-07T11:31:52.998Z"
+  }
+]

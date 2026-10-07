@@ -2,10 +2,6 @@
 
 ## 当前补充（2026-10-07，历史段落不回写）
 
-[Verifier挑战准备批次](BATCH-VERIFIER-CORPUS-CHECKS.md)继续免费VE-01，18池36候选的实际Oracle与标签全一致（16通过20业务负例），116.390秒、0模型请求；原manifest/intent/results[归档](experiments/VERIFIER-PREP-01/RESULT.md)。这不是正式收费选优或新自主交付结果；新的完整回归以该批次最终实际日志为准，下文515/38仍是前一源码时点。本次[留底](archive/2026-10-07-before-verifier-corpus/VALIDATION.md)。
-
-该新源码最终全量 **531/531、472.724秒**，独立浏览器 **38/38、1.3分钟**，TypeScript/diff通过；36份准备及15历史原件独立复核一致。新真实HTML、收费Verifier效益、物理相机与容器仍不由这些免费回归推定。
-
 [v5公开材料](PUBLICATION-V5-2026-10-07.md)已发布，11页PDF逐页检查及13个公网文件HTTP/SHA读回通过。[HTML01](experiments/HTML-01/RESULT.md)通用网页真实运行失败，1自动返修、19次HTTP、总费用unknown，原失败不覆盖。其后免费工程修补的HTML执行事实v1/Prompt v9、返修review-context v2、boot-disk v1身份门禁与旧模型实测分列，新的源码尚须新实验验证。本文更新前[留底](archive/2026-10-07-before-html01/VALIDATION.md)。
 
 本批冻结源码最终工程验证480/480（343.702秒），独立4421浏览器38/38（1.3分钟），TypeScript及diff格式通过，详见[BATCH-HTML01-CHECKS](BATCH-HTML01-CHECKS.md)。工程夹具/注入结果不计真实自主交付；HTML02按新预登记仅启动一次。

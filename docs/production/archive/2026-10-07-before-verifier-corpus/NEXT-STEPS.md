@@ -1,7 +1,5 @@
 # 自主软件生产任务清单
 
-最新增量：VE-01免费[18池/36候选准备](VERIFIER-CHALLENGE-CORPUS.md)已完成，统一实际Oracle36/36标签一致、116.390秒、0模型请求，原件见[VERIFIER-PREP-01](experiments/VERIFIER-PREP-01/RESULT.md)。三DEV池仍不计正式集。下一免费任务VE-02/03：三策略study adapter与预算/intent/unknown/取消/重启注入验证；其后VE-04整批配置冻结与新预算。没有自动启动54意图收费批次，真实HTML v10、实体相机与容器各自单独验收。本次[留底](archive/2026-10-07-before-verifier-corpus/NEXT-STEPS.md)。
-
 ## 申报后当前状态与执行顺序
 
 用户已完成申报。最新进度、任务与evaluation门限见 [申报后开发清单](POST-SUBMISSION-PLAN.md)。六角色配置、Verifier/Jev、冻结验收、预算/取消与三个工程Mock已实现；CAMERA-09首次真实有界场景Gate通过，01～09不同配置探索/完整摄像头需求分别统计，不称稳定成功率。

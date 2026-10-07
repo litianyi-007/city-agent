@@ -1,0 +1,2216 @@
+[
+  {
+    "poolId": "H01",
+    "candidateId": "cand-f15c",
+    "expectedPass": true,
+    "candidateValueJsonSha256": "183baebe1dd9eb178384a7f76b14e60b2db6e93bef20dbe80f93b8c0e8d02fa3",
+    "sourceSerialization": "JSON.stringify(value)",
+    "htmlUtf8Sha256": "cddd08cca60439d2e8bfb2b9cafee9296f24d59625392a40f85f895c298a32ff",
+    "checksSha256": "e8b464e579bde92a45687c803fb55b11cb7090b995f47a14b44140404f929437",
+    "actual": {
+      "passed": true,
+      "checks": [
+        {
+          "name": "页面加载、可见内容与 JavaScript",
+          "passed": true
+        },
+        {
+          "name": "初始库存与空记录",
+          "passed": true
+        },
+        {
+          "name": "最小合法出库精确记录",
+          "passed": true
+        },
+        {
+          "name": "最大合法出库精确记录",
+          "passed": true
+        },
+        {
+          "name": "连续出库按当前库存扣减且记录不丢失",
+          "passed": true
+        },
+        {
+          "name": "零数量拒绝且不改变库存记录",
+          "passed": true
+        },
+        {
+          "name": "超上限数量拒绝且不改变库存记录",
+          "passed": true
+        },
+        {
+          "name": "负数和小数拒绝且不改变库存记录",
+          "passed": true
+        },
+        {
+          "name": "空值和非数字拒绝且不改变库存记录",
+          "passed": true
+        },
+        {
+          "name": "库存不足拒绝且记录精确保留",
+          "passed": true
+        }
+      ],
+      "summary": "独立 Chromium 验收通过，交互与输出已验证。"
+    },
+    "matched": true,
+    "healthy": true
+  },
+  {
+    "poolId": "H01",
+    "candidateId": "cand-62d8",
+    "expectedPass": false,
+    "candidateValueJsonSha256": "a1d05d5ef26baa65d645834df8f76bac03a0cefefe2592148d0f224261307b3f",
+    "sourceSerialization": "JSON.stringify(value)",
+    "htmlUtf8Sha256": "d0747326cd5b87951c4f79a29c7cae5eda2e524729c0c896446afde47c0576a2",
+    "checksSha256": "e8b464e579bde92a45687c803fb55b11cb7090b995f47a14b44140404f929437",
+    "actual": {
+      "passed": false,
+      "checks": [
+        {
+          "name": "页面加载、可见内容与 JavaScript",
+          "passed": true
+        },
+        {
+          "name": "初始库存与空记录",
+          "passed": true
+        },
+        {
+          "name": "最小合法出库精确记录",
+          "passed": true
+        },
+        {
+          "name": "最大合法出库精确记录",
+          "passed": true
+        },
+        {
+          "name": "连续出库按当前库存扣减且记录不丢失",
+          "passed": true
+        },
+        {
+          "name": "零数量拒绝且不改变库存记录",
+          "passed": false,
+          "detail": "#message 文本不精确等于：数量必须为 1–5 的整数"
+        },
+        {
+          "name": "超上限数量拒绝且不改变库存记录",
+          "passed": false,
+          "detail": "#message 文本不精确等于：数量必须为 1–5 的整数"
+        },
+        {
+          "name": "负数和小数拒绝且不改变库存记录",
+          "passed": true
+        },
+        {
+          "name": "空值和非数字拒绝且不改变库存记录",
+          "passed": true
+        },
+        {
+          "name": "库存不足拒绝且记录精确保留",
+          "passed": true
+        }
+      ],
+      "summary": "浏览器验收未通过，需修复失败项。"
+    },
+    "matched": true,
+    "healthy": true
+  },
+  {
+    "poolId": "H02",
+    "candidateId": "cand-7ab2",
+    "expectedPass": false,
+    "candidateValueJsonSha256": "cd1114b9e1a1bb1b5ec078480942fbe9563af7cb3f0b602dcee57f198fa610f6",
+    "sourceSerialization": "JSON.stringify(value)",
+    "htmlUtf8Sha256": "41bf44e562a8d3cead2db08072878f199d171cc91b153b0869a9f31a85cee745",
+    "checksSha256": "6789cad4faa41320450900ac63c27403b9c3470457a4292fea084e1a668252cc",
+    "actual": {
+      "passed": false,
+      "checks": [
+        {
+          "name": "页面加载、可见内容与 JavaScript",
+          "passed": true
+        },
+        {
+          "name": "达到整单阈值即九折",
+          "passed": false,
+          "detail": "#amount 文本不精确等于：90.00"
+        },
+        {
+          "name": "多件低单价按整单金额优惠",
+          "passed": true
+        },
+        {
+          "name": "阈值以下不折扣且保留数量",
+          "passed": true
+        },
+        {
+          "name": "多件恰好达到阈值精确优惠",
+          "passed": false,
+          "detail": "#amount 文本不精确等于：90.00"
+        },
+        {
+          "name": "重算不累加且大额全单九折",
+          "passed": true
+        },
+        {
+          "name": "零值越界拒绝且保留金额",
+          "passed": true
+        },
+        {
+          "name": "非法数量拒绝且保留金额",
+          "passed": true
+        },
+        {
+          "name": "空值与非整数输入拒绝",
+          "passed": true
+        },
+        {
+          "name": "非数字和负数拒绝",
+          "passed": true
+        }
+      ],
+      "summary": "浏览器验收未通过，需修复失败项。"
+    },
+    "matched": true,
+    "healthy": true
+  },
+  {
+    "poolId": "H02",
+    "candidateId": "cand-d90e",
+    "expectedPass": false,
+    "candidateValueJsonSha256": "f4f700a716edc9db0965397ea3e6a96fb4aacc66ae29df0208c9e707388d6f9d",
+    "sourceSerialization": "JSON.stringify(value)",
+    "htmlUtf8Sha256": "f8b9ea8683b10b9480a9a096645d672a552e4375ac28deeb79bfbf3d52b2685b",
+    "checksSha256": "6789cad4faa41320450900ac63c27403b9c3470457a4292fea084e1a668252cc",
+    "actual": {
+      "passed": false,
+      "checks": [
+        {
+          "name": "页面加载、可见内容与 JavaScript",
+          "passed": true
+        },
+        {
+          "name": "达到整单阈值即九折",
+          "passed": true
+        },
+        {
+          "name": "多件低单价按整单金额优惠",
+          "passed": false,
+          "detail": "#amount 文本不精确等于：108.00"
+        },
+        {
+          "name": "阈值以下不折扣且保留数量",
+          "passed": true
+        },
+        {
+          "name": "多件恰好达到阈值精确优惠",
+          "passed": false,
+          "detail": "#amount 文本不精确等于：90.00"
+        },
+        {
+          "name": "重算不累加且大额全单九折",
+          "passed": false,
+          "detail": "#amount 文本不精确等于：108.00"
+        },
+        {
+          "name": "零值越界拒绝且保留金额",
+          "passed": true
+        },
+        {
+          "name": "非法数量拒绝且保留金额",
+          "passed": true
+        },
+        {
+          "name": "空值与非整数输入拒绝",
+          "passed": true
+        },
+        {
+          "name": "非数字和负数拒绝",
+          "passed": true
+        }
+      ],
+      "summary": "浏览器验收未通过，需修复失败项。"
+    },
+    "matched": true,
+    "healthy": true
+  },
+  {
+    "poolId": "H03",
+    "candidateId": "cand-3e91",
+    "expectedPass": false,
+    "candidateValueJsonSha256": "7586f8daaee84119fc58b3665e84ac1399bcfce259c11ca9e9a5b05be18a9722",
+    "sourceSerialization": "JSON.stringify(value)",
+    "htmlUtf8Sha256": "dde54f20da86f75e7706c9c9e289f7223dd51e4b281d596bc8a022d0c621a6bc",
+    "checksSha256": "24b5858b7eb3eeaed1fc0f3c7d6319f0611e129d004a4b31bd4d81c84f68439b",
+    "actual": {
+      "passed": false,
+      "checks": [
+        {
+          "name": "页面加载、可见内容与 JavaScript",
+          "passed": true
+        },
+        {
+          "name": "乘法后半分边界统一舍入",
+          "passed": false,
+          "detail": "#amount 文本不精确等于：3.02"
+        },
+        {
+          "name": "小额多件统一舍入不先舍入单价",
+          "passed": false,
+          "detail": "#amount 文本不精确等于：1.01"
+        },
+        {
+          "name": "两件半分单价得到精确总额",
+          "passed": false,
+          "detail": "#amount 文本不精确等于：5.11"
+        },
+        {
+          "name": "再次核算由当前输入重算且数量不改写",
+          "passed": false,
+          "detail": "#amount 文本不精确等于：1.01"
+        },
+        {
+          "name": "最小金额与最大批量精确边界",
+          "passed": false,
+          "detail": "#amount 文本不精确等于：9999999.00"
+        },
+        {
+          "name": "单价小数超精度与零值拒绝",
+          "passed": true
+        },
+        {
+          "name": "越界及负单价拒绝",
+          "passed": true
+        },
+        {
+          "name": "小数数量与数量越界拒绝",
+          "passed": true
+        },
+        {
+          "name": "空值和非数字单价拒绝",
+          "passed": true
+        },
+        {
+          "name": "零数量保留已有金额",
+          "passed": true
+        }
+      ],
+      "summary": "浏览器验收未通过，需修复失败项。"
+    },
+    "matched": true,
+    "healthy": true
+  },
+  {
+    "poolId": "H03",
+    "candidateId": "cand-80c4",
+    "expectedPass": true,
+    "candidateValueJsonSha256": "49686c56a55b4721c48e992af8d5b59c3e981192c47a4d458b082cba0fec6bfd",
+    "sourceSerialization": "JSON.stringify(value)",
+    "htmlUtf8Sha256": "4d55dfe900d8f02ec99d312ed1ab8e54d4d1fcf47233fbb4413d63707b71a18b",
+    "checksSha256": "24b5858b7eb3eeaed1fc0f3c7d6319f0611e129d004a4b31bd4d81c84f68439b",
+    "actual": {
+      "passed": true,
+      "checks": [
+        {
+          "name": "页面加载、可见内容与 JavaScript",
+          "passed": true
+        },
+        {
+          "name": "乘法后半分边界统一舍入",
+          "passed": true
+        },
+        {
+          "name": "小额多件统一舍入不先舍入单价",
+          "passed": true
+        },
+        {
+          "name": "两件半分单价得到精确总额",
+          "passed": true
+        },
+        {
+          "name": "再次核算由当前输入重算且数量不改写",
+          "passed": true
+        },
+        {
+          "name": "最小金额与最大批量精确边界",
+          "passed": true
+        },
+        {
+          "name": "单价小数超精度与零值拒绝",
+          "passed": true
+        },
+        {
+          "name": "越界及负单价拒绝",
+          "passed": true
+        },
+        {
+          "name": "小数数量与数量越界拒绝",
+          "passed": true
+        },
+        {
+          "name": "空值和非数字单价拒绝",
+          "passed": true
+        },
+        {
+          "name": "零数量保留已有金额",
+          "passed": true
+        }
+      ],
+      "summary": "独立 Chromium 验收通过，交互与输出已验证。"
+    },
+    "matched": true,
+    "healthy": true
+  },
+  {
+    "poolId": "H04",
+    "candidateId": "cand-49fe",
+    "expectedPass": true,
+    "candidateValueJsonSha256": "c6d5a947ab219d58d34b62e5d6fd79bbb4b3f2b9d4e6e0a48387abd052b79ba2",
+    "sourceSerialization": "JSON.stringify(value)",
+    "htmlUtf8Sha256": "c5b621e48e15753e6cc8f122e0b8bf9c85716d5f00d9d19d9001d991385b6e8b",
+    "checksSha256": "1175dbc9a0e73739ddbf51e857270a60a502da2eb198a09ae3a304fc14113674",
+    "actual": {
+      "passed": true,
+      "checks": [
+        {
+          "name": "页面加载、可见内容与 JavaScript",
+          "passed": true
+        },
+        {
+          "name": "初始摄氏模式与零值转换",
+          "passed": true
+        },
+        {
+          "name": "摄氏负温及小数正确换算",
+          "passed": true
+        },
+        {
+          "name": "华氏零摄氏边界无负零",
+          "passed": true
+        },
+        {
+          "name": "华氏负温正确换算",
+          "passed": true
+        },
+        {
+          "name": "来回切换清除旧结果不改输入",
+          "passed": true
+        },
+        {
+          "name": "切换后的当前单位确实用于重算",
+          "passed": true
+        },
+        {
+          "name": "正负范围端点有效",
+          "passed": true
+        },
+        {
+          "name": "越界及超精度拒绝保留结果",
+          "passed": true
+        },
+        {
+          "name": "空输入非数字拒绝保留结果",
+          "passed": true
+        },
+        {
+          "name": "切换单位清除错误但保留输入",
+          "passed": true
+        }
+      ],
+      "summary": "独立 Chromium 验收通过，交互与输出已验证。"
+    },
+    "matched": true,
+    "healthy": true
+  },
+  {
+    "poolId": "H04",
+    "candidateId": "cand-ac26",
+    "expectedPass": true,
+    "candidateValueJsonSha256": "004884fe9b09bedb74b7836ef3f3c3b362c04f7d90ce6d44f51cdaa04bb6aecf",
+    "sourceSerialization": "JSON.stringify(value)",
+    "htmlUtf8Sha256": "974ace254b1fd8af2aa9bf2a9b9ad3f6fa0ad18d9ce78f7aea887b1f8a36922e",
+    "checksSha256": "1175dbc9a0e73739ddbf51e857270a60a502da2eb198a09ae3a304fc14113674",
+    "actual": {
+      "passed": true,
+      "checks": [
+        {
+          "name": "页面加载、可见内容与 JavaScript",
+          "passed": true
+        },
+        {
+          "name": "初始摄氏模式与零值转换",
+          "passed": true
+        },
+        {
+          "name": "摄氏负温及小数正确换算",
+          "passed": true
+        },
+        {
+          "name": "华氏零摄氏边界无负零",
+          "passed": true
+        },
+        {
+          "name": "华氏负温正确换算",
+          "passed": true
+        },
+        {
+          "name": "来回切换清除旧结果不改输入",
+          "passed": true
+        },
+        {
+          "name": "切换后的当前单位确实用于重算",
+          "passed": true
+        },
+        {
+          "name": "正负范围端点有效",
+          "passed": true
+        },
+        {
+          "name": "越界及超精度拒绝保留结果",
+          "passed": true
+        },
+        {
+          "name": "空输入非数字拒绝保留结果",
+          "passed": true
+        },
+        {
+          "name": "切换单位清除错误但保留输入",
+          "passed": true
+        }
+      ],
+      "summary": "独立 Chromium 验收通过，交互与输出已验证。"
+    },
+    "matched": true,
+    "healthy": true
+  },
+  {
+    "poolId": "H05",
+    "candidateId": "cand-6b07",
+    "expectedPass": false,
+    "candidateValueJsonSha256": "3d8ba57ded93248134d7b9c2f05c02042678e58337f8be8f9560a84beff0b0f9",
+    "sourceSerialization": "JSON.stringify(value)",
+    "htmlUtf8Sha256": "d932f384676dfa7d22c480043cb61a733cbcdeffbbe7c20a9d02dd8edc1e2730",
+    "checksSha256": "d7b2d3122cb73b218d8a0f0a73c4eb19612197c3d537f5ca9030e32aba786be1",
+    "actual": {
+      "passed": false,
+      "checks": [
+        {
+          "name": "页面加载、可见内容与 JavaScript",
+          "passed": true
+        },
+        {
+          "name": "初始预约为空",
+          "passed": true
+        },
+        {
+          "name": "首次预约只增加一条精确记录",
+          "passed": true
+        },
+        {
+          "name": "同日期时段拒绝重复且保留原记录",
+          "passed": false,
+          "detail": "#message 文本不精确等于：该日期时段已预约"
+        },
+        {
+          "name": "不同日期同一时段互不冲突",
+          "passed": true
+        },
+        {
+          "name": "同日期不同时段互不冲突",
+          "passed": true
+        },
+        {
+          "name": "有效日期年首与年末边界",
+          "passed": true
+        },
+        {
+          "name": "不存在日期与越界年份拒绝",
+          "passed": true
+        },
+        {
+          "name": "空值和非法时段拒绝",
+          "passed": true
+        }
+      ],
+      "summary": "浏览器验收未通过，需修复失败项。"
+    },
+    "matched": true,
+    "healthy": true
+  },
+  {
+    "poolId": "H05",
+    "candidateId": "cand-c8a3",
+    "expectedPass": false,
+    "candidateValueJsonSha256": "b4bccbeae2e922d1c4da34d81fbf029746ee912f90630807a8bfc48faf5b77be",
+    "sourceSerialization": "JSON.stringify(value)",
+    "htmlUtf8Sha256": "96e20334c206c60989255bd4c1ba1ade253c0c845d5d836c9dcb039804e900e9",
+    "checksSha256": "d7b2d3122cb73b218d8a0f0a73c4eb19612197c3d537f5ca9030e32aba786be1",
+    "actual": {
+      "passed": false,
+      "checks": [
+        {
+          "name": "页面加载、可见内容与 JavaScript",
+          "passed": true
+        },
+        {
+          "name": "初始预约为空",
+          "passed": true
+        },
+        {
+          "name": "首次预约只增加一条精确记录",
+          "passed": true
+        },
+        {
+          "name": "同日期时段拒绝重复且保留原记录",
+          "passed": true
+        },
+        {
+          "name": "不同日期同一时段互不冲突",
+          "passed": false,
+          "detail": "#message 文本不精确等于：预约成功"
+        },
+        {
+          "name": "同日期不同时段互不冲突",
+          "passed": true
+        },
+        {
+          "name": "有效日期年首与年末边界",
+          "passed": true
+        },
+        {
+          "name": "不存在日期与越界年份拒绝",
+          "passed": true
+        },
+        {
+          "name": "空值和非法时段拒绝",
+          "passed": true
+        }
+      ],
+      "summary": "浏览器验收未通过，需修复失败项。"
+    },
+    "matched": true,
+    "healthy": true
+  },
+  {
+    "poolId": "H06",
+    "candidateId": "cand-e5d2",
+    "expectedPass": true,
+    "candidateValueJsonSha256": "9bec4a9588ddfc8e74499be70ff7df41ce464c8b8b9b2674ee779d6e8b506f60",
+    "sourceSerialization": "JSON.stringify(value)",
+    "htmlUtf8Sha256": "a7cc256e02829920aea5579470f0b7fa5f89fab183674faa1607be51c3e30fbb",
+    "checksSha256": "a85fa0e4932f5fdbf6a759e355d7ff76fccac8184924c83e916b4c7443a4a1fe",
+    "actual": {
+      "passed": true,
+      "checks": [
+        {
+          "name": "页面加载、可见内容与 JavaScript",
+          "passed": true
+        },
+        {
+          "name": "初始完整目录精确数量和顺序",
+          "passed": true
+        },
+        {
+          "name": "文具筛选精确两项且无残留",
+          "passed": true
+        },
+        {
+          "name": "食品和宠物分别精确一项",
+          "passed": true
+        },
+        {
+          "name": "筛选后恢复完整原目录",
+          "passed": true
+        },
+        {
+          "name": "分类A到B再恢复全部不丢失商品",
+          "passed": true
+        },
+        {
+          "name": "重复筛选与多次恢复不复制商品",
+          "passed": true
+        }
+      ],
+      "summary": "独立 Chromium 验收通过，交互与输出已验证。"
+    },
+    "matched": true,
+    "healthy": true
+  },
+  {
+    "poolId": "H06",
+    "candidateId": "cand-19f4",
+    "expectedPass": false,
+    "candidateValueJsonSha256": "c4b0d27a785dfddfe28c50a06a49c17d194590c6af046306971f63f31cf6a324",
+    "sourceSerialization": "JSON.stringify(value)",
+    "htmlUtf8Sha256": "3fff00b13d1fbe9b091b6bb8b1027c96b5eaf2da431b9b785730d1ec93e074a0",
+    "checksSha256": "a85fa0e4932f5fdbf6a759e355d7ff76fccac8184924c83e916b4c7443a4a1fe",
+    "actual": {
+      "passed": false,
+      "checks": [
+        {
+          "name": "页面加载、可见内容与 JavaScript",
+          "passed": true
+        },
+        {
+          "name": "初始完整目录精确数量和顺序",
+          "passed": true
+        },
+        {
+          "name": "文具筛选精确两项且无残留",
+          "passed": true
+        },
+        {
+          "name": "食品和宠物分别精确一项",
+          "passed": false,
+          "detail": "#count 文本不精确等于：1"
+        },
+        {
+          "name": "筛选后恢复完整原目录",
+          "passed": false,
+          "detail": "#count 文本不精确等于：4"
+        },
+        {
+          "name": "分类A到B再恢复全部不丢失商品",
+          "passed": false,
+          "detail": "#count 文本不精确等于：1"
+        },
+        {
+          "name": "重复筛选与多次恢复不复制商品",
+          "passed": false,
+          "detail": "#count 文本不精确等于：4"
+        }
+      ],
+      "summary": "浏览器验收未通过，需修复失败项。"
+    },
+    "matched": true,
+    "healthy": true
+  },
+  {
+    "poolId": "H07",
+    "candidateId": "cand-28c5",
+    "expectedPass": true,
+    "candidateValueJsonSha256": "78b3b7af97519589e94f025fa066f6c52077244df2131361e7745c3b77d0df5d",
+    "sourceSerialization": "JSON.stringify(value)",
+    "htmlUtf8Sha256": "5c67a82e2e5900bd15a38a6a8169be35aed3795328e90039240411f4bd6fc532",
+    "checksSha256": "158269e61b1fa58ff7877a609ba15190cba071737a988b68307e0cedf8485814",
+    "actual": {
+      "passed": true,
+      "checks": [
+        {
+          "name": "页面加载、可见内容与 JavaScript",
+          "passed": true
+        },
+        {
+          "name": "问卷初始三题均未选",
+          "passed": true
+        },
+        {
+          "name": "三题选择互不覆盖且提交精确",
+          "passed": true
+        },
+        {
+          "name": "改选后计数不增且重新提交",
+          "passed": true
+        },
+        {
+          "name": "部分回答保留未选并由当前状态重算",
+          "passed": true
+        },
+        {
+          "name": "同题反复改选不影响其他题",
+          "passed": true
+        }
+      ],
+      "summary": "独立 Chromium 验收通过，交互与输出已验证。"
+    },
+    "matched": true,
+    "healthy": true
+  },
+  {
+    "poolId": "H07",
+    "candidateId": "cand-a760",
+    "expectedPass": true,
+    "candidateValueJsonSha256": "060fc1adb54ed58caf241878976897d87004eb00a980ab26a68497d503f9f705",
+    "sourceSerialization": "JSON.stringify(value)",
+    "htmlUtf8Sha256": "c33e7cb10cb39414dd57ab91cdd3c9a0acce966769390fd1e234fa4a2c7b0bd8",
+    "checksSha256": "158269e61b1fa58ff7877a609ba15190cba071737a988b68307e0cedf8485814",
+    "actual": {
+      "passed": true,
+      "checks": [
+        {
+          "name": "页面加载、可见内容与 JavaScript",
+          "passed": true
+        },
+        {
+          "name": "问卷初始三题均未选",
+          "passed": true
+        },
+        {
+          "name": "三题选择互不覆盖且提交精确",
+          "passed": true
+        },
+        {
+          "name": "改选后计数不增且重新提交",
+          "passed": true
+        },
+        {
+          "name": "部分回答保留未选并由当前状态重算",
+          "passed": true
+        },
+        {
+          "name": "同题反复改选不影响其他题",
+          "passed": true
+        }
+      ],
+      "summary": "独立 Chromium 验收通过，交互与输出已验证。"
+    },
+    "matched": true,
+    "healthy": true
+  },
+  {
+    "poolId": "H08",
+    "candidateId": "cand-73de",
+    "expectedPass": false,
+    "candidateValueJsonSha256": "bb68edb11b66eaa408ae290335981a168ba099354a71e20f175e97d1e8047896",
+    "sourceSerialization": "JSON.stringify(value)",
+    "htmlUtf8Sha256": "b3ca083b192f458a130c2d8d977aae8f5a3e9e266e3f6a4cddae99c60d08776f",
+    "checksSha256": "e2c58ee00ad380b86f11cf6093af18c6e5be1ae20354c5e8ebd1395eb557f008",
+    "actual": {
+      "passed": false,
+      "checks": [
+        {
+          "name": "页面加载、可见内容与 JavaScript",
+          "passed": true
+        },
+        {
+          "name": "测验初态与未回答提交",
+          "passed": true
+        },
+        {
+          "name": "只回答一题未选题计零分",
+          "passed": true
+        },
+        {
+          "name": "重复提交不累加分数",
+          "passed": false,
+          "detail": "#score 文本不精确等于：2/2"
+        },
+        {
+          "name": "改错一题必须降至一分",
+          "passed": false,
+          "detail": "#score 文本不精确等于：1/2"
+        },
+        {
+          "name": "两题改错必须归零",
+          "passed": false,
+          "detail": "#score 文本不精确等于：0/2"
+        },
+        {
+          "name": "先错后对由当前答案升分",
+          "passed": true
+        }
+      ],
+      "summary": "浏览器验收未通过，需修复失败项。"
+    },
+    "matched": true,
+    "healthy": true
+  },
+  {
+    "poolId": "H08",
+    "candidateId": "cand-4b81",
+    "expectedPass": false,
+    "candidateValueJsonSha256": "3bfac7039675cb3c89e7eaed0742f73a840b42a95fa96ca15ed8d21224490ad4",
+    "sourceSerialization": "JSON.stringify(value)",
+    "htmlUtf8Sha256": "098b3e45cb316630c3baecf28a907aa66bcaa644dda0f6edaab634ab847405dd",
+    "checksSha256": "e2c58ee00ad380b86f11cf6093af18c6e5be1ae20354c5e8ebd1395eb557f008",
+    "actual": {
+      "passed": false,
+      "checks": [
+        {
+          "name": "页面加载、可见内容与 JavaScript",
+          "passed": true
+        },
+        {
+          "name": "测验初态与未回答提交",
+          "passed": true
+        },
+        {
+          "name": "只回答一题未选题计零分",
+          "passed": true
+        },
+        {
+          "name": "重复提交不累加分数",
+          "passed": true
+        },
+        {
+          "name": "改错一题必须降至一分",
+          "passed": false,
+          "detail": "#score 文本不精确等于：1/2"
+        },
+        {
+          "name": "两题改错必须归零",
+          "passed": false,
+          "detail": "#score 文本不精确等于：0/2"
+        },
+        {
+          "name": "先错后对由当前答案升分",
+          "passed": true
+        }
+      ],
+      "summary": "浏览器验收未通过，需修复失败项。"
+    },
+    "matched": true,
+    "healthy": true
+  },
+  {
+    "poolId": "H09",
+    "candidateId": "cand-e105",
+    "expectedPass": false,
+    "candidateValueJsonSha256": "8830664069bf2e63d8c8783756c75ec440e86ca8a5938a090a5c9987375ef15e",
+    "sourceSerialization": "JSON.stringify(value)",
+    "htmlUtf8Sha256": "de7e73d95a6f02c054de7cdb1e52daada07d528c64cb9413bd0f0ea137421f4c",
+    "checksSha256": "2fd0dcc818b130fed2e0482a5ba95d293c3728d2d183e0e1f64d9b9d117d210c",
+    "actual": {
+      "passed": false,
+      "checks": [
+        {
+          "name": "页面加载、可见内容与 JavaScript",
+          "passed": true
+        },
+        {
+          "name": "工单初态和独立身份",
+          "passed": true
+        },
+        {
+          "name": "前进后卡片和三个分类数同步",
+          "passed": false,
+          "detail": "#pending-count 文本不精确等于：0"
+        },
+        {
+          "name": "另一工单往返流转无丢失",
+          "passed": false,
+          "detail": "#working-count 文本不精确等于：0"
+        },
+        {
+          "name": "完整往返恢复初始分类和身份",
+          "passed": true
+        },
+        {
+          "name": "流转边界不越界且分类数稳定",
+          "passed": false,
+          "detail": "#working-count 文本不精确等于：0"
+        }
+      ],
+      "summary": "浏览器验收未通过，需修复失败项。"
+    },
+    "matched": true,
+    "healthy": true
+  },
+  {
+    "poolId": "H09",
+    "candidateId": "cand-6f92",
+    "expectedPass": true,
+    "candidateValueJsonSha256": "c56ea870164438c625911a988702c9699d3cf680f7223fe4324e22acfdddf521",
+    "sourceSerialization": "JSON.stringify(value)",
+    "htmlUtf8Sha256": "678ae41be7d358ed94fb875c33531d20b934da6d7eca7bffecb1d6c8b675362e",
+    "checksSha256": "2fd0dcc818b130fed2e0482a5ba95d293c3728d2d183e0e1f64d9b9d117d210c",
+    "actual": {
+      "passed": true,
+      "checks": [
+        {
+          "name": "页面加载、可见内容与 JavaScript",
+          "passed": true
+        },
+        {
+          "name": "工单初态和独立身份",
+          "passed": true
+        },
+        {
+          "name": "前进后卡片和三个分类数同步",
+          "passed": true
+        },
+        {
+          "name": "另一工单往返流转无丢失",
+          "passed": true
+        },
+        {
+          "name": "完整往返恢复初始分类和身份",
+          "passed": true
+        },
+        {
+          "name": "流转边界不越界且分类数稳定",
+          "passed": true
+        }
+      ],
+      "summary": "独立 Chromium 验收通过，交互与输出已验证。"
+    },
+    "matched": true,
+    "healthy": true
+  },
+  {
+    "poolId": "H10",
+    "candidateId": "cand-90ac",
+    "expectedPass": false,
+    "candidateValueJsonSha256": "e326c1543a847ecd4e18593649f1f99727e5ac8dcb5b6a17feb9ea5ffb6c9540",
+    "sourceSerialization": "JSON.stringify(value)",
+    "htmlUtf8Sha256": "ef6bdbc6af2dba9e22e3d6232b036997cdab07947585e28a1023f0fa1089105c",
+    "checksSha256": "91f21699cc5cdf10d9d5293687b887c34fffd2a083ae480a1e60ea24ee8a8887",
+    "actual": {
+      "passed": false,
+      "checks": [
+        {
+          "name": "页面加载、可见内容与 JavaScript",
+          "passed": true
+        },
+        {
+          "name": "采购清单初始为空",
+          "passed": true
+        },
+        {
+          "name": "三个同名项身份和数量独立",
+          "passed": true
+        },
+        {
+          "name": "删除第一项保留其他同名项",
+          "passed": false,
+          "detail": ".item 元素数量不等于 2"
+        },
+        {
+          "name": "删中间再删末项不得使用失效索引",
+          "passed": false,
+          "detail": "#quantity-total 文本不精确等于：4"
+        },
+        {
+          "name": "连续删除首项和次项保留末项",
+          "passed": false,
+          "detail": ".item 元素数量不等于 2"
+        },
+        {
+          "name": "非法数量和空名称不改原项",
+          "passed": true
+        },
+        {
+          "name": "数量上界与非整数拒绝",
+          "passed": true
+        }
+      ],
+      "summary": "浏览器验收未通过，需修复失败项。"
+    },
+    "matched": true,
+    "healthy": true
+  },
+  {
+    "poolId": "H10",
+    "candidateId": "cand-2d47",
+    "expectedPass": false,
+    "candidateValueJsonSha256": "ec8160c403d24e66d1bca0229fdf7cec1752ce7e5e7a0454df0bf46a0565a73b",
+    "sourceSerialization": "JSON.stringify(value)",
+    "htmlUtf8Sha256": "2b2b526f599c2e11cd8899ca3af67c8a97a70b68419cf4cf991a041321ad9373",
+    "checksSha256": "91f21699cc5cdf10d9d5293687b887c34fffd2a083ae480a1e60ea24ee8a8887",
+    "actual": {
+      "passed": false,
+      "checks": [
+        {
+          "name": "页面加载、可见内容与 JavaScript",
+          "passed": true
+        },
+        {
+          "name": "采购清单初始为空",
+          "passed": true
+        },
+        {
+          "name": "三个同名项身份和数量独立",
+          "passed": true
+        },
+        {
+          "name": "删除第一项保留其他同名项",
+          "passed": true
+        },
+        {
+          "name": "删中间再删末项不得使用失效索引",
+          "passed": false,
+          "detail": ".item 元素数量不等于 1"
+        },
+        {
+          "name": "连续删除首项和次项保留末项",
+          "passed": false,
+          "detail": "#item-i2 元素数量不等于 0"
+        },
+        {
+          "name": "非法数量和空名称不改原项",
+          "passed": true
+        },
+        {
+          "name": "数量上界与非整数拒绝",
+          "passed": true
+        }
+      ],
+      "summary": "浏览器验收未通过，需修复失败项。"
+    },
+    "matched": true,
+    "healthy": true
+  },
+  {
+    "poolId": "H11",
+    "candidateId": "cand-c38e",
+    "expectedPass": true,
+    "candidateValueJsonSha256": "c377c2e6a671a492e276db22154940beedb64ba179ef93c5de27f5197235448f",
+    "sourceSerialization": "JSON.stringify(value)",
+    "htmlUtf8Sha256": "12b8d31113c2894352fdc1af8e3cd43eac992e1b9bfd4b5ab808300f19ca0ac3",
+    "checksSha256": "62f17019908843fc2f4b488dfb377ab377cb8fc06360caae5d3e9a570616b1ab",
+    "actual": {
+      "passed": true,
+      "checks": [
+        {
+          "name": "页面加载、可见内容与 JavaScript",
+          "passed": true
+        },
+        {
+          "name": "支出账本初态",
+          "passed": true
+        },
+        {
+          "name": "小数金额以整数分相加",
+          "passed": true
+        },
+        {
+          "name": "新增和分类切换不串账",
+          "passed": true
+        },
+        {
+          "name": "删除后分类与总额同步归算",
+          "passed": true
+        },
+        {
+          "name": "空零负金额拒绝并保留支出",
+          "passed": true
+        },
+        {
+          "name": "非数字多位小数和越界金额拒绝",
+          "passed": true
+        },
+        {
+          "name": "金额上界与删除归零",
+          "passed": true
+        }
+      ],
+      "summary": "独立 Chromium 验收通过，交互与输出已验证。"
+    },
+    "matched": true,
+    "healthy": true
+  },
+  {
+    "poolId": "H11",
+    "candidateId": "cand-51b4",
+    "expectedPass": true,
+    "candidateValueJsonSha256": "d2ae7ddc5cc62ee353546640fb7371af595e00050c4a06d7d612e1a4b17ef2e1",
+    "sourceSerialization": "JSON.stringify(value)",
+    "htmlUtf8Sha256": "e022c3085d3923cbd6a19127cb2d304854f878ab8c6ceb1ca6d01b946f55ec61",
+    "checksSha256": "62f17019908843fc2f4b488dfb377ab377cb8fc06360caae5d3e9a570616b1ab",
+    "actual": {
+      "passed": true,
+      "checks": [
+        {
+          "name": "页面加载、可见内容与 JavaScript",
+          "passed": true
+        },
+        {
+          "name": "支出账本初态",
+          "passed": true
+        },
+        {
+          "name": "小数金额以整数分相加",
+          "passed": true
+        },
+        {
+          "name": "新增和分类切换不串账",
+          "passed": true
+        },
+        {
+          "name": "删除后分类与总额同步归算",
+          "passed": true
+        },
+        {
+          "name": "空零负金额拒绝并保留支出",
+          "passed": true
+        },
+        {
+          "name": "非数字多位小数和越界金额拒绝",
+          "passed": true
+        },
+        {
+          "name": "金额上界与删除归零",
+          "passed": true
+        }
+      ],
+      "summary": "独立 Chromium 验收通过，交互与输出已验证。"
+    },
+    "matched": true,
+    "healthy": true
+  },
+  {
+    "poolId": "H12",
+    "candidateId": "cand-8fa2",
+    "expectedPass": true,
+    "candidateValueJsonSha256": "77ac75c01ee7f89aec08ba67936701fdfa6c0c3ca75e419d43f10604bd07624c",
+    "sourceSerialization": "JSON.stringify(value)",
+    "htmlUtf8Sha256": "286a6c46774dfed8093715c5589010b5f6bffe2c76e118df21a09c76bbbfcf57",
+    "checksSha256": "1c6d58fcea007182e1d1a7baa2e451aefe819a3ef752aa1ab09176fa3503a3ae",
+    "actual": {
+      "passed": true,
+      "checks": [
+        {
+          "name": "页面加载、可见内容与 JavaScript",
+          "passed": true
+        },
+        {
+          "name": "表单初始进度和全部空值",
+          "passed": true
+        },
+        {
+          "name": "三步资料正常确认提交",
+          "passed": true
+        },
+        {
+          "name": "提交后重置全部显示和进度",
+          "passed": true
+        },
+        {
+          "name": "重置后姓名空值仍被校验",
+          "passed": true
+        },
+        {
+          "name": "重置后城市空值仍被校验",
+          "passed": true
+        },
+        {
+          "name": "重置后重新完整提交不能复用旧数据",
+          "passed": true
+        },
+        {
+          "name": "中途重置后重新完成新资料",
+          "passed": true
+        }
+      ],
+      "summary": "独立 Chromium 验收通过，交互与输出已验证。"
+    },
+    "matched": true,
+    "healthy": true
+  },
+  {
+    "poolId": "H12",
+    "candidateId": "cand-36d9",
+    "expectedPass": false,
+    "candidateValueJsonSha256": "88ccc10d810dfeb3c8fbba9fb479ef79f223862931fdcc3bb40f647db6f3e771",
+    "sourceSerialization": "JSON.stringify(value)",
+    "htmlUtf8Sha256": "b6b715ed3b5458ecc74fb5a75d6a9e8b577747cdb0219aea537b92faceab7e34",
+    "checksSha256": "1c6d58fcea007182e1d1a7baa2e451aefe819a3ef752aa1ab09176fa3503a3ae",
+    "actual": {
+      "passed": false,
+      "checks": [
+        {
+          "name": "页面加载、可见内容与 JavaScript",
+          "passed": true
+        },
+        {
+          "name": "表单初始进度和全部空值",
+          "passed": true
+        },
+        {
+          "name": "三步资料正常确认提交",
+          "passed": true
+        },
+        {
+          "name": "提交后重置全部显示和进度",
+          "passed": true
+        },
+        {
+          "name": "重置后姓名空值仍被校验",
+          "passed": true
+        },
+        {
+          "name": "重置后城市空值仍被校验",
+          "passed": true
+        },
+        {
+          "name": "重置后重新完整提交不能复用旧数据",
+          "passed": false,
+          "detail": "#receipt 文本不精确等于：姓名=陈；城市=宁波"
+        },
+        {
+          "name": "中途重置后重新完成新资料",
+          "passed": true
+        }
+      ],
+      "summary": "浏览器验收未通过，需修复失败项。"
+    },
+    "matched": true,
+    "healthy": true
+  },
+  {
+    "poolId": "C13",
+    "candidateId": "cand-f732",
+    "expectedPass": false,
+    "candidateValueJsonSha256": "601a0e4438911e98fb6c15ddaa8d39564639bd5eb5d554a55c72e23b9fbd5bd1",
+    "sourceSerialization": "JSON.stringify(value)",
+    "sceneJsonSha256": "576c62c733f6e9e416cab4c4f298dbdacb9d7b655a73e5f247022060ad47e1fb",
+    "checksSha256": "e6f08f38ce2d5f3fae118155df2406c892fafa7be6d4b34c476fdb7d74fb619d",
+    "actual": {
+      "version": "verifier-scene-oracle-v1",
+      "evidenceKind": "outer-authored-challenge-oracle",
+      "passed": false,
+      "business": [
+        {
+          "name": "精确标题",
+          "passed": true
+        },
+        {
+          "name": "业务掌拳与横移映射",
+          "passed": false
+        }
+      ],
+      "gate": {
+        "passed": true,
+        "checks": [
+          {
+            "name": "页面加载、可见内容与 JavaScript",
+            "passed": true
+          },
+          {
+            "name": "精确标题与初态",
+            "passed": true
+          },
+          {
+            "name": "手动聚散和初态恢复",
+            "passed": true
+          },
+          {
+            "name": "强制：真实Canvas绘制与有界粒子配置",
+            "passed": true
+          },
+          {
+            "name": "强制：手动散开/聚合/旋转/重置实际行为",
+            "passed": true
+          },
+          {
+            "name": "强制：合成21点手势分类/去抖/横向映射（非真实识别）",
+            "passed": true
+          },
+          {
+            "name": "强制：无雪对象初态可见性（派生诊断，非交付修改）",
+            "passed": true,
+            "detail": "相同objects/mappings、snowCount=0的可信派生场景像素不同于背景；scene seed会变化，不证明粒子坐标逐点一致。"
+          }
+        ],
+        "evidenceScope": "scene-behavior-synthetic",
+        "summary": "受控场景配置、实际Canvas、手动按钮及合成21点手势行为通过；未验证真实视觉模型、物理摄像头或完整用户需求。"
+      },
+      "modelRequests": 0
+    },
+    "matched": true,
+    "healthy": true
+  },
+  {
+    "poolId": "C13",
+    "candidateId": "cand-20c6",
+    "expectedPass": true,
+    "candidateValueJsonSha256": "2705751eadae025d758adfce66d86e4a4eeff923763489a26921ac6afc5f62ba",
+    "sourceSerialization": "JSON.stringify(value)",
+    "sceneJsonSha256": "6675f3b73407a12b11c89442bdd63dd9915d21d613b38c7b1c410d01ec6a77c2",
+    "checksSha256": "e6f08f38ce2d5f3fae118155df2406c892fafa7be6d4b34c476fdb7d74fb619d",
+    "actual": {
+      "version": "verifier-scene-oracle-v1",
+      "evidenceKind": "outer-authored-challenge-oracle",
+      "passed": true,
+      "business": [
+        {
+          "name": "精确标题",
+          "passed": true
+        },
+        {
+          "name": "业务掌拳与横移映射",
+          "passed": true
+        }
+      ],
+      "gate": {
+        "passed": true,
+        "checks": [
+          {
+            "name": "页面加载、可见内容与 JavaScript",
+            "passed": true
+          },
+          {
+            "name": "精确标题与初态",
+            "passed": true
+          },
+          {
+            "name": "手动聚散和初态恢复",
+            "passed": true
+          },
+          {
+            "name": "强制：真实Canvas绘制与有界粒子配置",
+            "passed": true
+          },
+          {
+            "name": "强制：手动散开/聚合/旋转/重置实际行为",
+            "passed": true
+          },
+          {
+            "name": "强制：合成21点手势分类/去抖/横向映射（非真实识别）",
+            "passed": true
+          },
+          {
+            "name": "强制：无雪对象初态可见性（派生诊断，非交付修改）",
+            "passed": true,
+            "detail": "相同objects/mappings、snowCount=0的可信派生场景像素不同于背景；scene seed会变化，不证明粒子坐标逐点一致。"
+          }
+        ],
+        "evidenceScope": "scene-behavior-synthetic",
+        "summary": "受控场景配置、实际Canvas、手动按钮及合成21点手势行为通过；未验证真实视觉模型、物理摄像头或完整用户需求。"
+      },
+      "modelRequests": 0
+    },
+    "matched": true,
+    "healthy": true
+  },
+  {
+    "poolId": "C14",
+    "candidateId": "cand-57de",
+    "expectedPass": false,
+    "candidateValueJsonSha256": "1b516942c4919ed01490348b3bdcc73ac88ed57bd45bb192c7a2849087f6a627",
+    "sourceSerialization": "JSON.stringify(value)",
+    "sceneJsonSha256": "87b8af4b11dc4d9ec67934edb028e8be5e02c07845fc207c1a5bcc80c3cabd77",
+    "checksSha256": "9f8b805e593f88a11d97548ea9fac2f2ee54a40eefa2b1365100afbd013ecb9c",
+    "actual": {
+      "version": "verifier-scene-oracle-v1",
+      "evidenceKind": "outer-authored-challenge-oracle",
+      "passed": false,
+      "business": [
+        {
+          "name": "精确标题",
+          "passed": true
+        },
+        {
+          "name": "业务掌拳与横移映射",
+          "passed": false
+        }
+      ],
+      "gate": {
+        "passed": true,
+        "checks": [
+          {
+            "name": "页面加载、可见内容与 JavaScript",
+            "passed": true
+          },
+          {
+            "name": "精确标题与初态",
+            "passed": true
+          },
+          {
+            "name": "手动聚散和初态恢复",
+            "passed": true
+          },
+          {
+            "name": "强制：真实Canvas绘制与有界粒子配置",
+            "passed": true
+          },
+          {
+            "name": "强制：手动散开/聚合/旋转/重置实际行为",
+            "passed": true
+          },
+          {
+            "name": "强制：合成21点手势分类/去抖/横向映射（非真实识别）",
+            "passed": true
+          },
+          {
+            "name": "强制：无雪对象初态可见性（派生诊断，非交付修改）",
+            "passed": true,
+            "detail": "相同objects/mappings、snowCount=0的可信派生场景像素不同于背景；scene seed会变化，不证明粒子坐标逐点一致。"
+          }
+        ],
+        "evidenceScope": "scene-behavior-synthetic",
+        "summary": "受控场景配置、实际Canvas、手动按钮及合成21点手势行为通过；未验证真实视觉模型、物理摄像头或完整用户需求。"
+      },
+      "modelRequests": 0
+    },
+    "matched": true,
+    "healthy": true
+  },
+  {
+    "poolId": "C14",
+    "candidateId": "cand-aca4",
+    "expectedPass": false,
+    "candidateValueJsonSha256": "c522fc7dd59461c3e8bd8a70845e6f1e7c5c19b99eecc7b44923bb62419af65f",
+    "sourceSerialization": "JSON.stringify(value)",
+    "sceneJsonSha256": "083b68a846b6f12c2eac7f8cd55cfffd0f7f0a491c5775de0695fc8dd3ee5fd3",
+    "checksSha256": "9f8b805e593f88a11d97548ea9fac2f2ee54a40eefa2b1365100afbd013ecb9c",
+    "actual": {
+      "version": "verifier-scene-oracle-v1",
+      "evidenceKind": "outer-authored-challenge-oracle",
+      "passed": false,
+      "business": [
+        {
+          "name": "精确标题",
+          "passed": true
+        },
+        {
+          "name": "业务掌拳与横移映射",
+          "passed": false
+        }
+      ],
+      "gate": {
+        "passed": true,
+        "checks": [
+          {
+            "name": "页面加载、可见内容与 JavaScript",
+            "passed": true
+          },
+          {
+            "name": "精确标题与初态",
+            "passed": true
+          },
+          {
+            "name": "手动聚散和初态恢复",
+            "passed": true
+          },
+          {
+            "name": "强制：真实Canvas绘制与有界粒子配置",
+            "passed": true
+          },
+          {
+            "name": "强制：手动散开/聚合/旋转/重置实际行为",
+            "passed": true
+          },
+          {
+            "name": "强制：合成21点手势分类/去抖/横向映射（非真实识别）",
+            "passed": true
+          },
+          {
+            "name": "强制：无雪对象初态可见性（派生诊断，非交付修改）",
+            "passed": true,
+            "detail": "相同objects/mappings、snowCount=0的可信派生场景像素不同于背景；scene seed会变化，不证明粒子坐标逐点一致。"
+          }
+        ],
+        "evidenceScope": "scene-behavior-synthetic",
+        "summary": "受控场景配置、实际Canvas、手动按钮及合成21点手势行为通过；未验证真实视觉模型、物理摄像头或完整用户需求。"
+      },
+      "modelRequests": 0
+    },
+    "matched": true,
+    "healthy": true
+  },
+  {
+    "poolId": "C15",
+    "candidateId": "cand-d180",
+    "expectedPass": true,
+    "candidateValueJsonSha256": "17eeba3eafb50c1bcc2153ae5764e802fc98dd6a47560cc2981094aefa76b48f",
+    "sourceSerialization": "JSON.stringify(value)",
+    "sceneJsonSha256": "fd1044c1bf15806d08cdd4332e1a0b71cc7be5a8694d6c0d64d4285ab7658d9e",
+    "checksSha256": "b14987ab1f1fa8b18a9f5028721ca982d393fceb6b320eae116010fd0000593a",
+    "actual": {
+      "version": "verifier-scene-oracle-v1",
+      "evidenceKind": "outer-authored-challenge-oracle",
+      "passed": true,
+      "business": [
+        {
+          "name": "精确标题",
+          "passed": true
+        },
+        {
+          "name": "业务掌拳与横移映射",
+          "passed": true
+        },
+        {
+          "name": "业务雪粒子数量",
+          "passed": true
+        }
+      ],
+      "gate": {
+        "passed": true,
+        "checks": [
+          {
+            "name": "页面加载、可见内容与 JavaScript",
+            "passed": true
+          },
+          {
+            "name": "精确标题与初态",
+            "passed": true
+          },
+          {
+            "name": "手动聚散和初态恢复",
+            "passed": true
+          },
+          {
+            "name": "强制：真实Canvas绘制与有界粒子配置",
+            "passed": true
+          },
+          {
+            "name": "强制：手动散开/聚合/旋转/重置实际行为",
+            "passed": true
+          },
+          {
+            "name": "强制：合成21点手势分类/去抖/横向映射（非真实识别）",
+            "passed": true
+          },
+          {
+            "name": "强制：无雪对象初态可见性（派生诊断，非交付修改）",
+            "passed": true,
+            "detail": "相同objects/mappings、snowCount=0的可信派生场景像素不同于背景；scene seed会变化，不证明粒子坐标逐点一致。"
+          }
+        ],
+        "evidenceScope": "scene-behavior-synthetic",
+        "summary": "受控场景配置、实际Canvas、手动按钮及合成21点手势行为通过；未验证真实视觉模型、物理摄像头或完整用户需求。"
+      },
+      "modelRequests": 0
+    },
+    "matched": true,
+    "healthy": true
+  },
+  {
+    "poolId": "C15",
+    "candidateId": "cand-6ac9",
+    "expectedPass": false,
+    "candidateValueJsonSha256": "89b6a4964ba8625bd83cbddcd6cd71cab9c09d0f93df71f0532b3d4700276e85",
+    "sourceSerialization": "JSON.stringify(value)",
+    "sceneJsonSha256": "bca976ffa6a30290b5576173135c4d936696b2d146a554ef31855aebcfe3f1d7",
+    "checksSha256": "b14987ab1f1fa8b18a9f5028721ca982d393fceb6b320eae116010fd0000593a",
+    "actual": {
+      "version": "verifier-scene-oracle-v1",
+      "evidenceKind": "outer-authored-challenge-oracle",
+      "passed": false,
+      "business": [
+        {
+          "name": "精确标题",
+          "passed": true
+        },
+        {
+          "name": "业务掌拳与横移映射",
+          "passed": true
+        },
+        {
+          "name": "业务雪粒子数量",
+          "passed": true
+        }
+      ],
+      "gate": {
+        "passed": false,
+        "checks": [
+          {
+            "name": "页面加载、可见内容与 JavaScript",
+            "passed": true
+          },
+          {
+            "name": "精确标题与初态",
+            "passed": true
+          },
+          {
+            "name": "手动聚散和初态恢复",
+            "passed": true
+          },
+          {
+            "name": "强制：真实Canvas绘制与有界粒子配置",
+            "passed": true
+          },
+          {
+            "name": "强制：手动散开/聚合/旋转/重置实际行为",
+            "passed": true
+          },
+          {
+            "name": "强制：合成21点手势分类/去抖/横向映射（非真实识别）",
+            "passed": true
+          },
+          {
+            "name": "强制场景行为Gate",
+            "passed": false,
+            "detail": "无雪派生对象初态必须实际可见；可见雪不能替代完全不可见对象的绘制证据（未修改交付scene或冻结CSS）"
+          }
+        ],
+        "evidenceScope": "scene-behavior-synthetic",
+        "summary": "场景行为验收失败；没有放宽冻结门禁或替代真实摄像头验收。"
+      },
+      "modelRequests": 0
+    },
+    "matched": true,
+    "healthy": true
+  },
+  {
+    "poolId": "C16",
+    "candidateId": "cand-e409",
+    "expectedPass": true,
+    "candidateValueJsonSha256": "f63404a1bccd1ea20433e8c3d67eb7d43b83b6445fb4fb97a75bd9afbe963c39",
+    "sourceSerialization": "JSON.stringify(value)",
+    "sceneJsonSha256": "af08cc83ff9fb1fabfac8f55a918cb93fcf12a9f2a8cf0873aab36ffe87a2003",
+    "checksSha256": "4fca3fb2556d1ed6b4821d938266c9f72bb5f31e4acb8a4d9674bca799565a1e",
+    "actual": {
+      "version": "verifier-scene-oracle-v1",
+      "evidenceKind": "outer-authored-challenge-oracle",
+      "passed": true,
+      "business": [
+        {
+          "name": "精确标题",
+          "passed": true
+        },
+        {
+          "name": "业务掌拳与横移映射",
+          "passed": true
+        },
+        {
+          "name": "业务总粒子数量",
+          "passed": true
+        },
+        {
+          "name": "业务主体粒子数量",
+          "passed": true
+        },
+        {
+          "name": "业务雪粒子数量",
+          "passed": true
+        }
+      ],
+      "gate": {
+        "passed": true,
+        "checks": [
+          {
+            "name": "页面加载、可见内容与 JavaScript",
+            "passed": true
+          },
+          {
+            "name": "精确标题与初态",
+            "passed": true
+          },
+          {
+            "name": "手动聚散和初态恢复",
+            "passed": true
+          },
+          {
+            "name": "强制：真实Canvas绘制与有界粒子配置",
+            "passed": true
+          },
+          {
+            "name": "强制：手动散开/聚合/旋转/重置实际行为",
+            "passed": true
+          },
+          {
+            "name": "强制：合成21点手势分类/去抖/横向映射（非真实识别）",
+            "passed": true
+          },
+          {
+            "name": "强制：无雪对象初态可见性（派生诊断，非交付修改）",
+            "passed": true,
+            "detail": "原场景无雪，初始背景像素对照直接证明对象可见；未修改scene或冻结CSS。"
+          }
+        ],
+        "evidenceScope": "scene-behavior-synthetic",
+        "summary": "受控场景配置、实际Canvas、手动按钮及合成21点手势行为通过；未验证真实视觉模型、物理摄像头或完整用户需求。"
+      },
+      "modelRequests": 0
+    },
+    "matched": true,
+    "healthy": true
+  },
+  {
+    "poolId": "C16",
+    "candidateId": "cand-184f",
+    "expectedPass": true,
+    "candidateValueJsonSha256": "1082cce669687927163c4e30ce19f8e33a980930077d381c4c6dbce7d5b4b773",
+    "sourceSerialization": "JSON.stringify(value)",
+    "sceneJsonSha256": "d7d111467f005652f56bee68827a4f868592e794610beeaf134a38cd6cab8d28",
+    "checksSha256": "4fca3fb2556d1ed6b4821d938266c9f72bb5f31e4acb8a4d9674bca799565a1e",
+    "actual": {
+      "version": "verifier-scene-oracle-v1",
+      "evidenceKind": "outer-authored-challenge-oracle",
+      "passed": true,
+      "business": [
+        {
+          "name": "精确标题",
+          "passed": true
+        },
+        {
+          "name": "业务掌拳与横移映射",
+          "passed": true
+        },
+        {
+          "name": "业务总粒子数量",
+          "passed": true
+        },
+        {
+          "name": "业务主体粒子数量",
+          "passed": true
+        },
+        {
+          "name": "业务雪粒子数量",
+          "passed": true
+        }
+      ],
+      "gate": {
+        "passed": true,
+        "checks": [
+          {
+            "name": "页面加载、可见内容与 JavaScript",
+            "passed": true
+          },
+          {
+            "name": "精确标题与初态",
+            "passed": true
+          },
+          {
+            "name": "手动聚散和初态恢复",
+            "passed": true
+          },
+          {
+            "name": "强制：真实Canvas绘制与有界粒子配置",
+            "passed": true
+          },
+          {
+            "name": "强制：手动散开/聚合/旋转/重置实际行为",
+            "passed": true
+          },
+          {
+            "name": "强制：合成21点手势分类/去抖/横向映射（非真实识别）",
+            "passed": true
+          },
+          {
+            "name": "强制：无雪对象初态可见性（派生诊断，非交付修改）",
+            "passed": true,
+            "detail": "原场景无雪，初始背景像素对照直接证明对象可见；未修改scene或冻结CSS。"
+          }
+        ],
+        "evidenceScope": "scene-behavior-synthetic",
+        "summary": "受控场景配置、实际Canvas、手动按钮及合成21点手势行为通过；未验证真实视觉模型、物理摄像头或完整用户需求。"
+      },
+      "modelRequests": 0
+    },
+    "matched": true,
+    "healthy": true
+  },
+  {
+    "poolId": "C17",
+    "candidateId": "cand-61fb",
+    "expectedPass": false,
+    "candidateValueJsonSha256": "c5ef3645f3c979baac55939cb6c0f9f546cfee79e98431d519f10d6810ef4ec2",
+    "sourceSerialization": "JSON.stringify(value)",
+    "sceneJsonSha256": "970f44f3a8da828ce828331b25af37167079e2db10201cfeab23d81b0f5a2d8c",
+    "checksSha256": "81c70ea9ab79489fd878323cd4a5214c9c7c60f7720cd7b691a399c824ec654b",
+    "actual": {
+      "version": "verifier-scene-oracle-v1",
+      "evidenceKind": "outer-authored-challenge-oracle",
+      "passed": false,
+      "business": [
+        {
+          "name": "精确标题",
+          "passed": true
+        },
+        {
+          "name": "业务掌拳与横移映射",
+          "passed": true
+        },
+        {
+          "name": "业务雪粒子数量",
+          "passed": true
+        },
+        {
+          "name": "业务非零cone主体",
+          "passed": true
+        },
+        {
+          "name": "业务非零star主体",
+          "passed": false
+        },
+        {
+          "name": "业务无雪组件区域",
+          "passed": true
+        },
+        {
+          "name": "业务cone区域不串扰",
+          "passed": true
+        },
+        {
+          "name": "业务star区域不串扰",
+          "passed": false
+        },
+        {
+          "name": "原场景左侧圆锥像素",
+          "passed": true
+        },
+        {
+          "name": "原场景右侧星形像素",
+          "passed": false
+        },
+        {
+          "name": "独立cone无雪派生实际可见",
+          "passed": true
+        }
+      ],
+      "gate": {
+        "passed": true,
+        "checks": [
+          {
+            "name": "页面加载、可见内容与 JavaScript",
+            "passed": true
+          },
+          {
+            "name": "精确标题与初态",
+            "passed": true
+          },
+          {
+            "name": "手动聚散和初态恢复",
+            "passed": true
+          },
+          {
+            "name": "强制：真实Canvas绘制与有界粒子配置",
+            "passed": true
+          },
+          {
+            "name": "强制：手动散开/聚合/旋转/重置实际行为",
+            "passed": true
+          },
+          {
+            "name": "强制：合成21点手势分类/去抖/横向映射（非真实识别）",
+            "passed": true
+          },
+          {
+            "name": "强制：无雪对象初态可见性（派生诊断，非交付修改）",
+            "passed": true,
+            "detail": "原场景无雪，初始背景像素对照直接证明对象可见；未修改scene或冻结CSS。"
+          }
+        ],
+        "evidenceScope": "scene-behavior-synthetic",
+        "summary": "受控场景配置、实际Canvas、手动按钮及合成21点手势行为通过；未验证真实视觉模型、物理摄像头或完整用户需求。"
+      },
+      "modelRequests": 0,
+      "componentPixels": {
+        "left": 3662,
+        "right": 0,
+        "total": 3662,
+        "width": 1072,
+        "height": 520,
+        "cameraActive": false
+      },
+      "componentDiagnostics": [
+        {
+          "primitive": "cone",
+          "gate": {
+            "passed": true,
+            "checks": [
+              {
+                "name": "页面加载、可见内容与 JavaScript",
+                "passed": true
+              },
+              {
+                "name": "精确标题与初态",
+                "passed": true
+              },
+              {
+                "name": "手动聚散和初态恢复",
+                "passed": true
+              },
+              {
+                "name": "强制：真实Canvas绘制与有界粒子配置",
+                "passed": true
+              },
+              {
+                "name": "强制：手动散开/聚合/旋转/重置实际行为",
+                "passed": true
+              },
+              {
+                "name": "强制：合成21点手势分类/去抖/横向映射（非真实识别）",
+                "passed": true
+              },
+              {
+                "name": "强制：无雪对象初态可见性（派生诊断，非交付修改）",
+                "passed": true,
+                "detail": "原场景无雪，初始背景像素对照直接证明对象可见；未修改scene或冻结CSS。"
+              }
+            ],
+            "evidenceScope": "scene-behavior-synthetic",
+            "summary": "受控场景配置、实际Canvas、手动按钮及合成21点手势行为通过；未验证真实视觉模型、物理摄像头或完整用户需求。"
+          }
+        }
+      ]
+    },
+    "matched": true,
+    "healthy": true
+  },
+  {
+    "poolId": "C17",
+    "candidateId": "cand-834c",
+    "expectedPass": false,
+    "candidateValueJsonSha256": "de87186069976c06ba07e027001e7631c34167f3011e2834e3bfabf3e2ae2904",
+    "sourceSerialization": "JSON.stringify(value)",
+    "sceneJsonSha256": "9e79850aa52de122ec3fd7604c303aa5908c50be841146df18b26286f115d474",
+    "checksSha256": "81c70ea9ab79489fd878323cd4a5214c9c7c60f7720cd7b691a399c824ec654b",
+    "actual": {
+      "version": "verifier-scene-oracle-v1",
+      "evidenceKind": "outer-authored-challenge-oracle",
+      "passed": false,
+      "business": [
+        {
+          "name": "精确标题",
+          "passed": true
+        },
+        {
+          "name": "业务掌拳与横移映射",
+          "passed": true
+        },
+        {
+          "name": "业务雪粒子数量",
+          "passed": true
+        },
+        {
+          "name": "业务非零cone主体",
+          "passed": false
+        },
+        {
+          "name": "业务非零star主体",
+          "passed": true
+        },
+        {
+          "name": "业务无雪组件区域",
+          "passed": true
+        },
+        {
+          "name": "业务cone区域不串扰",
+          "passed": false
+        },
+        {
+          "name": "业务star区域不串扰",
+          "passed": true
+        },
+        {
+          "name": "原场景左侧圆锥像素",
+          "passed": false
+        },
+        {
+          "name": "原场景右侧星形像素",
+          "passed": true
+        },
+        {
+          "name": "独立star无雪派生实际可见",
+          "passed": true
+        }
+      ],
+      "gate": {
+        "passed": true,
+        "checks": [
+          {
+            "name": "页面加载、可见内容与 JavaScript",
+            "passed": true
+          },
+          {
+            "name": "精确标题与初态",
+            "passed": true
+          },
+          {
+            "name": "手动聚散和初态恢复",
+            "passed": true
+          },
+          {
+            "name": "强制：真实Canvas绘制与有界粒子配置",
+            "passed": true
+          },
+          {
+            "name": "强制：手动散开/聚合/旋转/重置实际行为",
+            "passed": true
+          },
+          {
+            "name": "强制：合成21点手势分类/去抖/横向映射（非真实识别）",
+            "passed": true
+          },
+          {
+            "name": "强制：无雪对象初态可见性（派生诊断，非交付修改）",
+            "passed": true,
+            "detail": "原场景无雪，初始背景像素对照直接证明对象可见；未修改scene或冻结CSS。"
+          }
+        ],
+        "evidenceScope": "scene-behavior-synthetic",
+        "summary": "受控场景配置、实际Canvas、手动按钮及合成21点手势行为通过；未验证真实视觉模型、物理摄像头或完整用户需求。"
+      },
+      "modelRequests": 0,
+      "componentPixels": {
+        "left": 0,
+        "right": 1562,
+        "total": 1562,
+        "width": 1072,
+        "height": 520,
+        "cameraActive": false
+      },
+      "componentDiagnostics": [
+        {
+          "primitive": "star",
+          "gate": {
+            "passed": true,
+            "checks": [
+              {
+                "name": "页面加载、可见内容与 JavaScript",
+                "passed": true
+              },
+              {
+                "name": "精确标题与初态",
+                "passed": true
+              },
+              {
+                "name": "手动聚散和初态恢复",
+                "passed": true
+              },
+              {
+                "name": "强制：真实Canvas绘制与有界粒子配置",
+                "passed": true
+              },
+              {
+                "name": "强制：手动散开/聚合/旋转/重置实际行为",
+                "passed": true
+              },
+              {
+                "name": "强制：合成21点手势分类/去抖/横向映射（非真实识别）",
+                "passed": true
+              },
+              {
+                "name": "强制：无雪对象初态可见性（派生诊断，非交付修改）",
+                "passed": true,
+                "detail": "原场景无雪，初始背景像素对照直接证明对象可见；未修改scene或冻结CSS。"
+              }
+            ],
+            "evidenceScope": "scene-behavior-synthetic",
+            "summary": "受控场景配置、实际Canvas、手动按钮及合成21点手势行为通过；未验证真实视觉模型、物理摄像头或完整用户需求。"
+          }
+        }
+      ]
+    },
+    "matched": true,
+    "healthy": true
+  },
+  {
+    "poolId": "C18",
+    "candidateId": "cand-9ec2",
+    "expectedPass": false,
+    "candidateValueJsonSha256": "658bb395cc3e5381879ac2df363231d4d4579f63a35430028c77ad4a8fc844f1",
+    "sourceSerialization": "JSON.stringify(value)",
+    "sceneJsonSha256": "659e64ff49b44fff98516c8a6781dcf4e78d14e3cc87f182099b581d2a462e71",
+    "checksSha256": "d40603325c4bee972073c4cdf96cfbb3c0a11afe6b330ebdffe638134c5996d8",
+    "actual": {
+      "version": "verifier-scene-oracle-v1",
+      "evidenceKind": "outer-authored-challenge-oracle",
+      "passed": false,
+      "business": [
+        {
+          "name": "精确标题",
+          "passed": true
+        },
+        {
+          "name": "业务掌拳与横移映射",
+          "passed": true
+        },
+        {
+          "name": "业务总粒子数量",
+          "passed": false
+        },
+        {
+          "name": "业务主体粒子数量",
+          "passed": true
+        },
+        {
+          "name": "业务雪粒子数量",
+          "passed": false
+        }
+      ],
+      "gate": {
+        "passed": false,
+        "checks": [
+          {
+            "name": "页面加载、可见内容与 JavaScript",
+            "passed": true
+          },
+          {
+            "name": "精确标题与初态",
+            "passed": true
+          },
+          {
+            "name": "手动聚散和初态恢复",
+            "passed": false,
+            "detail": "#particle-count 文本不精确等于：180"
+          }
+        ],
+        "summary": "冻结场景DOM验收未通过；没有声称识别模型或物理摄像头完成验收。",
+        "evidenceScope": "scene-behavior-synthetic"
+      },
+      "modelRequests": 0
+    },
+    "matched": true,
+    "healthy": true
+  },
+  {
+    "poolId": "C18",
+    "candidateId": "cand-510b",
+    "expectedPass": true,
+    "candidateValueJsonSha256": "689dd2d6ab25b71da8daea3e062ef6a837dc9644705d330e430a147bd267fd84",
+    "sourceSerialization": "JSON.stringify(value)",
+    "sceneJsonSha256": "b7b04e54edddba5e5e4df4f09c9181302ba61a3afc23a11835f47a06a1829a68",
+    "checksSha256": "d40603325c4bee972073c4cdf96cfbb3c0a11afe6b330ebdffe638134c5996d8",
+    "actual": {
+      "version": "verifier-scene-oracle-v1",
+      "evidenceKind": "outer-authored-challenge-oracle",
+      "passed": true,
+      "business": [
+        {
+          "name": "精确标题",
+          "passed": true
+        },
+        {
+          "name": "业务掌拳与横移映射",
+          "passed": true
+        },
+        {
+          "name": "业务总粒子数量",
+          "passed": true
+        },
+        {
+          "name": "业务主体粒子数量",
+          "passed": true
+        },
+        {
+          "name": "业务雪粒子数量",
+          "passed": true
+        }
+      ],
+      "gate": {
+        "passed": true,
+        "checks": [
+          {
+            "name": "页面加载、可见内容与 JavaScript",
+            "passed": true
+          },
+          {
+            "name": "精确标题与初态",
+            "passed": true
+          },
+          {
+            "name": "手动聚散和初态恢复",
+            "passed": true
+          },
+          {
+            "name": "强制：真实Canvas绘制与有界粒子配置",
+            "passed": true
+          },
+          {
+            "name": "强制：手动散开/聚合/旋转/重置实际行为",
+            "passed": true
+          },
+          {
+            "name": "强制：合成21点手势分类/去抖/横向映射（非真实识别）",
+            "passed": true
+          },
+          {
+            "name": "强制：无雪对象初态可见性（派生诊断，非交付修改）",
+            "passed": true,
+            "detail": "相同objects/mappings、snowCount=0的可信派生场景像素不同于背景；scene seed会变化，不证明粒子坐标逐点一致。"
+          }
+        ],
+        "evidenceScope": "scene-behavior-synthetic",
+        "summary": "受控场景配置、实际Canvas、手动按钮及合成21点手势行为通过；未验证真实视觉模型、物理摄像头或完整用户需求。"
+      },
+      "modelRequests": 0
+    },
+    "matched": true,
+    "healthy": true
+  }
+]
