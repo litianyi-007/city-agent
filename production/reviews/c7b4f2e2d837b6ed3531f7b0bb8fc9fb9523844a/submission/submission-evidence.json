@@ -1,0 +1,2351 @@
+{
+  "version": "production-submission-v1",
+  "generatedAt": "2026-10-07T04:46:37.411Z",
+  "basicInfo": {
+    "pipelineName": "Agent Delivery Studio — 有界 HTML/受控摄像头场景生产",
+    "team": "用户定义目标/权限/预算，平台内六角色执行；外层开发 Agent 建设平台不计为内部交付",
+    "requirementType": "离线单HTML或严格JSON受控摄像头场景；不是任意仓库/摄像头代码自动生产"
+  },
+  "pipelineDesign": {
+    "stages": [
+      "产品扩展",
+      "研究约束",
+      "项目经理思考与设计",
+      "测试契约冻结",
+      "研发",
+      "独立Chromium硬Gate",
+      "项目经理反馈→有限返修",
+      "交付"
+    ],
+    "roles": [
+      "product",
+      "project-manager",
+      "researcher",
+      "developer",
+      "tester",
+      "verifier"
+    ],
+    "verifier": "每个可替换角色输出的全部合法候选经过独立序数审查；单候选也验证；错误或弃权失败关闭；不覆盖硬Gate",
+    "humanBoundary": "初始需求、权限、预算及缺信息/高风险决策属于人；不得手改生成产物或临时放宽门禁后计成功",
+    "scope": "无容器安全执行环境，禁止宿主生成Node/shell执行",
+    "reusable": "真实运行根据需求和冻结契约生成；Mock通过显式case配置，不用于真实题关键词特判",
+    "references": [
+      {
+        "name": "LLM-as-a-Verifier",
+        "url": "https://github.com/llm-as-a-verifier/llm-as-a-verifier",
+        "relationship": "概念借鉴；JSON ordinal审查未复现原score-token logprobs算法"
+      },
+      {
+        "name": "AnyJev",
+        "url": "https://github.com/nokia-applied-research/AnyJev",
+        "relationship": "仅调研与后续 typed proceed/revise/abstain/stop 与标注校准计划；本项目未实现原prefill/readout/head"
+      }
+    ]
+  },
+  "requirements": [
+    {
+      "runId": "37604a90-5c8b-4d0e-b40b-b4f47af7e6ee",
+      "id": "MOCK-01",
+      "source": "用户授权自拟模拟需求，2026-10-07；没有真实提出者或工单",
+      "background": "用最小协作工具验证从一句话目标到可交互 HTML 的新建应用路径。",
+      "acceptance": "初始无任务；添加“准备发布”后仅出现一条同名任务；输入框清空；能标记完成并显示完成统计；删除后列表与统计归零。",
+      "difficulty": "low",
+      "kind": "illustrative",
+      "brief": "为三人研发小组做一个无需登录的单页待办板：输入任务后添加到列表，支持标记完成和删除，显示任务统计。不依赖网络或后端，刷新后可重置。",
+      "evidenceKind": "fixture"
+    },
+    {
+      "runId": "b2dc3667-30dc-4d79-941d-533c9294a599",
+      "id": "MOCK-02",
+      "source": "用户授权自拟模拟需求，2026-10-07；受控模板功能扩展演练",
+      "background": "演练增量需求、原有交互回归与功能验收；本批不是任意既有仓库的真实修改。",
+      "acceptance": "添加“编写方案”和“执行测试”；完成其中一条；未完成筛选只显示另一条，已完成筛选只显示完成项；切回全部恢复两条；统计保留总数与完成数。",
+      "difficulty": "medium",
+      "kind": "illustrative",
+      "brief": "在受控的团队待办板演示模板上增加状态筛选：全部、未完成、已完成。切换筛选不能删除任务，添加和标记完成后计数应保持一致。仅交付单 HTML，不安装依赖。",
+      "evidenceKind": "fixture"
+    },
+    {
+      "runId": "18207ab0-cb91-4a0b-975e-b077d8e012e1",
+      "id": "MOCK-03",
+      "source": "用户授权自拟模拟需求，2026-10-07；人工构造缺陷的修复演练",
+      "background": "检查反例、错误反馈与修复后的回归；fixture 的修复不能计为真实模型自主修复。",
+      "acceptance": "空输入、纯空格提交均保持零项并显示提示；连续添加“回归接口”和“检查日志”恰好两项；删除第一条后第二条仍在，总数为一。",
+      "difficulty": "medium",
+      "kind": "illustrative",
+      "brief": "修复受控待办板演示模板的空任务问题：空字符串或纯空格不能新增任务，连续添加两个不同任务必须恰好产生两条，删除其中一条不影响另一条，统计正确。仅交付单 HTML。",
+      "evidenceKind": "fixture"
+    }
+  ],
+  "executionRecords": [
+    {
+      "id": "37604a90-5c8b-4d0e-b40b-b4f47af7e6ee",
+      "inputSnapshot": {
+        "brief": "为三人研发小组做一个无需登录的单页待办板：输入任务后添加到列表，支持标记完成和删除，显示任务统计。不依赖网络或后端，刷新后可重置。",
+        "capability": "offline-single-html",
+        "mode": "demo",
+        "verifierEngine": "llm-rubric",
+        "demoCaseId": "create",
+        "agentIds": [
+          "58b2f492-52c1-49ee-8936-53e5c8c6cc89",
+          "65e308f1-8582-4b41-b485-92911d44ed0f",
+          "8abcf5e4-a5f3-44a5-b58b-4f7aa83d8834",
+          "5e6500fe-48d3-4646-a412-d0bfaacffacc",
+          "299e00c3-cf0c-4f3f-814d-6c33e723a9d7",
+          "cc18586a-8d6b-4c19-950f-308034a0c0b1"
+        ],
+        "candidateCount": 1,
+        "limits": {
+          "maxCalls": 24,
+          "maxRepairCycles": 2,
+          "maxTokens": 500000,
+          "maxOutputTokens": 6000,
+          "maxDurationMs": 600000,
+          "maxCost": 5,
+          "currency": "USD"
+        },
+        "requirement": {
+          "id": "MOCK-01",
+          "source": "用户授权自拟模拟需求，2026-10-07；没有真实提出者或工单",
+          "background": "用最小协作工具验证从一句话目标到可交互 HTML 的新建应用路径。",
+          "acceptance": "初始无任务；添加“准备发布”后仅出现一条同名任务；输入框清空；能标记完成并显示完成统计；删除后列表与统计归零。",
+          "difficulty": "low",
+          "kind": "illustrative"
+        },
+        "budgetAuthorized": false
+      },
+      "agentSnapshot": [
+        {
+          "id": "58b2f492-52c1-49ee-8936-53e5c8c6cc89",
+          "name": "产品经理",
+          "role": "product",
+          "provider": "deepseek",
+          "baseUrl": "https://api.deepseek.com",
+          "modelId": "deepseek-flash",
+          "enabled": true,
+          "hasApiKey": true,
+          "pricing": {
+            "inputPerMillion": 0.3,
+            "outputPerMillion": 1.2,
+            "currency": "USD"
+          }
+        },
+        {
+          "id": "65e308f1-8582-4b41-b485-92911d44ed0f",
+          "name": "项目经理",
+          "role": "project-manager",
+          "provider": "deepseek",
+          "baseUrl": "https://api.deepseek.com",
+          "modelId": "deepseek-flash",
+          "enabled": true,
+          "hasApiKey": true,
+          "pricing": {
+            "inputPerMillion": 0.3,
+            "outputPerMillion": 1.2,
+            "currency": "USD"
+          }
+        },
+        {
+          "id": "8abcf5e4-a5f3-44a5-b58b-4f7aa83d8834",
+          "name": "研究员",
+          "role": "researcher",
+          "provider": "deepseek",
+          "baseUrl": "https://api.deepseek.com",
+          "modelId": "deepseek-flash",
+          "enabled": true,
+          "hasApiKey": true,
+          "pricing": {
+            "inputPerMillion": 0.3,
+            "outputPerMillion": 1.2,
+            "currency": "USD"
+          }
+        },
+        {
+          "id": "5e6500fe-48d3-4646-a412-d0bfaacffacc",
+          "name": "研发",
+          "role": "developer",
+          "provider": "deepseek",
+          "baseUrl": "https://api.deepseek.com",
+          "modelId": "deepseek-flash",
+          "enabled": true,
+          "hasApiKey": true,
+          "pricing": {
+            "inputPerMillion": 0.3,
+            "outputPerMillion": 1.2,
+            "currency": "USD"
+          }
+        },
+        {
+          "id": "299e00c3-cf0c-4f3f-814d-6c33e723a9d7",
+          "name": "测试",
+          "role": "tester",
+          "provider": "deepseek",
+          "baseUrl": "https://api.deepseek.com",
+          "modelId": "deepseek-flash",
+          "enabled": true,
+          "hasApiKey": true,
+          "pricing": {
+            "inputPerMillion": 0.3,
+            "outputPerMillion": 1.2,
+            "currency": "USD"
+          }
+        },
+        {
+          "id": "cc18586a-8d6b-4c19-950f-308034a0c0b1",
+          "name": "Verifier",
+          "role": "verifier",
+          "provider": "deepseek",
+          "baseUrl": "https://api.deepseek.com",
+          "modelId": "deepseek-flash",
+          "enabled": true,
+          "hasApiKey": true,
+          "pricing": {
+            "inputPerMillion": 0.3,
+            "outputPerMillion": 1.2,
+            "currency": "USD"
+          }
+        }
+      ],
+      "platformCommit": "c21c588632d04dc7ed9dfa8cb265606400d2b522",
+      "cameraVerification": null,
+      "repairCount": 0,
+      "repairPolicyVersion": "production-global-repair-v1",
+      "repairHistory": [],
+      "jevSnapshot": null,
+      "jevCalls": [],
+      "verifications": [
+        {
+          "phase": "product",
+          "engine": "llm-rubric",
+          "candidateIds": [
+            "c1979069-9c4b-433e-a35b-b1d76278c5fd"
+          ],
+          "criteriaHash": "5c74060b7628c92009bdc16391024e684d592a0af3d804c5f1e9debd14d378b5",
+          "decision": "accept",
+          "selectedCandidateId": "c1979069-9c4b-433e-a35b-b1d76278c5fd",
+          "scores": [
+            {
+              "candidateId": "c1979069-9c4b-433e-a35b-b1d76278c5fd",
+              "score": 4,
+              "reason": "Mock：示范候选验证记录，不代表真实模型判断。"
+            }
+          ],
+          "reason": "Mock 夹具选择；实际浏览器验收仍独立执行。"
+        },
+        {
+          "phase": "research",
+          "engine": "llm-rubric",
+          "candidateIds": [
+            "09569aac-b96c-4744-ad66-054dff177b57"
+          ],
+          "criteriaHash": "dfbcdc0306c3e047e00c373bbf3955893b05050fa4eb2798f199aa8568b0260f",
+          "decision": "accept",
+          "selectedCandidateId": "09569aac-b96c-4744-ad66-054dff177b57",
+          "scores": [
+            {
+              "candidateId": "09569aac-b96c-4744-ad66-054dff177b57",
+              "score": 4,
+              "reason": "Mock：示范候选验证记录，不代表真实模型判断。"
+            }
+          ],
+          "reason": "Mock 夹具选择；实际浏览器验收仍独立执行。"
+        },
+        {
+          "phase": "think-design",
+          "engine": "llm-rubric",
+          "candidateIds": [
+            "6b98cfbf-29db-410f-a3dd-698f1ceb8f80"
+          ],
+          "criteriaHash": "d956fad67b2845e26742635ea85436a463d930e160c14ddc3e96d893be18bedc",
+          "decision": "accept",
+          "selectedCandidateId": "6b98cfbf-29db-410f-a3dd-698f1ceb8f80",
+          "scores": [
+            {
+              "candidateId": "6b98cfbf-29db-410f-a3dd-698f1ceb8f80",
+              "score": 4,
+              "reason": "Mock：示范候选验证记录，不代表真实模型判断。"
+            }
+          ],
+          "reason": "Mock 夹具选择；实际浏览器验收仍独立执行。"
+        },
+        {
+          "phase": "acceptance",
+          "engine": "llm-rubric",
+          "candidateIds": [
+            "f01348a4-9116-445d-9f03-b9e7f98b6ca5"
+          ],
+          "criteriaHash": "7cb855a9a7bdb4f41581fd5652ef66d2e00041e748054e1b1053d99e4ce27cac",
+          "decision": "accept",
+          "selectedCandidateId": "f01348a4-9116-445d-9f03-b9e7f98b6ca5",
+          "scores": [
+            {
+              "candidateId": "f01348a4-9116-445d-9f03-b9e7f98b6ca5",
+              "score": 4,
+              "reason": "Mock：示范候选验证记录，不代表真实模型判断。"
+            }
+          ],
+          "reason": "Mock 夹具选择；实际浏览器验收仍独立执行。"
+        },
+        {
+          "phase": "implement",
+          "engine": "llm-rubric",
+          "candidateIds": [
+            "4b356205-dfbf-4f9b-aeea-4b4903cd7f22"
+          ],
+          "criteriaHash": "314837bd0091d77b62be7d2ac9ccc8ceb8a4024e8258a66a88d6c817ac724186",
+          "decision": "accept",
+          "selectedCandidateId": "4b356205-dfbf-4f9b-aeea-4b4903cd7f22",
+          "scores": [
+            {
+              "candidateId": "4b356205-dfbf-4f9b-aeea-4b4903cd7f22",
+              "score": 4,
+              "reason": "Mock：示范候选验证记录，不代表真实模型判断。"
+            }
+          ],
+          "reason": "Mock 夹具选择；实际浏览器验收仍独立执行。"
+        },
+        {
+          "phase": "feedback-0",
+          "engine": "llm-rubric",
+          "candidateIds": [
+            "e6b070d1-d413-4e7c-a600-d97864ee6002"
+          ],
+          "criteriaHash": "30625a9c826e092eb58468549c34a74bef8a9acef0ed63bfb4b83424acad9443",
+          "decision": "accept",
+          "selectedCandidateId": "e6b070d1-d413-4e7c-a600-d97864ee6002",
+          "scores": [
+            {
+              "candidateId": "e6b070d1-d413-4e7c-a600-d97864ee6002",
+              "score": 4,
+              "reason": "Mock：示范候选验证记录，不代表真实模型判断。"
+            }
+          ],
+          "reason": "Mock 夹具选择；实际浏览器验收仍独立执行。"
+        }
+      ],
+      "verifierAttempts": [
+        {
+          "callId": "ed18253b-4e60-4bd1-b348-bede2b51f2ef",
+          "phase": "product:verify",
+          "engine": "llm-rubric",
+          "sourceJevCallId": null,
+          "error": null,
+          "usage": {
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "estimatedCost": 0,
+            "currency": "USD"
+          }
+        },
+        {
+          "callId": "8ed34b97-8676-428a-9651-f0754ccc3186",
+          "phase": "research:verify",
+          "engine": "llm-rubric",
+          "sourceJevCallId": null,
+          "error": null,
+          "usage": {
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "estimatedCost": 0,
+            "currency": "USD"
+          }
+        },
+        {
+          "callId": "d207dc38-7365-4922-80c0-f0e5849df08a",
+          "phase": "think-design:verify",
+          "engine": "llm-rubric",
+          "sourceJevCallId": null,
+          "error": null,
+          "usage": {
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "estimatedCost": 0,
+            "currency": "USD"
+          }
+        },
+        {
+          "callId": "b72fbb8e-a505-4d85-91da-7a744929eaa1",
+          "phase": "acceptance:verify",
+          "engine": "llm-rubric",
+          "sourceJevCallId": null,
+          "error": null,
+          "usage": {
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "estimatedCost": 0,
+            "currency": "USD"
+          }
+        },
+        {
+          "callId": "d2be3118-8562-4d73-9795-22c22943616b",
+          "phase": "implement:verify",
+          "engine": "llm-rubric",
+          "sourceJevCallId": null,
+          "error": null,
+          "usage": {
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "estimatedCost": 0,
+            "currency": "USD"
+          }
+        },
+        {
+          "callId": "007696bb-8ab9-466e-b6b9-1ddb9f88f2a0",
+          "phase": "feedback-0:verify",
+          "engine": "llm-rubric",
+          "sourceJevCallId": null,
+          "error": null,
+          "usage": {
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "estimatedCost": 0,
+            "currency": "USD"
+          }
+        }
+      ],
+      "status": "completed",
+      "evidenceKind": "fixture",
+      "harnessInvocations": 0,
+      "actualProviderRequests": 0,
+      "knownProviderRequests": 0,
+      "unknownRequestIntents": 0,
+      "knownHarnessProviderRequests": 0,
+      "unknownHarnessRequestIntents": 0,
+      "jevProviderRequests": 0,
+      "knownJevProviderRequests": 0,
+      "unknownJevRequestIntents": 0,
+      "actualProviderRequestsDefinition": "Observed HTTP attempts, not an invoice; unresolved intents are unknown, known subtotal retained",
+      "actualModelCalls": 0,
+      "actualModelCallsDefinition": "Deprecated alias of Harness invocations; use actualProviderRequests for HTTP attempts",
+      "simulatedStageRecords": 12,
+      "injectedTestRecords": 0,
+      "frozenContract": {
+        "version": "production-acceptance-v2",
+        "hash": "a6de655a4b6468100d7a58b25aa7070b0ed3e5cba14a04b6838201b04f89e318",
+        "requirementHash": "4a137491d382b96c715321204411d2b02e7404a465375174d9f4c33a93c4e5a3",
+        "checks": [
+          {
+            "name": "Mock 边界可见与初始零任务",
+            "steps": [
+              {
+                "action": "assertText",
+                "selector": "#notice",
+                "text": "Mock"
+              },
+              {
+                "action": "assertTextExact",
+                "selector": "#count",
+                "text": "0"
+              },
+              {
+                "action": "assertCount",
+                "selector": "#tasks li",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "name": "新增、完成、删除与精确统计",
+            "steps": [
+              {
+                "action": "fill",
+                "selector": "#task-input",
+                "value": "准备发布"
+              },
+              {
+                "action": "click",
+                "selector": "#add-task"
+              },
+              {
+                "action": "assertCount",
+                "selector": "#tasks li",
+                "count": 1
+              },
+              {
+                "action": "assertTextExact",
+                "selector": "#tasks li span",
+                "text": "准备发布"
+              },
+              {
+                "action": "assertValue",
+                "selector": "#task-input",
+                "value": ""
+              },
+              {
+                "action": "assertTextExact",
+                "selector": "#count",
+                "text": "1"
+              },
+              {
+                "action": "click",
+                "selector": ".toggle"
+              },
+              {
+                "action": "assertTextExact",
+                "selector": "#done-count",
+                "text": "1"
+              },
+              {
+                "action": "click",
+                "selector": ".delete"
+              },
+              {
+                "action": "assertCount",
+                "selector": "#tasks li",
+                "count": 0
+              },
+              {
+                "action": "assertTextExact",
+                "selector": "#count",
+                "text": "0"
+              },
+              {
+                "action": "assertTextExact",
+                "selector": "#done-count",
+                "text": "0"
+              }
+            ]
+          }
+        ],
+        "frozenAt": "2026-10-07T04:43:35.198Z"
+      },
+      "outputs": [
+        {
+          "phase": "product",
+          "role": "product",
+          "value": {
+            "goal": "为三人研发小组做一个无需登录的单页待办板：输入任务后添加到列表，支持标记完成和删除，显示任务统计。不依赖网络或后端，刷新后可重置。",
+            "scope": "offline-single-html",
+            "acceptance": [
+              "初始无任务；添加“准备发布”后仅出现一条同名任务；输入框清空；能标记完成并显示完成统计；删除后列表与统计归零。"
+            ],
+            "exclusions": [
+              "无后端、无外网、无宿主代码执行"
+            ]
+          },
+          "selectedCandidateId": "c1979069-9c4b-433e-a35b-b1d76278c5fd"
+        },
+        {
+          "phase": "research",
+          "role": "researcher",
+          "value": {
+            "observations": [
+              "这是明确标记的工程 Mock 任务清单示范。"
+            ],
+            "constraints": [
+              "HTML/CSS/JS内联；冻结业务测试"
+            ],
+            "unknowns": [
+              "真实模型成功率、真实需求泛化未测量"
+            ]
+          },
+          "selectedCandidateId": "09569aac-b96c-4744-ad66-054dff177b57"
+        },
+        {
+          "phase": "think-design",
+          "role": "project-manager",
+          "value": {
+            "decision": "proceed",
+            "summary": "Mock 项目经理分解，开始冻结测试。",
+            "tasks": [
+              {
+                "id": "implement",
+                "owner": "developer",
+                "description": "按冻结DOM和业务测试实现离线页面"
+              },
+              {
+                "id": "verify",
+                "owner": "tester",
+                "description": "独立浏览器验证并记录结果"
+              }
+            ],
+            "risks": [
+              "Mock不能证明模型自主交付"
+            ]
+          },
+          "selectedCandidateId": "6b98cfbf-29db-410f-a3dd-698f1ceb8f80"
+        },
+        {
+          "phase": "acceptance",
+          "role": "tester",
+          "value": {
+            "checks": [
+              {
+                "name": "Mock 边界可见与初始零任务",
+                "steps": [
+                  {
+                    "action": "assertText",
+                    "selector": "#notice",
+                    "text": "Mock"
+                  },
+                  {
+                    "action": "assertTextExact",
+                    "selector": "#count",
+                    "text": "0"
+                  },
+                  {
+                    "action": "assertCount",
+                    "selector": "#tasks li",
+                    "count": 0
+                  }
+                ]
+              },
+              {
+                "name": "新增、完成、删除与精确统计",
+                "steps": [
+                  {
+                    "action": "fill",
+                    "selector": "#task-input",
+                    "value": "准备发布"
+                  },
+                  {
+                    "action": "click",
+                    "selector": "#add-task"
+                  },
+                  {
+                    "action": "assertCount",
+                    "selector": "#tasks li",
+                    "count": 1
+                  },
+                  {
+                    "action": "assertTextExact",
+                    "selector": "#tasks li span",
+                    "text": "准备发布"
+                  },
+                  {
+                    "action": "assertValue",
+                    "selector": "#task-input",
+                    "value": ""
+                  },
+                  {
+                    "action": "assertTextExact",
+                    "selector": "#count",
+                    "text": "1"
+                  },
+                  {
+                    "action": "click",
+                    "selector": ".toggle"
+                  },
+                  {
+                    "action": "assertTextExact",
+                    "selector": "#done-count",
+                    "text": "1"
+                  },
+                  {
+                    "action": "click",
+                    "selector": ".delete"
+                  },
+                  {
+                    "action": "assertCount",
+                    "selector": "#tasks li",
+                    "count": 0
+                  },
+                  {
+                    "action": "assertTextExact",
+                    "selector": "#count",
+                    "text": "0"
+                  },
+                  {
+                    "action": "assertTextExact",
+                    "selector": "#done-count",
+                    "text": "0"
+                  }
+                ]
+              }
+            ]
+          },
+          "selectedCandidateId": "f01348a4-9116-445d-9f03-b9e7f98b6ca5"
+        },
+        {
+          "phase": "implement",
+          "role": "developer",
+          "value": {
+            "html": "<!doctype html><html lang=\"zh\"><head><meta charset=\"utf-8\"><title>离线任务清单</title><style>body{font:18px system-ui;max-width:700px;margin:40px auto;padding:24px;color:#17212c}input,button{font:inherit;padding:12px}li{margin:18px 0}#notice{background:#fff6da;padding:12px}.done{text-decoration:line-through}output{padding:8px}</style></head><body><h1>为三人研发小组做一个无需登录的单页待办板：输入任务后添加到列表，支持标记完成和删除，显示任务统计。不依赖网络或后端，刷新后可重置。</h1><p id=\"notice\">工程 Mock 夹具，不是真实模型自主交付。</p><label for=\"task-input\">任务名称</label><input id=\"task-input\" maxlength=\"120\"><button id=\"add-task\">添加</button><p id=\"feedback\">请输入任务</p><button id=\"show-all\">全部</button><button id=\"show-open\">未完成</button><button id=\"show-done\">已完成</button><ul id=\"tasks\"></ul><p>任务数量 <output id=\"count\">0</output> 完成数量 <output id=\"done-count\">0</output></p><script>const tasks=[];let filter='all';let nextId=0;const input=document.querySelector('#task-input');const feedback=document.querySelector('#feedback');function render(){const list=document.querySelector('#tasks');list.replaceChildren();tasks.forEach(task=>{if(filter==='open'&&task.done||filter==='done'&&!task.done)return;const li=document.createElement('li');li.dataset.taskId=String(task.id);const span=document.createElement('span');span.textContent=task.title;span.className=task.done?'done':'';const button=document.createElement('button');button.className='toggle';button.textContent=task.done?'恢复':'完成';button.onclick=()=>{task.done=!task.done;render()};const remove=document.createElement('button');remove.className='delete';remove.textContent='删除';remove.onclick=()=>{tasks.splice(tasks.findIndex(item=>item.id===task.id),1);render()};li.append(span,button,remove);list.append(li)});document.querySelector('#count').textContent=String(tasks.length);document.querySelector('#done-count').textContent=String(tasks.filter(task=>task.done).length)}document.querySelector('#add-task').onclick=()=>{const title=input.value.trim();if(!title){feedback.textContent='任务不能为空';return}tasks.push({id:nextId++,title,done:false});input.value='';feedback.textContent='已添加';render()};document.querySelector('#show-all').onclick=()=>{filter='all';render()};document.querySelector('#show-open').onclick=()=>{filter='open';render()};document.querySelector('#show-done').onclick=()=>{filter='done';render()};render();</script></body></html>"
+          },
+          "selectedCandidateId": "4b356205-dfbf-4f9b-aeea-4b4903cd7f22"
+        },
+        {
+          "phase": "feedback-0",
+          "role": "project-manager",
+          "value": {
+            "decision": "proceed",
+            "summary": "硬门禁通过，按Mock证据类型交付。",
+            "tasks": [
+              {
+                "id": "delivery",
+                "owner": "tester",
+                "description": "打包证据"
+              }
+            ],
+            "risks": []
+          },
+          "selectedCandidateId": "e6b070d1-d413-4e7c-a600-d97864ee6002"
+        }
+      ],
+      "gateHistory": [
+        {
+          "passed": true,
+          "checks": [
+            {
+              "name": "页面加载、可见内容与 JavaScript",
+              "passed": true
+            },
+            {
+              "name": "Mock 边界可见与初始零任务",
+              "passed": true
+            },
+            {
+              "name": "新增、完成、删除与精确统计",
+              "passed": true
+            }
+          ],
+          "summary": "独立 Chromium 验收通过，交互与输出已验证。"
+        }
+      ],
+      "logs": "/api/production/runs/37604a90-5c8b-4d0e-b40b-b4f47af7e6ee/artifacts/evidence.json",
+      "artifacts": [
+        {
+          "name": "index.html",
+          "type": "text/html"
+        },
+        {
+          "name": "delivery-manifest.json",
+          "type": "application/json"
+        },
+        {
+          "name": "evidence.json",
+          "type": "application/json"
+        }
+      ],
+      "durationMs": 2902,
+      "video": null
+    },
+    {
+      "id": "b2dc3667-30dc-4d79-941d-533c9294a599",
+      "inputSnapshot": {
+        "brief": "在受控的团队待办板演示模板上增加状态筛选：全部、未完成、已完成。切换筛选不能删除任务，添加和标记完成后计数应保持一致。仅交付单 HTML，不安装依赖。",
+        "capability": "offline-single-html",
+        "mode": "demo",
+        "verifierEngine": "llm-rubric",
+        "demoCaseId": "feature",
+        "agentIds": [
+          "58b2f492-52c1-49ee-8936-53e5c8c6cc89",
+          "65e308f1-8582-4b41-b485-92911d44ed0f",
+          "8abcf5e4-a5f3-44a5-b58b-4f7aa83d8834",
+          "5e6500fe-48d3-4646-a412-d0bfaacffacc",
+          "299e00c3-cf0c-4f3f-814d-6c33e723a9d7",
+          "cc18586a-8d6b-4c19-950f-308034a0c0b1"
+        ],
+        "candidateCount": 1,
+        "limits": {
+          "maxCalls": 24,
+          "maxRepairCycles": 2,
+          "maxTokens": 500000,
+          "maxOutputTokens": 6000,
+          "maxDurationMs": 600000,
+          "maxCost": 5,
+          "currency": "USD"
+        },
+        "requirement": {
+          "id": "MOCK-02",
+          "source": "用户授权自拟模拟需求，2026-10-07；受控模板功能扩展演练",
+          "background": "演练增量需求、原有交互回归与功能验收；本批不是任意既有仓库的真实修改。",
+          "acceptance": "添加“编写方案”和“执行测试”；完成其中一条；未完成筛选只显示另一条，已完成筛选只显示完成项；切回全部恢复两条；统计保留总数与完成数。",
+          "difficulty": "medium",
+          "kind": "illustrative"
+        },
+        "budgetAuthorized": false
+      },
+      "agentSnapshot": [
+        {
+          "id": "58b2f492-52c1-49ee-8936-53e5c8c6cc89",
+          "name": "产品经理",
+          "role": "product",
+          "provider": "deepseek",
+          "baseUrl": "https://api.deepseek.com",
+          "modelId": "deepseek-flash",
+          "enabled": true,
+          "hasApiKey": true,
+          "pricing": {
+            "inputPerMillion": 0.3,
+            "outputPerMillion": 1.2,
+            "currency": "USD"
+          }
+        },
+        {
+          "id": "65e308f1-8582-4b41-b485-92911d44ed0f",
+          "name": "项目经理",
+          "role": "project-manager",
+          "provider": "deepseek",
+          "baseUrl": "https://api.deepseek.com",
+          "modelId": "deepseek-flash",
+          "enabled": true,
+          "hasApiKey": true,
+          "pricing": {
+            "inputPerMillion": 0.3,
+            "outputPerMillion": 1.2,
+            "currency": "USD"
+          }
+        },
+        {
+          "id": "8abcf5e4-a5f3-44a5-b58b-4f7aa83d8834",
+          "name": "研究员",
+          "role": "researcher",
+          "provider": "deepseek",
+          "baseUrl": "https://api.deepseek.com",
+          "modelId": "deepseek-flash",
+          "enabled": true,
+          "hasApiKey": true,
+          "pricing": {
+            "inputPerMillion": 0.3,
+            "outputPerMillion": 1.2,
+            "currency": "USD"
+          }
+        },
+        {
+          "id": "5e6500fe-48d3-4646-a412-d0bfaacffacc",
+          "name": "研发",
+          "role": "developer",
+          "provider": "deepseek",
+          "baseUrl": "https://api.deepseek.com",
+          "modelId": "deepseek-flash",
+          "enabled": true,
+          "hasApiKey": true,
+          "pricing": {
+            "inputPerMillion": 0.3,
+            "outputPerMillion": 1.2,
+            "currency": "USD"
+          }
+        },
+        {
+          "id": "299e00c3-cf0c-4f3f-814d-6c33e723a9d7",
+          "name": "测试",
+          "role": "tester",
+          "provider": "deepseek",
+          "baseUrl": "https://api.deepseek.com",
+          "modelId": "deepseek-flash",
+          "enabled": true,
+          "hasApiKey": true,
+          "pricing": {
+            "inputPerMillion": 0.3,
+            "outputPerMillion": 1.2,
+            "currency": "USD"
+          }
+        },
+        {
+          "id": "cc18586a-8d6b-4c19-950f-308034a0c0b1",
+          "name": "Verifier",
+          "role": "verifier",
+          "provider": "deepseek",
+          "baseUrl": "https://api.deepseek.com",
+          "modelId": "deepseek-flash",
+          "enabled": true,
+          "hasApiKey": true,
+          "pricing": {
+            "inputPerMillion": 0.3,
+            "outputPerMillion": 1.2,
+            "currency": "USD"
+          }
+        }
+      ],
+      "platformCommit": "c21c588632d04dc7ed9dfa8cb265606400d2b522",
+      "cameraVerification": null,
+      "repairCount": 0,
+      "repairPolicyVersion": "production-global-repair-v1",
+      "repairHistory": [],
+      "jevSnapshot": null,
+      "jevCalls": [],
+      "verifications": [
+        {
+          "phase": "product",
+          "engine": "llm-rubric",
+          "candidateIds": [
+            "b500c363-7864-47b7-9cca-064b4f665f6d"
+          ],
+          "criteriaHash": "2d57d37511ac9330a1fffb894ac8cb2110174fc2309b5defc9b47e71798814d1",
+          "decision": "accept",
+          "selectedCandidateId": "b500c363-7864-47b7-9cca-064b4f665f6d",
+          "scores": [
+            {
+              "candidateId": "b500c363-7864-47b7-9cca-064b4f665f6d",
+              "score": 4,
+              "reason": "Mock：示范候选验证记录，不代表真实模型判断。"
+            }
+          ],
+          "reason": "Mock 夹具选择；实际浏览器验收仍独立执行。"
+        },
+        {
+          "phase": "research",
+          "engine": "llm-rubric",
+          "candidateIds": [
+            "805ed087-13e5-4858-8cee-099585238b17"
+          ],
+          "criteriaHash": "48412d7742680bb93b96eb03c9ecb60325d827c324b658ee050ef6870389a80b",
+          "decision": "accept",
+          "selectedCandidateId": "805ed087-13e5-4858-8cee-099585238b17",
+          "scores": [
+            {
+              "candidateId": "805ed087-13e5-4858-8cee-099585238b17",
+              "score": 4,
+              "reason": "Mock：示范候选验证记录，不代表真实模型判断。"
+            }
+          ],
+          "reason": "Mock 夹具选择；实际浏览器验收仍独立执行。"
+        },
+        {
+          "phase": "think-design",
+          "engine": "llm-rubric",
+          "candidateIds": [
+            "703dccd1-edd2-49c9-a873-5bf6f159100f"
+          ],
+          "criteriaHash": "60768d16320f6f575e335cc1cd25f0e758eeb37baf65d52c8b6e3e54946bacf9",
+          "decision": "accept",
+          "selectedCandidateId": "703dccd1-edd2-49c9-a873-5bf6f159100f",
+          "scores": [
+            {
+              "candidateId": "703dccd1-edd2-49c9-a873-5bf6f159100f",
+              "score": 4,
+              "reason": "Mock：示范候选验证记录，不代表真实模型判断。"
+            }
+          ],
+          "reason": "Mock 夹具选择；实际浏览器验收仍独立执行。"
+        },
+        {
+          "phase": "acceptance",
+          "engine": "llm-rubric",
+          "candidateIds": [
+            "c0da9e4a-0a8d-4a62-b7bf-e16dc17dfbe3"
+          ],
+          "criteriaHash": "62e002b27c3ba4868f0e9ab70cd4f52e6982c452acc90fc92dd982e1e3bcd6d1",
+          "decision": "accept",
+          "selectedCandidateId": "c0da9e4a-0a8d-4a62-b7bf-e16dc17dfbe3",
+          "scores": [
+            {
+              "candidateId": "c0da9e4a-0a8d-4a62-b7bf-e16dc17dfbe3",
+              "score": 4,
+              "reason": "Mock：示范候选验证记录，不代表真实模型判断。"
+            }
+          ],
+          "reason": "Mock 夹具选择；实际浏览器验收仍独立执行。"
+        },
+        {
+          "phase": "implement",
+          "engine": "llm-rubric",
+          "candidateIds": [
+            "a5773340-0c7e-42cb-9da4-b1dba2bf3f2a"
+          ],
+          "criteriaHash": "85b01e8a4d475cb40a2f186f56347f71123994114ff565fa32488688219e8bb1",
+          "decision": "accept",
+          "selectedCandidateId": "a5773340-0c7e-42cb-9da4-b1dba2bf3f2a",
+          "scores": [
+            {
+              "candidateId": "a5773340-0c7e-42cb-9da4-b1dba2bf3f2a",
+              "score": 4,
+              "reason": "Mock：示范候选验证记录，不代表真实模型判断。"
+            }
+          ],
+          "reason": "Mock 夹具选择；实际浏览器验收仍独立执行。"
+        },
+        {
+          "phase": "feedback-0",
+          "engine": "llm-rubric",
+          "candidateIds": [
+            "fad8b8ab-5ebd-4efb-91c0-c696d7e6b305"
+          ],
+          "criteriaHash": "7d4f92dbf776af0d72815558969b8b32856f4ecd97216f66fca9dfe6f3d26cbe",
+          "decision": "accept",
+          "selectedCandidateId": "fad8b8ab-5ebd-4efb-91c0-c696d7e6b305",
+          "scores": [
+            {
+              "candidateId": "fad8b8ab-5ebd-4efb-91c0-c696d7e6b305",
+              "score": 4,
+              "reason": "Mock：示范候选验证记录，不代表真实模型判断。"
+            }
+          ],
+          "reason": "Mock 夹具选择；实际浏览器验收仍独立执行。"
+        }
+      ],
+      "verifierAttempts": [
+        {
+          "callId": "977a6688-9fec-4032-a3cd-2fcbf0b62dd6",
+          "phase": "product:verify",
+          "engine": "llm-rubric",
+          "sourceJevCallId": null,
+          "error": null,
+          "usage": {
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "estimatedCost": 0,
+            "currency": "USD"
+          }
+        },
+        {
+          "callId": "d426ca1d-9dc8-4f7b-b514-4985e5e17a16",
+          "phase": "research:verify",
+          "engine": "llm-rubric",
+          "sourceJevCallId": null,
+          "error": null,
+          "usage": {
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "estimatedCost": 0,
+            "currency": "USD"
+          }
+        },
+        {
+          "callId": "1c52657c-3bbc-464e-a8c1-849801cc506e",
+          "phase": "think-design:verify",
+          "engine": "llm-rubric",
+          "sourceJevCallId": null,
+          "error": null,
+          "usage": {
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "estimatedCost": 0,
+            "currency": "USD"
+          }
+        },
+        {
+          "callId": "ca6f3498-4a58-46e8-a525-e5deb48be694",
+          "phase": "acceptance:verify",
+          "engine": "llm-rubric",
+          "sourceJevCallId": null,
+          "error": null,
+          "usage": {
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "estimatedCost": 0,
+            "currency": "USD"
+          }
+        },
+        {
+          "callId": "3089a881-df4d-428d-b7d8-69f312440934",
+          "phase": "implement:verify",
+          "engine": "llm-rubric",
+          "sourceJevCallId": null,
+          "error": null,
+          "usage": {
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "estimatedCost": 0,
+            "currency": "USD"
+          }
+        },
+        {
+          "callId": "56a72b9f-c0fe-4895-9767-d903e53a0b2f",
+          "phase": "feedback-0:verify",
+          "engine": "llm-rubric",
+          "sourceJevCallId": null,
+          "error": null,
+          "usage": {
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "estimatedCost": 0,
+            "currency": "USD"
+          }
+        }
+      ],
+      "status": "completed",
+      "evidenceKind": "fixture",
+      "harnessInvocations": 0,
+      "actualProviderRequests": 0,
+      "knownProviderRequests": 0,
+      "unknownRequestIntents": 0,
+      "knownHarnessProviderRequests": 0,
+      "unknownHarnessRequestIntents": 0,
+      "jevProviderRequests": 0,
+      "knownJevProviderRequests": 0,
+      "unknownJevRequestIntents": 0,
+      "actualProviderRequestsDefinition": "Observed HTTP attempts, not an invoice; unresolved intents are unknown, known subtotal retained",
+      "actualModelCalls": 0,
+      "actualModelCallsDefinition": "Deprecated alias of Harness invocations; use actualProviderRequests for HTTP attempts",
+      "simulatedStageRecords": 12,
+      "injectedTestRecords": 0,
+      "frozenContract": {
+        "version": "production-acceptance-v2",
+        "hash": "37f996df9d0f32b2faa227d962cd804ee2a5522be22ff1b437f7f5120a299f9e",
+        "requirementHash": "886146fdf1c0a8b7a23a5a553a2387565cd6e4652caf634e66562a9120b31801",
+        "checks": [
+          {
+            "name": "Mock 边界可见与初始零任务",
+            "steps": [
+              {
+                "action": "assertText",
+                "selector": "#notice",
+                "text": "Mock"
+              },
+              {
+                "action": "assertTextExact",
+                "selector": "#count",
+                "text": "0"
+              },
+              {
+                "action": "assertCount",
+                "selector": "#tasks li",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "name": "两任务状态筛选与统计回归",
+            "steps": [
+              {
+                "action": "fill",
+                "selector": "#task-input",
+                "value": "编写方案"
+              },
+              {
+                "action": "click",
+                "selector": "#add-task"
+              },
+              {
+                "action": "fill",
+                "selector": "#task-input",
+                "value": "执行测试"
+              },
+              {
+                "action": "click",
+                "selector": "#add-task"
+              },
+              {
+                "action": "click",
+                "selector": "[data-task-id=\"0\"] .toggle"
+              },
+              {
+                "action": "assertTextExact",
+                "selector": "#done-count",
+                "text": "1"
+              },
+              {
+                "action": "click",
+                "selector": "#show-open"
+              },
+              {
+                "action": "assertTextExact",
+                "selector": "#tasks li span",
+                "text": "执行测试"
+              },
+              {
+                "action": "assertCount",
+                "selector": "#tasks li",
+                "count": 1
+              },
+              {
+                "action": "click",
+                "selector": "#show-done"
+              },
+              {
+                "action": "assertTextExact",
+                "selector": "#tasks li span",
+                "text": "编写方案"
+              },
+              {
+                "action": "assertCount",
+                "selector": "#tasks li",
+                "count": 1
+              },
+              {
+                "action": "click",
+                "selector": "#show-all"
+              },
+              {
+                "action": "assertCount",
+                "selector": "#tasks li",
+                "count": 2
+              },
+              {
+                "action": "assertTextExact",
+                "selector": "#count",
+                "text": "2"
+              },
+              {
+                "action": "assertTextExact",
+                "selector": "#done-count",
+                "text": "1"
+              }
+            ]
+          }
+        ],
+        "frozenAt": "2026-10-07T04:44:30.476Z"
+      },
+      "outputs": [
+        {
+          "phase": "product",
+          "role": "product",
+          "value": {
+            "goal": "在受控的团队待办板演示模板上增加状态筛选：全部、未完成、已完成。切换筛选不能删除任务，添加和标记完成后计数应保持一致。仅交付单 HTML，不安装依赖。",
+            "scope": "offline-single-html",
+            "acceptance": [
+              "添加“编写方案”和“执行测试”；完成其中一条；未完成筛选只显示另一条，已完成筛选只显示完成项；切回全部恢复两条；统计保留总数与完成数。"
+            ],
+            "exclusions": [
+              "无后端、无外网、无宿主代码执行"
+            ]
+          },
+          "selectedCandidateId": "b500c363-7864-47b7-9cca-064b4f665f6d"
+        },
+        {
+          "phase": "research",
+          "role": "researcher",
+          "value": {
+            "observations": [
+              "这是明确标记的工程 Mock 任务清单示范。"
+            ],
+            "constraints": [
+              "HTML/CSS/JS内联；冻结业务测试"
+            ],
+            "unknowns": [
+              "真实模型成功率、真实需求泛化未测量"
+            ]
+          },
+          "selectedCandidateId": "805ed087-13e5-4858-8cee-099585238b17"
+        },
+        {
+          "phase": "think-design",
+          "role": "project-manager",
+          "value": {
+            "decision": "proceed",
+            "summary": "Mock 项目经理分解，开始冻结测试。",
+            "tasks": [
+              {
+                "id": "implement",
+                "owner": "developer",
+                "description": "按冻结DOM和业务测试实现离线页面"
+              },
+              {
+                "id": "verify",
+                "owner": "tester",
+                "description": "独立浏览器验证并记录结果"
+              }
+            ],
+            "risks": [
+              "Mock不能证明模型自主交付"
+            ]
+          },
+          "selectedCandidateId": "703dccd1-edd2-49c9-a873-5bf6f159100f"
+        },
+        {
+          "phase": "acceptance",
+          "role": "tester",
+          "value": {
+            "checks": [
+              {
+                "name": "Mock 边界可见与初始零任务",
+                "steps": [
+                  {
+                    "action": "assertText",
+                    "selector": "#notice",
+                    "text": "Mock"
+                  },
+                  {
+                    "action": "assertTextExact",
+                    "selector": "#count",
+                    "text": "0"
+                  },
+                  {
+                    "action": "assertCount",
+                    "selector": "#tasks li",
+                    "count": 0
+                  }
+                ]
+              },
+              {
+                "name": "两任务状态筛选与统计回归",
+                "steps": [
+                  {
+                    "action": "fill",
+                    "selector": "#task-input",
+                    "value": "编写方案"
+                  },
+                  {
+                    "action": "click",
+                    "selector": "#add-task"
+                  },
+                  {
+                    "action": "fill",
+                    "selector": "#task-input",
+                    "value": "执行测试"
+                  },
+                  {
+                    "action": "click",
+                    "selector": "#add-task"
+                  },
+                  {
+                    "action": "click",
+                    "selector": "[data-task-id=\"0\"] .toggle"
+                  },
+                  {
+                    "action": "assertTextExact",
+                    "selector": "#done-count",
+                    "text": "1"
+                  },
+                  {
+                    "action": "click",
+                    "selector": "#show-open"
+                  },
+                  {
+                    "action": "assertTextExact",
+                    "selector": "#tasks li span",
+                    "text": "执行测试"
+                  },
+                  {
+                    "action": "assertCount",
+                    "selector": "#tasks li",
+                    "count": 1
+                  },
+                  {
+                    "action": "click",
+                    "selector": "#show-done"
+                  },
+                  {
+                    "action": "assertTextExact",
+                    "selector": "#tasks li span",
+                    "text": "编写方案"
+                  },
+                  {
+                    "action": "assertCount",
+                    "selector": "#tasks li",
+                    "count": 1
+                  },
+                  {
+                    "action": "click",
+                    "selector": "#show-all"
+                  },
+                  {
+                    "action": "assertCount",
+                    "selector": "#tasks li",
+                    "count": 2
+                  },
+                  {
+                    "action": "assertTextExact",
+                    "selector": "#count",
+                    "text": "2"
+                  },
+                  {
+                    "action": "assertTextExact",
+                    "selector": "#done-count",
+                    "text": "1"
+                  }
+                ]
+              }
+            ]
+          },
+          "selectedCandidateId": "c0da9e4a-0a8d-4a62-b7bf-e16dc17dfbe3"
+        },
+        {
+          "phase": "implement",
+          "role": "developer",
+          "value": {
+            "html": "<!doctype html><html lang=\"zh\"><head><meta charset=\"utf-8\"><title>离线任务清单</title><style>body{font:18px system-ui;max-width:700px;margin:40px auto;padding:24px;color:#17212c}input,button{font:inherit;padding:12px}li{margin:18px 0}#notice{background:#fff6da;padding:12px}.done{text-decoration:line-through}output{padding:8px}</style></head><body><h1>在受控的团队待办板演示模板上增加状态筛选：全部、未完成、已完成。切换筛选不能删除任务，添加和标记完成后计数应保持一致。仅交付单 HTML，不安装依赖。</h1><p id=\"notice\">工程 Mock 夹具，不是真实模型自主交付。</p><label for=\"task-input\">任务名称</label><input id=\"task-input\" maxlength=\"120\"><button id=\"add-task\">添加</button><p id=\"feedback\">请输入任务</p><button id=\"show-all\">全部</button><button id=\"show-open\">未完成</button><button id=\"show-done\">已完成</button><ul id=\"tasks\"></ul><p>任务数量 <output id=\"count\">0</output> 完成数量 <output id=\"done-count\">0</output></p><script>const tasks=[];let filter='all';let nextId=0;const input=document.querySelector('#task-input');const feedback=document.querySelector('#feedback');function render(){const list=document.querySelector('#tasks');list.replaceChildren();tasks.forEach(task=>{if(filter==='open'&&task.done||filter==='done'&&!task.done)return;const li=document.createElement('li');li.dataset.taskId=String(task.id);const span=document.createElement('span');span.textContent=task.title;span.className=task.done?'done':'';const button=document.createElement('button');button.className='toggle';button.textContent=task.done?'恢复':'完成';button.onclick=()=>{task.done=!task.done;render()};const remove=document.createElement('button');remove.className='delete';remove.textContent='删除';remove.onclick=()=>{tasks.splice(tasks.findIndex(item=>item.id===task.id),1);render()};li.append(span,button,remove);list.append(li)});document.querySelector('#count').textContent=String(tasks.length);document.querySelector('#done-count').textContent=String(tasks.filter(task=>task.done).length)}document.querySelector('#add-task').onclick=()=>{const title=input.value.trim();if(!title){feedback.textContent='任务不能为空';return}tasks.push({id:nextId++,title,done:false});input.value='';feedback.textContent='已添加';render()};document.querySelector('#show-all').onclick=()=>{filter='all';render()};document.querySelector('#show-open').onclick=()=>{filter='open';render()};document.querySelector('#show-done').onclick=()=>{filter='done';render()};render();</script></body></html>"
+          },
+          "selectedCandidateId": "a5773340-0c7e-42cb-9da4-b1dba2bf3f2a"
+        },
+        {
+          "phase": "feedback-0",
+          "role": "project-manager",
+          "value": {
+            "decision": "proceed",
+            "summary": "硬门禁通过，按Mock证据类型交付。",
+            "tasks": [
+              {
+                "id": "delivery",
+                "owner": "tester",
+                "description": "打包证据"
+              }
+            ],
+            "risks": []
+          },
+          "selectedCandidateId": "fad8b8ab-5ebd-4efb-91c0-c696d7e6b305"
+        }
+      ],
+      "gateHistory": [
+        {
+          "passed": true,
+          "checks": [
+            {
+              "name": "页面加载、可见内容与 JavaScript",
+              "passed": true
+            },
+            {
+              "name": "Mock 边界可见与初始零任务",
+              "passed": true
+            },
+            {
+              "name": "两任务状态筛选与统计回归",
+              "passed": true
+            }
+          ],
+          "summary": "独立 Chromium 验收通过，交互与输出已验证。"
+        }
+      ],
+      "logs": "/api/production/runs/b2dc3667-30dc-4d79-941d-533c9294a599/artifacts/evidence.json",
+      "artifacts": [
+        {
+          "name": "index.html",
+          "type": "text/html"
+        },
+        {
+          "name": "delivery-manifest.json",
+          "type": "application/json"
+        },
+        {
+          "name": "evidence.json",
+          "type": "application/json"
+        }
+      ],
+      "durationMs": 2876,
+      "video": null
+    },
+    {
+      "id": "18207ab0-cb91-4a0b-975e-b077d8e012e1",
+      "inputSnapshot": {
+        "brief": "修复受控待办板演示模板的空任务问题：空字符串或纯空格不能新增任务，连续添加两个不同任务必须恰好产生两条，删除其中一条不影响另一条，统计正确。仅交付单 HTML。",
+        "capability": "offline-single-html",
+        "mode": "demo",
+        "verifierEngine": "llm-rubric",
+        "demoCaseId": "bugfix",
+        "agentIds": [
+          "58b2f492-52c1-49ee-8936-53e5c8c6cc89",
+          "65e308f1-8582-4b41-b485-92911d44ed0f",
+          "8abcf5e4-a5f3-44a5-b58b-4f7aa83d8834",
+          "5e6500fe-48d3-4646-a412-d0bfaacffacc",
+          "299e00c3-cf0c-4f3f-814d-6c33e723a9d7",
+          "cc18586a-8d6b-4c19-950f-308034a0c0b1"
+        ],
+        "candidateCount": 1,
+        "limits": {
+          "maxCalls": 24,
+          "maxRepairCycles": 2,
+          "maxTokens": 500000,
+          "maxOutputTokens": 6000,
+          "maxDurationMs": 600000,
+          "maxCost": 5,
+          "currency": "USD"
+        },
+        "requirement": {
+          "id": "MOCK-03",
+          "source": "用户授权自拟模拟需求，2026-10-07；人工构造缺陷的修复演练",
+          "background": "检查反例、错误反馈与修复后的回归；fixture 的修复不能计为真实模型自主修复。",
+          "acceptance": "空输入、纯空格提交均保持零项并显示提示；连续添加“回归接口”和“检查日志”恰好两项；删除第一条后第二条仍在，总数为一。",
+          "difficulty": "medium",
+          "kind": "illustrative"
+        },
+        "budgetAuthorized": false
+      },
+      "agentSnapshot": [
+        {
+          "id": "58b2f492-52c1-49ee-8936-53e5c8c6cc89",
+          "name": "产品经理",
+          "role": "product",
+          "provider": "deepseek",
+          "baseUrl": "https://api.deepseek.com",
+          "modelId": "deepseek-flash",
+          "enabled": true,
+          "hasApiKey": true,
+          "pricing": {
+            "inputPerMillion": 0.3,
+            "outputPerMillion": 1.2,
+            "currency": "USD"
+          }
+        },
+        {
+          "id": "65e308f1-8582-4b41-b485-92911d44ed0f",
+          "name": "项目经理",
+          "role": "project-manager",
+          "provider": "deepseek",
+          "baseUrl": "https://api.deepseek.com",
+          "modelId": "deepseek-flash",
+          "enabled": true,
+          "hasApiKey": true,
+          "pricing": {
+            "inputPerMillion": 0.3,
+            "outputPerMillion": 1.2,
+            "currency": "USD"
+          }
+        },
+        {
+          "id": "8abcf5e4-a5f3-44a5-b58b-4f7aa83d8834",
+          "name": "研究员",
+          "role": "researcher",
+          "provider": "deepseek",
+          "baseUrl": "https://api.deepseek.com",
+          "modelId": "deepseek-flash",
+          "enabled": true,
+          "hasApiKey": true,
+          "pricing": {
+            "inputPerMillion": 0.3,
+            "outputPerMillion": 1.2,
+            "currency": "USD"
+          }
+        },
+        {
+          "id": "5e6500fe-48d3-4646-a412-d0bfaacffacc",
+          "name": "研发",
+          "role": "developer",
+          "provider": "deepseek",
+          "baseUrl": "https://api.deepseek.com",
+          "modelId": "deepseek-flash",
+          "enabled": true,
+          "hasApiKey": true,
+          "pricing": {
+            "inputPerMillion": 0.3,
+            "outputPerMillion": 1.2,
+            "currency": "USD"
+          }
+        },
+        {
+          "id": "299e00c3-cf0c-4f3f-814d-6c33e723a9d7",
+          "name": "测试",
+          "role": "tester",
+          "provider": "deepseek",
+          "baseUrl": "https://api.deepseek.com",
+          "modelId": "deepseek-flash",
+          "enabled": true,
+          "hasApiKey": true,
+          "pricing": {
+            "inputPerMillion": 0.3,
+            "outputPerMillion": 1.2,
+            "currency": "USD"
+          }
+        },
+        {
+          "id": "cc18586a-8d6b-4c19-950f-308034a0c0b1",
+          "name": "Verifier",
+          "role": "verifier",
+          "provider": "deepseek",
+          "baseUrl": "https://api.deepseek.com",
+          "modelId": "deepseek-flash",
+          "enabled": true,
+          "hasApiKey": true,
+          "pricing": {
+            "inputPerMillion": 0.3,
+            "outputPerMillion": 1.2,
+            "currency": "USD"
+          }
+        }
+      ],
+      "platformCommit": "c21c588632d04dc7ed9dfa8cb265606400d2b522",
+      "cameraVerification": null,
+      "repairCount": 0,
+      "repairPolicyVersion": "production-global-repair-v1",
+      "repairHistory": [],
+      "jevSnapshot": null,
+      "jevCalls": [],
+      "verifications": [
+        {
+          "phase": "product",
+          "engine": "llm-rubric",
+          "candidateIds": [
+            "7ad6a2f9-fae5-4468-bf36-d50d23d59f47"
+          ],
+          "criteriaHash": "f6001b6545d0c594674d8bd9cf72863ab3b197630ea79906e8b1e734cb0e770e",
+          "decision": "accept",
+          "selectedCandidateId": "7ad6a2f9-fae5-4468-bf36-d50d23d59f47",
+          "scores": [
+            {
+              "candidateId": "7ad6a2f9-fae5-4468-bf36-d50d23d59f47",
+              "score": 4,
+              "reason": "Mock：示范候选验证记录，不代表真实模型判断。"
+            }
+          ],
+          "reason": "Mock 夹具选择；实际浏览器验收仍独立执行。"
+        },
+        {
+          "phase": "research",
+          "engine": "llm-rubric",
+          "candidateIds": [
+            "da8e8fe2-55e7-44e7-9734-b5f994332152"
+          ],
+          "criteriaHash": "9373b5159b466c6b2fae5cca632a7504a938292fb548fe26d2e46673a1136039",
+          "decision": "accept",
+          "selectedCandidateId": "da8e8fe2-55e7-44e7-9734-b5f994332152",
+          "scores": [
+            {
+              "candidateId": "da8e8fe2-55e7-44e7-9734-b5f994332152",
+              "score": 4,
+              "reason": "Mock：示范候选验证记录，不代表真实模型判断。"
+            }
+          ],
+          "reason": "Mock 夹具选择；实际浏览器验收仍独立执行。"
+        },
+        {
+          "phase": "think-design",
+          "engine": "llm-rubric",
+          "candidateIds": [
+            "b5557213-6ee8-4d9a-b5f3-dcbf04b89753"
+          ],
+          "criteriaHash": "03d2825a6f6e54078f0e6a203bc0572e438305d0d5cee53953c2f47c05e47442",
+          "decision": "accept",
+          "selectedCandidateId": "b5557213-6ee8-4d9a-b5f3-dcbf04b89753",
+          "scores": [
+            {
+              "candidateId": "b5557213-6ee8-4d9a-b5f3-dcbf04b89753",
+              "score": 4,
+              "reason": "Mock：示范候选验证记录，不代表真实模型判断。"
+            }
+          ],
+          "reason": "Mock 夹具选择；实际浏览器验收仍独立执行。"
+        },
+        {
+          "phase": "acceptance",
+          "engine": "llm-rubric",
+          "candidateIds": [
+            "fc498370-5f6a-4705-80a3-a5bfe69eabb4"
+          ],
+          "criteriaHash": "55e55477007f2cc5c1d82c9457a2c496ad9ad5988fd8eedad600aa7378650965",
+          "decision": "accept",
+          "selectedCandidateId": "fc498370-5f6a-4705-80a3-a5bfe69eabb4",
+          "scores": [
+            {
+              "candidateId": "fc498370-5f6a-4705-80a3-a5bfe69eabb4",
+              "score": 4,
+              "reason": "Mock：示范候选验证记录，不代表真实模型判断。"
+            }
+          ],
+          "reason": "Mock 夹具选择；实际浏览器验收仍独立执行。"
+        },
+        {
+          "phase": "implement",
+          "engine": "llm-rubric",
+          "candidateIds": [
+            "5018dccc-97b0-406f-8a75-0cef4682fe01"
+          ],
+          "criteriaHash": "896f3864abfae0b9c1b04d0d202c49363909d1b0023eec4d7a3bf95049f712bf",
+          "decision": "accept",
+          "selectedCandidateId": "5018dccc-97b0-406f-8a75-0cef4682fe01",
+          "scores": [
+            {
+              "candidateId": "5018dccc-97b0-406f-8a75-0cef4682fe01",
+              "score": 4,
+              "reason": "Mock：示范候选验证记录，不代表真实模型判断。"
+            }
+          ],
+          "reason": "Mock 夹具选择；实际浏览器验收仍独立执行。"
+        },
+        {
+          "phase": "feedback-0",
+          "engine": "llm-rubric",
+          "candidateIds": [
+            "74392e70-f213-4644-9ae6-df8e4fdb4413"
+          ],
+          "criteriaHash": "ee44ec43d056f951741ae86053f09234c7f14fbc7d9bce8b7e5a91951d6e1df7",
+          "decision": "accept",
+          "selectedCandidateId": "74392e70-f213-4644-9ae6-df8e4fdb4413",
+          "scores": [
+            {
+              "candidateId": "74392e70-f213-4644-9ae6-df8e4fdb4413",
+              "score": 4,
+              "reason": "Mock：示范候选验证记录，不代表真实模型判断。"
+            }
+          ],
+          "reason": "Mock 夹具选择；实际浏览器验收仍独立执行。"
+        }
+      ],
+      "verifierAttempts": [
+        {
+          "callId": "be1b86d5-bcc9-4421-9e8f-b8b698c8f95f",
+          "phase": "product:verify",
+          "engine": "llm-rubric",
+          "sourceJevCallId": null,
+          "error": null,
+          "usage": {
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "estimatedCost": 0,
+            "currency": "USD"
+          }
+        },
+        {
+          "callId": "68682261-32d6-4165-9170-3c175e93e6d9",
+          "phase": "research:verify",
+          "engine": "llm-rubric",
+          "sourceJevCallId": null,
+          "error": null,
+          "usage": {
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "estimatedCost": 0,
+            "currency": "USD"
+          }
+        },
+        {
+          "callId": "4b50459d-7521-48fe-b5fa-9566a82d1ec3",
+          "phase": "think-design:verify",
+          "engine": "llm-rubric",
+          "sourceJevCallId": null,
+          "error": null,
+          "usage": {
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "estimatedCost": 0,
+            "currency": "USD"
+          }
+        },
+        {
+          "callId": "ff618506-50e5-4ac5-b12a-9dc403a01c08",
+          "phase": "acceptance:verify",
+          "engine": "llm-rubric",
+          "sourceJevCallId": null,
+          "error": null,
+          "usage": {
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "estimatedCost": 0,
+            "currency": "USD"
+          }
+        },
+        {
+          "callId": "a707db06-759a-4cf4-adf2-61c4ea063363",
+          "phase": "implement:verify",
+          "engine": "llm-rubric",
+          "sourceJevCallId": null,
+          "error": null,
+          "usage": {
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "estimatedCost": 0,
+            "currency": "USD"
+          }
+        },
+        {
+          "callId": "d1edb5b0-da46-4734-9b28-cf2df556b590",
+          "phase": "feedback-0:verify",
+          "engine": "llm-rubric",
+          "sourceJevCallId": null,
+          "error": null,
+          "usage": {
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "estimatedCost": 0,
+            "currency": "USD"
+          }
+        }
+      ],
+      "status": "completed",
+      "evidenceKind": "fixture",
+      "harnessInvocations": 0,
+      "actualProviderRequests": 0,
+      "knownProviderRequests": 0,
+      "unknownRequestIntents": 0,
+      "knownHarnessProviderRequests": 0,
+      "unknownHarnessRequestIntents": 0,
+      "jevProviderRequests": 0,
+      "knownJevProviderRequests": 0,
+      "unknownJevRequestIntents": 0,
+      "actualProviderRequestsDefinition": "Observed HTTP attempts, not an invoice; unresolved intents are unknown, known subtotal retained",
+      "actualModelCalls": 0,
+      "actualModelCallsDefinition": "Deprecated alias of Harness invocations; use actualProviderRequests for HTTP attempts",
+      "simulatedStageRecords": 12,
+      "injectedTestRecords": 0,
+      "frozenContract": {
+        "version": "production-acceptance-v2",
+        "hash": "5241ed2c655203e448de06493b485248e9c5138e44e6ed36d7db720a293e3c69",
+        "requirementHash": "3829b40f81e89c3318e5558a03589d35ea5234d672651b275c53c71442e4c6e0",
+        "checks": [
+          {
+            "name": "Mock 边界可见与初始零任务",
+            "steps": [
+              {
+                "action": "assertText",
+                "selector": "#notice",
+                "text": "Mock"
+              },
+              {
+                "action": "assertTextExact",
+                "selector": "#count",
+                "text": "0"
+              },
+              {
+                "action": "assertCount",
+                "selector": "#tasks li",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "name": "拒绝空输入及空格，连续添加和删除不丢项",
+            "steps": [
+              {
+                "action": "click",
+                "selector": "#add-task"
+              },
+              {
+                "action": "assertCount",
+                "selector": "#tasks li",
+                "count": 0
+              },
+              {
+                "action": "assertTextExact",
+                "selector": "#feedback",
+                "text": "任务不能为空"
+              },
+              {
+                "action": "fill",
+                "selector": "#task-input",
+                "value": "   "
+              },
+              {
+                "action": "click",
+                "selector": "#add-task"
+              },
+              {
+                "action": "assertCount",
+                "selector": "#tasks li",
+                "count": 0
+              },
+              {
+                "action": "assertTextExact",
+                "selector": "#feedback",
+                "text": "任务不能为空"
+              },
+              {
+                "action": "fill",
+                "selector": "#task-input",
+                "value": "回归接口"
+              },
+              {
+                "action": "click",
+                "selector": "#add-task"
+              },
+              {
+                "action": "fill",
+                "selector": "#task-input",
+                "value": "检查日志"
+              },
+              {
+                "action": "click",
+                "selector": "#add-task"
+              },
+              {
+                "action": "assertCount",
+                "selector": "#tasks li",
+                "count": 2
+              },
+              {
+                "action": "assertTextExact",
+                "selector": "#count",
+                "text": "2"
+              },
+              {
+                "action": "click",
+                "selector": "[data-task-id=\"0\"] .delete"
+              },
+              {
+                "action": "assertCount",
+                "selector": "#tasks li",
+                "count": 1
+              },
+              {
+                "action": "assertTextExact",
+                "selector": "#count",
+                "text": "1"
+              },
+              {
+                "action": "assertTextExact",
+                "selector": "#tasks li span",
+                "text": "检查日志"
+              }
+            ]
+          }
+        ],
+        "frozenAt": "2026-10-07T04:45:25.747Z"
+      },
+      "outputs": [
+        {
+          "phase": "product",
+          "role": "product",
+          "value": {
+            "goal": "修复受控待办板演示模板的空任务问题：空字符串或纯空格不能新增任务，连续添加两个不同任务必须恰好产生两条，删除其中一条不影响另一条，统计正确。仅交付单 HTML。",
+            "scope": "offline-single-html",
+            "acceptance": [
+              "空输入、纯空格提交均保持零项并显示提示；连续添加“回归接口”和“检查日志”恰好两项；删除第一条后第二条仍在，总数为一。"
+            ],
+            "exclusions": [
+              "无后端、无外网、无宿主代码执行"
+            ]
+          },
+          "selectedCandidateId": "7ad6a2f9-fae5-4468-bf36-d50d23d59f47"
+        },
+        {
+          "phase": "research",
+          "role": "researcher",
+          "value": {
+            "observations": [
+              "这是明确标记的工程 Mock 任务清单示范。"
+            ],
+            "constraints": [
+              "HTML/CSS/JS内联；冻结业务测试"
+            ],
+            "unknowns": [
+              "真实模型成功率、真实需求泛化未测量"
+            ]
+          },
+          "selectedCandidateId": "da8e8fe2-55e7-44e7-9734-b5f994332152"
+        },
+        {
+          "phase": "think-design",
+          "role": "project-manager",
+          "value": {
+            "decision": "proceed",
+            "summary": "Mock 项目经理分解，开始冻结测试。",
+            "tasks": [
+              {
+                "id": "implement",
+                "owner": "developer",
+                "description": "按冻结DOM和业务测试实现离线页面"
+              },
+              {
+                "id": "verify",
+                "owner": "tester",
+                "description": "独立浏览器验证并记录结果"
+              }
+            ],
+            "risks": [
+              "Mock不能证明模型自主交付"
+            ]
+          },
+          "selectedCandidateId": "b5557213-6ee8-4d9a-b5f3-dcbf04b89753"
+        },
+        {
+          "phase": "acceptance",
+          "role": "tester",
+          "value": {
+            "checks": [
+              {
+                "name": "Mock 边界可见与初始零任务",
+                "steps": [
+                  {
+                    "action": "assertText",
+                    "selector": "#notice",
+                    "text": "Mock"
+                  },
+                  {
+                    "action": "assertTextExact",
+                    "selector": "#count",
+                    "text": "0"
+                  },
+                  {
+                    "action": "assertCount",
+                    "selector": "#tasks li",
+                    "count": 0
+                  }
+                ]
+              },
+              {
+                "name": "拒绝空输入及空格，连续添加和删除不丢项",
+                "steps": [
+                  {
+                    "action": "click",
+                    "selector": "#add-task"
+                  },
+                  {
+                    "action": "assertCount",
+                    "selector": "#tasks li",
+                    "count": 0
+                  },
+                  {
+                    "action": "assertTextExact",
+                    "selector": "#feedback",
+                    "text": "任务不能为空"
+                  },
+                  {
+                    "action": "fill",
+                    "selector": "#task-input",
+                    "value": "   "
+                  },
+                  {
+                    "action": "click",
+                    "selector": "#add-task"
+                  },
+                  {
+                    "action": "assertCount",
+                    "selector": "#tasks li",
+                    "count": 0
+                  },
+                  {
+                    "action": "assertTextExact",
+                    "selector": "#feedback",
+                    "text": "任务不能为空"
+                  },
+                  {
+                    "action": "fill",
+                    "selector": "#task-input",
+                    "value": "回归接口"
+                  },
+                  {
+                    "action": "click",
+                    "selector": "#add-task"
+                  },
+                  {
+                    "action": "fill",
+                    "selector": "#task-input",
+                    "value": "检查日志"
+                  },
+                  {
+                    "action": "click",
+                    "selector": "#add-task"
+                  },
+                  {
+                    "action": "assertCount",
+                    "selector": "#tasks li",
+                    "count": 2
+                  },
+                  {
+                    "action": "assertTextExact",
+                    "selector": "#count",
+                    "text": "2"
+                  },
+                  {
+                    "action": "click",
+                    "selector": "[data-task-id=\"0\"] .delete"
+                  },
+                  {
+                    "action": "assertCount",
+                    "selector": "#tasks li",
+                    "count": 1
+                  },
+                  {
+                    "action": "assertTextExact",
+                    "selector": "#count",
+                    "text": "1"
+                  },
+                  {
+                    "action": "assertTextExact",
+                    "selector": "#tasks li span",
+                    "text": "检查日志"
+                  }
+                ]
+              }
+            ]
+          },
+          "selectedCandidateId": "fc498370-5f6a-4705-80a3-a5bfe69eabb4"
+        },
+        {
+          "phase": "implement",
+          "role": "developer",
+          "value": {
+            "html": "<!doctype html><html lang=\"zh\"><head><meta charset=\"utf-8\"><title>离线任务清单</title><style>body{font:18px system-ui;max-width:700px;margin:40px auto;padding:24px;color:#17212c}input,button{font:inherit;padding:12px}li{margin:18px 0}#notice{background:#fff6da;padding:12px}.done{text-decoration:line-through}output{padding:8px}</style></head><body><h1>修复受控待办板演示模板的空任务问题：空字符串或纯空格不能新增任务，连续添加两个不同任务必须恰好产生两条，删除其中一条不影响另一条，统计正确。仅交付单 HTML。</h1><p id=\"notice\">工程 Mock 夹具，不是真实模型自主交付。</p><label for=\"task-input\">任务名称</label><input id=\"task-input\" maxlength=\"120\"><button id=\"add-task\">添加</button><p id=\"feedback\">请输入任务</p><button id=\"show-all\">全部</button><button id=\"show-open\">未完成</button><button id=\"show-done\">已完成</button><ul id=\"tasks\"></ul><p>任务数量 <output id=\"count\">0</output> 完成数量 <output id=\"done-count\">0</output></p><script>const tasks=[];let filter='all';let nextId=0;const input=document.querySelector('#task-input');const feedback=document.querySelector('#feedback');function render(){const list=document.querySelector('#tasks');list.replaceChildren();tasks.forEach(task=>{if(filter==='open'&&task.done||filter==='done'&&!task.done)return;const li=document.createElement('li');li.dataset.taskId=String(task.id);const span=document.createElement('span');span.textContent=task.title;span.className=task.done?'done':'';const button=document.createElement('button');button.className='toggle';button.textContent=task.done?'恢复':'完成';button.onclick=()=>{task.done=!task.done;render()};const remove=document.createElement('button');remove.className='delete';remove.textContent='删除';remove.onclick=()=>{tasks.splice(tasks.findIndex(item=>item.id===task.id),1);render()};li.append(span,button,remove);list.append(li)});document.querySelector('#count').textContent=String(tasks.length);document.querySelector('#done-count').textContent=String(tasks.filter(task=>task.done).length)}document.querySelector('#add-task').onclick=()=>{const title=input.value.trim();if(!title){feedback.textContent='任务不能为空';return}tasks.push({id:nextId++,title,done:false});input.value='';feedback.textContent='已添加';render()};document.querySelector('#show-all').onclick=()=>{filter='all';render()};document.querySelector('#show-open').onclick=()=>{filter='open';render()};document.querySelector('#show-done').onclick=()=>{filter='done';render()};render();</script></body></html>"
+          },
+          "selectedCandidateId": "5018dccc-97b0-406f-8a75-0cef4682fe01"
+        },
+        {
+          "phase": "feedback-0",
+          "role": "project-manager",
+          "value": {
+            "decision": "proceed",
+            "summary": "硬门禁通过，按Mock证据类型交付。",
+            "tasks": [
+              {
+                "id": "delivery",
+                "owner": "tester",
+                "description": "打包证据"
+              }
+            ],
+            "risks": []
+          },
+          "selectedCandidateId": "74392e70-f213-4644-9ae6-df8e4fdb4413"
+        }
+      ],
+      "gateHistory": [
+        {
+          "passed": true,
+          "checks": [
+            {
+              "name": "页面加载、可见内容与 JavaScript",
+              "passed": true
+            },
+            {
+              "name": "Mock 边界可见与初始零任务",
+              "passed": true
+            },
+            {
+              "name": "拒绝空输入及空格，连续添加和删除不丢项",
+              "passed": true
+            }
+          ],
+          "summary": "独立 Chromium 验收通过，交互与输出已验证。"
+        }
+      ],
+      "logs": "/api/production/runs/18207ab0-cb91-4a0b-975e-b077d8e012e1/artifacts/evidence.json",
+      "artifacts": [
+        {
+          "name": "index.html",
+          "type": "text/html"
+        },
+        {
+          "name": "delivery-manifest.json",
+          "type": "application/json"
+        },
+        {
+          "name": "evidence.json",
+          "type": "application/json"
+        }
+      ],
+      "durationMs": 3202,
+      "video": null
+    }
+  ],
+  "requestLedger": [
+    {
+      "id": "37604a90-5c8b-4d0e-b40b-b4f47af7e6ee",
+      "harnessInvocations": 0,
+      "actualProviderRequests": 0,
+      "knownProviderRequests": 0,
+      "unknownRequestIntents": 0,
+      "knownHarnessProviderRequests": 0,
+      "unknownHarnessRequestIntents": 0,
+      "jevProviderRequests": 0,
+      "knownJevProviderRequests": 0,
+      "unknownJevRequestIntents": 0,
+      "actualProviderRequestsDefinition": "Observed HTTP attempts, not an invoice; unresolved intents are unknown, known subtotal retained",
+      "actualModelCalls": 0,
+      "actualModelCallsDefinition": "Deprecated alias of Harness invocations; use actualProviderRequests for HTTP attempts"
+    },
+    {
+      "id": "b2dc3667-30dc-4d79-941d-533c9294a599",
+      "harnessInvocations": 0,
+      "actualProviderRequests": 0,
+      "knownProviderRequests": 0,
+      "unknownRequestIntents": 0,
+      "knownHarnessProviderRequests": 0,
+      "unknownHarnessRequestIntents": 0,
+      "jevProviderRequests": 0,
+      "knownJevProviderRequests": 0,
+      "unknownJevRequestIntents": 0,
+      "actualProviderRequestsDefinition": "Observed HTTP attempts, not an invoice; unresolved intents are unknown, known subtotal retained",
+      "actualModelCalls": 0,
+      "actualModelCallsDefinition": "Deprecated alias of Harness invocations; use actualProviderRequests for HTTP attempts"
+    },
+    {
+      "id": "18207ab0-cb91-4a0b-975e-b077d8e012e1",
+      "harnessInvocations": 0,
+      "actualProviderRequests": 0,
+      "knownProviderRequests": 0,
+      "unknownRequestIntents": 0,
+      "knownHarnessProviderRequests": 0,
+      "unknownHarnessRequestIntents": 0,
+      "jevProviderRequests": 0,
+      "knownJevProviderRequests": 0,
+      "unknownJevRequestIntents": 0,
+      "actualProviderRequestsDefinition": "Observed HTTP attempts, not an invoice; unresolved intents are unknown, known subtotal retained",
+      "actualModelCalls": 0,
+      "actualModelCallsDefinition": "Deprecated alias of Harness invocations; use actualProviderRequests for HTTP attempts"
+    }
+  ],
+  "cameraAcceptanceMetrics": {
+    "realModelStarted": 0,
+    "boundedScenePassed": 0,
+    "actualVisionVerified": 0,
+    "physicalCameraVerified": 0,
+    "fullRequirementVerified": 0,
+    "scope": "scene-behavior-synthetic",
+    "excludedFromFullRequirementSuccessNumerator": true,
+    "includedInTerminalDenominator": true,
+    "note": "场景行为完成≠真实识别/设备/完整需求完成；终态计入完整需求分母但未验证不计成功；不得用模型判断或合成输入填充物理验收"
+  },
+  "metrics": {
+    "realModelStarted": 0,
+    "realModelTerminal": 0,
+    "realModelPassed": 0,
+    "goodProductRate": null,
+    "rateDenominator": "全部终态真实模型启动尝试（含失败、取消、中断）；非同冻结配置的统计不得称稳定性实验",
+    "fixtureStarted": 3,
+    "fixturePassed": 3,
+    "fixtureExcludedFromAutonomousSuccess": true,
+    "stageDefinition": {
+      "plannedAiStages": [
+        "product",
+        "research",
+        "think-design",
+        "acceptance",
+        "implement",
+        "feedback-0"
+      ],
+      "deterministicStages": [
+        "Chromium gate",
+        "evidence packaging"
+      ],
+      "plannedAiFraction": 0.75,
+      "note": "设计占比不是实测无人干预率；返修新增阶段单列调用记录"
+    },
+    "perRun": [
+      {
+        "id": "37604a90-5c8b-4d0e-b40b-b4f47af7e6ee",
+        "evidenceKind": "fixture",
+        "callRecords": 12,
+        "harnessInvocations": 0,
+        "actualProviderRequests": 0,
+        "knownProviderRequests": 0,
+        "unknownRequestIntents": 0,
+        "knownHarnessProviderRequests": 0,
+        "unknownHarnessRequestIntents": 0,
+        "jevProviderRequests": 0,
+        "knownJevProviderRequests": 0,
+        "unknownJevRequestIntents": 0,
+        "actualProviderRequestsDefinition": "Observed HTTP attempts, not an invoice; unresolved intents are unknown, known subtotal retained",
+        "actualModelCalls": 0,
+        "actualModelCallsDefinition": "Deprecated alias of Harness invocations; use actualProviderRequests for HTTP attempts",
+        "simulatedStageRecords": 12,
+        "injectedTestRecords": 0,
+        "durationMs": 2902,
+        "usage": {
+          "inputTokens": 0,
+          "outputTokens": 0,
+          "estimatedCost": 0,
+          "currency": "USD",
+          "complete": true
+        },
+        "interventions": [],
+        "aiAutonomousStageRatio": null,
+        "aiStageCompletionRatio": null,
+        "aiStageEvidence": {
+          "denominatorStages": [
+            "product",
+            "research",
+            "think-design",
+            "acceptance",
+            "implement",
+            "feedback-0",
+            "Chromium gate",
+            "evidence packaging"
+          ],
+          "completedStages": [
+            "product",
+            "research",
+            "think-design",
+            "acceptance",
+            "implement",
+            "feedback-0"
+          ],
+          "evidenceSource": "selected structured outputs + accepted verification records",
+          "excludes": "outside developer activity; not proof of no external intervention"
+        }
+      },
+      {
+        "id": "b2dc3667-30dc-4d79-941d-533c9294a599",
+        "evidenceKind": "fixture",
+        "callRecords": 12,
+        "harnessInvocations": 0,
+        "actualProviderRequests": 0,
+        "knownProviderRequests": 0,
+        "unknownRequestIntents": 0,
+        "knownHarnessProviderRequests": 0,
+        "unknownHarnessRequestIntents": 0,
+        "jevProviderRequests": 0,
+        "knownJevProviderRequests": 0,
+        "unknownJevRequestIntents": 0,
+        "actualProviderRequestsDefinition": "Observed HTTP attempts, not an invoice; unresolved intents are unknown, known subtotal retained",
+        "actualModelCalls": 0,
+        "actualModelCallsDefinition": "Deprecated alias of Harness invocations; use actualProviderRequests for HTTP attempts",
+        "simulatedStageRecords": 12,
+        "injectedTestRecords": 0,
+        "durationMs": 2876,
+        "usage": {
+          "inputTokens": 0,
+          "outputTokens": 0,
+          "estimatedCost": 0,
+          "currency": "USD",
+          "complete": true
+        },
+        "interventions": [],
+        "aiAutonomousStageRatio": null,
+        "aiStageCompletionRatio": null,
+        "aiStageEvidence": {
+          "denominatorStages": [
+            "product",
+            "research",
+            "think-design",
+            "acceptance",
+            "implement",
+            "feedback-0",
+            "Chromium gate",
+            "evidence packaging"
+          ],
+          "completedStages": [
+            "product",
+            "research",
+            "think-design",
+            "acceptance",
+            "implement",
+            "feedback-0"
+          ],
+          "evidenceSource": "selected structured outputs + accepted verification records",
+          "excludes": "outside developer activity; not proof of no external intervention"
+        }
+      },
+      {
+        "id": "18207ab0-cb91-4a0b-975e-b077d8e012e1",
+        "evidenceKind": "fixture",
+        "callRecords": 12,
+        "harnessInvocations": 0,
+        "actualProviderRequests": 0,
+        "knownProviderRequests": 0,
+        "unknownRequestIntents": 0,
+        "knownHarnessProviderRequests": 0,
+        "unknownHarnessRequestIntents": 0,
+        "jevProviderRequests": 0,
+        "knownJevProviderRequests": 0,
+        "unknownJevRequestIntents": 0,
+        "actualProviderRequestsDefinition": "Observed HTTP attempts, not an invoice; unresolved intents are unknown, known subtotal retained",
+        "actualModelCalls": 0,
+        "actualModelCallsDefinition": "Deprecated alias of Harness invocations; use actualProviderRequests for HTTP attempts",
+        "simulatedStageRecords": 12,
+        "injectedTestRecords": 0,
+        "durationMs": 3202,
+        "usage": {
+          "inputTokens": 0,
+          "outputTokens": 0,
+          "estimatedCost": 0,
+          "currency": "USD",
+          "complete": true
+        },
+        "interventions": [],
+        "aiAutonomousStageRatio": null,
+        "aiStageCompletionRatio": null,
+        "aiStageEvidence": {
+          "denominatorStages": [
+            "product",
+            "research",
+            "think-design",
+            "acceptance",
+            "implement",
+            "feedback-0",
+            "Chromium gate",
+            "evidence packaging"
+          ],
+          "completedStages": [
+            "product",
+            "research",
+            "think-design",
+            "acceptance",
+            "implement",
+            "feedback-0"
+          ],
+          "evidenceSource": "selected structured outputs + accepted verification records",
+          "excludes": "outside developer activity; not proof of no external intervention"
+        }
+      }
+    ],
+    "humanEfficiencyComparison": {
+      "status": "not-measured",
+      "predictionAllowed": "人工基线预测仅在材料中单列范围与依据；没有同范围对照不能宣称实测增效"
+    }
+  },
+  "attributionAndImprovements": {
+    "failures": [],
+    "next": [
+      "验证容器资源/秘密/网络隔离后扩展受控仓库",
+      "固定配置预登记、预算确认后执行三类九次实验",
+      "AnyJev式typed decision与标注集校准；等级与L4/L5无关",
+      "补实际业务需求、正式L4参考线、3–5分钟完整录屏"
+    ]
+  },
+  "selfEvaluation": {
+    "conclusion": "工程/Mock可用，真实自主交付未实测，L4未认证",
+    "officialL4Reference": "尚未提供",
+    "mockIsNotRealRequirement": true,
+    "promptVersion": "production-html-v6",
+    "verifierVersion": "verifier-phase-ordinal-v3",
+    "reusePlan": "保留虚拟社会入口；生产模块独立，后续受控模板/仓库和跨任务基准分阶段验证"
+  }
+}

@@ -1,0 +1,52 @@
+# 六角色自主软件生产工作区
+
+当前源码与封包工具为production-materials-v4：[已提交离线主稿（v3原叙述保留）](SUBMISSION-REPORT.md)、[评委独立安装/自测指南](REVIEWER-GUIDE.md)、[最新进度](POST-SUBMISSION-PLAN.md)。在线production/是固定案例＋安装引导＋材料，不是新需求后端；公开版本以publication-manifest为准。新包使用reviews/<完整publisher commit>/固定入口，PDF/MD/JSON分别记录材料版本与原实验来源；历史MP4保持原视频commit，旧公开附件不覆盖。
+
+v3静态页/PDF/MP4/ZIP已发布；v4准备更新安装源码与新实验账本，不以本地修改或源码push冒充部署。本轮原文[留底](https://github.com/litianyi-007/city-agent/blob/c7b4f2e2d837b6ed3531f7b0bb8fc9fb9523844a/docs/production/archive/2026-10-07-before-planning-loop/README.md)。实际新需求在本机4420页面点“新建自定义需求”，完整填写来源/验收、配置六角色与可选Jev，然后一次明确有限预算授权启动。
+
+最近真实尝试：[06](https://github.com/litianyi-007/city-agent/blob/c7b4f2e2d837b6ed3531f7b0bb8fc9fb9523844a/docs/production/experiments/CAMERA-06/RESULT.md)完成测试角色一次语义纠错后容量拒绝；[07](https://github.com/litianyi-007/city-agent/blob/c7b4f2e2d837b6ed3531f7b0bb8fc9fb9523844a/docs/production/experiments/CAMERA-07/RESULT.md)因初始PM修订计划未执行而停止；[08结果](https://github.com/litianyi-007/city-agent/blob/c7b4f2e2d837b6ed3531f7b0bb8fc9fb9523844a/docs/production/experiments/CAMERA-08/RESULT.md)两次真实角色纠错后最终Verifier JSON非法，57.688秒、14次HTTP、估算0.030952776 USD，未冻结/研发/Gate。本轮PM proceed，不当成真实再规划验证。工程测试、真实有界场景与完整硬件交付分列；不同配置调优不合并成稳定成功率。旧04结论与附件保持原版本。
+
+本线已进入第一批实施：产品经理、项目经理、研究员、研发、测试与 Verifier 共同执行有界软件生产。首批采用离线单 HTML 和受限 Chromium Gate，不执行生成的宿主脚本，不新增虚拟社会能力。用户允许自拟三个模拟需求；真实业务需求条款与官方 L4 认证不在本批完成范围内。
+
+## 工作边界
+
+工作目录为 `/Users/litianyi/Documents/Code/_ai-goods/city-agent-autonomous-production`，分支为 `feature/autonomous-production`，冻结基线为 `submission-milestone-2026-10-07` / `b66122c21604fdb2ecdcbafb89c3d5ad8cde1466`。相邻原目录、main、冻结 Tag 和旧申报材料均不修改。用户授权本轮仅发布独立 Pages `production/` 子树，原虚拟社会根入口、assets 和 submission 保持不变。
+
+Key 在新页面重新填写，不迁移原配置。生产 Agent 使用独立六角色契约；既有四角色与虚拟社会入口保留。原始准备文档在 [archive](https://github.com/litianyi-007/city-agent/blob/c7b4f2e2d837b6ed3531f7b0bb8fc9fb9523844a/docs/production/archive/README.md) 留底，旧实验仍是六次不同工程配置下的失败尝试。
+
+## 设计与验收
+
+- [设计](DESIGN.md)：职责、项目经理闭环、Verifier 与 AnyJev 的实施边界。
+- [验收](EVALUATION.md)：冻结标准、反例、取消、预算和证据口径。
+- [任务](NEXT-STEPS.md)：当前切片与容器、真实模型、稳定性后续工作。
+- [需求](REQUIREMENTS.md)：三项模拟案例与真实需求差距。
+- [启动](RUNBOOK.md)：独立端口、数据及回归命令。
+- [申报栏目](SUBMISSION.md)：七项材料索引；实测、预测与计划分开。
+- [隔离核对](ISOLATION.md)：并行分支/worktree、主线服务与共享 Git refs 边界。
+- [工程验证](VALIDATION.md)与[真实实验账本](EXPERIMENTS.md)：包括失败、弃权、用量和未完成项。
+
+## 评审入口与结论
+
+公开评审 Demo：[可信 Mock 交互与证据](https://litianyi-007.github.io/city-agent/production/)；[申报 PDF](https://litianyi-007.github.io/city-agent/production/submission/production-mock-submission.pdf)。它是静态回放，不运行 Harness 后端、不接收 Key、不执行新的生产任务。真实六角色任务必须按 RUNBOOK 在本机配置。部署需经独立脚本、秘密扫描、文件 hash 及原根树 SHA 核对，不以源码推送等同已部署。
+
+[评委对抗审查](https://github.com/litianyi-007/city-agent/blob/c7b4f2e2d837b6ed3531f7b0bb8fc9fb9523844a/docs/production/JUDGE-AUDIT-2026-10-07.md)记录致命疑问、复现、修复与仍缺的证据。旧生成代码 iframe 已关闭，当前预览只显示受控截图，下载源码后不受平台隔离保护。公开交互只允许运行逐字验证的平台可信夹具，不是任意生成代码的安全沙箱。
+
+三项自拟 Mock 与真实 Jev 决策不能证明内部 Agent 已自主研发交付，也未满足“至少三项真实业务需求”；本材料是阶段性技术自证，不是 L4 达标声明。
+
+托管 TypeSafe Jev 的设置与决策已接入本线；AnyJev 本地 SDK 则仍是后续方向，不能混称。用于其他研发线复用的兼容 Harness 用量/精确 Gate 改动独立提交为 `d62b857`，只供审查后 cherry-pick，本会话不跨线合并。
+
+本阶段工程通过仅证明管线可运行。只有内部真实模型完成目标并通过冻结 Gate，才登记真实自主交付成功。模拟需求仍可用于真实模型实验，但不能因此变为真实业务需求。
+
+## 新增受控摄像头场景测试
+
+2026-10-07 上一批（CAMERA-03）：[共享全局返修契约](https://github.com/litianyi-007/city-agent/blob/c7b4f2e2d837b6ed3531f7b0bb8fc9fb9523844a/docs/production/GLOBAL-REPAIR-CONTRACT.md)、[CAMERA-03 预登记](https://github.com/litianyi-007/city-agent/blob/c7b4f2e2d837b6ed3531f7b0bb8fc9fb9523844a/docs/production/CAMERA-03-PREGISTRATION.md) 与 [实测结果/下一批任务](https://github.com/litianyi-007/city-agent/blob/c7b4f2e2d837b6ed3531f7b0bb8fc9fb9523844a/docs/production/CAMERA-03-RESULT.md)。生成前纠错和研发返修共用最多两次，不修改冻结 Gate；旧 CAMERA-01/02 负结果保留。本次真实模型在反馈后自主修正产品JSON结构，随后因Jev协议不一致失败，无研发或圣诞树场景交付。[独立协议审查](JEV-PROTOCOL-AUDIT-CAMERA-03.md) 保留异常原文，没有放宽门限。本节更新前的入口文档已在 [留底](https://github.com/litianyi-007/city-agent/blob/c7b4f2e2d837b6ed3531f7b0bb8fc9fb9523844a/docs/production/archive/2026-10-07-before-global-repair/README.md) 保存。
+
+在本地生产页面选择 `camera-scene-v1`，内部角色生成严格 JSON 场景，平台可信运行时负责本机相机/识别/渲染，不执行模型脚本。先按 [本地资产说明](https://github.com/litianyi-007/city-agent/blob/c7b4f2e2d837b6ed3531f7b0bb8fc9fb9523844a/docs/production/CAMERA-ASSETS.md) 准备固定模型，再从页面输入需求。
+
+[规格](https://github.com/litianyi-007/city-agent/blob/c7b4f2e2d837b6ed3531f7b0bb8fc9fb9523844a/docs/prd/FP001-camera-scene.md) 与 [第一轮实验](https://github.com/litianyi-007/city-agent/blob/c7b4f2e2d837b6ed3531f7b0bb8fc9fb9523844a/docs/production/CAMERA-EXPERIMENT.md) 分别描述冻结验收和实测。合成场景 Gate、假摄像头 SDK 集成、真实视觉与实体设备验收分列；前两项通过不代表完整摄像头需求交付。旧“仅截图”的描述仍适用于任意模型生成 HTML，不能借此新能力恢复旧不安全 iframe。
+
+## 历史批次：Jev v3 与实际输出契约
+
+[设计与安全边界](JEV-RESILIENCE-V3-DESIGN.md)、[CAMERA-04 预登记](https://github.com/litianyi-007/city-agent/blob/c7b4f2e2d837b6ed3531f7b0bb8fc9fb9523844a/docs/production/CAMERA-04-PREGISTRATION.md)、[免费回归/独立审查](BATCH-CAMERA04-CHECKS.md)。本配置不重写旧失败；Jev 派生算术异常只能弃用决策、在原预算内进行一次独立 LLM 复核，不能变为 Jev 通过。角色及 Verifier 使用实际 schema 导出的输出契约，语义和最终行为 Gate 仍独立执行。
+
+本段更新前全文已按 `20f61eb` [留底](https://github.com/litianyi-007/city-agent/blob/c7b4f2e2d837b6ed3531f7b0bb8fc9fb9523844a/docs/production/archive/2026-10-07-before-jev-v3/README.md)。该历史批次仅推送源码、未发布Pages/PDF；不是本轮已授权production子树发布的状态声明。
