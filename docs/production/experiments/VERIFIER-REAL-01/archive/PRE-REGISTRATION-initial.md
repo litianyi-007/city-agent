@@ -2,8 +2,6 @@
 
 研究对象：固定18个人工候选池的同条件选优评审，不是18个自主软件开发需求，不认证L4/L5或实体摄像头。版本 `verifier-study-observed-v1`、`verifier-study-control-v1`、`verifier-study-source-v2`；运行时保存clean源码commit、完整source/hash、plan/freeze及独立同意。
 
-本稿在第一次真实prepare/收费请求之前补正已有策略的文义；[初稿留底](archive/PRE-REGISTRATION-initial.md)。不改模型、Prompt、Gate、工具、预算或候选。
-
 ## 单次授权与参数
 
 用户已回答“批准这一次实验，接受上述估算与Jev观测边界”；仅用于本次新实验，不无限重试、不自动恢复。
@@ -14,13 +12,12 @@
 - 固定18池，策略顺序baseline、llm、jev-cascade，共54个决策；最多36 LLM＋18 Jev调用意图，无重试。候选保持原顺序、未随机、seed=null。
 - 最多输入3,391,488 Token、观测输出221,184 Token、声明价估算1USD停止后续请求；30分钟取消触发并等待清理。不是供应商计费硬上限或总墙钟硬限制。
 - LLM输入工程预留61,440、请求max_tokens4096；Jev输入65,536预留、输出4096仅响应后观测门限，供应商输出硬上限unknown。最保守声明价工程预留0.890044416USD。
-- LLM与Oracle单次120秒；Jev单次30秒。温度、top_p、模型seed未显式指定，按供应商默认/unknown记录；候选seed=null不证明模型确定性。
 
 ## 方法与门禁
 
 先完成免费工程回归并从clean源码重新构建/启动。页/API prepare只冻结不调用；明确操作双风险确认后一次性消费同意与独立running记录，才运行原生Harness/固定官方Jev适配器。拒绝任意用户端点/回调或假来源注入。
 
-A按预设首候选基线，无模型调用；B用独立LLM ordinal审查；C用typed Jev，在已定义uncertain或具有完整可信诊断和完整usage、无部分选择的arithmetic-drift时升级一次同一B请求（分别记录jev-llm-fallback、jev-llm-protocol-fallback）。其它协议错误、预算/来源漂移、取消及未知usage按照冻结策略停止或失败关闭，不临时改变协议来得到成功。升级不是重试Jev，且不将Jev意见、其它策略答案或Oracle结果加入B请求。
+A按预设首候选基线，无模型调用；B用独立LLM ordinal审查；C用typed Jev并仅在已定义uncertain时升级同一B请求。协议错误、预算/来源漂移、取消及未知usage按照冻结策略停止或失败关闭，不临时改变协议来得到成功。
 
 全部54盲决策先于任何实际Oracle。每个策略新会话，无答案缓存；候选字节、需求、冻结Oracle与保留的坏例都不修改。实际隔离Chromium检查36候选，不以研究者或模型自述代替行为结果。
 
@@ -29,7 +26,5 @@ A按预设首候选基线，无模型调用；B用独立LLM ordinal审查；C用
 每策略报告计划/启动/未启动/接受/弃权/错误，选中候选Oracle通过/失败/unknown；已知费用、Token、升级比例、完整/未知用量和观测dispatch单列。完整18池不是独立同分布大样本，不声称统计普遍可靠。
 
 “评估completed”只表示该固定评估链路完成，不表示全部候选通过、不表示模型提升、不计软件交付良品。比较实际有效选中与错误接受、声明价/未知费用，不给Jev预定胜利。任一关键协议、来源、usage或安全门禁失败保留全记录，剩余not-started不能从分母消失。
-
-主要口径为好选中/18、坏放行/18，以及全坏池正确弃权；precision与coverage辅报。仅当usage与实际Oracle完整、C好选中不低于B、坏放行不高于B且C总声明价费用低于B，才称“本样本高性价比”；否则报告质量/费用权衡或未显示优势。C费用包含全部Jev与升级LLM，分别报告uncertain、arithmetic-drift升级；unknown不证明节省。既有语料标签不是本次实际Oracle，最多12池有好候选，不要求18次好选中。
 
 若失败只结束此授权运行；诊断与下一版本工程修订可以继续，但不能自动再次收费。本实验没有生成/手改代码、模板回退、测试放宽或外层代答。

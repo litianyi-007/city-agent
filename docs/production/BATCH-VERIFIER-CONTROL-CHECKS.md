@@ -34,6 +34,12 @@
 
 修复只转换Darwin实际解析到固定 `/private/var`、`/private/tmp` 的系统前缀，其余路径保持字面值；在初始化Store读取密钥/写入状态之前检查所有既有祖先。控制器原no-symlink规则未放松。补充标准系统别名、自定义祖先/叶子、现有study链接及悬空链接反例；修复后另跑回归，旧真实准备作废，新clean源码重新prepare。此时真实付费调用仍为0。
 
+修复源码 `eb8302295a7ea53090dc49b88c1efd3d027daea6`：完整Node **676/676**（906.263秒，零skip/取消），完整浏览器 **45/45**（约1.5分钟），TypeScript/Vite构建通过。全18池原生控制面用例通过（290.482秒）；定向旧API27项、路径边界7项另通过。独立路径安全审查无未关闭P0/P1/P2。所有日志在 `output/production-html02/verifier-control-*-path-fixed.log`，未覆盖第一次失败日志。
+
+此前通过实际页面启动的免费演练：控制面ID `e6214c9f-3063-4afd-a17c-fbc02502e19f`、原生ID `8c42fd10-ed6d-401e-b37c-1ab699aafa46`、源码 `f93dbd2`，317.938秒，54决策、54调用意图（36本机HTTP＋18内存Jev）、36实际Oracle、290事件、外部请求0。5454/378 Token及0.001469556USD均为夹具模拟账目，不是实际模型消耗。独立只读归档核验通过，包SHA256 `d18da1d95aa0e47e0a7a05d5ba7451824fe20dd2b1d2ef76be54b9b9a897d9e8`；1164原生headers=581 ledgerJSON＋1目录＋582PAX，无AppleDouble。不计真实质量或自主交付成功。
+
+实际收费之前独立核对预登记：补正已有arithmetic-drift升级分支的文义及固定超时/默认采样口径，初稿留底；预先登记Jev“质量不下降且完整总费用较低”的本样本价值判定，不改运行策略。后续仅文档补正commit，执行源码46文件hash与 `eb83022` 相同，再从clean HEAD构建/重启并重新prepare。
+
 开发期间初次credential generation测试使用了不存在的Jev `threshold` 字段而失败；更正为实际支持的timeout设置，未放宽协议。初次tsc因公共pricing可空类型不匹配失败，改用strict公共schema规范化。
 
 三次未完成的免费native尝试均保留，不计成功：实现中源码变化导致source guard停止；旧170秒测试等待上限导致取消；独立审查误用negative测试名称过滤而纳入native、被后续源码变化停止。没有外部供应商请求/模型费用，模拟usage和不完整Oracle不作模型效益。最终600秒工程用例等待原生清理，不放宽真实预算或Oracle。
