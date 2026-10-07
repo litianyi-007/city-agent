@@ -12,4 +12,4 @@
 
 当前公开评审候选：已执行非mock真实合成居民测试轮，全部确认请求7次（3居民、2规划、2CORS），input15,418/output6,881 Token，保守估算¥0.085884；20计划居民仅1份结构/跨题/资格联合通过，17未启动，两个10人门限均失败；规划0/2可应用候选，CORS2次HTTP200仅协议验证。原文、失败、未启动及预算均保留，不自动重试/扩容。[本轮报告](https://litianyi-007.github.io/city-agent/submission-next/live-proof/report.md)与[JSON](https://litianyi-007.github.io/city-agent/submission-next/live-proof/report.json)为部署后的公开入口。
 
-源码分支为`feature/virtual-society-next`，拟固定Tag`society-review-2026-10-07-rc1`；284单测、19浏览器（37.0秒）及双构建通过。[本轮真实测试与发布审查](docs/research/LIVE-REVIEW-2026-10-07.md)记录最终状态；推送/Tag/公网是否完成以发布记录为准。`main`、旧Tag、L4/L5分支不改，正式申报未提交。真实市场、人格贡献与30人门限未验，因此F001仍doing，不以材料完整标全部done。
+源码分支`feature/virtual-society-next`与固定Tag`society-review-2026-10-07-rc1`已推送，Pages与公开预发布Release已上线；284单测、19浏览器（37.0秒）、双构建、119公网文件字节与独立页面体验、335源码同机新目录安装均通过。[发布实证记录](docs/research/PUBLIC-RELEASE-2026-10-07.md)与[本轮真实测试](docs/research/LIVE-REVIEW-2026-10-07.md)分列。`main`、旧Tag、L4/L5分支不改，正式申报未提交。真实调查首批失败、市场/人格贡献/30人门限未验，因此F001仍doing，不以材料完整或工程通过标全部done。

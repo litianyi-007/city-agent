@@ -1,6 +1,6 @@
 # 真实虚拟社会调查测试轮与公开评审版本
 
-本轮已获得公开评审版发布与实验授权：仅 `feature/virtual-society-next` 和现有 `gh-pages`，保留旧里程碑；不改 `main`、另一会话的自动化生产分支，也不代为正式参赛提交。新固定版本名为 `society-review-2026-10-07-rc1`；是否已上线以公网及 GitHub 该 Tag 实际状态为准。
+本轮已获得公开评审版发布与实验授权：仅 `feature/virtual-society-next` 和现有 `gh-pages`，保留旧里程碑；不改 `main`、另一会话的自动化生产分支，也不代为正式参赛提交。固定版本 `society-review-2026-10-07-rc1`、Pages和公开预发布Release均已上线；[发布实证记录](PUBLIC-RELEASE-2026-10-07.md)另册记录安装与公网检查，不改变本轮质量失败。
 
 ## 本轮结论：执行真实调用，但质量门限未通过
 
@@ -27,7 +27,7 @@
 - 24项真实附件独立于规则夹具/历史试验：两组各8项冻结问卷、预设、Prompt、run、raw、统计、跨题与资格审计，以及计划/费用/规划/CORS等8项总附件。77项完整公开载荷和 manifest 登记字节与 SHA-256；hash仅证明字节一致，不认证原件来源或真实市场效度。
 - 新17页PDF已逐页视觉检查；4分33秒录像展示工程夹具运行，**不是本轮真实付费调查的录屏**。历史12×15真实基线、49次居民实验、原16题预算反例和四角色交付失败仍保留，不混为本轮成功证据。
 - [固定版本源码](https://github.com/litianyi-007/city-agent/tree/society-review-2026-10-07-rc1)与[评委安装指南](../guides/JUDGE-QUICKSTART.md)。`npm ci → npm run setup → npm run build → npm run doctor → npm run start:review`；页面填写操作者自己的Key。Pages浏览器直连不经过Harness；本机Harness服务只绑定回环。
-- 本次单测284/284通过；浏览器19/19通过（37.0秒），本机/Pages双构建通过；最终公网字节复核以发布检查记录为准。软件测试通过不改变上述真实调查负结果。Windows/Linux干净机器实测、真人市场校准、30人完整率、人格贡献和四角色交付终验仍未通过或未执行。
+- 本次单测284/284、浏览器19/19（37.0秒）、本机/Pages双构建、公网119项文件字节与独立零费用UI均通过；335固定源码包同机新目录安装、10接口、77材料及实际Chromium启动通过。软件测试通过不改变上述真实调查负结果。Windows/Linux/他人干净机器实测、真人市场校准、30人完整率、人格贡献和四角色交付终验仍未通过或未执行。
 
 原候选材料的本机完整留底位于 Git 忽略的 `output/review-drafts/pre-public-release-96709127/submission-next/`；旧公开 `submission/` 29文件与冻结 Tag 字节不变。新公开材料为移除本机路径、内部文档地址与私凭据的审查投影；projection 的源/公开 hash 在 README 登记。实验关键执行文件哈希在调用前计划中登记，后续源码固定 Tag 不是对先前脏工作区执行来源的独立认证。
 
