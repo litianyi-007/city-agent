@@ -1,6 +1,7 @@
-import { useEffect, useRef, useState, type FormEvent } from 'react';
+import { useCallback, useEffect, useRef, useState, type FormEvent } from 'react';
 import type { ProductionAgent, ProductionAgentInput, ProductionCapability, ProductionRole, ProductionRun, ProductionRunInput, ProductionVerification } from '../shared/production-schema';
 import { PRODUCTION_DEMO_CASES } from '../shared/production-benchmarks';
+import { isUnresolvedJevIntent, productionRequestCounts, projectProductionLedger } from '../shared/production-ledger';
 import type { JevEvaluation, JevPublicConfig } from '../shared/jev-schema';
 import JevSettings from './JevSettings';
 import './production.css';
@@ -27,6 +28,7 @@ function emptyRequirement(): ProductionRunInput['requirement'] {
 }
 const format = (value: number | null | undefined) => value == null ? 'unknown' : new Intl.NumberFormat('zh-CN').format(value);
 const displayScore = (value: number | null | undefined) => typeof value === 'number' && Number.isFinite(value) ? value.toFixed(2) : 'unknown';
+const displayCost = (value: number | null) => value == null || !Number.isFinite(value) || value < 0 ? 'unknown' : value > 0 && value < 0.00000001 ? value.toExponential(3) : new Intl.NumberFormat('zh-CN', { maximumFractionDigits: 8 }).format(value);
 const active = (run: ProductionRun | null) => !!run && ['queued', 'running'].includes(run.status);
 const artifactUrl = (runId: string, name: string) => `/api/production/runs/${encodeURIComponent(runId)}/artifacts/${encodeURIComponent(name)}`;
 const jevEvidenceId = (callId: string) => `prod-jev-call-${encodeURIComponent(callId)}`;
@@ -76,7 +78,9 @@ export default function ProductionWorkspace() {
   const [preview, setPreview] = useState(false);
   const mounted = useRef(true);
   const selectionRequest = useRef(0);
+  const submissionPending = useRef(false);
   const briefInput = useRef<HTMLTextAreaElement>(null);
+  const handleJevConfigChange = useCallback((value: JevPublicConfig) => { setJevConfig(value); setBudgetAuthorized(false); }, []);
 
   useEffect(() => {
     mounted.current = true;
@@ -100,13 +104,15 @@ export default function ProductionWorkspace() {
     const controller = new AbortController();
     let timer: ReturnType<typeof setTimeout>;
     const poll = async () => {
+      const version = selectionRequest.current;
       try {
         const [next, history] = await Promise.all([request<ProductionRun>(`/runs/${run!.id}`, undefined, controller.signal), request<ProductionRun[]>('/runs', undefined, controller.signal)]);
         if (controller.signal.aborted) return;
-        setRun(next); setRuns(history);
+        if (selectionRequest.current === version) setRun(previous => previous?.id === next.id ? next : previous);
+        setRuns(history);
         if (active(next)) timer = setTimeout(poll, 1200);
       } catch (e) {
-        if (!controller.signal.aborted) { setError(e instanceof Error ? e.message : '更新运行状态失败'); timer = setTimeout(poll, 2500); }
+        if (!controller.signal.aborted) { if (selectionRequest.current === version) setError(e instanceof Error ? e.message : '更新运行状态失败'); timer = setTimeout(poll, 2500); }
       }
     };
     timer = setTimeout(poll, 500);
@@ -135,22 +141,32 @@ export default function ProductionWorkspace() {
   }
   async function start(event: FormEvent) {
     event.preventDefault();
+    if (submissionPending.current) return;
     if (!canLaunch) { setError('请补齐需求来源与验收、角色配置，并在当前配置下重新确认有限预算；自定义需求不能运行固定 Mock。'); return; }
-    ++selectionRequest.current; setBusy(true); setError(''); setPreview(false);
+    submissionPending.current = true;
+    const authorized = budgetAuthorized;
+    const version = ++selectionRequest.current;
+    setBusy(true); setError(''); setPreview(false); setBudgetAuthorized(false);
     try {
-      const next = await request<ProductionRun>('/runs', json({ brief, capability, mode, agentIds: ROLE_ORDER.map(role => selection[role]), candidateCount, limits, requirement, budgetAuthorized: mode !== 'demo' && budgetAuthorized, ...(capability === 'camera-scene-v1' && mode === 'live' && Object.keys(cameraBusinessConstraints).length ? { cameraBusinessConstraints } : {}), ...(mode !== 'live' && demoCaseId ? { demoCaseId } : {}), ...(mode === 'mock-jev' || mode === 'live' && verifierEngine === 'jev-cascade' ? { verifierEngine: 'jev-cascade' } : {}) }));
+      const next = await request<ProductionRun>('/runs', json({ brief, capability, mode, agentIds: ROLE_ORDER.map(role => selection[role]), candidateCount, limits, requirement, budgetAuthorized: mode !== 'demo' && authorized, ...(capability === 'camera-scene-v1' && mode === 'live' && Object.keys(cameraBusinessConstraints).length ? { cameraBusinessConstraints } : {}), ...(mode !== 'live' && demoCaseId ? { demoCaseId } : {}), ...(mode === 'mock-jev' || mode === 'live' && verifierEngine === 'jev-cascade' ? { verifierEngine: 'jev-cascade' } : {}) }));
       if (!mounted.current) return;
-      setRun(next); setRuns(previous => [next, ...previous.filter(item => item.id !== next.id)]); setDetail('events');
-      setNotice(mode === 'demo' ? '已启动工程夹具：不会调用真实模型，不计入自主交付良品率。' : mode === 'mock-jev' ? '已启动混合验证：固定研发夹具 + 真实 Jev 决策，产生 Jev 费用，但不计为自主研发交付。' : '已启动真实模型任务；预算、返修与时间限制已冻结。');
-    } catch (e) { setError(e instanceof Error ? e.message : '启动失败'); }
-    finally { if (mounted.current) setBusy(false); }
+      setRuns(previous => [next, ...previous.filter(item => item.id !== next.id)]);
+      if (selectionRequest.current === version) {
+        setRun(next); setDetail('events');
+        setNotice(mode === 'demo' ? '已启动工程夹具：不会调用真实模型，不计入自主交付良品率。' : mode === 'mock-jev' ? '已启动混合验证：固定研发夹具 + 真实 Jev 决策，产生 Jev 费用，但不计为自主研发交付。' : '已启动真实模型任务；预算、返修与时间限制已冻结。');
+      }
+    } catch (e) { if (mounted.current && selectionRequest.current === version) setError(e instanceof Error ? e.message : '启动失败'); }
+    finally { submissionPending.current = false; if (mounted.current) setBusy(false); }
   }
   async function cancel() {
-    if (!run) return;
-    setBusy(true); setError(''); setPreview(false);
-    try { const next = await request<ProductionRun>(`/runs/${run.id}/cancel`, { method: 'POST' }); if (mounted.current) { setRun(next); setRuns(previous => previous.map(item => item.id === next.id ? next : item)); setNotice('取消请求已发送，终止与清理结果请查看执行日志。'); } }
-    catch (e) { setError(e instanceof Error ? e.message : '取消失败'); }
-    finally { if (mounted.current) setBusy(false); }
+    if (!run || submissionPending.current) return;
+    submissionPending.current = true;
+    const version = selectionRequest.current;
+    const cancelledRun = run;
+    setBusy(true); setError(''); setPreview(false); setBudgetAuthorized(false);
+    try { const next = await request<ProductionRun>(`/runs/${cancelledRun.id}/cancel`, { method: 'POST' }); if (mounted.current) { if (selectionRequest.current === version) setRun(previous => previous?.id === cancelledRun.id ? next : previous); setRuns(previous => previous.map(item => item.id === next.id ? next : item)); if (selectionRequest.current === version) setNotice(`「${cancelledRun.input.requirement.id}」取消请求已发送，终止与清理结果请查看该运行日志。`); } }
+    catch (e) { if (mounted.current && selectionRequest.current === version) setError(e instanceof Error ? e.message : '取消失败'); }
+    finally { submissionPending.current = false; if (mounted.current) setBusy(false); }
   }
 
   function detachMock() {
@@ -269,7 +285,7 @@ export default function ProductionWorkspace() {
         <div className="prod-section-heading prod-history-heading"><div><h2>执行与交付</h2><span className="prod-caption">全部启动尝试保留在账本</span></div><label className="prod-history-select" htmlFor="prod-history">选择运行<select id="prod-history" aria-label="选择运行" value={run?.id ?? ''} onChange={e => void selectRun(e.target.value)}><option value="" disabled>暂无运行</option>{runs.map(item => <option key={item.id} value={item.id}>{item.input.requirement.id} · {item.evidenceKind === 'real-model' ? '真实' : 'Mock'} · {STATUS[item.status]} · {item.createdAt.slice(11, 19)}</option>)}</select></label></div>
         {run ? <RunDetail run={run} detail={detail} setDetail={setDetail} preview={preview} setPreview={setPreview} cancel={cancel} busy={busy} /> : <div className="prod-empty"><Mark /><h3>等待第一份交付证据</h3><p>先运行 Mock 查看端到端流程；真实模型通过冻结 Gate 后，才会计入自主交付成功。</p></div>}
       </> : null}
-      {view === 'decision' ? <JevSettings onConfigChange={value => { setJevConfig(value); setBudgetAuthorized(false); }} /> : null}
+      {view === 'decision' ? <JevSettings onConfigChange={handleJevConfigChange} /> : null}
       {view === 'team' ? <><div className="prod-section-heading"><p className="prod-muted">预设角色可复制与重配。API Key 仅写入本分支控制面，不写入 Prompt、源码、日志或导出。</p><button className="prod-button prod-primary" type="button" onClick={() => setEditing('new')}>创建 Agent</button></div><div className="prod-agent-grid">{agents.map(agent => <article className="prod-panel prod-agent-card" key={agent.id}><div className="prod-agent-top"><span className={`prod-role prod-role-${agent.role}`}>{ROLE_INFO[agent.role].initials}</span><span className={`prod-pill ${agent.enabled ? '' : 'prod-pill-muted'}`}>{agent.enabled ? '已启用' : '已停用'}</span></div><h2>{agent.name}</h2><p className="prod-muted">{ROLE_INFO[agent.role].label} · {ROLE_INFO[agent.role].responsibility}</p><dl><div><dt>Provider / Model</dt><dd>{agent.provider} / {agent.modelId}</dd></div><div><dt>Base URL</dt><dd>{agent.baseUrl}</dd></div><div><dt>API Key</dt><dd>{agent.hasApiKey ? '已配置 · 仅显示脱敏状态' : '未配置'}</dd></div><div><dt>每百万 Token 估算单价</dt><dd>{agent.pricing ? `输入 ${agent.pricing.inputPerMillion} / 输出 ${agent.pricing.outputPerMillion} ${agent.pricing.currency}` : 'unknown · 未填写价格'}</dd></div></dl><div className="prod-agent-actions"><button className="prod-button" type="button" onClick={() => setEditing(agent)}>编辑</button><button className="prod-button" disabled={busy} type="button" onClick={() => void changeAgent('clone', agent)}>复制</button><button className="prod-button prod-danger" disabled={busy} type="button" onClick={() => void changeAgent('delete', agent)}>删除</button></div></article>)}</div></> : null}
 {view === 'report' ? <section className="prod-report"><div className="prod-metrics"><Metric label="真实模型启动尝试" value={String(realRuns.length)} note="包括失败、取消与中断" /><Metric label="真实自主交付良品率" value={goodRate} note={`${realPassed.length} 次完整验收通过 / ${realTerminal.length} 次终态尝试（含失败、取消、中断与摄像头完整验收待验证）`} /><Metric label="工程 / Mock 尝试" value={String(fixtureRuns.length)} note="不计入真实模型良品率" /><Metric label="实际业务需求" value={String(new Set(realRuns.filter(item => item.input.requirement.kind === 'user-declared-real').map(item => item.input.requirement.id)).size)} note="当前三个需求明确为 Mock" /></div><div className="prod-panel prod-report-body"><h2>七项申报材料的证据入口</h2><p>输入快照、模型配置、Prompt、候选评审、冻结契约、浏览器 Gate、原始调用和成本口径按运行留存。预测增效与未来能力须单独标注，不能充当实测。</p><a className="prod-button" href="/api/production/report" target="_blank" rel="noreferrer noopener">查看申报证据汇总 JSON</a><ol><li>基本信息与团队：六角色配置、管线类型与范围。</li><li>管线设计：项目经理有限闭环、候选 Verifier 与不可绕过的行为门禁。</li><li>需求清单：至少三项自拟 Mock；不冒充真实业务需求。</li><li>执行记录：从工作台选择运行，下载输入、证据与最终交付物。</li><li>指标统计：真实模型与工程夹具分开统计，unknown 不记作零。</li><li>归因改进：失败运行与 Gate 原始结果保留，不覆盖负结果。</li><li>L4 自评：依据有界操作定义；无官方参考文件，不宣称官方认证。</li></ol><aside className="prod-boundary">已接入 TypeSafe Jev HTTP 类型化决策，实测质量与用量以原始记录为准。开源 AnyJev 的本地推断与标注校准仍是下一阶段参考；LLM 序数评审不是原论文 score-token 算法的复现。</aside></div></section> : null}
       <footer className="prod-footer"><span>独立生产研发线 · 不修改冻结申报基线</span><span>实测 / 夹具 / 预测 / 待办分别标注</span></footer>
@@ -282,11 +298,46 @@ function Metric({ label, value, note }: { label: string; value: string; note: st
   return <div className="prod-panel prod-metric"><small>{label}</small><strong>{value}</strong><p>{note}</p></div>;
 }
 
-function unobservedJevRequest(evaluation: JevEvaluation): boolean {
-  return !evaluation.usage.complete && evaluation.providerRequests === 0 && evaluation.durationMs === 0 && evaluation.requestSnapshot == null && evaluation.rawResponse == null && evaluation.modelIdReturned == null && evaluation.httpStatus == null && !evaluation.error;
+function RunLedger({ run }: { run: ProductionRun }) {
+  const { requests, usage } = projectProductionLedger(run);
+  const requestText = (total: number | null, subtotal: number | null, unknown: number) => total == null ? `unknown（已观测小计 ${format(subtotal)}；${unknown} 条记录未观测）` : format(total);
+  const injected = run.evidenceKind === 'injected-test';
+  return <section className="prod-run-ledger" aria-label="请求与用量账本">
+    <h3>请求与用量账本</h3>
+    <p className="prod-caption">角色记录、Harness 调用意图、预算记录和实际 HTTP POST 是不同口径。失败前登记的意图不代表发出了请求；HTTP 观察也不是供应商账单。</p>
+    <div className="prod-ledger-grid">
+      <div><h4>意图与 HTTP 观察</h4><dl>
+        <div><dt>Harness 调用意图</dt><dd>{requests.harnessInvocations} 条</dd></div>
+        <div><dt>Harness 实际 HTTP POST</dt><dd>{requestText(requests.unknownHarnessRequestIntents ? null : requests.knownHarnessProviderRequests, requests.knownHarnessProviderRequests, requests.unknownHarnessRequestIntents)}</dd></div>
+        <div><dt>Jev 实际 HTTP POST</dt><dd>{requestText(requests.jevProviderRequests, requests.knownJevProviderRequests, requests.unknownJevRequestIntents)}</dd></div>
+        <div><dt>总实际 HTTP POST</dt><dd>{requestText(requests.actualProviderRequests, requests.knownProviderRequests, requests.unknownRequestIntents)}</dd></div>
+        <div><dt>HTTP 请求数未知记录</dt><dd>{requests.unknownRequestIntents} 条</dd></div>
+        <div><dt>Mock / 注入角色记录</dt><dd>{requests.simulatedStageRecords} / {requests.injectedTestRecords} 条</dd></div>
+        {requests.unclassifiedCallRecords ? <div><dt>来源未记录的旧角色记录</dt><dd>{requests.unclassifiedCallRecords} 条（不猜为零请求）</dd></div> : null}
+        {injected && run.jevCalls?.length ? <div><dt>Jev 派发记录（未验证 HTTP）</dt><dd>{requestText(requests.unknownJevDispatchIntents ? null : requests.observedJevDispatches, requests.observedJevDispatches, requests.unknownJevDispatchIntents)}</dd></div> : null}
+      </dl></div>
+      <div><h4>{injected ? '注入用量记录小计（非真实支出）' : '已报告用量小计（非总额）'}</h4><dl>
+        <div><dt>已报告输入 Token 小计</dt><dd>{format(usage.inputTokens.knownSubtotal)}<small>{usage.inputTokens.reportedEntries} 条已报告；{usage.inputTokens.unknownEntries} 条未知</small></dd></div>
+        <div><dt>已报告输出 Token 小计</dt><dd>{format(usage.outputTokens.knownSubtotal)}<small>{usage.outputTokens.reportedEntries} 条已报告；{usage.outputTokens.unknownEntries} 条未知</small></dd></div>
+        <div><dt>已报告估算费用小计</dt><dd>{displayCost(usage.estimatedCost.knownSubtotal)} {usage.currency ?? '币种 unknown'}<small>{usage.estimatedCost.reportedEntries} 条同币种已报告；{usage.estimatedCost.unknownEntries} 条未知</small></dd></div>
+        <div><dt>用量明细含未知记录</dt><dd>{usage.unknownUsageEntries} / {usage.entries} 条</dd></div>
+      </dl>{usage.currencyMismatchEntries ? <p className="prod-caption">{usage.currencyMismatchEntries} 条费用的币种缺失、不支持或不一致，未并入费用小计；不换汇或猜测币种。</p> : null}</div>
+    </div>
+    <p className="prod-caption prod-ledger-boundary">上方总账直接保留原始字段；已报告小计不替代 unknown 总额。观察到 POST = 0 也不推造已报告的 0 Token / 费用。{usage.entries === 0 ? '尚无可汇总的调用用量明细。' : ''}{injected ? '注入派发没有真实 HTTP 证据，不能当作供应商请求或支出。' : ''}</p>
+  </section>;
 }
 
-function JevDecisionEvidence({ calls, snapshot }: { calls: NonNullable<ProductionRun['jevCalls']>; snapshot?: JevPublicConfig }) {
+function CallRequestObservation({ call }: { call: ProductionRun['calls'][number] }) {
+  if (call.executionSource === 'mock' || call.executionSource === 'injected') return <p className="prod-caption prod-call-observation">{call.executionSource === 'mock' ? 'Mock' : '注入测试'}角色记录；不当作真实模型 HTTP 请求证据。</p>;
+  const counts = productionRequestCounts({ calls: [call] });
+  return <p className="prod-caption prod-call-observation">{call.executionSource === 'harness' ? 'Harness 调用意图 1 条' : '旧记录执行来源未记录'} · 实际 HTTP POST {format(counts.actualProviderRequests)}。{counts.actualProviderRequests === 0 ? '确定的 0 POST 不推造 0 Token / 费用。' : counts.actualProviderRequests == null ? '缺少合法 HTTP 观察字段，不按零请求处理。' : 'HTTP 观察不是供应商账单。'}</p>;
+}
+
+function unobservedJevRequest(evaluation: JevEvaluation): boolean {
+  return isUnresolvedJevIntent(evaluation);
+}
+
+function JevDecisionEvidence({ calls, snapshot, dispatchOnly = false }: { calls: NonNullable<ProductionRun['jevCalls']>; snapshot?: JevPublicConfig; dispatchOnly?: boolean }) {
   const labels: Record<JevEvaluation['status'], string> = { accepted: '接受候选', uncertain: '不确定 → 需复核', rejected: '拒绝候选', error: '请求 / 契约错误' };
   const dimensions = { coverage: '验收覆盖', consistency: '约束一致性', scope: '范围可执行性' };
   return <section className="prod-jev-evidence" aria-label="Jev 决策证据">
@@ -304,7 +355,7 @@ function JevDecisionEvidence({ calls, snapshot }: { calls: NonNullable<Productio
         {arithmeticError ? <p className="prod-boundary prod-jev-error-boundary">算术一致性异常；原始分数、选择与通过判断均未采信。独立复核是另一次判断，不把本次 Jev 错误改成通过。</p> : fatalError ? <p className="prod-boundary prod-jev-error-boundary">可信校验器记录为致命错误，不进入算术异常的独立复核分支。本次 Jev 决策未采信。</p> : null}
         <p>{evaluation.reason}</p>
         {evaluation.diagnostics?.length ? <ul className="prod-jev-diagnostics" aria-label="可信校验诊断">{evaluation.diagnostics.map((diagnostic, index) => <li key={`${diagnostic.answerId}-${diagnostic.code}-${index}`}><code>{diagnostic.code}</code> · 答案 <code>{diagnostic.answerId}</code></li>)}</ul> : null}
-        <p className="prod-caption">{evaluation.modelIdReturned ?? evaluation.modelIdRequested} · 实际请求 {pending ? '未观测 / unknown' : evaluation.providerRequests} · 选中 {evaluation.selectedCandidateId ?? '无'} · 估算费用 {evaluation.usage.estimatedCost == null ? 'unknown' : `${evaluation.usage.estimatedCost.toFixed(6)} USD`}</p>
+        <p className="prod-caption">{evaluation.modelIdReturned ?? evaluation.modelIdRequested} · {dispatchOnly ? '派发记录（未验证 HTTP）' : '实际请求'} {pending || !Number.isSafeInteger(evaluation.providerRequests) || evaluation.providerRequests < 0 ? '未观测 / unknown' : evaluation.providerRequests} · 选中 {evaluation.selectedCandidateId ?? '无'} · {dispatchOnly ? '注入用量费用记录' : '估算费用'} {evaluation.usage.estimatedCost == null ? 'unknown' : `${evaluation.usage.estimatedCost.toFixed(6)} USD`}</p>
         {evaluation.scores.map(candidate => <div className="prod-jev-candidate" key={candidate.candidateId}><code>{candidate.candidateId}</code><dl>{Object.entries(candidate.dimensions).map(([dimension, answer]) => <div key={dimension}><dt>{dimensions[dimension as keyof typeof dimensions]}</dt><dd>加权分数 <b>{answer.score.toFixed(3)} / 4</b><span>分布集中度 {answer.confidence.toFixed(3)}</span></dd></div>)}</dl><p className="prod-caption">Noul 范围判断 p(yes) = {candidate.scopeProbability.toFixed(3)}；派生集中度 = {candidate.scopeCertainty.toFixed(3)}。{candidate.qualified ? '满足该候选门限。' : '未满足全部候选门限。'}</p></div>)}
         {evaluation.choice ? <p className="prod-caption prod-jev-choice">Choice：{evaluation.choice.choice} · 分布集中度 {evaluation.choice.confidence.toFixed(3)}</p> : null}
         <details className="prod-output"><summary>完整分布、原始响应、请求快照与配置 hash</summary><pre>{JSON.stringify({ id: call.id, phase: call.phase, startedAt: call.startedAt, configHash: call.configHash, evaluation }, null, 2)}</pre></details>
@@ -360,8 +411,9 @@ function RunDetail({ run, detail, setDetail, preview, setPreview, cancel, busy }
   const cameraPreviewReady = isCamera && !!sceneArtifact && run.status === 'completed' && !!run.cameraVerification?.boundedScenePassed;
   const latestRole = run.events.at(-1)?.role;
   const jevCalls = run.jevCalls ?? [];
-  const unknownJevIntents = jevCalls.filter(call => unobservedJevRequest(call.evaluation)).length;
-  const knownJevRequests = jevCalls.filter(call => !unobservedJevRequest(call.evaluation)).reduce((sum, call) => sum + call.evaluation.providerRequests, 0);
+  const requests = productionRequestCounts(run);
+  const unknownJevIntents = requests.unknownJevRequestIntents;
+  const knownJevRequests = requests.knownJevProviderRequests;
   const isHybrid = run.evidenceKind === 'fixture-with-real-jev';
   return <section className="prod-panel prod-run-detail" aria-label="当前运行详情">
 <div className="prod-run-header"><div><span className={`prod-status prod-status-${run.status}`}>{isCamera && run.status === 'completed' ? '场景行为通过' : STATUS[run.status]}</span><span className="prod-pill">{run.evidenceKind === 'real-model' ? '真实模型证据' : isHybrid ? '固定研发夹具 + 真实 Jev' : run.evidenceKind === 'fixture' ? 'Mock / 工程夹具' : '注入测试'}</span><strong>{run.input.requirement.id}</strong><code>{run.id}</code></div>{active(run) ? <button className="prod-button prod-danger" type="button" disabled={busy} onClick={() => void cancel()}>取消任务</button> : null}</div>
@@ -369,15 +421,16 @@ function RunDetail({ run, detail, setDetail, preview, setPreview, cancel, busy }
     {isCamera ? <aside className="prod-camera-boundary"><b>{run.cameraVerification?.boundedScenePassed ? '场景行为通过，摄像头待实机验收' : '摄像头场景：行为验证尚未通过'}</b><p>合成关键点验证的是受控场景行为；视觉模型质量、真实摄像头和完整需求均未验收，不计入完整自主交付良品率。</p>{run.cameraVerification ? <details className="prod-output"><summary>场景验证范围与限制</summary><pre>{JSON.stringify(run.cameraVerification, null, 2)}</pre></details> : null}</aside> : null}
     <div className="prod-loop"><b>项目经理闭环</b><span>思考 → 设计 → 实施 → 测试 → 反馈 → 再规划</span><strong>{globalRepairPolicy ? '全局返修' : run.repairPolicyVersion ? '未知版本返修' : '旧版研发 / Gate 返修'} {run.repairs} / {run.input.limits.maxRepairCycles}</strong></div>
     <RepairHistory run={run} />
-    <div className="prod-run-roles">{ROLE_ORDER.map(role => { const called = run.calls.some(call => call.role === role); const events = run.events.some(event => event.role === role); return <div className={latestRole === role && active(run) ? 'current' : ''} key={role}><span className={`prod-role prod-role-${role}`}>{ROLE_INFO[role].initials}</span><span>{ROLE_INFO[role].label}<small>{latestRole === role && active(run) ? '当前环节' : called ? `${run.calls.filter(call => call.role === role).length} 次调用` : events ? '已有事件' : '待执行'}</small></span></div>; })}</div>
-    <div className="prod-run-summary"><span>时间 <b>{run.durationMs == null ? active(run) ? '进行中' : 'unknown' : `${(run.durationMs / 1000).toFixed(1)}s`}</b></span><span>{run.evidenceKind === 'fixture' || isHybrid ? '模拟环节记录' : '角色调用记录'} <b>{run.calls.length}</b></span><span>调用预算记录 <b>{run.calls.length + jevCalls.length} / {run.input.limits.maxCalls}</b></span>{jevCalls.length ? <span>Jev 实际请求 <b>{unknownJevIntents ? `unknown（已知 ${knownJevRequests} 次；${unknownJevIntents} 个请求意图未观测）` : knownJevRequests}</b></span> : null}<span>输入 / 输出 Token <b>{format(run.usage.inputTokens)} / {format(run.usage.outputTokens)}</b></span><span>估算费用 <b>{run.usage.estimatedCost == null ? 'unknown' : `${run.usage.estimatedCost.toFixed(6)} ${run.usage.currency}`}</b></span></div>
+    <div className="prod-run-roles">{ROLE_ORDER.map(role => { const called = run.calls.some(call => call.role === role); const events = run.events.some(event => event.role === role); return <div className={latestRole === role && active(run) ? 'current' : ''} key={role}><span className={`prod-role prod-role-${role}`}>{ROLE_INFO[role].initials}</span><span>{ROLE_INFO[role].label}<small>{latestRole === role && active(run) ? '当前环节' : called ? `${run.calls.filter(call => call.role === role).length} 条记录` : events ? '已有事件' : '待执行'}</small></span></div>; })}</div>
+    <div className="prod-run-summary"><span>时间 <b>{run.durationMs == null ? active(run) ? '进行中' : 'unknown' : `${(run.durationMs / 1000).toFixed(1)}s`}</b></span><span>{run.evidenceKind === 'fixture' || isHybrid ? '模拟环节记录' : '角色调用记录'} <b>{run.calls.length}</b></span><span>调用预算记录 <b>{run.calls.length + jevCalls.length} / {run.input.limits.maxCalls}</b></span>{jevCalls.length ? <span>{run.evidenceKind === 'injected-test' ? 'Jev 派发记录（未验证 HTTP）' : 'Jev 实际请求'} <b>{run.evidenceKind === 'injected-test' ? requests.unknownJevDispatchIntents ? `unknown（已知派发 ${format(requests.observedJevDispatches)}；${requests.unknownJevDispatchIntents} 个意图未观测）` : format(requests.observedJevDispatches) : unknownJevIntents ? `unknown（已知 ${format(knownJevRequests)} 次；${unknownJevIntents} 个请求意图未观测）` : format(knownJevRequests)}</b></span> : null}<span>输入 / 输出 Token <b>{format(run.usage.inputTokens)} / {format(run.usage.outputTokens)}</b></span><span>估算费用 <b>{run.usage.estimatedCost == null ? 'unknown' : `${run.usage.estimatedCost.toFixed(6)} ${run.usage.currency}`}</b></span></div>
+    <RunLedger run={run} />
     {run.error ? <p className="prod-run-error" role="alert">{run.error}</p> : null}
     <nav className="prod-detail-tabs" aria-label="运行详情分组">{([['events', '执行链路'], ['verifier', '候选验证'], ['delivery', '门禁与交付'], ['calls', '原始调用']] as const).map(([value, label]) => <button type="button" aria-pressed={detail === value} key={value} onClick={() => setDetail(value)}>{label}<small>{value === 'calls' ? run.calls.length : value === 'verifier' ? run.verifications.length : value === 'events' ? run.events.length : run.artifacts.length}</small></button>)}</nav>
     <div className="prod-detail-body">
       {detail === 'events' ? <><ol className="prod-events">{run.events.map(event => <li key={event.id}><time dateTime={event.time}>{new Date(event.time).toLocaleTimeString('zh-CN', { hour12: false })}</time><span className="prod-event-role">{event.role ? ROLE_INFO[event.role].label : event.phase}</span><p>{event.message}</p></li>)}</ol><details className="prod-output"><summary>输入快照与已选角色产物（{run.outputs.length}）</summary><pre>{JSON.stringify({ input: run.input, agentSnapshot: run.agentSnapshot, outputs: run.outputs }, null, 2)}</pre></details></> : null}
-{detail === 'verifier' ? <><p className="prod-muted">每个候选均经过结构预检与评审，包括单候选。LLM 序数评分不代表概率；Jev 分布与集中度单独展示。所有验证器都不能放宽冻结 Gate。评分仅在展示时保留两位小数，不改变原始数值、选择结果或门限。</p>{run.verifications.length ? run.verifications.map((verification, index) => <CandidateVerification key={`${verification.phase}-${index}`} verification={verification} jevCalls={jevCalls} />) : <p className="prod-empty-text">尚无候选评审结果。</p>}{jevCalls.length ? <JevDecisionEvidence calls={jevCalls} snapshot={run.jevSnapshot} /> : null}</> : null}
+{detail === 'verifier' ? <><p className="prod-muted">每个候选均经过结构预检与评审，包括单候选。LLM 序数评分不代表概率；Jev 分布与集中度单独展示。所有验证器都不能放宽冻结 Gate。评分仅在展示时保留两位小数，不改变原始数值、选择结果或门限。</p>{run.verifications.length ? run.verifications.map((verification, index) => <CandidateVerification key={`${verification.phase}-${index}`} verification={verification} jevCalls={jevCalls} />) : <p className="prod-empty-text">尚无候选评审结果。</p>}{jevCalls.length ? <JevDecisionEvidence calls={jevCalls} snapshot={run.jevSnapshot} dispatchOnly={run.evidenceKind === 'injected-test'} /> : null}</> : null}
 {detail === 'delivery' ? <><div className="prod-contract"><h3>冻结验收契约</h3>{run.frozenContract ? <><p>版本 <b>{run.frozenContract.version}</b> · 冻结于 {run.frozenContract.frozenAt}</p><code>{run.frozenContract.hash}</code><details className="prod-output"><summary>查看不可在返修中放宽的检查快照</summary><pre>{JSON.stringify(run.frozenContract, null, 2)}</pre></details></> : <p className="prod-muted">尚未冻结。研发开始前必须完成业务与测试契约冻结。</p>}</div><div className="prod-gate"><h3>{isCamera ? run.gate ? run.gate.passed ? '场景行为 Gate：通过（合成输入）' : '场景行为 Gate：未通过' : '场景行为 Gate：未执行' : run.gate ? run.gate.passed ? '最终行为 Gate：通过' : '最终行为 Gate：未通过' : '最终行为 Gate：未执行'}</h3>{gateFailureLabel ? <p className="prod-boundary prod-gate-failure-kind">{gateFailureLabel}：{active(run) ? '停止处理中' : '已停止'}，未作为代码质量返修。</p> : null}{run.gate?.summary ? <p>{run.gate.summary}</p> : null}{run.gate?.checks.map((check, index) => <div className={`prod-check ${check.passed ? '' : 'failed'}`} key={`${check.name}-${index}`}><span>{check.passed ? '通过' : '失败'}</span><b>{check.name}</b>{check.detail ? <p>{check.detail}</p> : null}</div>)}{run.gateHistory.length ? <details className="prod-output"><summary>全部 Gate 尝试（{run.gateHistory.length}）</summary><pre>{JSON.stringify(run.gateHistory, null, 2)}</pre></details> : null}</div><div className="prod-artifacts"><h3>交付物与证据</h3>{run.artifacts.length ? <div className="prod-artifact-list">{run.artifacts.map(artifact => <a className="prod-button" key={artifact.name} href={artifactUrl(run.id, artifact.name)} download={artifact.name}>{artifact.name}<small>{artifact.type}</small></a>)}</div> : <p className="prod-muted">尚无交付物。失败不会被替换成模板成功。</p>}{!isCamera ? <p className="prod-caption prod-download-warning">HTML 仅以源码文本下载。下载后在其他环境运行不再受平台隔离保护，不能视为网络安全承诺。</p> : sceneArtifact ? <p className="prod-caption prod-scene-download-note">scene.json 是声明式场景数据，不含模型脚本；下载文件不代表场景行为、摄像头或完整需求已验收。</p> : null}</div>{cameraPreviewReady ? <section className="prod-camera-delivery" aria-label="受控摄像头场景预览"><h3>声明式场景交互预览</h3><p className="prod-caption">新窗口只运行固定平台代码与已校验的场景数据，摄像头默认关闭。请手动授权；画面留在本机。场景 Gate 通过不能替代实机验收。</p><a className="prod-button prod-primary" href={`/api/production/runs/${encodeURIComponent(run.id)}/scene-preview`} target="_blank" rel="noopener noreferrer">打开受控场景预览</a><p className="prod-caption">关闭预览或停止摄像头会释放识别资源；不会恢复生成 HTML 的执行型 iframe。</p></section> : isCamera ? <p className="prod-camera-boundary">交互预览未开放；{sceneArtifact ? '可以下载上方已有场景与失败证据。' : run.artifacts.length ? '尚无场景文件，仅可下载上方已列出的证据。' : '尚无场景文件或交付物。'}</p> : null}{!isCamera && html ? <div className="prod-preview"><div><p>受控浏览器静态截图 · 不是实时交互预览</p><button className="prod-button" type="button" onClick={() => setPreview(!preview)}>{preview ? '关闭预览' : '打开运行预览'}</button></div><p className="prod-caption prod-preview-explanation">不在你的浏览器执行生成脚本。行为验收来自独立 Gate，截图不替代测试，也不证明产物安全。</p>{preview ? <ControlledPreview key={run.id} run={run} /> : null}</div> : null}</> : null}
-{detail === 'calls' ? <><p className="prod-muted">{run.evidenceKind === 'fixture' || isHybrid ? '以下研发角色记录均为固定工程夹具的模拟环节记录，模型字段仅是配置快照；实际研发模型请求数为 0；Jev 原始决策在下方单独列出。' : '保留各次原始输出、错误与使用量；所选与被拒绝的候选均可追溯。'}不记录模型隐藏思维链。</p>{run.calls.length ? run.calls.map(call => <details className="prod-output" key={call.id}><summary><span>{ROLE_INFO[call.role].label} · {call.phase}</span><span className="prod-pill">{call.error ? call.verificationEngine ? '复核请求失败 / 未取得合法结论' : '调用失败' : call.selected ? '已选择' : '未选择 / 评审调用'}</span></summary><VerificationRequestContext call={call} jevCalls={jevCalls} /><div className="prod-call-meta"><p>{call.executionSource === 'mock' || run.evidenceKind === 'fixture' ? '未请求此模型 · 配置快照：' : ''}{call.model.provider} / {call.model.modelId} · {call.startedAt}</p><p>输入 {format(call.usage.inputTokens)} / 输出 {format(call.usage.outputTokens)} Token · 估算费用 {call.usage.estimatedCost == null ? 'unknown' : `${call.usage.estimatedCost.toFixed(4)} ${call.usage.currency}`}</p><p>Prompt {call.promptVersion} · <code>{call.promptHash}</code></p>{call.error ? <p className="prod-run-error">{call.error}</p> : null}</div><pre>{call.rawOutput || '（未收到输出）'}</pre><details className="prod-prompt"><summary>调用输入 Prompt 与配置 hash</summary><pre>{JSON.stringify({ candidateId: call.candidateId, verificationEngine: call.verificationEngine, sourceJevCallId: call.sourceJevCallId, configHash: call.configHash, systemPrompt: call.systemPrompt, userPrompt: call.userPrompt }, null, 2)}</pre></details></details>) : <p className="prod-empty-text">尚无请求或模拟环节记录。</p>}{jevCalls.length ? <JevDecisionEvidence calls={jevCalls} snapshot={run.jevSnapshot} /> : null}</> : null}
+{detail === 'calls' ? <><p className="prod-muted">{run.evidenceKind === 'fixture' || isHybrid ? '以下研发角色记录均为固定工程夹具的模拟环节记录，模型字段仅是配置快照；实际研发模型请求数为 0；Jev 原始决策在下方单独列出。' : '保留各次原始输出、错误与使用量；所选与被拒绝的候选均可追溯。'}不记录模型隐藏思维链。</p>{run.calls.length ? run.calls.map(call => <details className="prod-output" key={call.id}><summary><span>{ROLE_INFO[call.role].label} · {call.phase}</span><span className="prod-pill">{call.error ? call.verificationEngine ? '复核请求失败 / 未取得合法结论' : '调用失败' : call.selected ? '已选择' : '未选择 / 评审调用'}</span></summary><VerificationRequestContext call={call} jevCalls={jevCalls} /><CallRequestObservation call={call} /><div className="prod-call-meta"><p>{call.executionSource === 'mock' || run.evidenceKind === 'fixture' ? '未请求此模型 · 配置快照：' : ''}{call.model.provider} / {call.model.modelId} · {call.startedAt}</p><p>输入 {format(call.usage.inputTokens)} / 输出 {format(call.usage.outputTokens)} Token · 估算费用 {call.usage.estimatedCost == null ? 'unknown' : `${call.usage.estimatedCost.toFixed(4)} ${call.usage.currency}`}</p><p>Prompt {call.promptVersion} · <code>{call.promptHash}</code></p>{call.error ? <p className="prod-run-error">{call.error}</p> : null}</div><pre>{call.rawOutput || '（未收到输出）'}</pre><details className="prod-prompt"><summary>调用输入 Prompt 与配置 hash</summary><pre>{JSON.stringify({ candidateId: call.candidateId, verificationEngine: call.verificationEngine, sourceJevCallId: call.sourceJevCallId, configHash: call.configHash, systemPrompt: call.systemPrompt, userPrompt: call.userPrompt }, null, 2)}</pre></details></details>) : <p className="prod-empty-text">尚无请求或模拟环节记录。</p>}{jevCalls.length ? <JevDecisionEvidence calls={jevCalls} snapshot={run.jevSnapshot} dispatchOnly={run.evidenceKind === 'injected-test'} /> : null}</> : null}
     </div>
   </section>;
 }

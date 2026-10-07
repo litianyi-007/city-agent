@@ -2,11 +2,11 @@ import path from 'node:path';
 import type { ProductionRun } from '../shared/production-schema.js';
 import type { JevEvaluation } from '../shared/jev-schema.js';
 import type { JevBenchmarkRun } from '../server/production/jev-benchmark.js';
-import { isUnresolvedJevIntent } from '../server/production/index.js';
+import { isUnresolvedJevIntent, projectProductionLedger } from '../shared/production-ledger.js';
 import { packagePath } from './production-public-safety.js';
 
 export const SUBMISSION_BASELINE = 'b66122c21604fdb2ecdcbafb89c3d5ad8cde1466';
-export const MATERIALS_VERSION = 'production-materials-v3';
+export const MATERIALS_VERSION = 'production-materials-v4';
 const SOURCE_REPOSITORY = 'https://github.com/litianyi-007/city-agent';
 export const PACKAGE_DOCS = ['README.md', 'RUNBOOK.md', 'DESIGN.md', 'EVALUATION.md', 'REQUIREMENTS.md', 'EXPERIMENTS.md', 'VALIDATION.md', 'ISOLATION.md', 'SUBMISSION.md', 'NEXT-STEPS.md', 'REVIEW.md'] as const;
 /** New reviewer documents are optional for historical packages. */
@@ -29,7 +29,7 @@ export function realGenerationMaterialRecords(runs: ProductionRun[]) {
 export function realGenerationMaterialRows(runs: ProductionRun[]): unknown[][] {
   return realGenerationMaterialRecords(runs).map(run => [run.requirementId, run.runId, `${run.platformCommit ?? 'unknown'} / ${run.promptVersion.join(',')}`, run.brief, run.lastPhase ?? 'unknown', `${run.status}; Gate:${run.gateState}`, run.durationMs === null ? 'unknown' : `${run.durationMs} ms`, `${run.harnessInvocations} / ${run.providerRequests ?? 'unknown'} / ${run.jevRequests ?? 'unknown'}`, `${run.usage.inputTokens ?? 'unknown'} / ${run.usage.outputTokens ?? 'unknown'}`, `${formatMaterialCost(run.usage.estimatedCost)} ${run.usage.currency}`, run.error ? run.error.length > 240 ? `${run.error.slice(0, 240)}... (full original error in run.json)` : run.error : 'none']);
 }
-type Benchmark = Pick<JevBenchmarkRun, 'id' | 'status' | 'policyVersion' | 'cases'> & { platformCommit?: string };
+type Benchmark = Pick<JevBenchmarkRun, 'id' | 'status' | 'policyVersion' | 'cases'> & Partial<Pick<JevBenchmarkRun, 'evidenceSource'>> & { platformCommit?: string };
 export interface MaterialRequest {
   origin: 'jev-benchmark' | 'production-jev';
   runId: string;
@@ -61,9 +61,16 @@ export function materialAccounting(fixtures: ProductionRun[], benchmarks: Benchm
   uniqueIds(fixtures, 'fixtures'); uniqueIds(benchmarks, 'benchmarks'); uniqueIds(supplemental, 'supplemental');
   if (fixtures.some(run => run.evidenceKind !== 'fixture' || run.input.mode !== 'demo' || run.input.requirement.kind !== 'illustrative' || run.calls.some(call => call.executionSource !== 'mock' || (call.providerRequests?.requests ?? 0) !== 0) || (run.jevCalls?.length ?? 0) !== 0 || run.usage.inputTokens !== 0 || run.usage.outputTokens !== 0 || run.usage.estimatedCost !== 0 || !run.usage.complete)) throw new Error('Fixture zero-call scope is inconsistent with its original evidence');
   if (supplemental.some(run => fixtures.some(fixture => fixture.id === run.id))) throw new Error('A run appears in both fixture and supplemental scope');
+  const injected = supplemental.filter(run => run.evidenceKind === 'injected-test');
+  const providerSupplemental = supplemental.filter(run => run.evidenceKind !== 'injected-test');
+  const injectedBenchmarks = benchmarks.filter(batch => batch.evidenceSource === 'injected-test');
+  // Keep legacy benchmark classification; absent provenance is not rewritten.
+  const providerBenchmarks = benchmarks.filter(batch => batch.evidenceSource !== 'injected-test');
   const records: MaterialRequest[] = [];
-  for (const batch of benchmarks) { uniqueIds(batch.cases, 'benchmark cases'); for (const item of batch.cases) if (item.evaluationInvoked || item.evaluation) records.push(request('jev-benchmark', batch.id, item.id, item.evaluation?.status ?? item.status, item.evaluation)); }
-  for (const run of supplemental) { uniqueIds(run.jevCalls ?? [], 'production Jev calls'); for (const call of run.jevCalls ?? []) records.push(request('production-jev', run.id, call.id, call.evaluation.status, call.evaluation)); }
+  for (const batch of benchmarks) uniqueIds(batch.cases, 'benchmark cases');
+  for (const batch of providerBenchmarks) for (const item of batch.cases) if (item.evaluationInvoked || item.evaluation) records.push(request('jev-benchmark', batch.id, item.id, item.evaluation?.status ?? item.status, item.evaluation));
+  for (const run of supplemental) uniqueIds(run.jevCalls ?? [], 'production Jev calls');
+  for (const run of providerSupplemental) for (const call of run.jevCalls ?? []) records.push(request('production-jev', run.id, call.id, call.evaluation.status, call.evaluation));
   const generation = supplemental.filter(run => run.evidenceKind === 'real-model');
   const generationRecords = realGenerationMaterialRecords(generation);
   const terminal = generation.filter(run => !['queued', 'running'].includes(run.status));
@@ -74,7 +81,23 @@ export function materialAccounting(fixtures: ProductionRun[], benchmarks: Benchm
     measuredScope: {
       fixtureGeneration: { scope: 'Only the copied Mock generation runs; not the entire package', runIds: fixtures.map(run => run.id), started: fixtures.length, gatePassed: fixtures.filter(run => run.status === 'completed' && run.gate?.passed).length, generatorProviderRequests: 0, generatorInputTokens: 0, generatorOutputTokens: 0, estimatedGeneratorCost: 0 },
       realGeneration: { scope: 'Different-configuration tuning ledger of actual internal generation attempts; not a fixed-configuration stability experiment. Per-run usage includes its Jev requests; do not add it to all-Jev totals.', runIds: generation.map(run => run.id), started: generation.length, recordedGatePassed: generation.filter(run => run.status === 'completed' && run.gate?.passed).length, recordedGatePassRate: generation.length ? generation.filter(run => run.status === 'completed' && run.gate?.passed).length / generation.length : null, terminalDenominator: terminal.length, fullRequirementDelivered: fullDelivered.length, fullRequirementDeliveryRate: terminal.length ? fullDelivered.length / terminal.length : null, boundedCameraScenePassed: terminal.filter(run => run.cameraVerification?.boundedScenePassed === true).length, autonomyCertified: false, records: generationRecords },
-      jevDecisions: { scope: 'All recorded Jev intents/responses, including protocol errors, abstention, mixed/live failures and cancellations; skipped cases made no request', benchmarkIds: benchmarks.map(batch => batch.id), supplementalRunIds: supplemental.filter(run => (run.jevCalls?.length ?? 0) > 0).map(run => run.id), providerRequests: requests, knownProviderRequests: records.reduce((sum, item) => sum + (item.requests ?? 0), 0), unknownRequestIntents: records.filter(item => item.requests === null).length, inputTokens, outputTokens, estimatedCost, currency: 'USD', complete: requests !== null && inputTokens !== null && outputTokens !== null && estimatedCost !== null && records.every(item => item.complete), records },
+      jevDecisions: { scope: 'Recorded non-injected Jev intents/responses, including protocol errors, abstention, mixed/live failures and cancellations; skipped cases made no request. Explicitly injected production/benchmark evidence is retained separately, never added to these provider totals. Legacy benchmark classification is preserved, not recertified.', benchmarkIds: providerBenchmarks.map(batch => batch.id), supplementalRunIds: providerSupplemental.filter(run => (run.jevCalls?.length ?? 0) > 0).map(run => run.id), providerRequests: requests, knownProviderRequests: records.reduce((sum, item) => sum + (item.requests ?? 0), 0), unknownRequestIntents: records.filter(item => item.requests === null).length, inputTokens, outputTokens, estimatedCost, currency: 'USD', complete: requests !== null && inputTokens !== null && outputTokens !== null && estimatedCost !== null && records.every(item => item.complete), records },
+      injectedEngineering: {
+        scope: 'Injected engineering records, not real generation or verified provider spending. Jev dispatch observations do not prove HTTP. Any explicit Harness HTTP observations remain in the per-run ledger; unknown is not zero.',
+        runIds: injected.map(run => run.id), started: injected.length, countedAsRealGeneration: false, countedInJevDecisions: false,
+        records: injected.map(run => ({ runId: run.id, status: run.status, evidenceKind: run.evidenceKind, ledger: projectProductionLedger(run), usageScope: 'Injected usage observations only; not verified real spending and not included in real Jev totals.', originalRun: structuredClone(run) })),
+        benchmarkIds: injectedBenchmarks.map(batch => batch.id), benchmarkStarted: injectedBenchmarks.length,
+        benchmarkRecords: injectedBenchmarks.map(batch => ({
+          benchmarkId: batch.id, status: batch.status, evidenceSource: batch.evidenceSource, originalBenchmark: structuredClone(batch),
+          cases: batch.cases.filter(item => item.evaluationInvoked || item.evaluation).map(item => ({
+            itemId: item.id, status: item.status, evaluationInvoked: item.evaluationInvoked, unresolvedEvaluationIntent: item.evaluationInvoked && !item.evaluation,
+            // Projection metadata is not a synthetic model call or a rewrite
+            // of the benchmark. A missing response remains an unknown ledger.
+            ledger: item.evaluation ? projectProductionLedger({ evidenceKind: 'injected-test', calls: [], jevCalls: [{ id: item.id, phase: 'benchmark', startedAt: item.startedAt ?? 'unknown', configHash: 'projection-only', evaluation: item.evaluation }], usage: item.evaluation.usage }) : null,
+            usageScope: 'Injected usage observations only; not verified real spending and not included in real Jev totals.',
+          })),
+        })),
+      },
       excludes: ['Outside platform developer/model cost', 'Device and recording cost', 'Provider invoice verification', 'Measured same-scope human baseline'],
     },
   };

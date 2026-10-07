@@ -54,6 +54,10 @@ test('CAMERA-05 archived failed attempt displays unknown usage, observed request
   await expect(detail.locator('.prod-run-summary')).toContainText('输入 / 输出 Token unknown / unknown');
   await expect(detail.locator('.prod-run-summary')).toContainText('估算费用 unknown');
   await expect(detail.locator('.prod-loop')).toContainText('全局返修 1 / 2');
+  const ledger = detail.getByRole('region', { name: '请求与用量账本', exact: true });
+  for (const [label, value] of [['Harness 调用意图', '8 条'], ['Harness 实际 HTTP POST', '7'], ['Jev 实际 HTTP POST', '3'], ['总实际 HTTP POST', '10'], ['已报告输入 Token 小计', '61,317'], ['已报告输出 Token 小计', '4,842'], ['已报告估算费用小计', '0.01776294 USD']]) await expect(ledger.locator('dl > div').filter({ has: page.locator('dt').filter({ hasText: label }) }).locator('dd')).toContainText(value);
+  await expect(ledger).toContainText('已报告小计不替代 unknown 总额');
+  await expect(ledger).toContainText('用量明细含未知记录1 / 11 条');
   await expect(detail.locator('.prod-run-error').first()).toContainText('malformed prompt variable reference');
   await expect(detail.locator('.prod-run-error').first()).toContainText('{{particleCount}}');
 
@@ -107,7 +111,8 @@ test('CAMERA-05 archived failed attempt displays unknown usage, observed request
     element.prepend(note);
   });
   const screenshotDirectory = fileURLToPath(new URL('../../output/production-camera05/', import.meta.url));
-  const screenshotPath = `${screenshotDirectory}CAMERA05-status.png`;
+  // Preserve the earlier status screenshot; this is a new ledger UI replay.
+  const screenshotPath = `${screenshotDirectory}CAMERA05-status-ledger.png`;
   mkdirSync(screenshotDirectory, { recursive: true });
   await detail.screenshot({ path: screenshotPath, animations: 'disabled' });
   await testInfo.attach('CAMERA05 archived failed UI replay — not new execution or success', { path: screenshotPath, contentType: 'image/png' });

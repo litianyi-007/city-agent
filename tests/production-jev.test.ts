@@ -63,7 +63,11 @@ test('mock-jev accepted six quality decisions executes the real browser Gate but
   assert.equal(run.status, 'completed', run.error); assert.equal(run.gate?.passed, true); assert.equal(run.evidenceKind, 'injected-test'); assert.equal(run.jevCalls?.length, 6); assert.equal(run.calls.length, 6); assert.equal(run.calls.every(call => call.executionSource === 'mock'), true); assert.equal(run.calls.some(call => call.role === 'verifier'), false); assert.equal(run.verifications.every(review => review.engine === 'jev' && review.decision === 'accept'), true);
   assert.equal(run.usage.inputTokens, 600); assert.equal(run.usage.outputTokens, 0); assert.ok(Math.abs(run.usage.estimatedCost! - 0.0000252) < 1e-12); assert.equal(run.usage.complete, true);
   const evidence = await (await request(`/runs/${run.id}/artifacts/evidence.json`)).text(); assert.equal(evidence.includes(FIXTURE_KEY), false); assert.equal(JSON.stringify(service.store.runs()).includes(FIXTURE_KEY), false); assert.match(evidence, /REDACTED/);
-  const report = productionReport(service.store.runs()); assert.equal(report.metrics.realModelStarted, 0); assert.equal(report.metrics.realModelPassed, 0); assert.equal(report.metrics.goodProductRate, null); assert.equal(report.executionRecords[0].actualProviderRequests, 0); assert.equal(report.executionRecords[0].harnessInvocations, 0);
+  const report = productionReport(service.store.runs()); assert.equal(report.metrics.realModelStarted, 0); assert.equal(report.metrics.realModelPassed, 0); assert.equal(report.metrics.goodProductRate, null);
+  const counts = report.executionRecords[0];
+  assert.equal(counts.actualProviderRequests, null, 'Injected Jev evaluations do not establish physical HTTP, even when the fixture dispatch count is zero');
+  assert.equal(counts.jevProviderRequests, null); assert.equal(counts.knownProviderRequests, 0); assert.equal(counts.knownHarnessProviderRequests, 0); assert.equal(counts.harnessInvocations, 0);
+  assert.equal(counts.observedJevDispatches, 0); assert.equal(counts.unverifiedJevDispatches, 0); assert.equal(counts.unknownJevRequestIntents, 6);
 });
 
 test('mock-jev requires enabled credentials, explicit authorization and USD budget without inheriting role keys', async t => {
@@ -103,8 +107,14 @@ test('Jev private run configuration snapshot survives external rotation and expo
 test('HTTP metrics distinguish logical Harness startup from observed provider POST requests', async t => {
   const { request, input, configure, wait, service } = await setup(t, { jevCall: accept }); configure(); const run = await wait((await (await request('/runs', input(), 'POST')).json()).id);
   run.calls[0].executionSource = 'harness'; run.calls[0].providerRequests = { requests: 0, deniedRequests: 1, status: null, transportComplete: false, inputReported: false, outputReported: false, inputTokens: null, outputTokens: null, complete: false };
-  let report = productionReport([run]); assert.equal(report.executionRecords[0].harnessInvocations, 1); assert.equal(report.executionRecords[0].actualProviderRequests, 0);
-  delete run.calls[0].providerRequests; report = productionReport([run]); assert.equal(report.executionRecords[0].actualProviderRequests, null);
+  let report = productionReport([run]); assert.equal(report.executionRecords[0].harnessInvocations, 1); assert.equal(report.executionRecords[0].actualProviderRequests, null);
+  assert.equal(report.executionRecords[0].knownHarnessProviderRequests, 0); assert.equal(report.executionRecords[0].knownProviderRequests, 0); assert.equal(report.executionRecords[0].observedJevDispatches, 0); assert.equal(report.executionRecords[0].unknownHarnessRequestIntents, 0); assert.equal(report.executionRecords[0].unknownJevRequestIntents, 6);
+  // An explicitly observed Harness subtotal remains known; it cannot establish
+  // physical HTTP for the unrelated injected Jev evaluations. This counter is
+  // a synthetic accounting fixture, not 27 requests made by this free test.
+  run.calls[0].providerRequests.requests = 27; report = productionReport([run]);
+  assert.equal(report.executionRecords[0].knownHarnessProviderRequests, 27); assert.equal(report.executionRecords[0].knownProviderRequests, 27); assert.equal(report.executionRecords[0].actualProviderRequests, null); assert.equal(report.executionRecords[0].observedJevDispatches, 0);
+  delete run.calls[0].providerRequests; report = productionReport([run]); assert.equal(report.executionRecords[0].actualProviderRequests, null); assert.equal(report.executionRecords[0].knownHarnessProviderRequests, 0); assert.equal(report.executionRecords[0].unknownHarnessRequestIntents, 1);
   assert.equal(productionReport(service.store.runs()).metrics.realModelStarted, 0);
 });
 

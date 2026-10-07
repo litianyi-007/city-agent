@@ -152,7 +152,7 @@ test('reviewer instructions pin the complete report commit and document correct 
   const instructions = reviewerInstallInstructions(originalCommit);
   for (const clause of ['Node.js >=22.19', '--branch feature/autonomous-production --single-branch', `git checkout ${originalCommit}`, 'npm ci', 'npx playwright install chromium', 'npm run build', 'npm start', 'http://127.0.0.1:4420/#production', 'npx tsx scripts/prepare-camera-assets.ts', '--verify', 'public GitHub Pages neither receives keys nor runs this backend']) assert.ok(instructions.includes(clause), clause);
   assert.throws(() => reviewerInstallInstructions('main'), /complete report commit/); assert.throws(() => reviewerInstallInstructions(originalCommit.slice(0, 7)), /complete report commit/);
-  assert.equal(MATERIALS_VERSION, 'production-materials-v3'); assert.ok(OPTIONAL_PACKAGE_DOCS.includes('REVIEWER-GUIDE.md')); assert.ok(OPTIONAL_PACKAGE_DOCS.includes('SUBMISSION-REPORT.md'));
+  assert.equal(MATERIALS_VERSION, 'production-materials-v4'); assert.ok(OPTIONAL_PACKAGE_DOCS.includes('REVIEWER-GUIDE.md')); assert.ok(OPTIONAL_PACKAGE_DOCS.includes('SUBMISSION-REPORT.md'));
 });
 
 test('four archived real camera failures are represented without changing input/raw bytes or claiming stable success', async () => {

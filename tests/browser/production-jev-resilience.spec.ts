@@ -100,7 +100,7 @@ test('v3 arithmetic error stays untrusted with an exact-source independent revie
   await page.getByRole('button', { name: '查看来源 Jev 调用 jev-ui-protocol' }).click();
   await expect(evidence).toBeFocused(); expect(new URL(page.url()).hash).toBe('#production');
   await expect(evidence).toContainText('选中 无');
-  await expect(evidence).toContainText('实际请求 1');
+  await expect(evidence).toContainText('派发记录（未验证 HTTP） 1');
   await evidence.locator('summary').click();
   const rawText = await evidence.locator('pre').textContent();
   const raw = JSON.parse(rawText!);
