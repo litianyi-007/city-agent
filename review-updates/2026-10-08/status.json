@@ -1,0 +1,93 @@
+{
+  "schemaVersion": "society-review-update-1.0",
+  "generatedAt": "2026-10-07T20:52:24.000Z",
+  "branch": "feature/virtual-society-next",
+  "sourceTag": "society-responses-review-2026-10-08-rc3",
+  "demoUrl": "https://litianyi-007.github.io/city-agent/#research",
+  "engineering": {
+    "proofId": "system-udYnvf",
+    "unit": {
+      "passed": 589,
+      "total": 589
+    },
+    "browser": {
+      "passed": 20,
+      "total": 20
+    },
+    "responses": {
+      "passed": 149,
+      "total": 149
+    },
+    "sourceInventorySha256": "937a18f3da4c14fcac7513e4187dee1154951318c62e52bcdb8b00f17aeab38a",
+    "historicalFiles": 179,
+    "providerRequests": 0,
+    "apiCostCny": 0,
+    "proofMeaning": "working-tree-byte-match-not-commit-attestation"
+  },
+  "responsesCandidate": {
+    "protocolVersion": "responses-text-stream-1.1",
+    "productionApiActivated": false,
+    "productionUiActivated": false
+  },
+  "liveRuns": [
+    {
+      "experimentId": "f3ae4289-85a8-4b34-b8ea-8d0e5a264469",
+      "status": "stopped",
+      "providerAttempts": 1,
+      "providerRequests": 1,
+      "passed": 0,
+      "failed": 1,
+      "notStarted": 1,
+      "knownUsageRequestCount": 0,
+      "inputTokens": null,
+      "outputTokens": null,
+      "usageStatus": "incomplete",
+      "conservativeKnownUsageCostCny": null,
+      "committedOrReservedCny": 0.06465,
+      "actualInvoiceCostCny": null,
+      "reportSha256": "3e298567c2429bd5002475192e8ac852ccf041733eb1146b46f3397dc43903ed",
+      "failureCode": "RESPONSES_SDK_NON_COMPLETION",
+      "ledgerFinalized": true
+    },
+    {
+      "experimentId": "143651dd-3e97-42d1-bf38-3ef3dcc603d8",
+      "status": "stopped",
+      "providerAttempts": 2,
+      "providerRequests": 2,
+      "passed": 1,
+      "failed": 1,
+      "notStarted": 0,
+      "knownUsageRequestCount": 2,
+      "inputTokens": 9677,
+      "outputTokens": 288,
+      "usageStatus": "reported",
+      "conservativeKnownUsageCostCny": 0.021658,
+      "committedOrReservedCny": 0.021658,
+      "actualInvoiceCostCny": null,
+      "reportSha256": "388dc10b22b850b1cac5e04c9a9b116761b32a1c8c488d29f55b3994d6c80886",
+      "failureCode": "probe-quality-rejected",
+      "ledgerFinalized": true
+    },
+    {
+      "experimentId": "50992659-bdbc-4c2a-a3eb-ee288768b40e",
+      "status": "passed",
+      "providerAttempts": 2,
+      "providerRequests": 2,
+      "passed": 2,
+      "failed": 0,
+      "notStarted": 0,
+      "knownUsageRequestCount": 2,
+      "inputTokens": 9942,
+      "outputTokens": 287,
+      "usageStatus": "reported",
+      "conservativeKnownUsageCostCny": 0.02218,
+      "committedOrReservedCny": 0.02218,
+      "actualInvoiceCostCny": null,
+      "reportSha256": "2ed16ea1d9d07c4e0ec63052b05a726d0e75a2c606bc7277d55303d3263aea6d",
+      "failureCode": null,
+      "ledgerFinalized": true
+    }
+  ],
+  "marketResearchValidated": false,
+  "personaContributionValidated": false
+}
