@@ -4,6 +4,10 @@
 
 本新批次只在 `feature/autonomous-production`，见[观测契约](production/VERIFIER-OBSERVED-TRANSPORT.md)。源代码、工程专项、本地完整演练和最终回归分别留证；不把本地替身当真实模型或公开部署。本次修改前[全文留底](production/archive/2026-10-07-before-verifier-observed/VALIDATION.md)。下文109等计数为各历史配置，不是新适配器的成绩。
 
+冻结源码 `3a1bedf` 专项52/52（83.057秒）；[完整免费演练](production/experiments/VERIFIER-OBSERVED-01/RESULT.md)54决策、36实际Oracle、267.672秒，36loopback POST＋18内存Jev dispatch、0供应商调用/费用。实际模型usage/效益null；独立原始账本审计通过，原有虚拟社会浏览器回归在独立4421中保持通过。最终全量结果见[批次审查](production/BATCH-VERIFIER-OBSERVED-CHECKS.md)，不把当前免费成绩套到旧真实任务。
+
+最终 `npm test`640/640、567.545秒；独立浏览器38/38、1.3分钟；TypeScript＋Vite生产构建、diff检查通过。没有新增收费模型成绩或更新公开v5；新材料与583原件的只读审计、目录scope迁移限制分别报告。
+
 ## 2026-10-07 审查补齐增量（以下旧批次记录不覆盖）
 
 - 最新工程回归：`npm test` 109/109、`npm run test:e2e` 5/5、TypeScript 通过；Pages浏览器检查通过，无Key实测快照、历史恢复、导入核验、失败停机及390px布局均覆盖。

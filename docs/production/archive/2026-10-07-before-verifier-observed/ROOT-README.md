@@ -4,8 +4,6 @@
 
 `feature/autonomous-production` 使用独立 worktree、数据和端口；虚拟社会主线不变。入口为 [线上固定案例与材料](https://litianyi-007.github.io/city-agent/production/)、[评委安装指南](docs/production/REVIEWER-GUIDE.md)、[最新进度与待办](docs/production/POST-SUBMISSION-PLAN.md)。线上是静态门户，不能提交新需求或填写 Key；实际需求编辑器在 **http://127.0.0.1:4420/#production**。
 
-最新 [VE-04观测适配](docs/production/VERIFIER-OBSERVED-TRANSPORT.md)与[完整18池免费演练](docs/production/experiments/VERIFIER-OBSERVED-01/RESULT.md)完成：54次盲决策、36实际浏览器Oracle，267.672秒、0外部模型请求；原生Harness、Jev、一次冻结同意、分引擎预算和取消清理均留证。不将假供应商Token/判断当模型效益；真实对照需独立额度与新freeze。下面的旧里程碑/公开v5范围不回写。[本次原文留底](docs/production/archive/2026-10-07-before-verifier-observed/ROOT-README.md)。
-
 Node 22.19+，依次 `npm ci` → `npx playwright install chromium` → `npm run build` → `npm start`。打开“新建自定义需求”，填写原话、来源与验收，在页面配置六角色模型和费率，再授权单次预算。真实调用要求干净源码、对应构建并重启服务；漂移会在下一付费阶段前停止，不自动重跑。工程 Mock 无需 Key。
 
 CAMERA09 已通过真实有界场景 Gate，但不等于实体摄像头或完整需求验收；[HTML01](docs/production/experiments/HTML-01/RESULT.md)、[HTML02](docs/production/experiments/HTML-02/RESULT.md)通用网页实测失败且保留原档。最新免费切片增加精确JSON纠错定位和[受控仓库准备契约](docs/production/REPOSITORY-PREPARATION.md)，不代表已开放仓库执行。当前只执行受限 HTML 或声明场景，不运行模型生成的宿主 Node/shell。工程与真实结果分列，不宣称通用 L5。[本次更新前留底](docs/production/archive/2026-10-07-before-html02/README.md)。

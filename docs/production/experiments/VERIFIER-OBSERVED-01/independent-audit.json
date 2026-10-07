@@ -1,0 +1,49 @@
+{
+  "auditSource": "independent-outer-engineering-agent-readonly-not-model-evaluation",
+  "status": "completed",
+  "runId": "f5152c26-891f-458f-a63a-bcf414dc3200",
+  "sourceCommit": "3a1bedfa8369f2032bb3b943b393dfbeaee3a456",
+  "sourceCleanAtStart": true,
+  "sourceHashCount": 39,
+  "evidenceFiles": 583,
+  "evidenceFileScope": "581 ledger files plus original started.json and receipt.json; excludes directory entry and derived archive/audit documents",
+  "ledgerEvents": 290,
+  "blindDecisions": 54,
+  "callbackIntents": 54,
+  "loopbackHttpPosts": 36,
+  "inMemoryJevDispatches": 18,
+  "externalProviderHttpAttempts": 0,
+  "oracleResults": {
+    "total": 36,
+    "healthy": 36,
+    "pass": 16,
+    "businessFail": 20,
+    "matchedFixedExpectations": true
+  },
+  "lastDecisionSequence": 217,
+  "firstOracleSequence": 218,
+  "allBlindDecisionsBeforeOracle": true,
+  "syntheticInputTokens": 5454,
+  "syntheticOutputTokens": 378,
+  "syntheticDeclaredRateCostUsd": 0.001469556,
+  "actualProviderFeeUsd": 0,
+  "actualModelUsage": null,
+  "eachStrategy": {
+    "accepted": 18,
+    "selectedOraclePass": 8,
+    "selectedOracleFail": 10,
+    "selectedOracleUnknown": 0
+  },
+  "durationMs": 267672,
+  "summaryRecomputedAndReceiptMatched": true,
+  "dummyCredentialsAbsent": true,
+  "sha256": {
+    "started": "314421d4203ab953ae319ffec23efd6aa6a9f1c79ab2dc59855566f9ae352eb8",
+    "manifest": "7ac37976eed6db71fe7a234a4c5e8a371c655b6acab6d6fb31171d7c7a51c0d9",
+    "receipt": "a5ae0395e3d6563dea6dd7720f0809e0a9da629dc7e1bfa1b672311df22e7c31",
+    "terminalEvent": "b120d4a571073b766c738d029716d1a0cee0fc0b376747874683861b0bd68f6b",
+    "terminalCommitMarker": "b00ad1352d81c943b5b0b44fd58cacfbc41252fc530aa02fe84f02fc647b0409",
+    "compressedOriginalLedger": "a1d171a2e9106327a0a4d758b5e32b3f1cdf0f159c514c538efa37ad8baed987"
+  },
+  "effectBoundary": "Fixed first-choice fixtures; no actual model effect, fee efficiency, new autonomous delivery or physical camera evidence. Machine and outer-development costs unmeasured."
+}

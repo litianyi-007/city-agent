@@ -1,8 +1,10 @@
 # 自主软件生产任务清单
 
-最新增量：VE-04 [原生观测适配与预算/清理契约](VERIFIER-OBSERVED-TRANSPORT.md)已实施，本批免费工程回归和完整18池演练独立留证。下一纵向切片是本评估的控制面收费启动/用户同意持久化、boot＋公开配置＋凭据轮换失效、完整新配置冻结；之后取得明确新额度才做 VE-05/06真实对照。现有factory不直接暴露到API或页面，禁止添加免费CLI的 `--live` 开关。1 USD只是估算停止额度，Jev4096是响应后观测门限，不是供应商账单/输出硬上界。[本次原文留底](archive/2026-10-07-before-verifier-observed/NEXT-STEPS.md)。
+最新增量：VE-04 [原生观测适配与预算/清理契约](VERIFIER-OBSERVED-TRANSPORT.md)已实施，[完整18池演练](experiments/VERIFIER-OBSERVED-01/RESULT.md)54决策/36实际Oracle，267.672秒，原件与独立审计留证。下一纵向切片是本评估的控制面收费启动/用户同意持久化、boot＋公开配置＋凭据轮换失效、完整新配置冻结；之后取得明确新额度才做 VE-05/06真实对照。现有factory不直接暴露到API或页面，禁止添加免费CLI的 `--live` 开关。1 USD只是估算停止额度，Jev4096是响应后观测门限，不是供应商账单/输出硬上界。[本次原文留底](archive/2026-10-07-before-verifier-observed/NEXT-STEPS.md)。
 
 以下“下一免费适配器”等段落保留前批时间点，新优先级以本文首段为准。
+
+补充：评委可读取归档原件/校验压缩包SHA；study marker绑定原目录scope，下一切片增加独立迁移只读核验/导入工具，不重写marker、不恢复收费执行。
 
 最新 VE-04免费准备已实现：[18池完整SDK wire与待批额度](VERIFIER-WIRE-PREFLIGHT.md)。下一免费切片完成真实study adapter的HTTP/usage/秘密隔离与取消反例，明确Jev输出观测停止阈值和Token预留语义；然后集中确认1 USD/30分钟、4096输出、当前页面Verifier/Jev配置、未随机候选顺序，再冻结收费实验。当前绝不由提案直接外呼，不自动沿用旧授权。[审查](BATCH-VERIFIER-PREFLIGHT-CHECKS.md)、[留底](archive/2026-10-07-before-verifier-preflight/NEXT-STEPS.md)。
 
