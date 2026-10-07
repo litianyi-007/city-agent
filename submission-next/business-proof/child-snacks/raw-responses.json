@@ -1,0 +1,1196 @@
+[
+  {
+    "residentId": "resident-001",
+    "status": "valid",
+    "structureValid": true,
+    "answers": [
+      {
+        "questionId": "eligibility",
+        "value": "eligible"
+      },
+      {
+        "questionId": "purchase-role",
+        "value": [
+          "unknown"
+        ]
+      },
+      {
+        "questionId": "child-evidence",
+        "value": "not-collected"
+      },
+      {
+        "questionId": "past-frequency",
+        "value": "unknown"
+      },
+      {
+        "questionId": "past-categories",
+        "value": [
+          "unknown"
+        ]
+      },
+      {
+        "questionId": "permission-factors",
+        "value": [
+          "unknown"
+        ]
+      },
+      {
+        "questionId": "child-own-taste",
+        "value": null
+      },
+      {
+        "questionId": "purchase-intent",
+        "value": "unknown"
+      },
+      {
+        "questionId": "monthly-budget",
+        "value": null
+      },
+      {
+        "questionId": "package-size",
+        "value": "unknown"
+      },
+      {
+        "questionId": "price-per20g",
+        "value": "unknown"
+      },
+      {
+        "questionId": "planned-channels",
+        "value": [
+          "unknown"
+        ]
+      },
+      {
+        "questionId": "travel-minutes",
+        "value": null
+      },
+      {
+        "questionId": "reachable-streets",
+        "value": [
+          "unknown"
+        ]
+      },
+      {
+        "questionId": "traceability-importance",
+        "value": null
+      },
+      {
+        "questionId": "purchase-barriers",
+        "value": [
+          "unknown"
+        ]
+      },
+      {
+        "questionId": "needed-evidence",
+        "value": null
+      }
+    ],
+    "coherence": {
+      "status": "not-configured",
+      "checked": 0,
+      "issues": [],
+      "scope": "仅执行问卷JSON预登记的硬约束；不自动理解职业、家庭或开放题语义，不以消费刻板印象判错。"
+    },
+    "raw": "{\"residentId\":\"resident-001\",\"answers\":[{\"questionId\":\"eligibility\",\"value\":\"eligible\"},{\"questionId\":\"purchase-role\",\"value\":[\"unknown\"]},{\"questionId\":\"child-evidence\",\"value\":\"not-collected\"},{\"questionId\":\"past-frequency\",\"value\":\"unknown\"},{\"questionId\":\"past-categories\",\"value\":[\"unknown\"]},{\"questionId\":\"permission-factors\",\"value\":[\"unknown\"]},{\"questionId\":\"child-own-taste\",\"value\":null},{\"questionId\":\"purchase-intent\",\"value\":\"unknown\"},{\"questionId\":\"monthly-budget\",\"value\":null},{\"questionId\":\"package-size\",\"value\":\"unknown\"},{\"questionId\":\"price-per20g\",\"value\":\"unknown\"},{\"questionId\":\"planned-channels\",\"value\":[\"unknown\"]},{\"questionId\":\"travel-minutes\",\"value\":null},{\"questionId\":\"reachable-streets\",\"value\":[\"unknown\"]},{\"questionId\":\"traceability-importance\",\"value\":null},{\"questionId\":\"purchase-barriers\",\"value\":[\"unknown\"]},{\"questionId\":\"needed-evidence\",\"value\":null}]}",
+    "durationMs": 10.441542000000027,
+    "inputTokens": 0,
+    "outputTokens": 0
+  },
+  {
+    "residentId": "resident-002",
+    "status": "valid",
+    "structureValid": true,
+    "answers": [
+      {
+        "questionId": "eligibility",
+        "value": "eligible"
+      },
+      {
+        "questionId": "purchase-role",
+        "value": [
+          "purchaser",
+          "shared"
+        ]
+      },
+      {
+        "questionId": "child-evidence",
+        "value": "not-collected"
+      },
+      {
+        "questionId": "past-frequency",
+        "value": "four-eight"
+      },
+      {
+        "questionId": "past-categories",
+        "value": [
+          "grain",
+          "fruit"
+        ]
+      },
+      {
+        "questionId": "permission-factors",
+        "value": [
+          "ingredients",
+          "school-rules"
+        ]
+      },
+      {
+        "questionId": "child-own-taste",
+        "value": null
+      },
+      {
+        "questionId": "purchase-intent",
+        "value": "yes"
+      },
+      {
+        "questionId": "monthly-budget",
+        "value": 80
+      },
+      {
+        "questionId": "package-size",
+        "value": "g20"
+      },
+      {
+        "questionId": "price-per20g",
+        "value": "three-six"
+      },
+      {
+        "questionId": "planned-channels",
+        "value": [
+          "online",
+          "pickup"
+        ]
+      },
+      {
+        "questionId": "travel-minutes",
+        "value": 15
+      },
+      {
+        "questionId": "reachable-streets",
+        "value": [
+          "changhe"
+        ]
+      },
+      {
+        "questionId": "traceability-importance",
+        "value": 4
+      },
+      {
+        "questionId": "purchase-barriers",
+        "value": [
+          "freshness"
+        ]
+      },
+      {
+        "questionId": "needed-evidence",
+        "value": "synthetic工程答卷：仍需独立真实资料与目标资格，不提供开店/主营结论。"
+      }
+    ],
+    "coherence": {
+      "status": "not-configured",
+      "checked": 0,
+      "issues": [],
+      "scope": "仅执行问卷JSON预登记的硬约束；不自动理解职业、家庭或开放题语义，不以消费刻板印象判错。"
+    },
+    "raw": "{\"residentId\":\"resident-002\",\"answers\":[{\"questionId\":\"eligibility\",\"value\":\"eligible\"},{\"questionId\":\"purchase-role\",\"value\":[\"purchaser\",\"shared\"]},{\"questionId\":\"child-evidence\",\"value\":\"not-collected\"},{\"questionId\":\"past-frequency\",\"value\":\"four-eight\"},{\"questionId\":\"past-categories\",\"value\":[\"grain\",\"fruit\"]},{\"questionId\":\"permission-factors\",\"value\":[\"ingredients\",\"school-rules\"]},{\"questionId\":\"child-own-taste\",\"value\":null},{\"questionId\":\"purchase-intent\",\"value\":\"yes\"},{\"questionId\":\"monthly-budget\",\"value\":80},{\"questionId\":\"package-size\",\"value\":\"g20\"},{\"questionId\":\"price-per20g\",\"value\":\"three-six\"},{\"questionId\":\"planned-channels\",\"value\":[\"online\",\"pickup\"]},{\"questionId\":\"travel-minutes\",\"value\":15},{\"questionId\":\"reachable-streets\",\"value\":[\"changhe\"]},{\"questionId\":\"traceability-importance\",\"value\":4},{\"questionId\":\"purchase-barriers\",\"value\":[\"freshness\"]},{\"questionId\":\"needed-evidence\",\"value\":\"synthetic工程答卷：仍需独立真实资料与目标资格，不提供开店/主营结论。\"}]}",
+    "durationMs": 10.345208000000014,
+    "inputTokens": 0,
+    "outputTokens": 0
+  },
+  {
+    "residentId": "resident-003",
+    "status": "valid",
+    "structureValid": true,
+    "answers": [
+      {
+        "questionId": "eligibility",
+        "value": "eligible"
+      },
+      {
+        "questionId": "purchase-role",
+        "value": [
+          "permission"
+        ]
+      },
+      {
+        "questionId": "child-evidence",
+        "value": "not-collected"
+      },
+      {
+        "questionId": "past-frequency",
+        "value": "four-eight"
+      },
+      {
+        "questionId": "past-categories",
+        "value": [
+          "grain",
+          "fruit"
+        ]
+      },
+      {
+        "questionId": "permission-factors",
+        "value": [
+          "ingredients",
+          "school-rules"
+        ]
+      },
+      {
+        "questionId": "child-own-taste",
+        "value": null
+      },
+      {
+        "questionId": "purchase-intent",
+        "value": "maybe"
+      },
+      {
+        "questionId": "monthly-budget",
+        "value": null
+      },
+      {
+        "questionId": "package-size",
+        "value": "g20"
+      },
+      {
+        "questionId": "price-per20g",
+        "value": "three-six"
+      },
+      {
+        "questionId": "planned-channels",
+        "value": [
+          "online",
+          "pickup"
+        ]
+      },
+      {
+        "questionId": "travel-minutes",
+        "value": 15
+      },
+      {
+        "questionId": "reachable-streets",
+        "value": [
+          "xixing"
+        ]
+      },
+      {
+        "questionId": "traceability-importance",
+        "value": 5
+      },
+      {
+        "questionId": "purchase-barriers",
+        "value": [
+          "allergen",
+          "price"
+        ]
+      },
+      {
+        "questionId": "needed-evidence",
+        "value": "synthetic工程答卷：仍需独立真实资料与目标资格，不提供开店/主营结论。"
+      }
+    ],
+    "coherence": {
+      "status": "not-configured",
+      "checked": 0,
+      "issues": [],
+      "scope": "仅执行问卷JSON预登记的硬约束；不自动理解职业、家庭或开放题语义，不以消费刻板印象判错。"
+    },
+    "raw": "{\"residentId\":\"resident-003\",\"answers\":[{\"questionId\":\"eligibility\",\"value\":\"eligible\"},{\"questionId\":\"purchase-role\",\"value\":[\"permission\"]},{\"questionId\":\"child-evidence\",\"value\":\"not-collected\"},{\"questionId\":\"past-frequency\",\"value\":\"four-eight\"},{\"questionId\":\"past-categories\",\"value\":[\"grain\",\"fruit\"]},{\"questionId\":\"permission-factors\",\"value\":[\"ingredients\",\"school-rules\"]},{\"questionId\":\"child-own-taste\",\"value\":null},{\"questionId\":\"purchase-intent\",\"value\":\"maybe\"},{\"questionId\":\"monthly-budget\",\"value\":null},{\"questionId\":\"package-size\",\"value\":\"g20\"},{\"questionId\":\"price-per20g\",\"value\":\"three-six\"},{\"questionId\":\"planned-channels\",\"value\":[\"online\",\"pickup\"]},{\"questionId\":\"travel-minutes\",\"value\":15},{\"questionId\":\"reachable-streets\",\"value\":[\"xixing\"]},{\"questionId\":\"traceability-importance\",\"value\":5},{\"questionId\":\"purchase-barriers\",\"value\":[\"allergen\",\"price\"]},{\"questionId\":\"needed-evidence\",\"value\":\"synthetic工程答卷：仍需独立真实资料与目标资格，不提供开店/主营结论。\"}]}",
+    "durationMs": 10.822709000000032,
+    "inputTokens": 0,
+    "outputTokens": 0
+  },
+  {
+    "residentId": "resident-004",
+    "status": "valid",
+    "structureValid": true,
+    "answers": [
+      {
+        "questionId": "eligibility",
+        "value": "eligible"
+      },
+      {
+        "questionId": "purchase-role",
+        "value": [
+          "purchaser",
+          "shared"
+        ]
+      },
+      {
+        "questionId": "child-evidence",
+        "value": "not-collected"
+      },
+      {
+        "questionId": "past-frequency",
+        "value": "none"
+      },
+      {
+        "questionId": "past-categories",
+        "value": [
+          "none"
+        ]
+      },
+      {
+        "questionId": "permission-factors",
+        "value": [
+          "ingredients",
+          "school-rules"
+        ]
+      },
+      {
+        "questionId": "child-own-taste",
+        "value": null
+      },
+      {
+        "questionId": "purchase-intent",
+        "value": "no"
+      },
+      {
+        "questionId": "monthly-budget",
+        "value": 0
+      },
+      {
+        "questionId": "package-size",
+        "value": "none"
+      },
+      {
+        "questionId": "price-per20g",
+        "value": "none"
+      },
+      {
+        "questionId": "planned-channels",
+        "value": [
+          "none"
+        ]
+      },
+      {
+        "questionId": "travel-minutes",
+        "value": null
+      },
+      {
+        "questionId": "reachable-streets",
+        "value": [
+          "xixing"
+        ]
+      },
+      {
+        "questionId": "traceability-importance",
+        "value": 4
+      },
+      {
+        "questionId": "purchase-barriers",
+        "value": [
+          "freshness"
+        ]
+      },
+      {
+        "questionId": "needed-evidence",
+        "value": "synthetic工程答卷：仍需独立真实资料与目标资格，不提供开店/主营结论。"
+      }
+    ],
+    "coherence": {
+      "status": "not-configured",
+      "checked": 0,
+      "issues": [],
+      "scope": "仅执行问卷JSON预登记的硬约束；不自动理解职业、家庭或开放题语义，不以消费刻板印象判错。"
+    },
+    "raw": "{\"residentId\":\"resident-004\",\"answers\":[{\"questionId\":\"eligibility\",\"value\":\"eligible\"},{\"questionId\":\"purchase-role\",\"value\":[\"purchaser\",\"shared\"]},{\"questionId\":\"child-evidence\",\"value\":\"not-collected\"},{\"questionId\":\"past-frequency\",\"value\":\"none\"},{\"questionId\":\"past-categories\",\"value\":[\"none\"]},{\"questionId\":\"permission-factors\",\"value\":[\"ingredients\",\"school-rules\"]},{\"questionId\":\"child-own-taste\",\"value\":null},{\"questionId\":\"purchase-intent\",\"value\":\"no\"},{\"questionId\":\"monthly-budget\",\"value\":0},{\"questionId\":\"package-size\",\"value\":\"none\"},{\"questionId\":\"price-per20g\",\"value\":\"none\"},{\"questionId\":\"planned-channels\",\"value\":[\"none\"]},{\"questionId\":\"travel-minutes\",\"value\":null},{\"questionId\":\"reachable-streets\",\"value\":[\"xixing\"]},{\"questionId\":\"traceability-importance\",\"value\":4},{\"questionId\":\"purchase-barriers\",\"value\":[\"freshness\"]},{\"questionId\":\"needed-evidence\",\"value\":\"synthetic工程答卷：仍需独立真实资料与目标资格，不提供开店/主营结论。\"}]}",
+    "durationMs": 12.726042000000007,
+    "inputTokens": 0,
+    "outputTokens": 0
+  },
+  {
+    "residentId": "resident-005",
+    "status": "valid",
+    "structureValid": true,
+    "answers": [
+      {
+        "questionId": "eligibility",
+        "value": "eligible"
+      },
+      {
+        "questionId": "purchase-role",
+        "value": [
+          "purchaser",
+          "shared"
+        ]
+      },
+      {
+        "questionId": "child-evidence",
+        "value": "not-collected"
+      },
+      {
+        "questionId": "past-frequency",
+        "value": "four-eight"
+      },
+      {
+        "questionId": "past-categories",
+        "value": [
+          "grain",
+          "fruit"
+        ]
+      },
+      {
+        "questionId": "permission-factors",
+        "value": [
+          "ingredients",
+          "school-rules"
+        ]
+      },
+      {
+        "questionId": "child-own-taste",
+        "value": null
+      },
+      {
+        "questionId": "purchase-intent",
+        "value": "yes"
+      },
+      {
+        "questionId": "monthly-budget",
+        "value": 80
+      },
+      {
+        "questionId": "package-size",
+        "value": "g20"
+      },
+      {
+        "questionId": "price-per20g",
+        "value": "three-six"
+      },
+      {
+        "questionId": "planned-channels",
+        "value": [
+          "online",
+          "pickup"
+        ]
+      },
+      {
+        "questionId": "travel-minutes",
+        "value": 15
+      },
+      {
+        "questionId": "reachable-streets",
+        "value": [
+          "puyan"
+        ]
+      },
+      {
+        "questionId": "traceability-importance",
+        "value": 4
+      },
+      {
+        "questionId": "purchase-barriers",
+        "value": [
+          "freshness"
+        ]
+      },
+      {
+        "questionId": "needed-evidence",
+        "value": "synthetic工程答卷：仍需独立真实资料与目标资格，不提供开店/主营结论。"
+      }
+    ],
+    "coherence": {
+      "status": "not-configured",
+      "checked": 0,
+      "issues": [],
+      "scope": "仅执行问卷JSON预登记的硬约束；不自动理解职业、家庭或开放题语义，不以消费刻板印象判错。"
+    },
+    "raw": "{\"residentId\":\"resident-005\",\"answers\":[{\"questionId\":\"eligibility\",\"value\":\"eligible\"},{\"questionId\":\"purchase-role\",\"value\":[\"purchaser\",\"shared\"]},{\"questionId\":\"child-evidence\",\"value\":\"not-collected\"},{\"questionId\":\"past-frequency\",\"value\":\"four-eight\"},{\"questionId\":\"past-categories\",\"value\":[\"grain\",\"fruit\"]},{\"questionId\":\"permission-factors\",\"value\":[\"ingredients\",\"school-rules\"]},{\"questionId\":\"child-own-taste\",\"value\":null},{\"questionId\":\"purchase-intent\",\"value\":\"yes\"},{\"questionId\":\"monthly-budget\",\"value\":80},{\"questionId\":\"package-size\",\"value\":\"g20\"},{\"questionId\":\"price-per20g\",\"value\":\"three-six\"},{\"questionId\":\"planned-channels\",\"value\":[\"online\",\"pickup\"]},{\"questionId\":\"travel-minutes\",\"value\":15},{\"questionId\":\"reachable-streets\",\"value\":[\"puyan\"]},{\"questionId\":\"traceability-importance\",\"value\":4},{\"questionId\":\"purchase-barriers\",\"value\":[\"freshness\"]},{\"questionId\":\"needed-evidence\",\"value\":\"synthetic工程答卷：仍需独立真实资料与目标资格，不提供开店/主营结论。\"}]}",
+    "durationMs": 12.82104099999998,
+    "inputTokens": 0,
+    "outputTokens": 0
+  },
+  {
+    "residentId": "resident-006",
+    "status": "valid",
+    "structureValid": true,
+    "answers": [
+      {
+        "questionId": "eligibility",
+        "value": "eligible"
+      },
+      {
+        "questionId": "purchase-role",
+        "value": [
+          "permission"
+        ]
+      },
+      {
+        "questionId": "child-evidence",
+        "value": "not-collected"
+      },
+      {
+        "questionId": "past-frequency",
+        "value": "four-eight"
+      },
+      {
+        "questionId": "past-categories",
+        "value": [
+          "grain",
+          "fruit"
+        ]
+      },
+      {
+        "questionId": "permission-factors",
+        "value": [
+          "ingredients",
+          "school-rules"
+        ]
+      },
+      {
+        "questionId": "child-own-taste",
+        "value": null
+      },
+      {
+        "questionId": "purchase-intent",
+        "value": "maybe"
+      },
+      {
+        "questionId": "monthly-budget",
+        "value": null
+      },
+      {
+        "questionId": "package-size",
+        "value": "g20"
+      },
+      {
+        "questionId": "price-per20g",
+        "value": "three-six"
+      },
+      {
+        "questionId": "planned-channels",
+        "value": [
+          "online",
+          "pickup"
+        ]
+      },
+      {
+        "questionId": "travel-minutes",
+        "value": 15
+      },
+      {
+        "questionId": "reachable-streets",
+        "value": [
+          "changhe"
+        ]
+      },
+      {
+        "questionId": "traceability-importance",
+        "value": 5
+      },
+      {
+        "questionId": "purchase-barriers",
+        "value": [
+          "allergen",
+          "price"
+        ]
+      },
+      {
+        "questionId": "needed-evidence",
+        "value": "synthetic工程答卷：仍需独立真实资料与目标资格，不提供开店/主营结论。"
+      }
+    ],
+    "coherence": {
+      "status": "not-configured",
+      "checked": 0,
+      "issues": [],
+      "scope": "仅执行问卷JSON预登记的硬约束；不自动理解职业、家庭或开放题语义，不以消费刻板印象判错。"
+    },
+    "raw": "{\"residentId\":\"resident-006\",\"answers\":[{\"questionId\":\"eligibility\",\"value\":\"eligible\"},{\"questionId\":\"purchase-role\",\"value\":[\"permission\"]},{\"questionId\":\"child-evidence\",\"value\":\"not-collected\"},{\"questionId\":\"past-frequency\",\"value\":\"four-eight\"},{\"questionId\":\"past-categories\",\"value\":[\"grain\",\"fruit\"]},{\"questionId\":\"permission-factors\",\"value\":[\"ingredients\",\"school-rules\"]},{\"questionId\":\"child-own-taste\",\"value\":null},{\"questionId\":\"purchase-intent\",\"value\":\"maybe\"},{\"questionId\":\"monthly-budget\",\"value\":null},{\"questionId\":\"package-size\",\"value\":\"g20\"},{\"questionId\":\"price-per20g\",\"value\":\"three-six\"},{\"questionId\":\"planned-channels\",\"value\":[\"online\",\"pickup\"]},{\"questionId\":\"travel-minutes\",\"value\":15},{\"questionId\":\"reachable-streets\",\"value\":[\"changhe\"]},{\"questionId\":\"traceability-importance\",\"value\":5},{\"questionId\":\"purchase-barriers\",\"value\":[\"allergen\",\"price\"]},{\"questionId\":\"needed-evidence\",\"value\":\"synthetic工程答卷：仍需独立真实资料与目标资格，不提供开店/主营结论。\"}]}",
+    "durationMs": 11.913749999999993,
+    "inputTokens": 0,
+    "outputTokens": 0
+  },
+  {
+    "residentId": "resident-007",
+    "status": "valid",
+    "structureValid": true,
+    "answers": [
+      {
+        "questionId": "eligibility",
+        "value": "eligible"
+      },
+      {
+        "questionId": "purchase-role",
+        "value": [
+          "purchaser",
+          "shared"
+        ]
+      },
+      {
+        "questionId": "child-evidence",
+        "value": "not-collected"
+      },
+      {
+        "questionId": "past-frequency",
+        "value": "none"
+      },
+      {
+        "questionId": "past-categories",
+        "value": [
+          "none"
+        ]
+      },
+      {
+        "questionId": "permission-factors",
+        "value": [
+          "ingredients",
+          "school-rules"
+        ]
+      },
+      {
+        "questionId": "child-own-taste",
+        "value": null
+      },
+      {
+        "questionId": "purchase-intent",
+        "value": "no"
+      },
+      {
+        "questionId": "monthly-budget",
+        "value": 0
+      },
+      {
+        "questionId": "package-size",
+        "value": "none"
+      },
+      {
+        "questionId": "price-per20g",
+        "value": "none"
+      },
+      {
+        "questionId": "planned-channels",
+        "value": [
+          "none"
+        ]
+      },
+      {
+        "questionId": "travel-minutes",
+        "value": null
+      },
+      {
+        "questionId": "reachable-streets",
+        "value": [
+          "xixing"
+        ]
+      },
+      {
+        "questionId": "traceability-importance",
+        "value": 4
+      },
+      {
+        "questionId": "purchase-barriers",
+        "value": [
+          "freshness"
+        ]
+      },
+      {
+        "questionId": "needed-evidence",
+        "value": "synthetic工程答卷：仍需独立真实资料与目标资格，不提供开店/主营结论。"
+      }
+    ],
+    "coherence": {
+      "status": "not-configured",
+      "checked": 0,
+      "issues": [],
+      "scope": "仅执行问卷JSON预登记的硬约束；不自动理解职业、家庭或开放题语义，不以消费刻板印象判错。"
+    },
+    "raw": "{\"residentId\":\"resident-007\",\"answers\":[{\"questionId\":\"eligibility\",\"value\":\"eligible\"},{\"questionId\":\"purchase-role\",\"value\":[\"purchaser\",\"shared\"]},{\"questionId\":\"child-evidence\",\"value\":\"not-collected\"},{\"questionId\":\"past-frequency\",\"value\":\"none\"},{\"questionId\":\"past-categories\",\"value\":[\"none\"]},{\"questionId\":\"permission-factors\",\"value\":[\"ingredients\",\"school-rules\"]},{\"questionId\":\"child-own-taste\",\"value\":null},{\"questionId\":\"purchase-intent\",\"value\":\"no\"},{\"questionId\":\"monthly-budget\",\"value\":0},{\"questionId\":\"package-size\",\"value\":\"none\"},{\"questionId\":\"price-per20g\",\"value\":\"none\"},{\"questionId\":\"planned-channels\",\"value\":[\"none\"]},{\"questionId\":\"travel-minutes\",\"value\":null},{\"questionId\":\"reachable-streets\",\"value\":[\"xixing\"]},{\"questionId\":\"traceability-importance\",\"value\":4},{\"questionId\":\"purchase-barriers\",\"value\":[\"freshness\"]},{\"questionId\":\"needed-evidence\",\"value\":\"synthetic工程答卷：仍需独立真实资料与目标资格，不提供开店/主营结论。\"}]}",
+    "durationMs": 12.126541000000032,
+    "inputTokens": 0,
+    "outputTokens": 0
+  },
+  {
+    "residentId": "resident-008",
+    "status": "valid",
+    "structureValid": true,
+    "answers": [
+      {
+        "questionId": "eligibility",
+        "value": "eligible"
+      },
+      {
+        "questionId": "purchase-role",
+        "value": [
+          "unknown"
+        ]
+      },
+      {
+        "questionId": "child-evidence",
+        "value": "not-collected"
+      },
+      {
+        "questionId": "past-frequency",
+        "value": "unknown"
+      },
+      {
+        "questionId": "past-categories",
+        "value": [
+          "unknown"
+        ]
+      },
+      {
+        "questionId": "permission-factors",
+        "value": [
+          "unknown"
+        ]
+      },
+      {
+        "questionId": "child-own-taste",
+        "value": null
+      },
+      {
+        "questionId": "purchase-intent",
+        "value": "unknown"
+      },
+      {
+        "questionId": "monthly-budget",
+        "value": null
+      },
+      {
+        "questionId": "package-size",
+        "value": "unknown"
+      },
+      {
+        "questionId": "price-per20g",
+        "value": "unknown"
+      },
+      {
+        "questionId": "planned-channels",
+        "value": [
+          "unknown"
+        ]
+      },
+      {
+        "questionId": "travel-minutes",
+        "value": null
+      },
+      {
+        "questionId": "reachable-streets",
+        "value": [
+          "unknown"
+        ]
+      },
+      {
+        "questionId": "traceability-importance",
+        "value": null
+      },
+      {
+        "questionId": "purchase-barriers",
+        "value": [
+          "unknown"
+        ]
+      },
+      {
+        "questionId": "needed-evidence",
+        "value": null
+      }
+    ],
+    "coherence": {
+      "status": "not-configured",
+      "checked": 0,
+      "issues": [],
+      "scope": "仅执行问卷JSON预登记的硬约束；不自动理解职业、家庭或开放题语义，不以消费刻板印象判错。"
+    },
+    "raw": "{\"residentId\":\"resident-008\",\"answers\":[{\"questionId\":\"eligibility\",\"value\":\"eligible\"},{\"questionId\":\"purchase-role\",\"value\":[\"unknown\"]},{\"questionId\":\"child-evidence\",\"value\":\"not-collected\"},{\"questionId\":\"past-frequency\",\"value\":\"unknown\"},{\"questionId\":\"past-categories\",\"value\":[\"unknown\"]},{\"questionId\":\"permission-factors\",\"value\":[\"unknown\"]},{\"questionId\":\"child-own-taste\",\"value\":null},{\"questionId\":\"purchase-intent\",\"value\":\"unknown\"},{\"questionId\":\"monthly-budget\",\"value\":null},{\"questionId\":\"package-size\",\"value\":\"unknown\"},{\"questionId\":\"price-per20g\",\"value\":\"unknown\"},{\"questionId\":\"planned-channels\",\"value\":[\"unknown\"]},{\"questionId\":\"travel-minutes\",\"value\":null},{\"questionId\":\"reachable-streets\",\"value\":[\"unknown\"]},{\"questionId\":\"traceability-importance\",\"value\":null},{\"questionId\":\"purchase-barriers\",\"value\":[\"unknown\"]},{\"questionId\":\"needed-evidence\",\"value\":null}]}",
+    "durationMs": 9.809500000000014,
+    "inputTokens": 0,
+    "outputTokens": 0
+  },
+  {
+    "residentId": "resident-009",
+    "status": "valid",
+    "structureValid": true,
+    "answers": [
+      {
+        "questionId": "eligibility",
+        "value": "eligible"
+      },
+      {
+        "questionId": "purchase-role",
+        "value": [
+          "permission"
+        ]
+      },
+      {
+        "questionId": "child-evidence",
+        "value": "not-collected"
+      },
+      {
+        "questionId": "past-frequency",
+        "value": "four-eight"
+      },
+      {
+        "questionId": "past-categories",
+        "value": [
+          "grain",
+          "fruit"
+        ]
+      },
+      {
+        "questionId": "permission-factors",
+        "value": [
+          "ingredients",
+          "school-rules"
+        ]
+      },
+      {
+        "questionId": "child-own-taste",
+        "value": null
+      },
+      {
+        "questionId": "purchase-intent",
+        "value": "maybe"
+      },
+      {
+        "questionId": "monthly-budget",
+        "value": null
+      },
+      {
+        "questionId": "package-size",
+        "value": "g20"
+      },
+      {
+        "questionId": "price-per20g",
+        "value": "three-six"
+      },
+      {
+        "questionId": "planned-channels",
+        "value": [
+          "online",
+          "pickup"
+        ]
+      },
+      {
+        "questionId": "travel-minutes",
+        "value": 15
+      },
+      {
+        "questionId": "reachable-streets",
+        "value": [
+          "changhe"
+        ]
+      },
+      {
+        "questionId": "traceability-importance",
+        "value": 5
+      },
+      {
+        "questionId": "purchase-barriers",
+        "value": [
+          "allergen",
+          "price"
+        ]
+      },
+      {
+        "questionId": "needed-evidence",
+        "value": "synthetic工程答卷：仍需独立真实资料与目标资格，不提供开店/主营结论。"
+      }
+    ],
+    "coherence": {
+      "status": "not-configured",
+      "checked": 0,
+      "issues": [],
+      "scope": "仅执行问卷JSON预登记的硬约束；不自动理解职业、家庭或开放题语义，不以消费刻板印象判错。"
+    },
+    "raw": "{\"residentId\":\"resident-009\",\"answers\":[{\"questionId\":\"eligibility\",\"value\":\"eligible\"},{\"questionId\":\"purchase-role\",\"value\":[\"permission\"]},{\"questionId\":\"child-evidence\",\"value\":\"not-collected\"},{\"questionId\":\"past-frequency\",\"value\":\"four-eight\"},{\"questionId\":\"past-categories\",\"value\":[\"grain\",\"fruit\"]},{\"questionId\":\"permission-factors\",\"value\":[\"ingredients\",\"school-rules\"]},{\"questionId\":\"child-own-taste\",\"value\":null},{\"questionId\":\"purchase-intent\",\"value\":\"maybe\"},{\"questionId\":\"monthly-budget\",\"value\":null},{\"questionId\":\"package-size\",\"value\":\"g20\"},{\"questionId\":\"price-per20g\",\"value\":\"three-six\"},{\"questionId\":\"planned-channels\",\"value\":[\"online\",\"pickup\"]},{\"questionId\":\"travel-minutes\",\"value\":15},{\"questionId\":\"reachable-streets\",\"value\":[\"changhe\"]},{\"questionId\":\"traceability-importance\",\"value\":5},{\"questionId\":\"purchase-barriers\",\"value\":[\"allergen\",\"price\"]},{\"questionId\":\"needed-evidence\",\"value\":\"synthetic工程答卷：仍需独立真实资料与目标资格，不提供开店/主营结论。\"}]}",
+    "durationMs": 10.400249999999971,
+    "inputTokens": 0,
+    "outputTokens": 0
+  },
+  {
+    "residentId": "resident-010",
+    "status": "valid",
+    "structureValid": true,
+    "answers": [
+      {
+        "questionId": "eligibility",
+        "value": "eligible"
+      },
+      {
+        "questionId": "purchase-role",
+        "value": [
+          "purchaser",
+          "shared"
+        ]
+      },
+      {
+        "questionId": "child-evidence",
+        "value": "not-collected"
+      },
+      {
+        "questionId": "past-frequency",
+        "value": "none"
+      },
+      {
+        "questionId": "past-categories",
+        "value": [
+          "none"
+        ]
+      },
+      {
+        "questionId": "permission-factors",
+        "value": [
+          "ingredients",
+          "school-rules"
+        ]
+      },
+      {
+        "questionId": "child-own-taste",
+        "value": null
+      },
+      {
+        "questionId": "purchase-intent",
+        "value": "no"
+      },
+      {
+        "questionId": "monthly-budget",
+        "value": 0
+      },
+      {
+        "questionId": "package-size",
+        "value": "none"
+      },
+      {
+        "questionId": "price-per20g",
+        "value": "none"
+      },
+      {
+        "questionId": "planned-channels",
+        "value": [
+          "none"
+        ]
+      },
+      {
+        "questionId": "travel-minutes",
+        "value": null
+      },
+      {
+        "questionId": "reachable-streets",
+        "value": [
+          "xixing"
+        ]
+      },
+      {
+        "questionId": "traceability-importance",
+        "value": 4
+      },
+      {
+        "questionId": "purchase-barriers",
+        "value": [
+          "freshness"
+        ]
+      },
+      {
+        "questionId": "needed-evidence",
+        "value": "synthetic工程答卷：仍需独立真实资料与目标资格，不提供开店/主营结论。"
+      }
+    ],
+    "coherence": {
+      "status": "not-configured",
+      "checked": 0,
+      "issues": [],
+      "scope": "仅执行问卷JSON预登记的硬约束；不自动理解职业、家庭或开放题语义，不以消费刻板印象判错。"
+    },
+    "raw": "{\"residentId\":\"resident-010\",\"answers\":[{\"questionId\":\"eligibility\",\"value\":\"eligible\"},{\"questionId\":\"purchase-role\",\"value\":[\"purchaser\",\"shared\"]},{\"questionId\":\"child-evidence\",\"value\":\"not-collected\"},{\"questionId\":\"past-frequency\",\"value\":\"none\"},{\"questionId\":\"past-categories\",\"value\":[\"none\"]},{\"questionId\":\"permission-factors\",\"value\":[\"ingredients\",\"school-rules\"]},{\"questionId\":\"child-own-taste\",\"value\":null},{\"questionId\":\"purchase-intent\",\"value\":\"no\"},{\"questionId\":\"monthly-budget\",\"value\":0},{\"questionId\":\"package-size\",\"value\":\"none\"},{\"questionId\":\"price-per20g\",\"value\":\"none\"},{\"questionId\":\"planned-channels\",\"value\":[\"none\"]},{\"questionId\":\"travel-minutes\",\"value\":null},{\"questionId\":\"reachable-streets\",\"value\":[\"xixing\"]},{\"questionId\":\"traceability-importance\",\"value\":4},{\"questionId\":\"purchase-barriers\",\"value\":[\"freshness\"]},{\"questionId\":\"needed-evidence\",\"value\":\"synthetic工程答卷：仍需独立真实资料与目标资格，不提供开店/主营结论。\"}]}",
+    "durationMs": 12.291791999999987,
+    "inputTokens": 0,
+    "outputTokens": 0
+  },
+  {
+    "residentId": "resident-011",
+    "status": "valid",
+    "structureValid": true,
+    "answers": [
+      {
+        "questionId": "eligibility",
+        "value": "eligible"
+      },
+      {
+        "questionId": "purchase-role",
+        "value": [
+          "unknown"
+        ]
+      },
+      {
+        "questionId": "child-evidence",
+        "value": "not-collected"
+      },
+      {
+        "questionId": "past-frequency",
+        "value": "unknown"
+      },
+      {
+        "questionId": "past-categories",
+        "value": [
+          "unknown"
+        ]
+      },
+      {
+        "questionId": "permission-factors",
+        "value": [
+          "unknown"
+        ]
+      },
+      {
+        "questionId": "child-own-taste",
+        "value": null
+      },
+      {
+        "questionId": "purchase-intent",
+        "value": "unknown"
+      },
+      {
+        "questionId": "monthly-budget",
+        "value": null
+      },
+      {
+        "questionId": "package-size",
+        "value": "unknown"
+      },
+      {
+        "questionId": "price-per20g",
+        "value": "unknown"
+      },
+      {
+        "questionId": "planned-channels",
+        "value": [
+          "unknown"
+        ]
+      },
+      {
+        "questionId": "travel-minutes",
+        "value": null
+      },
+      {
+        "questionId": "reachable-streets",
+        "value": [
+          "unknown"
+        ]
+      },
+      {
+        "questionId": "traceability-importance",
+        "value": null
+      },
+      {
+        "questionId": "purchase-barriers",
+        "value": [
+          "unknown"
+        ]
+      },
+      {
+        "questionId": "needed-evidence",
+        "value": null
+      }
+    ],
+    "coherence": {
+      "status": "not-configured",
+      "checked": 0,
+      "issues": [],
+      "scope": "仅执行问卷JSON预登记的硬约束；不自动理解职业、家庭或开放题语义，不以消费刻板印象判错。"
+    },
+    "raw": "{\"residentId\":\"resident-011\",\"answers\":[{\"questionId\":\"eligibility\",\"value\":\"eligible\"},{\"questionId\":\"purchase-role\",\"value\":[\"unknown\"]},{\"questionId\":\"child-evidence\",\"value\":\"not-collected\"},{\"questionId\":\"past-frequency\",\"value\":\"unknown\"},{\"questionId\":\"past-categories\",\"value\":[\"unknown\"]},{\"questionId\":\"permission-factors\",\"value\":[\"unknown\"]},{\"questionId\":\"child-own-taste\",\"value\":null},{\"questionId\":\"purchase-intent\",\"value\":\"unknown\"},{\"questionId\":\"monthly-budget\",\"value\":null},{\"questionId\":\"package-size\",\"value\":\"unknown\"},{\"questionId\":\"price-per20g\",\"value\":\"unknown\"},{\"questionId\":\"planned-channels\",\"value\":[\"unknown\"]},{\"questionId\":\"travel-minutes\",\"value\":null},{\"questionId\":\"reachable-streets\",\"value\":[\"unknown\"]},{\"questionId\":\"traceability-importance\",\"value\":null},{\"questionId\":\"purchase-barriers\",\"value\":[\"unknown\"]},{\"questionId\":\"needed-evidence\",\"value\":null}]}",
+    "durationMs": 10.684916999999984,
+    "inputTokens": 0,
+    "outputTokens": 0
+  },
+  {
+    "residentId": "resident-012",
+    "status": "valid",
+    "structureValid": true,
+    "answers": [
+      {
+        "questionId": "eligibility",
+        "value": "eligible"
+      },
+      {
+        "questionId": "purchase-role",
+        "value": [
+          "purchaser",
+          "shared"
+        ]
+      },
+      {
+        "questionId": "child-evidence",
+        "value": "not-collected"
+      },
+      {
+        "questionId": "past-frequency",
+        "value": "four-eight"
+      },
+      {
+        "questionId": "past-categories",
+        "value": [
+          "grain",
+          "fruit"
+        ]
+      },
+      {
+        "questionId": "permission-factors",
+        "value": [
+          "ingredients",
+          "school-rules"
+        ]
+      },
+      {
+        "questionId": "child-own-taste",
+        "value": null
+      },
+      {
+        "questionId": "purchase-intent",
+        "value": "yes"
+      },
+      {
+        "questionId": "monthly-budget",
+        "value": 80
+      },
+      {
+        "questionId": "package-size",
+        "value": "g20"
+      },
+      {
+        "questionId": "price-per20g",
+        "value": "three-six"
+      },
+      {
+        "questionId": "planned-channels",
+        "value": [
+          "online",
+          "pickup"
+        ]
+      },
+      {
+        "questionId": "travel-minutes",
+        "value": 15
+      },
+      {
+        "questionId": "reachable-streets",
+        "value": [
+          "changhe"
+        ]
+      },
+      {
+        "questionId": "traceability-importance",
+        "value": 4
+      },
+      {
+        "questionId": "purchase-barriers",
+        "value": [
+          "freshness"
+        ]
+      },
+      {
+        "questionId": "needed-evidence",
+        "value": "synthetic工程答卷：仍需独立真实资料与目标资格，不提供开店/主营结论。"
+      }
+    ],
+    "coherence": {
+      "status": "not-configured",
+      "checked": 0,
+      "issues": [],
+      "scope": "仅执行问卷JSON预登记的硬约束；不自动理解职业、家庭或开放题语义，不以消费刻板印象判错。"
+    },
+    "raw": "{\"residentId\":\"resident-012\",\"answers\":[{\"questionId\":\"eligibility\",\"value\":\"eligible\"},{\"questionId\":\"purchase-role\",\"value\":[\"purchaser\",\"shared\"]},{\"questionId\":\"child-evidence\",\"value\":\"not-collected\"},{\"questionId\":\"past-frequency\",\"value\":\"four-eight\"},{\"questionId\":\"past-categories\",\"value\":[\"grain\",\"fruit\"]},{\"questionId\":\"permission-factors\",\"value\":[\"ingredients\",\"school-rules\"]},{\"questionId\":\"child-own-taste\",\"value\":null},{\"questionId\":\"purchase-intent\",\"value\":\"yes\"},{\"questionId\":\"monthly-budget\",\"value\":80},{\"questionId\":\"package-size\",\"value\":\"g20\"},{\"questionId\":\"price-per20g\",\"value\":\"three-six\"},{\"questionId\":\"planned-channels\",\"value\":[\"online\",\"pickup\"]},{\"questionId\":\"travel-minutes\",\"value\":15},{\"questionId\":\"reachable-streets\",\"value\":[\"changhe\"]},{\"questionId\":\"traceability-importance\",\"value\":4},{\"questionId\":\"purchase-barriers\",\"value\":[\"freshness\"]},{\"questionId\":\"needed-evidence\",\"value\":\"synthetic工程答卷：仍需独立真实资料与目标资格，不提供开店/主营结论。\"}]}",
+    "durationMs": 12.235292000000015,
+    "inputTokens": 0,
+    "outputTokens": 0
+  }
+]

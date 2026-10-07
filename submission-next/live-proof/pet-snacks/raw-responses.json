@@ -1,0 +1,200 @@
+[
+  {
+    "residentId": "resident-001",
+    "status": "valid",
+    "structureValid": true,
+    "answers": [
+      {
+        "questionId": "pet-type",
+        "value": "cat"
+      },
+      {
+        "questionId": "purchase-role",
+        "value": [
+          "purchaser",
+          "decision",
+          "shared"
+        ]
+      },
+      {
+        "questionId": "snack-boundary",
+        "value": "understood"
+      },
+      {
+        "questionId": "past-frequency",
+        "value": "one-two"
+      },
+      {
+        "questionId": "past-snack-categories",
+        "value": [
+          "cat-creamy",
+          "freeze-dried"
+        ]
+      },
+      {
+        "questionId": "purchase-intent",
+        "value": "yes"
+      },
+      {
+        "questionId": "monthly-budget",
+        "value": 80
+      },
+      {
+        "questionId": "package-size",
+        "value": "g50"
+      },
+      {
+        "questionId": "price-per50g",
+        "value": "ten-twenty"
+      },
+      {
+        "questionId": "planned-channels",
+        "value": [
+          "online",
+          "pet-shop",
+          "pickup"
+        ]
+      },
+      {
+        "questionId": "online-handoff",
+        "value": "both"
+      },
+      {
+        "questionId": "travel-minutes",
+        "value": 15
+      },
+      {
+        "questionId": "reachable-streets",
+        "value": [
+          "puyan",
+          "changhe",
+          "xixing"
+        ]
+      },
+      {
+        "questionId": "purchase-barriers",
+        "value": [
+          "ingredients",
+          "traceability"
+        ]
+      },
+      {
+        "questionId": "price10-intent",
+        "value": "yes"
+      },
+      {
+        "questionId": "price20-intent",
+        "value": "maybe"
+      },
+      {
+        "questionId": "traceability-importance",
+        "value": 4
+      },
+      {
+        "questionId": "needed-evidence",
+        "value": "需要看到适用猫只的明确标注、成分表、生产日期与来源信息；如与伴侣或子女共同决定，也希望能有清楚的安全说明。"
+      }
+    ],
+    "coherence": {
+      "status": "not-configured",
+      "checked": 0,
+      "issues": [],
+      "scope": "仅执行问卷JSON预登记的硬约束；不自动理解职业、家庭或开放题语义，不以消费刻板印象判错。"
+    },
+    "raw": "{\"residentId\":\"resident-001\",\"answers\":[{\"questionId\":\"pet-type\",\"value\":\"cat\"},{\"questionId\":\"purchase-role\",\"value\":[\"purchaser\",\"decision\",\"shared\"]},{\"questionId\":\"snack-boundary\",\"value\":\"understood\"},{\"questionId\":\"past-frequency\",\"value\":\"one-two\"},{\"questionId\":\"past-snack-categories\",\"value\":[\"cat-creamy\",\"freeze-dried\"]},{\"questionId\":\"purchase-intent\",\"value\":\"yes\"},{\"questionId\":\"monthly-budget\",\"value\":80},{\"questionId\":\"package-size\",\"value\":\"g50\"},{\"questionId\":\"price-per50g\",\"value\":\"ten-twenty\"},{\"questionId\":\"planned-channels\",\"value\":[\"online\",\"pet-shop\",\"pickup\"]},{\"questionId\":\"online-handoff\",\"value\":\"both\"},{\"questionId\":\"travel-minutes\",\"value\":15},{\"questionId\":\"reachable-streets\",\"value\":[\"puyan\",\"changhe\",\"xixing\"]},{\"questionId\":\"purchase-barriers\",\"value\":[\"ingredients\",\"traceability\"]},{\"questionId\":\"price10-intent\",\"value\":\"yes\"},{\"questionId\":\"price20-intent\",\"value\":\"maybe\"},{\"questionId\":\"traceability-importance\",\"value\":4},{\"questionId\":\"needed-evidence\",\"value\":\"需要看到适用猫只的明确标注、成分表、生产日期与来源信息；如与伴侣或子女共同决定，也希望能有清楚的安全说明。\"}]}",
+    "durationMs": 2245.136416,
+    "inputTokens": 2828,
+    "outputTokens": 309
+  },
+  {
+    "residentId": "resident-002",
+    "status": "invalid",
+    "structureValid": false,
+    "answers": [],
+    "raw": "{\"residentId\":\"resident-002\",\"answers\":[{\"questionId\":\"pet-type\",\"value\":\"dog\"},{\"questionId\":\"purchase-role\",\"value\":[\"shared\"]},{\"questionId\":\"snack-boundary\",\"value\":\"understood\"},{\"questionId\":\"past-frequency\",\"value\":\"unknown\"},{\"questionId\":\"past-snack-categories\",\"value\":\"unknown\"},{\"questionId\":\"purchase-intent\",\"value\":\"maybe\"},{\"questionId\":\"monthly-budget\",\"value\":null},{\"questionId\":\"package-size\",\"value\":\"unknown\"},{\"questionId\":\"price-per50g\",\"value\":\"unknown\"},{\"questionId\":\"planned-channels\",\"value\":\"unknown\"},{\"questionId\":\"online-handoff\",\"value\":\"unknown\"},{\"questionId\":\"travel-minutes\",\"value\":null},{\"questionId\":\"reachable-streets\",\"value\":[\"changhe\"]},{\"questionId\":\"purchase-barriers\",\"value\":[\"suitability\",\"ingredients\"]},{\"questionId\":\"price10-intent\",\"value\":\"maybe\"},{\"questionId\":\"price20-intent\",\"value\":\"unknown\"},{\"questionId\":\"traceability-importance\",\"value\":null},{\"questionId\":\"needed-evidence\",\"value\":\"需要确认是否适合家中犬只的年龄与个体情况，以及成分和来源资料是否清楚。\"}]}",
+    "error": "答卷值违反题目契约：past-snack-categories",
+    "durationMs": 2573.5099169999994,
+    "inputTokens": 2781,
+    "outputTokens": 265
+  },
+  {
+    "residentId": "resident-003",
+    "status": "not-started",
+    "answers": [],
+    "raw": "",
+    "error": "预登记质量停止：原始答卷不能完整复核；余下保留not-started，不重试。",
+    "durationMs": 0,
+    "inputTokens": 0,
+    "outputTokens": 0
+  },
+  {
+    "residentId": "resident-004",
+    "status": "not-started",
+    "answers": [],
+    "raw": "",
+    "error": "预登记质量停止：原始答卷不能完整复核；余下保留not-started，不重试。",
+    "durationMs": 0,
+    "inputTokens": 0,
+    "outputTokens": 0
+  },
+  {
+    "residentId": "resident-005",
+    "status": "not-started",
+    "answers": [],
+    "raw": "",
+    "error": "预登记质量停止：原始答卷不能完整复核；余下保留not-started，不重试。",
+    "durationMs": 0,
+    "inputTokens": 0,
+    "outputTokens": 0
+  },
+  {
+    "residentId": "resident-006",
+    "status": "not-started",
+    "answers": [],
+    "raw": "",
+    "error": "预登记质量停止：原始答卷不能完整复核；余下保留not-started，不重试。",
+    "durationMs": 0,
+    "inputTokens": 0,
+    "outputTokens": 0
+  },
+  {
+    "residentId": "resident-007",
+    "status": "not-started",
+    "answers": [],
+    "raw": "",
+    "error": "预登记质量停止：原始答卷不能完整复核；余下保留not-started，不重试。",
+    "durationMs": 0,
+    "inputTokens": 0,
+    "outputTokens": 0
+  },
+  {
+    "residentId": "resident-008",
+    "status": "not-started",
+    "answers": [],
+    "raw": "",
+    "error": "预登记质量停止：原始答卷不能完整复核；余下保留not-started，不重试。",
+    "durationMs": 0,
+    "inputTokens": 0,
+    "outputTokens": 0
+  },
+  {
+    "residentId": "resident-009",
+    "status": "not-started",
+    "answers": [],
+    "raw": "",
+    "error": "预登记质量停止：原始答卷不能完整复核；余下保留not-started，不重试。",
+    "durationMs": 0,
+    "inputTokens": 0,
+    "outputTokens": 0
+  },
+  {
+    "residentId": "resident-010",
+    "status": "not-started",
+    "answers": [],
+    "raw": "",
+    "error": "预登记质量停止：原始答卷不能完整复核；余下保留not-started，不重试。",
+    "durationMs": 0,
+    "inputTokens": 0,
+    "outputTokens": 0
+  }
+]

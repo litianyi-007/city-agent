@@ -1,0 +1,5410 @@
+{
+  "summaries": [
+    {
+      "questionId": "pet-type",
+      "prompt": "本次情景中家中拥有哪类宠物？资格仍是合成假设，不代表滨江比例。",
+      "type": "single",
+      "denominator": 1,
+      "missing": 9,
+      "choices": [
+        {
+          "id": "cat",
+          "label": "只有猫",
+          "count": 1
+        },
+        {
+          "id": "dog",
+          "label": "只有犬",
+          "count": 0
+        },
+        {
+          "id": "both",
+          "label": "猫和犬都有",
+          "count": 0
+        },
+        {
+          "id": "unknown",
+          "label": "不知道/资格未确认",
+          "count": 0
+        }
+      ]
+    },
+    {
+      "questionId": "purchase-role",
+      "prompt": "您参与家中宠物采购的哪些环节？无参与/不知道排他。",
+      "type": "multiple",
+      "denominator": 1,
+      "missing": 9,
+      "choices": [
+        {
+          "id": "purchaser",
+          "label": "实际购买",
+          "count": 1
+        },
+        {
+          "id": "decision",
+          "label": "决定是否购买",
+          "count": 1
+        },
+        {
+          "id": "shared",
+          "label": "共同参与采购",
+          "count": 1
+        },
+        {
+          "id": "none",
+          "label": "不参与",
+          "count": 0
+        },
+        {
+          "id": "unknown",
+          "label": "不知道",
+          "count": 0
+        }
+      ]
+    },
+    {
+      "questionId": "snack-boundary",
+      "prompt": "本问卷只问辅助性奖励零食，明确不含日常主粮。您是否理解这一区别？不了解不能据此推导主粮需求。",
+      "type": "single",
+      "denominator": 1,
+      "missing": 9,
+      "choices": [
+        {
+          "id": "understood",
+          "label": "理解，只回答零食",
+          "count": 1
+        },
+        {
+          "id": "needs-info",
+          "label": "需要先了解定义",
+          "count": 0
+        },
+        {
+          "id": "unknown",
+          "label": "不知道",
+          "count": 0
+        }
+      ]
+    },
+    {
+      "questionId": "past-frequency",
+      "prompt": "过去30天购买宠物零食次数（不含主粮）？没有记录请选择不知道。",
+      "type": "single",
+      "denominator": 1,
+      "missing": 9,
+      "choices": [
+        {
+          "id": "none",
+          "label": "0次",
+          "count": 0
+        },
+        {
+          "id": "one-two",
+          "label": "1–2次",
+          "count": 1
+        },
+        {
+          "id": "three-five",
+          "label": "3–5次",
+          "count": 0
+        },
+        {
+          "id": "six-plus",
+          "label": "6次及以上",
+          "count": 0
+        },
+        {
+          "id": "unknown",
+          "label": "不知道/无记录",
+          "count": 0
+        }
+      ]
+    },
+    {
+      "questionId": "past-snack-categories",
+      "prompt": "过去30天购买哪些宠物零食？猫条/犬用条按明确适用物种区分；未购买/不知道排他，不含主粮。",
+      "type": "multiple",
+      "denominator": 1,
+      "missing": 9,
+      "choices": [
+        {
+          "id": "cat-creamy",
+          "label": "猫用猫条",
+          "count": 1
+        },
+        {
+          "id": "dog-chew",
+          "label": "犬用磨牙零食",
+          "count": 0
+        },
+        {
+          "id": "freeze-dried",
+          "label": "适用物种明确的冻干零食",
+          "count": 1
+        },
+        {
+          "id": "training",
+          "label": "适用物种明确的训练奖励",
+          "count": 0
+        },
+        {
+          "id": "none",
+          "label": "未购买",
+          "count": 0
+        },
+        {
+          "id": "unknown",
+          "label": "不知道",
+          "count": 0
+        }
+      ]
+    },
+    {
+      "questionId": "purchase-intent",
+      "prompt": "未来30天是否考虑为家中宠物购买零食（不含主粮）？",
+      "type": "single",
+      "denominator": 1,
+      "missing": 9,
+      "choices": [
+        {
+          "id": "yes",
+          "label": "考虑",
+          "count": 1
+        },
+        {
+          "id": "maybe",
+          "label": "需进一步了解",
+          "count": 0
+        },
+        {
+          "id": "no",
+          "label": "不考虑",
+          "count": 0
+        },
+        {
+          "id": "unknown",
+          "label": "不知道",
+          "count": 0
+        }
+      ]
+    },
+    {
+      "questionId": "monthly-budget",
+      "prompt": "未来30天家中宠物零食的计划总额，明确不考虑购买填0；不知道/暂未决定填null。不是主粮预算、个人收入或滨江均值。",
+      "type": "number",
+      "denominator": 1,
+      "missing": 9,
+      "mean": 80,
+      "median": 80,
+      "unit": "CNY/一个情景家庭/未来30天/仅宠物零食"
+    },
+    {
+      "questionId": "package-size",
+      "prompt": "考虑购买时偏好的单包规格？价格题固定为50克，其他规格不直接比较价格。",
+      "type": "single",
+      "denominator": 1,
+      "missing": 9,
+      "choices": [
+        {
+          "id": "g15",
+          "label": "15克",
+          "count": 0
+        },
+        {
+          "id": "g50",
+          "label": "50克",
+          "count": 1
+        },
+        {
+          "id": "g100",
+          "label": "100克",
+          "count": 0
+        },
+        {
+          "id": "none",
+          "label": "不购买",
+          "count": 0
+        },
+        {
+          "id": "unknown",
+          "label": "不知道",
+          "count": 0
+        }
+      ]
+    },
+    {
+      "questionId": "price-per50g",
+      "prompt": "只针对50克零食的考虑价位？区间左闭右开；不含主粮，未给定真实品牌或价格行情。",
+      "type": "single",
+      "denominator": 1,
+      "missing": 9,
+      "choices": [
+        {
+          "id": "under10",
+          "label": "大于0且小于10元/50克",
+          "count": 0
+        },
+        {
+          "id": "ten-twenty",
+          "label": "10至小于20元/50克",
+          "count": 1
+        },
+        {
+          "id": "twenty-forty",
+          "label": "20至小于40元/50克",
+          "count": 0
+        },
+        {
+          "id": "forty-plus",
+          "label": "40元及以上/50克",
+          "count": 0
+        },
+        {
+          "id": "none",
+          "label": "不购买",
+          "count": 0
+        },
+        {
+          "id": "unknown",
+          "label": "不知道",
+          "count": 0
+        }
+      ]
+    },
+    {
+      "questionId": "planned-channels",
+      "prompt": "未来可能通过哪些渠道购买零食？不购买/不知道排他，不代表实际订单。",
+      "type": "multiple",
+      "denominator": 1,
+      "missing": 9,
+      "choices": [
+        {
+          "id": "online",
+          "label": "线上配送",
+          "count": 1
+        },
+        {
+          "id": "pet-shop",
+          "label": "宠物店",
+          "count": 1
+        },
+        {
+          "id": "veterinary",
+          "label": "有相关商品的宠物诊疗机构",
+          "count": 0
+        },
+        {
+          "id": "community",
+          "label": "社区销售点",
+          "count": 0
+        },
+        {
+          "id": "pickup",
+          "label": "线上下单线下自提",
+          "count": 1
+        },
+        {
+          "id": "none",
+          "label": "不购买",
+          "count": 0
+        },
+        {
+          "id": "unknown",
+          "label": "不知道",
+          "count": 0
+        }
+      ]
+    },
+    {
+      "questionId": "online-handoff",
+      "prompt": "若线上下单，如何接收更适用？本轮不推断履约成本或销量。",
+      "type": "single",
+      "denominator": 1,
+      "missing": 9,
+      "choices": [
+        {
+          "id": "pickup",
+          "label": "线下自提",
+          "count": 0
+        },
+        {
+          "id": "delivery",
+          "label": "配送",
+          "count": 0
+        },
+        {
+          "id": "both",
+          "label": "两者都可",
+          "count": 1
+        },
+        {
+          "id": "none",
+          "label": "不购买/不适用",
+          "count": 0
+        },
+        {
+          "id": "unknown",
+          "label": "不知道",
+          "count": 0
+        }
+      ]
+    },
+    {
+      "questionId": "travel-minutes",
+      "prompt": "为线下零食网点可接受的单程步行时间？仅配送/不购买/不知道填null。",
+      "type": "number",
+      "denominator": 1,
+      "missing": 9,
+      "mean": 15,
+      "median": 15,
+      "unit": "分钟/单程步行"
+    },
+    {
+      "questionId": "reachable-streets",
+      "prompt": "您个人可到达的街道有哪些？只是粗粒度假设，不是推荐区域/真实订单密度；不知道排他。",
+      "type": "multiple",
+      "denominator": 1,
+      "missing": 9,
+      "choices": [
+        {
+          "id": "xixing",
+          "label": "西兴",
+          "count": 1
+        },
+        {
+          "id": "changhe",
+          "label": "长河",
+          "count": 1
+        },
+        {
+          "id": "puyan",
+          "label": "浦沿",
+          "count": 1
+        },
+        {
+          "id": "unknown",
+          "label": "不知道",
+          "count": 0
+        }
+      ]
+    },
+    {
+      "questionId": "purchase-barriers",
+      "prompt": "购买零食有哪些障碍？没有顾虑/不知道排他。",
+      "type": "multiple",
+      "denominator": 1,
+      "missing": 9,
+      "choices": [
+        {
+          "id": "suitability",
+          "label": "物种/个体适用性未确认",
+          "count": 0
+        },
+        {
+          "id": "ingredients",
+          "label": "成分与安全资料",
+          "count": 1
+        },
+        {
+          "id": "freshness",
+          "label": "日期与储存",
+          "count": 0
+        },
+        {
+          "id": "price",
+          "label": "价位",
+          "count": 0
+        },
+        {
+          "id": "traceability",
+          "label": "来源可追溯性",
+          "count": 1
+        },
+        {
+          "id": "none",
+          "label": "没有顾虑",
+          "count": 0
+        },
+        {
+          "id": "unknown",
+          "label": "不知道",
+          "count": 0
+        }
+      ]
+    },
+    {
+      "questionId": "price10-intent",
+      "prompt": "仅在适用性和资料均确认的假设下，50克辅助零食10元/包是否考虑？价格为实验设定，不是行情；总体不考虑购买应选不考虑。",
+      "type": "single",
+      "denominator": 1,
+      "missing": 9,
+      "choices": [
+        {
+          "id": "yes",
+          "label": "考虑",
+          "count": 1
+        },
+        {
+          "id": "maybe",
+          "label": "仍需了解",
+          "count": 0
+        },
+        {
+          "id": "no",
+          "label": "不考虑",
+          "count": 0
+        },
+        {
+          "id": "unknown",
+          "label": "不知道",
+          "count": 0
+        }
+      ]
+    },
+    {
+      "questionId": "price20-intent",
+      "prompt": "假设与上一题商品和资料相同，仅50克价格改为20元/包是否考虑？同一答卷条件追问，不是随机控价实验；总体不考虑购买应选不考虑。",
+      "type": "single",
+      "denominator": 1,
+      "missing": 9,
+      "choices": [
+        {
+          "id": "yes",
+          "label": "考虑",
+          "count": 0
+        },
+        {
+          "id": "maybe",
+          "label": "仍需了解",
+          "count": 1
+        },
+        {
+          "id": "no",
+          "label": "不考虑",
+          "count": 0
+        },
+        {
+          "id": "unknown",
+          "label": "不知道",
+          "count": 0
+        }
+      ]
+    },
+    {
+      "questionId": "traceability-importance",
+      "prompt": "商品来源资料对这次采购决定的重要性？1不重要，5非常重要；不知道填null。不是宠物健康诊断。",
+      "type": "scale",
+      "denominator": 1,
+      "missing": 9,
+      "mean": 4,
+      "median": 4,
+      "unit": "分"
+    },
+    {
+      "questionId": "needed-evidence",
+      "prompt": "决定购买还缺什么证据？可回答无关或不知道，不编造网点、真实订单、品牌功效或市场份额。",
+      "type": "text",
+      "denominator": 1,
+      "missing": 9
+    }
+  ],
+  "analysis": {
+    "outputs": [
+      {
+        "output": "questionnaire-review",
+        "status": "completed",
+        "detail": "结构检查与已登记约束覆盖，不等于全部题意审查。"
+      },
+      {
+        "output": "synthetic-analysis",
+        "status": "completed",
+        "detail": "逐题确定性汇总。"
+      },
+      {
+        "output": "group-comparison",
+        "status": "completed",
+        "detail": "街道、年龄档和预设的未加权分组数表。"
+      },
+      {
+        "output": "price-comparison",
+        "status": "completed",
+        "detail": "预登记价格追问交叉表；独立控价实验另行运行。"
+      },
+      {
+        "output": "hypothesis-report",
+        "status": "completed",
+        "detail": "条件研究简报和后续证据清单，不提供真实开店预测。"
+      }
+    ],
+    "groups": [
+      {
+        "field": "streetName",
+        "value": "浦沿街道",
+        "planned": 3,
+        "uniqueProfiles": 3,
+        "valid": 1,
+        "summaries": [
+          {
+            "questionId": "pet-type",
+            "prompt": "本次情景中家中拥有哪类宠物？资格仍是合成假设，不代表滨江比例。",
+            "type": "single",
+            "denominator": 1,
+            "missing": 2,
+            "choices": [
+              {
+                "id": "cat",
+                "label": "只有猫",
+                "count": 1
+              },
+              {
+                "id": "dog",
+                "label": "只有犬",
+                "count": 0
+              },
+              {
+                "id": "both",
+                "label": "猫和犬都有",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道/资格未确认",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "purchase-role",
+            "prompt": "您参与家中宠物采购的哪些环节？无参与/不知道排他。",
+            "type": "multiple",
+            "denominator": 1,
+            "missing": 2,
+            "choices": [
+              {
+                "id": "purchaser",
+                "label": "实际购买",
+                "count": 1
+              },
+              {
+                "id": "decision",
+                "label": "决定是否购买",
+                "count": 1
+              },
+              {
+                "id": "shared",
+                "label": "共同参与采购",
+                "count": 1
+              },
+              {
+                "id": "none",
+                "label": "不参与",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "snack-boundary",
+            "prompt": "本问卷只问辅助性奖励零食，明确不含日常主粮。您是否理解这一区别？不了解不能据此推导主粮需求。",
+            "type": "single",
+            "denominator": 1,
+            "missing": 2,
+            "choices": [
+              {
+                "id": "understood",
+                "label": "理解，只回答零食",
+                "count": 1
+              },
+              {
+                "id": "needs-info",
+                "label": "需要先了解定义",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "past-frequency",
+            "prompt": "过去30天购买宠物零食次数（不含主粮）？没有记录请选择不知道。",
+            "type": "single",
+            "denominator": 1,
+            "missing": 2,
+            "choices": [
+              {
+                "id": "none",
+                "label": "0次",
+                "count": 0
+              },
+              {
+                "id": "one-two",
+                "label": "1–2次",
+                "count": 1
+              },
+              {
+                "id": "three-five",
+                "label": "3–5次",
+                "count": 0
+              },
+              {
+                "id": "six-plus",
+                "label": "6次及以上",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道/无记录",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "past-snack-categories",
+            "prompt": "过去30天购买哪些宠物零食？猫条/犬用条按明确适用物种区分；未购买/不知道排他，不含主粮。",
+            "type": "multiple",
+            "denominator": 1,
+            "missing": 2,
+            "choices": [
+              {
+                "id": "cat-creamy",
+                "label": "猫用猫条",
+                "count": 1
+              },
+              {
+                "id": "dog-chew",
+                "label": "犬用磨牙零食",
+                "count": 0
+              },
+              {
+                "id": "freeze-dried",
+                "label": "适用物种明确的冻干零食",
+                "count": 1
+              },
+              {
+                "id": "training",
+                "label": "适用物种明确的训练奖励",
+                "count": 0
+              },
+              {
+                "id": "none",
+                "label": "未购买",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "purchase-intent",
+            "prompt": "未来30天是否考虑为家中宠物购买零食（不含主粮）？",
+            "type": "single",
+            "denominator": 1,
+            "missing": 2,
+            "choices": [
+              {
+                "id": "yes",
+                "label": "考虑",
+                "count": 1
+              },
+              {
+                "id": "maybe",
+                "label": "需进一步了解",
+                "count": 0
+              },
+              {
+                "id": "no",
+                "label": "不考虑",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "monthly-budget",
+            "prompt": "未来30天家中宠物零食的计划总额，明确不考虑购买填0；不知道/暂未决定填null。不是主粮预算、个人收入或滨江均值。",
+            "type": "number",
+            "denominator": 1,
+            "missing": 2,
+            "mean": 80,
+            "median": 80,
+            "unit": "CNY/一个情景家庭/未来30天/仅宠物零食"
+          },
+          {
+            "questionId": "package-size",
+            "prompt": "考虑购买时偏好的单包规格？价格题固定为50克，其他规格不直接比较价格。",
+            "type": "single",
+            "denominator": 1,
+            "missing": 2,
+            "choices": [
+              {
+                "id": "g15",
+                "label": "15克",
+                "count": 0
+              },
+              {
+                "id": "g50",
+                "label": "50克",
+                "count": 1
+              },
+              {
+                "id": "g100",
+                "label": "100克",
+                "count": 0
+              },
+              {
+                "id": "none",
+                "label": "不购买",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "price-per50g",
+            "prompt": "只针对50克零食的考虑价位？区间左闭右开；不含主粮，未给定真实品牌或价格行情。",
+            "type": "single",
+            "denominator": 1,
+            "missing": 2,
+            "choices": [
+              {
+                "id": "under10",
+                "label": "大于0且小于10元/50克",
+                "count": 0
+              },
+              {
+                "id": "ten-twenty",
+                "label": "10至小于20元/50克",
+                "count": 1
+              },
+              {
+                "id": "twenty-forty",
+                "label": "20至小于40元/50克",
+                "count": 0
+              },
+              {
+                "id": "forty-plus",
+                "label": "40元及以上/50克",
+                "count": 0
+              },
+              {
+                "id": "none",
+                "label": "不购买",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "planned-channels",
+            "prompt": "未来可能通过哪些渠道购买零食？不购买/不知道排他，不代表实际订单。",
+            "type": "multiple",
+            "denominator": 1,
+            "missing": 2,
+            "choices": [
+              {
+                "id": "online",
+                "label": "线上配送",
+                "count": 1
+              },
+              {
+                "id": "pet-shop",
+                "label": "宠物店",
+                "count": 1
+              },
+              {
+                "id": "veterinary",
+                "label": "有相关商品的宠物诊疗机构",
+                "count": 0
+              },
+              {
+                "id": "community",
+                "label": "社区销售点",
+                "count": 0
+              },
+              {
+                "id": "pickup",
+                "label": "线上下单线下自提",
+                "count": 1
+              },
+              {
+                "id": "none",
+                "label": "不购买",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "online-handoff",
+            "prompt": "若线上下单，如何接收更适用？本轮不推断履约成本或销量。",
+            "type": "single",
+            "denominator": 1,
+            "missing": 2,
+            "choices": [
+              {
+                "id": "pickup",
+                "label": "线下自提",
+                "count": 0
+              },
+              {
+                "id": "delivery",
+                "label": "配送",
+                "count": 0
+              },
+              {
+                "id": "both",
+                "label": "两者都可",
+                "count": 1
+              },
+              {
+                "id": "none",
+                "label": "不购买/不适用",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "travel-minutes",
+            "prompt": "为线下零食网点可接受的单程步行时间？仅配送/不购买/不知道填null。",
+            "type": "number",
+            "denominator": 1,
+            "missing": 2,
+            "mean": 15,
+            "median": 15,
+            "unit": "分钟/单程步行"
+          },
+          {
+            "questionId": "reachable-streets",
+            "prompt": "您个人可到达的街道有哪些？只是粗粒度假设，不是推荐区域/真实订单密度；不知道排他。",
+            "type": "multiple",
+            "denominator": 1,
+            "missing": 2,
+            "choices": [
+              {
+                "id": "xixing",
+                "label": "西兴",
+                "count": 1
+              },
+              {
+                "id": "changhe",
+                "label": "长河",
+                "count": 1
+              },
+              {
+                "id": "puyan",
+                "label": "浦沿",
+                "count": 1
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "purchase-barriers",
+            "prompt": "购买零食有哪些障碍？没有顾虑/不知道排他。",
+            "type": "multiple",
+            "denominator": 1,
+            "missing": 2,
+            "choices": [
+              {
+                "id": "suitability",
+                "label": "物种/个体适用性未确认",
+                "count": 0
+              },
+              {
+                "id": "ingredients",
+                "label": "成分与安全资料",
+                "count": 1
+              },
+              {
+                "id": "freshness",
+                "label": "日期与储存",
+                "count": 0
+              },
+              {
+                "id": "price",
+                "label": "价位",
+                "count": 0
+              },
+              {
+                "id": "traceability",
+                "label": "来源可追溯性",
+                "count": 1
+              },
+              {
+                "id": "none",
+                "label": "没有顾虑",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "price10-intent",
+            "prompt": "仅在适用性和资料均确认的假设下，50克辅助零食10元/包是否考虑？价格为实验设定，不是行情；总体不考虑购买应选不考虑。",
+            "type": "single",
+            "denominator": 1,
+            "missing": 2,
+            "choices": [
+              {
+                "id": "yes",
+                "label": "考虑",
+                "count": 1
+              },
+              {
+                "id": "maybe",
+                "label": "仍需了解",
+                "count": 0
+              },
+              {
+                "id": "no",
+                "label": "不考虑",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "price20-intent",
+            "prompt": "假设与上一题商品和资料相同，仅50克价格改为20元/包是否考虑？同一答卷条件追问，不是随机控价实验；总体不考虑购买应选不考虑。",
+            "type": "single",
+            "denominator": 1,
+            "missing": 2,
+            "choices": [
+              {
+                "id": "yes",
+                "label": "考虑",
+                "count": 0
+              },
+              {
+                "id": "maybe",
+                "label": "仍需了解",
+                "count": 1
+              },
+              {
+                "id": "no",
+                "label": "不考虑",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "traceability-importance",
+            "prompt": "商品来源资料对这次采购决定的重要性？1不重要，5非常重要；不知道填null。不是宠物健康诊断。",
+            "type": "scale",
+            "denominator": 1,
+            "missing": 2,
+            "mean": 4,
+            "median": 4,
+            "unit": "分"
+          },
+          {
+            "questionId": "needed-evidence",
+            "prompt": "决定购买还缺什么证据？可回答无关或不知道，不编造网点、真实订单、品牌功效或市场份额。",
+            "type": "text",
+            "denominator": 1,
+            "missing": 2
+          }
+        ]
+      },
+      {
+        "field": "streetName",
+        "value": "长河街道",
+        "planned": 3,
+        "uniqueProfiles": 3,
+        "valid": 0,
+        "summaries": [
+          {
+            "questionId": "pet-type",
+            "prompt": "本次情景中家中拥有哪类宠物？资格仍是合成假设，不代表滨江比例。",
+            "type": "single",
+            "denominator": 0,
+            "missing": 3,
+            "choices": [
+              {
+                "id": "cat",
+                "label": "只有猫",
+                "count": 0
+              },
+              {
+                "id": "dog",
+                "label": "只有犬",
+                "count": 0
+              },
+              {
+                "id": "both",
+                "label": "猫和犬都有",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道/资格未确认",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "purchase-role",
+            "prompt": "您参与家中宠物采购的哪些环节？无参与/不知道排他。",
+            "type": "multiple",
+            "denominator": 0,
+            "missing": 3,
+            "choices": [
+              {
+                "id": "purchaser",
+                "label": "实际购买",
+                "count": 0
+              },
+              {
+                "id": "decision",
+                "label": "决定是否购买",
+                "count": 0
+              },
+              {
+                "id": "shared",
+                "label": "共同参与采购",
+                "count": 0
+              },
+              {
+                "id": "none",
+                "label": "不参与",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "snack-boundary",
+            "prompt": "本问卷只问辅助性奖励零食，明确不含日常主粮。您是否理解这一区别？不了解不能据此推导主粮需求。",
+            "type": "single",
+            "denominator": 0,
+            "missing": 3,
+            "choices": [
+              {
+                "id": "understood",
+                "label": "理解，只回答零食",
+                "count": 0
+              },
+              {
+                "id": "needs-info",
+                "label": "需要先了解定义",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "past-frequency",
+            "prompt": "过去30天购买宠物零食次数（不含主粮）？没有记录请选择不知道。",
+            "type": "single",
+            "denominator": 0,
+            "missing": 3,
+            "choices": [
+              {
+                "id": "none",
+                "label": "0次",
+                "count": 0
+              },
+              {
+                "id": "one-two",
+                "label": "1–2次",
+                "count": 0
+              },
+              {
+                "id": "three-five",
+                "label": "3–5次",
+                "count": 0
+              },
+              {
+                "id": "six-plus",
+                "label": "6次及以上",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道/无记录",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "past-snack-categories",
+            "prompt": "过去30天购买哪些宠物零食？猫条/犬用条按明确适用物种区分；未购买/不知道排他，不含主粮。",
+            "type": "multiple",
+            "denominator": 0,
+            "missing": 3,
+            "choices": [
+              {
+                "id": "cat-creamy",
+                "label": "猫用猫条",
+                "count": 0
+              },
+              {
+                "id": "dog-chew",
+                "label": "犬用磨牙零食",
+                "count": 0
+              },
+              {
+                "id": "freeze-dried",
+                "label": "适用物种明确的冻干零食",
+                "count": 0
+              },
+              {
+                "id": "training",
+                "label": "适用物种明确的训练奖励",
+                "count": 0
+              },
+              {
+                "id": "none",
+                "label": "未购买",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "purchase-intent",
+            "prompt": "未来30天是否考虑为家中宠物购买零食（不含主粮）？",
+            "type": "single",
+            "denominator": 0,
+            "missing": 3,
+            "choices": [
+              {
+                "id": "yes",
+                "label": "考虑",
+                "count": 0
+              },
+              {
+                "id": "maybe",
+                "label": "需进一步了解",
+                "count": 0
+              },
+              {
+                "id": "no",
+                "label": "不考虑",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "monthly-budget",
+            "prompt": "未来30天家中宠物零食的计划总额，明确不考虑购买填0；不知道/暂未决定填null。不是主粮预算、个人收入或滨江均值。",
+            "type": "number",
+            "denominator": 0,
+            "missing": 3
+          },
+          {
+            "questionId": "package-size",
+            "prompt": "考虑购买时偏好的单包规格？价格题固定为50克，其他规格不直接比较价格。",
+            "type": "single",
+            "denominator": 0,
+            "missing": 3,
+            "choices": [
+              {
+                "id": "g15",
+                "label": "15克",
+                "count": 0
+              },
+              {
+                "id": "g50",
+                "label": "50克",
+                "count": 0
+              },
+              {
+                "id": "g100",
+                "label": "100克",
+                "count": 0
+              },
+              {
+                "id": "none",
+                "label": "不购买",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "price-per50g",
+            "prompt": "只针对50克零食的考虑价位？区间左闭右开；不含主粮，未给定真实品牌或价格行情。",
+            "type": "single",
+            "denominator": 0,
+            "missing": 3,
+            "choices": [
+              {
+                "id": "under10",
+                "label": "大于0且小于10元/50克",
+                "count": 0
+              },
+              {
+                "id": "ten-twenty",
+                "label": "10至小于20元/50克",
+                "count": 0
+              },
+              {
+                "id": "twenty-forty",
+                "label": "20至小于40元/50克",
+                "count": 0
+              },
+              {
+                "id": "forty-plus",
+                "label": "40元及以上/50克",
+                "count": 0
+              },
+              {
+                "id": "none",
+                "label": "不购买",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "planned-channels",
+            "prompt": "未来可能通过哪些渠道购买零食？不购买/不知道排他，不代表实际订单。",
+            "type": "multiple",
+            "denominator": 0,
+            "missing": 3,
+            "choices": [
+              {
+                "id": "online",
+                "label": "线上配送",
+                "count": 0
+              },
+              {
+                "id": "pet-shop",
+                "label": "宠物店",
+                "count": 0
+              },
+              {
+                "id": "veterinary",
+                "label": "有相关商品的宠物诊疗机构",
+                "count": 0
+              },
+              {
+                "id": "community",
+                "label": "社区销售点",
+                "count": 0
+              },
+              {
+                "id": "pickup",
+                "label": "线上下单线下自提",
+                "count": 0
+              },
+              {
+                "id": "none",
+                "label": "不购买",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "online-handoff",
+            "prompt": "若线上下单，如何接收更适用？本轮不推断履约成本或销量。",
+            "type": "single",
+            "denominator": 0,
+            "missing": 3,
+            "choices": [
+              {
+                "id": "pickup",
+                "label": "线下自提",
+                "count": 0
+              },
+              {
+                "id": "delivery",
+                "label": "配送",
+                "count": 0
+              },
+              {
+                "id": "both",
+                "label": "两者都可",
+                "count": 0
+              },
+              {
+                "id": "none",
+                "label": "不购买/不适用",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "travel-minutes",
+            "prompt": "为线下零食网点可接受的单程步行时间？仅配送/不购买/不知道填null。",
+            "type": "number",
+            "denominator": 0,
+            "missing": 3
+          },
+          {
+            "questionId": "reachable-streets",
+            "prompt": "您个人可到达的街道有哪些？只是粗粒度假设，不是推荐区域/真实订单密度；不知道排他。",
+            "type": "multiple",
+            "denominator": 0,
+            "missing": 3,
+            "choices": [
+              {
+                "id": "xixing",
+                "label": "西兴",
+                "count": 0
+              },
+              {
+                "id": "changhe",
+                "label": "长河",
+                "count": 0
+              },
+              {
+                "id": "puyan",
+                "label": "浦沿",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "purchase-barriers",
+            "prompt": "购买零食有哪些障碍？没有顾虑/不知道排他。",
+            "type": "multiple",
+            "denominator": 0,
+            "missing": 3,
+            "choices": [
+              {
+                "id": "suitability",
+                "label": "物种/个体适用性未确认",
+                "count": 0
+              },
+              {
+                "id": "ingredients",
+                "label": "成分与安全资料",
+                "count": 0
+              },
+              {
+                "id": "freshness",
+                "label": "日期与储存",
+                "count": 0
+              },
+              {
+                "id": "price",
+                "label": "价位",
+                "count": 0
+              },
+              {
+                "id": "traceability",
+                "label": "来源可追溯性",
+                "count": 0
+              },
+              {
+                "id": "none",
+                "label": "没有顾虑",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "price10-intent",
+            "prompt": "仅在适用性和资料均确认的假设下，50克辅助零食10元/包是否考虑？价格为实验设定，不是行情；总体不考虑购买应选不考虑。",
+            "type": "single",
+            "denominator": 0,
+            "missing": 3,
+            "choices": [
+              {
+                "id": "yes",
+                "label": "考虑",
+                "count": 0
+              },
+              {
+                "id": "maybe",
+                "label": "仍需了解",
+                "count": 0
+              },
+              {
+                "id": "no",
+                "label": "不考虑",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "price20-intent",
+            "prompt": "假设与上一题商品和资料相同，仅50克价格改为20元/包是否考虑？同一答卷条件追问，不是随机控价实验；总体不考虑购买应选不考虑。",
+            "type": "single",
+            "denominator": 0,
+            "missing": 3,
+            "choices": [
+              {
+                "id": "yes",
+                "label": "考虑",
+                "count": 0
+              },
+              {
+                "id": "maybe",
+                "label": "仍需了解",
+                "count": 0
+              },
+              {
+                "id": "no",
+                "label": "不考虑",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "traceability-importance",
+            "prompt": "商品来源资料对这次采购决定的重要性？1不重要，5非常重要；不知道填null。不是宠物健康诊断。",
+            "type": "scale",
+            "denominator": 0,
+            "missing": 3
+          },
+          {
+            "questionId": "needed-evidence",
+            "prompt": "决定购买还缺什么证据？可回答无关或不知道，不编造网点、真实订单、品牌功效或市场份额。",
+            "type": "text",
+            "denominator": 0,
+            "missing": 3
+          }
+        ]
+      },
+      {
+        "field": "streetName",
+        "value": "西兴街道",
+        "planned": 4,
+        "uniqueProfiles": 4,
+        "valid": 0,
+        "summaries": [
+          {
+            "questionId": "pet-type",
+            "prompt": "本次情景中家中拥有哪类宠物？资格仍是合成假设，不代表滨江比例。",
+            "type": "single",
+            "denominator": 0,
+            "missing": 4,
+            "choices": [
+              {
+                "id": "cat",
+                "label": "只有猫",
+                "count": 0
+              },
+              {
+                "id": "dog",
+                "label": "只有犬",
+                "count": 0
+              },
+              {
+                "id": "both",
+                "label": "猫和犬都有",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道/资格未确认",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "purchase-role",
+            "prompt": "您参与家中宠物采购的哪些环节？无参与/不知道排他。",
+            "type": "multiple",
+            "denominator": 0,
+            "missing": 4,
+            "choices": [
+              {
+                "id": "purchaser",
+                "label": "实际购买",
+                "count": 0
+              },
+              {
+                "id": "decision",
+                "label": "决定是否购买",
+                "count": 0
+              },
+              {
+                "id": "shared",
+                "label": "共同参与采购",
+                "count": 0
+              },
+              {
+                "id": "none",
+                "label": "不参与",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "snack-boundary",
+            "prompt": "本问卷只问辅助性奖励零食，明确不含日常主粮。您是否理解这一区别？不了解不能据此推导主粮需求。",
+            "type": "single",
+            "denominator": 0,
+            "missing": 4,
+            "choices": [
+              {
+                "id": "understood",
+                "label": "理解，只回答零食",
+                "count": 0
+              },
+              {
+                "id": "needs-info",
+                "label": "需要先了解定义",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "past-frequency",
+            "prompt": "过去30天购买宠物零食次数（不含主粮）？没有记录请选择不知道。",
+            "type": "single",
+            "denominator": 0,
+            "missing": 4,
+            "choices": [
+              {
+                "id": "none",
+                "label": "0次",
+                "count": 0
+              },
+              {
+                "id": "one-two",
+                "label": "1–2次",
+                "count": 0
+              },
+              {
+                "id": "three-five",
+                "label": "3–5次",
+                "count": 0
+              },
+              {
+                "id": "six-plus",
+                "label": "6次及以上",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道/无记录",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "past-snack-categories",
+            "prompt": "过去30天购买哪些宠物零食？猫条/犬用条按明确适用物种区分；未购买/不知道排他，不含主粮。",
+            "type": "multiple",
+            "denominator": 0,
+            "missing": 4,
+            "choices": [
+              {
+                "id": "cat-creamy",
+                "label": "猫用猫条",
+                "count": 0
+              },
+              {
+                "id": "dog-chew",
+                "label": "犬用磨牙零食",
+                "count": 0
+              },
+              {
+                "id": "freeze-dried",
+                "label": "适用物种明确的冻干零食",
+                "count": 0
+              },
+              {
+                "id": "training",
+                "label": "适用物种明确的训练奖励",
+                "count": 0
+              },
+              {
+                "id": "none",
+                "label": "未购买",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "purchase-intent",
+            "prompt": "未来30天是否考虑为家中宠物购买零食（不含主粮）？",
+            "type": "single",
+            "denominator": 0,
+            "missing": 4,
+            "choices": [
+              {
+                "id": "yes",
+                "label": "考虑",
+                "count": 0
+              },
+              {
+                "id": "maybe",
+                "label": "需进一步了解",
+                "count": 0
+              },
+              {
+                "id": "no",
+                "label": "不考虑",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "monthly-budget",
+            "prompt": "未来30天家中宠物零食的计划总额，明确不考虑购买填0；不知道/暂未决定填null。不是主粮预算、个人收入或滨江均值。",
+            "type": "number",
+            "denominator": 0,
+            "missing": 4
+          },
+          {
+            "questionId": "package-size",
+            "prompt": "考虑购买时偏好的单包规格？价格题固定为50克，其他规格不直接比较价格。",
+            "type": "single",
+            "denominator": 0,
+            "missing": 4,
+            "choices": [
+              {
+                "id": "g15",
+                "label": "15克",
+                "count": 0
+              },
+              {
+                "id": "g50",
+                "label": "50克",
+                "count": 0
+              },
+              {
+                "id": "g100",
+                "label": "100克",
+                "count": 0
+              },
+              {
+                "id": "none",
+                "label": "不购买",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "price-per50g",
+            "prompt": "只针对50克零食的考虑价位？区间左闭右开；不含主粮，未给定真实品牌或价格行情。",
+            "type": "single",
+            "denominator": 0,
+            "missing": 4,
+            "choices": [
+              {
+                "id": "under10",
+                "label": "大于0且小于10元/50克",
+                "count": 0
+              },
+              {
+                "id": "ten-twenty",
+                "label": "10至小于20元/50克",
+                "count": 0
+              },
+              {
+                "id": "twenty-forty",
+                "label": "20至小于40元/50克",
+                "count": 0
+              },
+              {
+                "id": "forty-plus",
+                "label": "40元及以上/50克",
+                "count": 0
+              },
+              {
+                "id": "none",
+                "label": "不购买",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "planned-channels",
+            "prompt": "未来可能通过哪些渠道购买零食？不购买/不知道排他，不代表实际订单。",
+            "type": "multiple",
+            "denominator": 0,
+            "missing": 4,
+            "choices": [
+              {
+                "id": "online",
+                "label": "线上配送",
+                "count": 0
+              },
+              {
+                "id": "pet-shop",
+                "label": "宠物店",
+                "count": 0
+              },
+              {
+                "id": "veterinary",
+                "label": "有相关商品的宠物诊疗机构",
+                "count": 0
+              },
+              {
+                "id": "community",
+                "label": "社区销售点",
+                "count": 0
+              },
+              {
+                "id": "pickup",
+                "label": "线上下单线下自提",
+                "count": 0
+              },
+              {
+                "id": "none",
+                "label": "不购买",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "online-handoff",
+            "prompt": "若线上下单，如何接收更适用？本轮不推断履约成本或销量。",
+            "type": "single",
+            "denominator": 0,
+            "missing": 4,
+            "choices": [
+              {
+                "id": "pickup",
+                "label": "线下自提",
+                "count": 0
+              },
+              {
+                "id": "delivery",
+                "label": "配送",
+                "count": 0
+              },
+              {
+                "id": "both",
+                "label": "两者都可",
+                "count": 0
+              },
+              {
+                "id": "none",
+                "label": "不购买/不适用",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "travel-minutes",
+            "prompt": "为线下零食网点可接受的单程步行时间？仅配送/不购买/不知道填null。",
+            "type": "number",
+            "denominator": 0,
+            "missing": 4
+          },
+          {
+            "questionId": "reachable-streets",
+            "prompt": "您个人可到达的街道有哪些？只是粗粒度假设，不是推荐区域/真实订单密度；不知道排他。",
+            "type": "multiple",
+            "denominator": 0,
+            "missing": 4,
+            "choices": [
+              {
+                "id": "xixing",
+                "label": "西兴",
+                "count": 0
+              },
+              {
+                "id": "changhe",
+                "label": "长河",
+                "count": 0
+              },
+              {
+                "id": "puyan",
+                "label": "浦沿",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "purchase-barriers",
+            "prompt": "购买零食有哪些障碍？没有顾虑/不知道排他。",
+            "type": "multiple",
+            "denominator": 0,
+            "missing": 4,
+            "choices": [
+              {
+                "id": "suitability",
+                "label": "物种/个体适用性未确认",
+                "count": 0
+              },
+              {
+                "id": "ingredients",
+                "label": "成分与安全资料",
+                "count": 0
+              },
+              {
+                "id": "freshness",
+                "label": "日期与储存",
+                "count": 0
+              },
+              {
+                "id": "price",
+                "label": "价位",
+                "count": 0
+              },
+              {
+                "id": "traceability",
+                "label": "来源可追溯性",
+                "count": 0
+              },
+              {
+                "id": "none",
+                "label": "没有顾虑",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "price10-intent",
+            "prompt": "仅在适用性和资料均确认的假设下，50克辅助零食10元/包是否考虑？价格为实验设定，不是行情；总体不考虑购买应选不考虑。",
+            "type": "single",
+            "denominator": 0,
+            "missing": 4,
+            "choices": [
+              {
+                "id": "yes",
+                "label": "考虑",
+                "count": 0
+              },
+              {
+                "id": "maybe",
+                "label": "仍需了解",
+                "count": 0
+              },
+              {
+                "id": "no",
+                "label": "不考虑",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "price20-intent",
+            "prompt": "假设与上一题商品和资料相同，仅50克价格改为20元/包是否考虑？同一答卷条件追问，不是随机控价实验；总体不考虑购买应选不考虑。",
+            "type": "single",
+            "denominator": 0,
+            "missing": 4,
+            "choices": [
+              {
+                "id": "yes",
+                "label": "考虑",
+                "count": 0
+              },
+              {
+                "id": "maybe",
+                "label": "仍需了解",
+                "count": 0
+              },
+              {
+                "id": "no",
+                "label": "不考虑",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "traceability-importance",
+            "prompt": "商品来源资料对这次采购决定的重要性？1不重要，5非常重要；不知道填null。不是宠物健康诊断。",
+            "type": "scale",
+            "denominator": 0,
+            "missing": 4
+          },
+          {
+            "questionId": "needed-evidence",
+            "prompt": "决定购买还缺什么证据？可回答无关或不知道，不编造网点、真实订单、品牌功效或市场份额。",
+            "type": "text",
+            "denominator": 0,
+            "missing": 4
+          }
+        ]
+      },
+      {
+        "field": "ageBand",
+        "value": "15-59",
+        "planned": 6,
+        "uniqueProfiles": 6,
+        "valid": 1,
+        "summaries": [
+          {
+            "questionId": "pet-type",
+            "prompt": "本次情景中家中拥有哪类宠物？资格仍是合成假设，不代表滨江比例。",
+            "type": "single",
+            "denominator": 1,
+            "missing": 5,
+            "choices": [
+              {
+                "id": "cat",
+                "label": "只有猫",
+                "count": 1
+              },
+              {
+                "id": "dog",
+                "label": "只有犬",
+                "count": 0
+              },
+              {
+                "id": "both",
+                "label": "猫和犬都有",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道/资格未确认",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "purchase-role",
+            "prompt": "您参与家中宠物采购的哪些环节？无参与/不知道排他。",
+            "type": "multiple",
+            "denominator": 1,
+            "missing": 5,
+            "choices": [
+              {
+                "id": "purchaser",
+                "label": "实际购买",
+                "count": 1
+              },
+              {
+                "id": "decision",
+                "label": "决定是否购买",
+                "count": 1
+              },
+              {
+                "id": "shared",
+                "label": "共同参与采购",
+                "count": 1
+              },
+              {
+                "id": "none",
+                "label": "不参与",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "snack-boundary",
+            "prompt": "本问卷只问辅助性奖励零食，明确不含日常主粮。您是否理解这一区别？不了解不能据此推导主粮需求。",
+            "type": "single",
+            "denominator": 1,
+            "missing": 5,
+            "choices": [
+              {
+                "id": "understood",
+                "label": "理解，只回答零食",
+                "count": 1
+              },
+              {
+                "id": "needs-info",
+                "label": "需要先了解定义",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "past-frequency",
+            "prompt": "过去30天购买宠物零食次数（不含主粮）？没有记录请选择不知道。",
+            "type": "single",
+            "denominator": 1,
+            "missing": 5,
+            "choices": [
+              {
+                "id": "none",
+                "label": "0次",
+                "count": 0
+              },
+              {
+                "id": "one-two",
+                "label": "1–2次",
+                "count": 1
+              },
+              {
+                "id": "three-five",
+                "label": "3–5次",
+                "count": 0
+              },
+              {
+                "id": "six-plus",
+                "label": "6次及以上",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道/无记录",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "past-snack-categories",
+            "prompt": "过去30天购买哪些宠物零食？猫条/犬用条按明确适用物种区分；未购买/不知道排他，不含主粮。",
+            "type": "multiple",
+            "denominator": 1,
+            "missing": 5,
+            "choices": [
+              {
+                "id": "cat-creamy",
+                "label": "猫用猫条",
+                "count": 1
+              },
+              {
+                "id": "dog-chew",
+                "label": "犬用磨牙零食",
+                "count": 0
+              },
+              {
+                "id": "freeze-dried",
+                "label": "适用物种明确的冻干零食",
+                "count": 1
+              },
+              {
+                "id": "training",
+                "label": "适用物种明确的训练奖励",
+                "count": 0
+              },
+              {
+                "id": "none",
+                "label": "未购买",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "purchase-intent",
+            "prompt": "未来30天是否考虑为家中宠物购买零食（不含主粮）？",
+            "type": "single",
+            "denominator": 1,
+            "missing": 5,
+            "choices": [
+              {
+                "id": "yes",
+                "label": "考虑",
+                "count": 1
+              },
+              {
+                "id": "maybe",
+                "label": "需进一步了解",
+                "count": 0
+              },
+              {
+                "id": "no",
+                "label": "不考虑",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "monthly-budget",
+            "prompt": "未来30天家中宠物零食的计划总额，明确不考虑购买填0；不知道/暂未决定填null。不是主粮预算、个人收入或滨江均值。",
+            "type": "number",
+            "denominator": 1,
+            "missing": 5,
+            "mean": 80,
+            "median": 80,
+            "unit": "CNY/一个情景家庭/未来30天/仅宠物零食"
+          },
+          {
+            "questionId": "package-size",
+            "prompt": "考虑购买时偏好的单包规格？价格题固定为50克，其他规格不直接比较价格。",
+            "type": "single",
+            "denominator": 1,
+            "missing": 5,
+            "choices": [
+              {
+                "id": "g15",
+                "label": "15克",
+                "count": 0
+              },
+              {
+                "id": "g50",
+                "label": "50克",
+                "count": 1
+              },
+              {
+                "id": "g100",
+                "label": "100克",
+                "count": 0
+              },
+              {
+                "id": "none",
+                "label": "不购买",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "price-per50g",
+            "prompt": "只针对50克零食的考虑价位？区间左闭右开；不含主粮，未给定真实品牌或价格行情。",
+            "type": "single",
+            "denominator": 1,
+            "missing": 5,
+            "choices": [
+              {
+                "id": "under10",
+                "label": "大于0且小于10元/50克",
+                "count": 0
+              },
+              {
+                "id": "ten-twenty",
+                "label": "10至小于20元/50克",
+                "count": 1
+              },
+              {
+                "id": "twenty-forty",
+                "label": "20至小于40元/50克",
+                "count": 0
+              },
+              {
+                "id": "forty-plus",
+                "label": "40元及以上/50克",
+                "count": 0
+              },
+              {
+                "id": "none",
+                "label": "不购买",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "planned-channels",
+            "prompt": "未来可能通过哪些渠道购买零食？不购买/不知道排他，不代表实际订单。",
+            "type": "multiple",
+            "denominator": 1,
+            "missing": 5,
+            "choices": [
+              {
+                "id": "online",
+                "label": "线上配送",
+                "count": 1
+              },
+              {
+                "id": "pet-shop",
+                "label": "宠物店",
+                "count": 1
+              },
+              {
+                "id": "veterinary",
+                "label": "有相关商品的宠物诊疗机构",
+                "count": 0
+              },
+              {
+                "id": "community",
+                "label": "社区销售点",
+                "count": 0
+              },
+              {
+                "id": "pickup",
+                "label": "线上下单线下自提",
+                "count": 1
+              },
+              {
+                "id": "none",
+                "label": "不购买",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "online-handoff",
+            "prompt": "若线上下单，如何接收更适用？本轮不推断履约成本或销量。",
+            "type": "single",
+            "denominator": 1,
+            "missing": 5,
+            "choices": [
+              {
+                "id": "pickup",
+                "label": "线下自提",
+                "count": 0
+              },
+              {
+                "id": "delivery",
+                "label": "配送",
+                "count": 0
+              },
+              {
+                "id": "both",
+                "label": "两者都可",
+                "count": 1
+              },
+              {
+                "id": "none",
+                "label": "不购买/不适用",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "travel-minutes",
+            "prompt": "为线下零食网点可接受的单程步行时间？仅配送/不购买/不知道填null。",
+            "type": "number",
+            "denominator": 1,
+            "missing": 5,
+            "mean": 15,
+            "median": 15,
+            "unit": "分钟/单程步行"
+          },
+          {
+            "questionId": "reachable-streets",
+            "prompt": "您个人可到达的街道有哪些？只是粗粒度假设，不是推荐区域/真实订单密度；不知道排他。",
+            "type": "multiple",
+            "denominator": 1,
+            "missing": 5,
+            "choices": [
+              {
+                "id": "xixing",
+                "label": "西兴",
+                "count": 1
+              },
+              {
+                "id": "changhe",
+                "label": "长河",
+                "count": 1
+              },
+              {
+                "id": "puyan",
+                "label": "浦沿",
+                "count": 1
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "purchase-barriers",
+            "prompt": "购买零食有哪些障碍？没有顾虑/不知道排他。",
+            "type": "multiple",
+            "denominator": 1,
+            "missing": 5,
+            "choices": [
+              {
+                "id": "suitability",
+                "label": "物种/个体适用性未确认",
+                "count": 0
+              },
+              {
+                "id": "ingredients",
+                "label": "成分与安全资料",
+                "count": 1
+              },
+              {
+                "id": "freshness",
+                "label": "日期与储存",
+                "count": 0
+              },
+              {
+                "id": "price",
+                "label": "价位",
+                "count": 0
+              },
+              {
+                "id": "traceability",
+                "label": "来源可追溯性",
+                "count": 1
+              },
+              {
+                "id": "none",
+                "label": "没有顾虑",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "price10-intent",
+            "prompt": "仅在适用性和资料均确认的假设下，50克辅助零食10元/包是否考虑？价格为实验设定，不是行情；总体不考虑购买应选不考虑。",
+            "type": "single",
+            "denominator": 1,
+            "missing": 5,
+            "choices": [
+              {
+                "id": "yes",
+                "label": "考虑",
+                "count": 1
+              },
+              {
+                "id": "maybe",
+                "label": "仍需了解",
+                "count": 0
+              },
+              {
+                "id": "no",
+                "label": "不考虑",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "price20-intent",
+            "prompt": "假设与上一题商品和资料相同，仅50克价格改为20元/包是否考虑？同一答卷条件追问，不是随机控价实验；总体不考虑购买应选不考虑。",
+            "type": "single",
+            "denominator": 1,
+            "missing": 5,
+            "choices": [
+              {
+                "id": "yes",
+                "label": "考虑",
+                "count": 0
+              },
+              {
+                "id": "maybe",
+                "label": "仍需了解",
+                "count": 1
+              },
+              {
+                "id": "no",
+                "label": "不考虑",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "traceability-importance",
+            "prompt": "商品来源资料对这次采购决定的重要性？1不重要，5非常重要；不知道填null。不是宠物健康诊断。",
+            "type": "scale",
+            "denominator": 1,
+            "missing": 5,
+            "mean": 4,
+            "median": 4,
+            "unit": "分"
+          },
+          {
+            "questionId": "needed-evidence",
+            "prompt": "决定购买还缺什么证据？可回答无关或不知道，不编造网点、真实订单、品牌功效或市场份额。",
+            "type": "text",
+            "denominator": 1,
+            "missing": 5
+          }
+        ]
+      },
+      {
+        "field": "ageBand",
+        "value": "60+",
+        "planned": 4,
+        "uniqueProfiles": 4,
+        "valid": 0,
+        "summaries": [
+          {
+            "questionId": "pet-type",
+            "prompt": "本次情景中家中拥有哪类宠物？资格仍是合成假设，不代表滨江比例。",
+            "type": "single",
+            "denominator": 0,
+            "missing": 4,
+            "choices": [
+              {
+                "id": "cat",
+                "label": "只有猫",
+                "count": 0
+              },
+              {
+                "id": "dog",
+                "label": "只有犬",
+                "count": 0
+              },
+              {
+                "id": "both",
+                "label": "猫和犬都有",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道/资格未确认",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "purchase-role",
+            "prompt": "您参与家中宠物采购的哪些环节？无参与/不知道排他。",
+            "type": "multiple",
+            "denominator": 0,
+            "missing": 4,
+            "choices": [
+              {
+                "id": "purchaser",
+                "label": "实际购买",
+                "count": 0
+              },
+              {
+                "id": "decision",
+                "label": "决定是否购买",
+                "count": 0
+              },
+              {
+                "id": "shared",
+                "label": "共同参与采购",
+                "count": 0
+              },
+              {
+                "id": "none",
+                "label": "不参与",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "snack-boundary",
+            "prompt": "本问卷只问辅助性奖励零食，明确不含日常主粮。您是否理解这一区别？不了解不能据此推导主粮需求。",
+            "type": "single",
+            "denominator": 0,
+            "missing": 4,
+            "choices": [
+              {
+                "id": "understood",
+                "label": "理解，只回答零食",
+                "count": 0
+              },
+              {
+                "id": "needs-info",
+                "label": "需要先了解定义",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "past-frequency",
+            "prompt": "过去30天购买宠物零食次数（不含主粮）？没有记录请选择不知道。",
+            "type": "single",
+            "denominator": 0,
+            "missing": 4,
+            "choices": [
+              {
+                "id": "none",
+                "label": "0次",
+                "count": 0
+              },
+              {
+                "id": "one-two",
+                "label": "1–2次",
+                "count": 0
+              },
+              {
+                "id": "three-five",
+                "label": "3–5次",
+                "count": 0
+              },
+              {
+                "id": "six-plus",
+                "label": "6次及以上",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道/无记录",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "past-snack-categories",
+            "prompt": "过去30天购买哪些宠物零食？猫条/犬用条按明确适用物种区分；未购买/不知道排他，不含主粮。",
+            "type": "multiple",
+            "denominator": 0,
+            "missing": 4,
+            "choices": [
+              {
+                "id": "cat-creamy",
+                "label": "猫用猫条",
+                "count": 0
+              },
+              {
+                "id": "dog-chew",
+                "label": "犬用磨牙零食",
+                "count": 0
+              },
+              {
+                "id": "freeze-dried",
+                "label": "适用物种明确的冻干零食",
+                "count": 0
+              },
+              {
+                "id": "training",
+                "label": "适用物种明确的训练奖励",
+                "count": 0
+              },
+              {
+                "id": "none",
+                "label": "未购买",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "purchase-intent",
+            "prompt": "未来30天是否考虑为家中宠物购买零食（不含主粮）？",
+            "type": "single",
+            "denominator": 0,
+            "missing": 4,
+            "choices": [
+              {
+                "id": "yes",
+                "label": "考虑",
+                "count": 0
+              },
+              {
+                "id": "maybe",
+                "label": "需进一步了解",
+                "count": 0
+              },
+              {
+                "id": "no",
+                "label": "不考虑",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "monthly-budget",
+            "prompt": "未来30天家中宠物零食的计划总额，明确不考虑购买填0；不知道/暂未决定填null。不是主粮预算、个人收入或滨江均值。",
+            "type": "number",
+            "denominator": 0,
+            "missing": 4
+          },
+          {
+            "questionId": "package-size",
+            "prompt": "考虑购买时偏好的单包规格？价格题固定为50克，其他规格不直接比较价格。",
+            "type": "single",
+            "denominator": 0,
+            "missing": 4,
+            "choices": [
+              {
+                "id": "g15",
+                "label": "15克",
+                "count": 0
+              },
+              {
+                "id": "g50",
+                "label": "50克",
+                "count": 0
+              },
+              {
+                "id": "g100",
+                "label": "100克",
+                "count": 0
+              },
+              {
+                "id": "none",
+                "label": "不购买",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "price-per50g",
+            "prompt": "只针对50克零食的考虑价位？区间左闭右开；不含主粮，未给定真实品牌或价格行情。",
+            "type": "single",
+            "denominator": 0,
+            "missing": 4,
+            "choices": [
+              {
+                "id": "under10",
+                "label": "大于0且小于10元/50克",
+                "count": 0
+              },
+              {
+                "id": "ten-twenty",
+                "label": "10至小于20元/50克",
+                "count": 0
+              },
+              {
+                "id": "twenty-forty",
+                "label": "20至小于40元/50克",
+                "count": 0
+              },
+              {
+                "id": "forty-plus",
+                "label": "40元及以上/50克",
+                "count": 0
+              },
+              {
+                "id": "none",
+                "label": "不购买",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "planned-channels",
+            "prompt": "未来可能通过哪些渠道购买零食？不购买/不知道排他，不代表实际订单。",
+            "type": "multiple",
+            "denominator": 0,
+            "missing": 4,
+            "choices": [
+              {
+                "id": "online",
+                "label": "线上配送",
+                "count": 0
+              },
+              {
+                "id": "pet-shop",
+                "label": "宠物店",
+                "count": 0
+              },
+              {
+                "id": "veterinary",
+                "label": "有相关商品的宠物诊疗机构",
+                "count": 0
+              },
+              {
+                "id": "community",
+                "label": "社区销售点",
+                "count": 0
+              },
+              {
+                "id": "pickup",
+                "label": "线上下单线下自提",
+                "count": 0
+              },
+              {
+                "id": "none",
+                "label": "不购买",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "online-handoff",
+            "prompt": "若线上下单，如何接收更适用？本轮不推断履约成本或销量。",
+            "type": "single",
+            "denominator": 0,
+            "missing": 4,
+            "choices": [
+              {
+                "id": "pickup",
+                "label": "线下自提",
+                "count": 0
+              },
+              {
+                "id": "delivery",
+                "label": "配送",
+                "count": 0
+              },
+              {
+                "id": "both",
+                "label": "两者都可",
+                "count": 0
+              },
+              {
+                "id": "none",
+                "label": "不购买/不适用",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "travel-minutes",
+            "prompt": "为线下零食网点可接受的单程步行时间？仅配送/不购买/不知道填null。",
+            "type": "number",
+            "denominator": 0,
+            "missing": 4
+          },
+          {
+            "questionId": "reachable-streets",
+            "prompt": "您个人可到达的街道有哪些？只是粗粒度假设，不是推荐区域/真实订单密度；不知道排他。",
+            "type": "multiple",
+            "denominator": 0,
+            "missing": 4,
+            "choices": [
+              {
+                "id": "xixing",
+                "label": "西兴",
+                "count": 0
+              },
+              {
+                "id": "changhe",
+                "label": "长河",
+                "count": 0
+              },
+              {
+                "id": "puyan",
+                "label": "浦沿",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "purchase-barriers",
+            "prompt": "购买零食有哪些障碍？没有顾虑/不知道排他。",
+            "type": "multiple",
+            "denominator": 0,
+            "missing": 4,
+            "choices": [
+              {
+                "id": "suitability",
+                "label": "物种/个体适用性未确认",
+                "count": 0
+              },
+              {
+                "id": "ingredients",
+                "label": "成分与安全资料",
+                "count": 0
+              },
+              {
+                "id": "freshness",
+                "label": "日期与储存",
+                "count": 0
+              },
+              {
+                "id": "price",
+                "label": "价位",
+                "count": 0
+              },
+              {
+                "id": "traceability",
+                "label": "来源可追溯性",
+                "count": 0
+              },
+              {
+                "id": "none",
+                "label": "没有顾虑",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "price10-intent",
+            "prompt": "仅在适用性和资料均确认的假设下，50克辅助零食10元/包是否考虑？价格为实验设定，不是行情；总体不考虑购买应选不考虑。",
+            "type": "single",
+            "denominator": 0,
+            "missing": 4,
+            "choices": [
+              {
+                "id": "yes",
+                "label": "考虑",
+                "count": 0
+              },
+              {
+                "id": "maybe",
+                "label": "仍需了解",
+                "count": 0
+              },
+              {
+                "id": "no",
+                "label": "不考虑",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "price20-intent",
+            "prompt": "假设与上一题商品和资料相同，仅50克价格改为20元/包是否考虑？同一答卷条件追问，不是随机控价实验；总体不考虑购买应选不考虑。",
+            "type": "single",
+            "denominator": 0,
+            "missing": 4,
+            "choices": [
+              {
+                "id": "yes",
+                "label": "考虑",
+                "count": 0
+              },
+              {
+                "id": "maybe",
+                "label": "仍需了解",
+                "count": 0
+              },
+              {
+                "id": "no",
+                "label": "不考虑",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "traceability-importance",
+            "prompt": "商品来源资料对这次采购决定的重要性？1不重要，5非常重要；不知道填null。不是宠物健康诊断。",
+            "type": "scale",
+            "denominator": 0,
+            "missing": 4
+          },
+          {
+            "questionId": "needed-evidence",
+            "prompt": "决定购买还缺什么证据？可回答无关或不知道，不编造网点、真实订单、品牌功效或市场份额。",
+            "type": "text",
+            "denominator": 0,
+            "missing": 4
+          }
+        ]
+      },
+      {
+        "field": "presetName",
+        "value": "养猫采购参与者 · 受雇与共同生活情景",
+        "planned": 3,
+        "uniqueProfiles": 3,
+        "valid": 1,
+        "summaries": [
+          {
+            "questionId": "pet-type",
+            "prompt": "本次情景中家中拥有哪类宠物？资格仍是合成假设，不代表滨江比例。",
+            "type": "single",
+            "denominator": 1,
+            "missing": 2,
+            "choices": [
+              {
+                "id": "cat",
+                "label": "只有猫",
+                "count": 1
+              },
+              {
+                "id": "dog",
+                "label": "只有犬",
+                "count": 0
+              },
+              {
+                "id": "both",
+                "label": "猫和犬都有",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道/资格未确认",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "purchase-role",
+            "prompt": "您参与家中宠物采购的哪些环节？无参与/不知道排他。",
+            "type": "multiple",
+            "denominator": 1,
+            "missing": 2,
+            "choices": [
+              {
+                "id": "purchaser",
+                "label": "实际购买",
+                "count": 1
+              },
+              {
+                "id": "decision",
+                "label": "决定是否购买",
+                "count": 1
+              },
+              {
+                "id": "shared",
+                "label": "共同参与采购",
+                "count": 1
+              },
+              {
+                "id": "none",
+                "label": "不参与",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "snack-boundary",
+            "prompt": "本问卷只问辅助性奖励零食，明确不含日常主粮。您是否理解这一区别？不了解不能据此推导主粮需求。",
+            "type": "single",
+            "denominator": 1,
+            "missing": 2,
+            "choices": [
+              {
+                "id": "understood",
+                "label": "理解，只回答零食",
+                "count": 1
+              },
+              {
+                "id": "needs-info",
+                "label": "需要先了解定义",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "past-frequency",
+            "prompt": "过去30天购买宠物零食次数（不含主粮）？没有记录请选择不知道。",
+            "type": "single",
+            "denominator": 1,
+            "missing": 2,
+            "choices": [
+              {
+                "id": "none",
+                "label": "0次",
+                "count": 0
+              },
+              {
+                "id": "one-two",
+                "label": "1–2次",
+                "count": 1
+              },
+              {
+                "id": "three-five",
+                "label": "3–5次",
+                "count": 0
+              },
+              {
+                "id": "six-plus",
+                "label": "6次及以上",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道/无记录",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "past-snack-categories",
+            "prompt": "过去30天购买哪些宠物零食？猫条/犬用条按明确适用物种区分；未购买/不知道排他，不含主粮。",
+            "type": "multiple",
+            "denominator": 1,
+            "missing": 2,
+            "choices": [
+              {
+                "id": "cat-creamy",
+                "label": "猫用猫条",
+                "count": 1
+              },
+              {
+                "id": "dog-chew",
+                "label": "犬用磨牙零食",
+                "count": 0
+              },
+              {
+                "id": "freeze-dried",
+                "label": "适用物种明确的冻干零食",
+                "count": 1
+              },
+              {
+                "id": "training",
+                "label": "适用物种明确的训练奖励",
+                "count": 0
+              },
+              {
+                "id": "none",
+                "label": "未购买",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "purchase-intent",
+            "prompt": "未来30天是否考虑为家中宠物购买零食（不含主粮）？",
+            "type": "single",
+            "denominator": 1,
+            "missing": 2,
+            "choices": [
+              {
+                "id": "yes",
+                "label": "考虑",
+                "count": 1
+              },
+              {
+                "id": "maybe",
+                "label": "需进一步了解",
+                "count": 0
+              },
+              {
+                "id": "no",
+                "label": "不考虑",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "monthly-budget",
+            "prompt": "未来30天家中宠物零食的计划总额，明确不考虑购买填0；不知道/暂未决定填null。不是主粮预算、个人收入或滨江均值。",
+            "type": "number",
+            "denominator": 1,
+            "missing": 2,
+            "mean": 80,
+            "median": 80,
+            "unit": "CNY/一个情景家庭/未来30天/仅宠物零食"
+          },
+          {
+            "questionId": "package-size",
+            "prompt": "考虑购买时偏好的单包规格？价格题固定为50克，其他规格不直接比较价格。",
+            "type": "single",
+            "denominator": 1,
+            "missing": 2,
+            "choices": [
+              {
+                "id": "g15",
+                "label": "15克",
+                "count": 0
+              },
+              {
+                "id": "g50",
+                "label": "50克",
+                "count": 1
+              },
+              {
+                "id": "g100",
+                "label": "100克",
+                "count": 0
+              },
+              {
+                "id": "none",
+                "label": "不购买",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "price-per50g",
+            "prompt": "只针对50克零食的考虑价位？区间左闭右开；不含主粮，未给定真实品牌或价格行情。",
+            "type": "single",
+            "denominator": 1,
+            "missing": 2,
+            "choices": [
+              {
+                "id": "under10",
+                "label": "大于0且小于10元/50克",
+                "count": 0
+              },
+              {
+                "id": "ten-twenty",
+                "label": "10至小于20元/50克",
+                "count": 1
+              },
+              {
+                "id": "twenty-forty",
+                "label": "20至小于40元/50克",
+                "count": 0
+              },
+              {
+                "id": "forty-plus",
+                "label": "40元及以上/50克",
+                "count": 0
+              },
+              {
+                "id": "none",
+                "label": "不购买",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "planned-channels",
+            "prompt": "未来可能通过哪些渠道购买零食？不购买/不知道排他，不代表实际订单。",
+            "type": "multiple",
+            "denominator": 1,
+            "missing": 2,
+            "choices": [
+              {
+                "id": "online",
+                "label": "线上配送",
+                "count": 1
+              },
+              {
+                "id": "pet-shop",
+                "label": "宠物店",
+                "count": 1
+              },
+              {
+                "id": "veterinary",
+                "label": "有相关商品的宠物诊疗机构",
+                "count": 0
+              },
+              {
+                "id": "community",
+                "label": "社区销售点",
+                "count": 0
+              },
+              {
+                "id": "pickup",
+                "label": "线上下单线下自提",
+                "count": 1
+              },
+              {
+                "id": "none",
+                "label": "不购买",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "online-handoff",
+            "prompt": "若线上下单，如何接收更适用？本轮不推断履约成本或销量。",
+            "type": "single",
+            "denominator": 1,
+            "missing": 2,
+            "choices": [
+              {
+                "id": "pickup",
+                "label": "线下自提",
+                "count": 0
+              },
+              {
+                "id": "delivery",
+                "label": "配送",
+                "count": 0
+              },
+              {
+                "id": "both",
+                "label": "两者都可",
+                "count": 1
+              },
+              {
+                "id": "none",
+                "label": "不购买/不适用",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "travel-minutes",
+            "prompt": "为线下零食网点可接受的单程步行时间？仅配送/不购买/不知道填null。",
+            "type": "number",
+            "denominator": 1,
+            "missing": 2,
+            "mean": 15,
+            "median": 15,
+            "unit": "分钟/单程步行"
+          },
+          {
+            "questionId": "reachable-streets",
+            "prompt": "您个人可到达的街道有哪些？只是粗粒度假设，不是推荐区域/真实订单密度；不知道排他。",
+            "type": "multiple",
+            "denominator": 1,
+            "missing": 2,
+            "choices": [
+              {
+                "id": "xixing",
+                "label": "西兴",
+                "count": 1
+              },
+              {
+                "id": "changhe",
+                "label": "长河",
+                "count": 1
+              },
+              {
+                "id": "puyan",
+                "label": "浦沿",
+                "count": 1
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "purchase-barriers",
+            "prompt": "购买零食有哪些障碍？没有顾虑/不知道排他。",
+            "type": "multiple",
+            "denominator": 1,
+            "missing": 2,
+            "choices": [
+              {
+                "id": "suitability",
+                "label": "物种/个体适用性未确认",
+                "count": 0
+              },
+              {
+                "id": "ingredients",
+                "label": "成分与安全资料",
+                "count": 1
+              },
+              {
+                "id": "freshness",
+                "label": "日期与储存",
+                "count": 0
+              },
+              {
+                "id": "price",
+                "label": "价位",
+                "count": 0
+              },
+              {
+                "id": "traceability",
+                "label": "来源可追溯性",
+                "count": 1
+              },
+              {
+                "id": "none",
+                "label": "没有顾虑",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "price10-intent",
+            "prompt": "仅在适用性和资料均确认的假设下，50克辅助零食10元/包是否考虑？价格为实验设定，不是行情；总体不考虑购买应选不考虑。",
+            "type": "single",
+            "denominator": 1,
+            "missing": 2,
+            "choices": [
+              {
+                "id": "yes",
+                "label": "考虑",
+                "count": 1
+              },
+              {
+                "id": "maybe",
+                "label": "仍需了解",
+                "count": 0
+              },
+              {
+                "id": "no",
+                "label": "不考虑",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "price20-intent",
+            "prompt": "假设与上一题商品和资料相同，仅50克价格改为20元/包是否考虑？同一答卷条件追问，不是随机控价实验；总体不考虑购买应选不考虑。",
+            "type": "single",
+            "denominator": 1,
+            "missing": 2,
+            "choices": [
+              {
+                "id": "yes",
+                "label": "考虑",
+                "count": 0
+              },
+              {
+                "id": "maybe",
+                "label": "仍需了解",
+                "count": 1
+              },
+              {
+                "id": "no",
+                "label": "不考虑",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "traceability-importance",
+            "prompt": "商品来源资料对这次采购决定的重要性？1不重要，5非常重要；不知道填null。不是宠物健康诊断。",
+            "type": "scale",
+            "denominator": 1,
+            "missing": 2,
+            "mean": 4,
+            "median": 4,
+            "unit": "分"
+          },
+          {
+            "questionId": "needed-evidence",
+            "prompt": "决定购买还缺什么证据？可回答无关或不知道，不编造网点、真实订单、品牌功效或市场份额。",
+            "type": "text",
+            "denominator": 1,
+            "missing": 2
+          }
+        ]
+      },
+      {
+        "field": "presetName",
+        "value": "养犬采购参与者 · 五层未知对照情景",
+        "planned": 3,
+        "uniqueProfiles": 3,
+        "valid": 0,
+        "summaries": [
+          {
+            "questionId": "pet-type",
+            "prompt": "本次情景中家中拥有哪类宠物？资格仍是合成假设，不代表滨江比例。",
+            "type": "single",
+            "denominator": 0,
+            "missing": 3,
+            "choices": [
+              {
+                "id": "cat",
+                "label": "只有猫",
+                "count": 0
+              },
+              {
+                "id": "dog",
+                "label": "只有犬",
+                "count": 0
+              },
+              {
+                "id": "both",
+                "label": "猫和犬都有",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道/资格未确认",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "purchase-role",
+            "prompt": "您参与家中宠物采购的哪些环节？无参与/不知道排他。",
+            "type": "multiple",
+            "denominator": 0,
+            "missing": 3,
+            "choices": [
+              {
+                "id": "purchaser",
+                "label": "实际购买",
+                "count": 0
+              },
+              {
+                "id": "decision",
+                "label": "决定是否购买",
+                "count": 0
+              },
+              {
+                "id": "shared",
+                "label": "共同参与采购",
+                "count": 0
+              },
+              {
+                "id": "none",
+                "label": "不参与",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "snack-boundary",
+            "prompt": "本问卷只问辅助性奖励零食，明确不含日常主粮。您是否理解这一区别？不了解不能据此推导主粮需求。",
+            "type": "single",
+            "denominator": 0,
+            "missing": 3,
+            "choices": [
+              {
+                "id": "understood",
+                "label": "理解，只回答零食",
+                "count": 0
+              },
+              {
+                "id": "needs-info",
+                "label": "需要先了解定义",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "past-frequency",
+            "prompt": "过去30天购买宠物零食次数（不含主粮）？没有记录请选择不知道。",
+            "type": "single",
+            "denominator": 0,
+            "missing": 3,
+            "choices": [
+              {
+                "id": "none",
+                "label": "0次",
+                "count": 0
+              },
+              {
+                "id": "one-two",
+                "label": "1–2次",
+                "count": 0
+              },
+              {
+                "id": "three-five",
+                "label": "3–5次",
+                "count": 0
+              },
+              {
+                "id": "six-plus",
+                "label": "6次及以上",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道/无记录",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "past-snack-categories",
+            "prompt": "过去30天购买哪些宠物零食？猫条/犬用条按明确适用物种区分；未购买/不知道排他，不含主粮。",
+            "type": "multiple",
+            "denominator": 0,
+            "missing": 3,
+            "choices": [
+              {
+                "id": "cat-creamy",
+                "label": "猫用猫条",
+                "count": 0
+              },
+              {
+                "id": "dog-chew",
+                "label": "犬用磨牙零食",
+                "count": 0
+              },
+              {
+                "id": "freeze-dried",
+                "label": "适用物种明确的冻干零食",
+                "count": 0
+              },
+              {
+                "id": "training",
+                "label": "适用物种明确的训练奖励",
+                "count": 0
+              },
+              {
+                "id": "none",
+                "label": "未购买",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "purchase-intent",
+            "prompt": "未来30天是否考虑为家中宠物购买零食（不含主粮）？",
+            "type": "single",
+            "denominator": 0,
+            "missing": 3,
+            "choices": [
+              {
+                "id": "yes",
+                "label": "考虑",
+                "count": 0
+              },
+              {
+                "id": "maybe",
+                "label": "需进一步了解",
+                "count": 0
+              },
+              {
+                "id": "no",
+                "label": "不考虑",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "monthly-budget",
+            "prompt": "未来30天家中宠物零食的计划总额，明确不考虑购买填0；不知道/暂未决定填null。不是主粮预算、个人收入或滨江均值。",
+            "type": "number",
+            "denominator": 0,
+            "missing": 3
+          },
+          {
+            "questionId": "package-size",
+            "prompt": "考虑购买时偏好的单包规格？价格题固定为50克，其他规格不直接比较价格。",
+            "type": "single",
+            "denominator": 0,
+            "missing": 3,
+            "choices": [
+              {
+                "id": "g15",
+                "label": "15克",
+                "count": 0
+              },
+              {
+                "id": "g50",
+                "label": "50克",
+                "count": 0
+              },
+              {
+                "id": "g100",
+                "label": "100克",
+                "count": 0
+              },
+              {
+                "id": "none",
+                "label": "不购买",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "price-per50g",
+            "prompt": "只针对50克零食的考虑价位？区间左闭右开；不含主粮，未给定真实品牌或价格行情。",
+            "type": "single",
+            "denominator": 0,
+            "missing": 3,
+            "choices": [
+              {
+                "id": "under10",
+                "label": "大于0且小于10元/50克",
+                "count": 0
+              },
+              {
+                "id": "ten-twenty",
+                "label": "10至小于20元/50克",
+                "count": 0
+              },
+              {
+                "id": "twenty-forty",
+                "label": "20至小于40元/50克",
+                "count": 0
+              },
+              {
+                "id": "forty-plus",
+                "label": "40元及以上/50克",
+                "count": 0
+              },
+              {
+                "id": "none",
+                "label": "不购买",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "planned-channels",
+            "prompt": "未来可能通过哪些渠道购买零食？不购买/不知道排他，不代表实际订单。",
+            "type": "multiple",
+            "denominator": 0,
+            "missing": 3,
+            "choices": [
+              {
+                "id": "online",
+                "label": "线上配送",
+                "count": 0
+              },
+              {
+                "id": "pet-shop",
+                "label": "宠物店",
+                "count": 0
+              },
+              {
+                "id": "veterinary",
+                "label": "有相关商品的宠物诊疗机构",
+                "count": 0
+              },
+              {
+                "id": "community",
+                "label": "社区销售点",
+                "count": 0
+              },
+              {
+                "id": "pickup",
+                "label": "线上下单线下自提",
+                "count": 0
+              },
+              {
+                "id": "none",
+                "label": "不购买",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "online-handoff",
+            "prompt": "若线上下单，如何接收更适用？本轮不推断履约成本或销量。",
+            "type": "single",
+            "denominator": 0,
+            "missing": 3,
+            "choices": [
+              {
+                "id": "pickup",
+                "label": "线下自提",
+                "count": 0
+              },
+              {
+                "id": "delivery",
+                "label": "配送",
+                "count": 0
+              },
+              {
+                "id": "both",
+                "label": "两者都可",
+                "count": 0
+              },
+              {
+                "id": "none",
+                "label": "不购买/不适用",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "travel-minutes",
+            "prompt": "为线下零食网点可接受的单程步行时间？仅配送/不购买/不知道填null。",
+            "type": "number",
+            "denominator": 0,
+            "missing": 3
+          },
+          {
+            "questionId": "reachable-streets",
+            "prompt": "您个人可到达的街道有哪些？只是粗粒度假设，不是推荐区域/真实订单密度；不知道排他。",
+            "type": "multiple",
+            "denominator": 0,
+            "missing": 3,
+            "choices": [
+              {
+                "id": "xixing",
+                "label": "西兴",
+                "count": 0
+              },
+              {
+                "id": "changhe",
+                "label": "长河",
+                "count": 0
+              },
+              {
+                "id": "puyan",
+                "label": "浦沿",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "purchase-barriers",
+            "prompt": "购买零食有哪些障碍？没有顾虑/不知道排他。",
+            "type": "multiple",
+            "denominator": 0,
+            "missing": 3,
+            "choices": [
+              {
+                "id": "suitability",
+                "label": "物种/个体适用性未确认",
+                "count": 0
+              },
+              {
+                "id": "ingredients",
+                "label": "成分与安全资料",
+                "count": 0
+              },
+              {
+                "id": "freshness",
+                "label": "日期与储存",
+                "count": 0
+              },
+              {
+                "id": "price",
+                "label": "价位",
+                "count": 0
+              },
+              {
+                "id": "traceability",
+                "label": "来源可追溯性",
+                "count": 0
+              },
+              {
+                "id": "none",
+                "label": "没有顾虑",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "price10-intent",
+            "prompt": "仅在适用性和资料均确认的假设下，50克辅助零食10元/包是否考虑？价格为实验设定，不是行情；总体不考虑购买应选不考虑。",
+            "type": "single",
+            "denominator": 0,
+            "missing": 3,
+            "choices": [
+              {
+                "id": "yes",
+                "label": "考虑",
+                "count": 0
+              },
+              {
+                "id": "maybe",
+                "label": "仍需了解",
+                "count": 0
+              },
+              {
+                "id": "no",
+                "label": "不考虑",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "price20-intent",
+            "prompt": "假设与上一题商品和资料相同，仅50克价格改为20元/包是否考虑？同一答卷条件追问，不是随机控价实验；总体不考虑购买应选不考虑。",
+            "type": "single",
+            "denominator": 0,
+            "missing": 3,
+            "choices": [
+              {
+                "id": "yes",
+                "label": "考虑",
+                "count": 0
+              },
+              {
+                "id": "maybe",
+                "label": "仍需了解",
+                "count": 0
+              },
+              {
+                "id": "no",
+                "label": "不考虑",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "traceability-importance",
+            "prompt": "商品来源资料对这次采购决定的重要性？1不重要，5非常重要；不知道填null。不是宠物健康诊断。",
+            "type": "scale",
+            "denominator": 0,
+            "missing": 3
+          },
+          {
+            "questionId": "needed-evidence",
+            "prompt": "决定购买还缺什么证据？可回答无关或不知道，不编造网点、真实订单、品牌功效或市场份额。",
+            "type": "text",
+            "denominator": 0,
+            "missing": 3
+          }
+        ]
+      },
+      {
+        "field": "presetName",
+        "value": "猫犬共同采购参与者 · 退休与多代照护情景",
+        "planned": 2,
+        "uniqueProfiles": 2,
+        "valid": 0,
+        "summaries": [
+          {
+            "questionId": "pet-type",
+            "prompt": "本次情景中家中拥有哪类宠物？资格仍是合成假设，不代表滨江比例。",
+            "type": "single",
+            "denominator": 0,
+            "missing": 2,
+            "choices": [
+              {
+                "id": "cat",
+                "label": "只有猫",
+                "count": 0
+              },
+              {
+                "id": "dog",
+                "label": "只有犬",
+                "count": 0
+              },
+              {
+                "id": "both",
+                "label": "猫和犬都有",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道/资格未确认",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "purchase-role",
+            "prompt": "您参与家中宠物采购的哪些环节？无参与/不知道排他。",
+            "type": "multiple",
+            "denominator": 0,
+            "missing": 2,
+            "choices": [
+              {
+                "id": "purchaser",
+                "label": "实际购买",
+                "count": 0
+              },
+              {
+                "id": "decision",
+                "label": "决定是否购买",
+                "count": 0
+              },
+              {
+                "id": "shared",
+                "label": "共同参与采购",
+                "count": 0
+              },
+              {
+                "id": "none",
+                "label": "不参与",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "snack-boundary",
+            "prompt": "本问卷只问辅助性奖励零食，明确不含日常主粮。您是否理解这一区别？不了解不能据此推导主粮需求。",
+            "type": "single",
+            "denominator": 0,
+            "missing": 2,
+            "choices": [
+              {
+                "id": "understood",
+                "label": "理解，只回答零食",
+                "count": 0
+              },
+              {
+                "id": "needs-info",
+                "label": "需要先了解定义",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "past-frequency",
+            "prompt": "过去30天购买宠物零食次数（不含主粮）？没有记录请选择不知道。",
+            "type": "single",
+            "denominator": 0,
+            "missing": 2,
+            "choices": [
+              {
+                "id": "none",
+                "label": "0次",
+                "count": 0
+              },
+              {
+                "id": "one-two",
+                "label": "1–2次",
+                "count": 0
+              },
+              {
+                "id": "three-five",
+                "label": "3–5次",
+                "count": 0
+              },
+              {
+                "id": "six-plus",
+                "label": "6次及以上",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道/无记录",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "past-snack-categories",
+            "prompt": "过去30天购买哪些宠物零食？猫条/犬用条按明确适用物种区分；未购买/不知道排他，不含主粮。",
+            "type": "multiple",
+            "denominator": 0,
+            "missing": 2,
+            "choices": [
+              {
+                "id": "cat-creamy",
+                "label": "猫用猫条",
+                "count": 0
+              },
+              {
+                "id": "dog-chew",
+                "label": "犬用磨牙零食",
+                "count": 0
+              },
+              {
+                "id": "freeze-dried",
+                "label": "适用物种明确的冻干零食",
+                "count": 0
+              },
+              {
+                "id": "training",
+                "label": "适用物种明确的训练奖励",
+                "count": 0
+              },
+              {
+                "id": "none",
+                "label": "未购买",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "purchase-intent",
+            "prompt": "未来30天是否考虑为家中宠物购买零食（不含主粮）？",
+            "type": "single",
+            "denominator": 0,
+            "missing": 2,
+            "choices": [
+              {
+                "id": "yes",
+                "label": "考虑",
+                "count": 0
+              },
+              {
+                "id": "maybe",
+                "label": "需进一步了解",
+                "count": 0
+              },
+              {
+                "id": "no",
+                "label": "不考虑",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "monthly-budget",
+            "prompt": "未来30天家中宠物零食的计划总额，明确不考虑购买填0；不知道/暂未决定填null。不是主粮预算、个人收入或滨江均值。",
+            "type": "number",
+            "denominator": 0,
+            "missing": 2
+          },
+          {
+            "questionId": "package-size",
+            "prompt": "考虑购买时偏好的单包规格？价格题固定为50克，其他规格不直接比较价格。",
+            "type": "single",
+            "denominator": 0,
+            "missing": 2,
+            "choices": [
+              {
+                "id": "g15",
+                "label": "15克",
+                "count": 0
+              },
+              {
+                "id": "g50",
+                "label": "50克",
+                "count": 0
+              },
+              {
+                "id": "g100",
+                "label": "100克",
+                "count": 0
+              },
+              {
+                "id": "none",
+                "label": "不购买",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "price-per50g",
+            "prompt": "只针对50克零食的考虑价位？区间左闭右开；不含主粮，未给定真实品牌或价格行情。",
+            "type": "single",
+            "denominator": 0,
+            "missing": 2,
+            "choices": [
+              {
+                "id": "under10",
+                "label": "大于0且小于10元/50克",
+                "count": 0
+              },
+              {
+                "id": "ten-twenty",
+                "label": "10至小于20元/50克",
+                "count": 0
+              },
+              {
+                "id": "twenty-forty",
+                "label": "20至小于40元/50克",
+                "count": 0
+              },
+              {
+                "id": "forty-plus",
+                "label": "40元及以上/50克",
+                "count": 0
+              },
+              {
+                "id": "none",
+                "label": "不购买",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "planned-channels",
+            "prompt": "未来可能通过哪些渠道购买零食？不购买/不知道排他，不代表实际订单。",
+            "type": "multiple",
+            "denominator": 0,
+            "missing": 2,
+            "choices": [
+              {
+                "id": "online",
+                "label": "线上配送",
+                "count": 0
+              },
+              {
+                "id": "pet-shop",
+                "label": "宠物店",
+                "count": 0
+              },
+              {
+                "id": "veterinary",
+                "label": "有相关商品的宠物诊疗机构",
+                "count": 0
+              },
+              {
+                "id": "community",
+                "label": "社区销售点",
+                "count": 0
+              },
+              {
+                "id": "pickup",
+                "label": "线上下单线下自提",
+                "count": 0
+              },
+              {
+                "id": "none",
+                "label": "不购买",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "online-handoff",
+            "prompt": "若线上下单，如何接收更适用？本轮不推断履约成本或销量。",
+            "type": "single",
+            "denominator": 0,
+            "missing": 2,
+            "choices": [
+              {
+                "id": "pickup",
+                "label": "线下自提",
+                "count": 0
+              },
+              {
+                "id": "delivery",
+                "label": "配送",
+                "count": 0
+              },
+              {
+                "id": "both",
+                "label": "两者都可",
+                "count": 0
+              },
+              {
+                "id": "none",
+                "label": "不购买/不适用",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "travel-minutes",
+            "prompt": "为线下零食网点可接受的单程步行时间？仅配送/不购买/不知道填null。",
+            "type": "number",
+            "denominator": 0,
+            "missing": 2
+          },
+          {
+            "questionId": "reachable-streets",
+            "prompt": "您个人可到达的街道有哪些？只是粗粒度假设，不是推荐区域/真实订单密度；不知道排他。",
+            "type": "multiple",
+            "denominator": 0,
+            "missing": 2,
+            "choices": [
+              {
+                "id": "xixing",
+                "label": "西兴",
+                "count": 0
+              },
+              {
+                "id": "changhe",
+                "label": "长河",
+                "count": 0
+              },
+              {
+                "id": "puyan",
+                "label": "浦沿",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "purchase-barriers",
+            "prompt": "购买零食有哪些障碍？没有顾虑/不知道排他。",
+            "type": "multiple",
+            "denominator": 0,
+            "missing": 2,
+            "choices": [
+              {
+                "id": "suitability",
+                "label": "物种/个体适用性未确认",
+                "count": 0
+              },
+              {
+                "id": "ingredients",
+                "label": "成分与安全资料",
+                "count": 0
+              },
+              {
+                "id": "freshness",
+                "label": "日期与储存",
+                "count": 0
+              },
+              {
+                "id": "price",
+                "label": "价位",
+                "count": 0
+              },
+              {
+                "id": "traceability",
+                "label": "来源可追溯性",
+                "count": 0
+              },
+              {
+                "id": "none",
+                "label": "没有顾虑",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "price10-intent",
+            "prompt": "仅在适用性和资料均确认的假设下，50克辅助零食10元/包是否考虑？价格为实验设定，不是行情；总体不考虑购买应选不考虑。",
+            "type": "single",
+            "denominator": 0,
+            "missing": 2,
+            "choices": [
+              {
+                "id": "yes",
+                "label": "考虑",
+                "count": 0
+              },
+              {
+                "id": "maybe",
+                "label": "仍需了解",
+                "count": 0
+              },
+              {
+                "id": "no",
+                "label": "不考虑",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "price20-intent",
+            "prompt": "假设与上一题商品和资料相同，仅50克价格改为20元/包是否考虑？同一答卷条件追问，不是随机控价实验；总体不考虑购买应选不考虑。",
+            "type": "single",
+            "denominator": 0,
+            "missing": 2,
+            "choices": [
+              {
+                "id": "yes",
+                "label": "考虑",
+                "count": 0
+              },
+              {
+                "id": "maybe",
+                "label": "仍需了解",
+                "count": 0
+              },
+              {
+                "id": "no",
+                "label": "不考虑",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "traceability-importance",
+            "prompt": "商品来源资料对这次采购决定的重要性？1不重要，5非常重要；不知道填null。不是宠物健康诊断。",
+            "type": "scale",
+            "denominator": 0,
+            "missing": 2
+          },
+          {
+            "questionId": "needed-evidence",
+            "prompt": "决定购买还缺什么证据？可回答无关或不知道，不编造网点、真实订单、品牌功效或市场份额。",
+            "type": "text",
+            "denominator": 0,
+            "missing": 2
+          }
+        ]
+      },
+      {
+        "field": "presetName",
+        "value": "养猫采购参与者 · 自雇与照护情景",
+        "planned": 2,
+        "uniqueProfiles": 2,
+        "valid": 0,
+        "summaries": [
+          {
+            "questionId": "pet-type",
+            "prompt": "本次情景中家中拥有哪类宠物？资格仍是合成假设，不代表滨江比例。",
+            "type": "single",
+            "denominator": 0,
+            "missing": 2,
+            "choices": [
+              {
+                "id": "cat",
+                "label": "只有猫",
+                "count": 0
+              },
+              {
+                "id": "dog",
+                "label": "只有犬",
+                "count": 0
+              },
+              {
+                "id": "both",
+                "label": "猫和犬都有",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道/资格未确认",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "purchase-role",
+            "prompt": "您参与家中宠物采购的哪些环节？无参与/不知道排他。",
+            "type": "multiple",
+            "denominator": 0,
+            "missing": 2,
+            "choices": [
+              {
+                "id": "purchaser",
+                "label": "实际购买",
+                "count": 0
+              },
+              {
+                "id": "decision",
+                "label": "决定是否购买",
+                "count": 0
+              },
+              {
+                "id": "shared",
+                "label": "共同参与采购",
+                "count": 0
+              },
+              {
+                "id": "none",
+                "label": "不参与",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "snack-boundary",
+            "prompt": "本问卷只问辅助性奖励零食，明确不含日常主粮。您是否理解这一区别？不了解不能据此推导主粮需求。",
+            "type": "single",
+            "denominator": 0,
+            "missing": 2,
+            "choices": [
+              {
+                "id": "understood",
+                "label": "理解，只回答零食",
+                "count": 0
+              },
+              {
+                "id": "needs-info",
+                "label": "需要先了解定义",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "past-frequency",
+            "prompt": "过去30天购买宠物零食次数（不含主粮）？没有记录请选择不知道。",
+            "type": "single",
+            "denominator": 0,
+            "missing": 2,
+            "choices": [
+              {
+                "id": "none",
+                "label": "0次",
+                "count": 0
+              },
+              {
+                "id": "one-two",
+                "label": "1–2次",
+                "count": 0
+              },
+              {
+                "id": "three-five",
+                "label": "3–5次",
+                "count": 0
+              },
+              {
+                "id": "six-plus",
+                "label": "6次及以上",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道/无记录",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "past-snack-categories",
+            "prompt": "过去30天购买哪些宠物零食？猫条/犬用条按明确适用物种区分；未购买/不知道排他，不含主粮。",
+            "type": "multiple",
+            "denominator": 0,
+            "missing": 2,
+            "choices": [
+              {
+                "id": "cat-creamy",
+                "label": "猫用猫条",
+                "count": 0
+              },
+              {
+                "id": "dog-chew",
+                "label": "犬用磨牙零食",
+                "count": 0
+              },
+              {
+                "id": "freeze-dried",
+                "label": "适用物种明确的冻干零食",
+                "count": 0
+              },
+              {
+                "id": "training",
+                "label": "适用物种明确的训练奖励",
+                "count": 0
+              },
+              {
+                "id": "none",
+                "label": "未购买",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "purchase-intent",
+            "prompt": "未来30天是否考虑为家中宠物购买零食（不含主粮）？",
+            "type": "single",
+            "denominator": 0,
+            "missing": 2,
+            "choices": [
+              {
+                "id": "yes",
+                "label": "考虑",
+                "count": 0
+              },
+              {
+                "id": "maybe",
+                "label": "需进一步了解",
+                "count": 0
+              },
+              {
+                "id": "no",
+                "label": "不考虑",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "monthly-budget",
+            "prompt": "未来30天家中宠物零食的计划总额，明确不考虑购买填0；不知道/暂未决定填null。不是主粮预算、个人收入或滨江均值。",
+            "type": "number",
+            "denominator": 0,
+            "missing": 2
+          },
+          {
+            "questionId": "package-size",
+            "prompt": "考虑购买时偏好的单包规格？价格题固定为50克，其他规格不直接比较价格。",
+            "type": "single",
+            "denominator": 0,
+            "missing": 2,
+            "choices": [
+              {
+                "id": "g15",
+                "label": "15克",
+                "count": 0
+              },
+              {
+                "id": "g50",
+                "label": "50克",
+                "count": 0
+              },
+              {
+                "id": "g100",
+                "label": "100克",
+                "count": 0
+              },
+              {
+                "id": "none",
+                "label": "不购买",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "price-per50g",
+            "prompt": "只针对50克零食的考虑价位？区间左闭右开；不含主粮，未给定真实品牌或价格行情。",
+            "type": "single",
+            "denominator": 0,
+            "missing": 2,
+            "choices": [
+              {
+                "id": "under10",
+                "label": "大于0且小于10元/50克",
+                "count": 0
+              },
+              {
+                "id": "ten-twenty",
+                "label": "10至小于20元/50克",
+                "count": 0
+              },
+              {
+                "id": "twenty-forty",
+                "label": "20至小于40元/50克",
+                "count": 0
+              },
+              {
+                "id": "forty-plus",
+                "label": "40元及以上/50克",
+                "count": 0
+              },
+              {
+                "id": "none",
+                "label": "不购买",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "planned-channels",
+            "prompt": "未来可能通过哪些渠道购买零食？不购买/不知道排他，不代表实际订单。",
+            "type": "multiple",
+            "denominator": 0,
+            "missing": 2,
+            "choices": [
+              {
+                "id": "online",
+                "label": "线上配送",
+                "count": 0
+              },
+              {
+                "id": "pet-shop",
+                "label": "宠物店",
+                "count": 0
+              },
+              {
+                "id": "veterinary",
+                "label": "有相关商品的宠物诊疗机构",
+                "count": 0
+              },
+              {
+                "id": "community",
+                "label": "社区销售点",
+                "count": 0
+              },
+              {
+                "id": "pickup",
+                "label": "线上下单线下自提",
+                "count": 0
+              },
+              {
+                "id": "none",
+                "label": "不购买",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "online-handoff",
+            "prompt": "若线上下单，如何接收更适用？本轮不推断履约成本或销量。",
+            "type": "single",
+            "denominator": 0,
+            "missing": 2,
+            "choices": [
+              {
+                "id": "pickup",
+                "label": "线下自提",
+                "count": 0
+              },
+              {
+                "id": "delivery",
+                "label": "配送",
+                "count": 0
+              },
+              {
+                "id": "both",
+                "label": "两者都可",
+                "count": 0
+              },
+              {
+                "id": "none",
+                "label": "不购买/不适用",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "travel-minutes",
+            "prompt": "为线下零食网点可接受的单程步行时间？仅配送/不购买/不知道填null。",
+            "type": "number",
+            "denominator": 0,
+            "missing": 2
+          },
+          {
+            "questionId": "reachable-streets",
+            "prompt": "您个人可到达的街道有哪些？只是粗粒度假设，不是推荐区域/真实订单密度；不知道排他。",
+            "type": "multiple",
+            "denominator": 0,
+            "missing": 2,
+            "choices": [
+              {
+                "id": "xixing",
+                "label": "西兴",
+                "count": 0
+              },
+              {
+                "id": "changhe",
+                "label": "长河",
+                "count": 0
+              },
+              {
+                "id": "puyan",
+                "label": "浦沿",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "purchase-barriers",
+            "prompt": "购买零食有哪些障碍？没有顾虑/不知道排他。",
+            "type": "multiple",
+            "denominator": 0,
+            "missing": 2,
+            "choices": [
+              {
+                "id": "suitability",
+                "label": "物种/个体适用性未确认",
+                "count": 0
+              },
+              {
+                "id": "ingredients",
+                "label": "成分与安全资料",
+                "count": 0
+              },
+              {
+                "id": "freshness",
+                "label": "日期与储存",
+                "count": 0
+              },
+              {
+                "id": "price",
+                "label": "价位",
+                "count": 0
+              },
+              {
+                "id": "traceability",
+                "label": "来源可追溯性",
+                "count": 0
+              },
+              {
+                "id": "none",
+                "label": "没有顾虑",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "price10-intent",
+            "prompt": "仅在适用性和资料均确认的假设下，50克辅助零食10元/包是否考虑？价格为实验设定，不是行情；总体不考虑购买应选不考虑。",
+            "type": "single",
+            "denominator": 0,
+            "missing": 2,
+            "choices": [
+              {
+                "id": "yes",
+                "label": "考虑",
+                "count": 0
+              },
+              {
+                "id": "maybe",
+                "label": "仍需了解",
+                "count": 0
+              },
+              {
+                "id": "no",
+                "label": "不考虑",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "price20-intent",
+            "prompt": "假设与上一题商品和资料相同，仅50克价格改为20元/包是否考虑？同一答卷条件追问，不是随机控价实验；总体不考虑购买应选不考虑。",
+            "type": "single",
+            "denominator": 0,
+            "missing": 2,
+            "choices": [
+              {
+                "id": "yes",
+                "label": "考虑",
+                "count": 0
+              },
+              {
+                "id": "maybe",
+                "label": "仍需了解",
+                "count": 0
+              },
+              {
+                "id": "no",
+                "label": "不考虑",
+                "count": 0
+              },
+              {
+                "id": "unknown",
+                "label": "不知道",
+                "count": 0
+              }
+            ]
+          },
+          {
+            "questionId": "traceability-importance",
+            "prompt": "商品来源资料对这次采购决定的重要性？1不重要，5非常重要；不知道填null。不是宠物健康诊断。",
+            "type": "scale",
+            "denominator": 0,
+            "missing": 2
+          },
+          {
+            "questionId": "needed-evidence",
+            "prompt": "决定购买还缺什么证据？可回答无关或不知道，不编造网点、真实订单、品牌功效或市场份额。",
+            "type": "text",
+            "denominator": 0,
+            "missing": 2
+          }
+        ]
+      }
+    ],
+    "comparisons": [
+      {
+        "id": "same-50g-price-pair",
+        "label": "相同50克零食10元/20元条件追问",
+        "kind": "price",
+        "baselineQuestionId": "price10-intent",
+        "changedQuestionId": "price20-intent",
+        "denominator": 1,
+        "missing": 9,
+        "transitions": [
+          {
+            "beforeId": "yes",
+            "beforeLabel": "考虑",
+            "afterId": "yes",
+            "afterLabel": "考虑",
+            "count": 0
+          },
+          {
+            "beforeId": "yes",
+            "beforeLabel": "考虑",
+            "afterId": "maybe",
+            "afterLabel": "仍需了解",
+            "count": 1
+          },
+          {
+            "beforeId": "yes",
+            "beforeLabel": "考虑",
+            "afterId": "no",
+            "afterLabel": "不考虑",
+            "count": 0
+          },
+          {
+            "beforeId": "yes",
+            "beforeLabel": "考虑",
+            "afterId": "unknown",
+            "afterLabel": "不知道",
+            "count": 0
+          },
+          {
+            "beforeId": "maybe",
+            "beforeLabel": "仍需了解",
+            "afterId": "yes",
+            "afterLabel": "考虑",
+            "count": 0
+          },
+          {
+            "beforeId": "maybe",
+            "beforeLabel": "仍需了解",
+            "afterId": "maybe",
+            "afterLabel": "仍需了解",
+            "count": 0
+          },
+          {
+            "beforeId": "maybe",
+            "beforeLabel": "仍需了解",
+            "afterId": "no",
+            "afterLabel": "不考虑",
+            "count": 0
+          },
+          {
+            "beforeId": "maybe",
+            "beforeLabel": "仍需了解",
+            "afterId": "unknown",
+            "afterLabel": "不知道",
+            "count": 0
+          },
+          {
+            "beforeId": "no",
+            "beforeLabel": "不考虑",
+            "afterId": "yes",
+            "afterLabel": "考虑",
+            "count": 0
+          },
+          {
+            "beforeId": "no",
+            "beforeLabel": "不考虑",
+            "afterId": "maybe",
+            "afterLabel": "仍需了解",
+            "count": 0
+          },
+          {
+            "beforeId": "no",
+            "beforeLabel": "不考虑",
+            "afterId": "no",
+            "afterLabel": "不考虑",
+            "count": 0
+          },
+          {
+            "beforeId": "no",
+            "beforeLabel": "不考虑",
+            "afterId": "unknown",
+            "afterLabel": "不知道",
+            "count": 0
+          },
+          {
+            "beforeId": "unknown",
+            "beforeLabel": "不知道",
+            "afterId": "yes",
+            "afterLabel": "考虑",
+            "count": 0
+          },
+          {
+            "beforeId": "unknown",
+            "beforeLabel": "不知道",
+            "afterId": "maybe",
+            "afterLabel": "仍需了解",
+            "count": 0
+          },
+          {
+            "beforeId": "unknown",
+            "beforeLabel": "不知道",
+            "afterId": "no",
+            "afterLabel": "不考虑",
+            "count": 0
+          },
+          {
+            "beforeId": "unknown",
+            "beforeLabel": "不知道",
+            "afterId": "unknown",
+            "afterLabel": "不知道",
+            "count": 0
+          }
+        ],
+        "interpretation": "同一答卷内的条件追问交叉表，不是独立随机实验；“保持原选择”保留原文，不把它误算成某固定套餐。不推断真实市场因果。"
+      }
+    ],
+    "questionnaireReview": {
+      "questions": 18,
+      "required": 14,
+      "types": [
+        "single",
+        "multiple",
+        "number",
+        "scale",
+        "text"
+      ],
+      "profileRules": 0,
+      "semanticCoverage": "only-declared-rules",
+      "warnings": [
+        "未定义 validationRules 的问题不能宣称已完成语义自洽检查。",
+        "职业、家庭与开放题需要进一步人工或模型盲评。"
+      ]
+    },
+    "hypothesisReport": {
+      "title": "宠物零食调查：真实LLM合成测试轮",
+      "valid": 1,
+      "planned": 10,
+      "assumptions": [
+        "成年、养猫/犬及采购参与资格是显式假设，不是滨江真实养宠比例。",
+        "四情景按10个计划画像覆盖(3/3/2/2)，不是总体占比；真实API作答不是真人研究。",
+        "五层均为assumption，不是DNA或真实经历/人格量表。",
+        "画像说明与行为均为用户情景假设，不是人口事实；与明确年龄/街道冲突时以结构化画像为准。",
+        "具体年龄为年龄档内的情景赋值；60+生成上限90岁不是人口事实。",
+        "覆盖抽样无人口权重；预设资格不能赋予总体代表性。",
+        "60+及退休分别为显式情景，不是年龄推出职业。"
+      ],
+      "claims": [
+        {
+          "id": "pet-qualification-assumption",
+          "claim": "成年、拥有猫/犬、采购参与资格均为假设，没有滨江真实目标分母；猫狗情景配比不是总体比例。",
+          "provenance": "assumption",
+          "sourceIds": [],
+          "observationIds": []
+        },
+        {
+          "id": "pet-no-staple-inference",
+          "claim": "本问卷只问辅助性零食，不支持猫粮/狗粮等主粮主营结论、健康功效或医疗建议。",
+          "provenance": "assumption",
+          "sourceIds": [],
+          "observationIds": []
+        },
+        {
+          "id": "live-test-boundary",
+          "claim": "使用真实API独立作答，不使用规则夹具；受访者仍为合成居民，非真人，不能据此认证市场需求或五层贡献。",
+          "provenance": "assumption",
+          "sourceIds": [],
+          "observationIds": []
+        }
+      ],
+      "nextEvidence": [
+        "先核验目标人群资格和分母，再决定是否采用总体权重。",
+        "用冻结画像做独立重复、单变量实验与无画像基线；保留失败及负结果。",
+        "真实选址需候选点、客流、租金、竞争和目标用户/订单证据；儿童口味不能由照护者许可代替。"
+      ],
+      "marketRecommendation": "not-supported"
+    },
+    "limitations": [
+      "所有比较仅描述这批合成答卷，不是滨江人口占比或真实购买率。",
+      "有效答卷统计排除结构错误及已声明画像硬矛盾，须同时报告计划、失败和分组分母。"
+    ]
+  },
+  "sampling": {
+    "method": "seeded-cell-coverage-fresh-draw-v2",
+    "populationWeighted": false,
+    "planned": 10,
+    "uniqueProfiles": 10,
+    "duplicateProfiles": 0,
+    "coveredCells": 10,
+    "streets": [
+      {
+        "value": "浦沿街道",
+        "planned": 3
+      },
+      {
+        "value": "长河街道",
+        "planned": 3
+      },
+      {
+        "value": "西兴街道",
+        "planned": 4
+      }
+    ],
+    "ageBands": [
+      {
+        "value": "15-59",
+        "planned": 6
+      },
+      {
+        "value": "60+",
+        "planned": 4
+      }
+    ],
+    "sexes": [
+      {
+        "value": "female",
+        "planned": 6
+      },
+      {
+        "value": "male",
+        "planned": 4
+      }
+    ],
+    "presets": [
+      {
+        "value": "养猫采购参与者 · 受雇与共同生活情景",
+        "planned": 3
+      },
+      {
+        "value": "养犬采购参与者 · 五层未知对照情景",
+        "planned": 3
+      },
+      {
+        "value": "猫犬共同采购参与者 · 退休与多代照护情景",
+        "planned": 2
+      },
+      {
+        "value": "养猫采购参与者 · 自雇与照护情景",
+        "planned": 2
+      }
+    ],
+    "limitations": [
+      "优先覆盖未抽取的可行单元；每次重新赋值具体年龄，受约束时仍可能重复。",
+      "重复画像不自动成为独立居民；画像数量不是目标群体人口分母。",
+      "预设按轮转分配，无总体权重；低样本数不保证每个预设覆盖所有单元。"
+    ]
+  },
+  "metrics": {
+    "planned": 10,
+    "valid": 1,
+    "structurallyValid": 1,
+    "contradictions": 0,
+    "failed": 1,
+    "notStarted": 8,
+    "modelCalls": 2,
+    "inputTokens": 5609,
+    "outputTokens": 574,
+    "apiCostCny": 0.01581,
+    "pricingBasis": "按证据包 pricing 中用户提供的CNY/百万Token单价估算；多模型或usage/单价缺失保持未知，最终以账单为准。"
+  }
+}

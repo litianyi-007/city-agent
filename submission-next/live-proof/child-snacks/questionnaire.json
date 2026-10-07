@@ -1,0 +1,467 @@
+{
+  "schemaVersion": "1.0",
+  "id": "live-child-snacks-review-1",
+  "title": "小学照护者零食调查：真实LLM合成测试轮",
+  "objective": "purchase-concerns",
+  "decisionContext": {
+    "offering": "面向小学生的包装零食概念；价格题统一为每20克独立包装。仅模拟问卷流程，不判断学校周边能否经营。 本轮真实模型作答；未知可用相应选项或null。所有题目均返回questionId与value，未采集的儿童原文必须null，不得补造。",
+    "buyer": "假设照护一名在读小学生的18岁以上成年照护者，购买/许可参与程度另问；目标人数未知",
+    "endUser": "小学生；本轮不采集儿童本人回答，照护者许可/观察不得替代儿童口味",
+    "channel": "线上及线下概念渠道；只问受访者可到达范围，不输出具体店址"
+  },
+  "population": {
+    "regionCode": "binjiang",
+    "period": "2020-11-01",
+    "unit": "person",
+    "filters": [
+      {
+        "field": "age",
+        "op": "gte",
+        "value": 18
+      },
+      {
+        "field": "caregiver",
+        "op": "eq",
+        "value": true
+      },
+      {
+        "field": "childSchoolStage",
+        "op": "eq",
+        "value": "primary"
+      }
+    ]
+  },
+  "questionnaire": {
+    "id": "business-child-q",
+    "version": "live-business-smoke-1.0",
+    "questions": [
+      {
+        "id": "eligibility",
+        "prompt": "本次情景中，您是否是正在照护在读小学生的成年人？这是资格自报，不是人口统计核验。",
+        "required": true,
+        "type": "single",
+        "options": [
+          {
+            "id": "eligible",
+            "label": "是（情景设定）"
+          },
+          {
+            "id": "ineligible",
+            "label": "否，不应纳入此目标样本"
+          },
+          {
+            "id": "unknown",
+            "label": "不知道/资格未确认"
+          }
+        ]
+      },
+      {
+        "id": "purchase-role",
+        "prompt": "对于选定的一名小学生，您有哪些零食决策参与？无参与/不知道不能与其他项同选。",
+        "required": true,
+        "type": "multiple",
+        "options": [
+          {
+            "id": "purchaser",
+            "label": "实际购买"
+          },
+          {
+            "id": "permission",
+            "label": "允许或限制"
+          },
+          {
+            "id": "shared",
+            "label": "与其他照护者共同决定"
+          },
+          {
+            "id": "none",
+            "label": "无参与"
+          },
+          {
+            "id": "unknown",
+            "label": "不知道"
+          }
+        ],
+        "minSelections": 1,
+        "maxSelections": 3
+      },
+      {
+        "id": "child-evidence",
+        "prompt": "本轮对孩子本人口味掌握了什么证据？本轮没有儿童直接问卷；未经核验的照护者观察不算本人回答。",
+        "required": true,
+        "type": "single",
+        "options": [
+          {
+            "id": "not-collected",
+            "label": "未采集孩子本人口味"
+          },
+          {
+            "id": "proxy-unverified",
+            "label": "只有未经核验的照护者观察"
+          },
+          {
+            "id": "unknown",
+            "label": "不知道"
+          }
+        ]
+      },
+      {
+        "id": "past-frequency",
+        "prompt": "过去30天为选定孩子购买零食的大致次数（不含正餐）？没有记录请选不知道。",
+        "required": true,
+        "type": "single",
+        "options": [
+          {
+            "id": "none",
+            "label": "0次"
+          },
+          {
+            "id": "one-three",
+            "label": "1–3次"
+          },
+          {
+            "id": "four-eight",
+            "label": "4–8次"
+          },
+          {
+            "id": "nine-plus",
+            "label": "9次及以上"
+          },
+          {
+            "id": "unknown",
+            "label": "不知道/无记录"
+          }
+        ]
+      },
+      {
+        "id": "past-categories",
+        "prompt": "过去30天购买过哪些零食类别？类别只用于概念测量，不代表孩子喜欢；未购买/不知道排他。",
+        "required": true,
+        "type": "multiple",
+        "options": [
+          {
+            "id": "dairy",
+            "label": "乳制品零食"
+          },
+          {
+            "id": "grain",
+            "label": "谷物/烘焙零食"
+          },
+          {
+            "id": "fruit",
+            "label": "水果类零食"
+          },
+          {
+            "id": "candy",
+            "label": "糖果/巧克力"
+          },
+          {
+            "id": "savory",
+            "label": "咸味膨化类"
+          },
+          {
+            "id": "none",
+            "label": "未购买"
+          },
+          {
+            "id": "unknown",
+            "label": "不知道"
+          }
+        ],
+        "minSelections": 1,
+        "maxSelections": 4
+      },
+      {
+        "id": "permission-factors",
+        "prompt": "您决定是否许可时会查哪些信息？不关心/不知道排他。与孩子本人口味分开回答。",
+        "required": true,
+        "type": "multiple",
+        "options": [
+          {
+            "id": "ingredients",
+            "label": "成分/过敏提示"
+          },
+          {
+            "id": "portion",
+            "label": "份量"
+          },
+          {
+            "id": "traceability",
+            "label": "生产日期与来源"
+          },
+          {
+            "id": "price",
+            "label": "价格"
+          },
+          {
+            "id": "school-rules",
+            "label": "学校与家庭规定"
+          },
+          {
+            "id": "none",
+            "label": "不关心上述信息"
+          },
+          {
+            "id": "unknown",
+            "label": "不知道"
+          }
+        ],
+        "minSelections": 1,
+        "maxSelections": 4
+      },
+      {
+        "id": "child-own-taste",
+        "prompt": "孩子本人表达的具体口味原文及采集方式。本轮未直接采集，请回答null/留空；不得根据照护者或画像编造儿童喜好。",
+        "required": false,
+        "type": "text",
+        "maxLength": 500
+      },
+      {
+        "id": "purchase-intent",
+        "prompt": "未来30天是否考虑为选定孩子购买包装零食？不考虑不是态度中点。",
+        "required": true,
+        "type": "single",
+        "options": [
+          {
+            "id": "yes",
+            "label": "考虑"
+          },
+          {
+            "id": "maybe",
+            "label": "需进一步了解"
+          },
+          {
+            "id": "no",
+            "label": "不考虑"
+          },
+          {
+            "id": "unknown",
+            "label": "不知道"
+          }
+        ]
+      },
+      {
+        "id": "monthly-budget",
+        "prompt": "未来30天为选定一名小学生计划支出的零食总额。明确不考虑购买填0；预算不知道或暂未决定填null，不把未知填0。",
+        "required": false,
+        "type": "number",
+        "min": 0,
+        "max": 1000,
+        "unit": "CNY/一名选定小学生/未来30天"
+      },
+      {
+        "id": "package-size",
+        "prompt": "若考虑购买，单次独立包装希望是多大？这是规格概念题，不与20克价格题混用；不购买/不知道单列。",
+        "required": true,
+        "type": "single",
+        "options": [
+          {
+            "id": "g10",
+            "label": "10克"
+          },
+          {
+            "id": "g20",
+            "label": "20克"
+          },
+          {
+            "id": "g50",
+            "label": "50克"
+          },
+          {
+            "id": "none",
+            "label": "不购买"
+          },
+          {
+            "id": "unknown",
+            "label": "不知道"
+          }
+        ]
+      },
+      {
+        "id": "price-per20g",
+        "prompt": "只针对20克独立包装，考虑的单包价位范围？不是主餐/大包装价格。区间左闭右开；不考虑购买选不购买。",
+        "required": true,
+        "type": "single",
+        "options": [
+          {
+            "id": "under3",
+            "label": "大于0且小于3元/20克"
+          },
+          {
+            "id": "three-six",
+            "label": "3至小于6元/20克"
+          },
+          {
+            "id": "six-ten",
+            "label": "6至小于10元/20克"
+          },
+          {
+            "id": "ten-plus",
+            "label": "10元及以上/20克"
+          },
+          {
+            "id": "none",
+            "label": "不购买"
+          },
+          {
+            "id": "unknown",
+            "label": "不知道"
+          }
+        ]
+      },
+      {
+        "id": "planned-channels",
+        "prompt": "未来计划通过哪些渠道购买？不购买/不知道排他，不能据此推导店铺客流。",
+        "required": true,
+        "type": "multiple",
+        "options": [
+          {
+            "id": "online",
+            "label": "线上配送"
+          },
+          {
+            "id": "community",
+            "label": "社区商店"
+          },
+          {
+            "id": "supermarket",
+            "label": "超市"
+          },
+          {
+            "id": "pickup",
+            "label": "线上下单线下自提"
+          },
+          {
+            "id": "none",
+            "label": "不购买"
+          },
+          {
+            "id": "unknown",
+            "label": "不知道"
+          }
+        ],
+        "minSelections": 1,
+        "maxSelections": 3
+      },
+      {
+        "id": "travel-minutes",
+        "prompt": "若考虑线下购买，为零食网点可接受的单程步行时间。单位分钟；不适用或不知道填null。",
+        "required": false,
+        "type": "number",
+        "min": 0,
+        "max": 120,
+        "unit": "分钟/单程步行"
+      },
+      {
+        "id": "reachable-streets",
+        "prompt": "哪些街道属于您个人可到达范围？街道只是粗粒度自报，不是商业推荐、候选点或人口份额；不知道排他。",
+        "required": true,
+        "type": "multiple",
+        "options": [
+          {
+            "id": "xixing",
+            "label": "西兴"
+          },
+          {
+            "id": "changhe",
+            "label": "长河"
+          },
+          {
+            "id": "puyan",
+            "label": "浦沿"
+          },
+          {
+            "id": "unknown",
+            "label": "不知道"
+          }
+        ],
+        "minSelections": 1,
+        "maxSelections": 3
+      },
+      {
+        "id": "traceability-importance",
+        "prompt": "生产日期和来源信息对您许可决定的重要性。1不重要，5非常重要；不知道/无决策参与填null。不是孩子口味分数。",
+        "required": false,
+        "type": "scale",
+        "min": 1,
+        "max": 5,
+        "minLabel": "不重要",
+        "maxLabel": "非常重要"
+      },
+      {
+        "id": "purchase-barriers",
+        "prompt": "目前阻碍购买或许可的因素？没有顾虑/不知道排他。",
+        "required": true,
+        "type": "multiple",
+        "options": [
+          {
+            "id": "allergen",
+            "label": "过敏与适用性未确认"
+          },
+          {
+            "id": "rules",
+            "label": "学校/家庭规定未确认"
+          },
+          {
+            "id": "price",
+            "label": "价位"
+          },
+          {
+            "id": "freshness",
+            "label": "日期与储存"
+          },
+          {
+            "id": "availability",
+            "label": "渠道不便"
+          },
+          {
+            "id": "none",
+            "label": "没有顾虑"
+          },
+          {
+            "id": "unknown",
+            "label": "不知道"
+          }
+        ],
+        "minSelections": 1,
+        "maxSelections": 4
+      },
+      {
+        "id": "needed-evidence",
+        "prompt": "要做许可/购买决定还缺什么信息？允许认为题目无关。不得填写孩子未表达的偏好、私密身份或真实店址。",
+        "required": false,
+        "type": "text",
+        "maxLength": 500
+      }
+    ]
+  },
+  "declarations": [
+    {
+      "id": "child-qualification-assumption",
+      "claim": "成年、照护和小学在读资格均为情景假设，滨江目标人数未知；历史框不提供此分母。",
+      "provenance": "assumption",
+      "sourceIds": [],
+      "observationIds": []
+    },
+    {
+      "id": "child-no-taste-data",
+      "claim": "本轮未采集儿童直接口味；照护者许可不是孩子偏好。",
+      "provenance": "assumption",
+      "sourceIds": [],
+      "observationIds": []
+    },
+    {
+      "id": "live-test-boundary",
+      "claim": "使用真实API独立作答，不使用规则夹具；受访者仍为合成居民，非真人，不能据此认证市场需求或五层贡献。",
+      "provenance": "assumption",
+      "sourceIds": [],
+      "observationIds": []
+    }
+  ],
+  "requestedOutputs": [
+    "questionnaire-review",
+    "synthetic-analysis",
+    "group-comparison",
+    "hypothesis-report"
+  ]
+}

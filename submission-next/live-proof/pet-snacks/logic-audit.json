@@ -1,0 +1,476 @@
+{
+  "schemaVersion": "1.0",
+  "verifierVersion": "explicit-questionnaire-logic-1.1",
+  "status": "conflict",
+  "scope": "独立的登记跨题规则审计；不升级survey默认valid，不证明真实模型质量/人格效度。",
+  "rules": [
+    {
+      "id": "purchase-role-exclusive",
+      "kind": "exclusive-options",
+      "questionId": "purchase-role",
+      "exclusiveOptionIds": [
+        "none",
+        "unknown"
+      ]
+    },
+    {
+      "id": "past-snack-categories-exclusive",
+      "kind": "exclusive-options",
+      "questionId": "past-snack-categories",
+      "exclusiveOptionIds": [
+        "none",
+        "unknown"
+      ]
+    },
+    {
+      "id": "planned-channels-exclusive",
+      "kind": "exclusive-options",
+      "questionId": "planned-channels",
+      "exclusiveOptionIds": [
+        "none",
+        "unknown"
+      ]
+    },
+    {
+      "id": "reachable-streets-exclusive",
+      "kind": "exclusive-options",
+      "questionId": "reachable-streets",
+      "exclusiveOptionIds": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "purchase-barriers-exclusive",
+      "kind": "exclusive-options",
+      "questionId": "purchase-barriers",
+      "exclusiveOptionIds": [
+        "none",
+        "unknown"
+      ]
+    },
+    {
+      "id": "no-purchase-zero-budget",
+      "kind": "conditional-equals",
+      "whenQuestionId": "purchase-intent",
+      "whenValue": "no",
+      "thenQuestionId": "monthly-budget",
+      "thenValue": 0
+    },
+    {
+      "id": "unknown-intent-unknown-budget",
+      "kind": "conditional-equals",
+      "whenQuestionId": "purchase-intent",
+      "whenValue": "unknown",
+      "thenQuestionId": "monthly-budget",
+      "thenValue": null
+    },
+    {
+      "id": "no-purchase-no-package",
+      "kind": "conditional-equals",
+      "whenQuestionId": "purchase-intent",
+      "whenValue": "no",
+      "thenQuestionId": "package-size",
+      "thenValue": "none"
+    },
+    {
+      "id": "no-purchase-no-channel",
+      "kind": "conditional-equals",
+      "whenQuestionId": "purchase-intent",
+      "whenValue": "no",
+      "thenQuestionId": "planned-channels",
+      "thenValue": [
+        "none"
+      ]
+    },
+    {
+      "id": "no-purchase-travel-not-applicable",
+      "kind": "conditional-equals",
+      "whenQuestionId": "purchase-intent",
+      "whenValue": "no",
+      "thenQuestionId": "travel-minutes",
+      "thenValue": null
+    },
+    {
+      "id": "no-purchase-no-price",
+      "kind": "conditional-equals",
+      "whenQuestionId": "purchase-intent",
+      "whenValue": "no",
+      "thenQuestionId": "price-per50g",
+      "thenValue": "none"
+    },
+    {
+      "id": "zero-past-frequency-no-past-categories",
+      "kind": "conditional-equals",
+      "whenQuestionId": "past-frequency",
+      "whenValue": "none",
+      "thenQuestionId": "past-snack-categories",
+      "thenValue": [
+        "none"
+      ]
+    },
+    {
+      "id": "no-purchase-no-online-handoff",
+      "kind": "conditional-equals",
+      "whenQuestionId": "purchase-intent",
+      "whenValue": "no",
+      "thenQuestionId": "online-handoff",
+      "thenValue": "none"
+    },
+    {
+      "id": "delivery-only-travel-not-applicable",
+      "kind": "conditional-equals",
+      "whenQuestionId": "online-handoff",
+      "whenValue": "delivery",
+      "thenQuestionId": "travel-minutes",
+      "thenValue": null
+    },
+    {
+      "id": "no-purchase-no-price10-intent",
+      "kind": "conditional-equals",
+      "whenQuestionId": "purchase-intent",
+      "whenValue": "no",
+      "thenQuestionId": "price10-intent",
+      "thenValue": "no"
+    },
+    {
+      "id": "no-purchase-no-price20-intent",
+      "kind": "conditional-equals",
+      "whenQuestionId": "purchase-intent",
+      "whenValue": "no",
+      "thenQuestionId": "price20-intent",
+      "thenValue": "no"
+    },
+    {
+      "id": "cat-only-no-dog-product",
+      "kind": "conditional-excludes",
+      "whenQuestionId": "pet-type",
+      "whenValue": "cat",
+      "thenQuestionId": "past-snack-categories",
+      "excludedOptionIds": [
+        "dog-chew"
+      ]
+    },
+    {
+      "id": "dog-only-no-cat-product",
+      "kind": "conditional-excludes",
+      "whenQuestionId": "pet-type",
+      "whenValue": "dog",
+      "thenQuestionId": "past-snack-categories",
+      "excludedOptionIds": [
+        "cat-creamy"
+      ]
+    }
+  ],
+  "rulesHash": "0f99472fb642f950bdc18a36ca543fd17f505bb878289e25b5c4952709223a2c",
+  "planned": 10,
+  "evaluated": 10,
+  "passed": 1,
+  "individuallyPassed": 1,
+  "completeDenominator": true,
+  "failed": 9,
+  "notEvaluated": 0,
+  "mappingIssues": [],
+  "records": [
+    {
+      "residentId": "resident-001",
+      "structureValid": true,
+      "rawStructureValid": true,
+      "answersMatchRaw": true,
+      "mapped": true,
+      "sourceStatus": "valid",
+      "errors": [],
+      "report": {
+        "schemaVersion": "1.0",
+        "verifierVersion": "explicit-questionnaire-logic-1.1",
+        "status": "checked",
+        "answerStructureValid": true,
+        "rulesHash": "0f99472fb642f950bdc18a36ca543fd17f505bb878289e25b5c4952709223a2c",
+        "registered": 18,
+        "checked": 6,
+        "skipped": 12,
+        "issues": [],
+        "scope": "仅检查另册登记的互斥/条件规则；不是通用语义理解、人格效度或真实模型质量，不升级survey.metrics.valid。"
+      },
+      "passed": true
+    },
+    {
+      "residentId": "resident-002",
+      "structureValid": false,
+      "rawStructureValid": false,
+      "answersMatchRaw": false,
+      "mapped": true,
+      "sourceStatus": "invalid",
+      "errors": [
+        "原始raw无法通过答题结构复核：答卷值违反题目契约：past-snack-categories",
+        "上游答卷状态为invalid，不计独立审计通过。"
+      ],
+      "report": {
+        "schemaVersion": "1.0",
+        "verifierVersion": "explicit-questionnaire-logic-1.1",
+        "status": "conflict",
+        "answerStructureValid": false,
+        "rulesHash": "0f99472fb642f950bdc18a36ca543fd17f505bb878289e25b5c4952709223a2c",
+        "registered": 18,
+        "checked": 0,
+        "skipped": 18,
+        "issues": [
+          {
+            "ruleId": "answer-structure",
+            "questionId": "questionnaire",
+            "message": "答题结构无法复核：必答题缺失：pet-type"
+          }
+        ],
+        "scope": "仅检查另册登记的互斥/条件规则；不是通用语义理解、人格效度或真实模型质量，不升级survey.metrics.valid。"
+      },
+      "passed": false
+    },
+    {
+      "residentId": "resident-003",
+      "structureValid": false,
+      "rawStructureValid": false,
+      "answersMatchRaw": false,
+      "mapped": true,
+      "sourceStatus": "not-started",
+      "errors": [
+        "原始raw无法通过答题结构复核：Unexpected end of JSON input",
+        "上游答卷状态为not-started，不计独立审计通过。"
+      ],
+      "report": {
+        "schemaVersion": "1.0",
+        "verifierVersion": "explicit-questionnaire-logic-1.1",
+        "status": "conflict",
+        "answerStructureValid": false,
+        "rulesHash": "0f99472fb642f950bdc18a36ca543fd17f505bb878289e25b5c4952709223a2c",
+        "registered": 18,
+        "checked": 0,
+        "skipped": 18,
+        "issues": [
+          {
+            "ruleId": "answer-structure",
+            "questionId": "questionnaire",
+            "message": "答题结构无法复核：必答题缺失：pet-type"
+          }
+        ],
+        "scope": "仅检查另册登记的互斥/条件规则；不是通用语义理解、人格效度或真实模型质量，不升级survey.metrics.valid。"
+      },
+      "passed": false
+    },
+    {
+      "residentId": "resident-004",
+      "structureValid": false,
+      "rawStructureValid": false,
+      "answersMatchRaw": false,
+      "mapped": true,
+      "sourceStatus": "not-started",
+      "errors": [
+        "原始raw无法通过答题结构复核：Unexpected end of JSON input",
+        "上游答卷状态为not-started，不计独立审计通过。"
+      ],
+      "report": {
+        "schemaVersion": "1.0",
+        "verifierVersion": "explicit-questionnaire-logic-1.1",
+        "status": "conflict",
+        "answerStructureValid": false,
+        "rulesHash": "0f99472fb642f950bdc18a36ca543fd17f505bb878289e25b5c4952709223a2c",
+        "registered": 18,
+        "checked": 0,
+        "skipped": 18,
+        "issues": [
+          {
+            "ruleId": "answer-structure",
+            "questionId": "questionnaire",
+            "message": "答题结构无法复核：必答题缺失：pet-type"
+          }
+        ],
+        "scope": "仅检查另册登记的互斥/条件规则；不是通用语义理解、人格效度或真实模型质量，不升级survey.metrics.valid。"
+      },
+      "passed": false
+    },
+    {
+      "residentId": "resident-005",
+      "structureValid": false,
+      "rawStructureValid": false,
+      "answersMatchRaw": false,
+      "mapped": true,
+      "sourceStatus": "not-started",
+      "errors": [
+        "原始raw无法通过答题结构复核：Unexpected end of JSON input",
+        "上游答卷状态为not-started，不计独立审计通过。"
+      ],
+      "report": {
+        "schemaVersion": "1.0",
+        "verifierVersion": "explicit-questionnaire-logic-1.1",
+        "status": "conflict",
+        "answerStructureValid": false,
+        "rulesHash": "0f99472fb642f950bdc18a36ca543fd17f505bb878289e25b5c4952709223a2c",
+        "registered": 18,
+        "checked": 0,
+        "skipped": 18,
+        "issues": [
+          {
+            "ruleId": "answer-structure",
+            "questionId": "questionnaire",
+            "message": "答题结构无法复核：必答题缺失：pet-type"
+          }
+        ],
+        "scope": "仅检查另册登记的互斥/条件规则；不是通用语义理解、人格效度或真实模型质量，不升级survey.metrics.valid。"
+      },
+      "passed": false
+    },
+    {
+      "residentId": "resident-006",
+      "structureValid": false,
+      "rawStructureValid": false,
+      "answersMatchRaw": false,
+      "mapped": true,
+      "sourceStatus": "not-started",
+      "errors": [
+        "原始raw无法通过答题结构复核：Unexpected end of JSON input",
+        "上游答卷状态为not-started，不计独立审计通过。"
+      ],
+      "report": {
+        "schemaVersion": "1.0",
+        "verifierVersion": "explicit-questionnaire-logic-1.1",
+        "status": "conflict",
+        "answerStructureValid": false,
+        "rulesHash": "0f99472fb642f950bdc18a36ca543fd17f505bb878289e25b5c4952709223a2c",
+        "registered": 18,
+        "checked": 0,
+        "skipped": 18,
+        "issues": [
+          {
+            "ruleId": "answer-structure",
+            "questionId": "questionnaire",
+            "message": "答题结构无法复核：必答题缺失：pet-type"
+          }
+        ],
+        "scope": "仅检查另册登记的互斥/条件规则；不是通用语义理解、人格效度或真实模型质量，不升级survey.metrics.valid。"
+      },
+      "passed": false
+    },
+    {
+      "residentId": "resident-007",
+      "structureValid": false,
+      "rawStructureValid": false,
+      "answersMatchRaw": false,
+      "mapped": true,
+      "sourceStatus": "not-started",
+      "errors": [
+        "原始raw无法通过答题结构复核：Unexpected end of JSON input",
+        "上游答卷状态为not-started，不计独立审计通过。"
+      ],
+      "report": {
+        "schemaVersion": "1.0",
+        "verifierVersion": "explicit-questionnaire-logic-1.1",
+        "status": "conflict",
+        "answerStructureValid": false,
+        "rulesHash": "0f99472fb642f950bdc18a36ca543fd17f505bb878289e25b5c4952709223a2c",
+        "registered": 18,
+        "checked": 0,
+        "skipped": 18,
+        "issues": [
+          {
+            "ruleId": "answer-structure",
+            "questionId": "questionnaire",
+            "message": "答题结构无法复核：必答题缺失：pet-type"
+          }
+        ],
+        "scope": "仅检查另册登记的互斥/条件规则；不是通用语义理解、人格效度或真实模型质量，不升级survey.metrics.valid。"
+      },
+      "passed": false
+    },
+    {
+      "residentId": "resident-008",
+      "structureValid": false,
+      "rawStructureValid": false,
+      "answersMatchRaw": false,
+      "mapped": true,
+      "sourceStatus": "not-started",
+      "errors": [
+        "原始raw无法通过答题结构复核：Unexpected end of JSON input",
+        "上游答卷状态为not-started，不计独立审计通过。"
+      ],
+      "report": {
+        "schemaVersion": "1.0",
+        "verifierVersion": "explicit-questionnaire-logic-1.1",
+        "status": "conflict",
+        "answerStructureValid": false,
+        "rulesHash": "0f99472fb642f950bdc18a36ca543fd17f505bb878289e25b5c4952709223a2c",
+        "registered": 18,
+        "checked": 0,
+        "skipped": 18,
+        "issues": [
+          {
+            "ruleId": "answer-structure",
+            "questionId": "questionnaire",
+            "message": "答题结构无法复核：必答题缺失：pet-type"
+          }
+        ],
+        "scope": "仅检查另册登记的互斥/条件规则；不是通用语义理解、人格效度或真实模型质量，不升级survey.metrics.valid。"
+      },
+      "passed": false
+    },
+    {
+      "residentId": "resident-009",
+      "structureValid": false,
+      "rawStructureValid": false,
+      "answersMatchRaw": false,
+      "mapped": true,
+      "sourceStatus": "not-started",
+      "errors": [
+        "原始raw无法通过答题结构复核：Unexpected end of JSON input",
+        "上游答卷状态为not-started，不计独立审计通过。"
+      ],
+      "report": {
+        "schemaVersion": "1.0",
+        "verifierVersion": "explicit-questionnaire-logic-1.1",
+        "status": "conflict",
+        "answerStructureValid": false,
+        "rulesHash": "0f99472fb642f950bdc18a36ca543fd17f505bb878289e25b5c4952709223a2c",
+        "registered": 18,
+        "checked": 0,
+        "skipped": 18,
+        "issues": [
+          {
+            "ruleId": "answer-structure",
+            "questionId": "questionnaire",
+            "message": "答题结构无法复核：必答题缺失：pet-type"
+          }
+        ],
+        "scope": "仅检查另册登记的互斥/条件规则；不是通用语义理解、人格效度或真实模型质量，不升级survey.metrics.valid。"
+      },
+      "passed": false
+    },
+    {
+      "residentId": "resident-010",
+      "structureValid": false,
+      "rawStructureValid": false,
+      "answersMatchRaw": false,
+      "mapped": true,
+      "sourceStatus": "not-started",
+      "errors": [
+        "原始raw无法通过答题结构复核：Unexpected end of JSON input",
+        "上游答卷状态为not-started，不计独立审计通过。"
+      ],
+      "report": {
+        "schemaVersion": "1.0",
+        "verifierVersion": "explicit-questionnaire-logic-1.1",
+        "status": "conflict",
+        "answerStructureValid": false,
+        "rulesHash": "0f99472fb642f950bdc18a36ca543fd17f505bb878289e25b5c4952709223a2c",
+        "registered": 18,
+        "checked": 0,
+        "skipped": 18,
+        "issues": [
+          {
+            "ruleId": "answer-structure",
+            "questionId": "questionnaire",
+            "message": "答题结构无法复核：必答题缺失：pet-type"
+          }
+        ],
+        "scope": "仅检查另册登记的互斥/条件规则；不是通用语义理解、人格效度或真实模型质量，不升级survey.metrics.valid。"
+      },
+      "passed": false
+    }
+  ]
+}

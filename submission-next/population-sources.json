@@ -1,0 +1,959 @@
+{
+  "preparedAt": "2026-10-06T19:42:02.314Z",
+  "historical": [
+    {
+      "id": "binjiang-census-2020-street-sex",
+      "title": "杭州高新区（滨江）统计年鉴 - 2020 · 按街道分的常住人口状况六七普对比",
+      "publisher": "杭州高新技术产业开发区（滨江）统计局",
+      "url": "https://zjjcmspublic.oss-cn-hangzhou-zwynet-d01-a.internet.cloud.zj.gov.cn/jcms_files/jcms1/web2945/site/attach/0/87ab83d95bd24748b0747c7ab72bf6ce.pdf",
+      "landingUrl": "https://www.hhtz.gov.cn/art/2021/11/30/art_1229574517_3974310.html",
+      "publishedAt": "2021-11-30T14:17:00+08:00",
+      "retrievedAt": "2026-09-23",
+      "sha256": "70119b88dc3209909f237921ae9efc764c5011d7e6f6032d1d27c2a1949fb966",
+      "localPath": "data/population/sources/binjiang-census-yearbook.pdf",
+      "bytes": 2048236
+    },
+    {
+      "id": "binjiang-census-2020-street-age",
+      "title": "杭州高新区（滨江）统计年鉴 - 2020 · 七普按年龄段分的各街道人口",
+      "publisher": "杭州高新技术产业开发区（滨江）统计局",
+      "url": "https://zjjcmspublic.oss-cn-hangzhou-zwynet-d01-a.internet.cloud.zj.gov.cn/jcms_files/jcms1/web2945/site/attach/0/87ab83d95bd24748b0747c7ab72bf6ce.pdf",
+      "landingUrl": "https://www.hhtz.gov.cn/art/2021/11/30/art_1229574517_3974310.html",
+      "publishedAt": "2021-11-30T14:17:00+08:00",
+      "retrievedAt": "2026-09-23",
+      "sha256": "70119b88dc3209909f237921ae9efc764c5011d7e6f6032d1d27c2a1949fb966",
+      "localPath": "data/population/sources/binjiang-census-yearbook.pdf",
+      "bytes": 2048236
+    }
+  ],
+  "recent": [
+    {
+      "id": "binjiang-2025-communique-landing",
+      "url": "https://www.hhtz.gov.cn/col/col1229574514/art/2026/art_d79bffcf95f24e619178dd3acfaee081.html",
+      "landingUrl": "https://www.hhtz.gov.cn/col/col1229574514/art/2026/art_d79bffcf95f24e619178dd3acfaee081.html",
+      "title": "2025年高新区（滨江）国民经济和社会发展统计公报（政府发布页）",
+      "publisher": "杭州高新技术产业开发区（滨江）统计局",
+      "source_type": "government-primary-landing",
+      "publishedAt": "2026-05-11T09:20:00+08:00",
+      "retrievedAt": "2026-09-23",
+      "sha256": "d17ad0a2826af0460df9328f22d69357e3a307bdf724417bba9fbdd50e47811f",
+      "localPath": "data/population/sources/binjiang-2025-communique-landing.html",
+      "bytes": 24456,
+      "verificationStatus": "government-publishing-metadata-and-attachment-link-archived"
+    },
+    {
+      "id": "binjiang-2025-communique",
+      "url": "https://www.hhtz.gov.cn/api-gateway/jpaas-web-server/front/document/download?fileUrl=YW5UzzlvCwcM%2FNHHX%2FtT6E3ixAsJP2c7xp8hYYAy%2F1w1JVljvIIt4mgUhFyyubT97lXco9Ks8tBjXT4JQ3mX0vhSCfljeCMpWwjq%2Bo2NNGOgaux4HtPUCLZrerF0vSd4pLZOEj%2BJK9amGH9%2BtcNL0YVx4%2FeFuIBBGP872zsz59U%3D&fileName=2025%E5%B9%B4%E9%AB%98%E6%96%B0%E5%8C%BA%EF%BC%88%E6%BB%A8%E6%B1%9F%EF%BC%89%E5%9B%BD%E6%B0%91%E7%BB%8F%E6%B5%8E%E5%92%8C%E7%A4%BE%E4%BC%9A%E5%8F%91%E5%B1%95%E7%BB%9F%E8%AE%A1%E5%85%AC%E6%8A%A5.pdf",
+      "landingUrl": "https://www.hhtz.gov.cn/col/col1229574514/art/2026/art_d79bffcf95f24e619178dd3acfaee081.html",
+      "title": "2025年高新区（滨江）国民经济和社会发展统计公报",
+      "publisher": "杭州高新技术产业开发区（滨江）统计局",
+      "source_type": "government-primary",
+      "publishedAt": "2026-05-11T09:20:00+08:00",
+      "documentDate": "2026-05-12",
+      "retrievedAt": "2026-09-23",
+      "sha256": "78f948305d953b3bef24ef4731fd043d321267401361cc54c81fd50c18b4ad11",
+      "localPath": "data/population/sources/binjiang-2025-communique.pdf",
+      "bytes": 2443591,
+      "verificationStatus": "government-original-archived-and-visually-checked",
+      "verificationNotes": "政府原始landing与其下载链接均以Mozilla/5.0 User-Agent成功获取。PDF第3页人口就业、图4及第10页注释已Poppler渲染视觉核对。55.9万人、男女28.6/27.3万人及常住增加0.7万人与官方媒体转载一致；转载不构成独立统计验证。网页PubDate与可见发布时间为2026-05-11 09:20，元数据成文时间为2026-05-12，两者原样保留。SHA256仅证明本地字节一致性。",
+      "landingSnapshot": {
+        "localPath": "data/population/sources/binjiang-2025-communique-landing.html",
+        "sha256": "d17ad0a2826af0460df9328f22d69357e3a307bdf724417bba9fbdd50e47811f",
+        "bytes": 24456
+      }
+    },
+    {
+      "id": "binjiang-2025-communique-official-reprint",
+      "url": "https://www.hhtznews.com.cn/content/content_9904219.html",
+      "landingUrl": "https://www.hhtznews.com.cn/content/content_9904219.html",
+      "title": "2025年高新区（滨江）国民经济和社会发展统计公报",
+      "publisher": "杭州市滨江区融媒体中心（滨江新闻网）",
+      "statisticalProducer": "杭州高新技术产业开发区（滨江）统计局；户籍人口来自区公安分局",
+      "attributedSource": "滨江发布",
+      "source_type": "official-reprint",
+      "publishedAt": "2026-06-03T10:08:55+08:00",
+      "retrievedAt": "2026-09-23",
+      "sha256": "6fceeb47dfee593120b55ea13ab70de16c8d70c9e6a2bbd51d9c07a17718b100",
+      "localPath": "data/population/sources/binjiang-2025-communique-official-news.html",
+      "bytes": 37876,
+      "verificationStatus": "official-reprint-archived-and-compared-with-government-original",
+      "verificationNotes": "下载了主办为杭州市滨江区融媒体中心的网页原始HTML，保留人口就业、注释和资料来源。人口段已与政府原始PDF逐项比对一致，仍按转载存储，不视作独立调查。SHA256仅验证留存文件的字节一致性，不是对统计真实性的独立证明。",
+      "governmentLandingCandidate": "https://www.hhtz.gov.cn/col/col1229574514/art/2026/art_d79bffcf95f24e619178dd3acfaee081.html",
+      "governmentLandingStatus": "verified-200-with-browser-user-agent; see binjiang-2025-communique"
+    },
+    {
+      "id": "binjiang-2024-communique",
+      "url": "https://zjjcmspublic.oss-cn-hangzhou-zwynet-d01-a.internet.cloud.zj.gov.cn/jcms_files/jcms1/web2945/site/attach/0/956d1f5516ba4fd9b13c1efa6dc17ed4.pdf",
+      "canonicalDownloadUrl": "https://www.hhtz.gov.cn/module/download/downfile.jsp?classid=0&filename=956d1f5516ba4fd9b13c1efa6dc17ed4.pdf",
+      "landingUrl": null,
+      "title": "2024年高新区（滨江）国民经济和社会发展统计公报",
+      "publisher": "杭州高新技术产业开发区（滨江）统计局",
+      "host": "浙江省政务公开附件存储",
+      "source_type": "government-primary",
+      "publishedAt": null,
+      "retrievedAt": "2026-09-23",
+      "sha256": "7825d0efe321c224aaef04fa3afce1a255dfe8144d79a36651407e959c640876",
+      "localPath": "data/population/sources/binjiang-2024-communique.pdf",
+      "bytes": 2583332,
+      "verificationStatus": "government-attachment-archived-and-visually-checked",
+      "verificationNotes": "正文人口页为PDF第3页/印刷第3页；注释和资料来源为PDF第10页。已用Poppler渲染并视觉核对。政府下载入口本次403，成功下载检索命中的浙江政务云同名附件；未从PDF制作日期或搜索引擎相对日期推定发布日期。"
+    },
+    {
+      "id": "binjiang-2023-yearbook",
+      "url": "https://zjjcmspublic.oss-cn-hangzhou-zwynet-d01-a.internet.cloud.zj.gov.cn/jcms_files/jcms1/web2945/site/attach/0/f416e9547a574c4a88f6bab62801924d.pdf",
+      "landingUrl": null,
+      "title": "杭州高新区（滨江）统计年鉴2023",
+      "publisher": "杭州高新技术产业开发区（滨江）统计局",
+      "host": "浙江省政务公开附件存储",
+      "source_type": "government-primary",
+      "publishedAt": null,
+      "retrievedAt": "2026-09-23",
+      "sha256": "338886a362ca60640ce999f185bb120e33922dedee9bc31dbbad57a0a4088134",
+      "localPath": "data/population/sources/binjiang-2023-yearbook.pdf",
+      "bytes": 1354816,
+      "verificationStatus": "government-attachment-archived-and-visually-checked",
+      "verificationNotes": "年末人口概况为PDF第10页/印刷第2页；街道基本情况为PDF第28页/印刷第20页，均已渲染视觉核对。表头明确2023年；本年鉴标题年份就是所录统计年，不能机械减一年。政府网站另有f7de87b4fb6248efa34f6b43bc44f8ff.pdf版本，本次该入口403，本包仅对已下载f416版本建立哈希。"
+    }
+  ],
+  "observations": [
+    {
+      "id": "binjiang:total",
+      "areaCode": "binjiang",
+      "dimension": "total",
+      "value": 503859,
+      "sourceId": "binjiang-census-2020-street-sex",
+      "locator": {
+        "table": "1-2 按街道分的常住人口状况六七普对比",
+        "page": 109,
+        "pdfPage": 117,
+        "row": "合计",
+        "column": "第七次人口普查 / 常住人口"
+      },
+      "period": "2020-11-01",
+      "populationBasis": "常住人口",
+      "boundaryVersion": "2020 年第七次人口普查街道口径",
+      "provenance": "fact"
+    },
+    {
+      "id": "binjiang:sex:female",
+      "areaCode": "binjiang",
+      "dimension": "sex",
+      "sex": "female",
+      "value": 243523,
+      "sourceId": "binjiang-census-2020-street-sex",
+      "locator": {
+        "table": "1-2 按街道分的常住人口状况六七普对比",
+        "page": 109,
+        "pdfPage": 117,
+        "row": "合计",
+        "column": "第七次人口普查 / 女"
+      },
+      "period": "2020-11-01",
+      "populationBasis": "常住人口",
+      "boundaryVersion": "2020 年第七次人口普查街道口径",
+      "provenance": "fact"
+    },
+    {
+      "id": "binjiang:sex:male",
+      "areaCode": "binjiang",
+      "dimension": "sex",
+      "sex": "male",
+      "value": 260336,
+      "sourceId": "binjiang-census-2020-street-sex",
+      "locator": {
+        "table": "1-2 按街道分的常住人口状况六七普对比",
+        "page": 109,
+        "pdfPage": 117,
+        "row": "合计",
+        "column": "常住人口减女（算术派生；原表无男性列）"
+      },
+      "period": "2020-11-01",
+      "populationBasis": "常住人口",
+      "boundaryVersion": "2020 年第七次人口普查街道口径",
+      "provenance": "fact",
+      "derivation": {
+        "operation": "subtract",
+        "inputObservationIds": [
+          "binjiang:total",
+          "binjiang:sex:female"
+        ]
+      }
+    },
+    {
+      "id": "xixing:total",
+      "areaCode": "xixing",
+      "dimension": "total",
+      "value": 143318,
+      "sourceId": "binjiang-census-2020-street-sex",
+      "locator": {
+        "table": "1-2 按街道分的常住人口状况六七普对比",
+        "page": 109,
+        "pdfPage": 117,
+        "row": "西兴街道",
+        "column": "第七次人口普查 / 常住人口"
+      },
+      "period": "2020-11-01",
+      "populationBasis": "常住人口",
+      "boundaryVersion": "2020 年第七次人口普查街道口径",
+      "provenance": "fact"
+    },
+    {
+      "id": "xixing:sex:female",
+      "areaCode": "xixing",
+      "dimension": "sex",
+      "sex": "female",
+      "value": 68780,
+      "sourceId": "binjiang-census-2020-street-sex",
+      "locator": {
+        "table": "1-2 按街道分的常住人口状况六七普对比",
+        "page": 109,
+        "pdfPage": 117,
+        "row": "西兴街道",
+        "column": "第七次人口普查 / 女"
+      },
+      "period": "2020-11-01",
+      "populationBasis": "常住人口",
+      "boundaryVersion": "2020 年第七次人口普查街道口径",
+      "provenance": "fact"
+    },
+    {
+      "id": "xixing:sex:male",
+      "areaCode": "xixing",
+      "dimension": "sex",
+      "sex": "male",
+      "value": 74538,
+      "sourceId": "binjiang-census-2020-street-sex",
+      "locator": {
+        "table": "1-2 按街道分的常住人口状况六七普对比",
+        "page": 109,
+        "pdfPage": 117,
+        "row": "西兴街道",
+        "column": "常住人口减女（算术派生；原表无男性列）"
+      },
+      "period": "2020-11-01",
+      "populationBasis": "常住人口",
+      "boundaryVersion": "2020 年第七次人口普查街道口径",
+      "provenance": "fact",
+      "derivation": {
+        "operation": "subtract",
+        "inputObservationIds": [
+          "xixing:total",
+          "xixing:sex:female"
+        ]
+      }
+    },
+    {
+      "id": "changhe:total",
+      "areaCode": "changhe",
+      "dimension": "total",
+      "value": 168276,
+      "sourceId": "binjiang-census-2020-street-sex",
+      "locator": {
+        "table": "1-2 按街道分的常住人口状况六七普对比",
+        "page": 109,
+        "pdfPage": 117,
+        "row": "长河街道",
+        "column": "第七次人口普查 / 常住人口"
+      },
+      "period": "2020-11-01",
+      "populationBasis": "常住人口",
+      "boundaryVersion": "2020 年第七次人口普查街道口径",
+      "provenance": "fact"
+    },
+    {
+      "id": "changhe:sex:female",
+      "areaCode": "changhe",
+      "dimension": "sex",
+      "sex": "female",
+      "value": 81125,
+      "sourceId": "binjiang-census-2020-street-sex",
+      "locator": {
+        "table": "1-2 按街道分的常住人口状况六七普对比",
+        "page": 109,
+        "pdfPage": 117,
+        "row": "长河街道",
+        "column": "第七次人口普查 / 女"
+      },
+      "period": "2020-11-01",
+      "populationBasis": "常住人口",
+      "boundaryVersion": "2020 年第七次人口普查街道口径",
+      "provenance": "fact"
+    },
+    {
+      "id": "changhe:sex:male",
+      "areaCode": "changhe",
+      "dimension": "sex",
+      "sex": "male",
+      "value": 87151,
+      "sourceId": "binjiang-census-2020-street-sex",
+      "locator": {
+        "table": "1-2 按街道分的常住人口状况六七普对比",
+        "page": 109,
+        "pdfPage": 117,
+        "row": "长河街道",
+        "column": "常住人口减女（算术派生；原表无男性列）"
+      },
+      "period": "2020-11-01",
+      "populationBasis": "常住人口",
+      "boundaryVersion": "2020 年第七次人口普查街道口径",
+      "provenance": "fact",
+      "derivation": {
+        "operation": "subtract",
+        "inputObservationIds": [
+          "changhe:total",
+          "changhe:sex:female"
+        ]
+      }
+    },
+    {
+      "id": "puyan:total",
+      "areaCode": "puyan",
+      "dimension": "total",
+      "value": 192265,
+      "sourceId": "binjiang-census-2020-street-sex",
+      "locator": {
+        "table": "1-2 按街道分的常住人口状况六七普对比",
+        "page": 109,
+        "pdfPage": 117,
+        "row": "浦沿街道",
+        "column": "第七次人口普查 / 常住人口"
+      },
+      "period": "2020-11-01",
+      "populationBasis": "常住人口",
+      "boundaryVersion": "2020 年第七次人口普查街道口径",
+      "provenance": "fact"
+    },
+    {
+      "id": "puyan:sex:female",
+      "areaCode": "puyan",
+      "dimension": "sex",
+      "sex": "female",
+      "value": 93618,
+      "sourceId": "binjiang-census-2020-street-sex",
+      "locator": {
+        "table": "1-2 按街道分的常住人口状况六七普对比",
+        "page": 109,
+        "pdfPage": 117,
+        "row": "浦沿街道",
+        "column": "第七次人口普查 / 女"
+      },
+      "period": "2020-11-01",
+      "populationBasis": "常住人口",
+      "boundaryVersion": "2020 年第七次人口普查街道口径",
+      "provenance": "fact"
+    },
+    {
+      "id": "puyan:sex:male",
+      "areaCode": "puyan",
+      "dimension": "sex",
+      "sex": "male",
+      "value": 98647,
+      "sourceId": "binjiang-census-2020-street-sex",
+      "locator": {
+        "table": "1-2 按街道分的常住人口状况六七普对比",
+        "page": 109,
+        "pdfPage": 117,
+        "row": "浦沿街道",
+        "column": "常住人口减女（算术派生；原表无男性列）"
+      },
+      "period": "2020-11-01",
+      "populationBasis": "常住人口",
+      "boundaryVersion": "2020 年第七次人口普查街道口径",
+      "provenance": "fact",
+      "derivation": {
+        "operation": "subtract",
+        "inputObservationIds": [
+          "puyan:total",
+          "puyan:sex:female"
+        ]
+      }
+    },
+    {
+      "id": "binjiang:age:0-4",
+      "areaCode": "binjiang",
+      "dimension": "age",
+      "ageBand": "0-4",
+      "value": 28000,
+      "sourceId": "binjiang-census-2020-street-age",
+      "locator": {
+        "table": "1-5 七普按年龄段分的各街道人口",
+        "page": 112,
+        "pdfPage": 120,
+        "row": "合计",
+        "column": "0–4 岁"
+      },
+      "period": "2020-11-01",
+      "populationBasis": "常住人口",
+      "boundaryVersion": "2020 年第七次人口普查街道口径",
+      "provenance": "fact"
+    },
+    {
+      "id": "binjiang:age:5-14",
+      "areaCode": "binjiang",
+      "dimension": "age",
+      "ageBand": "5-14",
+      "value": 41032,
+      "sourceId": "binjiang-census-2020-street-age",
+      "locator": {
+        "table": "1-5 七普按年龄段分的各街道人口",
+        "page": 112,
+        "pdfPage": 120,
+        "row": "合计",
+        "column": "5–14 岁"
+      },
+      "period": "2020-11-01",
+      "populationBasis": "常住人口",
+      "boundaryVersion": "2020 年第七次人口普查街道口径",
+      "provenance": "fact"
+    },
+    {
+      "id": "binjiang:age:15-59",
+      "areaCode": "binjiang",
+      "dimension": "age",
+      "ageBand": "15-59",
+      "value": 380393,
+      "sourceId": "binjiang-census-2020-street-age",
+      "locator": {
+        "table": "1-5 七普按年龄段分的各街道人口",
+        "page": 112,
+        "pdfPage": 120,
+        "row": "合计",
+        "column": "15–59 岁"
+      },
+      "period": "2020-11-01",
+      "populationBasis": "常住人口",
+      "boundaryVersion": "2020 年第七次人口普查街道口径",
+      "provenance": "fact"
+    },
+    {
+      "id": "binjiang:age:60+",
+      "areaCode": "binjiang",
+      "dimension": "age",
+      "ageBand": "60+",
+      "value": 54434,
+      "sourceId": "binjiang-census-2020-street-age",
+      "locator": {
+        "table": "1-5 七普按年龄段分的各街道人口",
+        "page": 112,
+        "pdfPage": 120,
+        "row": "合计",
+        "column": "60 岁及以上"
+      },
+      "period": "2020-11-01",
+      "populationBasis": "常住人口",
+      "boundaryVersion": "2020 年第七次人口普查街道口径",
+      "provenance": "fact"
+    },
+    {
+      "id": "xixing:age:0-4",
+      "areaCode": "xixing",
+      "dimension": "age",
+      "ageBand": "0-4",
+      "value": 8840,
+      "sourceId": "binjiang-census-2020-street-age",
+      "locator": {
+        "table": "1-5 七普按年龄段分的各街道人口",
+        "page": 112,
+        "pdfPage": 120,
+        "row": "西兴街道",
+        "column": "0–4 岁"
+      },
+      "period": "2020-11-01",
+      "populationBasis": "常住人口",
+      "boundaryVersion": "2020 年第七次人口普查街道口径",
+      "provenance": "fact"
+    },
+    {
+      "id": "xixing:age:5-14",
+      "areaCode": "xixing",
+      "dimension": "age",
+      "ageBand": "5-14",
+      "value": 11401,
+      "sourceId": "binjiang-census-2020-street-age",
+      "locator": {
+        "table": "1-5 七普按年龄段分的各街道人口",
+        "page": 112,
+        "pdfPage": 120,
+        "row": "西兴街道",
+        "column": "5–14 岁"
+      },
+      "period": "2020-11-01",
+      "populationBasis": "常住人口",
+      "boundaryVersion": "2020 年第七次人口普查街道口径",
+      "provenance": "fact"
+    },
+    {
+      "id": "xixing:age:15-59",
+      "areaCode": "xixing",
+      "dimension": "age",
+      "ageBand": "15-59",
+      "value": 108461,
+      "sourceId": "binjiang-census-2020-street-age",
+      "locator": {
+        "table": "1-5 七普按年龄段分的各街道人口",
+        "page": 112,
+        "pdfPage": 120,
+        "row": "西兴街道",
+        "column": "15–59 岁"
+      },
+      "period": "2020-11-01",
+      "populationBasis": "常住人口",
+      "boundaryVersion": "2020 年第七次人口普查街道口径",
+      "provenance": "fact"
+    },
+    {
+      "id": "xixing:age:60+",
+      "areaCode": "xixing",
+      "dimension": "age",
+      "ageBand": "60+",
+      "value": 14616,
+      "sourceId": "binjiang-census-2020-street-age",
+      "locator": {
+        "table": "1-5 七普按年龄段分的各街道人口",
+        "page": 112,
+        "pdfPage": 120,
+        "row": "西兴街道",
+        "column": "60 岁及以上"
+      },
+      "period": "2020-11-01",
+      "populationBasis": "常住人口",
+      "boundaryVersion": "2020 年第七次人口普查街道口径",
+      "provenance": "fact"
+    },
+    {
+      "id": "changhe:age:0-4",
+      "areaCode": "changhe",
+      "dimension": "age",
+      "ageBand": "0-4",
+      "value": 9192,
+      "sourceId": "binjiang-census-2020-street-age",
+      "locator": {
+        "table": "1-5 七普按年龄段分的各街道人口",
+        "page": 112,
+        "pdfPage": 120,
+        "row": "长河街道",
+        "column": "0–4 岁"
+      },
+      "period": "2020-11-01",
+      "populationBasis": "常住人口",
+      "boundaryVersion": "2020 年第七次人口普查街道口径",
+      "provenance": "fact"
+    },
+    {
+      "id": "changhe:age:5-14",
+      "areaCode": "changhe",
+      "dimension": "age",
+      "ageBand": "5-14",
+      "value": 13969,
+      "sourceId": "binjiang-census-2020-street-age",
+      "locator": {
+        "table": "1-5 七普按年龄段分的各街道人口",
+        "page": 112,
+        "pdfPage": 120,
+        "row": "长河街道",
+        "column": "5–14 岁"
+      },
+      "period": "2020-11-01",
+      "populationBasis": "常住人口",
+      "boundaryVersion": "2020 年第七次人口普查街道口径",
+      "provenance": "fact"
+    },
+    {
+      "id": "changhe:age:15-59",
+      "areaCode": "changhe",
+      "dimension": "age",
+      "ageBand": "15-59",
+      "value": 125102,
+      "sourceId": "binjiang-census-2020-street-age",
+      "locator": {
+        "table": "1-5 七普按年龄段分的各街道人口",
+        "page": 112,
+        "pdfPage": 120,
+        "row": "长河街道",
+        "column": "15–59 岁"
+      },
+      "period": "2020-11-01",
+      "populationBasis": "常住人口",
+      "boundaryVersion": "2020 年第七次人口普查街道口径",
+      "provenance": "fact"
+    },
+    {
+      "id": "changhe:age:60+",
+      "areaCode": "changhe",
+      "dimension": "age",
+      "ageBand": "60+",
+      "value": 20013,
+      "sourceId": "binjiang-census-2020-street-age",
+      "locator": {
+        "table": "1-5 七普按年龄段分的各街道人口",
+        "page": 112,
+        "pdfPage": 120,
+        "row": "长河街道",
+        "column": "60 岁及以上"
+      },
+      "period": "2020-11-01",
+      "populationBasis": "常住人口",
+      "boundaryVersion": "2020 年第七次人口普查街道口径",
+      "provenance": "fact"
+    },
+    {
+      "id": "puyan:age:0-4",
+      "areaCode": "puyan",
+      "dimension": "age",
+      "ageBand": "0-4",
+      "value": 9968,
+      "sourceId": "binjiang-census-2020-street-age",
+      "locator": {
+        "table": "1-5 七普按年龄段分的各街道人口",
+        "page": 112,
+        "pdfPage": 120,
+        "row": "浦沿街道",
+        "column": "0–4 岁"
+      },
+      "period": "2020-11-01",
+      "populationBasis": "常住人口",
+      "boundaryVersion": "2020 年第七次人口普查街道口径",
+      "provenance": "fact"
+    },
+    {
+      "id": "puyan:age:5-14",
+      "areaCode": "puyan",
+      "dimension": "age",
+      "ageBand": "5-14",
+      "value": 15662,
+      "sourceId": "binjiang-census-2020-street-age",
+      "locator": {
+        "table": "1-5 七普按年龄段分的各街道人口",
+        "page": 112,
+        "pdfPage": 120,
+        "row": "浦沿街道",
+        "column": "5–14 岁"
+      },
+      "period": "2020-11-01",
+      "populationBasis": "常住人口",
+      "boundaryVersion": "2020 年第七次人口普查街道口径",
+      "provenance": "fact"
+    },
+    {
+      "id": "puyan:age:15-59",
+      "areaCode": "puyan",
+      "dimension": "age",
+      "ageBand": "15-59",
+      "value": 146830,
+      "sourceId": "binjiang-census-2020-street-age",
+      "locator": {
+        "table": "1-5 七普按年龄段分的各街道人口",
+        "page": 112,
+        "pdfPage": 120,
+        "row": "浦沿街道",
+        "column": "15–59 岁"
+      },
+      "period": "2020-11-01",
+      "populationBasis": "常住人口",
+      "boundaryVersion": "2020 年第七次人口普查街道口径",
+      "provenance": "fact"
+    },
+    {
+      "id": "puyan:age:60+",
+      "areaCode": "puyan",
+      "dimension": "age",
+      "ageBand": "60+",
+      "value": 19805,
+      "sourceId": "binjiang-census-2020-street-age",
+      "locator": {
+        "table": "1-5 七普按年龄段分的各街道人口",
+        "page": 112,
+        "pdfPage": 120,
+        "row": "浦沿街道",
+        "column": "60 岁及以上"
+      },
+      "period": "2020-11-01",
+      "populationBasis": "常住人口",
+      "boundaryVersion": "2020 年第七次人口普查街道口径",
+      "provenance": "fact"
+    }
+  ],
+  "recentObservations": [
+    {
+      "id": "binjiang-2025-resident-total",
+      "metric": "population.total",
+      "value": 55.9,
+      "unit": "万人",
+      "period": "2025-12-31",
+      "populationBasis": "usual-resident",
+      "geoId": "binjiang",
+      "sourceId": "binjiang-2025-communique",
+      "locator": "PDF第3页/印刷第3页，（三）人口就业",
+      "precisionNotes": "官方1%人口抽样调查推算值，公报初步统计数；发布精度0.1万人，换算559000人不代表逐人精确计数。"
+    },
+    {
+      "id": "binjiang-2025-resident-male",
+      "metric": "population.male",
+      "value": 28.6,
+      "unit": "万人",
+      "period": "2025-12-31",
+      "populationBasis": "usual-resident",
+      "geoId": "binjiang",
+      "sourceId": "binjiang-2025-communique",
+      "locator": "PDF第3页/印刷第3页，（三）人口就业",
+      "precisionNotes": "原文明确占常住人口；发布精度0.1万人。"
+    },
+    {
+      "id": "binjiang-2025-resident-female",
+      "metric": "population.female",
+      "value": 27.3,
+      "unit": "万人",
+      "period": "2025-12-31",
+      "populationBasis": "usual-resident",
+      "geoId": "binjiang",
+      "sourceId": "binjiang-2025-communique",
+      "locator": "PDF第3页/印刷第3页，（三）人口就业",
+      "precisionNotes": "原文明确占常住人口；发布精度0.1万人。"
+    },
+    {
+      "id": "binjiang-2025-resident-male-share",
+      "metric": "population.male.share",
+      "value": 51.2,
+      "unit": "%",
+      "period": "2025-12-31",
+      "populationBasis": "usual-resident",
+      "geoId": "binjiang",
+      "sourceId": "binjiang-2025-communique",
+      "locator": "PDF第3页/印刷第3页，（三）人口就业",
+      "precisionNotes": "发布精度0.1个百分点，独立舍入，不能要求与28.6/55.9计算值完全一致。"
+    },
+    {
+      "id": "binjiang-2025-resident-female-share",
+      "metric": "population.female.share",
+      "value": 48.8,
+      "unit": "%",
+      "period": "2025-12-31",
+      "populationBasis": "usual-resident",
+      "geoId": "binjiang",
+      "sourceId": "binjiang-2025-communique",
+      "locator": "PDF第3页/印刷第3页，（三）人口就业",
+      "precisionNotes": "发布精度0.1个百分点。"
+    },
+    {
+      "id": "binjiang-2025-resident-increase",
+      "metric": "population.annualIncrease",
+      "value": 0.7,
+      "unit": "万人",
+      "period": "2025",
+      "populationBasis": "usual-resident",
+      "geoId": "binjiang",
+      "sourceId": "binjiang-2025-communique",
+      "locator": "PDF第3页/印刷第3页，（三）人口就业",
+      "precisionNotes": "直接录入原文同比，不通过总量相减重建。与2024公报55.2万人在发布精度下相容。"
+    },
+    {
+      "id": "binjiang-2025-urbanization",
+      "metric": "population.urban.share",
+      "value": 100,
+      "unit": "%",
+      "period": "2025-12-31",
+      "populationBasis": "usual-resident",
+      "geoId": "binjiang",
+      "sourceId": "binjiang-2025-communique",
+      "locator": "PDF第3页/印刷第3页，（三）人口就业",
+      "precisionNotes": "发布精度0.1个百分点；城镇人口口径不是户籍农业/非农业口径。"
+    },
+    {
+      "id": "binjiang-2025-hukou-total",
+      "metric": "population.total",
+      "value": 35.4,
+      "unit": "万人",
+      "period": "2025-12-31",
+      "populationBasis": "registered-hukou",
+      "geoId": "binjiang",
+      "sourceId": "binjiang-2025-communique",
+      "locator": "PDF第3页/印刷第3页，（三）人口就业；资料来源",
+      "precisionNotes": "户籍人口来自区公安分局，发布精度0.1万人；不能与常住人口相加。"
+    },
+    {
+      "id": "binjiang-2025-hukou-increase",
+      "metric": "population.annualIncrease",
+      "value": 1,
+      "unit": "万人",
+      "period": "2025",
+      "populationBasis": "registered-hukou",
+      "geoId": "binjiang",
+      "sourceId": "binjiang-2025-communique",
+      "locator": "PDF第3页/印刷第3页，（三）人口就业",
+      "precisionNotes": "原文比上年末增加1.0万人；两个已舍入总量35.4-34.5=0.9，与原文差0.1万人；保留原文，待更高精度数据核对。"
+    },
+    {
+      "id": "binjiang-2024-resident-total",
+      "metric": "population.total",
+      "value": 55.2,
+      "unit": "万人",
+      "period": "2024-12-31",
+      "populationBasis": "usual-resident",
+      "geoId": "binjiang",
+      "sourceId": "binjiang-2024-communique",
+      "locator": "PDF第3页/印刷第3页，（三）人口就业",
+      "precisionNotes": "发布精度0.1万人；公报注释[1]为初步统计数。"
+    },
+    {
+      "id": "binjiang-2024-resident-increase",
+      "metric": "population.annualIncrease",
+      "value": 0.9,
+      "unit": "万人",
+      "period": "2024",
+      "populationBasis": "usual-resident",
+      "geoId": "binjiang",
+      "sourceId": "binjiang-2024-communique",
+      "locator": "PDF第3页/印刷第3页，（三）人口就业",
+      "precisionNotes": "直接录入原文同比。"
+    },
+    {
+      "id": "binjiang-2024-urbanization",
+      "metric": "population.urban.share",
+      "value": 100,
+      "unit": "%",
+      "period": "2024-12-31",
+      "populationBasis": "usual-resident",
+      "geoId": "binjiang",
+      "sourceId": "binjiang-2024-communique",
+      "locator": "PDF第3页/印刷第3页，（三）人口就业",
+      "precisionNotes": "发布精度0.1个百分点。"
+    },
+    {
+      "id": "binjiang-2024-hukou-total",
+      "metric": "population.total",
+      "value": 34.5,
+      "unit": "万人",
+      "period": "2024-12-31",
+      "populationBasis": "registered-hukou",
+      "geoId": "binjiang",
+      "sourceId": "binjiang-2024-communique",
+      "locator": "PDF第3页/印刷第3页，（三）人口就业；PDF第10页资料来源",
+      "precisionNotes": "发布精度0.1万人；数据来自区公安分局。"
+    },
+    {
+      "id": "binjiang-2024-hukou-male",
+      "metric": "population.male",
+      "value": 17.1,
+      "unit": "万人",
+      "period": "2024-12-31",
+      "populationBasis": "registered-hukou",
+      "geoId": "binjiang",
+      "sourceId": "binjiang-2024-communique",
+      "locator": "PDF第3页/印刷第3页，（三）人口就业",
+      "precisionNotes": "原文明确为户籍人口中的男性，不得用于2024常住人口性别配比。"
+    },
+    {
+      "id": "binjiang-2024-hukou-female",
+      "metric": "population.female",
+      "value": 17.4,
+      "unit": "万人",
+      "period": "2024-12-31",
+      "populationBasis": "registered-hukou",
+      "geoId": "binjiang",
+      "sourceId": "binjiang-2024-communique",
+      "locator": "PDF第3页/印刷第3页，（三）人口就业",
+      "precisionNotes": "原文明确为户籍人口中的女性，不得用于2024常住人口性别配比。"
+    },
+    {
+      "id": "binjiang-2023-resident-total",
+      "metric": "population.total",
+      "value": 54.3,
+      "unit": "万人",
+      "period": "2023-12-31",
+      "populationBasis": "usual-resident",
+      "geoId": "binjiang",
+      "sourceId": "binjiang-2023-yearbook",
+      "locator": "PDF第10页/印刷第2页，年末人口概况，2023年列",
+      "precisionNotes": "发布精度0.1万人；表列与户籍人口单位不同。"
+    },
+    {
+      "id": "binjiang-2023-hukou-total",
+      "metric": "population.total",
+      "value": 334063,
+      "unit": "人",
+      "period": "2023-12-31",
+      "populationBasis": "registered-hukou",
+      "geoId": "binjiang",
+      "sourceId": "binjiang-2023-yearbook",
+      "locator": "PDF第10页/印刷第2页，年末人口概况",
+      "precisionNotes": "原表精确到人；不等于33.4万人逐字转换后的334000。"
+    },
+    {
+      "id": "binjiang-2023-hukou-male",
+      "metric": "population.male",
+      "value": 166522,
+      "unit": "人",
+      "period": "2023-12-31",
+      "populationBasis": "registered-hukou",
+      "geoId": "binjiang",
+      "sourceId": "binjiang-2023-yearbook",
+      "locator": "PDF第10页/印刷第2页，年末人口概况",
+      "precisionNotes": "年末户籍人口子项。"
+    },
+    {
+      "id": "binjiang-2023-hukou-female",
+      "metric": "population.female",
+      "value": 167541,
+      "unit": "人",
+      "period": "2023-12-31",
+      "populationBasis": "registered-hukou",
+      "geoId": "binjiang",
+      "sourceId": "binjiang-2023-yearbook",
+      "locator": "PDF第10页/印刷第2页，年末人口概况",
+      "precisionNotes": "年末户籍人口子项。"
+    },
+    {
+      "id": "binjiang-2023-area",
+      "metric": "geography.area",
+      "value": 72.2,
+      "unit": "平方公里",
+      "period": "2023",
+      "populationBasis": "not-applicable",
+      "geoId": "binjiang",
+      "sourceId": "binjiang-2023-yearbook",
+      "locator": "PDF第10页/印刷第2页，区域面积及表下注释",
+      "precisionNotes": "表下注释说明依据杭州市第一次地理国情普查基本情况；不是住宅可居住用地面积。"
+    },
+    {
+      "id": "binjiang-2023-xixing-hukou",
+      "metric": "population.total",
+      "value": 115395,
+      "unit": "人",
+      "period": "2023-12-31",
+      "populationBasis": "registered-hukou",
+      "geoId": "xixing",
+      "sourceId": "binjiang-2023-yearbook",
+      "locator": "PDF第28页/印刷第20页，街道基本情况，西兴列年末户籍人口行",
+      "precisionNotes": "只有户籍人口，不得用作街道常住总量。geoId为内部地理标识，街道名称由原表确认。"
+    },
+    {
+      "id": "binjiang-2023-changhe-hukou",
+      "metric": "population.total",
+      "value": 102433,
+      "unit": "人",
+      "period": "2023-12-31",
+      "populationBasis": "registered-hukou",
+      "geoId": "changhe",
+      "sourceId": "binjiang-2023-yearbook",
+      "locator": "PDF第28页/印刷第20页，街道基本情况，长河列年末户籍人口行",
+      "precisionNotes": "只有户籍人口，不得用作街道常住总量。geoId为内部地理标识，街道名称由原表确认。"
+    },
+    {
+      "id": "binjiang-2023-puyan-hukou",
+      "metric": "population.total",
+      "value": 116235,
+      "unit": "人",
+      "period": "2023-12-31",
+      "populationBasis": "registered-hukou",
+      "geoId": "puyan",
+      "sourceId": "binjiang-2023-yearbook",
+      "locator": "PDF第28页/印刷第20页，街道基本情况，浦沿列年末户籍人口行",
+      "precisionNotes": "只有户籍人口，不得用作街道常住总量。geoId为内部地理标识，街道名称由原表确认。"
+    }
+  ],
+  "notes": [
+    "七普两个索引指向同一PDF，不是两份独立测量。",
+    "2025区级总量不更新2020街道结构。",
+    "哈希只校验字节版本，不证明真实性。"
+  ]
+}

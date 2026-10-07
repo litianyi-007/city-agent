@@ -1,0 +1,35 @@
+{
+  "schemaVersion": "1.0",
+  "proofVersion": "five-layer-fixture-proof-1.0",
+  "id": "abfe1fd7-e1aa-4aba-a7ea-207088e9f14d",
+  "mode": "fixture",
+  "modelCalls": 0,
+  "notice": "工程规则夹具；没有LLM调用，不是真实居民偏好、人格效度或经营建议。",
+  "files": [
+    {
+      "name": "questionnaire.json",
+      "bytes": 10959,
+      "sha256": "9b1a01053ab0b27de9c4b27e08d7ec6fa209a811b1ccd6b533a81c04f1c8f247"
+    },
+    {
+      "name": "presets.json",
+      "bytes": 9642,
+      "sha256": "a423698c6f565d41183615d96e03649886b75af04459f8dd5ccedaccd719e776"
+    },
+    {
+      "name": "survey-run.json",
+      "bytes": 379045,
+      "sha256": "547b4958a93610d70a73bfe9509df886e2e08448f94a8b3df5d5921213b2eccf"
+    },
+    {
+      "name": "persona-proof.json",
+      "bytes": 10538,
+      "sha256": "36ebbd3375399a1fec032c1484aab49b8d92d489ed15ab3b72eb8723228ef79d"
+    },
+    {
+      "name": "proof-report.md",
+      "bytes": 3629,
+      "sha256": "a62239362eb6933131094f9ae3165747b0694625aa24cd44de3cf6184dd5b75f"
+    }
+  ]
+}

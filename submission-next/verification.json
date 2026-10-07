@@ -1,0 +1,39 @@
+{
+  "schemaVersion": "1.0",
+  "kind": "city-agent-engineering-verification",
+  "checkedAt": "2026-10-07T10:10:00.000Z",
+  "status": "engineering-passed-quality-not-tested",
+  "realModelCalls": 0,
+  "unit": {
+    "passed": 239,
+    "total": 239,
+    "failed": 0,
+    "durationMs": 19530.219541,
+    "log": "output/review-next-final-unit.tap"
+  },
+  "browser": {
+    "passed": 19,
+    "total": 19,
+    "failed": 0,
+    "durationSeconds": 38.4,
+    "log": "output/review-next-final-browser.log"
+  },
+  "builds": {
+    "localExitCode": 0,
+    "pagesExitCode": 0
+  },
+  "doctor": {
+    "ready": true,
+    "log": "output/review-next-doctor.json"
+  },
+  "pagesSmoke": {
+    "passed": true,
+    "freshModelCalls": 0,
+    "forbiddenRequests": 0,
+    "pageErrors": 0,
+    "log": "output/review-next-final-pages-smoke.log"
+  },
+  "realModelQuality": "not-tested",
+  "externalValidity": "not-validated",
+  "publishing": "not-performed"
+}

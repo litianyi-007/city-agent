@@ -1,0 +1,430 @@
+{
+  "schemaVersion": "1.0",
+  "verifierVersion": "explicit-questionnaire-logic-1.1",
+  "status": "checked",
+  "scope": "独立的登记跨题规则审计；不升级survey默认valid，不证明真实模型质量/人格效度。",
+  "rules": [
+    {
+      "id": "purchase-role-exclusive",
+      "kind": "exclusive-options",
+      "questionId": "purchase-role",
+      "exclusiveOptionIds": [
+        "none",
+        "unknown"
+      ]
+    },
+    {
+      "id": "past-categories-exclusive",
+      "kind": "exclusive-options",
+      "questionId": "past-categories",
+      "exclusiveOptionIds": [
+        "none",
+        "unknown"
+      ]
+    },
+    {
+      "id": "permission-factors-exclusive",
+      "kind": "exclusive-options",
+      "questionId": "permission-factors",
+      "exclusiveOptionIds": [
+        "none",
+        "unknown"
+      ]
+    },
+    {
+      "id": "planned-channels-exclusive",
+      "kind": "exclusive-options",
+      "questionId": "planned-channels",
+      "exclusiveOptionIds": [
+        "none",
+        "unknown"
+      ]
+    },
+    {
+      "id": "reachable-streets-exclusive",
+      "kind": "exclusive-options",
+      "questionId": "reachable-streets",
+      "exclusiveOptionIds": [
+        "unknown"
+      ]
+    },
+    {
+      "id": "purchase-barriers-exclusive",
+      "kind": "exclusive-options",
+      "questionId": "purchase-barriers",
+      "exclusiveOptionIds": [
+        "none",
+        "unknown"
+      ]
+    },
+    {
+      "id": "no-purchase-zero-budget",
+      "kind": "conditional-equals",
+      "whenQuestionId": "purchase-intent",
+      "whenValue": "no",
+      "thenQuestionId": "monthly-budget",
+      "thenValue": 0
+    },
+    {
+      "id": "unknown-intent-unknown-budget",
+      "kind": "conditional-equals",
+      "whenQuestionId": "purchase-intent",
+      "whenValue": "unknown",
+      "thenQuestionId": "monthly-budget",
+      "thenValue": null
+    },
+    {
+      "id": "no-purchase-no-package",
+      "kind": "conditional-equals",
+      "whenQuestionId": "purchase-intent",
+      "whenValue": "no",
+      "thenQuestionId": "package-size",
+      "thenValue": "none"
+    },
+    {
+      "id": "no-purchase-no-channel",
+      "kind": "conditional-equals",
+      "whenQuestionId": "purchase-intent",
+      "whenValue": "no",
+      "thenQuestionId": "planned-channels",
+      "thenValue": [
+        "none"
+      ]
+    },
+    {
+      "id": "no-purchase-travel-not-applicable",
+      "kind": "conditional-equals",
+      "whenQuestionId": "purchase-intent",
+      "whenValue": "no",
+      "thenQuestionId": "travel-minutes",
+      "thenValue": null
+    },
+    {
+      "id": "no-purchase-no-price",
+      "kind": "conditional-equals",
+      "whenQuestionId": "purchase-intent",
+      "whenValue": "no",
+      "thenQuestionId": "price-per20g",
+      "thenValue": "none"
+    },
+    {
+      "id": "zero-past-frequency-no-past-categories",
+      "kind": "conditional-equals",
+      "whenQuestionId": "past-frequency",
+      "whenValue": "none",
+      "thenQuestionId": "past-categories",
+      "thenValue": [
+        "none"
+      ]
+    },
+    {
+      "id": "child-no-direct-taste-not-collected",
+      "kind": "conditional-equals",
+      "whenQuestionId": "child-evidence",
+      "whenValue": "not-collected",
+      "thenQuestionId": "child-own-taste",
+      "thenValue": null
+    },
+    {
+      "id": "child-no-direct-taste-proxy-unverified",
+      "kind": "conditional-equals",
+      "whenQuestionId": "child-evidence",
+      "whenValue": "proxy-unverified",
+      "thenQuestionId": "child-own-taste",
+      "thenValue": null
+    },
+    {
+      "id": "child-no-direct-taste-unknown",
+      "kind": "conditional-equals",
+      "whenQuestionId": "child-evidence",
+      "whenValue": "unknown",
+      "thenQuestionId": "child-own-taste",
+      "thenValue": null
+    },
+    {
+      "id": "no-permission-traceability-not-applicable",
+      "kind": "conditional-equals",
+      "whenQuestionId": "purchase-role",
+      "whenValue": [
+        "none"
+      ],
+      "thenQuestionId": "traceability-importance",
+      "thenValue": null
+    }
+  ],
+  "rulesHash": "ce7c2df5deb08e75f47b2a287dc650db0c7763eebd2eb1f0791163f858fe4214",
+  "planned": 12,
+  "evaluated": 12,
+  "passed": 12,
+  "individuallyPassed": 12,
+  "completeDenominator": true,
+  "failed": 0,
+  "notEvaluated": 0,
+  "mappingIssues": [],
+  "records": [
+    {
+      "residentId": "resident-001",
+      "structureValid": true,
+      "rawStructureValid": true,
+      "answersMatchRaw": true,
+      "mapped": true,
+      "sourceStatus": "valid",
+      "errors": [],
+      "report": {
+        "schemaVersion": "1.0",
+        "verifierVersion": "explicit-questionnaire-logic-1.1",
+        "status": "checked",
+        "answerStructureValid": true,
+        "rulesHash": "ce7c2df5deb08e75f47b2a287dc650db0c7763eebd2eb1f0791163f858fe4214",
+        "registered": 17,
+        "checked": 8,
+        "skipped": 9,
+        "issues": [],
+        "scope": "仅检查另册登记的互斥/条件规则；不是通用语义理解、人格效度或真实模型质量，不升级survey.metrics.valid。"
+      },
+      "passed": true
+    },
+    {
+      "residentId": "resident-002",
+      "structureValid": true,
+      "rawStructureValid": true,
+      "answersMatchRaw": true,
+      "mapped": true,
+      "sourceStatus": "valid",
+      "errors": [],
+      "report": {
+        "schemaVersion": "1.0",
+        "verifierVersion": "explicit-questionnaire-logic-1.1",
+        "status": "checked",
+        "answerStructureValid": true,
+        "rulesHash": "ce7c2df5deb08e75f47b2a287dc650db0c7763eebd2eb1f0791163f858fe4214",
+        "registered": 17,
+        "checked": 7,
+        "skipped": 10,
+        "issues": [],
+        "scope": "仅检查另册登记的互斥/条件规则；不是通用语义理解、人格效度或真实模型质量，不升级survey.metrics.valid。"
+      },
+      "passed": true
+    },
+    {
+      "residentId": "resident-003",
+      "structureValid": true,
+      "rawStructureValid": true,
+      "answersMatchRaw": true,
+      "mapped": true,
+      "sourceStatus": "valid",
+      "errors": [],
+      "report": {
+        "schemaVersion": "1.0",
+        "verifierVersion": "explicit-questionnaire-logic-1.1",
+        "status": "checked",
+        "answerStructureValid": true,
+        "rulesHash": "ce7c2df5deb08e75f47b2a287dc650db0c7763eebd2eb1f0791163f858fe4214",
+        "registered": 17,
+        "checked": 7,
+        "skipped": 10,
+        "issues": [],
+        "scope": "仅检查另册登记的互斥/条件规则；不是通用语义理解、人格效度或真实模型质量，不升级survey.metrics.valid。"
+      },
+      "passed": true
+    },
+    {
+      "residentId": "resident-004",
+      "structureValid": true,
+      "rawStructureValid": true,
+      "answersMatchRaw": true,
+      "mapped": true,
+      "sourceStatus": "valid",
+      "errors": [],
+      "report": {
+        "schemaVersion": "1.0",
+        "verifierVersion": "explicit-questionnaire-logic-1.1",
+        "status": "checked",
+        "answerStructureValid": true,
+        "rulesHash": "ce7c2df5deb08e75f47b2a287dc650db0c7763eebd2eb1f0791163f858fe4214",
+        "registered": 17,
+        "checked": 13,
+        "skipped": 4,
+        "issues": [],
+        "scope": "仅检查另册登记的互斥/条件规则；不是通用语义理解、人格效度或真实模型质量，不升级survey.metrics.valid。"
+      },
+      "passed": true
+    },
+    {
+      "residentId": "resident-005",
+      "structureValid": true,
+      "rawStructureValid": true,
+      "answersMatchRaw": true,
+      "mapped": true,
+      "sourceStatus": "valid",
+      "errors": [],
+      "report": {
+        "schemaVersion": "1.0",
+        "verifierVersion": "explicit-questionnaire-logic-1.1",
+        "status": "checked",
+        "answerStructureValid": true,
+        "rulesHash": "ce7c2df5deb08e75f47b2a287dc650db0c7763eebd2eb1f0791163f858fe4214",
+        "registered": 17,
+        "checked": 7,
+        "skipped": 10,
+        "issues": [],
+        "scope": "仅检查另册登记的互斥/条件规则；不是通用语义理解、人格效度或真实模型质量，不升级survey.metrics.valid。"
+      },
+      "passed": true
+    },
+    {
+      "residentId": "resident-006",
+      "structureValid": true,
+      "rawStructureValid": true,
+      "answersMatchRaw": true,
+      "mapped": true,
+      "sourceStatus": "valid",
+      "errors": [],
+      "report": {
+        "schemaVersion": "1.0",
+        "verifierVersion": "explicit-questionnaire-logic-1.1",
+        "status": "checked",
+        "answerStructureValid": true,
+        "rulesHash": "ce7c2df5deb08e75f47b2a287dc650db0c7763eebd2eb1f0791163f858fe4214",
+        "registered": 17,
+        "checked": 7,
+        "skipped": 10,
+        "issues": [],
+        "scope": "仅检查另册登记的互斥/条件规则；不是通用语义理解、人格效度或真实模型质量，不升级survey.metrics.valid。"
+      },
+      "passed": true
+    },
+    {
+      "residentId": "resident-007",
+      "structureValid": true,
+      "rawStructureValid": true,
+      "answersMatchRaw": true,
+      "mapped": true,
+      "sourceStatus": "valid",
+      "errors": [],
+      "report": {
+        "schemaVersion": "1.0",
+        "verifierVersion": "explicit-questionnaire-logic-1.1",
+        "status": "checked",
+        "answerStructureValid": true,
+        "rulesHash": "ce7c2df5deb08e75f47b2a287dc650db0c7763eebd2eb1f0791163f858fe4214",
+        "registered": 17,
+        "checked": 13,
+        "skipped": 4,
+        "issues": [],
+        "scope": "仅检查另册登记的互斥/条件规则；不是通用语义理解、人格效度或真实模型质量，不升级survey.metrics.valid。"
+      },
+      "passed": true
+    },
+    {
+      "residentId": "resident-008",
+      "structureValid": true,
+      "rawStructureValid": true,
+      "answersMatchRaw": true,
+      "mapped": true,
+      "sourceStatus": "valid",
+      "errors": [],
+      "report": {
+        "schemaVersion": "1.0",
+        "verifierVersion": "explicit-questionnaire-logic-1.1",
+        "status": "checked",
+        "answerStructureValid": true,
+        "rulesHash": "ce7c2df5deb08e75f47b2a287dc650db0c7763eebd2eb1f0791163f858fe4214",
+        "registered": 17,
+        "checked": 8,
+        "skipped": 9,
+        "issues": [],
+        "scope": "仅检查另册登记的互斥/条件规则；不是通用语义理解、人格效度或真实模型质量，不升级survey.metrics.valid。"
+      },
+      "passed": true
+    },
+    {
+      "residentId": "resident-009",
+      "structureValid": true,
+      "rawStructureValid": true,
+      "answersMatchRaw": true,
+      "mapped": true,
+      "sourceStatus": "valid",
+      "errors": [],
+      "report": {
+        "schemaVersion": "1.0",
+        "verifierVersion": "explicit-questionnaire-logic-1.1",
+        "status": "checked",
+        "answerStructureValid": true,
+        "rulesHash": "ce7c2df5deb08e75f47b2a287dc650db0c7763eebd2eb1f0791163f858fe4214",
+        "registered": 17,
+        "checked": 7,
+        "skipped": 10,
+        "issues": [],
+        "scope": "仅检查另册登记的互斥/条件规则；不是通用语义理解、人格效度或真实模型质量，不升级survey.metrics.valid。"
+      },
+      "passed": true
+    },
+    {
+      "residentId": "resident-010",
+      "structureValid": true,
+      "rawStructureValid": true,
+      "answersMatchRaw": true,
+      "mapped": true,
+      "sourceStatus": "valid",
+      "errors": [],
+      "report": {
+        "schemaVersion": "1.0",
+        "verifierVersion": "explicit-questionnaire-logic-1.1",
+        "status": "checked",
+        "answerStructureValid": true,
+        "rulesHash": "ce7c2df5deb08e75f47b2a287dc650db0c7763eebd2eb1f0791163f858fe4214",
+        "registered": 17,
+        "checked": 13,
+        "skipped": 4,
+        "issues": [],
+        "scope": "仅检查另册登记的互斥/条件规则；不是通用语义理解、人格效度或真实模型质量，不升级survey.metrics.valid。"
+      },
+      "passed": true
+    },
+    {
+      "residentId": "resident-011",
+      "structureValid": true,
+      "rawStructureValid": true,
+      "answersMatchRaw": true,
+      "mapped": true,
+      "sourceStatus": "valid",
+      "errors": [],
+      "report": {
+        "schemaVersion": "1.0",
+        "verifierVersion": "explicit-questionnaire-logic-1.1",
+        "status": "checked",
+        "answerStructureValid": true,
+        "rulesHash": "ce7c2df5deb08e75f47b2a287dc650db0c7763eebd2eb1f0791163f858fe4214",
+        "registered": 17,
+        "checked": 8,
+        "skipped": 9,
+        "issues": [],
+        "scope": "仅检查另册登记的互斥/条件规则；不是通用语义理解、人格效度或真实模型质量，不升级survey.metrics.valid。"
+      },
+      "passed": true
+    },
+    {
+      "residentId": "resident-012",
+      "structureValid": true,
+      "rawStructureValid": true,
+      "answersMatchRaw": true,
+      "mapped": true,
+      "sourceStatus": "valid",
+      "errors": [],
+      "report": {
+        "schemaVersion": "1.0",
+        "verifierVersion": "explicit-questionnaire-logic-1.1",
+        "status": "checked",
+        "answerStructureValid": true,
+        "rulesHash": "ce7c2df5deb08e75f47b2a287dc650db0c7763eebd2eb1f0791163f858fe4214",
+        "registered": 17,
+        "checked": 7,
+        "skipped": 10,
+        "issues": [],
+        "scope": "仅检查另册登记的互斥/条件规则；不是通用语义理解、人格效度或真实模型质量，不升级survey.metrics.valid。"
+      },
+      "passed": true
+    }
+  ]
+}
