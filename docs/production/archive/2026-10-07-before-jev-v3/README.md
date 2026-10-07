@@ -33,14 +33,8 @@ Key 在新页面重新填写，不迁移原配置。生产 Agent 使用独立六
 
 ## 新增受控摄像头场景测试
 
-2026-10-07 上一批（CAMERA-03）：[共享全局返修契约](GLOBAL-REPAIR-CONTRACT.md)、[CAMERA-03 预登记](CAMERA-03-PREGISTRATION.md) 与 [实测结果/下一批任务](CAMERA-03-RESULT.md)。生成前纠错和研发返修共用最多两次，不修改冻结 Gate；旧 CAMERA-01/02 负结果保留。本次真实模型在反馈后自主修正产品JSON结构，随后因Jev协议不一致失败，无研发或圣诞树场景交付。[独立协议审查](JEV-PROTOCOL-AUDIT-CAMERA-03.md) 保留异常原文，没有放宽门限。本节更新前的入口文档已在 [留底](archive/2026-10-07-before-global-repair/README.md) 保存。
+2026-10-07 最新批次：[共享全局返修契约](GLOBAL-REPAIR-CONTRACT.md)、[CAMERA-03 预登记](CAMERA-03-PREGISTRATION.md) 与 [实测结果/下一批任务](CAMERA-03-RESULT.md)。生成前纠错和研发返修共用最多两次，不修改冻结 Gate；旧 CAMERA-01/02 负结果保留。本次真实模型在反馈后自主修正产品JSON结构，随后因Jev协议不一致失败，无研发或圣诞树场景交付。[独立协议审查](JEV-PROTOCOL-AUDIT-CAMERA-03.md) 保留异常原文，没有放宽门限。本节更新前的入口文档已在 [留底](archive/2026-10-07-before-global-repair/README.md) 保存。
 
 在本地生产页面选择 `camera-scene-v1`，内部角色生成严格 JSON 场景，平台可信运行时负责本机相机/识别/渲染，不执行模型脚本。先按 [本地资产说明](CAMERA-ASSETS.md) 准备固定模型，再从页面输入需求。
 
 [规格](../prd/FP001-camera-scene.md) 与 [第一轮实验](CAMERA-EXPERIMENT.md) 分别描述冻结验收和实测。合成场景 Gate、假摄像头 SDK 集成、真实视觉与实体设备验收分列；前两项通过不代表完整摄像头需求交付。旧“仅截图”的描述仍适用于任意模型生成 HTML，不能借此新能力恢复旧不安全 iframe。
-
-## 当前批次：Jev v3 与实际输出契约
-
-[设计与安全边界](JEV-RESILIENCE-V3-DESIGN.md)、[CAMERA-04 预登记](CAMERA-04-PREGISTRATION.md)、[免费回归/独立审查](BATCH-CAMERA04-CHECKS.md)。本配置不重写旧失败；Jev 派生算术异常只能弃用决策、在原预算内进行一次独立 LLM 复核，不能变为 Jev 通过。角色及 Verifier 使用实际 schema 导出的输出契约，语义和最终行为 Gate 仍独立执行。
-
-本段更新前全文已按 `20f61eb` [留底](archive/2026-10-07-before-jev-v3/README.md)。本批仅推送生产源码分支，不重新发布 Pages/PDF；公开入口仍是旧阶段静态回放，不能用来运行本地 CAMERA-04。

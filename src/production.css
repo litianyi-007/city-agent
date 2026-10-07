@@ -15,3 +15,4 @@
 .prod-camera-boundary p { margin: 8px 0; }
 .prod-camera-delivery { padding: 20px; border: 1px solid #cbd5e1; border-radius: 14px; margin-top: 20px; }
 .prod-camera-delivery .prod-button { min-height: 44px; }
+.prod-verification:focus-visible{outline:3px solid #3B82F6;outline-offset:3px}.prod-jev-source{max-width:100%;text-align:left;flex-wrap:wrap}.prod-jev-diagnostics{padding-left:1.5rem}.prod-jev-diagnostics li{padding:.25rem 0}

@@ -5,9 +5,11 @@ import { evaluateJevCandidates } from '../server/production/jev.js';
 import type { JevCandidateContext } from '../shared/jev-schema.js';
 import type { ProductionRun } from '../shared/production-schema.js';
 
-test('CAMERA-03 recorded Jev response reproduces the protocol rejection without network or evidence alteration', async () => {
-  const run: ProductionRun = JSON.parse(readFileSync(new URL('../docs/production/experiments/CAMERA-03/run.json', import.meta.url), 'utf8'));
+test('CAMERA-03 raw response remains rejected but is counterfactually classified as arithmetic drift by v3, with old evidence unchanged', async () => {
+  const originalBytes = readFileSync(new URL('../docs/production/experiments/CAMERA-03/run.json', import.meta.url));
+  const run: ProductionRun = JSON.parse(originalBytes.toString('utf8'));
   const original = run.jevCalls![0].evaluation;
+  assert.equal(run.status, 'failed'); assert.equal(original.policyVersion, 'jev-candidate-v2'); assert.equal(original.requestSnapshot!.state.phaseReview!.version, 'verifier-phase-ordinal-v2');
   const state = original.requestSnapshot!.state;
   const context: JevCandidateContext = { phase: state.phase, goal: state.goal, acceptance: state.acceptance, frozenHash: state.frozenHash, candidates: state.candidates, capability: state.capability, reviewContext: state.reviewContext };
   const body = original.rawResponse as { answers: Record<string, { score: number; probabilities: Record<string, number> }>; usage: { input_tokens: number; output_tokens: number } };
@@ -33,12 +35,17 @@ test('CAMERA-03 recorded Jev response reproduces the protocol rejection without 
   const result = await evaluateJevCandidates({ ...run.jevSnapshot!, apiKey: 'camera03-replay-fixture-not-a-real-key' }, context, new AbortController().signal, {
     fetch: (async (_url, init) => {
       injectedCalls++;
-      assert.deepEqual(JSON.parse(String(init?.body)), original.requestSnapshot);
+      const currentRequest = JSON.parse(String(init?.body));
+      assert.deepEqual(currentRequest.state.candidates, original.requestSnapshot!.state.candidates);
+      assert.equal(currentRequest.state.goal, state.goal); assert.deepEqual(currentRequest.state.acceptance, state.acceptance); assert.deepEqual(currentRequest.state.reviewContext, state.reviewContext);
+      assert.equal(currentRequest.state.phaseReview.version, 'verifier-phase-ordinal-v3', 'new request criteria, not a retrospective rewrite of v2');
       return new Response(JSON.stringify(body), { status: 200, headers: { 'Content-Type': 'application/json' } });
     }) as typeof fetch,
   });
   assert.equal(injectedCalls, 1, 'injected transport only; no actual HTTP request');
   assert.equal(result.status, 'error');
+  assert.equal(result.policyVersion, 'jev-candidate-v3'); assert.equal(result.errorKind, 'arithmetic-drift');
+  assert.deepEqual(result.diagnostics, [{ code: 'score-mean-drift', answerId: 'c0_scope' }]); assert.deepEqual(result.scores, []); assert.equal(result.choice, null);
   assert.equal(result.selectedCandidateId, null);
   assert.match(result.reason, /c0_scope: score does not match any probability-weighted value within display rounding/);
   assert.equal(result.usage.complete, true);
@@ -46,4 +53,5 @@ test('CAMERA-03 recorded Jev response reproduces the protocol rejection without 
   assert.equal(result.usage.outputTokens, 162);
   assert.deepEqual(result.rawResponse, original.rawResponse);
   assert.equal(JSON.stringify(body), unchanged, 'do not normalize or rewrite the provider response');
+  assert.deepEqual(readFileSync(new URL('../docs/production/experiments/CAMERA-03/run.json', import.meta.url)), originalBytes, 'historical failed run bytes remain unchanged');
 });

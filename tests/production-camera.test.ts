@@ -87,7 +87,9 @@ test('injected six-role camera delivery freezes new profile and source/runtime l
 });
 
 test('invalid camera developer code is retained as rejected raw evidence without scene/HTML template fallback', async t => {
-  const invalid: typeof runRole = async (...args) => { if (args[1].startsWith('返回严格JSON {"scene"')) return { text: JSON.stringify({ scene, html: '<script>evil()</script>' }), inputTokens: 100, outputTokens: 100, usageReported: true, harness: 'Injected' }; return roleCall(...args); };
+  // Dispatch the hostile developer fixture by the actual output contract,
+  // not a prompt prefix that changes when generic contract guidance is added.
+  const invalid: typeof runRole = async (...args) => { if (JSON.parse(args[2]).outputContract?.jsonSchema?.properties?.scene) return { text: JSON.stringify({ scene, html: '<script>evil()</script>' }), inputTokens: 100, outputTokens: 100, usageReported: true, harness: 'Injected' }; return roleCall(...args); };
   const { request, input, wait } = await setup(t, { roleCall: invalid }); const run = await wait((await (await request('/runs', input, 'POST')).json()).id); assert.equal(run.status, 'failed'); assert.match(run.error!, /全部候选非法/); assert.equal(run.artifacts.some(artifact => artifact.name === 'scene.json' || artifact.name === 'index.html'), false); assert.ok(run.calls.some(call => call.rawOutput.includes('evil()') && call.error?.includes('候选契约拒绝')));
 });
 

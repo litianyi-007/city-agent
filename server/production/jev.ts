@@ -19,6 +19,13 @@ const DISPLAY_HALF_QUANTUM = 0.005;
 const NUMERIC_EPSILON = 1e-9;
 interface ProbabilityBounds { lower: number[]; upper: number[]; }
 interface LinearConstraint { weights: number[]; maximum: number; }
+type ArithmeticDiagnostic = NonNullable<JevEvaluation['diagnostics']>[number];
+/** This private control-plane type cannot be selected by provider error text. */
+class JevArithmeticDrift extends Error {
+  constructor(message: string, readonly diagnostics: ArithmeticDiagnostic[]) { super(message); }
+}
+interface PreflightScore { answer: z.infer<typeof scoreAnswer>; bounds: ProbabilityBounds; name: string; }
+interface PreflightChoice { answer: z.infer<typeof choiceAnswer>; bounds: ProbabilityBounds; keys: string[]; selectedIndex: number; }
 
 /** Exact secret redaction protects response/error bodies even if a provider echoes headers. */
 function sanitized(value: unknown, secret: string | undefined): unknown {
@@ -97,12 +104,16 @@ function hasJointDistribution(bounds: ProbabilityBounds, extra: LinearConstraint
 function modalConstraints(count: number, mode: number): LinearConstraint[] {
   return Array.from({ length: count }, (_, index) => index).filter(index => index !== mode).map(index => ({ weights: Array.from({ length: count }, (_, item) => item === index ? 1 : item === mode ? -1 : 0), maximum: 0 }));
 }
-function verifiedScore(value: unknown, name: string): JevScoreAnswer {
+function preflightScore(value: unknown, name: string): PreflightScore {
   const answer = scoreAnswer.parse(value); const keys = ['0', '1', '2', '3', '4'];
   const bounds = distribution(answer.probabilities, keys, name); sameKeys(Object.keys(answer.legend), keys, `${name}.legend`);
   if (keys.some(key => answer.legend[key] !== LEVELS[Number(key)])) throw new Error(`${name}: legend differs from the frozen rubric; reordered or rewritten labels are not allowed`);
+  return { answer, bounds, name };
+}
+function verifiedScore({ answer, bounds, name }: PreflightScore): JevScoreAnswer {
+  const keys = ['0', '1', '2', '3', '4'];
   const expected = weightedInterval(bounds, keys.map(Number));
-  if (answer.score + DISPLAY_HALF_QUANTUM < expected.minimum - NUMERIC_EPSILON || answer.score - DISPLAY_HALF_QUANTUM > expected.maximum + NUMERIC_EPSILON) throw new Error(`${name}: score does not match any probability-weighted value within display rounding`);
+  if (answer.score + DISPLAY_HALF_QUANTUM < expected.minimum - NUMERIC_EPSILON || answer.score - DISPLAY_HALF_QUANTUM > expected.maximum + NUMERIC_EPSILON) throw new JevArithmeticDrift(`${name}: score does not match any probability-weighted value within display rounding`, [{ code: 'score-mean-drift', answerId: name }]);
   const maximum = Math.max(...Object.values(answer.probabilities));
   // A monotone rounding operation cannot make a true mode display below the
   // displayed maximum. All displayed ties must be considered, not just the first.
@@ -122,14 +133,17 @@ function verifiedScore(value: unknown, name: string): JevScoreAnswer {
     if (confidenceLower > 0) constraints.push({ weights: distances, maximum: 1.2 * (1 - confidenceLower) });
     return hasJointDistribution(bounds, constraints);
   });
-  if (!confidenceCompatible) throw new Error(`${name}: score and confidence have no joint probability distribution consistent with display rounding and the modal concentration formula`);
+  if (!confidenceCompatible) throw new JevArithmeticDrift(`${name}: score and confidence have no joint probability distribution consistent with display rounding and the modal concentration formula`, [{ code: 'score-concentration-drift', answerId: name }]);
   const { type: _, ...result } = answer; return result;
 }
-function verifiedChoice(value: unknown, candidateIds: string[]): JevChoiceAnswer {
+function preflightChoice(value: unknown, candidateIds: string[]): PreflightChoice {
   const answer = choiceAnswer.parse(value); const keys = [...candidateIds, 'abstain'];
   const bounds = distribution(answer.probabilities, keys, 'best');
   const selectedIndex = keys.indexOf(answer.choice);
   if (selectedIndex < 0 || answer.probabilities[answer.choice] < Math.max(...Object.values(answer.probabilities)) - NUMERIC_EPSILON) throw new Error('best: choice is not a displayed highest-probability option');
+  return { answer, bounds, keys, selectedIndex };
+}
+function verifiedChoice({ answer, bounds, keys, selectedIndex }: PreflightChoice): JevChoiceAnswer {
   const selectedWeights = keys.map((_, index) => index === selectedIndex ? 1 : 0);
   const baseline = 1 / keys.length; const denominator = 1 - baseline;
   const confidenceLower = Math.max(0, answer.confidence - DISPLAY_HALF_QUANTUM);
@@ -139,7 +153,7 @@ function verifiedChoice(value: unknown, candidateIds: string[]): JevChoiceAnswer
     { weights: selectedWeights.map(weight => -weight), maximum: -(baseline + denominator * confidenceLower) },
     ...modalConstraints(keys.length, selectedIndex),
   ];
-  if (!hasJointDistribution(bounds, constraints)) throw new Error('best: choice and confidence have no joint probability distribution consistent with display rounding');
+  if (!hasJointDistribution(bounds, constraints)) throw new JevArithmeticDrift('best: choice and confidence have no joint probability distribution consistent with display rounding', [{ code: 'choice-concentration-drift', answerId: 'best' }]);
   const { type: _, ...result } = answer; return result;
 }
 export function buildJevCandidateRequest(modelId: string, context: JevCandidateContext): JevRequestSnapshot {
@@ -201,14 +215,29 @@ export async function evaluateJevCandidates(config: SecretJevConfig, context: Je
     result.usage = { inputTokens: envelope.usage.input_tokens, outputTokens: envelope.usage.output_tokens, estimatedCost: (envelope.usage.input_tokens * config.inputPerMillion + envelope.usage.output_tokens * config.outputPerMillion) / 1e6, currency: 'USD', complete: true };
     if (envelope.model !== config.modelId) throw new Error('Jev returned an unexpected model version; pinned experiment configuration is unchanged');
     sameKeys(Object.keys(envelope.answers), Object.keys(request.questions), 'answers');
-    for (const [index, candidate] of context.candidates.entries()) {
-      const dimensions = Object.fromEntries(DIMENSIONS.map(dimension => [dimension, verifiedScore(envelope.answers[`c${index}_${dimension}`], `c${index}_${dimension}`)])) as Record<JevDimension, JevScoreAnswer>;
-      const inScope = noulAnswer.parse(envelope.answers[`c${index}_safe`]).noul; const certainty = Math.abs(2 * inScope - 1);
+    // Every answer is structurally checked before ANY derived arithmetic is
+    // classified. An early mean drift must not hide a later malformed answer,
+    // unsafe Noul schema, changed legend, invalid distribution or Choice ID.
+    const preflight = context.candidates.map((candidate, index) => ({ candidate,
+      dimensions: Object.fromEntries(DIMENSIONS.map(dimension => [dimension, preflightScore(envelope.answers[`c${index}_${dimension}`], `c${index}_${dimension}`)])) as Record<JevDimension, PreflightScore>,
+      inScope: noulAnswer.parse(envelope.answers[`c${index}_safe`]).noul,
+    }));
+    const choicePreflight = preflightChoice(envelope.answers.best, context.candidates.map(candidate => candidate.id));
+    const diagnostics: ArithmeticDiagnostic[] = []; const messages: string[] = [];
+    const verifyArithmetic = <T>(verify: () => T): T | undefined => {
+      try { return verify(); } catch (error) { if (!(error instanceof JevArithmeticDrift)) throw error; diagnostics.push(...error.diagnostics); messages.push(error.message); return undefined; }
+    };
+    const scored = preflight.map(item => ({ ...item, verifiedDimensions: Object.fromEntries(DIMENSIONS.map(dimension => [dimension, verifyArithmetic(() => verifiedScore(item.dimensions[dimension]))])) }));
+    const choice = verifyArithmetic(() => verifiedChoice(choicePreflight));
+    if (diagnostics.length) throw new JevArithmeticDrift(messages.join('; '), diagnostics);
+    // Do not publish partially qualified candidates before batch validation.
+    for (const { candidate, verifiedDimensions, inScope } of scored) {
+      const dimensions = verifiedDimensions as Record<JevDimension, JevScoreAnswer>; const certainty = Math.abs(2 * inScope - 1);
       const values = Object.values(dimensions);
       const candidateScore: JevCandidateScore = { candidateId: candidate.id, dimensions, meanScore: values.reduce((sum, answer) => sum + answer.score, 0) / values.length, minimumScore: Math.min(...values.map(answer => answer.score)), scopeProbability: inScope, scopeCertainty: certainty, qualified: values.every(answer => answer.score >= config.minScore && answer.confidence >= config.minConfidence) && inScope > 0.5 && certainty >= config.minConfidence, stronglyRejected: values.some(answer => answer.score < config.minScore && answer.confidence >= config.minConfidence) || inScope < 0.5 && certainty >= config.minConfidence };
       result.scores.push(candidateScore);
     }
-    result.choice = verifiedChoice(envelope.answers.best, context.candidates.map(candidate => candidate.id));
+    result.choice = choice!;
     const chosen = result.scores.find(candidate => candidate.candidateId === result.choice!.choice);
     const highestQualifiedScore = Math.max(...result.scores.filter(candidate => candidate.qualified).map(candidate => candidate.meanScore), -Infinity);
     if (result.scores.every(candidate => candidate.stronglyRejected)) { result.status = 'rejected'; result.reason = 'All candidates have a high-concentration failure on a predeclared criterion; Gate cannot be weakened.'; }
@@ -217,7 +246,10 @@ export async function evaluateJevCandidates(config: SecretJevConfig, context: Je
     else { result.status = 'uncertain'; result.reason = 'Candidate or Choice does not clear concentration/quality thresholds; require independent fallback verification, never assume acceptance.'; }
   } catch (error) {
     const message = timedOut ? 'Jev request timed out; no automatic retry' : signal.aborted ? 'Jev request cancelled; no automatic retry' : error instanceof Error ? error.message : String(error);
-    result.status = 'error'; result.selectedCandidateId = null; result.error = sanitized(message, config.apiKey) as string; result.reason = result.error;
+    result.status = 'error'; result.selectedCandidateId = null; result.scores = []; result.choice = null;
+    result.errorKind = !timedOut && !signal.aborted && result.usage.complete && error instanceof JevArithmeticDrift ? 'arithmetic-drift' : 'fatal';
+    if (result.errorKind === 'arithmetic-drift') result.diagnostics = (error as JevArithmeticDrift).diagnostics;
+    result.error = sanitized(message, config.apiKey) as string; result.reason = result.error;
   } finally { clearTimeout(timer); signal.removeEventListener('abort', abort); result.durationMs = Date.now() - started; }
   return result;
 }

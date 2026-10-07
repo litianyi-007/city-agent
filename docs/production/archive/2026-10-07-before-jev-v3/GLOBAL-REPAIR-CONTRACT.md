@@ -57,11 +57,3 @@ API 申报报告同时导出原样返修账本；旧缺字段为 null/unknown，
 ## 后续真实观察（不改启动前结论）
 
 [CAMERA-03](CAMERA-03-RESULT.md) 已实际执行：产品角色13条acceptance被拒绝，同角色收到反馈后输出11条合法结构，消耗1次全局修复；随后Jev协议错误停止。阶段结构纠正有本次真实证据，但Tester重生成、Gate后返修及最终交付尚未真实通过。未将剩余额度用于协议故障重试，未另起第四次付费任务。
-
-## 下一配置的明确例外（Jev v3）
-
-本节在 CAMERA-04 启动前追加；上面的 v2 实测、版本和停止行为保持历史原义，修改前全文已[留底](archive/2026-10-07-before-jev-v3/GLOBAL-REPAIR-CONTRACT.md)。
-
-[Jev v3](JEV-RESILIENCE-V3-DESIGN.md) 只对可信解析器在**全部响应预检合格后**确认的派生算术不一致，弃用整个 Jev 决策，并在原预算内最多升级一次独立 LLM Verifier。原 Jev 仍是 error、selectedCandidateId=null，不修写供应商分数、不据此自动接受；独立复核需通过原最低评分与最高分规则并引用 sourceJevCallId。HTTP/模型/ID/schema/概率/取消/未知 usage 等致命问题仍停止；非法独立 Verifier 不再重试。
-
-合法独立弃权仍走同一全局两次重生成额度；复核不增加额度。若生成新候选，这是新的评估，不是对原异常反复调用直到通过。Prompt 升 HTML v6 / camera v5、Verifier v3，加入实际 schema 的版本化输出契约；最终 acceptance 和 mandatory 行为 Gate 不变。新配置的免费验证与真实结果另记，不回填旧 CAMERA-03 成功或新引擎字段。

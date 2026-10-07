@@ -4,7 +4,7 @@ import type { ProductionPhaseRubric } from './production-verifier-rubric.js';
 
 export const JEV_ENDPOINT = 'https://api.typesafe.ai/v1/systemone';
 export const JEV_MODEL_ID = 'jev-1.13.0';
-export const JEV_POLICY_VERSION = 'jev-candidate-v2';
+export const JEV_POLICY_VERSION = 'jev-candidate-v3';
 export const jevConfigSchema = z.object({
   enabled: z.boolean().default(false),
   modelId: z.literal(JEV_MODEL_ID).default(JEV_MODEL_ID),
@@ -43,4 +43,7 @@ export interface JevEvaluation {
   providerRequests: number;
   durationMs: number;
   error?: string;
+  /** Assigned only by the trusted protocol validator, never provider error text. */
+  errorKind?: 'arithmetic-drift' | 'fatal';
+  diagnostics?: Array<{ code: 'score-mean-drift' | 'score-concentration-drift' | 'choice-concentration-drift'; answerId: string }>;
 }

@@ -68,13 +68,13 @@ function setup(t: TestContext, options: ProductionOptions = {}) {
 }
 
 test('six production stages and bounded repair phases have a versioned rubric; independent benchmark remains whole-answer', () => {
-  assert.equal(PROMPT_VERSION, 'production-html-v5'); assert.equal(CAMERA_PROMPT_VERSION, 'production-camera-scene-v4'); assert.equal(CRITERIA_VERSION, 'verifier-phase-ordinal-v2');
+  assert.equal(PROMPT_VERSION, 'production-html-v6'); assert.equal(CAMERA_PROMPT_VERSION, 'production-camera-scene-v5'); assert.equal(CRITERIA_VERSION, 'verifier-phase-ordinal-v3');
   for (const [phase, stage] of [['product', 'product'], ['research', 'research'], ['think-design', 'plan'], ['acceptance', 'acceptance'], ['implement', 'implementation'], ['repair-2', 'implementation'], ['feedback-2', 'feedback']]) {
     const rubric = productionPhaseRubric(phase)!; assert.equal(rubric.stage, stage); assert.equal(rubric.minimumOrdinalScore, 3); assert.equal(rubric.version, PRODUCTION_VERIFIER_VERSION);
   }
   for (const phase of ['developer', 'whole-answer', 'repair-3', 'feedback-3']) assert.equal(productionPhaseRubric(phase), null);
   const legacy = buildJevCandidateRequest(JEV_MODEL_ID, { phase: 'developer', goal: 'benchmark', acceptance: 'complete answer', frozenHash: null, candidates: [{ id: 'a', value: 'answer' }] });
-  assert.equal(legacy.state.phaseReview, undefined); assert.doesNotMatch(JSON.stringify(legacy), /verifier-phase-ordinal-v2/);
+  assert.equal(legacy.state.phaseReview, undefined); assert.doesNotMatch(JSON.stringify(legacy), /verifier-phase-ordinal-v3/);
 });
 
 test('Jev and LLM share exact stage dimensions and context path, without asking research for future artifacts', () => {

@@ -7,8 +7,8 @@ test('tester full few-shot is parseable strict JSON and valid production busines
   const example = parseJson(TESTER_VALID_JSON_EXAMPLE) as { checks: unknown[] };
   assert.deepEqual(testsSchema.parse(example), example); assert.equal(acceptanceSchema.safeParse(example.checks).success, true);
   assert.ok(CONTRACT_INSTRUCTIONS.tester.includes(TESTER_VALID_JSON_EXAMPLE)); assert.ok(CONTRACT_INSTRUCTIONS.tester.includes(JSON.stringify(TESTER_STEP_EXAMPLES)));
-  assert.equal(PROMPT_VERSION, 'production-html-v5'); assert.equal(CAMERA_PROMPT_VERSION, 'production-camera-scene-v4');
-  assert.equal(CRITERIA_VERSION, 'verifier-phase-ordinal-v2'); assert.equal(ACCEPTANCE_CONTRACT_VERSION, 'production-acceptance-v2'); assert.equal(CAMERA_ACCEPTANCE_VERSION, 'production-camera-acceptance-v1');
+  assert.equal(PROMPT_VERSION, 'production-html-v6'); assert.equal(CAMERA_PROMPT_VERSION, 'production-camera-scene-v5');
+  assert.equal(CRITERIA_VERSION, 'verifier-phase-ordinal-v3'); assert.equal(ACCEPTANCE_CONTRACT_VERSION, 'production-acceptance-v2'); assert.equal(CAMERA_ACCEPTANCE_VERSION, 'production-camera-acceptance-v1');
 });
 
 test('every documented action object validates through the unchanged Gate step schema', () => {
