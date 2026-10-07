@@ -98,6 +98,8 @@ test('nine-check counterfactual fits actual request byte caps across stage regen
   const final = store.run(run.id)!;
   assert.equal(final.status, 'completed', final.error);
   assert.equal(final.evidenceKind, 'injected-test', 'Never count this fixture as autonomous generation success');
+  assert.equal(final.validationContract?.harnessPromptTransportVersion, 'harness-literal-prompt-v1');
+  assert.equal(JSON.parse(store.readArtifact(run.id, 'delivery-manifest.json')).validationContract.harnessPromptTransportVersion, 'harness-literal-prompt-v1');
   assert.equal(testerCalls, 2);
   assert.equal(gateCalls, 2);
   assert.equal(final.repairs, 2);

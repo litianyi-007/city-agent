@@ -25,7 +25,7 @@ test('Jev lossless layout keeps complete state/criteria once, preserves old evid
 });
 
 test('new protocol fields cannot be mistaken for credentials and known-impossible camera constraints are refused before requests', () => {
-  for (const field of ['platformMandatoryGate', 'platformEngineering', 'physicalAcceptance', 'cameraBusinessConstraints', 'invariantUnderCssInteraction', JEV_REQUEST_LAYOUT_VERSION, 'requestLayoutVersion', 'jevRequestLayoutVersion']) assert.equal(productionApiKeySchema.safeParse(field).success, false, field);
+  for (const field of ['platformMandatoryGate', 'platformEngineering', 'physicalAcceptance', 'cameraBusinessConstraints', 'invariantUnderCssInteraction', JEV_REQUEST_LAYOUT_VERSION, 'requestLayoutVersion', 'jevRequestLayoutVersion', 'harnessPromptTransportVersion', 'harness-literal-prompt-v1']) assert.equal(productionApiKeySchema.safeParse(field).success, false, field);
   const input = { mode: 'live', capability: 'camera-scene-v1', brief: 'A generic declarative scene, not a task keyword branch', agentIds: Array(6).fill('00000000-0000-4000-8000-000000000001'), requirement: { id: 'generic-constraint', source: 'Free engineering fixture', acceptance: 'Explicit mappings, no device claim' }, cameraBusinessConstraints: { openPalm: 'scatter', closedFist: 'gather', palmX: 'rotate' } };
   assert.equal(productionRunInputSchema.safeParse(input).success, true);
   assert.equal(productionRunInputSchema.safeParse({ ...input, cameraBusinessConstraints: {} }).success, false);

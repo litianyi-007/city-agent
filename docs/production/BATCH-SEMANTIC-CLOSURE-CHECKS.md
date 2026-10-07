@@ -26,3 +26,11 @@
 真实任务只有 [CAMERA-05预登记](experiments/CAMERA-05/PRE-REGISTRATION.md) 后的一次页面启动；工程通过不自动记成自主交付成功。预算30调用/50万Token/600秒/5USD，全局2次返修。未启动费用为无模型请求，不填造模型Token。
 
 仍只支持离线单HTML与受控声明式camera scene；无可靠容器时不执行模型生成Node/shell。Key不迁移、不进入Prompt/导出/Git，实体摄像头由用户主动启动。合成行为、真实视觉、实体设备和完整业务验收分开记录；九次泛化/Verifier效益对照及通用仓库执行仍是后续任务。
+
+## 真实探索后的免费补修
+
+CAMERA-05终态及其10次实际HTTP、39.567秒、已知费用小计0.01776294 USD和unknown总账见 [RESULT.md](experiments/CAMERA-05/RESULT.md)。传输缺陷在模型测试请求前阻断，未生成scene/冻结/Gate。本批只启动这一次，没有自动收费重跑。
+
+后续加入 [无损Harness transport v1](HARNESS-LITERAL-TRANSPORT.md)，以真实SDK＋本地假provider保持system/user原字节、权限层、禁用工具、取消、usage和清理。新增并行清理归属判断只认自身Prompt＋模型ID，不干扰其他Harness夹具。首次新增全量复核353/355通过、2项失败；归属测试加固后最终全量 **355/355（50.637秒）**，浏览器 **35/35（约1.3分钟）**、TypeScript/构建通过。免费回归日志与明确标注“历史真实记录重放”的截图在本worktree `output/production-camera05/`，不冒充新运行或实机验收。
+
+最终代码尚未再次通过外部真实模型检验；下一优先级仍是新配置预登记后取得最小真实场景闭环，其次才是用户主动实机验收、Verifier同条件效益实验和受控仓库。
