@@ -4,8 +4,6 @@
 
 ## 当前进度
 
-最新 VE-04 新增[原生观测适配器与工程演练](VERIFIER-OBSERVED-TRANSPORT.md)：可信 factory/完整18池请求白名单、实际dispatch与usage、冻结来源/同意、分引擎预算、失败保留及取消等待清理。LLM依旧基于现有Harness，Jev严守旧协议；无第二套运行时、无任意生成脚本宿主执行。下一切片为授权启动入口与boot/配置/Key轮换失效，再新额度确认及真实效益对照；本批只跑假供应商。下面各历史“适配器待实现”段落不代表最新状态，旧实测与公开v5不追写。[本次全文留底](archive/2026-10-07-before-verifier-observed/POST-SUBMISSION-PLAN.md)。
-
 最新 VE-04新增[免费完整请求/配置预检及预算提案](VERIFIER-WIRE-PREFLIGHT.md)，18池通过真实锁定SDK→loopback fake provider抓完整wire，不读取Key、不新增模型成绩；建议独立1 USD、30分钟、最多54评审意图，账单/Token上界不冒称保证。下一免费工程是实际study transport适配/独立HTTP与usage观测/密钥脱敏/每类预留，再确认Jev输出停止语义和预算后收费；候选内部未随机。公开v5、旧实测与已申报稿保持不变。[本次全文留底](archive/2026-10-07-before-verifier-preflight/POST-SUBMISSION-PLAN.md)。
 
 本批 VE-02/03 实现独立三策略执行与[先行账本合同](VERIFIER-STUDY-CONTRACT.md)：running manifest、intent、原响应与 hash、未知/超限/取消停止、显式恢复不重放、重复实验不复用答案。免费 Mock＋实际 Chromium 用于验证链路，不写成真实模型效益；下一门禁 VE-04 传输/参数/价格/预算冻结。虚拟社会评审只提供[交接说明](REVIEW-CONTRACT-HANDOFF.md)，不跨 worktree 修改。本次[全文留底](archive/2026-10-07-before-verifier-study/POST-SUBMISSION-PLAN.md)。

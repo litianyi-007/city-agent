@@ -1,9 +1,5 @@
 # 六角色自主软件生产工作区
 
-最新 VE-04 增量：[原生观测适配器、一次性冻结同意、分引擎预算和取消清理](VERIFIER-OBSERVED-TRANSPORT.md)已经实现，共用旧 study 内核而非另起系统。先运行独立本地供应商演练及全量回归；真实供应商实验不从提案自动启动。公开v5和已提交申报稿保持不变。本次修改前[全文留底](archive/2026-10-07-before-verifier-observed/README.md)。
-
-下文604项、18次wire捕获及前批状态是各自源码的历史记录，不是本新适配器的真实模型成绩。
-
 最新免费切片 VE-04：[完整SDK请求捕获、公开配置绑定和1 USD待批提案](VERIFIER-WIRE-PREFLIGHT.md)。18池新会话、原始wire无截断、0外部供应商请求；[原始证据](experiments/VERIFIER-WIRE-01/RESULT.md)和[审查/回归](BATCH-VERIFIER-PREFLIGHT-CHECKS.md)独立保存。真实study适配器、Token边界及本评估预算仍待确认，不假装已选优省费；公开v5和已提交申报稿不变。本次[全文留底](archive/2026-10-07-before-verifier-preflight/README.md)。
 
 本批最终工程604/604＋38/38浏览器；免费18池完整SDK捕获11.949秒。下一免费任务是实际study transport及每类预算/秘密脱敏，预算单独批准后才正式对照；不是再次执行旧六角色或将Mock成功率当真实效果。

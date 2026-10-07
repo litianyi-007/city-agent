@@ -1,8 +1,8 @@
 ---
 title: Verifier 同条件候选对照评估计划
 type: design
-status: native-observed-adapter-engineering-only-fee-unapproved
-version: verifier-evaluation-plan-v5
+status: full-wire-preflight-proposed-unfunded-unexecuted
+version: verifier-evaluation-plan-v4
 date: 2026-10-07
 tags: [production, verifier, jev, evaluation]
 spec_relationships:
@@ -18,10 +18,6 @@ spec_relationships:
 ---
 
 # Verifier同条件候选对照评估计划
-
-VE-04新增[原生观测适配/单内核/一次冻结同意/实际源码校验](VERIFIER-OBSERVED-TRANSPORT.md)，本地假供应商与实际Chromium演练单列，不把fixture选优填进模型分子。新版本明确LLM61,440输入预留＋请求4096输出、Jev65,536输入工程预留＋4096事后观测停止；整批54意图、1 USD估算停止额度、30分钟取消触发，等待清理可更久。不保证供应商计费硬上限，不推断Jev输出硬上限。真实收费启动入口和该批用户明确额度仍需下一切片，不自动复用旧提案；候选未随机/seed=null。v4全文已[留底](archive/2026-10-07-before-verifier-observed/VERIFIER-EVALUATION-PLAN.md)。
-
-下文v4时点“adapter未实现”等历史描述由本段更新；旧计划/提案/真实失败不回写。
 
 VE-04免费[完整SDK wire捕获与费用提案](VERIFIER-WIRE-PREFLIGHT.md)已实施，18池实际封装请求逐字保留；它仍不是收费配置冻结、供应商鉴权或真实模型选优。建议1 USD/30分钟、LLM输出4096、最多54评审意图；真实adapter/Token边界及独立授权仍需确认。候选内部保持原源码顺序、未随机，替代下文v3拟定随机要求，seed=null；没有改候选字节或旧实验。[完整v3留底](archive/2026-10-07-before-verifier-preflight/VERIFIER-EVALUATION-PLAN.md)、[本批原件](experiments/VERIFIER-WIRE-01/RESULT.md)。
 

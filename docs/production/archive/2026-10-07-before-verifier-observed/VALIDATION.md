@@ -1,9 +1,5 @@
 # Demo 验证记录
 
-## 自动化生产 VE-04 原生观测适配增量
-
-本新批次只在 `feature/autonomous-production`，见[观测契约](production/VERIFIER-OBSERVED-TRANSPORT.md)。源代码、工程专项、本地完整演练和最终回归分别留证；不把本地替身当真实模型或公开部署。本次修改前[全文留底](production/archive/2026-10-07-before-verifier-observed/VALIDATION.md)。下文109等计数为各历史配置，不是新适配器的成绩。
-
 ## 2026-10-07 审查补齐增量（以下旧批次记录不覆盖）
 
 - 最新工程回归：`npm test` 109/109、`npm run test:e2e` 5/5、TypeScript 通过；Pages浏览器检查通过，无Key实测快照、历史恢复、导入核验、失败停机及390px布局均覆盖。
