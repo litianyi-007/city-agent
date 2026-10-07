@@ -1,0 +1,33 @@
+{
+  "brief": "修复受控待办板演示模板的空任务问题：空字符串或纯空格不能新增任务，连续添加两个不同任务必须恰好产生两条，删除其中一条不影响另一条，统计正确。仅交付单 HTML。",
+  "mode": "demo",
+  "verifierEngine": "llm-rubric",
+  "demoCaseId": "bugfix",
+  "agentIds": [
+    "58b2f492-52c1-49ee-8936-53e5c8c6cc89",
+    "65e308f1-8582-4b41-b485-92911d44ed0f",
+    "8abcf5e4-a5f3-44a5-b58b-4f7aa83d8834",
+    "5e6500fe-48d3-4646-a412-d0bfaacffacc",
+    "299e00c3-cf0c-4f3f-814d-6c33e723a9d7",
+    "cc18586a-8d6b-4c19-950f-308034a0c0b1"
+  ],
+  "candidateCount": 1,
+  "limits": {
+    "maxCalls": 24,
+    "maxRepairCycles": 2,
+    "maxTokens": 500000,
+    "maxOutputTokens": 6000,
+    "maxDurationMs": 600000,
+    "maxCost": 5,
+    "currency": "USD"
+  },
+  "requirement": {
+    "id": "MOCK-03",
+    "source": "用户授权自拟模拟需求，2026-10-07；人工构造缺陷的修复演练",
+    "background": "检查反例、错误反馈与修复后的回归；fixture 的修复不能计为真实模型自主修复。",
+    "acceptance": "空输入、纯空格提交均保持零项并显示提示；连续添加“回归接口”和“检查日志”恰好两项；删除第一条后第二条仍在，总数为一。",
+    "difficulty": "medium",
+    "kind": "illustrative"
+  },
+  "budgetAuthorized": false
+}

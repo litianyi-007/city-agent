@@ -1,0 +1,173 @@
+[
+  {
+    "phase": "product",
+    "role": "product",
+    "value": {
+      "goal": "为三人研发小组做一个无需登录的单页待办板：输入任务后添加到列表，支持标记完成和删除，显示任务统计。不依赖网络或后端，刷新后可重置。",
+      "scope": "offline-single-html",
+      "acceptance": [
+        "初始无任务；添加“准备发布”后仅出现一条同名任务；输入框清空；能标记完成并显示完成统计；删除后列表与统计归零。"
+      ],
+      "exclusions": [
+        "无后端、无外网、无宿主代码执行"
+      ]
+    },
+    "selectedCandidateId": "f3e2cd05-8313-42c2-9438-6b36b714afb1"
+  },
+  {
+    "phase": "research",
+    "role": "researcher",
+    "value": {
+      "observations": [
+        "这是明确标记的工程 Mock 任务清单示范。"
+      ],
+      "constraints": [
+        "HTML/CSS/JS内联；冻结业务测试"
+      ],
+      "unknowns": [
+        "真实模型成功率、真实需求泛化未测量"
+      ]
+    },
+    "selectedCandidateId": "f8a04e52-87ad-4acf-a60c-eaa25a58530f"
+  },
+  {
+    "phase": "think-design",
+    "role": "project-manager",
+    "value": {
+      "decision": "proceed",
+      "summary": "Mock 项目经理分解，开始冻结测试。",
+      "tasks": [
+        {
+          "id": "implement",
+          "owner": "developer",
+          "description": "按冻结DOM和业务测试实现离线页面"
+        },
+        {
+          "id": "verify",
+          "owner": "tester",
+          "description": "独立浏览器验证并记录结果"
+        }
+      ],
+      "risks": [
+        "Mock不能证明模型自主交付"
+      ]
+    },
+    "selectedCandidateId": "845e9ae3-346f-4e82-8db8-4ff70ad20ee6"
+  },
+  {
+    "phase": "acceptance",
+    "role": "tester",
+    "value": {
+      "checks": [
+        {
+          "name": "Mock 边界可见与初始零任务",
+          "steps": [
+            {
+              "action": "assertText",
+              "selector": "#notice",
+              "text": "Mock"
+            },
+            {
+              "action": "assertTextExact",
+              "selector": "#count",
+              "text": "0"
+            },
+            {
+              "action": "assertCount",
+              "selector": "#tasks li",
+              "count": 0
+            }
+          ]
+        },
+        {
+          "name": "新增、完成、删除与精确统计",
+          "steps": [
+            {
+              "action": "fill",
+              "selector": "#task-input",
+              "value": "准备发布"
+            },
+            {
+              "action": "click",
+              "selector": "#add-task"
+            },
+            {
+              "action": "assertCount",
+              "selector": "#tasks li",
+              "count": 1
+            },
+            {
+              "action": "assertTextExact",
+              "selector": "#tasks li span",
+              "text": "准备发布"
+            },
+            {
+              "action": "assertValue",
+              "selector": "#task-input",
+              "value": ""
+            },
+            {
+              "action": "assertTextExact",
+              "selector": "#count",
+              "text": "1"
+            },
+            {
+              "action": "click",
+              "selector": ".toggle"
+            },
+            {
+              "action": "assertTextExact",
+              "selector": "#done-count",
+              "text": "1"
+            },
+            {
+              "action": "click",
+              "selector": ".delete"
+            },
+            {
+              "action": "assertCount",
+              "selector": "#tasks li",
+              "count": 0
+            },
+            {
+              "action": "assertTextExact",
+              "selector": "#count",
+              "text": "0"
+            },
+            {
+              "action": "assertTextExact",
+              "selector": "#done-count",
+              "text": "0"
+            }
+          ]
+        }
+      ]
+    },
+    "selectedCandidateId": "fb4ec54e-06f6-48ec-ac8c-05926d35e242"
+  },
+  {
+    "phase": "implement",
+    "role": "developer",
+    "value": {
+      "html": "<!doctype html><html lang=\"zh\"><head><meta charset=\"utf-8\"><title>离线任务清单</title><style>body{font:18px system-ui;max-width:700px;margin:40px auto;padding:24px;color:#17212c}input,button{font:inherit;padding:12px}li{margin:18px 0}#notice{background:#fff6da;padding:12px}.done{text-decoration:line-through}output{padding:8px}</style></head><body><h1>为三人研发小组做一个无需登录的单页待办板：输入任务后添加到列表，支持标记完成和删除，显示任务统计。不依赖网络或后端，刷新后可重置。</h1><p id=\"notice\">工程 Mock 夹具，不是真实模型自主交付。</p><label for=\"task-input\">任务名称</label><input id=\"task-input\" maxlength=\"120\"><button id=\"add-task\">添加</button><p id=\"feedback\">请输入任务</p><button id=\"show-all\">全部</button><button id=\"show-open\">未完成</button><button id=\"show-done\">已完成</button><ul id=\"tasks\"></ul><p>任务数量 <output id=\"count\">0</output> 完成数量 <output id=\"done-count\">0</output></p><script>const tasks=[];let filter='all';let nextId=0;const input=document.querySelector('#task-input');const feedback=document.querySelector('#feedback');function render(){const list=document.querySelector('#tasks');list.replaceChildren();tasks.forEach(task=>{if(filter==='open'&&task.done||filter==='done'&&!task.done)return;const li=document.createElement('li');li.dataset.taskId=String(task.id);const span=document.createElement('span');span.textContent=task.title;span.className=task.done?'done':'';const button=document.createElement('button');button.className='toggle';button.textContent=task.done?'恢复':'完成';button.onclick=()=>{task.done=!task.done;render()};const remove=document.createElement('button');remove.className='delete';remove.textContent='删除';remove.onclick=()=>{tasks.splice(tasks.findIndex(item=>item.id===task.id),1);render()};li.append(span,button,remove);list.append(li)});document.querySelector('#count').textContent=String(tasks.length);document.querySelector('#done-count').textContent=String(tasks.filter(task=>task.done).length)}document.querySelector('#add-task').onclick=()=>{const title=input.value.trim();if(!title){feedback.textContent='任务不能为空';return}tasks.push({id:nextId++,title,done:false});input.value='';feedback.textContent='已添加';render()};document.querySelector('#show-all').onclick=()=>{filter='all';render()};document.querySelector('#show-open').onclick=()=>{filter='open';render()};document.querySelector('#show-done').onclick=()=>{filter='done';render()};render();</script></body></html>"
+    },
+    "selectedCandidateId": "e60b2b72-2ab0-44e3-b5a8-a1859ab7105c"
+  },
+  {
+    "phase": "feedback-0",
+    "role": "project-manager",
+    "value": {
+      "decision": "proceed",
+      "summary": "硬门禁通过，按Mock证据类型交付。",
+      "tasks": [
+        {
+          "id": "delivery",
+          "owner": "tester",
+          "description": "打包证据"
+        }
+      ],
+      "risks": []
+    },
+    "selectedCandidateId": "9bfd4f4d-51f3-4287-81f8-8a6e8ad4ff93"
+  }
+]

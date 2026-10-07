@@ -1,0 +1,435 @@
+{
+  "version": "mock-package-v2",
+  "materialsVersion": "production-materials-v2",
+  "generatedAt": "2026-10-06T21:40:07.603Z",
+  "renderedAt": "2026-10-07T00:22:03.083Z",
+  "platformCommit": "891fedcab0f3c5994c7e92f7874e610b3b6354b8",
+  "publisherCommit": "b899b0e4d7ae9b3cd91efa9a55969ab57c954215",
+  "auditCommit": "b899b0e4d7ae9b3cd91efa9a55969ab57c954215",
+  "auditDocument": "REVIEW.md",
+  "auditSourceDocument": "JUDGE-AUDIT-2026-10-07.md",
+  "runtimeDocumentationScope": "Current publisher snapshot; does not retroactively describe historical run configuration",
+  "submissionBaseline": "b66122c21604fdb2ecdcbafb89c3d5ad8cde1466",
+  "inheritedFrom": {
+    "package": "production-mock-materials-T0LOB0",
+    "manifestSha256": "a8831c7c631b7fe6ef30c13c0952e48c50964ad7fe3ba9e51668e40bf6018d2e"
+  },
+  "historicalVideo": true,
+  "publicDemoUrl": "https://litianyi-007.github.io/city-agent/production/",
+  "documentOrigins": [
+    {
+      "path": "README.md",
+      "sourcePath": "docs/production/README.md",
+      "origin": "current publisher repository snapshot; not historical run configuration",
+      "commit": "b899b0e4d7ae9b3cd91efa9a55969ab57c954215"
+    },
+    {
+      "path": "RUNBOOK.md",
+      "sourcePath": "docs/production/RUNBOOK.md",
+      "origin": "current publisher repository snapshot; not historical run configuration",
+      "commit": "b899b0e4d7ae9b3cd91efa9a55969ab57c954215"
+    },
+    {
+      "path": "DESIGN.md",
+      "sourcePath": "docs/production/DESIGN.md",
+      "origin": "current publisher repository snapshot; not historical run configuration",
+      "commit": "b899b0e4d7ae9b3cd91efa9a55969ab57c954215"
+    },
+    {
+      "path": "EVALUATION.md",
+      "sourcePath": "docs/production/EVALUATION.md",
+      "origin": "current publisher repository snapshot; not historical run configuration",
+      "commit": "b899b0e4d7ae9b3cd91efa9a55969ab57c954215"
+    },
+    {
+      "path": "REQUIREMENTS.md",
+      "sourcePath": "docs/production/REQUIREMENTS.md",
+      "origin": "current publisher repository snapshot; not historical run configuration",
+      "commit": "b899b0e4d7ae9b3cd91efa9a55969ab57c954215"
+    },
+    {
+      "path": "EXPERIMENTS.md",
+      "sourcePath": "docs/production/EXPERIMENTS.md",
+      "origin": "current publisher repository snapshot; not historical run configuration",
+      "commit": "b899b0e4d7ae9b3cd91efa9a55969ab57c954215"
+    },
+    {
+      "path": "VALIDATION.md",
+      "sourcePath": "docs/production/VALIDATION.md",
+      "origin": "current publisher repository snapshot; not historical run configuration",
+      "commit": "b899b0e4d7ae9b3cd91efa9a55969ab57c954215"
+    },
+    {
+      "path": "ISOLATION.md",
+      "sourcePath": "docs/production/ISOLATION.md",
+      "origin": "current publisher repository snapshot; not historical run configuration",
+      "commit": "b899b0e4d7ae9b3cd91efa9a55969ab57c954215"
+    },
+    {
+      "path": "SUBMISSION.md",
+      "sourcePath": "docs/production/SUBMISSION.md",
+      "origin": "current publisher repository snapshot; not historical run configuration",
+      "commit": "b899b0e4d7ae9b3cd91efa9a55969ab57c954215"
+    },
+    {
+      "path": "NEXT-STEPS.md",
+      "sourcePath": "docs/production/NEXT-STEPS.md",
+      "origin": "current publisher repository snapshot; not historical run configuration",
+      "commit": "b899b0e4d7ae9b3cd91efa9a55969ab57c954215"
+    },
+    {
+      "path": "REVIEW.md",
+      "sourcePath": "docs/production/JUDGE-AUDIT-2026-10-07.md",
+      "origin": "current publisher repository snapshot; not historical run configuration",
+      "commit": "b899b0e4d7ae9b3cd91efa9a55969ab57c954215"
+    }
+  ],
+  "runIds": [
+    "1bc03ce0-424a-467c-a9f6-a349b4440818",
+    "d517c98c-9066-47af-8090-48c1334b588b",
+    "1d138b10-46a5-4fcb-a11c-1ad54d36c748"
+  ],
+  "cases": [
+    {
+      "requirementId": "MOCK-01",
+      "status": "completed",
+      "evidenceKind": "fixture"
+    },
+    {
+      "requirementId": "MOCK-02",
+      "status": "completed",
+      "evidenceKind": "fixture"
+    },
+    {
+      "requirementId": "MOCK-03",
+      "status": "completed",
+      "evidenceKind": "fixture"
+    }
+  ],
+  "measured": {
+    "fixturePassed": 3,
+    "fixtureStarted": 3,
+    "providerCalls": 0
+  },
+  "measuredScope": {
+    "fixtureGeneration": {
+      "scope": "Only the copied Mock generation runs; not the entire package",
+      "runIds": [
+        "1bc03ce0-424a-467c-a9f6-a349b4440818",
+        "d517c98c-9066-47af-8090-48c1334b588b",
+        "1d138b10-46a5-4fcb-a11c-1ad54d36c748"
+      ],
+      "started": 3,
+      "gatePassed": 3,
+      "generatorProviderRequests": 0,
+      "generatorInputTokens": 0,
+      "generatorOutputTokens": 0,
+      "estimatedGeneratorCost": 0
+    },
+    "realGeneration": {
+      "scope": "Real internal generation tasks, not Jev decisions or outside platform development",
+      "runIds": [],
+      "started": 0,
+      "recordedGatePassed": 0,
+      "recordedGatePassRate": null,
+      "autonomyCertified": false
+    },
+    "jevDecisions": {
+      "scope": "All recorded Jev intents/responses, including protocol errors, abstention, mixed/live failures and cancellations; skipped cases made no request",
+      "benchmarkIds": [
+        "f0c7b845-1dff-4573-8644-a8de82157505",
+        "807e9dc4-957a-437d-9798-4cebd57998da"
+      ],
+      "supplementalRunIds": [
+        "e436f153-4304-4b7b-ac1e-54e2d9a91b5f"
+      ],
+      "providerRequests": 5,
+      "knownProviderRequests": 5,
+      "unknownRequestIntents": 0,
+      "inputTokens": 15027,
+      "outputTokens": 874,
+      "estimatedCost": 0.0006311340000000001,
+      "currency": "USD",
+      "complete": true,
+      "records": [
+        {
+          "origin": "jev-benchmark",
+          "runId": "f0c7b845-1dff-4573-8644-a8de82157505",
+          "itemId": "MOCK-01",
+          "status": "error",
+          "requests": 1,
+          "inputTokens": 3386,
+          "outputTokens": 177,
+          "estimatedCost": 0.000142212,
+          "complete": true
+        },
+        {
+          "origin": "jev-benchmark",
+          "runId": "807e9dc4-957a-437d-9798-4cebd57998da",
+          "itemId": "MOCK-01",
+          "status": "accepted",
+          "requests": 1,
+          "inputTokens": 3386,
+          "outputTokens": 177,
+          "estimatedCost": 0.000142212,
+          "complete": true
+        },
+        {
+          "origin": "jev-benchmark",
+          "runId": "807e9dc4-957a-437d-9798-4cebd57998da",
+          "itemId": "MOCK-02",
+          "status": "uncertain",
+          "requests": 1,
+          "inputTokens": 3432,
+          "outputTokens": 177,
+          "estimatedCost": 0.000144144,
+          "complete": true
+        },
+        {
+          "origin": "jev-benchmark",
+          "runId": "807e9dc4-957a-437d-9798-4cebd57998da",
+          "itemId": "MOCK-03",
+          "status": "accepted",
+          "requests": 1,
+          "inputTokens": 3442,
+          "outputTokens": 177,
+          "estimatedCost": 0.00014456400000000002,
+          "complete": true
+        },
+        {
+          "origin": "production-jev",
+          "runId": "e436f153-4304-4b7b-ac1e-54e2d9a91b5f",
+          "itemId": "67a7ac1d-43c5-4e36-bec4-29233a939ea1",
+          "status": "uncertain",
+          "requests": 1,
+          "inputTokens": 1381,
+          "outputTokens": 166,
+          "estimatedCost": 0.000058002000000000005,
+          "complete": true
+        }
+      ]
+    },
+    "excludes": [
+      "Outside platform developer/model cost",
+      "Device and recording cost",
+      "Provider invoice verification",
+      "Measured same-scope human baseline"
+    ]
+  },
+  "unknown": [
+    "realModelAutonomy",
+    "measuredHumanBaseline",
+    "measuredEfficiency",
+    "realModelGoodRate"
+  ],
+  "files": [
+    {
+      "path": "jev-benchmarks.json",
+      "sha256": "887b34072287b305c73b2f05d5fbfe6d395684150c2e2af161a2fa46726df853"
+    },
+    {
+      "path": "mixed-and-live-runs.json",
+      "sha256": "fde6b8aeac06355d7420815972d49d0bdb4ab0e1894c75fc6b3a86e7b1a7dab8"
+    },
+    {
+      "path": "workspace.png",
+      "sha256": "9c7869751fc27b5b488560d2373ac85125c251aacbfc5bf486f04557d0dcf36a"
+    },
+    {
+      "path": "MOCK-01/input.json",
+      "sha256": "98cff2e266da2d9cc59b2db3bb13cb9863fdbf055c4a2c9c77d6fdbf3941494e"
+    },
+    {
+      "path": "MOCK-01/run.json",
+      "sha256": "4a6e2e9036220c07a3bceadda1c07b3e849ae2c0cf179445bf94f56bee02ceaa"
+    },
+    {
+      "path": "MOCK-01/intermediate.json",
+      "sha256": "8e40db26d86df6bb1330c39f03b67caaff8e797e6f97ae4d817540cd0b39b69f"
+    },
+    {
+      "path": "MOCK-01/frozen-contract.json",
+      "sha256": "3407039802b0abe2022533f55d04ec6815b4af241b016a0965f456b897b68abf"
+    },
+    {
+      "path": "MOCK-01/gate.json",
+      "sha256": "d63591ea309863ebbddd1a7452d4446df537e7756d0be288d8629b432d500a82"
+    },
+    {
+      "path": "MOCK-01/events.ndjson",
+      "sha256": "473fb088b50db11462073b98a53dd30574fedfb5943fefae5fb63fcbc239f697"
+    },
+    {
+      "path": "MOCK-01/index.html",
+      "sha256": "718b0fa044423ac80ee53efec3e6fae675b64f7cffa00708b5694e9ba494d3ef"
+    },
+    {
+      "path": "MOCK-01/delivery-manifest.json",
+      "sha256": "fafd859f040efde9ebe1fd5a6308a6a50cce1d770432b2e3aa39fb0e33799f78"
+    },
+    {
+      "path": "MOCK-01/evidence.json",
+      "sha256": "4a6e2e9036220c07a3bceadda1c07b3e849ae2c0cf179445bf94f56bee02ceaa"
+    },
+    {
+      "path": "MOCK-01-preview.png",
+      "sha256": "0fbaaa3a11626ea4ba75dd71598a69ee2b7f14bb5d65544e300ae3cb33a07a8b"
+    },
+    {
+      "path": "MOCK-02/input.json",
+      "sha256": "66f97046884211d0c969341f5e72feb35d55d460c8b26a3512d6666dba9a0013"
+    },
+    {
+      "path": "MOCK-02/run.json",
+      "sha256": "a07a1dbac514fe06c24feb5f31b9ac8b2418a1286899804e0efd25fa4681ccda"
+    },
+    {
+      "path": "MOCK-02/intermediate.json",
+      "sha256": "4055b4c1ee50f1ad60e965c22413a6019dfa4034cbd6bb904b52cd5a8ca0c20a"
+    },
+    {
+      "path": "MOCK-02/frozen-contract.json",
+      "sha256": "f641256c02c478cbb9c0ac43b8a2e3d7ef478a3664272899664bbc3df9e81df6"
+    },
+    {
+      "path": "MOCK-02/gate.json",
+      "sha256": "85f7d47e10ab53e2b744d4171f9387efc59d97aa38590437196efe11e435624e"
+    },
+    {
+      "path": "MOCK-02/events.ndjson",
+      "sha256": "5315d20c38d9082d11786b7518703415c3afd9a0dcd4a5a773e1bac068be2734"
+    },
+    {
+      "path": "MOCK-02/index.html",
+      "sha256": "601a88a51fdc66c4fc6451f2b4ebc0d0666ff583e79c6e853b859cc4d9ed656d"
+    },
+    {
+      "path": "MOCK-02/delivery-manifest.json",
+      "sha256": "36ce606e1deb8428c5c07fc22fbe8a82a427e36eaddb407851e6d397a1ac058a"
+    },
+    {
+      "path": "MOCK-02/evidence.json",
+      "sha256": "a07a1dbac514fe06c24feb5f31b9ac8b2418a1286899804e0efd25fa4681ccda"
+    },
+    {
+      "path": "MOCK-02-preview.png",
+      "sha256": "051f1a11835672701d7e305e68b89312d60aa9199d3a5b0029db8c1914c0fc0a"
+    },
+    {
+      "path": "MOCK-03/input.json",
+      "sha256": "333946dcc7ceb3ca27a4a3c453ec13f3faf969e2c521fe81b34c9c910373fa5f"
+    },
+    {
+      "path": "MOCK-03/run.json",
+      "sha256": "e21e6548c4bffbcb006cd965d4892c4c86fc32178ef06f485d509e2db4c5e8f1"
+    },
+    {
+      "path": "MOCK-03/intermediate.json",
+      "sha256": "60f4b4035169bee5fb385358bac15e4d0153137a1f0777dbee1ebbfa49d34895"
+    },
+    {
+      "path": "MOCK-03/frozen-contract.json",
+      "sha256": "e35cd0276881d017ae1fc7309732b05f100b27d26f6be8e263c937f776a65bb2"
+    },
+    {
+      "path": "MOCK-03/gate.json",
+      "sha256": "a36608d4122e8952cf9470b3749b97798eac68eb1c57e5a6ee768896392dce2a"
+    },
+    {
+      "path": "MOCK-03/events.ndjson",
+      "sha256": "e98c5d78cbc87d8972f63693ac1eb98d321cde28309c16d539a2f69a732be8f5"
+    },
+    {
+      "path": "MOCK-03/index.html",
+      "sha256": "c707ca3cb5ee748744431040f3ee14b50bf7aed989f9138266addbd46e47ac65"
+    },
+    {
+      "path": "MOCK-03/delivery-manifest.json",
+      "sha256": "fe97bb777b90b4d87411ebda7c53c92b2f298419f0f88ee228e6123e64b93b05"
+    },
+    {
+      "path": "MOCK-03/evidence.json",
+      "sha256": "e21e6548c4bffbcb006cd965d4892c4c86fc32178ef06f485d509e2db4c5e8f1"
+    },
+    {
+      "path": "MOCK-03-preview.png",
+      "sha256": "f6f3bc10eb76105d9dd75e0d4db5089c8082d5d7e0032049b3a2895ab69ff5e9"
+    },
+    {
+      "path": "metrics.png",
+      "sha256": "863fbc679e22bfebdae1c7039d13dd6d03cd62c2d75c3b554218fd5216d00c69"
+    },
+    {
+      "path": "demo.webm",
+      "sha256": "deb4b5c972e5b1a9196b5b24ba4ce022e1adcf02101a9a51d7ec6f793d6be81b"
+    },
+    {
+      "path": "submission-evidence.json",
+      "sha256": "214e7cb0b4dfb279cca17a39eb242bc43d1dccef796b549541c492bc3911dd66"
+    },
+    {
+      "path": "requirements.json",
+      "sha256": "e6f2da7e6d9c35a03300ac2a82b4ec39c03f4a82a3490c70a39dd7a763f64511"
+    },
+    {
+      "path": "materials-summary.json",
+      "sha256": "97224bccf4d24f5126e3a74bbb174c79d4cd563680737c07ac92cd8524b900e2"
+    },
+    {
+      "path": "submission.html",
+      "sha256": "1ad59a94b65898982374423e415e2fe866c53a4fdc4363d0940c27aa3059c105"
+    },
+    {
+      "path": "production-mock-submission.pdf",
+      "sha256": "12bbfee56e05653f055c414fd7457226f4ccdc4fdb536525b94a95ed13820816"
+    },
+    {
+      "path": "README.md",
+      "sha256": "b098779434c944c5d0afd3dac912c8523137af09c39e1ea24910ac3345dc6d16"
+    },
+    {
+      "path": "RUNBOOK.md",
+      "sha256": "6fa6f8feedf7dff810f107447c59329be8fcbcc51da2732313f95e4ace5610e4"
+    },
+    {
+      "path": "DESIGN.md",
+      "sha256": "ca9fab3bfe7ac7c439e40733fdb2b0fb65645bacb3960f1fa69c01b0e84d22fc"
+    },
+    {
+      "path": "EVALUATION.md",
+      "sha256": "c7107a7571c70a0a4c8dfa89e3e7adcfa6e67d7d37f9cbe3a27212ddbc58e31e"
+    },
+    {
+      "path": "REQUIREMENTS.md",
+      "sha256": "812f06aeec7c6b5c066aca81f655e99b108ea343e10c79088b7989b1c5057398"
+    },
+    {
+      "path": "EXPERIMENTS.md",
+      "sha256": "47c5f32b239b840fbc38bd0b6452b107b99b54f9eafd621a02e19cfde4644449"
+    },
+    {
+      "path": "VALIDATION.md",
+      "sha256": "9e0d197fa98577e306903e5fd071dd316ae5535921e8bed61fc2e9a8fb7ad07a"
+    },
+    {
+      "path": "ISOLATION.md",
+      "sha256": "e9d450c220558f2a545ec51a017025f6fbb5879ec215daa388aa728ccd5be90a"
+    },
+    {
+      "path": "SUBMISSION.md",
+      "sha256": "24a53bae4fda18170ba54223b0b1b05a9ac3b3b0e33ede57cfd77de64f052198"
+    },
+    {
+      "path": "NEXT-STEPS.md",
+      "sha256": "65f2f7cfcc0eff027bbb39dddb885157450178d4529ff7f83e8ac79233ac1cae"
+    },
+    {
+      "path": "REVIEW.md",
+      "sha256": "2b5f79c404d278d9dea9ee898f7ee08a29c735988a3dd0776b2b49029336d15c"
+    },
+    {
+      "path": "PACKAGE-NOTES.md",
+      "sha256": "0e404ee5f3e3205b204f1585b4b2925b80d20cea3e6db2c3a89b165894335bf2"
+    }
+  ]
+}

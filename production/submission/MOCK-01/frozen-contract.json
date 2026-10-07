@@ -1,0 +1,90 @@
+{
+  "version": "production-acceptance-v1",
+  "hash": "a6de655a4b6468100d7a58b25aa7070b0ed3e5cba14a04b6838201b04f89e318",
+  "requirementHash": "4a137491d382b96c715321204411d2b02e7404a465375174d9f4c33a93c4e5a3",
+  "checks": [
+    {
+      "name": "Mock 边界可见与初始零任务",
+      "steps": [
+        {
+          "action": "assertText",
+          "selector": "#notice",
+          "text": "Mock"
+        },
+        {
+          "action": "assertTextExact",
+          "selector": "#count",
+          "text": "0"
+        },
+        {
+          "action": "assertCount",
+          "selector": "#tasks li",
+          "count": 0
+        }
+      ]
+    },
+    {
+      "name": "新增、完成、删除与精确统计",
+      "steps": [
+        {
+          "action": "fill",
+          "selector": "#task-input",
+          "value": "准备发布"
+        },
+        {
+          "action": "click",
+          "selector": "#add-task"
+        },
+        {
+          "action": "assertCount",
+          "selector": "#tasks li",
+          "count": 1
+        },
+        {
+          "action": "assertTextExact",
+          "selector": "#tasks li span",
+          "text": "准备发布"
+        },
+        {
+          "action": "assertValue",
+          "selector": "#task-input",
+          "value": ""
+        },
+        {
+          "action": "assertTextExact",
+          "selector": "#count",
+          "text": "1"
+        },
+        {
+          "action": "click",
+          "selector": ".toggle"
+        },
+        {
+          "action": "assertTextExact",
+          "selector": "#done-count",
+          "text": "1"
+        },
+        {
+          "action": "click",
+          "selector": ".delete"
+        },
+        {
+          "action": "assertCount",
+          "selector": "#tasks li",
+          "count": 0
+        },
+        {
+          "action": "assertTextExact",
+          "selector": "#count",
+          "text": "0"
+        },
+        {
+          "action": "assertTextExact",
+          "selector": "#done-count",
+          "text": "0"
+        }
+      ]
+    }
+  ],
+  "frozenAt": "2026-10-06T21:37:22.168Z"
+}

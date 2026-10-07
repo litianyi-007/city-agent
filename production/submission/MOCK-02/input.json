@@ -1,0 +1,33 @@
+{
+  "brief": "在受控的团队待办板演示模板上增加状态筛选：全部、未完成、已完成。切换筛选不能删除任务，添加和标记完成后计数应保持一致。仅交付单 HTML，不安装依赖。",
+  "mode": "demo",
+  "verifierEngine": "llm-rubric",
+  "demoCaseId": "feature",
+  "agentIds": [
+    "58b2f492-52c1-49ee-8936-53e5c8c6cc89",
+    "65e308f1-8582-4b41-b485-92911d44ed0f",
+    "8abcf5e4-a5f3-44a5-b58b-4f7aa83d8834",
+    "5e6500fe-48d3-4646-a412-d0bfaacffacc",
+    "299e00c3-cf0c-4f3f-814d-6c33e723a9d7",
+    "cc18586a-8d6b-4c19-950f-308034a0c0b1"
+  ],
+  "candidateCount": 1,
+  "limits": {
+    "maxCalls": 24,
+    "maxRepairCycles": 2,
+    "maxTokens": 500000,
+    "maxOutputTokens": 6000,
+    "maxDurationMs": 600000,
+    "maxCost": 5,
+    "currency": "USD"
+  },
+  "requirement": {
+    "id": "MOCK-02",
+    "source": "用户授权自拟模拟需求，2026-10-07；受控模板功能扩展演练",
+    "background": "演练增量需求、原有交互回归与功能验收；本批不是任意既有仓库的真实修改。",
+    "acceptance": "添加“编写方案”和“执行测试”；完成其中一条；未完成筛选只显示另一条，已完成筛选只显示完成项；切回全部恢复两条；统计保留总数与完成数。",
+    "difficulty": "medium",
+    "kind": "illustrative"
+  },
+  "budgetAuthorized": false
+}

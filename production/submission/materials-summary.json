@@ -1,0 +1,122 @@
+{
+  "version": "production-materials-v2",
+  "measuredScope": {
+    "fixtureGeneration": {
+      "scope": "Only the copied Mock generation runs; not the entire package",
+      "runIds": [
+        "1bc03ce0-424a-467c-a9f6-a349b4440818",
+        "d517c98c-9066-47af-8090-48c1334b588b",
+        "1d138b10-46a5-4fcb-a11c-1ad54d36c748"
+      ],
+      "started": 3,
+      "gatePassed": 3,
+      "generatorProviderRequests": 0,
+      "generatorInputTokens": 0,
+      "generatorOutputTokens": 0,
+      "estimatedGeneratorCost": 0
+    },
+    "realGeneration": {
+      "scope": "Real internal generation tasks, not Jev decisions or outside platform development",
+      "runIds": [],
+      "started": 0,
+      "recordedGatePassed": 0,
+      "recordedGatePassRate": null,
+      "autonomyCertified": false
+    },
+    "jevDecisions": {
+      "scope": "All recorded Jev intents/responses, including protocol errors, abstention, mixed/live failures and cancellations; skipped cases made no request",
+      "benchmarkIds": [
+        "f0c7b845-1dff-4573-8644-a8de82157505",
+        "807e9dc4-957a-437d-9798-4cebd57998da"
+      ],
+      "supplementalRunIds": [
+        "e436f153-4304-4b7b-ac1e-54e2d9a91b5f"
+      ],
+      "providerRequests": 5,
+      "knownProviderRequests": 5,
+      "unknownRequestIntents": 0,
+      "inputTokens": 15027,
+      "outputTokens": 874,
+      "estimatedCost": 0.0006311340000000001,
+      "currency": "USD",
+      "complete": true,
+      "records": [
+        {
+          "origin": "jev-benchmark",
+          "runId": "f0c7b845-1dff-4573-8644-a8de82157505",
+          "itemId": "MOCK-01",
+          "status": "error",
+          "requests": 1,
+          "inputTokens": 3386,
+          "outputTokens": 177,
+          "estimatedCost": 0.000142212,
+          "complete": true
+        },
+        {
+          "origin": "jev-benchmark",
+          "runId": "807e9dc4-957a-437d-9798-4cebd57998da",
+          "itemId": "MOCK-01",
+          "status": "accepted",
+          "requests": 1,
+          "inputTokens": 3386,
+          "outputTokens": 177,
+          "estimatedCost": 0.000142212,
+          "complete": true
+        },
+        {
+          "origin": "jev-benchmark",
+          "runId": "807e9dc4-957a-437d-9798-4cebd57998da",
+          "itemId": "MOCK-02",
+          "status": "uncertain",
+          "requests": 1,
+          "inputTokens": 3432,
+          "outputTokens": 177,
+          "estimatedCost": 0.000144144,
+          "complete": true
+        },
+        {
+          "origin": "jev-benchmark",
+          "runId": "807e9dc4-957a-437d-9798-4cebd57998da",
+          "itemId": "MOCK-03",
+          "status": "accepted",
+          "requests": 1,
+          "inputTokens": 3442,
+          "outputTokens": 177,
+          "estimatedCost": 0.00014456400000000002,
+          "complete": true
+        },
+        {
+          "origin": "production-jev",
+          "runId": "e436f153-4304-4b7b-ac1e-54e2d9a91b5f",
+          "itemId": "67a7ac1d-43c5-4e36-bec4-29233a939ea1",
+          "status": "uncertain",
+          "requests": 1,
+          "inputTokens": 1381,
+          "outputTokens": 166,
+          "estimatedCost": 0.000058002000000000005,
+          "complete": true
+        }
+      ]
+    },
+    "excludes": [
+      "Outside platform developer/model cost",
+      "Device and recording cost",
+      "Provider invoice verification",
+      "Measured same-scope human baseline"
+    ]
+  },
+  "originalRunPlatformCommit": "891fedcab0f3c5994c7e92f7874e610b3b6354b8",
+  "publisherCommit": "b899b0e4d7ae9b3cd91efa9a55969ab57c954215",
+  "auditCommit": "b899b0e4d7ae9b3cd91efa9a55969ab57c954215",
+  "auditDocument": "REVIEW.md",
+  "auditSourceDocument": "JUDGE-AUDIT-2026-10-07.md",
+  "runtimeDocumentationScope": "Current publisher snapshot; does not retroactively describe historical run configuration",
+  "renderedAt": "2026-10-07T00:22:03.083Z",
+  "inheritedFrom": {
+    "package": "production-mock-materials-T0LOB0",
+    "manifestSha256": "a8831c7c631b7fe6ef30c13c0952e48c50964ad7fe3ba9e51668e40bf6018d2e"
+  },
+  "historicalVideo": true,
+  "publicDemoUrl": "https://litianyi-007.github.io/city-agent/production/",
+  "publicDemoScope": "Trusted fixed Mock/static materials only; no backend, live model calls, or untrusted artifact execution"
+}
