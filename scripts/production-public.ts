@@ -7,7 +7,7 @@ import type { JevBenchmarkRun } from '../server/production/jev-benchmark.js';
 import { PRODUCTION_DEMO_CASES } from '../shared/production-benchmarks.js';
 import { demoHtml } from '../server/production/fixtures.js';
 import { productionEnvironment } from '../config/production-environment.js';
-import { renderProductionPortal, type ProductionPortalRequirement } from './production-portal.js';
+import { historicalIframeVideo, renderProductionPortal, type ProductionPortalRequirement } from './production-portal.js';
 import { assertNoPublishedSecrets, assertWorktreeDirectory, PUBLIC_PROJECT_ID, publicPath, readCheckedPackage, sha256 } from './production-public-safety.js';
 
 export const PREVIEW_CSP = "default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; connect-src 'none'; worker-src 'none'; frame-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'";
@@ -58,7 +58,8 @@ export async function buildProductionPublic(source: string, root: string) {
   const generatedAt = new Date().toISOString();
   const cameraRuns = checked.files.has('real-camera-runs.json') ? json<ProductionRun[]>('real-camera-runs.json') : [];
   if (!Array.isArray(cameraRuns) || cameraRuns.some(run => run.evidenceKind !== 'real-model' || run.input.capability !== 'camera-scene-v1') || new Set(cameraRuns.map(run => run.id)).size !== cameraRuns.length) throw new Error('Camera evidence ledger must contain unique real declarative-scene attempts.');
-  const portalInput = { packageManifest: checked.manifest, report: json('submission-evidence.json'), requirements: json<ProductionPortalRequirement[]>('requirements.json'), runs, jevBenchmarks: json<JevBenchmarkRun[]>('jev-benchmarks.json'), mixedRuns: json<ProductionRun[]>('mixed-and-live-runs.json'), cameraRuns, recordedBuildInfo: { deploymentCommit: commit, generatedAt, videoDurationSeconds, videoSourceCommit: String(checked.manifest.videoSourceCommit ?? checked.manifest.platformCommit), historicalIframeRecording: checked.manifest.historicalIframeRecording === true || checked.manifest.historicalVideo === true }, trustedFixtureIds: runs.map(run => run.input.requirement.id), sourceHref: 'https://github.com/litianyi-007/city-agent/tree/' + commit };
+  const videoSourceCommit = String(checked.manifest.videoSourceCommit ?? checked.manifest.platformCommit);
+  const portalInput = { packageManifest: checked.manifest, report: json('submission-evidence.json'), requirements: json<ProductionPortalRequirement[]>('requirements.json'), runs, jevBenchmarks: json<JevBenchmarkRun[]>('jev-benchmarks.json'), mixedRuns: json<ProductionRun[]>('mixed-and-live-runs.json'), cameraRuns, recordedBuildInfo: { deploymentCommit: commit, generatedAt, videoDurationSeconds, videoSourceCommit, historicalIframeRecording: historicalIframeVideo(checked.manifest, videoSourceCommit) }, trustedFixtureIds: runs.map(run => run.input.requirement.id), sourceHref: 'https://github.com/litianyi-007/city-agent/tree/' + commit };
   const portal = renderProductionPortal({ ...portalInput, submissionBase: './' + layout.materialsBase, previewBase: './' + layout.previewsBase, virtualSocietyHref: '../', snapshotHref: './' + layout.versionedEntry });
   await save('index.html', portal);
   await save(layout.versionedEntry, renderProductionPortal({ ...portalInput, submissionBase: './submission/', previewBase: './previews/', virtualSocietyHref: '../../../', snapshotHref: './' }));

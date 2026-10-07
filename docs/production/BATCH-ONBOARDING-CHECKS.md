@@ -38,4 +38,10 @@ UI/UX 技能采用 Product Demo + Features 的清晰入口组织；Web Interface
 6. 仅授权production子树；基于最新gh-pages非强制提交，逐项核对其他根树SHA/mode/type不变。并发变化即停止，不force。
 7. 部署后核验HTTP文件hash、三固定案例的真实交互、入口/安装引导和媒体资源；生成独立发布回执与QA记录。不能用分支push代替公开部署确认。
 
-导出产物、实际媒体时长、最终HTTP核验与发布commit以本次 `output/pdf/`、`output/production-public/` 内生成的 manifest / receipt / QA 为准；本文件在录制前冻结，不提前宣称导出和部署已完成。成本0仅指本批新增模型请求为0，不抹去材料包中的历史真实费用；外层开发Token/人日不由平台计量。
+导出产物、实际媒体时长、最终HTTP核验与发布commit以本次 `output/pdf/`、`output/production-public/` 内生成的 manifest / receipt / QA 为准；本文件初版在录制前冻结，以下追加修订单独提交，不提前宣称部署已完成。成本0仅指本批新增模型请求为0，不抹去材料包中的历史真实费用；外层开发Token/人日不由平台计量。
+
+## 发布前排版修订
+
+首版c21c588免费录屏已完成：三Mock Gate均通过，耗时2902/2876/3202ms；MP4 205.88秒，H.264/yuv420p，源WebM保留。PDF逐页检查发现封面末段形成近空白页、CAMERA-04账本行被拆页，故未发布该首版导出。修订只压缩封面空白和保持表格整行，采用`--from-package`逐字继承运行与视频，不重跑任务；安装源码仍固定新的publisher commit，video/run source保留c21c588。
+
+同时修正“所有继承视频都被标为旧iframe录屏”的展示归因：仅显式历史iframe标记或已知891fedc录屏显示该风险说明，继承新版受控截图录屏不被误标。旧风险说明、失败及原片仍保留；不将继承视频视为新实验。修订后的分页和公开HTTP状态须再次检查，不以首版检查代替。

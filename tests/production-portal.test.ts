@@ -76,6 +76,17 @@ test('registered MP4 is preferred without relabeling historical footage as a new
   assert.equal(fallback.includes('<source src="./submission/demo.mp4"'), false);
 });
 
+test('inherited controlled-screenshot footage is not relabeled as vulnerable historical iframe footage', () => {
+  const input = portalInput();
+  input.packageManifest = { ...input.packageManifest, files: [{ path: 'demo.mp4' }], historicalVideo: true, historicalIframeRecording: false, videoSourceCommit: 'c21c588632d04dc7ed9dfa8cb265606400d2b522' };
+  const html = renderProductionPortal(input);
+  assert.ok(html.includes('c21c588632d04dc7ed9dfa8cb265606400d2b522'));
+  assert.ok(html.includes('视频用于展示固定 Mock 与证据浏览'));
+  assert.equal(html.includes('其中旧 iframe 预览已发现'), false);
+  input.packageManifest.historicalIframeRecording = true;
+  assert.ok(renderProductionPortal(input).includes('其中旧 iframe 预览已发现'));
+});
+
 test('four different-version real camera failures remain separate from three zero-generation Mock cases', () => {
   const input = portalInput();
   input.cameraRuns = Array.from({ length: 4 }, (_, index): ProductionRun => ({
