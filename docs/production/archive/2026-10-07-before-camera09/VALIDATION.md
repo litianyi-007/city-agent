@@ -1,11 +1,5 @@
 # 第一批工程验证与真实验证
 
-## 当前补充（2026-10-07，历史段落不回写）
-
-[CAMERA-09](experiments/CAMERA-09/RESULT.md)已完成一次最小真实有界场景交付，冻结source24256f9、11/11行为Gate、0返修，76.602秒、18实际HTTP、估算0.037964112 USD。完整摄像头/真实视觉/实体设备仍分别验收，不算完整良品或稳定L5。
-
-后续pending计量修补、Verifier开发语料与历史证据验证见[BATCH-CAMERA09-CHECKS](BATCH-CAMERA09-CHECKS.md)，当前六角色Key已由用户配置在本分支页面，未迁移别线。新公开材料以publication-manifest/receipt为准，旧段落的Key未配置、当时未调用/未发布与189/229项工程数字均是历史时点，不是现在状态。[本文更新前留底](archive/2026-10-07-before-camera09/VALIDATION.md)。
-
 ## 审查前基线已验证（历史记录）
 
 - Node 22.22.3，全套单测189/189，墙钟11.685秒。

@@ -8,7 +8,7 @@ import { PRODUCTION_DEMO_CASES } from '../shared/production-benchmarks.js';
 import type { ProductionRun } from '../shared/production-schema.js';
 import { productionReport } from '../server/production/index.js';
 import type { JevBenchmarkRun } from '../server/production/jev-benchmark.js';
-import { benchmarkMaterialRows, formatMaterialCost, immutableSourceLink, inheritedMaterialFile, MATERIALS_VERSION, materialAccounting, OPTIONAL_PACKAGE_DOCS, PACKAGE_DOCS, packageDocLinks, publicMaterialUrl, realGenerationMaterialRows, reviewerInstallInstructions, SUBMISSION_BASELINE } from './production-materials.js';
+import { benchmarkMaterialRows, CAMERA_DELIVERY_NOTICE, CAMERA_MATERIAL_ARCHIVES, cameraMaterialAppendPlan, cameraMaterialFiles, formatMaterialCost, immutableSourceLink, inheritedMaterialFile, MATERIALS_VERSION, materialAccounting, materialInheritancePaths, OPTIONAL_PACKAGE_DOCS, PACKAGE_DOCS, packageDocLinks, publicMaterialUrl, realGenerationMaterialRows, reviewerInstallInstructions, SUBMISSION_BASELINE } from './production-materials.js';
 import { assertNoPublishedSecrets, assertWorktreeDirectory, checkedFile, readCheckedPackage } from './production-public-safety.js';
 
 // Trusted export/recording code, not generated application execution on the host.
@@ -82,19 +82,22 @@ const supplementalRuns = sourceDirectory ? JSON.parse(readInherited('mixed-and-l
 if (supplementalRuns.some(run => ['queued', 'running'].includes(run.status))) throw new Error('Wait for paid/mixed runs to finish before packaging.');
 const cameraRuns: ProductionRun[] = [];
 const cameraEvidence: Array<{ path: string; bytes: Buffer; sourcePath: string }> = [];
-for (const number of ['01', '02', '03', '04', '05', '06', '07', '08']) {
-  for (const name of ['run.json', 'evidence.json', 'delivery-manifest.json', 'platform-metadata.json']) {
+for (const number of CAMERA_MATERIAL_ARCHIVES) {
+  for (const name of cameraMaterialFiles(number)) {
     const sourcePath = `docs/production/experiments/CAMERA-${number}/${name}`;
     try {
       const bytes = await checkedFile(environment.root, sourcePath); assertNoPublishedSecrets(bytes, sourcePath);
       if (name === 'run.json') { const run = JSON.parse(bytes.toString('utf8')) as ProductionRun; if (run.evidenceKind !== 'real-model' || ['queued', 'running'].includes(run.status) || !run.platformCommit || !/^[a-f0-9]{40}$/.test(run.platformCommit)) throw new Error('Camera archive must retain its actual terminal real-model provenance.'); execFileSync('git', ['merge-base', '--is-ancestor', SUBMISSION_BASELINE, run.platformCommit], { cwd: environment.root }); cameraRuns.push(run); }
       cameraEvidence.push({ path: `CAMERA-${number}/${name}`, bytes, sourcePath });
-    } catch (error) { if ((error as NodeJS.ErrnoException).code !== 'ENOENT' || name === 'run.json') throw error; }
+    } catch (error) { if ((error as NodeJS.ErrnoException).code !== 'ENOENT' || name === 'run.json' || number === '09') throw error; }
   }
 }
 // A separate new appendix preserves inherited mixed/live bytes unchanged.
 // The tracked terminal camera snapshot is authoritative for those exact IDs.
 const combinedSupplemental = [...supplementalRuns.filter(run => !cameraRuns.some(camera => camera.id === run.id)), ...cameraRuns];
+// Validate byte equality before any rendering. The inherited originals win
+// only when exactly identical; a silent old/current evidence mismatch is fatal.
+const cameraAppend = cameraMaterialAppendPlan(inheritedFiles, cameraEvidence);
 
 const browser = await chromium.launch();
 let context: Awaited<ReturnType<typeof browser.newContext>> | undefined;
@@ -103,8 +106,7 @@ let inheritedReport: ReturnType<typeof productionReport> | null = null;
 let demoCases: typeof PRODUCTION_DEMO_CASES = PRODUCTION_DEMO_CASES;
 try {
   if (sourceDirectory && inheritedManifest) {
-    const presentation = new Set<string>([...packageDocs, 'submission.html', 'production-mock-submission.pdf', 'PACKAGE-NOTES.md', 'materials-summary.json', 'real-camera-runs.json']);
-    for (const file of inheritedManifest.files) if (!presentation.has(file.path)) await save(file.path, readInherited(file.path));
+    for (const name of materialInheritancePaths(inheritedManifest.files.map(file => file.path), packageDocs)) await save(name, readInherited(name));
     const inheritedRunIds = new Set<string>();
     for (const item of inheritedManifest.cases) {
       if (!/^[a-zA-Z0-9_-]{1,80}$/.test(item.requirementId)) throw new Error('Archived case ID is unsafe.');
@@ -199,7 +201,7 @@ try {
     files.push({ path: 'demo.mp4', sha256: sha(await readFile(path.join(directory, 'demo.mp4'))) });
   }
   }
-  for (const item of cameraEvidence) if (!files.some(file => file.path === item.path)) await save(item.path, item.bytes);
+  for (const item of cameraAppend) await save(item.path, item.bytes);
   await save('real-camera-runs.json', JSON.stringify(cameraRuns, null, 2));
   const report = inheritedReport ?? productionReport(runs);
   if (!inheritedReport) {
@@ -219,7 +221,7 @@ try {
     ['研究员', '分析约束与未知项', '无搜索工具就不声称联网研究'],
     ['项目经理', '拆任务，思考与设计，测试反馈后重规划', '有界轮次/费用/时间；无权绕过 Gate'],
     ['测试', '独立定义可执行检查', '合法 CSS、交互结果、研发前冻结 hash'],
-    ['研发', '实现完整 HTML，按证据有限返修', '不修改冻结测试、不执行宿主脚本'],
+    ['研发', '实现离线 HTML 或声明式场景 JSON，按证据有限返修', '场景由平台可信 runtime 执行；不修改冻结测试、不执行宿主脚本'],
     ['Verifier', '每次可替换输出的候选审查与选择', '无合格答案则弃权；评分不是概率'],
     ['Chromium Gate', '实际页面加载与交互验收', '精确结果与实际条目数；失败不能被评分覆盖'],
     ['交付', '源码、日志、契约、manifest 与指标', '必要证据完整才完成；unknown 不当零'],
@@ -250,11 +252,12 @@ try {
   const installSection = `<section><h2>评委独立安装与体验入口</h2><div class="warning"><b>GitHub Pages 是静态展示，不运行 Harness 后台、不收 Key、不执行真实模型请求。</b>实际操作必须按以下步骤安装本地服务；公开材料不包含任何凭据。只检查Mock无需Key，live需评委自行页面配置模型、单价及预算。</div><pre style="font:11px/1.7 monospace;white-space:pre-wrap;overflow-wrap:anywhere">${escape(reviewerInstallInstructions(publisherCommit))}</pre><p>报告完整 commit：<code>${escape(publisherCommit)}</code>。该提交固定材料所描述的平台配置；历史运行各自的platformCommit另列，不把它们更新成报告commit。摄像头素材准备会从固定官方来源下载，不是模型调用；缺失/损坏会在付费前停止，不使用CDN回退。</p>${versionedMaterialsUrl ? `<p><a href="${escape(new URL('REVIEWER-GUIDE.md', versionedMaterialsUrl).href)}">当前版本评委导引</a> · <a href="${escape(new URL('SUBMISSION-REPORT.md', versionedMaterialsUrl).href)}">完整七栏目申报报告</a> · <a href="${escape(new URL(files.some(file => file.path === 'demo.mp4') ? 'demo.mp4' : 'demo.webm', versionedMaterialsUrl).href)}">版本录屏（Mock，不是实际模型交付）</a></p>` : ''}</section>`;
   const realSection = `<section><h2>实际六角色调优账本：已实测，完整交付 ${realGeneration.fullRequirementDelivered}/${realGeneration.terminalDenominator}</h2><div class="warning">已归档摄像头尝试在不同工程/Prompt/Verifier配置下连续调优，原始失败全部保留。这里只是调优账本，不是同一冻结配置稳定性或成功率实验。场景合成Gate通过也不等于真实识别、物理摄像头或用户完整需求通过；真实终态进入分母，未验证不得进入完整良品分子。</div>${table(['需求', '运行ID', '平台/Prompt', '输入原话', '最后调用阶段', '终态/Gate', '耗时', 'Harness / 供应商POST / Jev', '总输入/输出Token', '该运行估算费用', '失败归因摘录'], realRows, 'case-table', [7, 10, 13, 10, 8, 9, 7, 9, 8, 7, 12])}<p>各CAMERA目录逐字复制已有run/evidence/manifest/metadata；CAMERA-01/02未归档单独evidence时，以run.json内完整原始请求/响应为证据，不补造不存在的文件。real-camera-runs.json保存所有已归档终态记录。每运行usage已包含自己的JeV，不能再加全部JeV总额；逐角色计数为逻辑调用，供应商POST只据wire记录，缺记录为unknown。准确输入、全部阶段原文、Gate与费用见原JSON。</p><p>LLM-as-a-Verifier借鉴分维度候选评价及反馈；托管TypeSafe JeV已实施，当前v3先全量结构校验，只有派生算术漂移弃用原决策后允许一次独立LLM；正常不确定走另一独立级联。致命协议/鉴权/取消/超时/unknown和预算耗尽停，合法弃权回原角色，共用两次全局修复。评分和集中度不是正确概率；最终冻结行为Gate不可被评分覆盖。</p></section>`;
   const reviewerCover = `<p class="warning"><b>评委先看：静态体验不等于在线管线。</b>独立实操请按“评委独立安装”专页：clone feature/autonomous-production → checkout 完整报告commit → Node 22.19+ / npm ci → Chromium → build → start → http://127.0.0.1:4420/#production。${optionalDocs.includes('REVIEWER-GUIDE.md') && versionedMaterialsUrl ? ` <a href="${escape(new URL('REVIEWER-GUIDE.md', versionedMaterialsUrl).href)}">本版本评委导引</a>` : ''}<br>实际六角色已运行 ${realGeneration.started} 次，完整交付 ${realGeneration.fullRequirementDelivered}/${realGeneration.terminalDenominator}；均不同配置调优，不能当稳定成功率。真实业务需求数仍为0。</p>`;
-  const currentHtml = html.replace('真实生成记录通过率', '不同配置账本 Gate 比例（非稳定性）').replace('六角色真实自主交付、代表性稳定实验', '六角色真实成功交付、代表性稳定实验').replace('<h3>1 基本信息</h3>', `${reviewerCover}<h3>1 基本信息</h3>`);
+  const boundedMilestone = `<section><h2>真实场景 Gate 首次通过 · 异配置调优账本，非稳定性</h2><div class="warning"><b>有界场景行为 ${realGeneration.boundedCameraScenePassed}/${realGeneration.cameraTerminalDenominator}；完整需求交付 ${realGeneration.fullRequirementDelivered}/${realGeneration.terminalDenominator}。</b><p>${escape(CAMERA_DELIVERY_NOTICE)}</p></div><p>首次有界通过：${escape(realGeneration.firstBoundedCameraScenePass?.requirementId ?? '尚无')}，原始运行平台 ${escape(realGeneration.firstBoundedCameraScenePass?.platformCommit ?? 'unknown')}。全部尝试及配置逐次保留，不把探索账本比例叫稳定成功率。CAMERA-09七份原档包括严格 scene.json、camera-runtime-manifest.json 与 index.html.txt；后者仅文本源码下载，不是公开实时摄像头或任意生成 HTML 执行入口。硬件与完整需求未验证，仍不得进入完整良品分子。</p><p>历史 Mock 视频来源：${escape(reviewerMetadata.videoSourceCommit)}；报告与材料导出：${escape(publisherCommit)}。旧 MP4/WebM 原字节继承，不是 CAMERA-09 的真实研发录屏。新资料按本报告固定版本阅读：<a href="${escape(immutableSourceLink(publisherCommit, 'docs/production/experiments/CAMERA-09/RESULT.md'))}">CAMERA-09 结果</a> · <a href="${escape(immutableSourceLink(publisherCommit, 'docs/production/VERIFIER-DEV-CORPUS.md'))}">免费 DEV 候选池（不计正式质量实验）</a>。</p></section>`;
+  const currentHtml = html.replace('真实生成记录通过率', '不同配置账本 Gate 比例（非稳定性）').replace('管线：Agent Delivery Studio，有界单 HTML 软件生产。', '管线：Agent Delivery Studio，有界离线 HTML 或模型场景 DSL＋可信 runtime。').replace('<h3>1 基本信息</h3>', `${reviewerCover}<p class="warning">有界场景行为 ${realGeneration.boundedCameraScenePassed}/${realGeneration.cameraTerminalDenominator}；完整交付 ${realGeneration.fullRequirementDelivered}/${realGeneration.terminalDenominator}。${escape(CAMERA_DELIVERY_NOTICE)}</p><h3>1 基本信息</h3>`);
   // Keep the expanded cover on one page and preserve complete ledger rows.
   // These are presentation changes only; evidence and video bytes are untouched.
   const printLayout = 'section:first-child{padding:0}section:first-child p{margin:8px 0}section:first-child h1{font-size:25px;margin-bottom:8px}section:first-child .metrics{margin:12px 0}section:first-child .metric{padding:10px}section:first-child .metric strong{font-size:28px}section:first-child .warning{padding:8px 10px}tr{break-inside:avoid}';
-  const packagedHtml = currentHtml.replace('</body></html>', `${installSection}${realSection}${jevSection}</body></html>`).replace('</style>', `${printLayout}</style>`);
+  const packagedHtml = currentHtml.replace('</body></html>', `${installSection}${boundedMilestone}${realSection}${jevSection}</body></html>`).replace('</style>', `${printLayout}</style>`);
   await save('submission.html', packagedHtml);
   const pdfPage = await browser.newPage();
   await pdfPage.setContent(packagedHtml, { waitUntil: 'load' });
@@ -271,7 +274,7 @@ try {
     documentOrigins.push({ path: name, sourcePath: `docs/production/${sourceName}`, origin: 'current publisher repository snapshot; not historical run configuration', commit: publisherCommit });
   }
   const notes = `# 材料包阅读说明\n\n原 Mock 运行平台 commit：${platformCommit}。材料导出与审查工具 commit：${publisherCommit}。原始运行、候选、Gate、输入、Prompt/config与所有失败保持原版本；重新渲染不重新实验。\n\n## 体验入口\n\n${publicDemoUrl ? `公开静态入口：${publicDemoUrl}，只运行可信固定 Mock 和材料浏览，不运行 Harness 后端、不收集 Key、不执行模型生成产物。\n\n` : ''}本机管线：${new URL('/#production', base).href}，需按 RUNBOOK 启动服务并配置。\n\n## 三种证据与费用\n\n三条 Mock 仅工程夹具，行为 Gate ${passed}/${runs.length}；零生成请求不表示全包零付费请求。六角色真实生成任务记录 ${realGeneration.started}；不认证无人干预、L4达标或稳定L5。全包真实 Jev ${jevTotal.providerRequests ?? 'unknown'} 请求，输入 ${jevTotal.inputTokens ?? 'unknown'} / 输出 ${jevTotal.outputTokens ?? 'unknown'} Token，估算 ${formatMaterialCost(jevTotal.estimatedCost)} USD（非供应商账单，不含外层开发/设备/录屏）。v1/v2不同配置分别统计；protocol error、skipped、uncertain与混合失败均保留。详见 materials-summary.json、jev-benchmarks.json、mixed-and-live-runs.json。\n\n## 录屏与安全审查\n\n${videoDescription}\n\n旧iframe预览可自导航外联，已撤下；不可信HTML只下载为附件，本机预览为受控Chromium截图。公开门户只用固定可信Mock。截图和worktree不是任意代码安全容器；容器/受控仓库/Node与shell仍不支持。临时Jev凭据须用户轮换，材料不包含密钥。\n\n## 申报硬缺口\n\n≥3真实业务需求当前未满足；正式团队姓名、官方L4参考线、六角色真实自主交付、代表性稳定实验、校准集、同范围人工与无Verifier对照未完成。人口与虚拟社会线独立，不把它们的结果挪作本线证据。AnyJev SDK未接入，L0/L1/L2不等于研发L4/L5。\n\n## 复现与血缘\n\n离线使用 --from-package 先验证原manifest并复制原证据到新目录；不访问API、不重发供应商请求。新Mock录制另起任务，不能静默重跑并覆盖失败。原始包SHA256：${inheritedManifestSha256 ?? 'not inherited'}。文件hash只用于一致性检查，不是防篡改签名。文档来源见manifest.documentOrigins；运行JSON中的platformCommit不改写成publisherCommit。\n`;
-  const currentNotes = notes + `\n## 评委独立安装（报告版本）\n\n\`\`\`text\n${reviewerInstallInstructions(publisherCommit)}\n\`\`\`\n\nReport commit: ${publisherCommit}\n版本材料: ${versionedMaterialsUrl ?? 'not configured'}\n\n## 真实任务附录\n\n真实已实测 ${realGeneration.started} 次；完整交付 ${realGeneration.fullRequirementDelivered}/${realGeneration.terminalDenominator}。不同配置调优，不是稳定性实验。real-camera-runs.json和各CAMERA归档目录保留完整输入、角色原文与失败；未到Gate明确not-reached。run.usage已包含该run的Jev，不能再加全包Jev总账；roleOnlyUsage才是生成/Verifier角色单独费用。未知计量仍unknown，Harness逻辑调用不冒充供应商POST。camera合成通过不等于真实视觉、实体设备或完整需求通过。\n\n正式业务需求≥3、官方L4标准与同范围人日对照仍缺；AnyJev SDK仍仅规划。\n`;
+  const currentNotes = notes.replace('六角色真实自主交付、代表性稳定实验', '完整摄像头需求交付、代表性稳定实验') + `\n## 评委独立安装（报告版本）\n\n\`\`\`text\n${reviewerInstallInstructions(publisherCommit)}\n\`\`\`\n\nReport commit: ${publisherCommit}\n版本材料: ${versionedMaterialsUrl ?? 'not configured'}\n\n## 真实任务附录\n\n真实已实测 ${realGeneration.started} 次；有界场景行为 ${realGeneration.boundedCameraScenePassed}/${realGeneration.cameraTerminalDenominator}；完整交付 ${realGeneration.fullRequirementDelivered}/${realGeneration.terminalDenominator}。不同配置调优，不是稳定性实验。${CAMERA_DELIVERY_NOTICE}\n\n首次有界通过：${realGeneration.firstBoundedCameraScenePass?.requirementId ?? '尚无'} / ${realGeneration.firstBoundedCameraScenePass?.platformCommit ?? 'unknown'}。real-camera-runs.json重新计算汇总，各CAMERA原档逐字继承，存在旧/当前字节冲突就拒绝。CAMERA-09含七原档：run/evidence/delivery-manifest/platform-metadata/scene/camera-runtime-manifest JSON与index.html.txt。文本源只下载，不公开执行模型代码。未到Gate明确not-reached。run.usage已包含该run的Jev，不能再加全包Jev总账；roleOnlyUsage才是生成/Verifier角色单独费用。未知计量仍unknown，Harness逻辑调用不冒充供应商POST。camera合成通过不等于真实视觉、实体设备或完整需求通过。\n\n历史 Mock 视频来源 ${reviewerMetadata.videoSourceCommit}，原视频字节不变，不能作CAMERA-09录屏。新结果说明：[CAMERA-09](${immutableSourceLink(publisherCommit, 'docs/production/experiments/CAMERA-09/RESULT.md')})；[免费 DEV 池](${immutableSourceLink(publisherCommit, 'docs/production/VERIFIER-DEV-CORPUS.md')})不计正式质量实验。\n\n正式业务需求≥3、官方L4标准与同范围人日对照仍缺；AnyJev SDK仍仅规划。\n`;
   await save('PACKAGE-NOTES.md', currentNotes);
   await save('package-manifest.json', JSON.stringify({ version: 'mock-package-v2', materialsVersion: MATERIALS_VERSION, ...reviewerMetadata, generatedAt: report.generatedAt, renderedAt, platformCommit, publisherCommit, auditCommit: publisherCommit, auditDocument: 'REVIEW.md', auditSourceDocument: auditDoc, runtimeDocumentationScope: 'Current publisher snapshot; does not retroactively describe historical run configuration', submissionBaseline: SUBMISSION_BASELINE, inheritedFrom: sourceDirectory ? { package: path.basename(sourceDirectory), manifestSha256: inheritedManifestSha256 } : null, historicalVideo, publicDemoUrl, documentOrigins, runIds: runs.map(run => run.id), cases: runs.map(run => ({ requirementId: run.input.requirement.id, status: run.status, evidenceKind: run.evidenceKind })), measured: { fixturePassed: passed, fixtureStarted: runs.length, providerCalls: 0 }, measuredScope: accounting.measuredScope, unknown: ['realModelAutonomy', 'measuredHumanBaseline', 'measuredEfficiency', ...(realGeneration.started === 0 ? ['realModelGoodRate'] : [])], files }, null, 2));
   console.log(JSON.stringify({ directory, platformCommit, publisherCommit, inherited: Boolean(sourceDirectory), passed, started: runs.length, runs: runs.map(run => ({ id: run.id, requirement: run.input.requirement.id, status: run.status, durationMs: run.durationMs })), pdf: path.join(directory, 'production-mock-submission.pdf'), recording: record || historicalVideo ? path.join(directory, 'demo.webm') : null }));

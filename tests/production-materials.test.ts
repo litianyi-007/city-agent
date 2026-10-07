@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { mkdir, mkdtemp, readFile, rm, symlink, writeFile } from 'node:fs/promises';
 import path from 'node:path';
-import { benchmarkMaterialRows, formatMaterialCost, immutableSourceLink, inheritedMaterialFile, materialAccounting, MATERIALS_VERSION, OPTIONAL_PACKAGE_DOCS, packageDocLinks, publicMaterialUrl, realGenerationMaterialRecords, realGenerationMaterialRows, reviewerInstallInstructions, SUBMISSION_BASELINE } from '../scripts/production-materials.js';
+import { benchmarkMaterialRows, CAMERA_DELIVERY_NOTICE, CAMERA_DELIVERY_SCOPE, CAMERA_MATERIAL_ARCHIVES, cameraMaterialAppendPlan, cameraMaterialFiles, formatMaterialCost, immutableSourceLink, inheritedMaterialFile, materialAccounting, materialInheritancePaths, MATERIALS_VERSION, OPTIONAL_PACKAGE_DOCS, packageDocLinks, publicMaterialUrl, realGenerationMaterialRecords, realGenerationMaterialRows, reviewerInstallInstructions, SUBMISSION_BASELINE } from '../scripts/production-materials.js';
 import { readCheckedPackage, sha256 } from '../scripts/production-public-safety.js';
 import { createJevBenchmarkSnapshot } from '../server/production/jev-benchmark.js';
 import { DEFAULT_JEV_CONFIG, type JevEvaluation } from '../shared/jev-schema.js';
@@ -152,7 +152,7 @@ test('reviewer instructions pin the complete report commit and document correct 
   const instructions = reviewerInstallInstructions(originalCommit);
   for (const clause of ['Node.js >=22.19', '--branch feature/autonomous-production --single-branch', `git checkout ${originalCommit}`, 'npm ci', 'npx playwright install chromium', 'npm run build', 'npm start', 'http://127.0.0.1:4420/#production', 'npx tsx scripts/prepare-camera-assets.ts', '--verify', 'public GitHub Pages neither receives keys nor runs this backend']) assert.ok(instructions.includes(clause), clause);
   assert.throws(() => reviewerInstallInstructions('main'), /complete report commit/); assert.throws(() => reviewerInstallInstructions(originalCommit.slice(0, 7)), /complete report commit/);
-  assert.equal(MATERIALS_VERSION, 'production-materials-v4'); assert.ok(OPTIONAL_PACKAGE_DOCS.includes('REVIEWER-GUIDE.md')); assert.ok(OPTIONAL_PACKAGE_DOCS.includes('SUBMISSION-REPORT.md'));
+  assert.equal(MATERIALS_VERSION, 'production-materials-v5'); assert.ok(OPTIONAL_PACKAGE_DOCS.includes('REVIEWER-GUIDE.md')); assert.ok(OPTIONAL_PACKAGE_DOCS.includes('SUBMISSION-REPORT.md'));
 });
 
 test('four archived real camera failures are represented without changing input/raw bytes or claiming stable success', async () => {
@@ -170,4 +170,45 @@ test('camera synthetic passes stay in the real terminal denominator but never pr
   const camera = { ...fixture('camera'), input, evidenceKind: 'real-model' as const, cameraVerification: { scope: 'scene-behavior-synthetic' as const, boundedScenePassed: true, visionModelVerified: false as const, physicalCameraVerified: false as const, fullRequirementVerified: false as const, runtimeVersion: 'unit', runtimeHash: 'unit', limitations: [] }, calls: [{ id: 'call-one', role: 'developer' as const, phase: 'implement', executionSource: 'harness' as const, usage: { inputTokens: null, outputTokens: null, estimatedCost: null, currency: 'USD' } }] as ProductionRun['calls'] };
   const scope = materialAccounting([], [], [camera]).measuredScope; assert.equal(scope.realGeneration.recordedGatePassed, 1); assert.equal(scope.realGeneration.boundedCameraScenePassed, 1); assert.equal(scope.realGeneration.terminalDenominator, 1); assert.equal(scope.realGeneration.fullRequirementDelivered, 0);
   const record = scope.realGeneration.records[0]; assert.equal(record.harnessInvocations, 1); assert.equal(record.providerRequests, null); assert.equal(record.unknownProviderCounts, 1); assert.equal(record.roleOnlyUsage.inputTokens, null); assert.equal(record.roleOnlyUsage.estimatedCost, null); assert.equal(formatMaterialCost(record.roleOnlyUsage.estimatedCost), 'unknown');
+});
+
+test('v5 copies exactly seven CAMERA09 originals, regenerates summaries once and never silently overwrites inherited evidence or video', () => {
+  assert.deepEqual(CAMERA_MATERIAL_ARCHIVES, ['01', '02', '03', '04', '05', '06', '07', '08', '09']);
+  const names = cameraMaterialFiles('09');
+  assert.deepEqual(names, ['run.json', 'evidence.json', 'delivery-manifest.json', 'platform-metadata.json', 'scene.json', 'camera-runtime-manifest.json', 'index.html.txt']);
+  for (const number of CAMERA_MATERIAL_ARCHIVES.slice(0, -1)) assert.equal(cameraMaterialFiles(number).length, 4);
+  const oldRun = Buffer.from('{"original":"preserved"}'); const video = Buffer.from('original Mock MP4 bytes, source c21c588; not CAMERA09');
+  const inherited = new Map([['CAMERA-04/run.json', oldRun], ['demo.mp4', video], ['real-camera-runs.json', Buffer.from('old summary')], ['materials-summary.json', Buffer.from('old accounting')], ['SUBMISSION-REPORT.md', Buffer.from('old presentation')]]);
+  const paths = materialInheritancePaths([...inherited.keys()], ['SUBMISSION-REPORT.md']);
+  assert.deepEqual(paths, ['CAMERA-04/run.json', 'demo.mp4']);
+  const archived = [{ path: 'CAMERA-04/run.json', sourcePath: 'docs/production/experiments/CAMERA-04/run.json', bytes: Buffer.from(oldRun) }, ...names.map(name => ({ path: `CAMERA-09/${name}`, sourcePath: `docs/production/experiments/CAMERA-09/${name}`, bytes: Buffer.from(`new original ${name}`) }))];
+  const append = cameraMaterialAppendPlan(inherited, archived);
+  assert.deepEqual(append.map(item => item.path), names.map(name => `CAMERA-09/${name}`));
+  assert.equal(new Set([...paths, ...append.map(item => item.path), 'real-camera-runs.json', 'materials-summary.json', 'SUBMISSION-REPORT.md']).size, paths.length + append.length + 3);
+  assert.equal(inherited.get('CAMERA-04/run.json'), oldRun); assert.equal(inherited.get('demo.mp4'), video);
+  assert.throws(() => cameraMaterialAppendPlan(inherited, [{ ...archived[0], bytes: Buffer.from('{"rewritten":true}') }]), /conflicts with the immutable archive/);
+  assert.throws(() => cameraMaterialAppendPlan(inherited, [archived[0], archived[0]]), /Duplicate camera archive/);
+  assert.throws(() => materialInheritancePaths(['real-camera-runs.json', 'real-camera-runs.json'], []), /Duplicate inherited/);
+  assert.throws(() => cameraMaterialAppendPlan(null, [{ path: 'CAMERA-09/index.html', sourcePath: 'untrusted', bytes: Buffer.from('<script>not allowed</script>') }]), /allowlist/);
+});
+
+test('v5 nine-configuration camera ledger records its first bounded DSL delivery without recertifying hardware, full delivery or stability', async () => {
+  const files = CAMERA_MATERIAL_ARCHIVES.map(number => new URL(`../docs/production/experiments/CAMERA-${number}/run.json`, import.meta.url));
+  const bytes = await Promise.all(files.map(file => readFile(file))); const runs = bytes.map(value => JSON.parse(value.toString('utf8')) as ProductionRun);
+  const before = JSON.stringify(runs); const scope = materialAccounting([], [], runs).measuredScope.realGeneration;
+  assert.equal(scope.started, 9); assert.equal(scope.terminalDenominator, 9); assert.equal(scope.cameraTerminalDenominator, 9);
+  assert.equal(scope.recordedGatePassed, 1); assert.equal(scope.boundedCameraScenePassed, 1);
+  assert.equal(scope.fullRequirementDelivered, 0); assert.equal(scope.fullRequirementDeliveryRate, 0); assert.equal(scope.autonomyCertified, false); assert.equal(scope.stabilityExperiment, false);
+  assert.equal(scope.cameraDeliveryScope, CAMERA_DELIVERY_SCOPE); assert.match(scope.scope, /not a fixed-configuration stability experiment/);
+  assert.match(CAMERA_DELIVERY_SCOPE, /not arbitrary software source/); assert.match(CAMERA_DELIVERY_NOTICE, /DSL＋平台可信 runtime/); assert.match(CAMERA_DELIVERY_NOTICE, /完整需求仍未验收/);
+  const camera09 = runs.at(-1)!;
+  assert.deepEqual(scope.firstBoundedCameraScenePass, { runId: camera09.id, requirementId: 'CAMERA-09', platformCommit: '24256f96165f0be3156be037a2fea42492e31117' });
+  const record = scope.records.at(-1)!;
+  assert.equal(record.implementationKind, 'model-scene-dsl-with-trusted-runtime'); assert.equal(record.candidateCount, 1); assert.equal(record.gateCheckCount, 11);
+  assert.equal(record.boundedScenePassed, true); assert.equal(record.visionModelVerified, false); assert.equal(record.physicalCameraVerified, false); assert.equal(record.fullRequirementVerified, false);
+  assert.equal(record.providerRequests, 12); assert.equal(record.jevRequests, 6); assert.equal(record.usage.complete, true);
+  assert.equal(record.usage.inputTokens, 143680); assert.equal(record.usage.outputTokens, 8715); assert.ok(Math.abs(record.usage.estimatedCost! - 0.037964112) < 1e-12);
+  assert.equal(scope.records.find(item => item.requirementId === 'CAMERA-05')!.usage.estimatedCost, null, 'Unknown old totals are not changed to zero after a later bounded success');
+  assert.equal(JSON.stringify(runs), before, 'No original run or configuration is rewritten by the new summary');
+  for (const [index, file] of files.entries()) assert.deepEqual(await readFile(file), bytes[index]);
 });

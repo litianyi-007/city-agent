@@ -16,8 +16,8 @@ function injectedRun(): ProductionRun {
   return { id: randomUUID(), evidenceKind: 'injected-test', input: productionRunInputSchema.parse({ brief: 'Free scope presentation test', mode: 'live', agentIds: Array.from({ length: 6 }, () => randomUUID()), requirement: { id: 'injected-scope', source: 'Engineering fixture, not a real demand', acceptance: 'Accounting only', kind: 'illustrative' } }), status: 'failed', createdAt: '2026-10-07T00:00:00Z', agentSnapshot: [], events: [], calls: [call], verifications: [], outputs: [], gateHistory: [], repairs: 0, usage: { inputTokens: 250, outputTokens: 20, estimatedCost: 0.0100084, currency: 'USD', complete: true }, interventions: [], artifacts: [], jevCalls: [{ id: randomUUID(), phase: 'product', startedAt: '2026-10-07T00:00:00Z', configHash: 'fixture', evaluation: evaluation() }] };
 }
 
-test('v4 retains injected originals and dispatch observations but excludes every injected field from provider totals', () => {
-  assert.equal(MATERIALS_VERSION, 'production-materials-v4');
+test('v5 retains injected originals and dispatch observations but excludes every injected field from provider totals', () => {
+  assert.equal(MATERIALS_VERSION, 'production-materials-v5');
   const run = injectedRun(); const before = JSON.stringify(run);
   const scope = materialAccounting([], [], [run]).measuredScope;
   assert.equal(scope.realGeneration.started, 0);

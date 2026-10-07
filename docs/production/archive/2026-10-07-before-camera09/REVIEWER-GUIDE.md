@@ -1,8 +1,8 @@
 # 评委安装、访问与自主测试指南
 
-本指南对应材料源码 `production-materials-v5`；公开部署是否已更新以publication-manifest为准。公开页不需要 Key；本地真实运行需自备 Key、网络和明确预算。最新真实结果见 [CAMERA-09](experiments/CAMERA-09/RESULT.md) 与 [进度](POST-SUBMISSION-PLAN.md)。09已通过有界场景闭环，真实视觉/实体摄像头/完整需求分别验收；安装成功不保证任意新任务交付成功。
+本指南对应当前源码 `production-materials-v4`。公开页不需要 Key；本地真实运行需自备 Key、网络和明确预算。最新真实尝试与工程结果见 [进度](POST-SUBMISSION-PLAN.md) 及原始实验档；安装成功不保证新任务交付成功。
 
-v3/v4固定在线页、PDF/MD/ZIP和MP4保留；新材料加入09七份原证据，安装命令固定到本版publisherCommit。部署后核对publication-manifest完整commit，不把三Mock/旧录屏source c21c588或09运行source24256f9改成新导出版本。更新前全文[留底](archive/2026-10-07-before-camera09/REVIEWER-GUIDE.md)。
+v3固定在线页、PDF/MD/ZIP和MP4已发布；本轮v4将安装命令固定到含“新建自定义需求”、一次性授权、真实请求账本与有限再规划的新源码。部署前仍可看旧版案例；部署后核对页面publication-manifest的完整publisherCommit，不把旧证据/录屏的sourceCommit改成新版本。原指南[留底](archive/2026-10-07-before-planning-loop/REVIEWER-GUIDE.md)。
 
 ## A. 不安装：先看公开材料（约5分钟）
 
@@ -10,7 +10,7 @@ v3/v4固定在线页、PDF/MD/ZIP和MP4保留；新材料加入09七份原证据
 2. 当前可用：手动体验待办添加/完成/删除、筛选、空输入与两项提交；查看各 Mock 的实际Gate和输入。交互页面是平台注册的可信固定夹具，不是此时模型在线生成。
 3. 在线“材料与复现”查看该版PDF/ZIP/MP4，按各附件来源commit解释；历史录屏不证明后续版本或真实模型交付。
 4. 进入固定版本入口，下载主稿MD、PDF、指南、完整ZIP，核对 `package-manifest.json` 的发布commit、材料版本与SHA-256。正式评审使用PDF给出的 `reviews/<完整commit>/` URL。播放 `demo.mp4`，这是**免费Mock**历史录屏，不是六角色真实成功视频；不兼容可下载播放。
-5. 展开真实场景逐次账本，下载 `real-camera-runs.json`；仅含该包实际归档终态。v5的CAMERA-09含run/evidence、交付manifest、启动metadata、scene.json、runtime manifest与index.html.txt，11项实际Gate通过，0返修。摄像头模型交付声明数据，由固定可信运行时渲染，不是任意软件源码；TXT仅审查下载。不要混合Mock、合成行为、完整硬件需求或不同配置探索分母。
+5. 展开真实场景逐次账本，下载 `real-camera-runs.json`；仅含该包实际归档终态。部署前先在 [GitHub生产文档](https://github.com/litianyi-007/city-agent/tree/feature/autonomous-production/docs/production) 查看新结果。不要混合Mock、合成行为、完整硬件需求或不同配置探索分母。
 
 公开 GitHub Pages 没有 Harness后端，不接收 Key、不开新生产任务、不申请摄像头。原虚拟社会入口另行保留，不表示本生产线获得了其人口与记忆的新能力。
 
@@ -76,11 +76,9 @@ npm run build
 
 合成手势场景行为、假摄像头SDK集成、真实视觉模型、实体硬件、完整原需求是分开的证明层次；假摄像头通过不能勾选完整硬件通过。相机拒绝、资产缺失、视觉未验证均须保留而非删去。
 
-独立安装不会复制作者本地运行数据库，也不会自动出现CAMERA-09历史。可以先审查该版归档与固定源码；页面重新输入需求并启动真模型会创建新运行、产生新费用，不等同于回放历史。作者机器保留原运行时，可选CAMERA-09→“门禁与交付”→“打开受控场景预览”，先用手动按钮，再由设备持有人主动开启摄像头。
-
 ## E. 离线审阅与故障排查
 
-- ZIP内可独立阅读主稿/PDF、播放历史Mock MP4、检查三个Mock、九次真实场景探索及09有界交付证据。离线材料不是可执行的完整后端安装包，历史视频不是09真实研发录屏。
+- ZIP内可独立阅读主稿/PDF、播放MP4、检查三个Mock和所有真实失败JSON。离线材料不是可执行的完整后端安装包。
 - 文件校验：macOS `shasum -a 256 文件名`，Linux `sha256sum 文件名`，对照manifest相应条目；hash证明字节一致，不证明结论真实或日志防篡改。
 - 安装故障：检查Node版本、依赖下载、Chromium安装及端口；模型故障：检查有效ID、端点、单价、Key状态和预算。报错可脱敏反馈，不截图/发送Key。
 - 退出服务用本次终端Ctrl+C，不停止其他项目。需要保留数据时不要清理数据目录；分享材料时排除整个控制面数据、主密钥、配置、私人日志。

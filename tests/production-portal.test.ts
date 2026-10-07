@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
+import { readFileSync } from 'node:fs';
 import { chromium } from 'playwright';
 import { renderProductionPortal, type ProductionPortalInput } from '../scripts/production-portal.js';
 import { PRODUCTION_DEMO_CASES } from '../shared/production-benchmarks.js';
@@ -35,6 +36,8 @@ test('public onboarding prioritizes three honest entry points and fixed cases be
   assert.ok(html.includes('这里只展示案例快照，不能提交新需求'));
   assert.equal(html.includes('<textarea'), false);
   assert.equal(html.includes('href="http://127.0.0.1:'), false);
+  assert.ok(html.includes('本包未记录通过的真实交付闭环；完整需求未验收'));
+  assert.equal(html.includes('真实有界场景闭环已记录'), false);
 });
 
 test('reviewer v3 highlights same-version Markdown, independent installation and immutable evidence links', () => {
@@ -127,13 +130,49 @@ test('four different-version real camera failures remain separate from three zer
   assert.ok(html.includes('0.0%'));
   assert.ok(html.includes('0 个通过 / 4 次真实研发终态尝试'));
   assert.ok(html.includes('real-camera-runs.json'));
-  assert.equal((html.match(/完整需求未验收/g) ?? []).length, 4);
+  assert.equal((html.match(/class="badge negative">失败 · 完整需求未验收<\/span>/g) ?? []).length, 4, 'Each archived failure has its own truthful full-requirement badge');
   for (const run of input.cameraRuns) assert.ok(html.includes(run.platformCommit!));
   const bounded = { ...input.cameraRuns[0], status: 'completed' as const, gate: { passed: true, checks: [] }, cameraVerification: { ...input.cameraRuns[0].cameraVerification!, boundedScenePassed: true } };
   const boundedHtml = renderProductionPortal({ ...input, cameraRuns: [bounded], mixedRuns: [bounded] });
   assert.ok(boundedHtml.includes('0 个通过 / 1 次真实研发终态尝试'));
   assert.ok(boundedHtml.includes('通过（不代表实机）'));
   assert.equal(boundedHtml.includes('完整需求已验收'), false);
+  assert.ok(boundedHtml.includes('真实有界场景闭环已记录；摄像头实机 / 完整需求未验收'));
+  assert.ok(boundedHtml.includes('有界场景行为 1 / 1 次终态'));
+  assert.equal(boundedHtml.includes('当前真实自主交付尚未通过'), false);
+  assert.equal(boundedHtml.includes('真实端到端交付未证实'), false);
+});
+
+test('v5 archived CAMERA09 bounded delivery is traced through seven text-only files without recertifying hardware or old Mock footage', () => {
+  // Serialization of real archived evidence, not a new execution or success.
+  const input = portalInput();
+  input.cameraRuns = Array.from({ length: 9 }, (_, index) => JSON.parse(readFileSync(new URL(`../docs/production/experiments/CAMERA-${String(index + 1).padStart(2, '0')}/run.json`, import.meta.url), 'utf8')) as ProductionRun);
+  const original = JSON.stringify(input.cameraRuns);
+  const commit = 'f'.repeat(40); const videoSource = 'c21c588632d04dc7ed9dfa8cb265606400d2b522';
+  const names = ['run.json', 'evidence.json', 'delivery-manifest.json', 'platform-metadata.json', 'scene.json', 'camera-runtime-manifest.json', 'index.html.txt'];
+  input.packageManifest = { ...input.packageManifest, materialsVersion: 'production-materials-v5', reportCommit: commit, publisherCommit: commit, historicalVideo: true, historicalIframeRecording: false, videoSourceCommit: videoSource, files: [{ path: 'demo.mp4' }, ...names.map(name => ({ path: `CAMERA-09/${name}` }))] };
+  input.recordedBuildInfo = { deploymentCommit: commit };
+  input.submissionBase = `./reviews/${commit}/submission/`;
+  const html = renderProductionPortal(input);
+  assert.ok(html.includes('记录 9 次真实生成尝试；完整交付通过 0 / 9 次终态'));
+  assert.ok(html.includes('有界场景行为 1 / 9 次终态；仅为异配置调优账本计数，非稳定成功率'));
+  assert.ok(html.includes('真实有界场景闭环已记录；摄像头实机 / 完整需求未验收'));
+  assert.ok(html.includes('模型场景 DSL＋平台可信 runtime，不是任意软件源码'));
+  assert.ok(html.includes('每阶段候选数 N=1；N=1 仅验证单候选，不证明多候选选优或节费'));
+  assert.ok(html.includes('0 个通过 / 9 次真实研发终态尝试'));
+  for (const name of names) assert.ok(html.includes(`href="./reviews/${commit}/submission/CAMERA-09/${name}"`), name);
+  assert.ok(html.includes('24256f96165f0be3156be037a2fea42492e31117'));
+  assert.ok(html.includes(`git checkout ${commit}`)); assert.ok(html.includes(`视频来源源码版本：<code>${videoSource}</code>`));
+  assert.equal(html.includes('当前真实自主交付尚未通过'), false); assert.equal(html.includes('真实端到端交付未证实'), false);
+  assert.equal(html.includes('真实端到端交付、稳定性与同范围人工效率对照尚未证实'), false);
+  assert.equal(html.includes('完整需求已验收'), false); assert.equal(html.includes(`href="./reviews/${commit}/submission/CAMERA-09/index.html"`), false);
+  assert.equal(html.includes('data-src="./previews/CAMERA-09/'), false); assert.equal(html.includes('type="password"'), false); assert.equal(html.includes('getUserMedia('), false);
+  assert.ok(html.includes('公开页面不接收 Key、不运行 Harness、不进行实时生成'));
+  assert.equal(JSON.stringify(input.cameraRuns), original);
+  input.packageManifest.files = [{ path: 'CAMERA-09/run.json' }];
+  const partial = renderProductionPortal(input);
+  assert.ok(partial.includes(`href="./reviews/${commit}/submission/CAMERA-09/run.json"`));
+  assert.equal(partial.includes(`href="./reviews/${commit}/submission/CAMERA-09/scene.json"`), false, 'Never link an unregistered source artifact');
 });
 
 test('portable portal escapes evidence, discloses static scope and never embeds generated source or Key forms', () => {
