@@ -1,0 +1,98 @@
+# 自主软件生产任务清单
+
+## 质量与评委发布切片（2026-10-08，v6）
+
+本批范围：免费落实 Jev v4 弱证据弃权分流、可选的源码绑定条款证据、v6 最新实测附录与安装引导、不可覆盖旧证据的发布门禁。详细合同、反例与验收口径见 [本批设计](QUALITY-V6-DESIGN.md)，工程结果见 [本批审核记录](BATCH-QUALITY-V6-CHECKS.md)。更新前原文 [留底](https://github.com/litianyi-007/city-agent/blob/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/docs/production/archive/2026-10-08-before-quality-v6/NEXT-STEPS.md)。新源码不回写 REAL-02 的 v3 策略或旧模型结果。
+
+下一顺序：
+
+1. 在当前质量配置下新冻结 HTML 需求、最终行为 Gate、模型与预算，另行确认后进行真实自主交付；本批只验证工程，未消费新的模型授权。
+2. 对条款证据及 Jev v4 做新的预登记对照；源码引用有效不等于业务条款正确，复核增加的成本必须计入。
+3. 实体摄像头、受控仓库／容器执行器、三类任务九次固定配置泛化分别验收，不使用固定 Mock 或选优对照代替。
+
+v6 在线页是可信固定案例和可核验材料入口；新的软件需求从本地安装后的“新建自定义需求”启动。原申报 MD、旧 PDF／视频／实验原件与虚拟社会主线保持独立。
+
+## 下一批顺序（2026-10-08）
+
+最新：[REAL-02](https://github.com/litianyi-007/city-agent/blob/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/docs/production/experiments/VERIFIER-REAL-02/RESULT.md)已按新批准完成完整 18 池，52 HTTP／54 决策／36 实际 Oracle；没有追加调用。B 好 12／坏 4，C 好 11／坏 2，C 费用多 3.258721%；高性价比条件不成立，不能为了材料追认 Jev 胜利或自主交付。以下旧表第 5 项的对照部分已完成，HTML 生产闭环仍需独立实测。
+
+| 当前顺序 | 任务 | 完成／停止门限 |
+| --- | --- | --- |
+| 1 | 归档本次原始账本、实际 Oracle、费用及独立审查 | 4 控制原件字节相同、573 JSON 只读核验；18 池固定分母／错弃权／升级费保留，旧负结果不回写 |
+| 2 | 免费完善条款／实施证据／可证伪边界合同 | 用 H02/H10 坏放行建立通用反例；不写题目关键词分支、不让模型自述替代行为 Gate |
+| 3 | 离线审查 12 次 Jev 数值兼容与 C16 错弃权 | 保留 ±0.005 原冻结规则；区分类型合法、置信度与业务校准；适配有来源、有反例、新版本，不后验追认通过 |
+| 4 | 回到 HTML 需求自主交付闭环 | 免费修复先验证；新付费任务先冻结配置及独立预算，最终实际交互验收、≤2 返修、无人工改产物 |
+| 5 | 受控仓库、安全执行器与未见泛化 | 容器／网络／秘密／资源／取消硬门限；九次固定配置实验另行预登记 |
+
+本次授权已消费；不自动重跑、不修改本次候选／Gate／费率、不改默认策略。主线、公开 v5 与申报原稿保持不变。[更新前全文留底](https://github.com/litianyi-007/city-agent/blob/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/docs/production/archive/2026-10-08-before-verifier-real02/NEXT-STEPS.md)。
+
+### 上一批任务与历史时点
+
+最新状态：下表 1–4 的免费切片已实施并最终 **705/705＋45/45** 回归通过，见[修复及验收记录](https://github.com/litianyi-007/city-agent/blob/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/docs/production/BATCH-VERIFIER-PROTOCOL-CHECKS.md)和[输出契约](https://github.com/litianyi-007/city-agent/blob/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/docs/production/VERIFIER-OUTPUT-CONTRACT.md)。下一纵向切片是第 5 项，**先新冻结、预登记及集中确认预算，再启动真实对照**；[待确认提案](https://github.com/litianyi-007/city-agent/blob/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/docs/production/VERIFIER-NEXT-RUN-PROPOSAL.md)已列模型、调用数、时间、Token 和价值判定。旧 REAL-01 一次授权不延用，原失败不覆盖，首次通过也不称稳定 L5。[本次更新前全文留底](https://github.com/litianyi-007/city-agent/blob/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/docs/production/archive/2026-10-08-before-verifier-protocol/NEXT-STEPS.md)。
+
+控制面/只读迁移已完成；首次收费实验已结束，见[VERIFIER-REAL-01](https://github.com/litianyi-007/city-agent/blob/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/docs/production/experiments/VERIFIER-REAL-01/RESULT.md)。它是有原始记录的协议失败，不是完整对照；此前一次授权已消费，禁止自动重跑。以下旧计划按历史时点保留，当前优先级为：
+
+| 顺序 | 任务 | 免费验收/停止门限 |
+| --- | --- | --- |
+| 1 | 区分LLM JSON语法、结构、ID/评分契约失败，反馈具体原因 | H04原响应固定hash可复现；没有本地自动JSON修补或第二次调用；诊断不泄Key |
+| 2 | 新版本紧凑Verifier输出/转义提示，必要时约束自由文本 | 非法转义、截断、外来ID、重复评分、低分/非最高分均拒绝；合法转义正例通过；旧实验不修改 |
+| 3 | 需求边界逐条证据、全坏池弃权与硬Gate | H02含100边界固定负例保留；模型5/5或解释不能覆盖实际行为断言 |
+| 4 | Jev数值协议兼容前提核对与原响应重放 | 再现2drift＋1uncertain；精度/公式有来源，不为放行扩大容差；直接决策与升级费用分列 |
+| 5 | 新冻结配置的对照实验，再回到真实HTML交付 | 先另行确认预算；报告所有尝试/未启动/unknown，零后验改门禁；选优与产品交付分开 |
+| 6 | 已规划受控仓库、安全执行器和泛化 | 先验证容器/资源/秘密/网络隔离，不执行宿主生成脚本；九次实验另行预登记 |
+
+[更新前全文留底](https://github.com/litianyi-007/city-agent/blob/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/docs/production/archive/2026-10-08-before-verifier-real01/NEXT-STEPS.md)。不等待虚拟社会线，不编辑另一worktree。
+
+当前纵向切片已接入[评估控制面及只读归档核验](https://github.com/litianyi-007/city-agent/blob/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/docs/production/VERIFIER-CONTROL-PLANE.md)，免费验证与真实实验分列；下文待办入口描述保留为旧时点。接下来依次：确认当前公开配置与完整18池1USD估算停止额度→新clean源码/plan冻结及页面同意→真实A/B/C观察、失败与成本归因→反馈提示修订的新版本→真实HTML需求闭环。实际仓库/容器、实体相机、未见泛化分别验收，不用选优工程完成替代。[更新前全文留底](https://github.com/litianyi-007/city-agent/blob/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/docs/production/archive/2026-10-07-before-verifier-control/NEXT-STEPS.md)。
+
+最新增量：VE-04 [原生观测适配与预算/清理契约](https://github.com/litianyi-007/city-agent/blob/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/docs/production/VERIFIER-OBSERVED-TRANSPORT.md)已实施，[完整18池演练](https://github.com/litianyi-007/city-agent/blob/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/docs/production/experiments/VERIFIER-OBSERVED-01/RESULT.md)54决策/36实际Oracle，267.672秒，原件与独立审计留证。下一纵向切片是本评估的控制面收费启动/用户同意持久化、boot＋公开配置＋凭据轮换失效、完整新配置冻结；之后取得明确新额度才做 VE-05/06真实对照。现有factory不直接暴露到API或页面，禁止添加免费CLI的 `--live` 开关。1 USD只是估算停止额度，Jev4096是响应后观测门限，不是供应商账单/输出硬上界。[本次原文留底](https://github.com/litianyi-007/city-agent/blob/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/docs/production/archive/2026-10-07-before-verifier-observed/NEXT-STEPS.md)。
+
+以下“下一免费适配器”等段落保留前批时间点，新优先级以本文首段为准。
+
+补充：评委可读取归档原件/校验压缩包SHA；study marker绑定原目录scope，下一切片增加独立迁移只读核验/导入工具，不重写marker、不恢复收费执行。
+
+最新 VE-04免费准备已实现：[18池完整SDK wire与待批额度](https://github.com/litianyi-007/city-agent/blob/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/docs/production/VERIFIER-WIRE-PREFLIGHT.md)。下一免费切片完成真实study adapter的HTTP/usage/秘密隔离与取消反例，明确Jev输出观测停止阈值和Token预留语义；然后集中确认1 USD/30分钟、4096输出、当前页面Verifier/Jev配置、未随机候选顺序，再冻结收费实验。当前绝不由提案直接外呼，不自动沿用旧授权。[审查](https://github.com/litianyi-007/city-agent/blob/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/docs/production/BATCH-VERIFIER-PREFLIGHT-CHECKS.md)、[留底](https://github.com/litianyi-007/city-agent/blob/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/docs/production/archive/2026-10-07-before-verifier-preflight/NEXT-STEPS.md)。
+
+当前切片 VE-02/03 已实现：[注入执行器与独立账本](https://github.com/litianyi-007/city-agent/blob/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/docs/production/VERIFIER-STUDY-CONTRACT.md)，免费测试覆盖持久化先于调用、相同输入新调用、迟到结果不可改终态和全部决策先于 Oracle。下一顺序为 VE-04 真实 transport/配置/预算冻结，再做 VE-05/06 收费对照；不自动启动54意图评测。旧 Phase-1 的两条意见[交接](https://github.com/litianyi-007/city-agent/blob/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/docs/production/REVIEW-CONTRACT-HANDOFF.md)给虚拟社会线，本线未改其目录。本次[留底](https://github.com/litianyi-007/city-agent/blob/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/docs/production/archive/2026-10-07-before-verifier-study/NEXT-STEPS.md)。
+
+最新增量：VE-01免费[18池/36候选准备](https://github.com/litianyi-007/city-agent/blob/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/docs/production/VERIFIER-CHALLENGE-CORPUS.md)已完成，统一实际Oracle36/36标签一致、116.390秒、0模型请求，原件见[VERIFIER-PREP-01](https://github.com/litianyi-007/city-agent/blob/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/docs/production/experiments/VERIFIER-PREP-01/RESULT.md)。三DEV池仍不计正式集。下一免费任务VE-02/03：三策略study adapter与预算/intent/unknown/取消/重启注入验证；其后VE-04整批配置冻结与新预算。没有自动启动54意图收费批次，真实HTML v10、实体相机与容器各自单独验收。本次[留底](https://github.com/litianyi-007/city-agent/blob/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/docs/production/archive/2026-10-07-before-verifier-corpus/NEXT-STEPS.md)。
+
+## 申报后当前状态与执行顺序
+
+用户已完成申报。最新进度、任务与evaluation门限见 [申报后开发清单](POST-SUBMISSION-PLAN.md)。六角色配置、Verifier/Jev、冻结验收、预算/取消与三个工程Mock已实现；CAMERA-09首次真实有界场景Gate通过，01～09不同配置探索/完整摄像头需求分别统计，不称稳定成功率。
+
+公共首屏、紧凑输出/语义预检、原生JSON、09真实场景闭环及v5发布已完成。HTML-01已真实执行并失败；下一顺序为免费修补HTML执行事实/返修评审上下文/启动身份 → 新版本HTML真实探索 → 用户主动实体摄像头验收 → Verifier同条件效益对照 → 容器及受控仓库 → 固定配置泛化实验。三DEV池免费Oracle准备与正式18池/收费模型对照分列。本分支六角色Key已由用户配置，不迁移别线；新增真实执行先冻结该实验与预算。[HTML01结果](https://github.com/litianyi-007/city-agent/blob/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/docs/production/experiments/HTML-01/RESULT.md)、[v5发布](https://github.com/litianyi-007/city-agent/blob/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/docs/production/PUBLICATION-V5-2026-10-07.md)，[本次更新前留底](https://github.com/litianyi-007/city-agent/blob/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/docs/production/archive/2026-10-07-before-html01/NEXT-STEPS.md)。
+
+上述免费修补已480/38项通过，HTML02按新预登记/干净boot实际探索一次并在研究JSON阶段失败；原始结果见[HTML02](https://github.com/litianyi-007/city-agent/blob/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/docs/production/experiments/HTML-02/RESULT.md)。本批推进[语法诊断/反馈](https://github.com/litianyi-007/city-agent/blob/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/docs/production/BATCH-HTML02-CHECKS.md)和[仓库准备契约](https://github.com/litianyi-007/city-agent/blob/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/docs/production/REPOSITORY-PREPARATION.md)，不自动追加付费或启用系统容器。接下来的免费重点是Verifier正式候选/Oracle与执行器契约；新真实任务、实体相机、收费效益实验及容器准备按各自预算/权限确认，不以Mock冒充。本次[旧文留底](https://github.com/litianyi-007/city-agent/blob/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/docs/production/archive/2026-10-07-before-html02/NEXT-STEPS.md)。
+
+下文第一批框架保留作为任务背景；修改前原文 [留底](https://github.com/litianyi-007/city-agent/blob/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/docs/production/archive/2026-10-07-before-onboarding/NEXT-STEPS.md)。本批优先免费工程验证和独立production静态入口，不把演练记为自主交付。
+
+第一批围绕单 HTML 可运行切片推进，不等待任意仓库平台。用户已批准三个模拟需求和高性价比调用方向；本分支仍需页面配置新的模型与 Key。
+
+## 第一批
+
+| ID | 任务 | 完成证据 |
+| --- | --- | --- |
+| AP-01 | 固定六角色职责、三个模拟需求、执行范围与验收 | DESIGN、REQUIREMENTS 和独立输入快照 |
+| AP-02 | 独立配置、复制、脱敏；API、前端、预览、E2E 和数据统一隔离 | 配置/API/浏览器回归 |
+| AP-03 | 产品扩展、项目经理计划、测试契约预检与冻结 | 原始角色输出、选择器预检与 hash |
+| AP-04 | 所有可替换角色输出经 Verifier 审查和候选选优 | N=1/N=2、全部坏候选与非法评分反例 |
+| AP-05 | 研发、实际浏览器 Gate、反馈与最多两次返修 | 每轮 Gate 及不得修改冻结检查的测试 |
+| AP-06 | 逐请求证据、usage/费用、预算、取消和重启 | 原文/hash、unknown、限额与恢复测试 |
+| AP-07 | 三项 MOCK 完整执行与材料包 | 源码、输入、阶段结果、Gate、日志、预测区间 |
+| AP-08 | 新配置下真实模型实验 | 页面配置完成后启动；工程夹具不代替该证据 |
+| AP-09 | 托管 Jev 设置、三维选优和不确定升级 | 单候选/双候选/错误/unknown/取消/密钥轮换工程反例；与真实研发分列 |
+| AP-10 | 三组固定合成池真实 Jev 对照 | 外呼前冻结配置和候选 hash；全部失败、弃权、Gate 与额外费用；不泛化 |
+
+初次真实批次采用每项 5 USD、三项合计 15 USD 的内部保守限额。用户允许无硬总额但要求性价比，并非要求无限重试。每项同时有调用、Token、时限及两次返修上限。金额取配置价格估算，不等于供应商账单。
+
+## 后续任务
+
+- 验证容器或等效隔离，完成路径、秘密、网络、资源与取消攻击测试；在此之前拒绝生成 Node/shell 的宿主执行。
+- 扩展受控模板和仓库功能添加、Bug 修复，交付 base commit、patch、lockfile 和可复现构建。
+- 固定配置预登记三类任务各三次，独立任务目录，报告全部尝试；配置变化新起实验版本。
+- 将本批三组合成池对照扩展为有独立标注及代表性的候选集；加入无 Verifier/LLM/Jev cascade 的同条件成本对照，避免把低供应商价格直接称为已实测高性价比。
+- 评估 AnyJev 的低风险 typed decision adapter；取得模型能力和独立标注集后才做校准。
+- 补真实业务需求来源与正式 L4 参考线；公开服务或外部部署另行授权。
+
+虚拟社会线继续负责人口、人群、调查、现实桥和记忆；本线不修改其 worktree，不合并分支。Hopper/grok-4.7 只是可选外层评审，不是内部团队验收证据。

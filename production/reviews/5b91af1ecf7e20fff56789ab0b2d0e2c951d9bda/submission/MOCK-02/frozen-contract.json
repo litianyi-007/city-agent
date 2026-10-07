@@ -1,0 +1,107 @@
+{
+  "version": "production-acceptance-v2",
+  "hash": "37f996df9d0f32b2faa227d962cd804ee2a5522be22ff1b437f7f5120a299f9e",
+  "requirementHash": "886146fdf1c0a8b7a23a5a553a2387565cd6e4652caf634e66562a9120b31801",
+  "checks": [
+    {
+      "name": "Mock 边界可见与初始零任务",
+      "steps": [
+        {
+          "action": "assertText",
+          "selector": "#notice",
+          "text": "Mock"
+        },
+        {
+          "action": "assertTextExact",
+          "selector": "#count",
+          "text": "0"
+        },
+        {
+          "action": "assertCount",
+          "selector": "#tasks li",
+          "count": 0
+        }
+      ]
+    },
+    {
+      "name": "两任务状态筛选与统计回归",
+      "steps": [
+        {
+          "action": "fill",
+          "selector": "#task-input",
+          "value": "编写方案"
+        },
+        {
+          "action": "click",
+          "selector": "#add-task"
+        },
+        {
+          "action": "fill",
+          "selector": "#task-input",
+          "value": "执行测试"
+        },
+        {
+          "action": "click",
+          "selector": "#add-task"
+        },
+        {
+          "action": "click",
+          "selector": "[data-task-id=\"0\"] .toggle"
+        },
+        {
+          "action": "assertTextExact",
+          "selector": "#done-count",
+          "text": "1"
+        },
+        {
+          "action": "click",
+          "selector": "#show-open"
+        },
+        {
+          "action": "assertTextExact",
+          "selector": "#tasks li span",
+          "text": "执行测试"
+        },
+        {
+          "action": "assertCount",
+          "selector": "#tasks li",
+          "count": 1
+        },
+        {
+          "action": "click",
+          "selector": "#show-done"
+        },
+        {
+          "action": "assertTextExact",
+          "selector": "#tasks li span",
+          "text": "编写方案"
+        },
+        {
+          "action": "assertCount",
+          "selector": "#tasks li",
+          "count": 1
+        },
+        {
+          "action": "click",
+          "selector": "#show-all"
+        },
+        {
+          "action": "assertCount",
+          "selector": "#tasks li",
+          "count": 2
+        },
+        {
+          "action": "assertTextExact",
+          "selector": "#count",
+          "text": "2"
+        },
+        {
+          "action": "assertTextExact",
+          "selector": "#done-count",
+          "text": "1"
+        }
+      ]
+    }
+  ],
+  "frozenAt": "2026-10-07T04:44:30.476Z"
+}

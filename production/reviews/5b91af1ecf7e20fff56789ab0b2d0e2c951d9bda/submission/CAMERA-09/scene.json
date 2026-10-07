@@ -1,0 +1,117 @@
+{
+  "version": "camera-scene-v1",
+  "title": "梦幻雪夜粒子圣诞树",
+  "background": "#050814",
+  "palette": [
+    "#7fd8ff",
+    "#b9e6ff",
+    "#ffd98a",
+    "#ff9d5c",
+    "#ff4f6d",
+    "#eaf6ff"
+  ],
+  "objects": [
+    {
+      "id": "tree-core",
+      "primitive": "cone",
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        3.2,
+        4.6,
+        3.2
+      ],
+      "count": 620,
+      "color": "#1f8a4d"
+    },
+    {
+      "id": "tree-upper",
+      "primitive": "cone",
+      "position": [
+        0,
+        2.4,
+        0
+      ],
+      "scale": [
+        2.2,
+        3.2,
+        2.2
+      ],
+      "count": 360,
+      "color": "#2fae62"
+    },
+    {
+      "id": "tree-glow",
+      "primitive": "sphere",
+      "position": [
+        1.1,
+        0.6,
+        0.8
+      ],
+      "scale": [
+        1.4,
+        1.4,
+        1.4
+      ],
+      "count": 140,
+      "color": "#ffd98a"
+    },
+    {
+      "id": "tree-warm-dots",
+      "primitive": "sphere",
+      "position": [
+        -1.2,
+        1.4,
+        -0.9
+      ],
+      "scale": [
+        0.9,
+        0.9,
+        0.9
+      ],
+      "count": 132,
+      "color": "#ff9d5c"
+    },
+    {
+      "id": "top-star",
+      "primitive": "star",
+      "position": [
+        0,
+        5.15,
+        0
+      ],
+      "scale": [
+        1.2,
+        1.2,
+        1.2
+      ],
+      "count": 84,
+      "color": "#ffe89a"
+    },
+    {
+      "id": "ornament-ring",
+      "primitive": "ring",
+      "position": [
+        0,
+        1.15,
+        0
+      ],
+      "scale": [
+        2.6,
+        2.6,
+        2.6
+      ],
+      "count": 24,
+      "color": "#ff4f6d"
+    }
+  ],
+  "snowCount": 60,
+  "mappings": {
+    "openPalm": "scatter",
+    "closedFist": "gather",
+    "palmX": "rotate"
+  }
+}

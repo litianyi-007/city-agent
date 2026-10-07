@@ -1,0 +1,21 @@
+{
+  "version": "verifier-study-control-v1",
+  "grantSha256": "ffc7a84942e3720c9a9b12dcc5c4531ac769663ec7f6526d776bc59034555477",
+  "run": {
+    "id": "6eaf79ac-0244-48b7-b2d2-aa8bef84ea9d",
+    "status": "running",
+    "executionSource": "real-provider",
+    "bootId": "1d361474-e7d2-4735-adee-e069cccef563",
+    "frozenStudySha256": "67165b1343b0e67e55f659662529f77ce40aa2e0ed52e569adbba3ef33af5310",
+    "createdAt": "2026-10-07T19:12:00.183Z",
+    "finishedAt": null,
+    "progress": {
+      "ledgerEvents": null,
+      "decisions": null,
+      "calls": null,
+      "oracles": null
+    },
+    "summary": null,
+    "error": null
+  }
+}
