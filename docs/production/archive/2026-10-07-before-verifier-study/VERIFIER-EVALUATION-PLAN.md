@@ -1,8 +1,8 @@
 ---
 title: Verifier 同条件候选对照评估计划
 type: design
-status: injected-adapter-implemented-unfunded-unexecuted
-version: verifier-evaluation-plan-v3
+status: corpus-prepared-unfunded-unexecuted
+version: verifier-evaluation-plan-v2
 date: 2026-10-07
 tags: [production, verifier, jev, evaluation]
 spec_relationships:
@@ -21,7 +21,7 @@ spec_relationships:
 
 本文件仍是待冻结收费配置、待单独确认预算的计划。18个人工候选池已完成免费准备：36结构合法候选经实际Chromium，16通过/20预设业务负例，36/36标签一致，见[语料说明](VERIFIER-CHALLENGE-CORPUS.md)和[VERIFIER-PREP-01原件](experiments/VERIFIER-PREP-01/RESULT.md)。没有启动本对照计划的模型请求，也没有新增模型准确率、费用收益或自主交付实测值。文档版本不是已冻结的收费实验配置；[完整v1留底](archive/2026-10-07-before-verifier-corpus/VERIFIER-EVALUATION-PLAN.md)。
 
-本批已实现 VE-02/03 的[注入执行器、独立初始manifest和先行intent账本](VERIFIER-STUDY-CONTRACT.md)，免费故障/取消/无缓存测试及真实Chromium Mock演练独立报告，不是本收费实验已执行。完成 VE-04 真实传输/配置预检和预算确认后，才登记新收费评估。当前任务预算不自动授权本评估；真正未见的真实任务继续留出。本次[完整v2留底](archive/2026-10-07-before-verifier-study/VERIFIER-EVALUATION-PLAN.md)。
+执行优先级：CAMERA09有界闭环、HTML01/02真实探索和后续免费修补分列后，本批已推进VE-01免费准备；下一步是VE-02/03同条件study adapter及账本的免费工程验证。完成传输/配置预检和预算确认后，才登记新的收费评估批次。当前任务预算不自动授权本评估。真正未见的真实任务继续留出，不参与本候选池设计或调优。
 
 ## 1. 要回答的问题与证据边界
 
@@ -151,7 +151,7 @@ HTML Oracle使用实际Chromium交互、精确输出/元素数及边界状态。
 
 ## 8. 后续材料可以如何表述
 
-现在可以写：“已具备独立Verifier、托管Jev级联和可追溯硬Gate；18个人工挑战池的36候选已完成免费独立Oracle准备，同条件三策略注入执行器与先行账本已实现，真实模型对照待传输、正式配置冻结与新预算确认。”
+现在可以写：“已具备独立Verifier、托管Jev级联和可追溯硬Gate；18个人工挑战池的36候选已完成免费独立Oracle准备，待同条件study执行器、正式配置冻结与预算确认。”
 
 未来实测后可以写：“在某冻结版本的18个人工挑战池上，三策略分别取得X个已知好选择、Y个误选择、Z个合法弃权，实际费用/已知小计及未知项如下。”同时列明来源不是内部Agent生成、设备层未验证及样本构成。
 
