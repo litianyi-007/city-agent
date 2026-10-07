@@ -33,7 +33,7 @@ Key 在新页面重新填写，不迁移原配置。生产 Agent 使用独立六
 
 ## 新增受控摄像头场景测试
 
-2026-10-07 最新批次：[共享全局返修契约](GLOBAL-REPAIR-CONTRACT.md)、[CAMERA-03 预登记](CAMERA-03-PREGISTRATION.md) 与 [实测结果/下一批任务](CAMERA-03-RESULT.md)。生成前纠错和研发返修共用最多两次，不修改冻结 Gate；旧 CAMERA-01/02 负结果保留。本次真实模型在反馈后自主修正产品JSON结构，随后因Jev协议不一致失败，无研发或圣诞树场景交付。[独立协议审查](JEV-PROTOCOL-AUDIT-CAMERA-03.md) 保留异常原文，没有放宽门限。本节更新前的入口文档已在 [留底](archive/2026-10-07-before-global-repair/README.md) 保存。
+2026-10-07 下一切片：[共享全局返修契约](GLOBAL-REPAIR-CONTRACT.md) 与 [CAMERA-03 预登记](CAMERA-03-PREGISTRATION.md)。生成前纠错和研发返修共用最多两次，不修改冻结 Gate；旧 CAMERA-01/02 负结果保留。真实结果在新实验完成后另记，实施中不能称自主交付通过。本节更新前的入口文档已在 [留底](archive/2026-10-07-before-global-repair/README.md) 保存。
 
 在本地生产页面选择 `camera-scene-v1`，内部角色生成严格 JSON 场景，平台可信运行时负责本机相机/识别/渲染，不执行模型脚本。先按 [本地资产说明](CAMERA-ASSETS.md) 准备固定模型，再从页面输入需求。
 
