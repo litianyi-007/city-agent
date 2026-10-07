@@ -18,6 +18,8 @@
     "preview:pages": "vite preview --mode pages --host 127.0.0.1 --port 4173",
     "preview:production": "vite preview",
     "production:package": "tsx scripts/production-package.ts",
+    "production:public": "tsx scripts/production-public.ts",
+    "production:publish": "tsx scripts/publish-production.ts",
     "start": "tsx server/index.ts",
     "test": "tsx --test tests/*.test.ts",
     "test:e2e": "playwright test",

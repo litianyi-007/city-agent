@@ -1,0 +1,114 @@
+import assert from 'node:assert/strict';
+import test from 'node:test';
+import { chromium } from 'playwright';
+import { renderProductionPortal, type ProductionPortalInput } from '../scripts/production-portal.js';
+import { PRODUCTION_DEMO_CASES } from '../shared/production-benchmarks.js';
+import { productionRunInputSchema, type ProductionRun } from '../shared/production-schema.js';
+import { demoHtml } from '../server/production/fixtures.js';
+import type { JevBenchmarkRun } from '../server/production/jev-benchmark.js';
+import type { JevEvaluation } from '../shared/jev-schema.js';
+
+function fixtureRun(index: number): ProductionRun {
+  const item = PRODUCTION_DEMO_CASES[index];
+  const input = productionRunInputSchema.parse({ brief: item.brief, mode: 'demo', demoCaseId: item.operation, agentIds: Array.from({ length: 6 }, (_, offset) => `00000000-0000-4000-8000-00000000000${offset}`), requirement: { id: item.id, source: item.source, acceptance: item.acceptance, kind: item.kind } });
+  return { id: `portal-fixture-${index}`, input, status: 'completed', createdAt: '2026-10-07T00:00:00Z', evidenceKind: 'fixture', agentSnapshot: [], events: [], calls: [], verifications: [], outputs: [{ role: 'developer', phase: 'implementation', value: { html: 'SOURCE_MUST_NOT_BE_EMBEDDED<script>unsafe()</script>' }, selectedCandidateId: 'mock' }], gateHistory: [], gate: { passed: true, checks: [{ name: '实际行为契约', passed: true }] }, repairs: 0, durationMs: 1200, usage: { inputTokens: 0, outputTokens: 0, estimatedCost: 0, currency: 'USD', complete: true }, interventions: [], artifacts: [{ name: 'index.html', type: 'text/html' }], frozenContract: { version: 'test-contract', hash: 'frozen-hash', requirementHash: 'input-hash', frozenAt: '2026-10-07T00:00:00Z', checks: [] } };
+}
+const portalInput = (): ProductionPortalInput => ({ packageManifest: { platformCommit: 'frozen-commit', generatedAt: '2026-10-07', files: [] }, report: {}, requirements: PRODUCTION_DEMO_CASES, runs: PRODUCTION_DEMO_CASES.map((_, index) => fixtureRun(index)), jevBenchmarks: [], mixedRuns: [], trustedFixtureIds: PRODUCTION_DEMO_CASES.map(item => item.id) });
+
+test('portable portal escapes evidence, discloses static scope and never embeds generated source or Key forms', () => {
+  const input = portalInput(); input.requirements = [{ ...PRODUCTION_DEMO_CASES[0], brief: '<script>alert("escape")</script>' }];
+  const html = renderProductionPortal(input);
+  assert.ok(html.includes('&lt;script&gt;alert(&quot;escape&quot;)&lt;/script&gt;'));
+  assert.equal(html.includes('<script>alert("escape")</script>'), false);
+  assert.equal(html.includes('SOURCE_MUST_NOT_BE_EMBEDDED'), false);
+  assert.ok(html.includes('静态交互演示 / 证据回放，非线上自主研发服务'));
+  assert.ok(html.includes('index.html.txt')); assert.equal(html.includes('type="password"'), false);
+  assert.equal(html.includes('fetch('), false); assert.ok(html.includes("connect-src 'none'"));
+  assert.ok(html.includes('unknown')); assert.equal(html.includes('allow-same-origin'), false);
+  assert.throws(() => renderProductionPortal({ ...input, sourceHref: 'javascript:alert(1)' }));
+  assert.throws(() => renderProductionPortal({ ...input, previewBase: 'https://external.example/' }));
+  assert.throws(() => renderProductionPortal({ ...input, requirements: [{ ...input.requirements[0], id: '../unsafe' }] }));
+});
+
+test('public interactive previews require explicit byte-verified fixture IDs; failed and empty states remain honest', () => {
+  const input = portalInput(); input.trustedFixtureIds = [];
+  input.runs[0].gate!.passed = false; input.runs[0].status = 'failed';
+  const html = renderProductionPortal(input);
+  assert.equal(html.includes('data-src="'), false); assert.ok(html.includes('最终行为 Gate：未通过'));
+  assert.ok(html.includes('预览不可用。')); assert.ok(html.includes('2 / 3'));
+  const empty = renderProductionPortal({ ...input, runs: [], requirements: [] });
+  assert.ok(empty.includes('本材料包未提供需求快照')); assert.ok(empty.includes('0 / 0')); assert.ok(empty.includes('unknown'));
+});
+
+test('real Jev accounting retains failed and uncertain calls, excludes injected tests and never equates it with autonomous delivery', () => {
+  const input = portalInput();
+  const evaluation = (status: JevEvaluation['status'], count: number): JevEvaluation => ({ status, policyVersion: 'test-v2', selectedCandidateId: null, reason: `${status} evidence`, requestSnapshot: null, rawResponse: { reason: '<script>untrusted()</script>' }, scores: [], choice: null, usage: { inputTokens: count * 10, outputTokens: count, estimatedCost: count / 1e6, currency: 'USD', complete: true }, modelIdRequested: 'pinned-test', modelIdReturned: 'pinned-test', httpStatus: 200, providerRequests: 1, durationMs: 20 });
+  const batch = { id: 'real-batch', evidenceSource: 'live-jev-evaluation', status: 'completed', policyVersion: 'test-v2', configHash: 'fixed', cases: ['accepted', 'error', 'uncertain'].map((status, index) => ({ id: `case-${index}`, title: 'synthetic candidate pool', attempted: true, status: 'completed', evaluation: evaluation(status as JevEvaluation['status'], index + 1) })), usage: {}, metrics: {}, error: null } as unknown as JevBenchmarkRun;
+  input.jevBenchmarks = [batch, { ...batch, id: 'injected-batch', evidenceSource: 'injected-test' }];
+  const html = renderProductionPortal(input);
+  assert.ok(html.includes('0.000006000')); assert.ok(html.includes('60 输入 / 6 输出 Token'));
+  assert.ok(html.includes('error evidence')); assert.ok(html.includes('uncertain evidence'));
+  assert.equal((html.match(/class="decision"/g) ?? []).length, 3);
+  assert.ok(html.includes('unknown')); assert.ok(html.includes('候选由人工固定构造，不是模型生成软件'));
+  assert.equal(html.includes('<script>untrusted()</script>'), false);
+  input.jevBenchmarks = [{ ...batch, cases: batch.cases.map((item, index) => index === 0 ? { ...item, evaluation: { ...item.evaluation!, usage: { ...item.evaluation!.usage, inputTokens: null, estimatedCost: null, complete: false } } } : item) }];
+  assert.ok(renderProductionPortal(input).includes('unknown'));
+  const intent = { ...evaluation('error', 0), durationMs: 0, providerRequests: 0, rawResponse: null, requestSnapshot: null, modelIdReturned: null, httpStatus: null, usage: { inputTokens: null, outputTokens: null, estimatedCost: null, currency: 'USD' as const, complete: false } };
+  input.jevBenchmarks = [{ ...batch, cases: [{ ...batch.cases[0], evaluation: intent }] }];
+  const unresolved = renderProductionPortal(input);
+  assert.ok(unresolved.includes('未完成请求意图 / 未观测')); assert.ok(unresolved.includes('实际请求</dt><dd>unknown'));
+  assert.ok(unresolved.includes('已知 0 次；1 个请求意图未观测，不记为 0'));
+  input.jevBenchmarks = [{ ...batch, cases: [{ ...batch.cases[0], evaluation: { ...intent, error: 'preflight failed', usage: { ...intent.usage, inputTokens: 0, outputTokens: 0, estimatedCost: 0, complete: true } } }] }];
+  const denied = renderProductionPortal(input); assert.ok(denied.includes('实际请求</dt><dd>0')); assert.equal(denied.includes('未完成请求意图 / 未观测'), false);
+});
+
+test('actual Chromium public portal performs three trusted fixture interactions, keyboard selection and both themes without external calls', async () => {
+  const input = portalInput();
+  input.packageManifest.platformCommit = '891fedcab0f3c5994c7e92f7874e610b3b6354b8';
+  input.packageManifest.files = [{ path: 'demo.webm' }];
+  const html = renderProductionPortal(input);
+  const browser = await chromium.launch(); const context = await browser.newContext(); const page = await context.newPage();
+  page.setDefaultTimeout(5000);
+  const unexpected: string[] = []; const errors: string[] = [];
+  page.on('pageerror', error => errors.push(error.message));
+  await context.route('**/*', route => {
+    const url = new URL(route.request().url());
+    if (url.origin === 'http://portal.test' && url.pathname === '/production/') return route.fulfill({ contentType: 'text/html', body: html });
+    const match = /^\/production\/previews\/(MOCK-0[123])\/index\.html$/.exec(url.pathname);
+    if (url.origin === 'http://portal.test' && match) {
+      const run = input.runs.find(item => item.input.requirement.id === match[1])!;
+      const source = demoHtml(run.input).replace('<head>', '<head><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Content-Security-Policy" content="default-src \'none\'; script-src \'unsafe-inline\'; style-src \'unsafe-inline\'; connect-src \'none\'; object-src \'none\'; base-uri \'none\'; form-action \'none\'">');
+      return route.fulfill({ contentType: 'text/html', body: source });
+    }
+    unexpected.push(route.request().url()); return route.abort();
+  });
+  try {
+    await page.goto('http://portal.test/production/');
+    assert.deepEqual(errors, []);
+    assert.equal(await page.locator('iframe').getAttribute('sandbox'), 'allow-scripts');
+    let frame = page.frameLocator('iframe');
+    await frame.locator('#task-input').fill('准备发布'); await frame.locator('#add-task').click();
+    assert.equal(await frame.locator('#tasks li').count(), 1); await frame.locator('.toggle').click();
+    assert.equal(await frame.locator('#done-count').innerText(), '1'); await frame.locator('.delete').click();
+    assert.equal(await frame.locator('#count').innerText(), '0');
+    const featureButton = page.getByRole('button', { name: /MOCK-02/ }); await featureButton.focus(); await page.keyboard.press('Enter');
+    assert.equal(await featureButton.getAttribute('aria-pressed'), 'true'); assert.equal(new URL(page.url()).hash, '#case-MOCK-02');
+    frame = page.frameLocator('iframe');
+    for (const text of ['编写方案', '执行测试']) { await frame.locator('#task-input').fill(text); await frame.locator('#add-task').click(); }
+    await frame.locator('.toggle').first().click(); await frame.locator('#show-open').click();
+    assert.equal(await frame.locator('#tasks li span').innerText(), '执行测试'); await frame.locator('#show-done').click();
+    assert.equal(await frame.locator('#tasks li span').innerText(), '编写方案'); await frame.locator('#show-all').click();
+    assert.equal(await frame.locator('#tasks li').count(), 2); assert.equal(await frame.locator('#count').innerText(), '2');
+    await page.getByRole('button', { name: /MOCK-03/ }).click(); frame = page.frameLocator('iframe');
+    await frame.locator('#task-input').fill('   '); await frame.locator('#add-task').click(); assert.equal(await frame.locator('#tasks li').count(), 0);
+    for (const text of ['回归接口', '检查日志']) { await frame.locator('#task-input').fill(text); await frame.locator('#add-task').click(); }
+    await frame.locator('.delete').first().click(); assert.equal(await frame.locator('#tasks li span').innerText(), '检查日志');
+    for (const theme of ['dark', 'light']) {
+      if (theme === 'light') await page.getByRole('button', { name: '切换浅色' }).click();
+      for (const width of [375, 768, 1024, 1440]) { await page.setViewportSize({ width, height: 1000 }); assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true, `overflow ${theme} ${width}`); }
+    }
+    await page.getByRole('button', { name: '关闭预览', exact: true }).click(); assert.equal(await page.locator('iframe').count(), 0);
+    await page.getByRole('button', { name: '打开预览', exact: true }).click(); frame = page.frameLocator('iframe'); assert.equal(await frame.locator('#tasks li').count(), 0);
+    assert.deepEqual(errors, []); assert.deepEqual(unexpected, []);
+  } finally { await context.close(); await browser.close(); }
+});

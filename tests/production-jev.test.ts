@@ -15,7 +15,7 @@ import type { ProductionOptions } from '../server/production/pipeline.js';
 import { demoChecks, demoHtml } from '../server/production/fixtures.js';
 import type { runRole } from '../server/harness.js';
 
-const FIXTURE_KEY = 'jev-unit-fixture-"key\\-not-real';
+const FIXTURE_KEY = 'jev-unit-fixture-key-not-real';
 function evaluation(config: SecretJevConfig, context: JevCandidateContext, status: JevEvaluation['status'] = 'accepted'): JevEvaluation {
   const selectedCandidateId = status === 'accepted' ? context.candidates[0].id : null;
   const dimensions = { score: status === 'uncertain' ? 3 : status === 'rejected' ? 1 : 4, probabilities: status === 'uncertain' ? { '0': 0, '1': 0, '2': 0.5, '3': 0, '4': 0.5 } : status === 'rejected' ? { '0': 0, '1': 1, '2': 0, '3': 0, '4': 0 } : { '0': 0, '1': 0, '2': 0, '3': 0, '4': 1 }, confidence: status === 'uncertain' ? 1 / 6 : 1, legend: { '0': 'none', '1': 'major', '2': 'partial', '3': 'good', '4': 'complete' } };

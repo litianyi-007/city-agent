@@ -17,11 +17,7 @@
 - 回归使用 `docs/production/baseline.playwright.config.ts`，默认端口 4421，独立临时数据；不直接启动默认 4311 测试配置或固定端口开发服务。
 - Worktree 不是安全沙箱；未验证隔离执行器前不得在宿主执行模型生成的 Node、shell 或依赖安装脚本。
 - 用户本轮已允许高性价比真实调用；首批采用每项 5 USD、合计 15 USD 的内部估算上限，仍需本分支页面新配置与单价。Hopper 登录或历史配置不替代新配置，不无限重试。
-- 仅提交本分支相关文件；允许普通推送 `feature/autonomous-production`。2026-10-07 用户另行授权 GitHub Demo 与材料发布，只允许在现有 `gh-pages` 新增/更新独立 `production/` 子树；逐项核对原根页面、assets 与 submission 树 SHA 不变，基于最新树非强制提交，遇并发推进停止。不使用旧 publish-source/publish-pages 脚本，不修改 main、冻结 Tag、旧 Release 或旧申报资产，禁止 force-push。
+- 仅提交本分支相关文件；允许普通推送 `feature/autonomous-production`，禁止修改 main、gh-pages、冻结 Tag、旧 Release 或申报资产，禁止 force-push。
 - 旧实测失败与工程夹具分开报告，不以测试通过宣称内部 Agent 自主交付成功。
 
 工作入口为 [docs/production/README.md](docs/production/README.md)。
-
-## 本轮评委对抗审查
-
-主文档修改前在 `docs/production/archive/2026-10-07-before-judge-review/` 留底。已复现旧 iframe 可自导航外联，以及特殊字符凭据日志脱敏/弱输入镜像验收问题；生成 HTML 不再在用户浏览器执行，仅下载源码附件与受控 Chromium 截图。固定可信 Mock 的公开交互必须比对 `demoHtml(run.input)` 原始字节，不能将该策略扩展到模型生成代码。新 Prompt/验收契约为 v2；旧运行、旧视频和负结果保持原配置并披露限制，不作为新版安全证据。

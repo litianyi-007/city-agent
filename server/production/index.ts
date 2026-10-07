@@ -8,15 +8,35 @@ import { ProductionStore } from './store.js';
 import { platformCommit, buildProvenance } from './provenance.js';
 import { runJevBenchmark } from './jev-benchmark.js';
 import { PRODUCTION_DEMO_CASES } from '../../shared/production-benchmarks.js';
+import { ProductionPreview } from './preview.js';
+import type { JevEvaluation } from '../../shared/jev-schema.js';
 
-export const PRODUCTION_ARTIFACT_CSP = "default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; connect-src 'none'; worker-src 'none'; frame-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; sandbox allow-scripts";
+// Source is a download, never an execution-capable document in the UI browser.
+export const PRODUCTION_ARTIFACT_CSP = "default-src 'none'; connect-src 'none'; frame-ancestors 'none'; sandbox";
+
+/** The persisted intent is not evidence that its HTTP request never occurred. */
+export function isUnresolvedJevIntent(evaluation: JevEvaluation): boolean {
+  return evaluation.providerRequests === 0 && evaluation.durationMs === 0 && evaluation.requestSnapshot === null && evaluation.rawResponse === null && evaluation.httpStatus === null && evaluation.modelIdReturned === null && !evaluation.error && !evaluation.usage.complete;
+}
+export function productionRequestCounts(run: ProductionRun) {
+  const harness = run.calls.filter(call => call.executionSource === 'harness');
+  const known = (value: unknown): value is number => Number.isSafeInteger(value) && (value as number) >= 0;
+  const harnessCounts = harness.map(call => known(call.providerRequests?.requests) ? call.providerRequests!.requests : null);
+  const jevCounts = (run.jevCalls ?? []).map(call => !isUnresolvedJevIntent(call.evaluation) && known(call.evaluation.providerRequests) ? call.evaluation.providerRequests : null);
+  const unknownHarnessRequestIntents = harnessCounts.filter(value => value === null).length;
+  const unknownJevRequestIntents = jevCounts.filter(value => value === null).length;
+  const safeSum = (values: Array<number | null>) => { const sum = values.reduce<number>((total, value) => total + (value ?? 0), 0); return known(sum) ? sum : null; };
+  const knownHarnessProviderRequests = safeSum(harnessCounts); const knownJevProviderRequests = safeSum(jevCounts);
+  const knownProviderRequests = safeSum([...harnessCounts, ...jevCounts]);
+  return { harnessInvocations: harness.length, actualProviderRequests: unknownHarnessRequestIntents + unknownJevRequestIntents ? null : knownProviderRequests, knownProviderRequests, unknownRequestIntents: unknownHarnessRequestIntents + unknownJevRequestIntents, knownHarnessProviderRequests, unknownHarnessRequestIntents, jevProviderRequests: unknownJevRequestIntents ? null : knownJevProviderRequests, knownJevProviderRequests, unknownJevRequestIntents, actualProviderRequestsDefinition: 'Observed HTTP attempts, not an invoice; unresolved intents are unknown, known subtotal retained', actualModelCalls: harness.length, actualModelCallsDefinition: 'Deprecated alias of Harness invocations; use actualProviderRequests for HTTP attempts' };
+}
 
 export function productionReport(runs: ProductionRun[]) {
   const live = runs.filter(run => run.evidenceKind === 'real-model'); const terminal = live.filter(run => !['queued', 'running'].includes(run.status));
   const passed = terminal.filter(run => run.status === 'completed' && run.gate?.passed);
   const fixture = runs.filter(run => run.evidenceKind === 'fixture');
   const aiStages = ['product', 'research', 'think-design', 'acceptance', 'implement', 'feedback-0'];
-  const requestCounts = (run: ProductionRun) => { const harness = run.calls.filter(call => call.executionSource === 'harness'); return { harnessInvocations: harness.length, actualProviderRequests: harness.every(call => call.providerRequests) ? harness.reduce((sum, call) => sum + call.providerRequests!.requests, 0) + (run.jevCalls ?? []).reduce((sum, call) => sum + call.evaluation.providerRequests, 0) : null, jevProviderRequests: (run.jevCalls ?? []).reduce((sum, call) => sum + call.evaluation.providerRequests, 0), actualModelCalls: harness.length, actualModelCallsDefinition: 'Deprecated alias of Harness invocations; use actualProviderRequests for HTTP attempts' }; };
+  const requestCounts = productionRequestCounts;
   return {
     version: 'production-submission-v1', generatedAt: new Date().toISOString(),
     basicInfo: { pipelineName: 'Agent Delivery Studio — 有界 HTML 软件生产', team: '用户定义目标/权限/预算，平台内六角色执行；外层开发 Agent 建设平台不计为内部交付', requirementType: '离线单HTML小应用，演示可含新建/增量/缺陷场景，不是任意仓库自动生产' },
@@ -24,14 +44,14 @@ export function productionReport(runs: ProductionRun[]) {
     requirements: runs.map(run => ({ runId: run.id, ...run.input.requirement, brief: run.input.brief, evidenceKind: run.evidenceKind })),
     executionRecords: runs.map(run => ({ id: run.id, inputSnapshot: run.input, agentSnapshot: run.agentSnapshot, platformCommit: run.platformCommit ?? null, jevSnapshot: run.jevSnapshot ?? null, jevCalls: run.jevCalls ?? [], status: run.status, evidenceKind: run.evidenceKind, ...requestCounts(run), simulatedStageRecords: run.calls.filter(call => call.executionSource === 'mock').length, injectedTestRecords: run.calls.filter(call => call.executionSource === 'injected').length, frozenContract: run.frozenContract, outputs: run.outputs, gateHistory: run.gateHistory, logs: run.artifacts.some(artifact => artifact.name === 'evidence.json') ? `/api/production/runs/${run.id}/artifacts/evidence.json` : null, artifacts: run.artifacts, durationMs: run.durationMs ?? null, video: null })),
     requestLedger: runs.map(run => ({ id: run.id, ...requestCounts(run) })),
-    metrics: { realModelStarted: live.length, realModelTerminal: terminal.length, realModelPassed: passed.length, goodProductRate: terminal.length ? passed.length / terminal.length : null, rateDenominator: '全部终态真实模型启动尝试（含失败、取消、中断）；非同冻结配置的统计不得称稳定性实验', fixtureStarted: fixture.length, fixturePassed: fixture.filter(run => run.status === 'completed' && run.gate?.passed).length, fixtureExcludedFromAutonomousSuccess: true, stageDefinition: { plannedAiStages: aiStages, deterministicStages: ['Chromium gate', 'evidence packaging'], plannedAiFraction: 6 / 8, note: '设计占比不是实测无人干预率；返修新增阶段单列调用记录' }, perRun: runs.map(run => { const completedAiStages = aiStages.filter(phase => run.outputs.some(output => output.phase === phase) && run.verifications.some(review => review.phase === phase && review.decision === 'accept')); return { id: run.id, evidenceKind: run.evidenceKind, callRecords: run.calls.length, actualModelCalls: run.calls.filter(call => call.executionSource === 'harness').length, simulatedStageRecords: run.calls.filter(call => call.executionSource === 'mock').length, injectedTestRecords: run.calls.filter(call => call.executionSource === 'injected').length, durationMs: run.durationMs ?? null, usage: run.usage, interventions: run.interventions, aiAutonomousStageRatio: run.evidenceKind === 'real-model' ? completedAiStages.length / 8 : null, aiStageCompletionRatio: run.evidenceKind === 'real-model' ? completedAiStages.length / aiStages.length : null, aiStageEvidence: { denominatorStages: [...aiStages, 'Chromium gate', 'evidence packaging'], completedStages: completedAiStages, evidenceSource: 'selected structured outputs + accepted verification records', excludes: 'outside developer activity; not proof of no external intervention' } }; }), humanEfficiencyComparison: { status: 'not-measured', predictionAllowed: '人工基线预测仅在材料中单列范围与依据；没有同范围对照不能宣称实测增效' } },
+    metrics: { realModelStarted: live.length, realModelTerminal: terminal.length, realModelPassed: passed.length, goodProductRate: terminal.length ? passed.length / terminal.length : null, rateDenominator: '全部终态真实模型启动尝试（含失败、取消、中断）；非同冻结配置的统计不得称稳定性实验', fixtureStarted: fixture.length, fixturePassed: fixture.filter(run => run.status === 'completed' && run.gate?.passed).length, fixtureExcludedFromAutonomousSuccess: true, stageDefinition: { plannedAiStages: aiStages, deterministicStages: ['Chromium gate', 'evidence packaging'], plannedAiFraction: 6 / 8, note: '设计占比不是实测无人干预率；返修新增阶段单列调用记录' }, perRun: runs.map(run => { const completedAiStages = aiStages.filter(phase => run.outputs.some(output => output.phase === phase) && run.verifications.some(review => review.phase === phase && review.decision === 'accept')); return { id: run.id, evidenceKind: run.evidenceKind, callRecords: run.calls.length, ...requestCounts(run), simulatedStageRecords: run.calls.filter(call => call.executionSource === 'mock').length, injectedTestRecords: run.calls.filter(call => call.executionSource === 'injected').length, durationMs: run.durationMs ?? null, usage: run.usage, interventions: run.interventions, aiAutonomousStageRatio: run.evidenceKind === 'real-model' ? completedAiStages.length / 8 : null, aiStageCompletionRatio: run.evidenceKind === 'real-model' ? completedAiStages.length / aiStages.length : null, aiStageEvidence: { denominatorStages: [...aiStages, 'Chromium gate', 'evidence packaging'], completedStages: completedAiStages, evidenceSource: 'selected structured outputs + accepted verification records', excludes: 'outside developer activity; not proof of no external intervention' } }; }), humanEfficiencyComparison: { status: 'not-measured', predictionAllowed: '人工基线预测仅在材料中单列范围与依据；没有同范围对照不能宣称实测增效' } },
     attributionAndImprovements: { failures: runs.filter(run => ['failed', 'cancelled', 'interrupted'].includes(run.status)).map(run => ({ id: run.id, evidenceKind: run.evidenceKind, cause: run.error ?? 'unknown', gate: run.gate ?? null })), next: ['验证容器资源/秘密/网络隔离后扩展受控仓库', '固定配置预登记、预算确认后执行三类九次实验', 'AnyJev式typed decision与标注集校准；等级与L4/L5无关', '补实际业务需求、正式L4参考线、3–5分钟完整录屏'] },
     selfEvaluation: { conclusion: live.length ? '仅依据真实记录评估最小闭环；不宣称稳定通用L5' : '工程/Mock可用，真实自主交付未实测，L4未认证', officialL4Reference: '尚未提供', mockIsNotRealRequirement: true, promptVersion: PROMPT_VERSION, verifierVersion: CRITERIA_VERSION, reusePlan: '保留虚拟社会入口；生产模块独立，后续受控模板/仓库和跨任务基准分阶段验证' },
   };
 }
 
 export function createProductionService(dataDir: string, options: ProductionOptions = {}) {
-  const store = new ProductionStore(dataDir); const pipeline = new ProductionPipeline(store, options); const router = Router(); const commit = platformCommit(); const build = buildProvenance();
+  const store = new ProductionStore(dataDir); const pipeline = new ProductionPipeline(store, options); const preview = new ProductionPreview(store); const router = Router(); const commit = platformCommit(); const build = buildProvenance();
   let benchmark: { controller: AbortController; completion: Promise<unknown> } | undefined;
   const action = (handler: (req: Request, res: Response) => unknown) => (req: Request, res: Response) => { try { handler(req, res); } catch (error) { const message = store.redact(error instanceof Error ? error.message : String(error)); res.status(error instanceof z.ZodError ? 400 : /不存在/.test(message) ? 404 : /运行中/.test(message) ? 409 : 400).json({ error: message }); } };
   router.get('/agents', action((_req, res) => res.json(store.agents())));
@@ -70,7 +90,22 @@ export function createProductionService(dataDir: string, options: ProductionOpti
     store.addRun(run, input.agentIds); pipeline.start(store.run(run.id)!); res.status(202).json(store.run(run.id));
   }));
   router.post('/runs/:id/cancel', action((req, res) => { const id = String(req.params.id); const run = store.run(id); if (!run) throw new Error('运行不存在'); if (!['queued', 'running'].includes(run.status)) throw new Error('任务不在运行中，不能再次取消'); pipeline.cancel(id); res.json(store.run(id)); }));
-  router.get('/runs/:id/artifacts/:name', action((req, res) => { const id = String(req.params.id); const name = String(req.params.name); const value = store.readArtifact(id, name); res.setHeader('Cache-Control', 'no-store'); res.setHeader('X-Content-Type-Options', 'nosniff'); if (name === 'index.html') { res.setHeader('Content-Security-Policy', PRODUCTION_ARTIFACT_CSP); res.type('html').send(value); } else { res.type('json').send(value); } }));
+  router.get('/runs/:id/preview', async (req, res) => {
+    const controller = new AbortController();
+    const abort = () => controller.abort();
+    const disconnect = () => { if (!res.writableEnded) abort(); };
+    req.once('aborted', abort); res.once('close', disconnect);
+    try {
+      const png = await preview.capture(String(req.params.id), controller.signal);
+      res.setHeader('Cache-Control', 'no-store'); res.setHeader('X-Content-Type-Options', 'nosniff');
+      res.setHeader('Content-Disposition', 'inline; filename="preview.png"');
+      res.setHeader('X-Preview-Mode', 'static-image-bounded-capture');
+      res.type('png').send(png);
+    } catch (error) {
+      if (!res.destroyed && !res.headersSent) { const message = store.redact(error instanceof Error ? error.message : String(error)); res.status(/运行中/.test(message) ? 409 : /不存在/.test(message) ? 404 : /时间|超时/.test(message) ? 504 : 400).json({ error: message }); }
+    } finally { req.off('aborted', abort); res.off('close', disconnect); }
+  });
+  router.get('/runs/:id/artifacts/:name', action((req, res) => { const id = String(req.params.id); const name = String(req.params.name); const value = store.readArtifact(id, name); res.setHeader('Cache-Control', 'no-store'); res.setHeader('X-Content-Type-Options', 'nosniff'); if (name === 'index.html') { res.setHeader('Content-Security-Policy', PRODUCTION_ARTIFACT_CSP); res.setHeader('Content-Disposition', 'attachment; filename="index.html"'); res.type('text/plain').send(value); } else { res.type('json').send(value); } }));
   router.get('/report', action((_req, res) => res.json({ ...productionReport(store.runs()), jevBenchmarks: store.jevBenchmarks() })));
-  return { router, store, pipeline, close: async () => { benchmark?.controller.abort(); await Promise.all([pipeline.stop(), benchmark?.completion]); } };
+  return { router, store, pipeline, preview, close: async () => { benchmark?.controller.abort(); await Promise.all([pipeline.stop(), benchmark?.completion, preview.close()]); } };
 }

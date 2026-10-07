@@ -18,18 +18,24 @@ test('production workspace runs three explicit fixtures through frozen browser g
     expect(run.evidenceKind).toBe('fixture');
     expect(run.input.requirement.kind).toBe('illustrative');
     expect(run.gate.passed).toBe(true);
+    expect(run.gate.checks.length).toBeGreaterThan(0);
+    expect(run.gate.checks.every((check: { passed: boolean }) => check.passed)).toBe(true);
     expect(run.verifications.length).toBe(6);
     await page.getByRole('button', { name: /门禁与交付/ }).click();
     await expect(page.getByRole('heading', { name: '最终行为 Gate：通过' })).toBeVisible();
     await page.getByRole('button', { name: '打开运行预览' }).click();
-    await expect(page.locator('iframe')).toHaveAttribute('sandbox', 'allow-scripts');
-    const frame = page.frameLocator('iframe');
-    await expect(frame.locator('#notice')).toContainText('Mock');
-    await frame.locator('#task-input').fill('浏览器实操');
-    await frame.locator('#add-task').click();
-    await expect(frame.locator('#tasks li')).toHaveCount(1);
+    const preview = page.getByAltText(`受控浏览器截图 ${item.id}`, { exact: true });
+    await expect(preview).toBeVisible();
+    await expect(preview).toHaveAttribute('src', `/api/production/runs/${queued.id}/preview`);
+    await expect.poll(() => preview.evaluate(image => (image as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
+    await expect(page.getByText('截图已载入；不是实时交互预览。')).toBeVisible();
+    await expect(page.locator('iframe')).toHaveCount(0);
+    const source = await request.get(`/api/production/runs/${queued.id}/artifacts/index.html`);
+    expect(source.headers()['content-type']).toContain('text/plain');
+    expect(source.headers()['content-disposition']).toContain('attachment');
     await page.getByRole('button', { name: '关闭预览' }).click();
     await expect(page.locator('iframe')).toHaveCount(0);
+    await expect(page.locator('.prod-preview img')).toHaveCount(0);
   }
   await page.getByRole('button', { name: '证据与申报', exact: true }).click();
   await expect(page.getByText('unknown', { exact: true })).toBeVisible();
@@ -44,7 +50,12 @@ test('production agents configure and clone without revealing keys, and endpoint
   const name = `Browser test agent ${Date.now()}`;
   const secret = 'fixture-browser-secret-not-a-real-key';
   await page.getByLabel('Agent 名称').fill(name);
+  await page.getByLabel(/API Key（/).fill('short');
+  expect(await page.getByLabel(/API Key（/).evaluate(input => (input as HTMLInputElement).checkValidity())).toBe(false);
+  await page.getByLabel(/API Key（/).fill('fixture-invalid-token-"quote');
+  expect(await page.getByLabel(/API Key（/).evaluate(input => (input as HTMLInputElement).checkValidity())).toBe(false);
   await page.getByLabel(/API Key（/).fill(secret);
+  expect(await page.getByLabel(/API Key（/).evaluate(input => (input as HTMLInputElement).checkValidity())).toBe(true);
   await page.getByRole('button', { name: '保存配置', exact: true }).click();
   const card = page.locator('.prod-agent-card').filter({ has: page.getByRole('heading', { name, exact: true }) });
   await expect(card).toContainText('已配置 · 仅显示脱敏状态');
@@ -73,4 +84,43 @@ test('production workspace fits narrow screens with labelled controls and visibl
   await page.getByLabel('需求原话').fill('自定义需求不能使用固定夹具伪装完成');
   await expect(page.getByRole('button', { name: '运行 Mock 链路' })).toBeDisabled();
   await expect(page.getByText(/自定义需求或验收需要真实模型处理/)).toBeVisible();
+});
+
+test('a failed recorded Gate is displayed as not passed, never as not executed', async ({ page }) => {
+  const id = '00000000-0000-4000-8000-000000000009';
+  const fixture = PRODUCTION_DEMO_CASES[0];
+  const failedRun = { id, status: 'failed', createdAt: '2026-10-07T00:00:00Z', evidenceKind: 'fixture', input: { brief: fixture.brief, mode: 'demo', limits: { maxRepairCycles: 2, maxCalls: 24 }, requirement: { id: fixture.id, acceptance: fixture.acceptance, kind: 'illustrative' } }, agentSnapshot: [], events: [], calls: [], outputs: [], verifications: [], repairs: 2, gate: { passed: false, checks: [{ name: '新增后任务数量', passed: false, detail: 'expected 1, got 0' }] }, gateHistory: [], artifacts: [], interventions: [], usage: { inputTokens: 0, outputTokens: 0, estimatedCost: 0, currency: 'USD', complete: true } };
+  await page.route('**/api/production/runs', route => route.fulfill({ contentType: 'application/json', body: JSON.stringify([failedRun]) }));
+  await page.route(`**/api/production/runs/${id}`, route => route.fulfill({ contentType: 'application/json', body: JSON.stringify(failedRun) }));
+  await page.goto('/#production');
+  await page.getByRole('button', { name: /门禁与交付/ }).click();
+  await expect(page.getByRole('heading', { name: '最终行为 Gate：未通过', exact: true })).toBeVisible();
+  await expect(page.getByText('expected 1, got 0')).toBeVisible();
+  await expect(page.getByRole('heading', { name: '最终行为 Gate：未执行', exact: true })).toHaveCount(0);
+  await expect(page.locator('iframe')).toHaveCount(0);
+});
+
+test('an unresolved Jev request intent is unobserved, not a free zero-request call', async ({ page }) => {
+  const id = '00000000-0000-4000-8000-000000000008';
+  const fixture = PRODUCTION_DEMO_CASES[0];
+  const evaluation = { policyVersion: 'test-v2', status: 'error', selectedCandidateId: null, reason: 'Synthetic persisted request intent', requestSnapshot: null, rawResponse: null, scores: [], choice: null, usage: { inputTokens: null, outputTokens: null, estimatedCost: null, currency: 'USD', complete: false }, modelIdRequested: 'jev-1.13.0', modelIdReturned: null, httpStatus: null, providerRequests: 0, durationMs: 0 };
+  const run = { id, status: 'interrupted', createdAt: '2026-10-07T00:00:00Z', evidenceKind: 'fixture-with-real-jev', input: { brief: fixture.brief, mode: 'mock-jev', limits: { maxRepairCycles: 2, maxCalls: 24 }, requirement: { id: fixture.id, acceptance: fixture.acceptance, kind: 'illustrative' } }, agentSnapshot: [], events: [], calls: [], outputs: [], verifications: [], repairs: 0, gateHistory: [], artifacts: [], interventions: [], usage: evaluation.usage, jevCalls: [{ id: 'request-intent', phase: 'product', startedAt: '2026-10-07T00:00:00Z', configHash: 'fixed', evaluation }] };
+  await page.route('**/api/production/runs', route => route.fulfill({ contentType: 'application/json', body: JSON.stringify([run]) }));
+  await page.route(`**/api/production/runs/${id}`, route => route.fulfill({ contentType: 'application/json', body: JSON.stringify(run) }));
+  await page.goto('/#production');
+  await expect(page.locator('.prod-run-summary')).toContainText('unknown（已知 0 次；1 个请求意图未观测）');
+  await page.getByRole('button', { name: /候选验证/ }).click();
+  await expect(page.getByText('请求意图未完成 / 未观测', { exact: true })).toBeVisible();
+  await expect(page.locator('.prod-jev-evidence')).toContainText('实际请求 未观测 / unknown');
+  await expect(page.locator('.prod-jev-evidence')).not.toContainText('实际请求 0');
+  // A completed preflight failure with an explicit error and no provider call
+  // remains a known zero, rather than being mistaken for an unresolved intent.
+  const completed = { ...run, jevCalls: [{ ...run.jevCalls[0], evaluation: { ...evaluation, error: 'preflight denied', usage: { ...evaluation.usage, inputTokens: 0, outputTokens: 0, estimatedCost: 0, complete: true } } }] };
+  await page.unroute('**/api/production/runs');
+  await page.route('**/api/production/runs', route => route.fulfill({ contentType: 'application/json', body: JSON.stringify([completed]) }));
+  await page.unroute(`**/api/production/runs/${id}`);
+  await page.route(`**/api/production/runs/${id}`, route => route.fulfill({ contentType: 'application/json', body: JSON.stringify(completed) }));
+  await page.reload(); await page.getByRole('button', { name: /候选验证/ }).click();
+  await expect(page.locator('.prod-jev-evidence')).toContainText('实际请求 0');
+  await expect(page.getByText('请求意图未完成 / 未观测', { exact: true })).toHaveCount(0);
 });

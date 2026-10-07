@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { productionApiKeySchema } from './production-schema.js';
 
 export const JEV_ENDPOINT = 'https://api.typesafe.ai/v1/systemone';
 export const JEV_MODEL_ID = 'jev-1.13.0';
@@ -14,7 +15,7 @@ export const jevConfigSchema = z.object({
   maxRequests: z.number().int().min(1).max(24).default(24),
   timeoutMs: z.number().int().min(1000).max(30000).default(30000),
 }).strict();
-export const jevConfigPatchSchema = jevConfigSchema.partial().extend({ apiKey: z.string().trim().min(1).max(500).nullable().optional() }).strict();
+export const jevConfigPatchSchema = jevConfigSchema.partial().extend({ apiKey: productionApiKeySchema.nullable().optional() }).strict().refine(value => !value.apiKey || value.apiKey !== JEV_ENDPOINT && value.apiKey !== JEV_MODEL_ID, 'API Key 不得与 Jev 模型或服务地址相同');
 export type JevConfig = z.infer<typeof jevConfigSchema>;
 export type JevPublicConfig = JevConfig & { hasApiKey: boolean };
 export type SecretJevConfig = JevConfig & { apiKey?: string; hasApiKey?: boolean };

@@ -22,7 +22,7 @@ async function setup(t: TestContext, options: ProductionOptions = {}) {
   t.after(async () => { await service.close(); await new Promise<void>((resolve, reject) => server.close(error => error ? reject(error) : resolve())); rmSync(directory, { recursive: true, force: true }); });
   const request = (route: string, body?: unknown, method = 'GET') => fetch(`http://127.0.0.1:${address.port}/api/production${route}`, { method, headers: { 'Content-Type': 'application/json' }, ...(body === undefined ? {} : { body: JSON.stringify(body) }) });
   const input = (overrides: Partial<ProductionRunInput> = {}) => { const fixture = PRODUCTION_DEMO_CASES.find(item => item.operation === overrides.demoCaseId) ?? PRODUCTION_DEMO_CASES[0]; return productionRunInputSchema.parse({ brief: fixture.brief, mode: 'demo', ...(overrides.mode === 'live' ? {} : { demoCaseId: fixture.operation }), agentIds: service.store.agents().map(agent => agent.id), requirement: { id: fixture.id, source: fixture.source, acceptance: fixture.acceptance, kind: 'illustrative' }, ...overrides }); };
-  const configure = () => { for (const agent of service.store.agents()) service.store.patchAgent(agent.id, { apiKey: `test-key-${agent.role}`, pricing: { currency: 'USD', inputPerMillion: 1, outputPerMillion: 1 } }); };
+  const configure = () => { for (const agent of service.store.agents()) service.store.patchAgent(agent.id, { apiKey: `test-fixture-key-${agent.role}`, pricing: { currency: 'USD', inputPerMillion: 1, outputPerMillion: 1 } }); };
   const wait = async (id: string) => { const deadline = Date.now() + 20000; while (Date.now() < deadline) { const run = service.store.run(id)!; if (!['queued', 'running'].includes(run.status)) { while (service.pipeline.busy) await new Promise(resolve => setTimeout(resolve, 10)); return service.store.run(id)!; } await new Promise(resolve => setTimeout(resolve, 20)); } throw new Error('Production did not finish'); };
   return { directory, service, request, input, configure, wait };
 }
@@ -39,7 +39,7 @@ const injected: typeof runRole = async (_agent, system, prompt) => {
 };
 
 test('production agent presets are separate, encrypted, cloneable and endpoint changes clear keys', async t => {
-  const { service, directory, request } = await setup(t); assert.equal(service.store.agents().length, 6); const agent = service.store.agents()[0]; const secret = 'quoted-"key\\-with-escape';
+  const { service, directory, request } = await setup(t); assert.equal(service.store.agents().length, 6); const agent = service.store.agents()[0]; const secret = 'production-fixture-key-not-real';
   await request(`/agents/${agent.id}`, { apiKey: secret }, 'PATCH'); assert.equal(service.store.secretAgents([agent.id])[0].apiKey, secret); assert.equal((await (await request('/agents')).text()).includes(secret), false);
   const clone = await (await request(`/agents/${agent.id}/clone`, undefined, 'POST')).json(); assert.equal(clone.hasApiKey, true); assert.equal(service.store.secretAgents([clone.id])[0].apiKey, secret);
   await request(`/agents/${agent.id}`, { name: 'renamed' }, 'PATCH'); assert.equal(service.store.secretAgents([agent.id])[0].apiKey, secret);
@@ -68,7 +68,7 @@ test('three explicit Mock cases execute actual browser interactions, export all 
   for (const demoCaseId of ['create', 'feature', 'bugfix'] as const) {
     const response = await request('/runs', input({ demoCaseId }), 'POST'); assert.equal(response.status, 202); const queued = await response.json(); const run = await wait(queued.id);
     assert.equal(run.status, 'completed', run.error); assert.equal(run.gate?.passed, true); assert.equal(run.evidenceKind, 'fixture'); assert.equal(run.calls.length, 12); assert.equal(run.verifications.length, 6); assert.equal(run.repairs, 0); assert.ok(run.frozenContract?.hash);
-    const html = await request(`/runs/${run.id}/artifacts/index.html`); assert.match(html.headers.get('content-security-policy')!, /connect-src 'none'.*sandbox allow-scripts/); assert.equal(html.status, 200);
+    const html = await request(`/runs/${run.id}/artifacts/index.html`); assert.match(html.headers.get('content-security-policy')!, /sandbox/); assert.doesNotMatch(html.headers.get('content-security-policy')!, /allow-scripts/); assert.match(html.headers.get('content-type')!, /text\/plain/); assert.match(html.headers.get('content-disposition')!, /attachment/); assert.equal(html.status, 200);
     const evidence = await (await request(`/runs/${run.id}/artifacts/evidence.json`)).json(); assert.equal(evidence.calls.length, 12); assert.equal(evidence.status, 'completed');
   }
   const report = productionReport(service.store.runs()); assert.equal(report.metrics.fixturePassed, 3); assert.equal(report.metrics.realModelPassed, 0); assert.equal(report.metrics.goodProductRate, null);

@@ -10,6 +10,4 @@
 
 每条命令显式 workdir；编辑用新目录绝对路径。依赖、数据、加密主密钥、日志、产物和浏览器测试目录独立，不通过符号链接共享可写目录。配置拒绝数据目录越出本 worktree；启动先核端口占用，不复用或关闭主线服务。
 
-三个开发 Agent 均已确认编辑范围仅为生产 worktree。main 操作、跨线自动合并、移动 Tag、改写共享历史、force-push 均禁止。2026-10-07 用户另行授权仅发布 `gh-pages:production/` 独立子树：保存原根 index/assets/submission 树 SHA，基于最新根树正常提交，只包含 production/ 变更，发生并发推进停止，发布后核对原树 SHA。不执行旧 publish-source/publish-pages，不修改旧公开资料。
-
-Git worktree 共享对象与 refs，并非安全沙箱；共享契约只能通过独立提交供另一会话审查后 cherry-pick，不自动移到其 worktree。公开 Pages 子树与本机数据/密钥完全分离，只包含人工审核、hash 验证且秘密扫描通过的白名单材料。
+三个开发 Agent 均已确认编辑范围仅为生产 worktree。所有发布、main/gh-pages 操作、跨线自动合并、移动 Tag、改写共享历史、force-push 均禁止。Git worktree 共享对象与 refs，并非安全沙箱；共享契约只能通过独立提交供另一会话人工审查后 cherry-pick。
