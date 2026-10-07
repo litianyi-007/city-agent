@@ -21,7 +21,7 @@
     "production:public": "tsx scripts/production-public.ts",
     "production:publish": "tsx scripts/publish-production.ts",
     "start": "tsx server/index.ts",
-    "test": "tsx --test tests/*.test.ts",
+    "test": "tsx --test --test-concurrency=1 tests/*.test.ts",
     "test:e2e": "playwright test",
     "setup": "playwright install chromium",
     "population": "tsx scripts/population.ts"
