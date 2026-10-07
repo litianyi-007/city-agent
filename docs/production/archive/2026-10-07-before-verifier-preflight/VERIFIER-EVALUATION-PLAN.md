@@ -1,8 +1,8 @@
 ---
 title: Verifier 同条件候选对照评估计划
 type: design
-status: full-wire-preflight-proposed-unfunded-unexecuted
-version: verifier-evaluation-plan-v4
+status: injected-adapter-implemented-unfunded-unexecuted
+version: verifier-evaluation-plan-v3
 date: 2026-10-07
 tags: [production, verifier, jev, evaluation]
 spec_relationships:
@@ -18,8 +18,6 @@ spec_relationships:
 ---
 
 # Verifier同条件候选对照评估计划
-
-VE-04免费[完整SDK wire捕获与费用提案](VERIFIER-WIRE-PREFLIGHT.md)已实施，18池实际封装请求逐字保留；它仍不是收费配置冻结、供应商鉴权或真实模型选优。建议1 USD/30分钟、LLM输出4096、最多54评审意图；真实adapter/Token边界及独立授权仍需确认。候选内部保持原源码顺序、未随机，替代下文v3拟定随机要求，seed=null；没有改候选字节或旧实验。[完整v3留底](archive/2026-10-07-before-verifier-preflight/VERIFIER-EVALUATION-PLAN.md)、[本批原件](experiments/VERIFIER-WIRE-01/RESULT.md)。
 
 本文件仍是待冻结收费配置、待单独确认预算的计划。18个人工候选池已完成免费准备：36结构合法候选经实际Chromium，16通过/20预设业务负例，36/36标签一致，见[语料说明](VERIFIER-CHALLENGE-CORPUS.md)和[VERIFIER-PREP-01原件](experiments/VERIFIER-PREP-01/RESULT.md)。没有启动本对照计划的模型请求，也没有新增模型准确率、费用收益或自主交付实测值。文档版本不是已冻结的收费实验配置；[完整v1留底](archive/2026-10-07-before-verifier-corpus/VERIFIER-EVALUATION-PLAN.md)。
 
@@ -82,7 +80,7 @@ VE-04免费[完整SDK wire捕获与费用提案](VERIFIER-WIRE-PREFLIGHT.md)已�
 
 上表不是已冻结收费测试。准备已补足精确输入、边界、允许等义实现与断言；36/36标签核对不是36候选全通过（实际16通过、20失败），更不是模型选对36次。同池统一中立DOM，不需要候选特有定位；H07等义实现与H10中间数量边界已实测。C17在准备前明确左cone/右star无雪布局，同时检验原画布两侧像素与逐primitive派生，不能只引用generic Gate。具体源码与hash见准备manifest，不把后续模型结果用于重新贴标签。
 
-一好一坏池的源码首位已分层平衡：四池首位好、四池首位坏。本次v4提案保留双好/双坏内部源码顺序、不执行候选随机化、seed=null；若另行随机，须新请求builder版本及permutation留底，不能偷偷重排后绕过hash。由此构成的基线比例是人为设计结果，不是自然分布中的产品成功率；实际结果仍须逐候选运行Oracle，不能按构造标签直接填入Gate通过。
+一好一坏池的首位在冻结前分层平衡：四池首位好、四池首位坏；双好/双坏池内部顺序以固定种子打乱。由此构成的基线比例是人为设计结果，不是自然分布中的产品成功率；实际结果仍须逐候选运行Oracle，不能按构造标签直接填入Gate通过。
 
 ## 4. 独立Oracle与冻结要求
 
@@ -94,7 +92,7 @@ HTML Oracle使用实际Chromium交互、精确输出/元素数及边界状态。
 
 正式冻结manifest至少包含：
 
-- study/pool/Oracle版本、18个固定ID、分层、固定顺序及随机化状态（当前未随机、seed=null）、候选原字节hash、人工构造来源与许可。
+- study/pool/Oracle版本、18个固定ID、分层、固定顺序及随机种子、候选原字节hash、人工构造来源与许可。
 - 需求原文/验收/能力profile、场景显式映射、业务Oracle定义/源码/checks hash、schema/语义/覆盖责任版本。
 - 当前源commit、Prompt、Verifier与compact策略、Jev数值/请求layout版本、Harness literal transport版本；Gate源hash、runtime/资产manifest/hash及browser版本。
 - B与C复核的Provider/Base URL/Model ID及可观察响应身份限制；所有实际模型参数，不支持或未报告参数标为provider-default/unknown，不猜测已冻结temperature。
@@ -112,7 +110,7 @@ HTML Oracle使用实际Chromium交互、精确输出/元素数及边界状态。
 免费预检必须通过：
 
 1. 36候选结构合法，实际Oracle与标签一致；全坏/双好/数值边界的判定有独立反例。
-2. 所有传输请求离线序列化测量，完整SDK wire、角色/Verifier上下文、Jev单题32,000及整批64,000 UTF-8字节的本地边界都满足；不截断、不删业务要求。官方Jev32k/64k限制以Token计，不能将本地字节代理当作精确Tokenizer或官方字节限额。
+2. 所有真实传输请求离线序列化测量，角色/Verifier上下文、Jev单题32KB及整批64KB等当前边界都满足；不截断、不删业务要求。
 3. 一次复核和来源链正确；早算术异常之后的致命错误不能被掩盖；非法协议不变为accepted或合法弃权。
 4. 双坏无默认首候选/模板回退；候选、检查、配置hash不能在评估/执行钩子中改变。
 5. 初始快照、每次请求intent先持久化；取消、超时、unknown、费用/Token停止和重启不漏账、不自动重放付费调用。

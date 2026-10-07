@@ -4,8 +4,6 @@
 
 ## 当前进度
 
-最新 VE-04新增[免费完整请求/配置预检及预算提案](VERIFIER-WIRE-PREFLIGHT.md)，18池通过真实锁定SDK→loopback fake provider抓完整wire，不读取Key、不新增模型成绩；建议独立1 USD、30分钟、最多54评审意图，账单/Token上界不冒称保证。下一免费工程是实际study transport适配/独立HTTP与usage观测/密钥脱敏/每类预留，再确认Jev输出停止语义和预算后收费；候选内部未随机。公开v5、旧实测与已申报稿保持不变。[本次全文留底](archive/2026-10-07-before-verifier-preflight/POST-SUBMISSION-PLAN.md)。
-
 本批 VE-02/03 实现独立三策略执行与[先行账本合同](VERIFIER-STUDY-CONTRACT.md)：running manifest、intent、原响应与 hash、未知/超限/取消停止、显式恢复不重放、重复实验不复用答案。免费 Mock＋实际 Chromium 用于验证链路，不写成真实模型效益；下一门禁 VE-04 传输/参数/价格/预算冻结。虚拟社会评审只提供[交接说明](REVIEW-CONTRACT-HANDOFF.md)，不跨 worktree 修改。本次[全文留底](archive/2026-10-07-before-verifier-study/POST-SUBMISSION-PLAN.md)。
 
 最新免费增量：VE-01[18池独立挑战集](VERIFIER-CHALLENGE-CORPUS.md)与[36份实际Oracle准备](experiments/VERIFIER-PREP-01/RESULT.md)完成，16通过/20预设业务负例、36标签一致，116.390秒、0供应商请求；盲评不含标签/结果，实际离线请求在原字节边界内。本批源码7755b4d与[工程记录](BATCH-VERIFIER-CORPUS-CHECKS.md)分列；收费效果仍未测，下一免费工作VE-02/03。以下三DEV池、HTML02及v5时点保留，不把新源码/语料称已发布材料。本次[全文留底](archive/2026-10-07-before-verifier-corpus/POST-SUBMISSION-PLAN.md)。

@@ -1,0 +1,8 @@
+{
+  "poolId": "C13",
+  "requestSha256": "65b76d6e9c6646a7bd99d250823cd4c9ea9d6e90be245b52b86b97f51e856388",
+  "sourceCommit": "7bc387fc88162ec7196ede59757ee7d4a25fe428",
+  "configurationSha256": "8bb89fb2c812e8b8daf8f95d66589221c0dd179c1a67d52cb2efabad69fd8560",
+  "status": "local-fixture-pending",
+  "externalProviderHttpAttempts": 0
+}

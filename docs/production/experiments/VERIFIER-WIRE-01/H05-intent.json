@@ -1,0 +1,8 @@
+{
+  "poolId": "H05",
+  "requestSha256": "0a1737d011dd8105d84034e0c8d4672fff103ffbb1caa1c009eab5e099c71a41",
+  "sourceCommit": "7bc387fc88162ec7196ede59757ee7d4a25fe428",
+  "configurationSha256": "8bb89fb2c812e8b8daf8f95d66589221c0dd179c1a67d52cb2efabad69fd8560",
+  "status": "local-fixture-pending",
+  "externalProviderHttpAttempts": 0
+}

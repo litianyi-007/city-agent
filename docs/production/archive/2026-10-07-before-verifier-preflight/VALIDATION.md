@@ -2,10 +2,6 @@
 
 ## 当前补充（2026-10-07，历史段落不回写）
 
-VE-04免费[完整SDK wire预检](VERIFIER-WIRE-PREFLIGHT.md)与[本批验证记录](BATCH-VERIFIER-PREFLIGHT-CHECKS.md)已实施。18池逐字/参数/hash/独立会话与loopback抓取[原件](experiments/VERIFIER-WIRE-01/RESULT.md)分列；工程用量不当真实usage、0外部模型请求不当选优收益。当前付费ready=false，1 USD是待批声明价估算额度，Jev输出Token上界未知；公开v5不更新。[本文留底](archive/2026-10-07-before-verifier-preflight/VALIDATION.md)。
-
-该切片源码7bc387f最终工程 **604/604、529.372秒**，独立浏览器 **38/38、1.3分钟**，专项15/15、TypeScript/diff通过。实际18池免费捕获11.949秒、18localPOST/0external，39原件/33source SHA均独立核对；模型Token/效果仍未测。
-
 VE-02/03 新[注入study合同](VERIFIER-STUDY-CONTRACT.md)增加先行manifest/intent、三策略、全盲决策先于Oracle及无答案缓存。免费工程与Mock实际Oracle的本批记录单独保存；不是新增真实模型/费用效益/自主交付成绩。旧 Phase-1 意见的[跨线交接](REVIEW-CONTRACT-HANDOFF.md)保留历史文件，不修改虚拟社会线。本次[留底](archive/2026-10-07-before-verifier-study/VALIDATION.md)。
 
 该切片冻结01ab356最终 **589/589、506.819秒**，独立浏览器 **38/38、1.3分钟**，TypeScript/diff/clean构建通过。[本批工程记录](BATCH-VERIFIER-STUDY-CHECKS.md)保留审查期间的非冻结失败；[VERIFIER-MOCK-01原件](experiments/VERIFIER-MOCK-01/RESULT.md)为131.547秒、54注入意图/36实际Oracle、0外部供应商请求。三策略固定首选各8通过10失败，合成Token/费用不得当模型效益。

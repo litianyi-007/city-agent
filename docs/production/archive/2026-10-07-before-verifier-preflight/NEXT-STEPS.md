@@ -1,7 +1,5 @@
 # 自主软件生产任务清单
 
-最新 VE-04免费准备已实现：[18池完整SDK wire与待批额度](VERIFIER-WIRE-PREFLIGHT.md)。下一免费切片完成真实study adapter的HTTP/usage/秘密隔离与取消反例，明确Jev输出观测停止阈值和Token预留语义；然后集中确认1 USD/30分钟、4096输出、当前页面Verifier/Jev配置、未随机候选顺序，再冻结收费实验。当前绝不由提案直接外呼，不自动沿用旧授权。[审查](BATCH-VERIFIER-PREFLIGHT-CHECKS.md)、[留底](archive/2026-10-07-before-verifier-preflight/NEXT-STEPS.md)。
-
 当前切片 VE-02/03 已实现：[注入执行器与独立账本](VERIFIER-STUDY-CONTRACT.md)，免费测试覆盖持久化先于调用、相同输入新调用、迟到结果不可改终态和全部决策先于 Oracle。下一顺序为 VE-04 真实 transport/配置/预算冻结，再做 VE-05/06 收费对照；不自动启动54意图评测。旧 Phase-1 的两条意见[交接](REVIEW-CONTRACT-HANDOFF.md)给虚拟社会线，本线未改其目录。本次[留底](archive/2026-10-07-before-verifier-study/NEXT-STEPS.md)。
 
 最新增量：VE-01免费[18池/36候选准备](VERIFIER-CHALLENGE-CORPUS.md)已完成，统一实际Oracle36/36标签一致、116.390秒、0模型请求，原件见[VERIFIER-PREP-01](experiments/VERIFIER-PREP-01/RESULT.md)。三DEV池仍不计正式集。下一免费任务VE-02/03：三策略study adapter与预算/intent/unknown/取消/重启注入验证；其后VE-04整批配置冻结与新预算。没有自动启动54意图收费批次，真实HTML v10、实体相机与容器各自单独验收。本次[留底](archive/2026-10-07-before-verifier-corpus/NEXT-STEPS.md)。

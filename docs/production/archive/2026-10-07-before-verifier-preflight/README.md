@@ -1,12 +1,8 @@
 # 六角色自主软件生产工作区
 
-最新免费切片 VE-04：[完整SDK请求捕获、公开配置绑定和1 USD待批提案](VERIFIER-WIRE-PREFLIGHT.md)。18池新会话、原始wire无截断、0外部供应商请求；[原始证据](experiments/VERIFIER-WIRE-01/RESULT.md)和[审查/回归](BATCH-VERIFIER-PREFLIGHT-CHECKS.md)独立保存。真实study适配器、Token边界及本评估预算仍待确认，不假装已选优省费；公开v5和已提交申报稿不变。本次[全文留底](archive/2026-10-07-before-verifier-preflight/README.md)。
+本批新增 VE-02/03：[三策略注入执行器、先行不可覆写账本和无答案缓存合同](VERIFIER-STUDY-CONTRACT.md)。固定候选、相同 B/C 复核、全部盲选择先于 Oracle；写盘/unknown/超预算/取消停止，恢复不重放。免费验证与真实模型成绩分列，公开 v5 不变。两条旧 Phase-1 评审意见的[跨线交接](REVIEW-CONTRACT-HANDOFF.md)不直接修改虚拟社会 worktree；本次原文[留底](archive/2026-10-07-before-verifier-study/README.md)。
 
-本批最终工程604/604＋38/38浏览器；免费18池完整SDK捕获11.949秒。下一免费任务是实际study transport及每类预算/秘密脱敏，预算单独批准后才正式对照；不是再次执行旧六角色或将Mock成功率当真实效果。
-
-上一批 VE-02/03：[三策略注入执行器、先行不可覆写账本和无答案缓存合同](VERIFIER-STUDY-CONTRACT.md)。固定候选、相同 B/C 复核、全部盲选择先于 Oracle；写盘/unknown/超预算/取消停止，恢复不重放。免费验证与真实模型成绩分列，公开 v5 不变。两条旧 Phase-1 评审意见的[跨线交接](REVIEW-CONTRACT-HANDOFF.md)不直接修改虚拟社会 worktree；该批原文[留底](archive/2026-10-07-before-verifier-study/README.md)。
-
-VE-02/03冻结工程 **589/589＋38/38浏览器**；[18池演练原件](experiments/VERIFIER-MOCK-01/RESULT.md)54注入调用、36实际Oracle、131.547秒，外部模型请求0；[批次审查/验证](BATCH-VERIFIER-STUDY-CHECKS.md)。免费Mock不计选优效益；这是上一源码的成绩，VE-04最新结果见本文首段。
+本批最终工程 **589/589＋38/38浏览器**；[18池演练原件](experiments/VERIFIER-MOCK-01/RESULT.md)54注入调用、36实际Oracle、131.547秒，外部模型请求0；[批次审查/验证](BATCH-VERIFIER-STUDY-CHECKS.md)。免费Mock不计选优效益，下一门禁是VE-04真实传输及预算冻结。
 
 最新免费增量：[18池Verifier挑战集](VERIFIER-CHALLENGE-CORPUS.md)及[原始准备证据](experiments/VERIFIER-PREP-01/RESULT.md)。36结构合法候选实际Oracle与独立标签全一致（16通过/20业务负例），116.390秒、0模型请求；不是模型选优成绩或新自主交付。准备源码7755b4d，下一步VE-02/03同条件study执行器/账本；公开v5仍保持固定旧版本。本次[全文留底](archive/2026-10-07-before-verifier-corpus/production-README.md)。
 
