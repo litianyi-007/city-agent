@@ -5,6 +5,7 @@ import path from 'node:path';
 export const PUBLIC_SUBTREE = 'production/';
 export const PUBLIC_PROJECT_ID = 'city-agent-autonomous-production-public-v1';
 export const sha256 = (value: string | Buffer) => createHash('sha256').update(value).digest('hex');
+export const isFrozenPackageVersion = (value: unknown): value is string => ['mock-package-v1', 'mock-package-v1-qa1', 'mock-package-v2'].includes(value as string);
 export function packagePath(name: string) {
   if (!/^[A-Za-z0-9._/-]+$/.test(name) || name.startsWith('/') || name.split('/').some(part => !part || part === '.' || part === '..')) throw new Error('Invalid public package path.');
   const rootFiles = new Set(['package-manifest.json', 'requirements.json', 'submission-evidence.json', 'jev-benchmarks.json', 'mixed-and-live-runs.json', 'submission.html', 'production-mock-submission.pdf', 'demo.webm', 'workspace.png', 'metrics.png', 'README.md', 'RUNBOOK.md', 'DESIGN.md', 'EVALUATION.md', 'REQUIREMENTS.md', 'EXPERIMENTS.md', 'VALIDATION.md', 'ISOLATION.md', 'SUBMISSION.md', 'NEXT-STEPS.md', 'PACKAGE-NOTES.md', 'REVIEW.md', 'materials-summary.json']);
@@ -55,7 +56,7 @@ export async function readCheckedPackage(root: string) {
   const manifestBytes = await checkedFile(root, 'package-manifest.json');
   assertNoPublishedSecrets(manifestBytes, 'package-manifest.json');
   const manifest = JSON.parse(manifestBytes.toString('utf8')) as PackageManifest;
-  if (!/^mock-package-v[12]$/.test(manifest.version) || !/^[a-f0-9]{40}$/.test(manifest.platformCommit) || manifest.submissionBaseline !== 'b66122c21604fdb2ecdcbafb89c3d5ad8cde1466' || !Array.isArray(manifest.files) || manifest.files.length > 100) throw new Error('Not a registered frozen production demonstration package.');
+  if (!isFrozenPackageVersion(manifest.version) || !/^[a-f0-9]{40}$/.test(manifest.platformCommit) || manifest.submissionBaseline !== 'b66122c21604fdb2ecdcbafb89c3d5ad8cde1466' || !Array.isArray(manifest.files) || manifest.files.length > 100) throw new Error('Not a registered frozen production demonstration package.');
   const files = new Map<string, Buffer>();
   let total = manifestBytes.length;
   for (const item of manifest.files) {

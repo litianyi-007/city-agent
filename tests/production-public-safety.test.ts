@@ -3,7 +3,7 @@ import { test } from 'node:test';
 import { mkdtemp, mkdir, rm, symlink, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { assertNoPublishedSecrets, assertUnrelatedTreesPreserved, assertWorktreeDirectory, checkedFile, packagePath, publicPath } from '../scripts/production-public-safety.js';
+import { assertNoPublishedSecrets, assertUnrelatedTreesPreserved, assertWorktreeDirectory, checkedFile, isFrozenPackageVersion, packagePath, publicPath } from '../scripts/production-public-safety.js';
 import { trustedFixturePreview } from '../scripts/production-public.js';
 import { PRODUCTION_DEMO_CASES } from '../shared/production-benchmarks.js';
 import { demoHtml } from '../server/production/fixtures.js';
@@ -15,6 +15,10 @@ test('publication paths cannot include runtime data or overwrite unrelated site 
   assert.equal(packagePath('MOCK-01/evidence.json'), 'MOCK-01/evidence.json');
   assert.equal(publicPath('MOCK-02/index.html'), 'MOCK-02/index.html.txt');
   assert.equal(publicPath('MOCK-02/gate.json'), 'MOCK-02/gate.json');
+});
+test('registered historical QA manifest is accepted without permitting arbitrary version suffixes', () => {
+  for (const version of ['mock-package-v1', 'mock-package-v1-qa1', 'mock-package-v2']) assert.equal(isFrozenPackageVersion(version), true);
+  for (const version of ['mock-package-v1-unreviewed', 'mock-package-v2-extra', 'mock-package-v3', null]) assert.equal(isFrozenPackageVersion(version), false);
 });
 test('secret-like values and nonempty credential fields block publication', () => {
   assert.throws(() => assertNoPublishedSecrets(Buffer.from('apikey_' + 'a'.repeat(40)), 'note.txt'));
