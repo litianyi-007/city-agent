@@ -1,0 +1,132 @@
+{
+  "schemaVersion": "experiment-budget-1.0",
+  "experimentId": "approved-2026-10-07-contract11-cny5-24",
+  "createdAt": "2026-10-07T13:49:38.398Z",
+  "updatedAt": "2026-10-07T13:49:47.982Z",
+  "state": "closed",
+  "budgetCny": 5,
+  "budgetNanoCny": 5000000000,
+  "maxProviderRequests": 24,
+  "pricing": {
+    "provider": "deepseek",
+    "modelId": "deepseek-flash",
+    "currency": "CNY",
+    "inputCnyPerMillionTokens": 2,
+    "outputCnyPerMillionTokens": 8,
+    "sourceUrl": "https://api-docs.deepseek.com/zh-cn/quick_start/pricing/",
+    "checkedAt": "2026-10-07T13:48:54.338Z"
+  },
+  "inputNanoCnyPerToken": 2000,
+  "outputNanoCnyPerToken": 8000,
+  "reservations": [
+    {
+      "reservationId": "108ed3e0-7319-4001-8383-523c01851f36",
+      "requestId": "child-snacks.resident-001",
+      "purpose": "resident",
+      "reservedAt": "2026-10-07T13:49:38.472Z",
+      "promptUtf8Bytes": 13275,
+      "inputEnvelopeTokens": 16384,
+      "reservedInputTokens": 29659,
+      "maxOutputTokens": 3000,
+      "reservationNanoCny": 83318000,
+      "committedNanoCny": 8140000,
+      "state": "settled",
+      "finishedAt": "2026-10-07T13:49:40.294Z",
+      "outcome": "succeeded",
+      "usage": {
+        "inputTokens": 3050,
+        "outputTokens": 255
+      },
+      "actualNanoCny": 8140000
+    },
+    {
+      "reservationId": "bfc4f455-6796-46a9-a8f0-68e9e20d80b0",
+      "requestId": "pet-snacks.resident-001",
+      "purpose": "resident",
+      "reservedAt": "2026-10-07T13:49:40.459Z",
+      "promptUtf8Bytes": 13729,
+      "inputEnvelopeTokens": 16384,
+      "reservedInputTokens": 30113,
+      "maxOutputTokens": 3000,
+      "reservationNanoCny": 84226000,
+      "committedNanoCny": 8458000,
+      "state": "settled",
+      "finishedAt": "2026-10-07T13:49:42.159Z",
+      "outcome": "succeeded",
+      "usage": {
+        "inputTokens": 3177,
+        "outputTokens": 263
+      },
+      "actualNanoCny": 8458000
+    },
+    {
+      "reservationId": "7690b389-af37-4b23-accc-204d2ab46a66",
+      "requestId": "pet-snacks.resident-002",
+      "purpose": "resident",
+      "reservedAt": "2026-10-07T13:49:42.237Z",
+      "promptUtf8Bytes": 13584,
+      "inputEnvelopeTokens": 16384,
+      "reservedInputTokens": 29968,
+      "maxOutputTokens": 3000,
+      "reservationNanoCny": 83936000,
+      "committedNanoCny": 8308000,
+      "state": "settled",
+      "finishedAt": "2026-10-07T13:49:44.173Z",
+      "outcome": "succeeded",
+      "usage": {
+        "inputTokens": 3130,
+        "outputTokens": 256
+      },
+      "actualNanoCny": 8308000
+    },
+    {
+      "reservationId": "c4c2f66e-1a9b-4b9d-a443-f3cbe1d974b0",
+      "requestId": "pet-snacks.resident-003",
+      "purpose": "resident",
+      "reservedAt": "2026-10-07T13:49:44.245Z",
+      "promptUtf8Bytes": 13760,
+      "inputEnvelopeTokens": 16384,
+      "reservedInputTokens": 30144,
+      "maxOutputTokens": 3000,
+      "reservationNanoCny": 84288000,
+      "committedNanoCny": 8446000,
+      "state": "settled",
+      "finishedAt": "2026-10-07T13:49:45.879Z",
+      "outcome": "succeeded",
+      "usage": {
+        "inputTokens": 3171,
+        "outputTokens": 263
+      },
+      "actualNanoCny": 8446000
+    },
+    {
+      "reservationId": "7fb0f04c-0d5e-42c2-b31e-a1707edf7cb2",
+      "requestId": "pet-snacks.resident-004",
+      "purpose": "resident",
+      "reservedAt": "2026-10-07T13:49:45.952Z",
+      "promptUtf8Bytes": 13753,
+      "inputEnvelopeTokens": 16384,
+      "reservedInputTokens": 30137,
+      "maxOutputTokens": 3000,
+      "reservationNanoCny": 84274000,
+      "committedNanoCny": 8680000,
+      "state": "settled",
+      "finishedAt": "2026-10-07T13:49:47.871Z",
+      "outcome": "succeeded",
+      "usage": {
+        "inputTokens": 3176,
+        "outputTokens": 291
+      },
+      "actualNanoCny": 8680000
+    }
+  ],
+  "requestCount": 5,
+  "committedNanoCny": 42032000,
+  "committedCny": 0.042032,
+  "knownUsageCostCny": 0.042032,
+  "knownUsageRequestCount": 5,
+  "usageStatus": "reported",
+  "storageStatus": "durable",
+  "remainingCny": 4.957968,
+  "limitation": "Local conservative pre-call reservation, not a provider billing guarantee. Input tokens are bounded by outgoing UTF8 bytes plus registered protocol overhead; unknown, failed or excess usage halts and retains the reservation. No auto-retry, cache discount, top-up, fallback, or ledger resume."
+}

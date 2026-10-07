@@ -1,0 +1,120 @@
+{
+  "protocol": {
+    "version": "live-qualification-1.0",
+    "checks": [
+      "adult-caregiver-primary-assumptions",
+      "eligibility-agrees-with-profile",
+      "child-own-taste-null"
+    ]
+  },
+  "planned": 10,
+  "checked": 1,
+  "rows": [
+    {
+      "residentId": "resident-001",
+      "protocolVersion": "live-qualification-1.0",
+      "status": "checked",
+      "issues": [],
+      "scope": "只核对已明确赋予的合成资格，不认证真实身份/人口代表性/市场效度。"
+    },
+    {
+      "residentId": "resident-002",
+      "protocolVersion": "live-qualification-1.0",
+      "status": "conflict",
+      "issues": [
+        "答卷结构/状态未通过，不算资格核对通过。",
+        "资格回答未与明确照护小学假设一致；不替换样本。",
+        "未采集儿童原文，应明确null；不事后修补。"
+      ],
+      "scope": "只核对已明确赋予的合成资格，不认证真实身份/人口代表性/市场效度。"
+    },
+    {
+      "residentId": "resident-003",
+      "protocolVersion": "live-qualification-1.0",
+      "status": "conflict",
+      "issues": [
+        "答卷结构/状态未通过，不算资格核对通过。",
+        "资格回答未与明确照护小学假设一致；不替换样本。",
+        "未采集儿童原文，应明确null；不事后修补。"
+      ],
+      "scope": "只核对已明确赋予的合成资格，不认证真实身份/人口代表性/市场效度。"
+    },
+    {
+      "residentId": "resident-004",
+      "protocolVersion": "live-qualification-1.0",
+      "status": "conflict",
+      "issues": [
+        "答卷结构/状态未通过，不算资格核对通过。",
+        "资格回答未与明确照护小学假设一致；不替换样本。",
+        "未采集儿童原文，应明确null；不事后修补。"
+      ],
+      "scope": "只核对已明确赋予的合成资格，不认证真实身份/人口代表性/市场效度。"
+    },
+    {
+      "residentId": "resident-005",
+      "protocolVersion": "live-qualification-1.0",
+      "status": "conflict",
+      "issues": [
+        "答卷结构/状态未通过，不算资格核对通过。",
+        "资格回答未与明确照护小学假设一致；不替换样本。",
+        "未采集儿童原文，应明确null；不事后修补。"
+      ],
+      "scope": "只核对已明确赋予的合成资格，不认证真实身份/人口代表性/市场效度。"
+    },
+    {
+      "residentId": "resident-006",
+      "protocolVersion": "live-qualification-1.0",
+      "status": "conflict",
+      "issues": [
+        "答卷结构/状态未通过，不算资格核对通过。",
+        "资格回答未与明确照护小学假设一致；不替换样本。",
+        "未采集儿童原文，应明确null；不事后修补。"
+      ],
+      "scope": "只核对已明确赋予的合成资格，不认证真实身份/人口代表性/市场效度。"
+    },
+    {
+      "residentId": "resident-007",
+      "protocolVersion": "live-qualification-1.0",
+      "status": "conflict",
+      "issues": [
+        "答卷结构/状态未通过，不算资格核对通过。",
+        "资格回答未与明确照护小学假设一致；不替换样本。",
+        "未采集儿童原文，应明确null；不事后修补。"
+      ],
+      "scope": "只核对已明确赋予的合成资格，不认证真实身份/人口代表性/市场效度。"
+    },
+    {
+      "residentId": "resident-008",
+      "protocolVersion": "live-qualification-1.0",
+      "status": "conflict",
+      "issues": [
+        "答卷结构/状态未通过，不算资格核对通过。",
+        "资格回答未与明确照护小学假设一致；不替换样本。",
+        "未采集儿童原文，应明确null；不事后修补。"
+      ],
+      "scope": "只核对已明确赋予的合成资格，不认证真实身份/人口代表性/市场效度。"
+    },
+    {
+      "residentId": "resident-009",
+      "protocolVersion": "live-qualification-1.0",
+      "status": "conflict",
+      "issues": [
+        "答卷结构/状态未通过，不算资格核对通过。",
+        "资格回答未与明确照护小学假设一致；不替换样本。",
+        "未采集儿童原文，应明确null；不事后修补。"
+      ],
+      "scope": "只核对已明确赋予的合成资格，不认证真实身份/人口代表性/市场效度。"
+    },
+    {
+      "residentId": "resident-010",
+      "protocolVersion": "live-qualification-1.0",
+      "status": "conflict",
+      "issues": [
+        "答卷结构/状态未通过，不算资格核对通过。",
+        "资格回答未与明确照护小学假设一致；不替换样本。",
+        "未采集儿童原文，应明确null；不事后修补。"
+      ],
+      "scope": "只核对已明确赋予的合成资格，不认证真实身份/人口代表性/市场效度。"
+    }
+  ]
+}

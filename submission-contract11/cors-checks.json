@@ -1,0 +1,17 @@
+{
+  "checks": [
+    {
+      "id": "child-snacks",
+      "state": "not-run",
+      "reason": "scenario-quality-stopped",
+      "modelCalls": 0
+    },
+    {
+      "id": "pet-snacks",
+      "state": "not-run",
+      "reason": "scenario-quality-stopped",
+      "modelCalls": 0
+    }
+  ],
+  "note": "真实Pages origin的模型协议/CORS检查；不等于新版页面长问卷输入全流程，不增加独立居民分母。"
+}

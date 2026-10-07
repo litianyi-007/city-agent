@@ -1,0 +1,158 @@
+{
+  "schemaVersion": "contract-review-appendix-1.0",
+  "experimentId": "f736fda5-2b12-4918-b843-1421e1c76454",
+  "protocolVersion": "live-business-smoke-1.1",
+  "planHash": "b035c929da5aee2db87c7bac9c37301a51f359459bc5a0bac1d816db9c2bddc6",
+  "realModelCalls": 5,
+  "conservativeCostCny": 0.042032,
+  "publicationKind": "negative-result-supplement",
+  "payloadCount": 27,
+  "liveEvidenceFileCount": 24,
+  "reportSha256": "d63b821400cfdfc7aeffe7e5111d4e06bd63c3e42bf5ef54adf6b97bb72d2af8",
+  "planSha256": "3d1bee778baf96915a4a22f6795d4d1c53cf3889702382496c234b6d6950764f",
+  "sourceCriticalFileCount": 23,
+  "rawEvidenceModified": false,
+  "mockUsed": false,
+  "marketResearchValidated": false,
+  "personaContributionValidated": false,
+  "formalSubmission": "not-confirmed",
+  "generatedAt": "2026-10-07T14:00:52.638Z",
+  "displayRevision": 3,
+  "files": [
+    {
+      "name": "appendix.pdf",
+      "bytes": 899441,
+      "sha256": "aafabaab10611ab130892eb9ede98ecf918dde530659d58370f997d8da6c3e6f"
+    },
+    {
+      "name": "budget-ledger.json",
+      "bytes": 4347,
+      "sha256": "24e218725a9df8b6c9c454b4f844134f7145c5e340152168c64cea2c7875405b"
+    },
+    {
+      "name": "child-snacks/logic-audit.json",
+      "bytes": 15623,
+      "sha256": "876ace0707be1f1d364a579b68ed657da4a9c0c886d65cd0ff3eaed11a1cbf56"
+    },
+    {
+      "name": "child-snacks/presets.json",
+      "bytes": 10336,
+      "sha256": "adf7cf8e03215d4459dc8d41aaf3a0df9fe5c7ead83814c0f0e951d8e2e0e908"
+    },
+    {
+      "name": "child-snacks/prompts.txt",
+      "bytes": 99342,
+      "sha256": "1a870b4d09dc8e916c16afaac5ac5e736d30b564dc1af58b145fd0228a2a0b7b"
+    },
+    {
+      "name": "child-snacks/qualification-audit.json",
+      "bytes": 4903,
+      "sha256": "9e01944da7ef3d2f1101ebee16f684572a46dcfb63413206896b75ac8824e269"
+    },
+    {
+      "name": "child-snacks/questionnaire.json",
+      "bytes": 13266,
+      "sha256": "f4902949d87a8409a06d993299e88194e856fe1f7895cd9114ccc2ef587c6442"
+    },
+    {
+      "name": "child-snacks/raw-responses.json",
+      "bytes": 6079,
+      "sha256": "3522a45b68843c8ed88a4bdbab75170e2c003dab63bb9df6291579a582796401"
+    },
+    {
+      "name": "child-snacks/statistics.json",
+      "bytes": 145373,
+      "sha256": "b043b4ada7481dac026fd6132bd8fb4afc8c5cf8bbe79bb92bd37c2d9f441524"
+    },
+    {
+      "name": "child-snacks/survey-run.json",
+      "bytes": 354211,
+      "sha256": "d40563283e27bd67a4c168f6ccd3f42bd3c81c2817e5845d676e6bb31e8841ff"
+    },
+    {
+      "name": "cors-checks.json",
+      "bytes": 424,
+      "sha256": "a936aa62efe539862362f1c6e54743576b7390e06a06ac5de10f0faa347c6d08"
+    },
+    {
+      "name": "index.html",
+      "bytes": 12235,
+      "sha256": "b3baac3f0683ecf65a16f316611e200b4413ddb333fe9f55381a8e1c810903e8"
+    },
+    {
+      "name": "pet-snacks/logic-audit.json",
+      "bytes": 14897,
+      "sha256": "d7a1d09fb3a9c31d89b478cac9f0eab7bd4573c5814674c3af8acc4fd4e45722"
+    },
+    {
+      "name": "pet-snacks/presets.json",
+      "bytes": 11158,
+      "sha256": "db25e39ba522d46c525033640cc02f49d90961dd05443ac70fd8a57cfffb1d80"
+    },
+    {
+      "name": "pet-snacks/prompts.txt",
+      "bytes": 102992,
+      "sha256": "6d048bf80a87f803df553568194125fde3652926d22d618fe16b8e49521a2071"
+    },
+    {
+      "name": "pet-snacks/qualification-audit.json",
+      "bytes": 4251,
+      "sha256": "072175e2b9e7decc5dafaf7f3646c5d7ac6f2ece32ec00b95a7769435d17ebe0"
+    },
+    {
+      "name": "pet-snacks/questionnaire.json",
+      "bytes": 14191,
+      "sha256": "53113ed83639be46bc075a6d651a58585a080a23360a77dacd0338543445886d"
+    },
+    {
+      "name": "pet-snacks/raw-responses.json",
+      "bytes": 13243,
+      "sha256": "39d2bf0f41cfbac794278d721a7936f46a2932b8683dd6ac9180a04d6e73b6b3"
+    },
+    {
+      "name": "pet-snacks/statistics.json",
+      "bytes": 160035,
+      "sha256": "48b97f4a928e29ccc8f425121916f1e4563f324000a0b7d5c0816be6e6b24261"
+    },
+    {
+      "name": "pet-snacks/survey-run.json",
+      "bytes": 385802,
+      "sha256": "1b832481f668ec1b4c94edc6ed0547d0037d82fb3dec7be3f085c4697499c487"
+    },
+    {
+      "name": "plan.json",
+      "bytes": 706532,
+      "sha256": "3d1bee778baf96915a4a22f6795d4d1c53cf3889702382496c234b6d6950764f"
+    },
+    {
+      "name": "planning-child.json",
+      "bytes": 84,
+      "sha256": "fbad4dda7250cd7f5ab1e088cead0b0190f2f9e15f75ac33431068d2a440b6c2"
+    },
+    {
+      "name": "planning-pet.json",
+      "bytes": 84,
+      "sha256": "fbad4dda7250cd7f5ab1e088cead0b0190f2f9e15f75ac33431068d2a440b6c2"
+    },
+    {
+      "name": "pricing-source.json",
+      "bytes": 671,
+      "sha256": "0c37b8d09bc3cb9dbbf9f583761b746d12fb62ca6b23e47f1cdcc411258fa8fa"
+    },
+    {
+      "name": "README.md",
+      "bytes": 2621,
+      "sha256": "a4255b801f1830889aa2656fdce65858ca18d21fed1dffe621e8084062a7b2f4"
+    },
+    {
+      "name": "report.json",
+      "bytes": 11812,
+      "sha256": "d63b821400cfdfc7aeffe7e5111d4e06bd63c3e42bf5ef54adf6b97bb72d2af8"
+    },
+    {
+      "name": "report.md",
+      "bytes": 1187,
+      "sha256": "b9b78e76c3a9f3b667e750db5f6b7232a98c1bd9aa1612f5d6c42d9eb97f2a4e"
+    }
+  ]
+}

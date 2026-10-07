@@ -1,0 +1,384 @@
+[
+  {
+    "residentId": "resident-001",
+    "status": "valid",
+    "structureValid": true,
+    "answers": [
+      {
+        "questionId": "pet-type",
+        "value": "cat"
+      },
+      {
+        "questionId": "purchase-role",
+        "value": [
+          "purchaser",
+          "decision"
+        ]
+      },
+      {
+        "questionId": "snack-boundary",
+        "value": "understood"
+      },
+      {
+        "questionId": "past-frequency",
+        "value": "unknown"
+      },
+      {
+        "questionId": "past-snack-categories",
+        "value": [
+          "unknown"
+        ]
+      },
+      {
+        "questionId": "purchase-intent",
+        "value": "maybe"
+      },
+      {
+        "questionId": "monthly-budget",
+        "value": null
+      },
+      {
+        "questionId": "package-size",
+        "value": "g50"
+      },
+      {
+        "questionId": "price-per50g",
+        "value": "ten-twenty"
+      },
+      {
+        "questionId": "planned-channels",
+        "value": [
+          "online",
+          "pet-shop"
+        ]
+      },
+      {
+        "questionId": "online-handoff",
+        "value": "pickup"
+      },
+      {
+        "questionId": "travel-minutes",
+        "value": 15
+      },
+      {
+        "questionId": "reachable-streets",
+        "value": [
+          "puyan"
+        ]
+      },
+      {
+        "questionId": "purchase-barriers",
+        "value": [
+          "suitability",
+          "ingredients",
+          "freshness"
+        ]
+      },
+      {
+        "questionId": "price10-intent",
+        "value": "yes"
+      },
+      {
+        "questionId": "price20-intent",
+        "value": "maybe"
+      },
+      {
+        "questionId": "traceability-importance",
+        "value": 4
+      },
+      {
+        "questionId": "needed-evidence",
+        "value": null
+      }
+    ],
+    "coherence": {
+      "status": "not-configured",
+      "checked": 0,
+      "issues": [],
+      "scope": "仅执行问卷JSON预登记的硬约束；不自动理解职业、家庭或开放题语义，不以消费刻板印象判错。"
+    },
+    "raw": "{\"residentId\":\"resident-001\",\"answers\":[{\"questionId\":\"pet-type\",\"value\":\"cat\"},{\"questionId\":\"purchase-role\",\"value\":[\"purchaser\",\"decision\"]},{\"questionId\":\"snack-boundary\",\"value\":\"understood\"},{\"questionId\":\"past-frequency\",\"value\":\"unknown\"},{\"questionId\":\"past-snack-categories\",\"value\":[\"unknown\"]},{\"questionId\":\"purchase-intent\",\"value\":\"maybe\"},{\"questionId\":\"monthly-budget\",\"value\":null},{\"questionId\":\"package-size\",\"value\":\"g50\"},{\"questionId\":\"price-per50g\",\"value\":\"ten-twenty\"},{\"questionId\":\"planned-channels\",\"value\":[\"online\",\"pet-shop\"]},{\"questionId\":\"online-handoff\",\"value\":\"pickup\"},{\"questionId\":\"travel-minutes\",\"value\":15},{\"questionId\":\"reachable-streets\",\"value\":[\"puyan\"]},{\"questionId\":\"purchase-barriers\",\"value\":[\"suitability\",\"ingredients\",\"freshness\"]},{\"questionId\":\"price10-intent\",\"value\":\"yes\"},{\"questionId\":\"price20-intent\",\"value\":\"maybe\"},{\"questionId\":\"traceability-importance\",\"value\":4},{\"questionId\":\"needed-evidence\",\"value\":null}]}",
+    "durationMs": 1739.64275,
+    "inputTokens": 3177,
+    "outputTokens": 263
+  },
+  {
+    "residentId": "resident-002",
+    "status": "valid",
+    "structureValid": true,
+    "answers": [
+      {
+        "questionId": "pet-type",
+        "value": "dog"
+      },
+      {
+        "questionId": "purchase-role",
+        "value": [
+          "purchaser",
+          "decision",
+          "shared"
+        ]
+      },
+      {
+        "questionId": "snack-boundary",
+        "value": "understood"
+      },
+      {
+        "questionId": "past-frequency",
+        "value": "unknown"
+      },
+      {
+        "questionId": "past-snack-categories",
+        "value": [
+          "unknown"
+        ]
+      },
+      {
+        "questionId": "purchase-intent",
+        "value": "maybe"
+      },
+      {
+        "questionId": "monthly-budget",
+        "value": null
+      },
+      {
+        "questionId": "package-size",
+        "value": "unknown"
+      },
+      {
+        "questionId": "price-per50g",
+        "value": "unknown"
+      },
+      {
+        "questionId": "planned-channels",
+        "value": [
+          "unknown"
+        ]
+      },
+      {
+        "questionId": "online-handoff",
+        "value": "unknown"
+      },
+      {
+        "questionId": "travel-minutes",
+        "value": null
+      },
+      {
+        "questionId": "reachable-streets",
+        "value": [
+          "changhe"
+        ]
+      },
+      {
+        "questionId": "purchase-barriers",
+        "value": [
+          "suitability",
+          "ingredients",
+          "traceability"
+        ]
+      },
+      {
+        "questionId": "price10-intent",
+        "value": "maybe"
+      },
+      {
+        "questionId": "price20-intent",
+        "value": "maybe"
+      },
+      {
+        "questionId": "traceability-importance",
+        "value": null
+      },
+      {
+        "questionId": "needed-evidence",
+        "value": null
+      }
+    ],
+    "coherence": {
+      "status": "not-configured",
+      "checked": 0,
+      "issues": [],
+      "scope": "仅执行问卷JSON预登记的硬约束；不自动理解职业、家庭或开放题语义，不以消费刻板印象判错。"
+    },
+    "raw": "{\"residentId\":\"resident-002\",\"answers\":[{\"questionId\":\"pet-type\",\"value\":\"dog\"},{\"questionId\":\"purchase-role\",\"value\":[\"purchaser\",\"decision\",\"shared\"]},{\"questionId\":\"snack-boundary\",\"value\":\"understood\"},{\"questionId\":\"past-frequency\",\"value\":\"unknown\"},{\"questionId\":\"past-snack-categories\",\"value\":[\"unknown\"]},{\"questionId\":\"purchase-intent\",\"value\":\"maybe\"},{\"questionId\":\"monthly-budget\",\"value\":null},{\"questionId\":\"package-size\",\"value\":\"unknown\"},{\"questionId\":\"price-per50g\",\"value\":\"unknown\"},{\"questionId\":\"planned-channels\",\"value\":[\"unknown\"]},{\"questionId\":\"online-handoff\",\"value\":\"unknown\"},{\"questionId\":\"travel-minutes\",\"value\":null},{\"questionId\":\"reachable-streets\",\"value\":[\"changhe\"]},{\"questionId\":\"purchase-barriers\",\"value\":[\"suitability\",\"ingredients\",\"traceability\"]},{\"questionId\":\"price10-intent\",\"value\":\"maybe\"},{\"questionId\":\"price20-intent\",\"value\":\"maybe\"},{\"questionId\":\"traceability-importance\",\"value\":null},{\"questionId\":\"needed-evidence\",\"value\":null}]}",
+    "durationMs": 1978.8380000000006,
+    "inputTokens": 3130,
+    "outputTokens": 256
+  },
+  {
+    "residentId": "resident-003",
+    "status": "valid",
+    "structureValid": true,
+    "answers": [
+      {
+        "questionId": "pet-type",
+        "value": "both"
+      },
+      {
+        "questionId": "purchase-role",
+        "value": [
+          "purchaser",
+          "decision",
+          "shared"
+        ]
+      },
+      {
+        "questionId": "snack-boundary",
+        "value": "understood"
+      },
+      {
+        "questionId": "past-frequency",
+        "value": "unknown"
+      },
+      {
+        "questionId": "past-snack-categories",
+        "value": [
+          "unknown"
+        ]
+      },
+      {
+        "questionId": "purchase-intent",
+        "value": "maybe"
+      },
+      {
+        "questionId": "monthly-budget",
+        "value": null
+      },
+      {
+        "questionId": "package-size",
+        "value": "unknown"
+      },
+      {
+        "questionId": "price-per50g",
+        "value": "unknown"
+      },
+      {
+        "questionId": "planned-channels",
+        "value": [
+          "online",
+          "pet-shop",
+          "pickup"
+        ]
+      },
+      {
+        "questionId": "online-handoff",
+        "value": "both"
+      },
+      {
+        "questionId": "travel-minutes",
+        "value": null
+      },
+      {
+        "questionId": "reachable-streets",
+        "value": [
+          "xixing"
+        ]
+      },
+      {
+        "questionId": "purchase-barriers",
+        "value": [
+          "suitability",
+          "ingredients",
+          "freshness"
+        ]
+      },
+      {
+        "questionId": "price10-intent",
+        "value": "maybe"
+      },
+      {
+        "questionId": "price20-intent",
+        "value": "maybe"
+      },
+      {
+        "questionId": "traceability-importance",
+        "value": null
+      },
+      {
+        "questionId": "needed-evidence",
+        "value": null
+      }
+    ],
+    "coherence": {
+      "status": "not-configured",
+      "checked": 0,
+      "issues": [],
+      "scope": "仅执行问卷JSON预登记的硬约束；不自动理解职业、家庭或开放题语义，不以消费刻板印象判错。"
+    },
+    "raw": "{\"residentId\":\"resident-003\",\"answers\":[{\"questionId\":\"pet-type\",\"value\":\"both\"},{\"questionId\":\"purchase-role\",\"value\":[\"purchaser\",\"decision\",\"shared\"]},{\"questionId\":\"snack-boundary\",\"value\":\"understood\"},{\"questionId\":\"past-frequency\",\"value\":\"unknown\"},{\"questionId\":\"past-snack-categories\",\"value\":[\"unknown\"]},{\"questionId\":\"purchase-intent\",\"value\":\"maybe\"},{\"questionId\":\"monthly-budget\",\"value\":null},{\"questionId\":\"package-size\",\"value\":\"unknown\"},{\"questionId\":\"price-per50g\",\"value\":\"unknown\"},{\"questionId\":\"planned-channels\",\"value\":[\"online\",\"pet-shop\",\"pickup\"]},{\"questionId\":\"online-handoff\",\"value\":\"both\"},{\"questionId\":\"travel-minutes\",\"value\":null},{\"questionId\":\"reachable-streets\",\"value\":[\"xixing\"]},{\"questionId\":\"purchase-barriers\",\"value\":[\"suitability\",\"ingredients\",\"freshness\"]},{\"questionId\":\"price10-intent\",\"value\":\"maybe\"},{\"questionId\":\"price20-intent\",\"value\":\"maybe\"},{\"questionId\":\"traceability-importance\",\"value\":null},{\"questionId\":\"needed-evidence\",\"value\":null}]}",
+    "durationMs": 1675.6286250000003,
+    "inputTokens": 3171,
+    "outputTokens": 263
+  },
+  {
+    "residentId": "resident-004",
+    "status": "invalid",
+    "structureValid": false,
+    "answers": [],
+    "raw": "{\"residentId\":\"resident-004\",\"answers\":[{\"questionId\":\"pet-type\",\"value\":\"cat\"},{\"questionId\":\"purchase-role\",\"value\":[\"purchaser\",\"decision\",\"shared\"]},{\"questionId\":\"snack-boundary\",\"value\":\"understood\"},{\"questionId\":\"past-frequency\",\"value\":\"unknown\"},{\"questionId\":\"past-snack-categories\",\"value\":\"unknown\"},{\"questionId\":\"purchase-intent\",\"value\":\"maybe\"},{\"questionId\":\"monthly-budget\",\"value\":null},{\"questionId\":\"package-size\",\"value\":\"g50\"},{\"questionId\":\"price-per50g\",\"value\":\"ten-twenty\"},{\"questionId\":\"planned-channels\",\"value\":[\"online\",\"pet-shop\"]},{\"questionId\":\"online-handoff\",\"value\":\"both\"},{\"questionId\":\"travel-minutes\",\"value\":null},{\"questionId\":\"reachable-streets\",\"value\":[\"xixing\",\"changhe\"]},{\"questionId\":\"purchase-barriers\",\"value\":[\"suitability\",\"ingredients\",\"freshness\"]},{\"questionId\":\"price10-intent\",\"value\":\"maybe\"},{\"questionId\":\"price20-intent\",\"value\":\"maybe\"},{\"questionId\":\"traceability-importance\",\"value\":4},{\"questionId\":\"needed-evidence\",\"value\":\"需要确认适用猫只的具体成分、生产日期与储存条件、来源可追溯信息，以及少量试吃后的接受度。\"}]}",
+    "error": "答卷值违反题目契约：past-snack-categories",
+    "durationMs": 1961.4819579999994,
+    "inputTokens": 3176,
+    "outputTokens": 291
+  },
+  {
+    "residentId": "resident-005",
+    "status": "not-started",
+    "answers": [],
+    "raw": "",
+    "error": "预登记质量停止：原始答卷不能完整复核；余下保留not-started，不重试。",
+    "durationMs": 0,
+    "inputTokens": 0,
+    "outputTokens": 0
+  },
+  {
+    "residentId": "resident-006",
+    "status": "not-started",
+    "answers": [],
+    "raw": "",
+    "error": "预登记质量停止：原始答卷不能完整复核；余下保留not-started，不重试。",
+    "durationMs": 0,
+    "inputTokens": 0,
+    "outputTokens": 0
+  },
+  {
+    "residentId": "resident-007",
+    "status": "not-started",
+    "answers": [],
+    "raw": "",
+    "error": "预登记质量停止：原始答卷不能完整复核；余下保留not-started，不重试。",
+    "durationMs": 0,
+    "inputTokens": 0,
+    "outputTokens": 0
+  },
+  {
+    "residentId": "resident-008",
+    "status": "not-started",
+    "answers": [],
+    "raw": "",
+    "error": "预登记质量停止：原始答卷不能完整复核；余下保留not-started，不重试。",
+    "durationMs": 0,
+    "inputTokens": 0,
+    "outputTokens": 0
+  },
+  {
+    "residentId": "resident-009",
+    "status": "not-started",
+    "answers": [],
+    "raw": "",
+    "error": "预登记质量停止：原始答卷不能完整复核；余下保留not-started，不重试。",
+    "durationMs": 0,
+    "inputTokens": 0,
+    "outputTokens": 0
+  },
+  {
+    "residentId": "resident-010",
+    "status": "not-started",
+    "answers": [],
+    "raw": "",
+    "error": "预登记质量停止：原始答卷不能完整复核；余下保留not-started，不重试。",
+    "durationMs": 0,
+    "inputTokens": 0,
+    "outputTokens": 0
+  }
+]

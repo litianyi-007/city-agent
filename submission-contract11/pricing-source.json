@@ -1,0 +1,14 @@
+{
+  "checkedAt": "2026-10-07T13:48:54.338Z",
+  "url": "https://api-docs.deepseek.com/zh-cn/quick_start/pricing/",
+  "sourceHtmlSha256": "5a7b1832592387340f2fc456399b34b89b05f3fa167c2e35909e2fa4afe021e3",
+  "method": "direct-official-HTML-fetched-and-table-manually-verified",
+  "modelId": "deepseek-flash",
+  "currency": "CNY",
+  "peakCacheMissInputPerMillion": 2,
+  "peakOutputPerMillion": 8,
+  "offPeakCacheMissInputPerMillion": 1,
+  "offPeakOutputPerMillion": 4,
+  "estimateBasis": "All input charged at peak cache-miss and output at peak rate for conservative ceiling; no cache/off-peak rebate. Not provider invoice.",
+  "sourceVersionIndependentlyAttested": false
+}

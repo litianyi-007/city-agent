@@ -1,0 +1,197 @@
+[
+  {
+    "residentId": "resident-001",
+    "status": "valid",
+    "structureValid": true,
+    "answers": [
+      {
+        "questionId": "eligibility",
+        "value": "eligible"
+      },
+      {
+        "questionId": "purchase-role",
+        "value": [
+          "purchaser",
+          "permission",
+          "shared"
+        ]
+      },
+      {
+        "questionId": "child-evidence",
+        "value": "not-collected"
+      },
+      {
+        "questionId": "past-frequency",
+        "value": "unknown"
+      },
+      {
+        "questionId": "past-categories",
+        "value": [
+          "unknown"
+        ]
+      },
+      {
+        "questionId": "permission-factors",
+        "value": [
+          "ingredients",
+          "traceability",
+          "school-rules",
+          "price"
+        ]
+      },
+      {
+        "questionId": "child-own-taste",
+        "value": null
+      },
+      {
+        "questionId": "purchase-intent",
+        "value": "maybe"
+      },
+      {
+        "questionId": "monthly-budget",
+        "value": null
+      },
+      {
+        "questionId": "package-size",
+        "value": "unknown"
+      },
+      {
+        "questionId": "price-per20g",
+        "value": "unknown"
+      },
+      {
+        "questionId": "planned-channels",
+        "value": [
+          "unknown"
+        ]
+      },
+      {
+        "questionId": "travel-minutes",
+        "value": null
+      },
+      {
+        "questionId": "reachable-streets",
+        "value": [
+          "puyan",
+          "unknown"
+        ]
+      },
+      {
+        "questionId": "traceability-importance",
+        "value": null
+      },
+      {
+        "questionId": "purchase-barriers",
+        "value": [
+          "allergen",
+          "rules",
+          "freshness"
+        ]
+      },
+      {
+        "questionId": "needed-evidence",
+        "value": null
+      }
+    ],
+    "coherence": {
+      "status": "not-configured",
+      "checked": 0,
+      "issues": [],
+      "scope": "仅执行问卷JSON预登记的硬约束；不自动理解职业、家庭或开放题语义，不以消费刻板印象判错。"
+    },
+    "raw": "{\"residentId\":\"resident-001\",\"answers\":[{\"questionId\":\"eligibility\",\"value\":\"eligible\"},{\"questionId\":\"purchase-role\",\"value\":[\"purchaser\",\"permission\",\"shared\"]},{\"questionId\":\"child-evidence\",\"value\":\"not-collected\"},{\"questionId\":\"past-frequency\",\"value\":\"unknown\"},{\"questionId\":\"past-categories\",\"value\":[\"unknown\"]},{\"questionId\":\"permission-factors\",\"value\":[\"ingredients\",\"traceability\",\"school-rules\",\"price\"]},{\"questionId\":\"child-own-taste\",\"value\":null},{\"questionId\":\"purchase-intent\",\"value\":\"maybe\"},{\"questionId\":\"monthly-budget\",\"value\":null},{\"questionId\":\"package-size\",\"value\":\"unknown\"},{\"questionId\":\"price-per20g\",\"value\":\"unknown\"},{\"questionId\":\"planned-channels\",\"value\":[\"unknown\"]},{\"questionId\":\"travel-minutes\",\"value\":null},{\"questionId\":\"reachable-streets\",\"value\":[\"puyan\",\"unknown\"]},{\"questionId\":\"traceability-importance\",\"value\":null},{\"questionId\":\"purchase-barriers\",\"value\":[\"allergen\",\"rules\",\"freshness\"]},{\"questionId\":\"needed-evidence\",\"value\":null}]}",
+    "durationMs": 1863.296375,
+    "inputTokens": 3050,
+    "outputTokens": 255
+  },
+  {
+    "residentId": "resident-002",
+    "status": "not-started",
+    "answers": [],
+    "raw": "",
+    "error": "预登记质量停止：本份结构、登记跨题或资格检查未通过；余下保留not-started，不重试。",
+    "durationMs": 0,
+    "inputTokens": 0,
+    "outputTokens": 0
+  },
+  {
+    "residentId": "resident-003",
+    "status": "not-started",
+    "answers": [],
+    "raw": "",
+    "error": "预登记质量停止：本份结构、登记跨题或资格检查未通过；余下保留not-started，不重试。",
+    "durationMs": 0,
+    "inputTokens": 0,
+    "outputTokens": 0
+  },
+  {
+    "residentId": "resident-004",
+    "status": "not-started",
+    "answers": [],
+    "raw": "",
+    "error": "预登记质量停止：本份结构、登记跨题或资格检查未通过；余下保留not-started，不重试。",
+    "durationMs": 0,
+    "inputTokens": 0,
+    "outputTokens": 0
+  },
+  {
+    "residentId": "resident-005",
+    "status": "not-started",
+    "answers": [],
+    "raw": "",
+    "error": "预登记质量停止：本份结构、登记跨题或资格检查未通过；余下保留not-started，不重试。",
+    "durationMs": 0,
+    "inputTokens": 0,
+    "outputTokens": 0
+  },
+  {
+    "residentId": "resident-006",
+    "status": "not-started",
+    "answers": [],
+    "raw": "",
+    "error": "预登记质量停止：本份结构、登记跨题或资格检查未通过；余下保留not-started，不重试。",
+    "durationMs": 0,
+    "inputTokens": 0,
+    "outputTokens": 0
+  },
+  {
+    "residentId": "resident-007",
+    "status": "not-started",
+    "answers": [],
+    "raw": "",
+    "error": "预登记质量停止：本份结构、登记跨题或资格检查未通过；余下保留not-started，不重试。",
+    "durationMs": 0,
+    "inputTokens": 0,
+    "outputTokens": 0
+  },
+  {
+    "residentId": "resident-008",
+    "status": "not-started",
+    "answers": [],
+    "raw": "",
+    "error": "预登记质量停止：本份结构、登记跨题或资格检查未通过；余下保留not-started，不重试。",
+    "durationMs": 0,
+    "inputTokens": 0,
+    "outputTokens": 0
+  },
+  {
+    "residentId": "resident-009",
+    "status": "not-started",
+    "answers": [],
+    "raw": "",
+    "error": "预登记质量停止：本份结构、登记跨题或资格检查未通过；余下保留not-started，不重试。",
+    "durationMs": 0,
+    "inputTokens": 0,
+    "outputTokens": 0
+  },
+  {
+    "residentId": "resident-010",
+    "status": "not-started",
+    "answers": [],
+    "raw": "",
+    "error": "预登记质量停止：本份结构、登记跨题或资格检查未通过；余下保留not-started，不重试。",
+    "durationMs": 0,
+    "inputTokens": 0,
+    "outputTokens": 0
+  }
+]
