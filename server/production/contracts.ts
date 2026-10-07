@@ -1,11 +1,12 @@
 import { z } from 'zod';
 import { acceptanceSchema } from '../gate.js';
 import type { ProductionCapability } from '../../shared/production-schema.js';
+import { PRODUCTION_VERIFIER_VERSION } from '../../shared/production-verifier-rubric.js';
 
-export const PROMPT_VERSION = 'production-html-v2';
+export const PROMPT_VERSION = 'production-html-v3';
 export const ACCEPTANCE_CONTRACT_VERSION = 'production-acceptance-v2';
-export const CRITERIA_VERSION = 'verifier-ordinal-v1';
-export const CAMERA_PROMPT_VERSION = 'production-camera-scene-v1';
+export const CRITERIA_VERSION = PRODUCTION_VERIFIER_VERSION;
+export const CAMERA_PROMPT_VERSION = 'production-camera-scene-v2';
 export const CAMERA_ACCEPTANCE_VERSION = 'production-camera-acceptance-v1';
 export const CAMERA_MANDATORY_CHECKS_VERSION = 'camera-scene-behavior-v1';
 export const productSchema = z.object({ goal: z.string().min(3).max(5000), scope: z.literal('offline-single-html'), acceptance: z.array(z.string().min(1).max(1000)).min(1).max(12), exclusions: z.array(z.string().max(500)).max(12) }).strict();
@@ -41,7 +42,7 @@ export function parseVerifiedDecision(value: unknown, candidateIds: string[]) {
 }
 export const CONTRACT_INSTRUCTIONS = {
   product: '返回严格JSON：{"goal":"可操作目标","scope":"offline-single-html","acceptance":["业务标准"],"exclusions":["不支持范围"]}。只能离线单HTML应用，不运行Node、shell、不联网；不能虚构已交付。需求明确要求无法支持的后端/仓库能力时，不能偷偷缩减为相同目标，须拒绝。',
-  researcher: '返回严格JSON：{"observations":["基于已提供信息的判断"],"constraints":["约束"],"unknowns":["未知"]}。本角色没有外部搜索工具；不能虚构已搜索或已验证来源。',
+  researcher: '返回严格JSON：{"observations":["基于已提供信息的具体判断与可执行设计/验证建议"],"constraints":["真实边界与对实施的影响"],"unknowns":["blocking: 必须补充的信息；或deferred: 后续验证项"]}。根据context.product与context.knownPlatform区分已知事实、建议和未知；给出可执行方向，不只复述需求或把全部内容列为unknown。研究阶段无需生成代码、冻结测试或提供尚未进行的实机证明；不得虚构这些成果。诚实deferred未知可以保留；有必需blocking输入应明确建议停止/询问。本角色没有外部搜索工具；不能虚构已搜索或已验证来源。',
   'project-manager': '返回严格JSON：{"decision":"proceed|revise|stop","summary":"简短决策依据而非隐藏思维过程","tasks":[{"id":"任务ID","owner":"product|researcher|developer|tester","description":"具体任务"}],"risks":["风险"]}。不得改变需求、冻结验收或预算；无法支持须stop。Gate失败只能revise或stop，不能声称通过；Gate通过可proceed交付。',
   tester: '返回严格JSON {"checks":[{"name":"检查名","steps":[...]}]}，2–12项独立新页面，每项最多20步。步骤fill(selector,value)、click(selector)、assertVisible(selector)、assertText(selector,text,包含)、assertTextExact(selector,text,精确可含空串)、assertCount(selector,count,精确匹配元素数量)、assertValue(selector,value,精确)、assertChanged(selector,after:{action:click|fill,selector,value?})。至少一项先交互再业务文本/数量结果断言，或点击驱动的assertChanged；assertValue与after.fill的assertChanged只能作辅助检查，不可单独作为功能门限，即使用另一CSS别名指向同一个输入也不合格。必须覆盖全部用户验收，数字不能用包含断言，只验证输入本身不够。普通唯一CSS选择器，不用反斜杠或重复嵌套。定义明确DOM/业务契约，随后冻结。',
   developer: '返回严格JSON {"html":"<!doctype html>...完整闭合文档... </html>"}。实现用户业务目标及全部冻结检查，所有JS/CSS内联；禁止外部网络、弹窗、下载、iframe、worker、后端或shell。不能删除失败测试或修改冻结检查。不能把静态通过文案当功能。',

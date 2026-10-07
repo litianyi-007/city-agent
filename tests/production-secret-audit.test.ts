@@ -16,7 +16,7 @@ function fixture(t: TestContext) {
 }
 
 test('new production and Jev keys reject structural words, controls and JSON-significant credentials without provider-prefix assumptions', () => {
-  assert.equal(PRODUCTION_CREDENTIAL_POLICY_VERSION, 'visible-token-v1');
+  assert.equal(PRODUCTION_CREDENTIAL_POLICY_VERSION, 'visible-token-v2');
   for (const apiKey of ['e', 'completed', 'short-unit-key', 'too-long-'.repeat(70), 'unit-invalid-token with-space', 'unit-invalid-token\nwith-newline', 'unit-invalid-token\twith-tab', 'unit-invalid-token-"quoted', "unit-invalid-token-'quoted", 'unit-invalid-token-\\slash', 'unit-invalid-token-中文', ' unit-valid-token-long-enough']) {
     assert.equal(productionAgentInputSchema.safeParse({ name: 'Unit', role: 'tester', apiKey }).success, false);
     assert.equal(productionAgentPatchSchema.safeParse({ apiKey }).success, false);
@@ -56,7 +56,7 @@ test('legacy encrypted credentials with quotes and slashes survive restart but c
 
 test('protocol/version and public-configuration collisions cannot become masking credentials', t => {
   const { store, directory } = fixture(t); const agent = store.agents()[0]; const before = readFileSync(path.join(directory, 'production/state.json'), 'utf8');
-  for (const apiKey of ['fixture-with-real-jev', 'production-html-v2', 'production-acceptance-v2', 'raw-wire-usage-v1', 'budgetAuthorized', 'selectedCandidateId', JEV_ENDPOINT, agent.id, agent.baseUrl]) {
+  for (const apiKey of ['fixture-with-real-jev', 'production-html-v2', 'production-html-v3', 'production-acceptance-v2', 'production-camera-scene-v2', 'production-camera-acceptance-v1', 'production-camera-delivery-v1', 'verifier-phase-ordinal-v2', 'camera-scene-runtime-v1', 'camera-hand-worker-v1', 'camera-scene-behavior-v1', 'hand-geometry-v1', 'mediapipe-hand-v1', 'visible-token-v2', 'raw-wire-usage-v1', 'budgetAuthorized', 'selectedCandidateId', JEV_ENDPOINT, agent.id, agent.baseUrl]) {
     assert.throws(() => store.patchAgent(agent.id, { apiKey }), /API Key/); assert.throws(() => store.patchJevConfig({ apiKey }), /API Key/);
   }
   for (const apiKey of ['long-unit-public-name', 'long-unit-public-model']) assert.throws(() => store.addAgent({ name: 'long-unit-public-name', role: 'tester', modelId: 'long-unit-public-model', apiKey }), /API Key/);

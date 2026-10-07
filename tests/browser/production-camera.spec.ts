@@ -51,3 +51,32 @@ test('a failed camera Gate does not offer an unusable trusted preview link or ex
   await expect(page.getByRole('link', { name: '打开受控场景预览' })).toHaveCount(0);
   await expect(page.getByText(/交互预览未开放/)).toBeVisible(); await expect(page.locator('iframe')).toHaveCount(0);
 });
+
+test('verifier score display rounds only presentation, preserves zero and unknown, and never upgrades the failed Gate', async ({ page }) => {
+  const rawScore = 2.2600000000000002;
+  const base = stateRun({ capability: 'camera-scene-v1', mode: 'live', limits: { maxCalls: 24, maxRepairCycles: 2 }, requirement: { id: 'UI-SCORE-DISPLAY', kind: 'illustrative' } }, false);
+  const review = (engine: string, candidateId: string, score: number | null) => ({ phase: 'research', engine, candidateIds: [candidateId], selectedCandidateId: null, criteriaHash: 'unchanged-criteria', decision: 'abstain', reason: '工程评分展示状态，不是真实模型或测试证据', scores: [{ candidateId, score, reason: '原始评分与门限不变' }] });
+  const run = { ...base, verifications: [review('jev', 'jev-candidate', rawScore), review('llm-rubric', 'llm-candidate', 4.333333333333333), review('llm-rubric', 'zero-candidate', 0), review('jev', 'unknown-candidate', null)], calls: [{ id: 'raw-score-call', role: 'researcher', phase: 'research', model: agents[2], executionSource: 'injected', startedAt: '2026-10-07T00:00:00Z', promptVersion: 'engineering-score-display', promptHash: 'unchanged', configHash: 'fixture', rawOutput: JSON.stringify({ score: rawScore }), usage: { inputTokens: null, outputTokens: null, estimatedCost: null, currency: 'USD' } }] };
+  await page.route('**/api/production/runs', route => route.fulfill({ json: [run] }));
+  await page.route(`**/api/production/runs/${id}`, route => route.fulfill({ json: run }));
+  const responsePromise = page.waitForResponse(response => response.url().endsWith('/api/production/runs'));
+  await page.goto('/#production');
+  const snapshot = await (await responsePromise).json(); expect(snapshot[0].verifications[0].scores[0].score).toBe(rawScore);
+  await page.getByRole('button', { name: /候选验证/ }).click();
+  const scores = page.locator('.prod-score');
+  await expect(scores.nth(0)).toContainText('评分 2.26（管线排序值）');
+  await expect(scores.nth(1)).toContainText('评分 4.33 / 5');
+  await expect(scores.nth(2)).toContainText('评分 0.00 / 5');
+  await expect(scores.nth(3)).toContainText('评分 unknown（管线排序值）');
+  await expect(scores).toHaveCount(4); await expect(scores.nth(0)).not.toContainText(String(rawScore));
+  await expect(page.getByText(/LLM 序数评分不代表概率/)).toBeVisible();
+  await expect(page.getByText(/评分仅在展示时保留两位小数/)).toBeVisible();
+  await expect(page.getByText('拒绝 / 弃权', { exact: true })).toHaveCount(4);
+  await page.getByRole('button', { name: /原始调用/ }).click();
+  const rawCall = page.locator('.prod-output').filter({ hasText: '研究员 · research' });
+  await rawCall.locator('summary').first().click();
+  await expect(rawCall.locator('pre').first()).toHaveText(JSON.stringify({ score: rawScore }));
+  await page.getByRole('button', { name: /门禁与交付/ }).click();
+  await expect(page.getByRole('heading', { name: '场景行为 Gate：未通过' })).toBeVisible();
+  await expect(page.getByRole('link', { name: '打开受控场景预览' })).toHaveCount(0);
+});

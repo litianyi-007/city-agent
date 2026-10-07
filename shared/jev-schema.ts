@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { productionApiKeySchema } from './production-schema.js';
+import type { ProductionPhaseRubric } from './production-verifier-rubric.js';
 
 export const JEV_ENDPOINT = 'https://api.typesafe.ai/v1/systemone';
 export const JEV_MODEL_ID = 'jev-1.13.0';
@@ -20,12 +21,12 @@ export type JevConfig = z.infer<typeof jevConfigSchema>;
 export type JevPublicConfig = JevConfig & { hasApiKey: boolean };
 export type SecretJevConfig = JevConfig & { apiKey?: string; hasApiKey?: boolean };
 export const DEFAULT_JEV_CONFIG: JevConfig = jevConfigSchema.parse({});
-export interface JevCandidateContext { phase: string; goal: string; acceptance: string | string[]; frozenHash: string | null; candidates: Array<{ id: string; value: unknown }>; capability?: 'offline-single-html' | 'camera-scene-v1'; }
+export interface JevCandidateContext { phase: string; goal: string; acceptance: string | string[]; frozenHash: string | null; candidates: Array<{ id: string; value: unknown }>; capability?: 'offline-single-html' | 'camera-scene-v1'; reviewContext?: unknown; }
 export type JevDimension = 'coverage' | 'consistency' | 'scope';
 export interface JevScoreAnswer { score: number; probabilities: Record<string, number>; confidence: number; legend: Record<string, string>; }
 export interface JevCandidateScore { candidateId: string; dimensions: Record<JevDimension, JevScoreAnswer>; meanScore: number; minimumScore: number; scopeProbability: number; scopeCertainty: number; qualified: boolean; stronglyRejected: boolean; }
 export interface JevChoiceAnswer { choice: string; probabilities: Record<string, number>; confidence: number; }
-export interface JevRequestSnapshot { model: string; state: JevCandidateContext & { trustBoundary: string }; questions: Record<string, { type: 'score' | 'choice' | 'noul'; instructions: string; criteria?: string[] | Record<string, string> }>; }
+export interface JevRequestSnapshot { model: string; state: JevCandidateContext & { trustBoundary: string; phaseReview?: ProductionPhaseRubric }; questions: Record<string, { type: 'score' | 'choice' | 'noul'; instructions: string; criteria?: string[] | Record<string, string> }>; }
 export interface JevEvaluation {
   policyVersion: string;
   status: 'accepted' | 'uncertain' | 'rejected' | 'error';
