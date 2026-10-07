@@ -15,6 +15,28 @@ function fixtureRun(index: number): ProductionRun {
 }
 const portalInput = (): ProductionPortalInput => ({ packageManifest: { platformCommit: 'frozen-commit', generatedAt: '2026-10-07', files: [] }, report: {}, requirements: PRODUCTION_DEMO_CASES, runs: PRODUCTION_DEMO_CASES.map((_, index) => fixtureRun(index)), jevBenchmarks: [], mixedRuns: [], trustedFixtureIds: PRODUCTION_DEMO_CASES.map(item => item.id) });
 
+test('public onboarding prioritizes three honest entry points and fixed cases before installation and folded evidence', () => {
+  const input = portalInput();
+  input.packageManifest.publisherCommit = 'a'.repeat(40);
+  input.recordedBuildInfo = { deploymentCommit: 'b'.repeat(40) };
+  const html = renderProductionPortal(input);
+  assert.ok(html.includes('aria-label="选择体验方式"'));
+  for (const label of ['体验固定案例', '本地输入新需求', '查看材料']) assert.ok(html.includes(`<strong>${label}</strong>`));
+  assert.ok(html.includes('立即操作成品 · 不收费 · 非新生成'));
+  assert.ok(html.indexOf('<section id="fixed-cases"') < html.indexOf('<section id="reviewer-start"'));
+  assert.ok(html.indexOf('<section id="fixed-cases"') < html.indexOf('<section id="jev-evidence"'));
+  assert.ok(html.includes('<details class="evidence-panel"><summary>六角色管线与能力边界'));
+  assert.ok(html.includes('<details class="evidence-panel"><summary>真实 Jev 与完整请求账本'));
+  assert.equal(html.includes('<details class="evidence-panel" open'), false);
+  assert.ok(html.includes('在“需求原话”输入你的新需求'));
+  assert.ok(html.includes('再点击“启动真实生产”'));
+  assert.ok(html.includes(`git checkout ${'b'.repeat(40)}`));
+  assert.equal(html.includes(`git checkout ${'a'.repeat(40)}`), false);
+  assert.ok(html.includes('这里只展示案例快照，不能提交新需求'));
+  assert.equal(html.includes('<textarea'), false);
+  assert.equal(html.includes('href="http://127.0.0.1:'), false);
+});
+
 test('reviewer v3 highlights same-version Markdown, independent installation and immutable evidence links', () => {
   const input = portalInput();
   const commit = 'a'.repeat(40);
@@ -161,6 +183,9 @@ test('actual Chromium public portal performs three trusted fixture interactions,
     assert.equal(await page.getByRole('link', { name: '下载申报主稿', exact: true }).getAttribute('href'), './submission/SUBMISSION-REPORT.md');
     assert.equal(await page.locator('video source').first().getAttribute('type'), 'video/mp4');
     assert.equal(await page.locator('input[type=password]').count(), 0);
+    assert.equal(await page.locator('main > section').first().getAttribute('id'), 'fixed-cases');
+    assert.equal(await page.locator('.entry-choices > a').count(), 3);
+    assert.equal(await page.locator('.evidence-panel[open]').count(), 0);
     assert.equal(await page.locator('iframe').getAttribute('sandbox'), 'allow-scripts');
     let frame = page.frameLocator('iframe');
     await frame.locator('#task-input').fill('准备发布'); await frame.locator('#add-task').click();
@@ -186,5 +211,71 @@ test('actual Chromium public portal performs three trusted fixture interactions,
     await page.getByRole('button', { name: '关闭预览', exact: true }).click(); assert.equal(await page.locator('iframe').count(), 0);
     await page.getByRole('button', { name: '打开预览', exact: true }).click(); frame = page.frameLocator('iframe'); assert.equal(await frame.locator('#tasks li').count(), 0);
     assert.deepEqual(errors, []); assert.deepEqual(unexpected, []);
+  } finally { await context.close(); await browser.close(); }
+});
+
+test('actual Chromium onboarding opens deep evidence links and only copies installation commands after an explicit click', async () => {
+  const input = portalInput();
+  const installedCommit = 'b'.repeat(40);
+  input.packageManifest.publisherCommit = 'a'.repeat(40);
+  input.recordedBuildInfo = { deploymentCommit: installedCommit };
+  input.trustedFixtureIds = [];
+  input.cameraRuns = [{ ...fixtureRun(0), id: 'camera-onboarding-state', evidenceKind: 'real-model', status: 'failed', input: { ...fixtureRun(0).input, mode: 'live', capability: 'camera-scene-v1' }, gate: undefined, artifacts: [], error: 'Engineering API-state example only' }];
+  const html = renderProductionPortal(input);
+  const browser = await chromium.launch(); const context = await browser.newContext(); const page = await context.newPage();
+  const unexpected: string[] = []; const errors: string[] = [];
+  page.on('pageerror', error => errors.push(error.message));
+  // Raw trusted test JavaScript avoids transpiler-only __name helpers in the
+  // browser's isolated initialization context. No real Clipboard permission.
+  await page.addInitScript(`window.copyCalls = 0; Object.defineProperty(navigator, 'clipboard', { configurable: true, value: { writeText: async function (text) { window.copyCalls++; window.copiedCommands = text; throw new Error('Engineering denied-clipboard fixture'); } } });`);
+  await context.route('**/*', route => {
+    const url = new URL(route.request().url());
+    if (url.origin === 'http://portal.test' && url.pathname === '/production/') return route.fulfill({ contentType: 'text/html', body: html });
+    unexpected.push(route.request().url()); return route.abort();
+  });
+  try {
+    await page.goto('http://portal.test/production/');
+    assert.equal(await page.evaluate(() => (window as unknown as { copyCalls: number }).copyCalls), 0);
+    const localEntry = page.locator('.entry-choices a[href="#reviewer-start"]');
+    await localEntry.focus(); await page.keyboard.press('Enter');
+    assert.equal(new URL(page.url()).hash, '#reviewer-start');
+    assert.equal(await page.getByRole('heading', { name: '本地页面：在哪里输入我的需求？' }).isVisible(), true);
+    await page.getByRole('button', { name: '复制安装命令', exact: true }).click();
+    assert.equal(await page.evaluate(() => (window as unknown as { copyCalls: number }).copyCalls), 1);
+    assert.match(await page.locator('#copy-commands-status').innerText(), /剪贴板不可用，命令已选中/);
+    assert.match(await page.evaluate(() => window.getSelection()?.toString() ?? ''), new RegExp(`git checkout ${installedCommit}`));
+    assert.equal(await page.locator('#reviewer-install-commands').evaluate(element => document.activeElement === element), true);
+    assert.equal(await page.locator('.evidence-panel[open]').count(), 0);
+    await page.getByRole('link', { name: '执行证据', exact: true }).click();
+    assert.equal(await page.locator('#jev-evidence').evaluate(element => element.closest('details')?.open), true);
+    await page.goto('http://portal.test/production/#camera-evidence');
+    await page.reload();
+    assert.equal(await page.locator('#camera-evidence').evaluate(element => element.closest('details')?.open), true);
+    assert.equal(await page.locator('#jev-evidence').evaluate(element => element.closest('details')?.open), false);
+    for (const theme of ['dark', 'light']) {
+      if (theme === 'light') await page.getByRole('button', { name: '切换浅色' }).click();
+      for (const width of [375, 768, 1024, 1440]) {
+        await page.setViewportSize({ width, height: 1000 });
+        assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true, `onboarding overflow ${theme} ${width}`);
+      }
+    }
+    assert.equal(await page.locator('textarea,input[type=password],a[href^="http://127.0.0.1:"]').count(), 0);
+    assert.deepEqual(errors, []); assert.deepEqual(unexpected, []);
+  } finally { await context.close(); await browser.close(); }
+});
+
+test('clipboard success is user-triggered and copies the exact current-version command text without executing it', async () => {
+  const input = { ...portalInput(), requirements: [], runs: [], trustedFixtureIds: [], recordedBuildInfo: { deploymentCommit: 'c'.repeat(40) } };
+  const html = renderProductionPortal(input);
+  const browser = await chromium.launch(); const context = await browser.newContext(); const page = await context.newPage();
+  await page.addInitScript(`window.copyCalls = 0; Object.defineProperty(navigator, 'clipboard', { value: { writeText: async function (text) { window.copyCalls++; window.copiedCommands = text; } } });`);
+  await context.route('**/*', route => route.fulfill({ contentType: 'text/html', body: html }));
+  try {
+    await page.goto('http://portal.test/production/#reviewer-start');
+    assert.equal(await page.evaluate(() => (window as unknown as { copyCalls: number }).copyCalls), 0);
+    await page.getByRole('button', { name: '复制安装命令', exact: true }).click();
+    assert.equal(await page.evaluate(() => (window as unknown as { copyCalls: number }).copyCalls), 1);
+    assert.equal(await page.evaluate(() => (window as unknown as { copiedCommands: string }).copiedCommands), await page.locator('#reviewer-install-commands').textContent());
+    assert.match(await page.locator('#copy-commands-status').innerText(), /安装命令已复制/);
   } finally { await context.close(); await browser.close(); }
 });

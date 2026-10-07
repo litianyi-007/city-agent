@@ -15,8 +15,8 @@ test('publication paths cannot include runtime data or overwrite unrelated site 
   assert.equal(packagePath('MOCK-01/evidence.json'), 'MOCK-01/evidence.json');
   assert.equal(publicPath('MOCK-02/index.html'), 'MOCK-02/index.html.txt');
   assert.equal(publicPath('MOCK-02/gate.json'), 'MOCK-02/gate.json');
-  for (const name of ['demo.mp4', 'REVIEWER-GUIDE.md', 'SUBMISSION-REPORT.md', 'real-camera-runs.json', 'CAMERA-04/run.json', 'CAMERA-03/evidence.json', 'CAMERA-01/delivery-manifest.json']) assert.equal(packagePath(name), name);
-  for (const name of ['CAMERA-05/run.json', 'CAMERA-04/scene.html', 'CAMERA-04/api-key.json', 'demo-private.mp4']) assert.throws(() => packagePath(name), /allowlist/);
+  for (const name of ['demo.mp4', 'REVIEWER-GUIDE.md', 'SUBMISSION-REPORT.md', 'SUBMISSION-INTRODUCTION.md', 'POST-SUBMISSION-PLAN.md', 'real-camera-runs.json', 'CAMERA-04/run.json', 'CAMERA-03/evidence.json', 'CAMERA-01/delivery-manifest.json']) assert.equal(packagePath(name), name);
+  for (const name of ['CAMERA-05/run.json', 'CAMERA-04/scene.html', 'CAMERA-04/api-key.json', 'demo-private.mp4', 'SUBMISSION-REPORT.md.zip', 'PRIVATE-NOTES.md']) assert.throws(() => packagePath(name), /allowlist/);
 });
 test('registered historical QA manifest is accepted without permitting arbitrary version suffixes', () => {
   for (const version of ['mock-package-v1', 'mock-package-v1-qa1', 'mock-package-v2']) assert.equal(isFrozenPackageVersion(version), true);

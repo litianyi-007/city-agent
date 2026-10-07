@@ -14,3 +14,5 @@ tmp/pdfs/
 *.log
 # Reproducible prepared camera models/WASM; pins and preparation script tracked.
 public/camera-assets/
+# User-created submission archive: preserve locally, never include in source/publishing.
+/docs/production/SUBMISSION-REPORT.md.zip
