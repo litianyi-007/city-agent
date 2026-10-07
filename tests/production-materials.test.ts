@@ -1,8 +1,8 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { mkdir, mkdtemp, rm, symlink, writeFile } from 'node:fs/promises';
+import { mkdir, mkdtemp, readFile, rm, symlink, writeFile } from 'node:fs/promises';
 import path from 'node:path';
-import { benchmarkMaterialRows, formatMaterialCost, immutableSourceLink, inheritedMaterialFile, materialAccounting, packageDocLinks, publicMaterialUrl, SUBMISSION_BASELINE } from '../scripts/production-materials.js';
+import { benchmarkMaterialRows, formatMaterialCost, immutableSourceLink, inheritedMaterialFile, materialAccounting, MATERIALS_VERSION, OPTIONAL_PACKAGE_DOCS, packageDocLinks, publicMaterialUrl, realGenerationMaterialRecords, realGenerationMaterialRows, reviewerInstallInstructions, SUBMISSION_BASELINE } from '../scripts/production-materials.js';
 import { readCheckedPackage, sha256 } from '../scripts/production-public-safety.js';
 import { createJevBenchmarkSnapshot } from '../server/production/jev-benchmark.js';
 import { DEFAULT_JEV_CONFIG, type JevEvaluation } from '../shared/jev-schema.js';
@@ -88,11 +88,12 @@ test('real generation records are separate from mixed Jev evidence and do not im
 });
 
 test('immutable source links fix absent package references without moving original run provenance', () => {
-  const doc = '[Tasks](NEXT-STEPS.md) [Archive](archive/README.md) [Schema](../../shared/production-benchmarks.ts) [External](https://example.org)';
-  const result = packageDocLinks(doc, originalCommit, ['NEXT-STEPS.md']);
+  const doc = '[Tasks](NEXT-STEPS.md) [Archive](archive/README.md) [Schema](../../shared/production-benchmarks.ts) [External](https://example.org) [Mock raw](MOCK-01/run.json) [Camera raw](CAMERA-04/run.json)';
+  const result = packageDocLinks(doc, originalCommit, ['NEXT-STEPS.md', 'MOCK-01/run.json', 'CAMERA-04/run.json']);
   assert.ok(result.includes('[Tasks](NEXT-STEPS.md)'));
   assert.ok(result.includes(`/blob/${originalCommit}/docs/production/archive/README.md`)); assert.ok(result.includes(`/blob/${originalCommit}/shared/production-benchmarks.ts`));
   assert.ok(result.includes('[External](https://example.org)')); assert.throws(() => immutableSourceLink('main', 'docs/production/README.md'), /immutable/); assert.throws(() => immutableSourceLink(originalCommit, '../secret'), /Invalid/);
+  assert.ok(result.includes('[Mock raw](MOCK-01/run.json)')); assert.ok(result.includes('[Camera raw](CAMERA-04/run.json)'));
 });
 
 test('public material URL supports only explicit safe HTTPS static entry and does not enable API operations', () => {
@@ -145,4 +146,28 @@ test('ordinary manifest, every registered hash, and bounded count are mandatory 
   const oversized = path.join(directory, 'oversized'); await mkdir(oversized);
   await writeFile(path.join(oversized, 'package-manifest.json'), JSON.stringify({ version: 'mock-package-v1', platformCommit: originalCommit, submissionBaseline: SUBMISSION_BASELINE, files: Array.from({ length: 101 }, () => ({ path: 'requirements.json', sha256: '0'.repeat(64) })) }));
   await assert.rejects(readCheckedPackage(oversized), /registered frozen/);
+});
+
+test('reviewer instructions pin the complete report commit and document correct independent installation and camera preparation', () => {
+  const instructions = reviewerInstallInstructions(originalCommit);
+  for (const clause of ['Node.js >=22.19', '--branch feature/autonomous-production --single-branch', `git checkout ${originalCommit}`, 'npm ci', 'npx playwright install chromium', 'npm run build', 'npm start', 'http://127.0.0.1:4420/#production', 'npx tsx scripts/prepare-camera-assets.ts', '--verify', 'public GitHub Pages neither receives keys nor runs this backend']) assert.ok(instructions.includes(clause), clause);
+  assert.throws(() => reviewerInstallInstructions('main'), /complete report commit/); assert.throws(() => reviewerInstallInstructions(originalCommit.slice(0, 7)), /complete report commit/);
+  assert.equal(MATERIALS_VERSION, 'production-materials-v3'); assert.ok(OPTIONAL_PACKAGE_DOCS.includes('REVIEWER-GUIDE.md')); assert.ok(OPTIONAL_PACKAGE_DOCS.includes('SUBMISSION-REPORT.md'));
+});
+
+test('four archived real camera failures are represented without changing input/raw bytes or claiming stable success', async () => {
+  const paths = ['01', '02', '03', '04'].map(number => new URL(`../docs/production/experiments/CAMERA-${number}/run.json`, import.meta.url));
+  const bytes = await Promise.all(paths.map(source => readFile(source))); const runs = bytes.map(value => JSON.parse(value.toString('utf8')) as ProductionRun);
+  assert.equal(runs.length, 4); assert.ok(runs.every(run => run.evidenceKind === 'real-model' && run.status === 'failed'));
+  const accounting = materialAccounting([], [], runs).measuredScope; assert.equal(accounting.realGeneration.started, 4); assert.equal(accounting.realGeneration.terminalDenominator, 4); assert.equal(accounting.realGeneration.fullRequirementDelivered, 0); assert.equal(accounting.realGeneration.fullRequirementDeliveryRate, 0); assert.equal(accounting.realGeneration.autonomyCertified, false); assert.match(accounting.realGeneration.scope, /Different-configuration tuning ledger/);
+  const records = realGenerationMaterialRecords(runs); const rows = realGenerationMaterialRows(runs); assert.equal(rows.length, 4);
+  for (const [index, record] of records.entries()) { assert.equal(record.runId, runs[index].id); assert.deepEqual(record.input, runs[index].input); assert.deepEqual(record.usage, runs[index].usage); assert.equal(record.gateState, 'not-reached'); assert.equal(record.fullRequirementVerified, false); assert.equal(record.harnessInvocations, runs[index].calls.filter(call => call.executionSource === 'harness').length); assert.equal(record.jevRequestIntents, runs[index].jevCalls?.length ?? 0); assert.ok(rows[index].includes(runs[index].input.brief)); }
+  for (const [index, source] of paths.entries()) assert.deepEqual(await readFile(source), bytes[index], 'source evidence remains byte-identical');
+});
+
+test('camera synthetic passes stay in the real terminal denominator but never prove full delivery; unknown POST counts are not logical call lengths', () => {
+  const input = productionRunInputSchema.parse({ ...fixture('camera').input, mode: 'live', capability: 'camera-scene-v1' });
+  const camera = { ...fixture('camera'), input, evidenceKind: 'real-model' as const, cameraVerification: { scope: 'scene-behavior-synthetic' as const, boundedScenePassed: true, visionModelVerified: false as const, physicalCameraVerified: false as const, fullRequirementVerified: false as const, runtimeVersion: 'unit', runtimeHash: 'unit', limitations: [] }, calls: [{ id: 'call-one', role: 'developer' as const, phase: 'implement', executionSource: 'harness' as const, usage: { inputTokens: null, outputTokens: null, estimatedCost: null, currency: 'USD' } }] as ProductionRun['calls'] };
+  const scope = materialAccounting([], [], [camera]).measuredScope; assert.equal(scope.realGeneration.recordedGatePassed, 1); assert.equal(scope.realGeneration.boundedCameraScenePassed, 1); assert.equal(scope.realGeneration.terminalDenominator, 1); assert.equal(scope.realGeneration.fullRequirementDelivered, 0);
+  const record = scope.realGeneration.records[0]; assert.equal(record.harnessInvocations, 1); assert.equal(record.providerRequests, null); assert.equal(record.unknownProviderCounts, 1); assert.equal(record.roleOnlyUsage.inputTokens, null); assert.equal(record.roleOnlyUsage.estimatedCost, null); assert.equal(formatMaterialCost(record.roleOnlyUsage.estimatedCost), 'unknown');
 });

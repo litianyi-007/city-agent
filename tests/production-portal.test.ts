@@ -15,6 +15,70 @@ function fixtureRun(index: number): ProductionRun {
 }
 const portalInput = (): ProductionPortalInput => ({ packageManifest: { platformCommit: 'frozen-commit', generatedAt: '2026-10-07', files: [] }, report: {}, requirements: PRODUCTION_DEMO_CASES, runs: PRODUCTION_DEMO_CASES.map((_, index) => fixtureRun(index)), jevBenchmarks: [], mixedRuns: [], trustedFixtureIds: PRODUCTION_DEMO_CASES.map(item => item.id) });
 
+test('reviewer v3 highlights same-version Markdown, independent installation and immutable evidence links', () => {
+  const input = portalInput();
+  const commit = 'a'.repeat(40);
+  input.packageManifest = { ...input.packageManifest, materialsVersion: 'production-materials-v3', reportCommit: commit, publisherCommit: commit, files: [{ path: 'REVIEWER-GUIDE.md' }, { path: 'SUBMISSION-REPORT.md' }] };
+  input.submissionBase = `./reviews/${commit}/submission/`;
+  input.previewBase = `./reviews/${commit}/previews/`;
+  input.snapshotHref = `./reviews/${commit}/index.html`;
+  const html = renderProductionPortal(input);
+  assert.ok(html.includes('评委入口 · 下载、安装与自测'));
+  for (const name of ['REVIEWER-GUIDE.md', 'SUBMISSION-REPORT.md']) assert.ok(html.includes(`href="./reviews/${commit}/submission/${name}"`));
+  assert.ok(html.includes(`href="./reviews/${commit}/index.html"`));
+  assert.ok(html.includes('git clone --branch feature/autonomous-production --single-branch https://github.com/litianyi-007/city-agent.git city-agent-production-review'));
+  assert.ok(html.includes('Node.js 22.19+'));
+  assert.ok(html.includes('npx playwright install chromium'));
+  assert.ok(html.includes(`git checkout ${commit}`));
+  assert.ok(html.includes('npm ci\nnpx playwright install chromium\nnpm run build\nnpm start'));
+  assert.ok(html.includes('公开页面不接收 Key、不运行 Harness、不进行实时生成'));
+  assert.ok(html.includes('按评委指南准备并核验固定本地资产'));
+});
+
+test('registered MP4 is preferred without relabeling historical footage as a new real delivery experiment', () => {
+  const input = portalInput();
+  const originalCommit = '891fedcab0f3c5994c7e92f7874e610b3b6354b8';
+  input.packageManifest = { ...input.packageManifest, files: [{ path: 'demo.mp4' }, { path: 'demo.webm' }], historicalVideo: true, videoSourceCommit: originalCommit };
+  const mp4 = renderProductionPortal(input);
+  assert.ok(mp4.includes('下载 MP4 演示视频'));
+  assert.ok(mp4.includes('<source src="./submission/demo.mp4" type="video/mp4">'));
+  assert.ok(mp4.indexOf('<source src="./submission/demo.mp4"') < mp4.indexOf('<source src="./submission/demo.webm"'));
+  assert.ok(mp4.includes(originalCommit));
+  assert.ok(mp4.includes('格式转换不是重跑、重录或新的模型实验'));
+  assert.ok(mp4.includes('不作为现版本安全边界通过证据'));
+  input.packageManifest.files = [{ path: 'demo.webm' }];
+  const fallback = renderProductionPortal(input);
+  assert.ok(fallback.includes('历史 WebM 回退录屏'));
+  assert.ok(fallback.includes('下载历史 WebM 录屏'));
+  assert.ok(fallback.includes('本包没有 MP4'));
+  assert.equal(fallback.includes('<source src="./submission/demo.mp4"'), false);
+});
+
+test('four different-version real camera failures remain separate from three zero-generation Mock cases', () => {
+  const input = portalInput();
+  input.cameraRuns = Array.from({ length: 4 }, (_, index): ProductionRun => ({
+    ...fixtureRun(0), id: `camera-ui-state-${index}`, platformCommit: String(index + 1).repeat(40),
+    input: { ...fixtureRun(0).input, mode: 'live', capability: 'camera-scene-v1', demoCaseId: undefined, requirement: { ...fixtureRun(0).input.requirement, id: `CAMERA-0${index + 1}`, source: 'Engineering portal-state test, not measured evidence', acceptance: 'Original frozen acceptance', kind: 'illustrative' } },
+    evidenceKind: 'real-model', status: 'failed', gate: undefined, gateHistory: [], artifacts: [],
+    cameraVerification: { scope: 'scene-behavior-synthetic', boundedScenePassed: false, visionModelVerified: false, physicalCameraVerified: false, fullRequirementVerified: false, runtimeVersion: 'engineering-fixture', runtimeHash: 'engineering-fixture-hash', limitations: ['UI fixture only'] },
+    calls: [], usage: { inputTokens: null, outputTokens: null, estimatedCost: null, currency: 'USD', complete: false }, error: 'engineering failed-state evidence',
+  }));
+  const html = renderProductionPortal(input);
+  assert.ok(html.includes('记录 4 次真实生成尝试；完整交付通过 0 / 4 次终态'));
+  assert.ok(html.includes('不同配置的调优账本，不是同一冻结配置下的稳定成功率实验'));
+  assert.ok(html.includes('3 / 3'));
+  assert.ok(html.includes('0.0%'));
+  assert.ok(html.includes('0 个通过 / 4 次真实研发终态尝试'));
+  assert.ok(html.includes('real-camera-runs.json'));
+  assert.equal((html.match(/完整需求未验收/g) ?? []).length, 4);
+  for (const run of input.cameraRuns) assert.ok(html.includes(run.platformCommit!));
+  const bounded = { ...input.cameraRuns[0], status: 'completed' as const, gate: { passed: true, checks: [] }, cameraVerification: { ...input.cameraRuns[0].cameraVerification!, boundedScenePassed: true } };
+  const boundedHtml = renderProductionPortal({ ...input, cameraRuns: [bounded], mixedRuns: [bounded] });
+  assert.ok(boundedHtml.includes('0 个通过 / 1 次真实研发终态尝试'));
+  assert.ok(boundedHtml.includes('通过（不代表实机）'));
+  assert.equal(boundedHtml.includes('完整需求已验收'), false);
+});
+
 test('portable portal escapes evidence, discloses static scope and never embeds generated source or Key forms', () => {
   const input = portalInput(); input.requirements = [{ ...PRODUCTION_DEMO_CASES[0], brief: '<script>alert("escape")</script>' }];
   const html = renderProductionPortal(input);
@@ -60,12 +124,19 @@ test('real Jev accounting retains failed and uncertain calls, excludes injected 
   assert.ok(unresolved.includes('已知 0 次；1 个请求意图未观测，不记为 0'));
   input.jevBenchmarks = [{ ...batch, cases: [{ ...batch.cases[0], evaluation: { ...intent, error: 'preflight failed', usage: { ...intent.usage, inputTokens: 0, outputTokens: 0, estimatedCost: 0, complete: true } } }] }];
   const denied = renderProductionPortal(input); assert.ok(denied.includes('实际请求</dt><dd>0')); assert.equal(denied.includes('未完成请求意图 / 未观测'), false);
+  input.jevBenchmarks = [{ ...batch, cases: [{ ...batch.cases[0], evaluationInvoked: true, evaluation: null }] }];
+  const missingResponse = renderProductionPortal(input);
+  assert.ok(missingResponse.includes('已登记开始评审，但没有取得响应记录'));
+  assert.ok(missingResponse.includes('实际请求</dt><dd>unknown'));
+  assert.ok(missingResponse.includes('已知 0 次；1 个请求意图未观测，不记为 0'));
+  assert.equal(missingResponse.includes('真实 Jev 估算费用（USD）</p><strong>0.'), false);
 });
 
 test('actual Chromium public portal performs three trusted fixture interactions, keyboard selection and both themes without external calls', async () => {
   const input = portalInput();
   input.packageManifest.platformCommit = '891fedcab0f3c5994c7e92f7874e610b3b6354b8';
-  input.packageManifest.files = [{ path: 'demo.webm' }];
+  input.packageManifest.files = [{ path: 'demo.webm' }, { path: 'demo.mp4' }, { path: 'REVIEWER-GUIDE.md' }, { path: 'SUBMISSION-REPORT.md' }];
+  input.packageManifest.materialsVersion = 'production-materials-v3';
   const html = renderProductionPortal(input);
   const browser = await chromium.launch(); const context = await browser.newContext(); const page = await context.newPage();
   page.setDefaultTimeout(5000);
@@ -85,6 +156,11 @@ test('actual Chromium public portal performs three trusted fixture interactions,
   try {
     await page.goto('http://portal.test/production/');
     assert.deepEqual(errors, []);
+    assert.equal(await page.getByRole('heading', { name: '评委入口 · 下载、安装与自测' }).count(), 1);
+    assert.equal(await page.getByRole('link', { name: '下载评委安装 / 自测指南' }).getAttribute('href'), './submission/REVIEWER-GUIDE.md');
+    assert.equal(await page.getByRole('link', { name: '下载申报主稿', exact: true }).getAttribute('href'), './submission/SUBMISSION-REPORT.md');
+    assert.equal(await page.locator('video source').first().getAttribute('type'), 'video/mp4');
+    assert.equal(await page.locator('input[type=password]').count(), 0);
     assert.equal(await page.locator('iframe').getAttribute('sandbox'), 'allow-scripts');
     let frame = page.frameLocator('iframe');
     await frame.locator('#task-input').fill('准备发布'); await frame.locator('#add-task').click();
