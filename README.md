@@ -2,15 +2,17 @@
 
 2026-10-07追加：JSON契约修复后的第二轮真实调查已完成，仍未通过两个10人门限；小学0/10、宠物3/10联合通过，15未启动。5次确认请求、17,032 Token，保守估算¥0.042032；按授权停止整场景，规划/CORS未再启动。旧RC1、原PDF和旧账本保持不变。[独立测试与下一步](docs/research/CONTRACT-TRIAL-2026-10-07.md)。本轮已关账，不以未用余额自动重试或扩容。
 
-公开评审版 RC1 已发布：`feature/virtual-society-next`，固定 Tag `society-review-2026-10-07-rc1`（源码 `0600eb067fa74a448c96610f7f47ca9176d56760`）。[源码/材料下载](https://github.com/litianyi-007/city-agent/releases/tag/society-review-2026-10-07-rc1) · [发布实证记录](docs/research/PUBLIC-RELEASE-2026-10-07.md)。`main`、旧 Tag 与并行 L4/L5 分支不改，正式比赛尚未提交。[合并待办与真实状态](docs/SOCIETY-NEXT.md) · [五层人群方法与在线依据](docs/research/RESIDENT-CONSTRUCTION-METHOD.md) · [历史16题/12人工程自证](docs/research/PERSONA-PROOF.md) · [评测预登记](docs/research/EVALUATION-NEXT.md)。
+最新公开固定版：`society-contract-review-2026-10-07-rc2-ui1`（源码 `a1fe400a1a2e06879081caecb6afe15d7d0e7373`）。[最新独立补充材料](https://litianyi-007.github.io/city-agent/submission-contract11/) · [固定源码/附件下载](https://github.com/litianyi-007/city-agent/releases/tag/society-contract-review-2026-10-07-rc2-ui1) · [最新发布实证](docs/research/CONTRACT-PUBLIC-RELEASE-2026-10-07.md)。303单测、19浏览器回归（37.7秒）、双构建通过；公网浏览器34项通过，155文件实际字节一致性由151项初检＋4项独立补验覆盖，原传输失败记录保留。界面已修复新旧报告入口混淆，不把工程通过升级为真实质量通过。
+
+历史公开评审版 RC1：固定 Tag `society-review-2026-10-07-rc1`（源码 `0600eb067fa74a448c96610f7f47ca9176d56760`）。[历史源码/材料下载](https://github.com/litianyi-007/city-agent/releases/tag/society-review-2026-10-07-rc1) · [历史发布实证记录](docs/research/PUBLIC-RELEASE-2026-10-07.md)。`main`、旧 Tag 与并行 L4/L5 分支未由本批修改，正式比赛尚未提交。[合并待办与真实状态](docs/SOCIETY-NEXT.md) · [五层人群方法与在线依据](docs/research/RESIDENT-CONSTRUCTION-METHOD.md) · [历史16题/12人工程自证](docs/research/PERSONA-PROOF.md) · [评测预登记](docs/research/EVALUATION-NEXT.md)。
 
 历史RC1轮已实施真实 API 合成居民调查，不是 mock：计划两场景各10名；小学17题实际1名、联合通过0/10，宠物18题实际2名、联合通过1/10，合计17名未启动；两场景均未达到扩容门限。另2次自然语言规划均未产出可应用的 schema 候选；2次浏览器跨域请求 HTTP200 仅证明协议路径，不是新版页面完整流程或额外独立居民。全部7次确认请求 input15,418/output6,881 Token，按冻结高峰非缓存价保守估算¥0.085884，不是供应商账单。¥5/24次授权未用满也不自动重试或扩容。
 
-截至本候选文档更新，284项单元测试、19项浏览器回归（37.0秒）及本机/Pages两种构建通过；最新事实与发布封板见[本轮真实测试与发布审查](docs/research/LIVE-REVIEW-2026-10-07.md)。历史188/14阶段见[初批交接](docs/research/NEXT-BATCH-REPORT-2026-10-07.md)，历史239/19阶段见[评审补齐交接](docs/research/REVIEW-COMPLETION-2026-10-07.md)；不把旧工程结果改写成新的模型质量。
+历史RC1阶段284项单元测试、19项浏览器回归（37.0秒）及本机/Pages两种构建通过，见[RC1真实测试与发布审查](docs/research/LIVE-REVIEW-2026-10-07.md)。历史188/14阶段见[初批交接](docs/research/NEXT-BATCH-REPORT-2026-10-07.md)，历史239/19阶段见[评审补齐交接](docs/research/REVIEW-COMPLETION-2026-10-07.md)；不把旧工程结果改写成新的模型质量。
 
-[阶段里程碑汇报](docs/MILESTONE-SUBMISSION-2026-10-07.md)：封板截至2026-10-07 03:19:40（北京时间），四项申报附件及外部观测映射、记忆/wiki/dream的未实施规划齐备。冻结Tag：`submission-milestone-2026-10-07`；后续新任务从此Tag分支。申报完成不代表原产品M1/M2全部验收通过。
+[阶段里程碑汇报](docs/MILESTONE-SUBMISSION-2026-10-07.md)：封板截至2026-10-07 03:19:40（北京时间），四项申报附件及外部观测映射、记忆/wiki/dream的未实施规划齐备。冻结Tag：`submission-milestone-2026-10-07`；后续新任务从此Tag分支。申报材料准备完成不代表正式申报已提交或原产品M1/M2全部验收通过。
 
-公开问卷 Demo：**https://litianyi-007.github.io/city-agent/**。已上线：[公开评审材料](https://litianyi-007.github.io/city-agent/submission-next/index.html) · [真实测试轮报告](https://litianyi-007.github.io/city-agent/submission-next/live-proof/report.md) · [原文/失败总账JSON](https://litianyi-007.github.io/city-agent/submission-next/live-proof/report.json)。公网119项文件字节与发布版一致，零费用页面流程独立通过；335文件固定源码包在macOS同机新目录安装复验通过，不是跨平台/他人干净电脑验证。原冻结[申报材料](https://litianyi-007.github.io/city-agent/submission/index.html)及[录屏](https://litianyi-007.github.io/city-agent/submission/demo.mp4)保持不变。新版4分33秒视频是前次零费用 UI 操作，不冒充本轮真实 API 录像。
+公开问卷 Demo：**https://litianyi-007.github.io/city-agent/**。最新入口见顶部；历史RC1[公开评审材料](https://litianyi-007.github.io/city-agent/submission-next/index.html) · [真实测试报告](https://litianyi-007.github.io/city-agent/submission-next/live-proof/report.md) · [原文/失败总账JSON](https://litianyi-007.github.io/city-agent/submission-next/live-proof/report.json)保持不变。RC1阶段119项公网文件字节一致，335文件固定源码包在macOS同机新目录安装复验通过，不是跨平台/他人干净电脑验证，也不继承为新版UI1安装验收。原冻结[申报材料](https://litianyi-007.github.io/city-agent/submission/index.html)及[录屏](https://litianyi-007.github.io/city-agent/submission/demo.mp4)保持不变。RC1的4分33秒视频是前次零费用 UI 操作；本轮未制作新的付费实测录像。
 
 **评委入口：[完整快速开始与故障排查](docs/guides/JUDGE-QUICKSTART.md) · [静态说明页](public/review-guide.html)。** 三条路径：浏览器无Key看快照/规则；页面自备Key直接请求供应商（需CORS、不经过Harness）；下载候选固定源码后本机通过Harness复现。`doctor/start:review`属于新候选，旧冻结Tag只有原基本启动；材料ZIP不是安装包。Windows/Linux尚未完成本项目干净机器实测。
 
@@ -29,10 +31,12 @@ Node.js 22.19+（已验证 22.22.3），不要使用Node 20；使用nvm时先执
 评审应下载上面已发布的固定 Tag/完整 commit SHA，而非浮动分支。在新目录取得源码，再执行安装：
 
 ```bash
-git clone --branch society-review-2026-10-07-rc1 --depth 1 https://github.com/litianyi-007/city-agent.git city-agent-review-rc1
-cd city-agent-review-rc1
+git clone --branch society-contract-review-2026-10-07-rc2-ui1 --depth 1 https://github.com/litianyi-007/city-agent.git city-agent-review-rc2-ui1
+cd city-agent-review-rc2-ui1
 git rev-parse HEAD
 ```
+
+应输出 `a1fe400a1a2e06879081caecb6afe15d7d0e7373`。此固定Tag可下载；本轮没有重新完成其干净机器安装验收，历史RC1下载方式仍保留在评委指南。
 
 ```bash
 npm ci
