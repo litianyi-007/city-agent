@@ -112,6 +112,21 @@ for (const strategy of [undefined, 'planned-groups-v1'] as const) for (const col
   });
 }
 
+test('same-length historical synthetic credential generations retain full startup coverage without repeating window scans', async t => {
+  const f = fixture(t);
+  const synthetic = f.service.store as unknown as { encrypt(secret: string): string; state: { snapshots: Record<string, unknown[]> } };
+  // Keep the existing synthetic product-credential length. A new seventh
+  // distinct length may legitimately exceed the unchanged global scan bound;
+  // this fixture tests many historical generations, not unlimited lengths.
+  synthetic.state.snapshots.history = Array.from({ length: 24 }, (_, i) => ({ public: f.service.store.agents()[0], secret: synthetic.encrypt(`free-group-history-${String(i).padStart(8, '0')}`.padEnd('group-fixture-product-never-a-real-key'.length, '!')) }));
+  const run = await f.start(); assert.equal(run.status, 'completed', run.error);
+  assert.equal(f.captures[0].phase, 'product'); assert.equal(run.calls.length, 15);
+  assert.equal(run.repairs, 0);
+  assert.equal(run.validationContract!.publicCollisionGuardVersion, 'public-collision-guard-v2');
+  assert.equal(run.validationContract!.startupPublicGuardVersion, 'production-startup-public-guard-v1');
+  assert.equal(run.evidenceKind, 'injected-test');
+});
+
 test('two groups compose one independently reviewed candidate with exact sources, no fabricated call, then freeze once', async t => {
   const f = fixture(t); const run = await f.start(); assert.equal(run.status, 'completed', run.error);
   assert.equal(run.calls.length, 15); assert.equal(run.repairs, 0); assert.deepEqual(f.counts(), { preflights: 1, gates: 1 });

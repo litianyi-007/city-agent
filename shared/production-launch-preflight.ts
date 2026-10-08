@@ -19,8 +19,8 @@ export function productionLaunchCallEnvelope(candidateCount: 1 | 2, repairLimit:
   // ordinary regeneration adds one, and a Gate repair adds two.
   return { baseCalls: 6 * (candidateCount + 1), worstCaseCalls: (6 + 3 * repairLimit) * (candidateCount + 1) };
 }
-export type ProductionLaunchPreflightIssueCode = 'agent-selection-invalid' | 'agent-disabled' | 'agent-key-missing' | 'agent-pricing-missing' | 'agent-currency-mismatch' | 'execution-unready' | 'execution-stale' | 'first-request-token-budget' | 'first-request-cost-budget';
-export type ProductionLaunchPreflightWarningCode = 'not-paid-authorization' | 'acceptance-not-frozen' | 'reservation-not-billing' | 'budget-may-stop-early' | 'call-envelope-exceeds-budget' | 'token-envelope-exceeds-budget' | 'cost-envelope-exceeds-budget' | 'source-bound-not-real-validated' | 'planned-groups-not-real-validated';
+export type ProductionLaunchPreflightIssueCode = 'agent-selection-invalid' | 'agent-disabled' | 'agent-key-missing' | 'agent-pricing-missing' | 'agent-currency-mismatch' | 'execution-unready' | 'execution-stale' | 'first-request-token-budget' | 'first-request-cost-budget' | 'startup-public-contract-rejected';
+export type ProductionLaunchPreflightWarningCode = 'not-paid-authorization' | 'acceptance-not-frozen' | 'reservation-not-billing' | 'budget-may-stop-early' | 'call-envelope-exceeds-budget' | 'token-envelope-exceeds-budget' | 'cost-envelope-exceeds-budget' | 'source-bound-not-real-validated' | 'planned-groups-not-real-validated' | 'startup-guard-not-guarantee';
 export interface ProductionLaunchExecutionSummary {
   bootId: string | null; startedAt: string | null; commit: string | null; sourceClean: boolean;
   sourceFingerprint: string | null; buildFingerprint: string | null;
@@ -33,6 +33,9 @@ export interface ProductionLaunchPreflightReport {
   input: ProductionRunInput; models: ProductionAgent[]; execution: ProductionLaunchExecutionSummary;
   /** Opt-in only: legacy report serialization/hash stays byte-compatible. */
   configuration?: { promptVersion: string; pmOutputPolicyVersion: string; roleSchemaDiagnosticsVersion: string; acceptanceStepAuditVersion?: string; acceptanceReviewProjectionVersion?: string };
+  /** Present only when the server has checked the same full fixed material
+   * and encrypted credential set as startup. No plaintext/secret metadata. */
+  startupGuard?: { version: string; publicCollisionGuardVersion: string; ready: boolean };
   budget: {
     baseCalls: number; worstCaseCalls: number; inputTokensPerRequest: number; outputTokensPerRequest: number;
     firstRequest: { totalTokens: number; estimatedCost: number | null; currency: 'USD' | 'CNY' };

@@ -22,6 +22,7 @@ import { JEV_POLICY_VERSION } from '../../shared/jev-schema.js';
 import { productionRequestCounts } from '../../shared/production-ledger.js';
 import { VerifierStudyController } from './verifier-study-control.js';
 import { buildProductionLaunchPreflight } from './launch-preflight.js';
+import { assertProductionStartupPublicSafe } from './startup-public-contract.js';
 export { isUnresolvedJevIntent, productionRequestCounts } from '../../shared/production-ledger.js';
 
 // Source is a download, never an execution-capable document in the UI browser.
@@ -151,7 +152,7 @@ export function createProductionService(dataDir: string, options: ProductionOpti
     try {
       if (pipeline.busy || benchmark || studies.busy) throw new Error('预检时已有活动运行。');
       store.assertStudyPublicSafe(req.body);
-      const report = buildProductionLaunchPreflight(req.body, store.agents(), executionIdentity, assertExecutionFresh);
+      const report = buildProductionLaunchPreflight(req.body, store.agents(), executionIdentity, assertExecutionFresh, input => assertProductionStartupPublicSafe(store, input));
       store.assertStudyPublicSafe(report); res.json(report);
     } catch { res.status(400).json({ error: '免费预检被拒绝：请检查未授权的离线HTML输入、公开配置、运行互斥及保密边界；未启动任何任务。' }); }
   });

@@ -1,0 +1,28 @@
+{
+  "version": "html06-conversation-assent-v1",
+  "recordedAtUtc": "2026-10-08 18:38:52 UTC",
+  "timezone": "Asia/Shanghai",
+  "userReply": "继续下一步",
+  "referencedProposalCommit": "fba3731f373d690b6792b01beb62f1e7d4337d3a",
+  "referencedProposal": "docs/production/HTML-06-PROPOSAL.md",
+  "basis": "User instructed continuation after the specific one-run HTML06 budget question; interpreted and announced as assent only to that bounded proposal.",
+  "scope": "One HTML-06 real UI submission only; no Jev or automatic second run.",
+  "limits": {
+    "maxCalls": 24,
+    "maxRepairCycles": 2,
+    "maxTokens": 500000,
+    "maxOutputTokens": 6000,
+    "maxDurationMs": 600000,
+    "maxCost": 1,
+    "currency": "USD"
+  },
+  "prices": {
+    "inputPerMillion": 0.3,
+    "outputPerMillion": 1.2,
+    "currency": "USD"
+  },
+  "unknownUsageStop": true,
+  "noGateRelaxation": true,
+  "noOuterArtifactEdit": true,
+  "limitation": "Conversation-derived bounded consent record, not an independent signature or a supplier invoice cap."
+}

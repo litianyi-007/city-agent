@@ -1,17 +1,5 @@
 # 自主软件生产任务清单
 
-## 当前顺序：HTML06启动守卫修复之后（2026-10-09）
-
-[HTML06](experiments/HTML-06/RESULT.md)仅启动一次，首调用前因公共守卫工作量超限失败，0供应商调用/费用。该授权已使用，不自动第二次提交。[守卫v2及预检同源](PUBLIC-COLLISION-GUARD.md)免费修复，原12×20Gate、Verifier质量标准和完整八项业务不变；[本批验证](BATCH-HTML06-GUARD-CHECKS.md)记录工程而非模型效果。
-
-| 顺序 | 下一任务 | 门限 |
-| --- | --- | --- |
-| 1 | 新配置一次真实完整分组与HTML交付 | [HTML07提案](HTML-07-PROPOSAL.md)另获单次有限预算授权；干净源码/构建/boot，免费预检含startupGuard.ready=true；实际前端只提交1次，0调用拒绝也入账 |
-| 2 | 核对业务覆盖及经济效果 | 逐原始状态、边界、负例核对独立setup和精确业务结果；真实steps审计与PM自报义务不是语义证书。真实Verifier、freeze、行为Gate、失败、额外规划/审计Token均留证；不先称更省费 |
-| 3 | 安全执行器、受控仓库与泛化 | 容器/网络/秘密/资源/取消硬门限先通过，再支持模板、增量与Bug；固定配置三类九次另预登记并确认整批总预算，未见题目不加专用分支 |
-
-本批真实UI启动仅HTML06一次、外部模型请求0；工程修复不自动启动HTML07或对照实验。仅推送生产分支，不改另一worktree、main、tag、gh-pages、申报稿及旧实验。[修改前全文留底](archive/2026-10-09-before-html06/NEXT-STEPS.md)。下面是此前时点记录，新顺序以上表为准。
-
 ## 当前顺序：步骤事实审计之后（2026-10-08）
 
 [实际步骤审计](ACCEPTANCE-STEP-AUDIT.md)已接入分组构建、完整 Verifier、源守卫、冻结与交付证据。不是自动的语义覆盖判定，不从 PM 自报义务认证原需求齐全；完整原文和行为 Gate 保持。工程结果与审查独立见[本批记录](BATCH-STEP-AUDIT-CHECKS.md)，[修改前全文留底](archive/2026-10-08-before-step-audit/NEXT-STEPS.md)。

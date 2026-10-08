@@ -1,7 +1,7 @@
 import { randomUUID } from 'node:crypto';
 import { isDeepStrictEqual } from 'node:util';
 import type { z } from 'zod';
-import { PRODUCTION_ACCEPTANCE_POLICY_LITERALS, PRODUCTION_ACCEPTANCE_GROUP_POLICY_LITERALS, PRODUCTION_PM_OUTPUT_POLICY_LITERALS, PRODUCTION_STEP_AUDIT_POLICY_LITERALS, PRODUCTION_CREDENTIAL_POLICY_VERSION, PRODUCTION_PLANNING_LOOP_VERSION, PRODUCTION_REPAIR_POLICY_VERSION, PRODUCTION_ROLE_LABELS, productionRunInputSchema, type ProductionCall, type ProductionRepair, type ProductionRole, type ProductionRun, type ProductionAcceptanceConstruction } from '../../shared/production-schema.js';
+import { PRODUCTION_CREDENTIAL_POLICY_VERSION, PRODUCTION_PLANNING_LOOP_VERSION, PRODUCTION_REPAIR_POLICY_VERSION, PRODUCTION_ROLE_LABELS, productionRunInputSchema, type ProductionCall, type ProductionRepair, type ProductionRole, type ProductionRun, type ProductionAcceptanceConstruction } from '../../shared/production-schema.js';
 import { runGate, preflightAcceptanceChecks, type AcceptanceCheck } from '../gate.js';
 import { HARNESS_JSON_OUTPUT_VERSION, HARNESS_PROMPT_TRANSPORT_VERSION, HarnessCallError, runRole, type RoleResult } from '../harness.js';
 import { USAGE_OBSERVER_VERSION } from '../usage-observer.js';
@@ -28,7 +28,9 @@ import { IMPLEMENTATION_EVIDENCE_VERSION, IMPLEMENTATION_EVIDENCE_VERIFIER_PROFI
 import { parseImplementationEvidenceDecisionText } from './implementation-evidence.js';
 import { estimateProductionCost, PRODUCTION_INPUT_TOKEN_RESERVATION } from '../../shared/production-launch-preflight.js';
 import { ACCEPTANCE_DIAGNOSTICS_VERSION, acceptanceCapacityFacts, diagnoseAcceptanceCapacity } from './acceptance-diagnostics.js';
-import { ACCEPTANCE_PLAN_VERSION, ACCEPTANCE_GROUP_VERSION, ACCEPTANCE_CONSTRUCTION_VERSION, ACCEPTANCE_PLAN_DIAGNOSTIC_LITERALS, acceptancePlanSchema, acceptancePlanHash, acceptanceGroupSchema, parseAcceptancePlan, parseAcceptanceGroup, composeAcceptanceGroups } from './acceptance-plan.js';
+import { ACCEPTANCE_PLAN_VERSION, ACCEPTANCE_GROUP_VERSION, ACCEPTANCE_CONSTRUCTION_VERSION, acceptancePlanSchema, acceptancePlanHash, acceptanceGroupSchema, parseAcceptancePlan, parseAcceptanceGroup, composeAcceptanceGroups } from './acceptance-plan.js';
+import { PUBLIC_COLLISION_GUARD_VERSION } from './public-collision-guard.js';
+import { STARTUP_PUBLIC_GUARD_VERSION, assertProductionStartupPublicSafe } from './startup-public-contract.js';
 
 export interface ProductionOptions { roleCall?: typeof runRole; gate?: typeof runGate; cameraGate?: typeof runCameraSceneGate; jevCall?: typeof evaluateJevCandidates; acceptancePreflight?: typeof preflightAcceptanceChecks; executionIdentity?: ProductionExecutionIdentity; assertExecutionFresh?: () => void; }
 export const CAMERA_GESTURE_DOM_CONTRACT = { selector: '#gesture-map', text: '固定可信平台文案，由scene.mappings唯一计算，不是用户必须定稿的UI文字。根据用户明确映射或授权范围内尚未指定的映射选择对应完整label，不能改变硬约束。', debounceFrames: CAMERA_DEBOUNCE_FRAMES, labels: CAMERA_GESTURE_LABELS };
@@ -56,6 +58,8 @@ export class ProductionPipeline {
     const acceptanceCapacity = camera ? undefined : acceptanceCapacityFacts();
     const responseFormatPolicy = 'deepseek-json-object-other-prompt-only' as const;
     const validationContract = { ...(implementationEvidenceMode ? { implementationEvidencePolicy: 'source-bound-v1' as const, implementationEvidenceVersion: IMPLEMENTATION_EVIDENCE_VERSION } : {}), planningLoopVersion: PRODUCTION_PLANNING_LOOP_VERSION, reviewContextVersion: REVIEW_CONTEXT_PROJECTION_VERSION, verifierDiagnosticsVersion: VERIFIER_DECISION_DIAGNOSTICS_VERSION, ...(!camera ? { htmlExecutionProfileVersion: HTML_EXECUTION_PROFILE_VERSION, outputDiagnosticsVersion: OUTPUT_DIAGNOSTICS_VERSION, acceptanceDiagnosticsVersion: ACCEPTANCE_DIAGNOSTICS_VERSION, acceptancePlanningVersion: ACCEPTANCE_PLANNING_VERSION } : {}), harnessPromptTransportVersion: HARNESS_PROMPT_TRANSPORT_VERSION, harnessJsonOutputVersion: HARNESS_JSON_OUTPUT_VERSION, responseFormatPolicy, semanticsVersion: ACCEPTANCE_SEMANTICS_VERSION, jevRequestLayoutVersion: JEV_REQUEST_LAYOUT_VERSION, ...(camera ? { cameraTestSemanticsVersion: CAMERA_TEST_SEMANTICS_VERSION } : {}), coverage: productionCoverageContract(capability) };
+    run.validationContract = structuredClone(validationContract);
+    Object.assign(validationContract, { publicCollisionGuardVersion: PUBLIC_COLLISION_GUARD_VERSION, startupPublicGuardVersion: STARTUP_PUBLIC_GUARD_VERSION });
     run.validationContract = structuredClone(validationContract);
     if (groupedAcceptance) {
       productionRunInputSchema.parse(run.input);
@@ -427,15 +431,7 @@ export class ProductionPipeline {
       // Fail before any paid request if a legacy credential would corrupt the
       // new fixed host protocol. This compares authenticated encrypted bytes,
       // never exports credentials or migrates the caller's private settings.
-      if (!camera) this.store.assertStudyPublicSafe({ outputDiagnosticsVersion: OUTPUT_DIAGNOSTICS_VERSION, acceptanceCapacity, acceptanceDiagnosticsVersion: ACCEPTANCE_DIAGNOSTICS_VERSION, acceptancePlanningVersion: ACCEPTANCE_PLANNING_VERSION, protocolLiterals: PRODUCTION_ACCEPTANCE_POLICY_LITERALS });
-      if (groupedAcceptance) {
-        this.store.assertStudyPublicSafe({ strategy: acceptanceStrategy, groupProtocolLiterals: PRODUCTION_ACCEPTANCE_GROUP_POLICY_LITERALS, pmProtocolLiterals: PRODUCTION_PM_OUTPUT_POLICY_LITERALS, diagnostics: ACCEPTANCE_PLAN_DIAGNOSTIC_LITERALS, pmPolicies: [pmOutputPolicy('think-design', outputContractSnapshot(planSchema)), pmOutputPolicy('acceptance-plan', outputContractSnapshot(acceptancePlanSchema))] });
-        this.store.assertStudyPublicSafe({ stepAuditProtocolLiterals: PRODUCTION_STEP_AUDIT_POLICY_LITERALS });
-        // Scan each complete fixed instruction separately, without weakening
-        // the existing bounded scan or omitting any text. A single combined
-        // envelope exceeds its work limit with six otherwise valid Keys.
-        for (const instructions of [...Object.values(GROUPED_CONTRACT_INSTRUCTIONS), GROUPED_ACCEPTANCE_PLAN_INSTRUCTIONS, GROUPED_ACCEPTANCE_GROUP_INSTRUCTIONS, ACCEPTANCE_CONSTRUCTION_REVIEW_INSTRUCTIONS]) this.store.assertStudyPublicSafe({ instructions });
-      }
+      assertProductionStartupPublicSafe(this.store, run.input);
       run.status = 'running'; event('start', camera ? '受控摄像头场景配置闭环开始；仅平台可信代码执行，物理摄像头与真实识别验收待完成。' : '有界闭环开始；仅离线单HTML交付，不执行生成的宿主脚本。');
       const productFixture = { goal: run.input.brief, scope: capability, acceptance: [run.input.requirement.acceptance], exclusions: ['无后端、无外网、无宿主代码执行'] };
       const researchFixture = { observations: ['这是明确标记的工程 Mock 任务清单示范。'], constraints: ['HTML/CSS/JS内联；冻结业务测试'], unknowns: ['真实模型成功率、真实需求泛化未测量'] };

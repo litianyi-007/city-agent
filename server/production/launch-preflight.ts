@@ -1,10 +1,12 @@
 import { createHash } from 'node:crypto';
-import { PRODUCTION_ROLES, productionAgentInputSchema, productionRunInputSchema, type ProductionAgent } from '../../shared/production-schema.js';
+import { PRODUCTION_ROLES, productionAgentInputSchema, productionRunInputSchema, type ProductionAgent, type ProductionRunInput } from '../../shared/production-schema.js';
 import { estimateProductionCost, productionLaunchCallEnvelope, PRODUCTION_INPUT_TOKEN_RESERVATION, PRODUCTION_LAUNCH_PREFLIGHT_VERSION, type ProductionLaunchPreflightReport, type ProductionLaunchExecutionSummary } from '../../shared/production-launch-preflight.js';
 import type { ProductionExecutionIdentity } from './provenance.js';
 import { STEP_AUDITED_GROUPED_PROMPT_VERSION, ACCEPTANCE_REVIEW_PROJECTION_VERSION } from './contracts.js';
 import { ACCEPTANCE_STEP_AUDIT_VERSION } from './acceptance-step-audit.js';
 import { PM_OUTPUT_POLICY_VERSION, ROLE_SCHEMA_DIAGNOSTICS_VERSION } from './role-output-policy.js';
+import { PUBLIC_COLLISION_GUARD_VERSION } from './public-collision-guard.js';
+import { STARTUP_PUBLIC_GUARD_VERSION } from './startup-public-contract.js';
 
 const messages = {
   'agent-selection-invalid': '必须选择六个不同的公开 Agent，每个角色恰好一个。',
@@ -16,6 +18,7 @@ const messages = {
   'execution-stale': '启动身份新鲜度校验失败；报告不授权执行，请重新构建或准备。',
   'first-request-token-budget': 'Token 预算不足以预留第一次产品角色请求。',
   'first-request-cost-budget': '费用预算不足以预留第一次产品角色请求。',
+  'startup-public-contract-rejected': '启动固定协议的保密或容量守卫未通过；请核对配置，不会启动任务或自动重试。',
 } as const;
 const warnings = {
   'not-paid-authorization': 'ready 仅表示此刻公开配置和第一次请求预留可满足，不是收费授权或启动令牌。真实启动仍须单独明确有限预算授权并重新校验。',
@@ -27,6 +30,7 @@ const warnings = {
   'cost-envelope-exceeds-budget': '声明价保守预留包络超过 maxCost，不代表实际收费，但运行可能提前停止。',
   'source-bound-not-real-validated': 'source-bound-v1 只有免费工程证据；源码锚点和检查引用不证明语义正确，完整冻结行为 Gate 仍必需，首轮建议 legacy 后再独立对照。',
   'planned-groups-not-real-validated': '分组策略只完成工程验证，未实测质量或节费；组不独立冻结或接受。按最多3组预留16初始／最多28次调用（两次共享修复），实际硬预算可能提前停止；原12项／20步与最终Gate不变。',
+  'startup-guard-not-guarantee': '固定启动材料已使用加密凭据集合核验，不解密或导出秘密；ready仍非收费授权。实际启动重复核验，后续新数据、配置变化与执行错误仍可能停止。',
 } as const;
 const sha = /^[a-f0-9]{64}$/;
 const commit = /^[a-f0-9]{40}(?:[a-f0-9]{24})?$/;
@@ -46,9 +50,10 @@ function executionSummary(identity: ProductionExecutionIdentity, fresh: boolean)
   result.ready = identity.ready === true && identity.issues.length === 0 && !!result.bootId && !!result.startedAt && !!result.commit && result.sourceClean && !!result.sourceFingerprint && !!result.buildFingerprint && !!buildSnapshot?.sourceClean && buildSnapshot.platformCommit === result.commit;
   return result;
 }
-/** Credential-free, no dispatch/persistence/browser. This snapshot is NOT a
- * consumed consent contract and must never be accepted as a paid start token. */
-export function buildProductionLaunchPreflight(raw: unknown, publicAgents: readonly ProductionAgent[], identity: ProductionExecutionIdentity, assertFresh: (() => void) | undefined): ProductionLaunchPreflightReport {
+/** Plaintext-credential-free, no dispatch/persistence/browser. The optional
+ * server callback checks fixed public material against encrypted generations.
+ * Without it, legacy pure reports stay byte-compatible. Never a paid token. */
+export function buildProductionLaunchPreflight(raw: unknown, publicAgents: readonly ProductionAgent[], identity: ProductionExecutionIdentity, assertFresh: (() => void) | undefined, assertStartupSafe?: (input: ProductionRunInput) => void): ProductionLaunchPreflightReport {
   if (!raw || typeof raw !== 'object' || Array.isArray(raw) || !Object.hasOwn(raw, 'budgetAuthorized') || (raw as { budgetAuthorized?: unknown }).budgetAuthorized !== false) throw new Error('免费预检必须显式未授权收费。');
   const input = productionRunInputSchema.parse(raw);
   if (input.mode !== 'live' || input.capability !== 'offline-single-html' || input.verifierEngine !== 'llm-rubric') throw new Error('免费预检仅支持真实离线 HTML 的独立 LLM 复核配置，不启动执行。');
@@ -96,6 +101,14 @@ export function buildProductionLaunchPreflight(raw: unknown, publicAgents: reado
   if (budget.envelope.worstCaseEstimatedCost !== null && budget.envelope.worstCaseEstimatedCost > input.limits.maxCost) warning('cost-envelope-exceeds-budget');
   if (input.implementationEvidencePolicy === 'source-bound-v1') warning('source-bound-not-real-validated');
   if (input.acceptanceStrategy === 'planned-groups-v1') warning('planned-groups-not-real-validated');
+  let startupGuard: ProductionLaunchPreflightReport['startupGuard'];
+  if (assertStartupSafe) {
+    let safe = false;
+    try { assertStartupSafe(input); safe = true; } catch { add('startup-public-contract-rejected'); }
+    startupGuard = { version: STARTUP_PUBLIC_GUARD_VERSION, publicCollisionGuardVersion: PUBLIC_COLLISION_GUARD_VERSION, ready: safe };
+    warning('startup-guard-not-guarantee');
+  }
   const payload = { version: PRODUCTION_LAUNCH_PREFLIGHT_VERSION, ready: !issues.length, paidAuthorized: false as const, finalGate: null, modelRequests: 0 as const, input, models, execution, budget, issues, warnings: warn, ...(input.acceptanceStrategy === 'planned-groups-v1' ? { configuration: { promptVersion: STEP_AUDITED_GROUPED_PROMPT_VERSION, pmOutputPolicyVersion: PM_OUTPUT_POLICY_VERSION, roleSchemaDiagnosticsVersion: ROLE_SCHEMA_DIAGNOSTICS_VERSION, acceptanceStepAuditVersion: ACCEPTANCE_STEP_AUDIT_VERSION, acceptanceReviewProjectionVersion: ACCEPTANCE_REVIEW_PROJECTION_VERSION } } : {}) };
-  return { ...payload, reportHash: createHash('sha256').update(JSON.stringify(payload)).digest('hex') };
+  const checkedPayload = { ...payload, ...(startupGuard ? { startupGuard } : {}) };
+  return { ...checkedPayload, reportHash: createHash('sha256').update(JSON.stringify(checkedPayload)).digest('hex') };
 }

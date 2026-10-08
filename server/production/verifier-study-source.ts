@@ -5,14 +5,14 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { types as utilTypes } from 'node:util';
 
-export const VERIFIER_STUDY_SOURCE_VERSION = 'verifier-study-source-v6' as const;
+export const VERIFIER_STUDY_SOURCE_VERSION = 'verifier-study-source-v7' as const;
 const BRANCH = 'feature/autonomous-production';
 const BASELINE = 'b66122c21604fdb2ecdcbafb89c3d5ad8cde1466';
 // There is deliberately no caller-selected root, filename, Git command or ref.
 const ROOT = dirname(fileURLToPath(new URL('../../package.json', import.meta.url)));
 
-/** Fixed repository source closure, not an attestation of installed node_modules,
- * Chromium binaries, the host, or an atomic OS-wide filesystem snapshot. */
+/** Fixed study-selected source set, not the full recursive import graph or an
+ * attestation of loaded TS, node_modules, Chromium, host or atomic filesystem. */
 export const VERIFIER_STUDY_SOURCE_FILES = Object.freeze([
   'server/production/verifier-wire-preflight.ts', 'server/production/verifier-study-preflight.ts',
   'scripts/prepare-production-verifier-study.ts', 'server/production/verifier-study.ts', 'server/production/verifier-study-ledger.ts',
@@ -33,6 +33,7 @@ export const VERIFIER_STUDY_SOURCE_FILES = Object.freeze([
   'server/production/verifier-study-archive.ts', 'shared/verifier-study-control-schema.ts',
   'shared/production-launch-preflight.ts', 'server/production/launch-preflight.ts',
   'server/production/acceptance-diagnostics.ts',
+  'server/production/public-collision-guard.ts',
 ] as const);
 
 export interface VerifierStudySourceSnapshot {

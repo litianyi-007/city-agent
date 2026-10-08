@@ -1,13 +1,5 @@
 # 六角色自主软件生产工作区
 
-## 最新批次：HTML06启动失败与免费守卫修复（2026-10-09）
-
-[HTML06实际页面仅提交一次](experiments/HTML-06/RESULT.md)，启动协议守卫在首模型调用前超限，failed/286ms/0调用/0Token/0模型费用。没有进入plan、groups、audit、freeze、研发或Gate；八项业务全部未测，不把真实模式启动标记当模型执行证据。16份公开原件含输入、实际提交、授权解释、原始下载和两张截图，旧失败不回写。
-
-免费[守卫v2与启动同源切片](PUBLIC-COLLISION-GUARD.md)保留所有历史Agent/Jev代际和完整指令，用分长度窗口及加密候选前缀过滤减少重复工作；最终仍须完整密文和认证Tag匹配，工作边界明确且超限失败关闭。免费预检现在核对与启动相同固定材料，报告新增 `startupGuard`；ready仍不授权收费或保证交付。[工程与对抗审查](BATCH-HTML06-GUARD-CHECKS.md)／[下一单次提案](HTML-07-PROPOSAL.md)分别记录，费用0不自动重用HTML06单次授权。
-
-体验入口仍为 `http://127.0.0.1:4420/#production` → 新建自定义需求 → 填写需求与验收 → 免费预检；六角色配置在页面填写Key与声明费率。公开[Pages](https://litianyi-007.github.io/city-agent/production/)仍是v6静态交互/材料入口，不运行任意需求研发后端。本批仅生产分支源码/文档，不改主线、gh-pages、已提交申报或历史实验；[更新前全文留底](archive/2026-10-09-before-html06/README.md)。以下内容按此前批次时点阅读。
-
 ## 当前源码：实际步骤审计（2026-10-08）
 
 在 [PM 分阶段输出政策](PM-OUTPUT-POLICY.md)之后，本批推进 [步骤事实与完整评审契约](ACCEPTANCE-STEP-AUDIT.md)：显式分组验收使用 grouped v3，将真实数组长度、操作/断言索引与源调用 hash 绑定到完整候选；完整 Verifier 接收原需求、完整计划和一次测试全文，审查前后重算，随后仍执行原冻结行为 Gate。旧 v1/v2 提示、非分组 HTML、摄像头及历史实验保持原件。

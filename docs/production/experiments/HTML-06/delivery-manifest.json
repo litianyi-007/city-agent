@@ -1,0 +1,834 @@
+{
+  "version": "production-delivery-v1",
+  "runId": "6bd95961-4dca-4378-9d2b-ead8befdb36e",
+  "platformCommit": "fba3731f373d690b6792b01beb62f1e7d4337d3a",
+  "status": "failed",
+  "evidenceKind": "real-model",
+  "capability": "offline-single-html",
+  "requirement": {
+    "id": "HTML-06",
+    "source": "用户授权范围内自拟演示需求；非真实业务工单；HTML-06仅本次1 USD声明价估算停止额度",
+    "background": "grouped v3实际步骤审计与完整评审工程验证后的单次闭环提案；保留HTML-04/05全部业务要求与限额，不复用旧答案、源码或模板",
+    "acceptance": "1. 初始实际记录数0，全部总额与当前筛选小计均精确为0.00。某分类没有记录时，实际显示0条、小计0.00，不产生占位记录冒充费用。\n2. 添加“打印纸／办公／10.10”和“车票／差旅／20.20”后，实际只有2条，描述、分类和金额准确；全部总额及全部筛选小计为30.30。每次成功添加后描述、金额输入清空。\n3. 办公筛选只显示“打印纸”1条、小计10.10；差旅筛选只显示“车票”1条、小计20.20；全部总额始终为30.30。切回全部恢复原2条，不复制、丢失或修改记录。\n4. 在独立新页添加0.10与0.20两笔后，实际2条，总额与全部小计精确为0.30，不是浮点尾数或输入拼接；删除其中0.10一笔后，另一笔保留且总额为0.20。\n5. 单条下界0.01和上界9999.99均可入账且分别只新增1条；两笔合计精确为10000.00。上限属于单条金额，不能错误限制全部费用总额。金额显示保留两位小数。\n6. -1、0、空金额、1.234和10000.00均提示并拒绝。分别在空列表及已有有效记录的状态下核对：拒绝后实际记录数、已有内容、全部总额与当前小计不变。不得将空值当0、负数取绝对值或超精度金额静默四舍五入后入账。\n7. 空白描述（包括纯空格）即使金额有效也提示并拒绝，实际记录、内容与总额保持不变。\n8. 分类筛选状态下删除只移除目标记录并立即更新小计、全部总额；切回全部后其它记录仍在。删除最后一条后实际记录数0、总额与小计均回到0.00。\n各独立check自行setup，不依赖前一个检查的页面状态；最多12项、每项20步。分类选择和筛选可通过click操作，业务由明确按钮click驱动，不依赖原生form.submit。使用独立业务内容/金额节点做精确断言、实际条目容器做数量断言，不以按钮可见、输入回显或整行含操作按钮的文本替代业务验证。当前Gate无reload、键盘或selectOption，不把未发生的刷新/持久化验证写成通过。",
+    "difficulty": "low",
+    "kind": "illustrative"
+  },
+  "promptVersion": "production-html-grouped-v3",
+  "validationContract": {
+    "planningLoopVersion": "production-planning-loop-v1",
+    "reviewContextVersion": "production-review-context-v2",
+    "verifierDiagnosticsVersion": "verifier-decision-diagnostic-v1",
+    "htmlExecutionProfileVersion": "production-html-execution-v1",
+    "outputDiagnosticsVersion": "production-json-diagnostics-v2",
+    "acceptanceDiagnosticsVersion": "production-acceptance-diagnostics-v1",
+    "acceptancePlanningVersion": "production-acceptance-planning-v1",
+    "harnessPromptTransportVersion": "harness-literal-prompt-v1",
+    "harnessJsonOutputVersion": "harness-json-output-v1",
+    "responseFormatPolicy": "deepseek-json-object-other-prompt-only",
+    "semanticsVersion": "production-acceptance-semantic-v2",
+    "jevRequestLayoutVersion": "jev-request-layout-v2",
+    "coverage": {
+      "version": "production-coverage-owners-v1",
+      "capability": "offline-single-html",
+      "owners": {
+        "hostSchema": {
+          "required": true,
+          "scope": "Complete inline HTML and strict test/verifier schemas; not business correctness."
+        },
+        "roleCss": {
+          "required": true,
+          "scope": "All in-scope business behavior independently frozen and actually executed in restricted Chromium, including exact numeric results and edge cases. No platform template is evidence for generated code."
+        },
+        "platformMandatoryGate": {
+          "required": true,
+          "scope": "Restricted browser network/navigation/error/timeout policies; no host execution or arbitrary repository support."
+        }
+      },
+      "evidenceRule": "This contract assigns obligations only. A claimed owner or engineering fixture does not pass a business requirement. Final delivery requires actual immutable checks; unknown and deferred coverage never become true automatically."
+    },
+    "acceptanceStrategy": "planned-groups-v1",
+    "acceptanceConstructionVersion": "production-acceptance-construction-v1",
+    "acceptancePlanVersion": "production-acceptance-plan-v1",
+    "acceptanceGroupVersion": "production-acceptance-group-v1",
+    "pmOutputPolicyVersion": "production-pm-output-policy-v1",
+    "roleSchemaDiagnosticsVersion": "production-role-schema-diagnostics-v1",
+    "acceptanceStepAuditVersion": "production-acceptance-step-audit-v1",
+    "acceptanceReviewProjectionVersion": "production-acceptance-review-projection-v1"
+  },
+  "validationContractHash": "787dc9470bfd96bc3aabc9f15ee685c377ea8519cadbf0b48ab781b5d88de78f",
+  "compactOutputPolicy": {
+    "version": "verifier-compact-output-v2",
+    "candidateReasonTargetCharacters": 120,
+    "overallReasonTargetCharacters": 160,
+    "hostCandidateReasonMaximum": 1000,
+    "hostOverallReasonMaximum": 1500
+  },
+  "verifierVersion": "verifier-phase-ordinal-v5",
+  "outputContractVersion": "production-output-contract-v1",
+  "repairPolicyVersion": "production-global-repair-v1",
+  "repairHistory": [],
+  "credentialPolicyVersion": "visible-token-v2",
+  "jevPolicyVersion": "jev-candidate-v4",
+  "jevConfig": null,
+  "usageObserverVersion": "raw-wire-usage-v1",
+  "runtime": "DeepSeek Harness 0.1.5-rc.3 + restricted Chromium Gate",
+  "environment": {
+    "generatedExecution": "restricted short-lived Chromium; no generated Node/shell execution",
+    "localPreview": "controlled screenshot, not a generated-code iframe",
+    "dependencyLock": "repository package-lock.json; no generated dependencies",
+    "targetBaseCommit": null,
+    "targetBaseCommitReason": "single HTML generation; no target Git repository was modified",
+    "platformFrozenBaseline": "b66122c21604fdb2ecdcbafb89c3d5ad8cde1466"
+  },
+  "source": null,
+  "sourceSha256": null,
+  "models": [
+    {
+      "id": "58b2f492-52c1-49ee-8936-53e5c8c6cc89",
+      "name": "产品经理",
+      "role": "product",
+      "provider": "deepseek",
+      "baseUrl": "https://api.deepseek.com",
+      "modelId": "deepseek-flash",
+      "enabled": true,
+      "hasApiKey": true,
+      "pricing": {
+        "inputPerMillion": 0.3,
+        "outputPerMillion": 1.2,
+        "currency": "USD"
+      }
+    },
+    {
+      "id": "65e308f1-8582-4b41-b485-92911d44ed0f",
+      "name": "项目经理",
+      "role": "project-manager",
+      "provider": "deepseek",
+      "baseUrl": "https://api.deepseek.com",
+      "modelId": "deepseek-flash",
+      "enabled": true,
+      "hasApiKey": true,
+      "pricing": {
+        "inputPerMillion": 0.3,
+        "outputPerMillion": 1.2,
+        "currency": "USD"
+      }
+    },
+    {
+      "id": "8abcf5e4-a5f3-44a5-b58b-4f7aa83d8834",
+      "name": "研究员",
+      "role": "researcher",
+      "provider": "deepseek",
+      "baseUrl": "https://api.deepseek.com",
+      "modelId": "deepseek-flash",
+      "enabled": true,
+      "hasApiKey": true,
+      "pricing": {
+        "inputPerMillion": 0.3,
+        "outputPerMillion": 1.2,
+        "currency": "USD"
+      }
+    },
+    {
+      "id": "5e6500fe-48d3-4646-a412-d0bfaacffacc",
+      "name": "研发",
+      "role": "developer",
+      "provider": "deepseek",
+      "baseUrl": "https://api.deepseek.com",
+      "modelId": "deepseek-flash",
+      "enabled": true,
+      "hasApiKey": true,
+      "pricing": {
+        "inputPerMillion": 0.3,
+        "outputPerMillion": 1.2,
+        "currency": "USD"
+      }
+    },
+    {
+      "id": "299e00c3-cf0c-4f3f-814d-6c33e723a9d7",
+      "name": "测试",
+      "role": "tester",
+      "provider": "deepseek",
+      "baseUrl": "https://api.deepseek.com",
+      "modelId": "deepseek-flash",
+      "enabled": true,
+      "hasApiKey": true,
+      "pricing": {
+        "inputPerMillion": 0.3,
+        "outputPerMillion": 1.2,
+        "currency": "USD"
+      }
+    },
+    {
+      "id": "cc18586a-8d6b-4c19-950f-308034a0c0b1",
+      "name": "Verifier",
+      "role": "verifier",
+      "provider": "deepseek",
+      "baseUrl": "https://api.deepseek.com",
+      "modelId": "deepseek-flash",
+      "enabled": true,
+      "hasApiKey": true,
+      "pricing": {
+        "inputPerMillion": 0.3,
+        "outputPerMillion": 1.2,
+        "currency": "USD"
+      }
+    }
+  ],
+  "reproduce": "Run frozen checks against delivered index.html in request-denying isolated Chromium; raw records are in evidence.json. Downloaded HTML opened outside this controlled environment is not network isolated.",
+  "limitations": [
+    "Offline single HTML only",
+    "No calibrated verifier confidence",
+    "Cost based on declared pricing, not provider invoice",
+    "No arbitrary repository execution; verified container unavailable",
+    "Chromium timeout and heap bounds are not OS CPU/memory/disk hard limits"
+  ],
+  "usage": {
+    "inputTokens": 0,
+    "outputTokens": 0,
+    "estimatedCost": 0,
+    "currency": "USD",
+    "complete": true
+  },
+  "durationMs": 286,
+  "repairs": 0,
+  "interventions": [],
+  "failure": "评估凭据碰撞检查超限，请精简配置",
+  "executionIdentity": {
+    "version": "production-boot-disk-v1",
+    "bootId": "45b7681c-f1d5-44b6-85d2-2f311871f47e",
+    "startedAt": "2026-10-08T13:44:05.077Z",
+    "commit": "fba3731f373d690b6792b01beb62f1e7d4337d3a",
+    "sourceClean": true,
+    "sourceFingerprint": "740be7ab122d6cb459a99adb56d05283de94b846f55d2d56396bd4cb89e6de91",
+    "sourceFiles": [
+      {
+        "path": "config/production-environment.ts",
+        "sha256": "9f80b92fddbd8d3b1a6b35d427d2bf95e63dc83752670ecfb029646e5afb67fa",
+        "bytes": 1917
+      },
+      {
+        "path": "index.html",
+        "sha256": "b527e803cb1ee33a2cf43a0769eab07296f50b02e5ab8624904acc7cbb6f30fc",
+        "bytes": 541
+      },
+      {
+        "path": "package-lock.json",
+        "sha256": "e278b75c619b286a72fb8c545863080a5112627669a9fec9202473bb2d92938e",
+        "bytes": 414150
+      },
+      {
+        "path": "package.json",
+        "sha256": "8dab70403153a1d8f52a3ddb11fcfcd3ffa92754c8a04df27c6dfa42a30a86e8",
+        "bytes": 1610
+      },
+      {
+        "path": "scripts/production-build-stamp.ts",
+        "sha256": "d76ffcbcb392f10e97e1a515f060ea1b0d9af0880b9a2766299d4a4881024bb2",
+        "bytes": 573
+      },
+      {
+        "path": "server/city.ts",
+        "sha256": "4d2a171264c5588efd1c40cb6e19fe592b603af7dda76f8429dd7343ad3680bd",
+        "bytes": 12575
+      },
+      {
+        "path": "server/demo-artifact.ts",
+        "sha256": "ed9b32573322e77d8938a2c651294a7eca62453b011787bb2918120f0fa209de",
+        "bytes": 21010
+      },
+      {
+        "path": "server/execution-evidence.ts",
+        "sha256": "1c84dd20e0a54d84979b96ab164d94c36ff2c447b8bc7d2021fc76a9f61d39ce",
+        "bytes": 7049
+      },
+      {
+        "path": "server/gate.ts",
+        "sha256": "8195c4cc972a81b0304762313bc1ccaf54f559b7afc24ace73ff5fca1bef8cf0",
+        "bytes": 14893
+      },
+      {
+        "path": "server/harness-literal-prompt.mjs",
+        "sha256": "6c04f63db159bec675069ea72939bbbc225f1d1fcb08200848dc00aef3aa31d2",
+        "bytes": 958
+      },
+      {
+        "path": "server/harness.ts",
+        "sha256": "ba8d14b147760015d36f4fa573bab55f90cc2386b38ffd0f5403f90df8be5007",
+        "bytes": 12618
+      },
+      {
+        "path": "server/index.ts",
+        "sha256": "54295293ed5335f179ebbcc98a4e38e08eba853fef4b84e9f43e8b1c9f19b68d",
+        "bytes": 17515
+      },
+      {
+        "path": "server/orchestrator.ts",
+        "sha256": "3a856af970f308c28dd7b227371fba21210d5184023fac8dcb49ec689490422d",
+        "bytes": 34705
+      },
+      {
+        "path": "server/population/model.ts",
+        "sha256": "c97d0ac0c52165bccb519dab60789db57757bac80aa9e9dc7ff5afa8dbc913f1",
+        "bytes": 20270
+      },
+      {
+        "path": "server/population/service.ts",
+        "sha256": "c7013d677eebfd77a2cd79e12781e88351f636a09ce204cce50f62e4dc5a42a5",
+        "bytes": 6308
+      },
+      {
+        "path": "server/production/acceptance-diagnostics.ts",
+        "sha256": "d4c5ef33f13496727431bf003d91598139f92a224a2b7a1a42aa1f637b5d7bca",
+        "bytes": 4878
+      },
+      {
+        "path": "server/production/acceptance-plan.ts",
+        "sha256": "fe64d9be0c60ba22a64309cd17292393f478dee92a639dd7085d07d5d9f8f0fd",
+        "bytes": 10858
+      },
+      {
+        "path": "server/production/acceptance-preflight.ts",
+        "sha256": "111c8218c85af5484b5c1472dbf51d91291fa6e41efcdb92a589049ff89d415a",
+        "bytes": 15009
+      },
+      {
+        "path": "server/production/acceptance-step-audit.ts",
+        "sha256": "519f7b5a09a093164a57a82fdc2863a41b759894b536b3b10ed3bb5e2f51be91",
+        "bytes": 7805
+      },
+      {
+        "path": "server/production/camera-gate.ts",
+        "sha256": "9d4826052d66afe5a3e8e4bbb2a0278520439ebd90b9c9b549103e09fd1e4345",
+        "bytes": 16597
+      },
+      {
+        "path": "server/production/contracts.ts",
+        "sha256": "6f1f90cf8c883aac0ba5a6e00715923e80c52b76b64f4eaca3e5dee72519aa52",
+        "bytes": 37232
+      },
+      {
+        "path": "server/production/fixtures.ts",
+        "sha256": "8d46fbf98c1d707e97f1e07e99fd84ed7434a12d900b05b01fbd4fc6ed6d9b06",
+        "bytes": 6277
+      },
+      {
+        "path": "server/production/implementation-evidence.ts",
+        "sha256": "f78fd2a93e7407d848b9f42955c78a9fe24a1d021f5d9c61e876ad1a56415b00",
+        "bytes": 1671
+      },
+      {
+        "path": "server/production/index.ts",
+        "sha256": "799a63ae7b82295ee75e1f623454ba12526c3480359c76f2fdee4f4bad615381",
+        "bytes": 29175
+      },
+      {
+        "path": "server/production/jev-benchmark.ts",
+        "sha256": "18f7a1a69eaceb67fc9d84f932049fce6526816e8d338e4194862d9fbb2a45da",
+        "bytes": 19752
+      },
+      {
+        "path": "server/production/jev.ts",
+        "sha256": "51a8797fa4e20082f491600d9ba82191c7340b4c6a2167bf137212786a0023b4",
+        "bytes": 27844
+      },
+      {
+        "path": "server/production/launch-preflight.ts",
+        "sha256": "9975d0efe508fc8bfc60f34f9495889c0bb5a2df80d502ad68c4e6b2f63daef9",
+        "bytes": 11573
+      },
+      {
+        "path": "server/production/output-diagnostics.ts",
+        "sha256": "65cd7f1aedfbbc8ba0c3ef3d5aff7b37aef76202c4c80c2d2b9f03201505eb22",
+        "bytes": 4101
+      },
+      {
+        "path": "server/production/pipeline.ts",
+        "sha256": "e185b1a0bb70e95a3327cf7ac54b4024c39d889b7e3ca3ebb0902f53e03e76b0",
+        "bytes": 84121
+      },
+      {
+        "path": "server/production/preview.ts",
+        "sha256": "687a76b9ee26bd842e620f7df533d87144fd7b01d4bda4ce800a007b7a232742",
+        "bytes": 6598
+      },
+      {
+        "path": "server/production/provenance.ts",
+        "sha256": "8253fd5023eb8fcb9eae59feb24411891c987ddf3f3928084800166d4de96357",
+        "bytes": 17011
+      },
+      {
+        "path": "server/production/review-context.ts",
+        "sha256": "92e2fe0f08dd6bb4ba534dccd93775f0830e947556eea6512f7cffc7afe02074",
+        "bytes": 6309
+      },
+      {
+        "path": "server/production/role-output-policy.ts",
+        "sha256": "1207a85ad9ec9712d3b120403c40dbda0876d946873eb390444cd84f594d9dbb",
+        "bytes": 10374
+      },
+      {
+        "path": "server/production/service.ts",
+        "sha256": "17b3e2b62b07e9956723476709ac65c5620ff7d5769433bbd27ae36edfc7eb76",
+        "bytes": 97
+      },
+      {
+        "path": "server/production/store.ts",
+        "sha256": "604322024a652ee644953c3dffe79258183e7e153ad0012c4fde9a51463a3b58",
+        "bytes": 18299
+      },
+      {
+        "path": "server/production/verifier-corpus-preparation.ts",
+        "sha256": "11efcfed2d6004a5bb556097e5b3ca95d3fce47d35ddaea708036d14d2206f39",
+        "bytes": 8288
+      },
+      {
+        "path": "server/production/verifier-diagnostics.ts",
+        "sha256": "f60be81780d0cb0981790944d607831d48cb6d2494ac1139c6557379acec8c87",
+        "bytes": 6806
+      },
+      {
+        "path": "server/production/verifier-scene-oracle.ts",
+        "sha256": "9358e57df8ab0672d99b613b3a88b01f69079038087113a201fd584180d5f34b",
+        "bytes": 10966
+      },
+      {
+        "path": "server/production/verifier-study-archive.ts",
+        "sha256": "c0be74b52ae625126db8333f0782f7360fcf3d1be73e1e8325fc9f3d6cd10cd9",
+        "bytes": 16112
+      },
+      {
+        "path": "server/production/verifier-study-control.ts",
+        "sha256": "d79d9d6f7414272400b9022bd4a009ef20a484ba3370e39f1aa6f12bdce772e4",
+        "bytes": 25560
+      },
+      {
+        "path": "server/production/verifier-study-engineering-fixture.ts",
+        "sha256": "39304ccea28f3a3d58c574d07596057bf58487e3b198218d19a44f1ee3d4703a",
+        "bytes": 7333
+      },
+      {
+        "path": "server/production/verifier-study-ledger.ts",
+        "sha256": "c90619c55230264ecd309ee5f917ece5f65171514803ee96a66bad3121c7a9c2",
+        "bytes": 33794
+      },
+      {
+        "path": "server/production/verifier-study-observed-policy.ts",
+        "sha256": "5ebc00c090c4e8b0a42cd1804346b3178fbc3c16e60ec425c6035e14363a5bc4",
+        "bytes": 8044
+      },
+      {
+        "path": "server/production/verifier-study-preflight.ts",
+        "sha256": "7e2e3e855bcaff9674bf022d22aa30bedec3ebd1e1e56055182b5a595ecd46f4",
+        "bytes": 13137
+      },
+      {
+        "path": "server/production/verifier-study-source.ts",
+        "sha256": "09be0513f477b534315974e458310629f14672139b576d373c7cc8fcbed85beb",
+        "bytes": 8599
+      },
+      {
+        "path": "server/production/verifier-study-strategy.ts",
+        "sha256": "9887d2e14e7796365d2fb6456eb58ae840ba52c9f31439163716ccc9ba485e6b",
+        "bytes": 15753
+      },
+      {
+        "path": "server/production/verifier-study-transport.ts",
+        "sha256": "abd929832863be7c2ded4fa8a9db1af455c51bd29e737e62264786a824861939",
+        "bytes": 22969
+      },
+      {
+        "path": "server/production/verifier-study.ts",
+        "sha256": "1645358921205c69e6326fd93461c52d1914490bade3979a63ecbca28626ca01",
+        "bytes": 34878
+      },
+      {
+        "path": "server/production/verifier-wire-preflight.ts",
+        "sha256": "b76decb0df59c0f211ff50ebf05099b465193de36a4b6be48c60387e856d6c65",
+        "bytes": 14271
+      },
+      {
+        "path": "server/research-cases.ts",
+        "sha256": "a99d0340c3adc13ba8b71ca735b51e5f3d852f136f0885da75f47e3339e4a7eb",
+        "bytes": 13524
+      },
+      {
+        "path": "server/research/contract.ts",
+        "sha256": "f93f289704e0776997d5ccd6a1fb2a3fa5fb222fb7266258b9bc094544301fc1",
+        "bytes": 9781
+      },
+      {
+        "path": "server/research/residents.ts",
+        "sha256": "b465eb97d146d4b057b90b52e946d798317e79968394dbabf6cdccb8c2e42a8d",
+        "bytes": 5756
+      },
+      {
+        "path": "server/research/surveys.ts",
+        "sha256": "2fbe045ff36f7f830d933cc9766985befdfc3c18c934e255c80e6878dc67d5b3",
+        "bytes": 4513
+      },
+      {
+        "path": "server/research/templates.ts",
+        "sha256": "6e68d4badaa32165a2556e743917119b9a3d5767c396bfd3f4276b526759a7ab",
+        "bytes": 9845
+      },
+      {
+        "path": "server/store.ts",
+        "sha256": "f3bce1b774fb98fdef667d26dcd10d83f73b50047860d07ac5351fedc90304e4",
+        "bytes": 20908
+      },
+      {
+        "path": "server/types.ts",
+        "sha256": "8bd0989d49a8ac941c884aee49e9638b6262383b610d89836464169a3e36a7ea",
+        "bytes": 2869
+      },
+      {
+        "path": "server/usage-observer.ts",
+        "sha256": "1fba7f0ff518b775dd331976eb2996563250cd0593690792cf9283219d6d4f98",
+        "bytes": 15534
+      },
+      {
+        "path": "shared/camera-asset-manifest.ts",
+        "sha256": "952ff1fe03cf164d0ec8e155a17303842b2ff7e59e003ab1dfbf93ea98db39ca",
+        "bytes": 5415
+      },
+      {
+        "path": "shared/camera-hand-worker.ts",
+        "sha256": "32c535e2ed5827f66d8886543faec3e97e1e7aa9aba673fd50c5ce4458bda540",
+        "bytes": 3072
+      },
+      {
+        "path": "shared/camera-scene-runtime.ts",
+        "sha256": "8c1e88e4e37dfcb8b18f4f9cb82c16affd37f98b7012c90b2e9d8bd2e48a7233",
+        "bytes": 27467
+      },
+      {
+        "path": "shared/camera-scene-schema.ts",
+        "sha256": "3c1920ba2fafb0230c40ecc63fbcba5da33fcc7e5f1cf8c08604b0fff97162d1",
+        "bytes": 2176
+      },
+      {
+        "path": "shared/camera-test-semantics.ts",
+        "sha256": "139845ba925af107fd49a29b44a681143e84a82278945d74acca8cef9eebc7fd",
+        "bytes": 3693
+      },
+      {
+        "path": "shared/evidence.ts",
+        "sha256": "5717a1067cfc0f57e87446f3045eff02a0f6371d31ccede91f45b9c6e85e61a6",
+        "bytes": 613
+      },
+      {
+        "path": "shared/jev-schema.ts",
+        "sha256": "4be0491fc0576898f06660b0f0a4a666af238a6f027dc86878e022c043e0739a",
+        "bytes": 3516
+      },
+      {
+        "path": "shared/production-benchmarks.ts",
+        "sha256": "8d48899765423339976e30524a8316e744cef98231296c85a7aa23eae3a51394",
+        "bytes": 3260
+      },
+      {
+        "path": "shared/production-coverage.ts",
+        "sha256": "e007e25af2eeb7aa73788a07a171c92519cd5ef806a32b47a7e45eecd8606333",
+        "bytes": 2479
+      },
+      {
+        "path": "shared/production-execution-profile.ts",
+        "sha256": "b2831b50b710dda61c044da88bdc599329dfec710de51dc9d4f1b2458663b4fb",
+        "bytes": 2890
+      },
+      {
+        "path": "shared/production-implementation-evidence.ts",
+        "sha256": "7fe1b65bff9ac27a000ccd5df73b3a7713b240e662b103da54986b8b1bd5bd47",
+        "bytes": 13238
+      },
+      {
+        "path": "shared/production-launch-preflight.ts",
+        "sha256": "3498364ed0ffe22ca6686b7cdb35911b07600f692315bd564ebf0034987615d7",
+        "bytes": 3619
+      },
+      {
+        "path": "shared/production-ledger.ts",
+        "sha256": "82d1b47e18a0b2685acc31f2e3c03eb7ce34d94f91b0a420fecdb7c857e350ad",
+        "bytes": 6309
+      },
+      {
+        "path": "shared/production-repository-contract.ts",
+        "sha256": "a840f4b6bfcc85baedcc4a72bd1c22426b4f9f793b9bd746c243bc2a5492488d",
+        "bytes": 14106
+      },
+      {
+        "path": "shared/production-schema.ts",
+        "sha256": "4725611bdaf1f7fd965f439846452af888ebef9c74ed4ba7c1722af8a245445a",
+        "bytes": 23383
+      },
+      {
+        "path": "shared/production-verifier-challenge-corpus.ts",
+        "sha256": "4a7f51692974f9e24f9b73f00ba4de18ad19aa480902f8342d4ea12b53d431a7",
+        "bytes": 1940
+      },
+      {
+        "path": "shared/production-verifier-dev-corpus.ts",
+        "sha256": "bc066fa29eac3b9b9898577ce95835d26cc1735449bf4717975e39ad4412f347",
+        "bytes": 13477
+      },
+      {
+        "path": "shared/production-verifier-html-corpus-a.ts",
+        "sha256": "316d992458ea60afed08799b0753a00598a20bea95b2f84eb158b095f4053885",
+        "bytes": 34158
+      },
+      {
+        "path": "shared/production-verifier-html-corpus-b.ts",
+        "sha256": "5a377442dbc4a080d48469791790c11ee379657608c9e5ff7e97b5d317086b42",
+        "bytes": 34636
+      },
+      {
+        "path": "shared/production-verifier-rubric.ts",
+        "sha256": "739ba95f5bcb8499989823540144343e59678dc246234471de728cce88a5c07a",
+        "bytes": 20281
+      },
+      {
+        "path": "shared/production-verifier-scene-corpus.ts",
+        "sha256": "97bc07440f164981dfda0826564a8b34f01b0c1a8160197ca551cd132a20a761",
+        "bytes": 10969
+      },
+      {
+        "path": "shared/research-schema.ts",
+        "sha256": "873b96148acc760446cf1b35eb9da2981a5986cb4c3dd25f3263be1b727f27d2",
+        "bytes": 7185
+      },
+      {
+        "path": "shared/survey-analysis.ts",
+        "sha256": "bc1d3704211a7ffdec774079168834f703aa539703db765d034845cdff427e1d",
+        "bytes": 5788
+      },
+      {
+        "path": "shared/survey-engine.ts",
+        "sha256": "1f837a33b195e4178fe7f0c956a88f1d1e55edc716674cf27d71f2e2e6e561b5",
+        "bytes": 16619
+      },
+      {
+        "path": "shared/survey-runner.ts",
+        "sha256": "b9721cfb94b49d564e8ec737d42a176ef45aad42de601e05905e83685b8a125b",
+        "bytes": 8663
+      },
+      {
+        "path": "shared/verifier-study-control-schema.ts",
+        "sha256": "5a5060df6b3b2f615fa195f08172f6b3ba58af039b69d468f4eb33cb22505467",
+        "bytes": 6133
+      },
+      {
+        "path": "src/App.tsx",
+        "sha256": "4a5d5fc747c4f041f793d7b25da2b13337aedf4abcfe812d5890367c04894a45",
+        "bytes": 29210
+      },
+      {
+        "path": "src/browser-crypto.ts",
+        "sha256": "8310446bb1e39d2f7b52551a6b021b4a882212e7dc92f27b63adffb63a2caa5d",
+        "bytes": 528
+      },
+      {
+        "path": "src/browser-model.ts",
+        "sha256": "8ec39bb56f390ac4307ae468dfaf76749f1fccee1d427bce1109aff495e38927",
+        "bytes": 2895
+      },
+      {
+        "path": "src/JevSettings.tsx",
+        "sha256": "f161b2ea71d5f948569efacb0a1a673749c0c2b4a26ccbc732a490d6aec3d149",
+        "bytes": 12617
+      },
+      {
+        "path": "src/local-survey.ts",
+        "sha256": "cf373727754d6c4e861c689908513de506679db50341b38ff55c23a74cd5094a",
+        "bytes": 1016
+      },
+      {
+        "path": "src/main.tsx",
+        "sha256": "0e99cb1d88bc224d461fce65ad73d14bbe1b669a24535e1bfc149f3cc65a954c",
+        "bytes": 261
+      },
+      {
+        "path": "src/pages-api.ts",
+        "sha256": "e06c326438aa5375405e26b8f068499543590d84bcb5e00ecdf106a8ff738ae2",
+        "bytes": 7397
+      },
+      {
+        "path": "src/pages-main.tsx",
+        "sha256": "ff41bb1d8b248b199ece1cf02e3196458f95d41b1520a1bc1419dc2fa2e9d88f",
+        "bytes": 266
+      },
+      {
+        "path": "src/pages.css",
+        "sha256": "909d4293db092bb241d0ad9a580319e7ca5c4f04ab21adc78bae045bcef58331",
+        "bytes": 2072
+      },
+      {
+        "path": "src/PagesApp.tsx",
+        "sha256": "b18e45586d1b2cc49fff73941574f15e1f35ab6d8ecb2afaeae02b254cc0295b",
+        "bytes": 5471
+      },
+      {
+        "path": "src/PagesSurveyPanel.tsx",
+        "sha256": "396ded27ed3b958f544036f177be4dd8771ac27a5bf4d0fff61f787c5fd31a7d",
+        "bytes": 10674
+      },
+      {
+        "path": "src/PopulationExplorer.tsx",
+        "sha256": "1aaa3500389cce0b362423b35184ad8e04d7ce2d5d28ee6917cf51830617b3af",
+        "bytes": 12221
+      },
+      {
+        "path": "src/production.css",
+        "sha256": "39a853d1096a0f02d4d5b3714f4b535d9dcb7b911729fd20f57eeb50b22389ab",
+        "bytes": 30279
+      },
+      {
+        "path": "src/ProductionWorkspace.tsx",
+        "sha256": "ef774c6b01f5a2a3da4b8105b8fb64e4a72ca71a133d5d308416e4cb8b317c98",
+        "bytes": 85804
+      },
+      {
+        "path": "src/QuestionEditor.tsx",
+        "sha256": "6620c079b91cb4630375800242b2039711f3a263ef34968973a9292f5d942601",
+        "bytes": 5466
+      },
+      {
+        "path": "src/research-client.ts",
+        "sha256": "8c223a20926eaa76a8dedeccfb3144714e59ff54334a3f8f9d5eb63ffe2b7131",
+        "bytes": 1432
+      },
+      {
+        "path": "src/research-draft.ts",
+        "sha256": "29f8c2094169f33d4651de3fc433a3b5cd22b573cf554c10244cfc5e7ab1b60f",
+        "bytes": 1595
+      },
+      {
+        "path": "src/research.css",
+        "sha256": "a61a77250ebee84726ca3f5c927c6cd237ab1a2808d4e81f6c67cdc5d67b524c",
+        "bytes": 6885
+      },
+      {
+        "path": "src/ResearchCaseView.tsx",
+        "sha256": "177d0d2dc28ae549c68c1e6a07dc8d88f2919c9dc2d168d9248c50e1c1cc0801",
+        "bytes": 2647
+      },
+      {
+        "path": "src/ResearchWorkspace.tsx",
+        "sha256": "11d81794782ee31269626f292e4e06adefdb562e9e004e5ffb79c1048f6ab310",
+        "bytes": 24692
+      },
+      {
+        "path": "src/ResidentAgentEditor.tsx",
+        "sha256": "48f7898fd852b8e9bf922feed6fa7c8e49281d4cc1ff9d341f6fa61f82f10aee",
+        "bytes": 8037
+      },
+      {
+        "path": "src/run-history.ts",
+        "sha256": "8ab87817ced61729de99940cd72afcae8d8ae46f8b08f9d2a89704e56c8a8503",
+        "bytes": 5085
+      },
+      {
+        "path": "src/styles.css",
+        "sha256": "c1d2257098768e901991e3e0739a17f5bbfbd4fe4e6162fbf7afb8c9c37bbf64",
+        "bytes": 30311
+      },
+      {
+        "path": "src/SurveyResults.tsx",
+        "sha256": "e3c985b937847b583f7c0d840d48042f7cf2fa94c6d082ec5c1197c427bba57b",
+        "bytes": 5540
+      },
+      {
+        "path": "src/verifier-study.css",
+        "sha256": "603b94499ffba1b1f9a0249e38b60de3907711962a72b9a418a41be0cdaaa9ae",
+        "bytes": 3678
+      },
+      {
+        "path": "src/VerifierStudyPanel.tsx",
+        "sha256": "cd0cecda2bce7d09041a26e9634254516c9bed6d711e2e2eefeadee96e55ef12",
+        "bytes": 25058
+      },
+      {
+        "path": "src/WorkspaceRouter.tsx",
+        "sha256": "4e2ffbd0bab6db233740ba6c05b68c27ef42050741916cc81c33aeb9af605bbd",
+        "bytes": 751
+      },
+      {
+        "path": "tsconfig.json",
+        "sha256": "cd804651f6c2cff3f97f7b6acb7ff2df20d2a8056a98322e878ebee9a14cf39c",
+        "bytes": 481
+      },
+      {
+        "path": "vite.config.ts",
+        "sha256": "7de1aa5078f5cf1a98d641aa9d3b252dfd737c2d658c04cc7c41eed0e64de69c",
+        "bytes": 1099
+      }
+    ],
+    "buildSnapshot": {
+      "platformCommit": "fba3731f373d690b6792b01beb62f1e7d4337d3a",
+      "sourceClean": true,
+      "builtAt": "2026-10-08T13:43:23.386Z"
+    },
+    "buildFingerprint": "d4428c04df0824250c7a40496c65d96f17d31f0e89eab39e296ff905a239d31a",
+    "buildFiles": [
+      {
+        "path": "dist/assets/App-EfP0Mg48.css",
+        "sha256": "236febf3e8be090567f5d65600ced6fad9296e99b9e9d9e3c039d82a9898845d",
+        "bytes": 6883
+      },
+      {
+        "path": "dist/assets/App-WECzEyJa.js",
+        "sha256": "c403108b4bd0f76824306da8f2fb682135ad913ab162c7a47b0e719371ceef2a",
+        "bytes": 81159
+      },
+      {
+        "path": "dist/assets/index-Dl1r7i87.js",
+        "sha256": "0329857d07c3a6f811ef7059a3c20406101a5c135809f6a6c4eb986aa54b92f5",
+        "bytes": 225307
+      },
+      {
+        "path": "dist/assets/index-mQ8ZRgYI.css",
+        "sha256": "3f0761f9a39a4d0658b237edc9829fdb79fc82fd22fa08ae2557a02b6de62d7f",
+        "bytes": 30318
+      },
+      {
+        "path": "dist/assets/PagesSurveyPanel-C_GOz7tt.js",
+        "sha256": "d0a911ea7a5104f3e3c6e755691598d94e29fbf87043a58af8619f4f4c4e4578",
+        "bytes": 66774
+      },
+      {
+        "path": "dist/assets/ProductionWorkspace-6uWg_4vf.js",
+        "sha256": "44a525cc27bb5606a34c497d23ec3389f19311924551e26b32d9c028a54e0153",
+        "bytes": 122695
+      },
+      {
+        "path": "dist/assets/ProductionWorkspace-CXbsWWPt.css",
+        "sha256": "86f96b2d3c9ea4a98946a23ff7205d0d2a628de2a3ebcabdafcead89d1e28f08",
+        "bytes": 33614
+      },
+      {
+        "path": "dist/assets/schemas-DUvEaCW4.js",
+        "sha256": "d1f669b612f30202cc93b6666caed4753350d654460bafb3908674ddb7cdeb6b",
+        "bytes": 92496
+      },
+      {
+        "path": "dist/index.html",
+        "sha256": "4ad9719e48d3ad8bbb914037b37740e49e7de9eb91c8213e6bf8e92683385fec",
+        "bytes": 644
+      },
+      {
+        "path": "dist/production-build.json",
+        "sha256": "64dd94f4118a00824f7816c7b46eed69698e3034e879c6a7eec090e25b6de1cd",
+        "bytes": 130
+      }
+    ],
+    "ready": true,
+    "issues": [],
+    "limitation": "Boot disk snapshot and subsequent freshness checks; not proof of already-loaded TS module bytes or an atomic filesystem/security sandbox."
+  },
+  "harnessJsonOutputVersion": "harness-json-output-v1",
+  "responseFormatPolicy": "deepseek-json-object-other-prompt-only",
+  "responseFormats": [],
+  "acceptanceStrategy": "planned-groups-v1",
+  "acceptanceConstruction": null,
+  "acceptanceConstructionHash": null,
+  "acceptanceConstructionBoundary": "Plan quotes/slot mappings, group hashes and step audit bind original generation and actual array counts/indices, not semantic coverage, valid setup or execution success. Full original requirement and checks are reviewed by the complete static Verifier; unchanged frozen behavior Gate remains mandatory. Composite candidates and host audits are not extra model calls."
+}

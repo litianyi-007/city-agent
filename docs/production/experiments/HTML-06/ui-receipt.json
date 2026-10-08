@@ -1,0 +1,24 @@
+{
+  "version": "html06-real-ui-receipt-v1",
+  "startedThroughActualFrontend": true,
+  "noFulfillmentStubs": true,
+  "inAppBrowserUnavailable": true,
+  "browserFallbackReason": "cua iab returned Browser is not available; use owned purpose-built Playwright CLI",
+  "sourceCommit": "fba3731f373d690b6792b01beb62f1e7d4337d3a",
+  "bootId": "45b7681c-f1d5-44b6-85d2-2f311871f47e",
+  "runId": "6bd95961-4dca-4378-9d2b-ead8befdb36e",
+  "preflightHash": "d152c5e35e8013e9e364caf29ff994d838bc1bc654f73f9ef646c02c87944e95",
+  "httpSubmitCount": 1,
+  "observedStartResponses": 1,
+  "blockedBrowserExternalRequests": 0,
+  "beforeRunCount": 21,
+  "afterRunCount": 22,
+  "evidenceKind": "real-model",
+  "terminalStatus": "failed",
+  "screenshotFiles": [
+    "ui-before-launch.png",
+    "ui-terminal.png"
+  ],
+  "generatedArtifactEditedByOuterAgent": false,
+  "automaticAdditionalRun": false
+}

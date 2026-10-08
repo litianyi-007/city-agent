@@ -10,12 +10,15 @@ import { createProductionService } from '../server/production/index.js';
 import { EXECUTION_IDENTITY_LIMITATION, PRODUCTION_EXECUTION_IDENTITY_VERSION, type ProductionExecutionIdentity } from '../server/production/provenance.js';
 import { productionRunInputSchema, type ProductionAgent } from '../shared/production-schema.js';
 import type { ProductionLaunchPreflightReport } from '../shared/production-launch-preflight.js';
+import { startupPublicGuardInputs } from '../server/production/startup-public-contract.js';
+import { STEP_AUDITED_CONSTRUCTION_REVIEW_INSTRUCTIONS } from '../server/production/contracts.js';
+import { ProductionStore } from '../server/production/store.js';
 
 const fixtureCredential = 'fixture-preflight-only-token-20261008';
 function identity(): ProductionExecutionIdentity {
   return { version: PRODUCTION_EXECUTION_IDENTITY_VERSION, bootId: 'launch-api-fixture-boot', startedAt: '2026-10-08T00:00:00.000Z', commit: 'a'.repeat(40), sourceClean: true, sourceFingerprint: 'b'.repeat(64), sourceFiles: [], buildSnapshot: { platformCommit: 'a'.repeat(40), sourceClean: true, builtAt: '2026-10-07T23:00:00.000Z' }, buildFingerprint: 'c'.repeat(64), buildFiles: [], ready: true, issues: [], limitation: EXECUTION_IDENTITY_LIMITATION };
 }
-async function setup(t: TestContext, options: { configured?: boolean; stale?: boolean; unready?: boolean } = {}) {
+async function setup(t: TestContext, options: { configured?: boolean; stale?: boolean; unready?: boolean; syntheticHistory?: (store: ProductionStore) => void } = {}) {
   const directory = mkdtempSync(path.join(fileURLToPath(new URL('../', import.meta.url)), '.city-agent-launch-preflight-api-'));
   let freshnessChecks = 0; let forbiddenOperations = 0;
   const service = createProductionService(directory, { executionIdentity: { ...identity(), ...(options.unready ? { ready: false, sourceClean: false } : {}) }, assertExecutionFresh: () => { freshnessChecks++; if (options.stale) throw new Error('synthetic-private-freshness-detail'); }, roleCall: async () => { forbiddenOperations++; throw new Error('Free preflight must never dispatch'); } });
@@ -23,6 +26,7 @@ async function setup(t: TestContext, options: { configured?: boolean; stale?: bo
     service.store.patchAgent(agent.id, { apiKey: fixtureCredential, pricing: { inputPerMillion: 0.3, outputPerMillion: 1.2, currency: 'USD' } });
   }
   const models = service.store.agents();
+  options.syntheticHistory?.(service.store);
   const beforeFiles = readdirSync(directory, { recursive: true }).sort();
   const forbidden = () => { forbiddenOperations++; throw new Error('Free preflight attempted secret/decryption/persistence/runtime operation'); };
   // Only brand-new test-owned synthetic credentials are installed above. From
@@ -62,6 +66,43 @@ test('free launch API returns public ready identity/rates and does not authorize
     assert.equal(JSON.stringify(report).includes(fixtureCredential), false); assert.equal(JSON.stringify(report).includes('apiKey'), false);
   }
   assert.equal(f.checks(), 2); f.assertFree();
+});
+
+test('free grouped launch checks every complete startup payload against current and historical synthetic generations without decrypting', async t => {
+  const f = await setup(t, { syntheticHistory: store => {
+    const synthetic = store as unknown as { encrypt(value: string): string; state: { snapshots: Record<string, unknown[]> } };
+    synthetic.state.snapshots.history = Array.from({ length: 24 }, (_, i) => ({ public: store.agents()[0], secret: synthetic.encrypt(`fixture-preflight-history-${String(i).padStart(10, '0')}`) }));
+  } });
+  const input = { ...f.input, acceptanceStrategy: 'planned-groups-v1', candidateCount: 1 } as const;
+  const calls: unknown[] = []; const check = f.service.store.assertStudyPublicSafe.bind(f.service.store);
+  f.service.store.assertStudyPublicSafe = value => { calls.push(structuredClone(value)); check(value); };
+  const response = await f.request(input); assert.equal(response.status, 200);
+  const report = await response.json() as ProductionLaunchPreflightReport;
+  assert.equal(report.ready, true); assert.equal(report.startupGuard?.ready, true);
+  assert.equal(report.startupGuard?.version, 'production-startup-public-guard-v1');
+  assert.equal(report.startupGuard?.publicCollisionGuardVersion, 'public-collision-guard-v2');
+  assert.deepEqual(calls.slice(1, -1), startupPublicGuardInputs(report.input));
+  assert.equal(report.modelRequests, 0); assert.equal(report.paidAuthorized, false);
+  assert.ok(report.warnings.some(w => w.code === 'startup-guard-not-guarantee'));
+  assert.doesNotMatch(JSON.stringify(report.startupGuard), /length|count|mask|digest|secret/i);
+  f.assertFree();
+});
+
+test('legacy historical Jev credential in the last complete instruction makes free readiness unready without launching or exposing it', async t => {
+  // Entirely synthetic legacy test state, not a migration or real Key read.
+  const collision = STEP_AUDITED_CONSTRUCTION_REVIEW_INSTRUCTIONS.slice(-24);
+  const f = await setup(t, { syntheticHistory: store => {
+    const synthetic = store as unknown as { encrypt(value: string): string; state: { jevSnapshots: Record<string, unknown> } };
+    synthetic.state.jevSnapshots = { history: { public: {}, secret: synthetic.encrypt(collision) } };
+  } });
+  const response = await f.request({ ...f.input, acceptanceStrategy: 'planned-groups-v1', candidateCount: 1 });
+  assert.equal(response.status, 200);
+  const report = await response.json() as ProductionLaunchPreflightReport;
+  assert.equal(report.ready, false); assert.equal(report.startupGuard?.ready, false);
+  assert.ok(report.issues.some(i => i.code === 'startup-public-contract-rejected'));
+  assert.equal(report.modelRequests, 0); assert.equal(report.paidAuthorized, false);
+  assert.equal(JSON.stringify(report).includes(collision), false);
+  f.assertFree();
 });
 
 test('missing public credentials/rates and dirty or stale boot produce unready zero-request reports, not paid fallback', async t => {
