@@ -32,7 +32,7 @@ export interface ProductionLaunchPreflightReport {
   paidAuthorized: false; finalGate: null; modelRequests: 0;
   input: ProductionRunInput; models: ProductionAgent[]; execution: ProductionLaunchExecutionSummary;
   /** Opt-in only: legacy report serialization/hash stays byte-compatible. */
-  configuration?: { promptVersion: string; pmOutputPolicyVersion: string; roleSchemaDiagnosticsVersion: string };
+  configuration?: { promptVersion: string; pmOutputPolicyVersion: string; roleSchemaDiagnosticsVersion: string; acceptanceStepAuditVersion?: string; acceptanceReviewProjectionVersion?: string };
   budget: {
     baseCalls: number; worstCaseCalls: number; inputTokensPerRequest: number; outputTokensPerRequest: number;
     firstRequest: { totalTokens: number; estimatedCost: number | null; currency: 'USD' | 'CNY' };

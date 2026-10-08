@@ -2,7 +2,8 @@ import { createHash } from 'node:crypto';
 import { PRODUCTION_ROLES, productionAgentInputSchema, productionRunInputSchema, type ProductionAgent } from '../../shared/production-schema.js';
 import { estimateProductionCost, productionLaunchCallEnvelope, PRODUCTION_INPUT_TOKEN_RESERVATION, PRODUCTION_LAUNCH_PREFLIGHT_VERSION, type ProductionLaunchPreflightReport, type ProductionLaunchExecutionSummary } from '../../shared/production-launch-preflight.js';
 import type { ProductionExecutionIdentity } from './provenance.js';
-import { GROUPED_ACCEPTANCE_PROMPT_VERSION } from './contracts.js';
+import { STEP_AUDITED_GROUPED_PROMPT_VERSION, ACCEPTANCE_REVIEW_PROJECTION_VERSION } from './contracts.js';
+import { ACCEPTANCE_STEP_AUDIT_VERSION } from './acceptance-step-audit.js';
 import { PM_OUTPUT_POLICY_VERSION, ROLE_SCHEMA_DIAGNOSTICS_VERSION } from './role-output-policy.js';
 
 const messages = {
@@ -95,6 +96,6 @@ export function buildProductionLaunchPreflight(raw: unknown, publicAgents: reado
   if (budget.envelope.worstCaseEstimatedCost !== null && budget.envelope.worstCaseEstimatedCost > input.limits.maxCost) warning('cost-envelope-exceeds-budget');
   if (input.implementationEvidencePolicy === 'source-bound-v1') warning('source-bound-not-real-validated');
   if (input.acceptanceStrategy === 'planned-groups-v1') warning('planned-groups-not-real-validated');
-  const payload = { version: PRODUCTION_LAUNCH_PREFLIGHT_VERSION, ready: !issues.length, paidAuthorized: false as const, finalGate: null, modelRequests: 0 as const, input, models, execution, budget, issues, warnings: warn, ...(input.acceptanceStrategy === 'planned-groups-v1' ? { configuration: { promptVersion: GROUPED_ACCEPTANCE_PROMPT_VERSION, pmOutputPolicyVersion: PM_OUTPUT_POLICY_VERSION, roleSchemaDiagnosticsVersion: ROLE_SCHEMA_DIAGNOSTICS_VERSION } } : {}) };
+  const payload = { version: PRODUCTION_LAUNCH_PREFLIGHT_VERSION, ready: !issues.length, paidAuthorized: false as const, finalGate: null, modelRequests: 0 as const, input, models, execution, budget, issues, warnings: warn, ...(input.acceptanceStrategy === 'planned-groups-v1' ? { configuration: { promptVersion: STEP_AUDITED_GROUPED_PROMPT_VERSION, pmOutputPolicyVersion: PM_OUTPUT_POLICY_VERSION, roleSchemaDiagnosticsVersion: ROLE_SCHEMA_DIAGNOSTICS_VERSION, acceptanceStepAuditVersion: ACCEPTANCE_STEP_AUDIT_VERSION, acceptanceReviewProjectionVersion: ACCEPTANCE_REVIEW_PROJECTION_VERSION } } : {}) };
   return { ...payload, reportHash: createHash('sha256').update(JSON.stringify(payload)).digest('hex') };
 }

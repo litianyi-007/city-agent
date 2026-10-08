@@ -3,7 +3,7 @@ import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import test from 'node:test';
 import { z } from 'zod';
-import { ACCEPTANCE_GROUP_INSTRUCTIONS, ACCEPTANCE_PLAN_INSTRUCTIONS, CONTRACT_INSTRUCTIONS, GROUPED_ACCEPTANCE_GROUP_INSTRUCTIONS, GROUPED_ACCEPTANCE_PLAN_INSTRUCTIONS, GROUPED_ACCEPTANCE_PROMPT_VERSION, GROUPED_CONTRACT_INSTRUCTIONS, LEGACY_GROUPED_ACCEPTANCE_PROMPT_VERSION, contractProfile, outputContractSnapshot, parseJson, planSchema } from '../server/production/contracts.ts';
+import { ACCEPTANCE_GROUP_INSTRUCTIONS, ACCEPTANCE_PLAN_INSTRUCTIONS, ACCEPTANCE_CONSTRUCTION_REVIEW_INSTRUCTIONS, CONTRACT_INSTRUCTIONS, GROUPED_ACCEPTANCE_GROUP_INSTRUCTIONS, GROUPED_ACCEPTANCE_PLAN_INSTRUCTIONS, GROUPED_ACCEPTANCE_PROMPT_VERSION, GROUPED_CONTRACT_INSTRUCTIONS, LEGACY_GROUPED_ACCEPTANCE_PROMPT_VERSION, STEP_AUDITED_GROUPED_PROMPT_VERSION, STEP_AUDITED_GROUPED_CONTRACT_INSTRUCTIONS, STEP_AUDITED_ACCEPTANCE_PLAN_INSTRUCTIONS, STEP_AUDITED_ACCEPTANCE_GROUP_INSTRUCTIONS, STEP_AUDITED_CONSTRUCTION_REVIEW_INSTRUCTIONS, STEP_AUDIT_PLANNING_INSTRUCTIONS, contractProfile, outputContractSnapshot, parseJson, planSchema, verifierSchema } from '../server/production/contracts.ts';
 import { acceptancePlanSchema } from '../server/production/acceptance-plan.ts';
 import { PM_OUTPUT_POLICY_VERSION, ROLE_SCHEMA_DIAGNOSTICS_VERSION, ROLE_SCHEMA_DIAGNOSTIC_LIMITS, diagnoseRoleSchema, pmOutputPolicy, type RoleSchemaBinding } from '../server/production/role-output-policy.ts';
 
@@ -77,6 +77,28 @@ test('only grouped v2 removes the incompatible default-field instruction; legacy
     assert.ok(text.includes('不能自动删字段、截取合法JSON前缀或修改Gate'));
   }
   assert.throws(() => planSchema.parse({ ...valid, notes: [] }));
+});
+
+test('step-audited grouped v3 preserves all v2 prompt bytes and the strict four-field Verifier output', () => {
+  assert.equal(STEP_AUDITED_GROUPED_PROMPT_VERSION, 'production-html-grouped-v3');
+  const expected = {
+    product: 'f84ce943189b22c58450d04b38b47b4f67463eca99ba9548f9e4cfa85ba9b391',
+    researcher: 'e3b484fe9da65216b36bed6fcda0f44bbb584cefe68155b5b3d93c171c136672',
+    'project-manager': '83f07d44b73c66ae9b09d48f640adc497dce2c94f4b9970b4c73d2b9c8bcc4d7',
+    tester: 'bf0e427494212f1847762f5befa4e5aae5dffb8a5c30187ee4fc930663cbda19',
+    developer: 'cfc9ce1d00e2ee4401f4ea433e0682e2c551bcc35e03ed50c46b1e1bf87de0b8',
+    p: '08dbac2535c51ced6f6b64b28afe9d04f746d603699167e70467a776dd8d63d8',
+    g: '8eb96b4982e9ed40839e3dc72a9b26be5a99e1294bba7c202957595ed0376ae5',
+    v: '052d12d128dc2bbbadcbdade51e75adc39603c35cc71173865348b88ca177921',
+  };
+  assert.deepEqual(Object.fromEntries(Object.entries({ ...GROUPED_CONTRACT_INSTRUCTIONS, p: GROUPED_ACCEPTANCE_PLAN_INSTRUCTIONS, g: GROUPED_ACCEPTANCE_GROUP_INSTRUCTIONS, v: ACCEPTANCE_CONSTRUCTION_REVIEW_INSTRUCTIONS }).map(([name, text]) => [name, sha(text)])), expected);
+  for (const role of ['product', 'tester', 'developer'] as const) assert.equal(STEP_AUDITED_GROUPED_CONTRACT_INSTRUCTIONS[role], GROUPED_CONTRACT_INSTRUCTIONS[role]);
+  for (const role of ['researcher', 'project-manager'] as const) assert.equal(STEP_AUDITED_GROUPED_CONTRACT_INSTRUCTIONS[role], `${GROUPED_CONTRACT_INSTRUCTIONS[role]} ${STEP_AUDIT_PLANNING_INSTRUCTIONS}`);
+  assert.equal(STEP_AUDITED_ACCEPTANCE_PLAN_INSTRUCTIONS, `${GROUPED_ACCEPTANCE_PLAN_INSTRUCTIONS} ${STEP_AUDIT_PLANNING_INSTRUCTIONS}`);
+  assert.equal(STEP_AUDITED_ACCEPTANCE_GROUP_INSTRUCTIONS, `${GROUPED_ACCEPTANCE_GROUP_INSTRUCTIONS} ${STEP_AUDIT_PLANNING_INSTRUCTIONS}`);
+  assert.ok(STEP_AUDITED_CONSTRUCTION_REVIEW_INSTRUCTIONS.startsWith(`${ACCEPTANCE_CONSTRUCTION_REVIEW_INSTRUCTIONS} `));
+  assert.ok(STEP_AUDITED_CONSTRUCTION_REVIEW_INSTRUCTIONS.includes('审计不能发现计划漏掉的原始要求'));
+  assert.deepEqual(Object.keys(verifierSchema.shape), ['decision', 'selectedCandidateId', 'scores', 'reason']);
 });
 
 test('policy rejects incompatible phases, open roots and nonexistent or wrongly typed mapping paths, never inventing fields', () => {

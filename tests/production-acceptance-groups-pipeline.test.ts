@@ -10,10 +10,11 @@ import { OUTPUT_DIAGNOSTICS_VERSION } from '../server/production/output-diagnost
 import type { ProductionOptions } from '../server/production/pipeline.js';
 import type { runRole, RoleResult } from '../server/harness.js';
 import { preflightAcceptanceChecks, runGate, type AcceptanceCheck } from '../server/gate.js';
-import { ACCEPTANCE_GROUP_INSTRUCTIONS, GROUPED_CONTRACT_INSTRUCTIONS, GROUPED_ACCEPTANCE_PROMPT_VERSION, outputContractSnapshot, planSchema } from '../server/production/contracts.js';
+import { ACCEPTANCE_GROUP_INSTRUCTIONS, STEP_AUDITED_GROUPED_CONTRACT_INSTRUCTIONS as GROUPED_CONTRACT_INSTRUCTIONS, STEP_AUDITED_GROUPED_PROMPT_VERSION as GROUPED_ACCEPTANCE_PROMPT_VERSION, ACCEPTANCE_REVIEW_PROJECTION_VERSION, outputContractSnapshot, planSchema } from '../server/production/contracts.js';
+import { ACCEPTANCE_STEP_AUDIT_VERSION, buildAcceptanceStepAudit } from '../server/production/acceptance-step-audit.js';
 import { PM_OUTPUT_POLICY_VERSION, ROLE_SCHEMA_DIAGNOSTICS_VERSION, diagnoseRoleSchema } from '../server/production/role-output-policy.js';
 import { ACCEPTANCE_GROUP_VERSION, ACCEPTANCE_PLAN_VERSION, ACCEPTANCE_CONSTRUCTION_VERSION, ACCEPTANCE_PLAN_DIAGNOSTIC_LITERALS, acceptancePlanHash, type AcceptanceGroup, type AcceptancePlan } from '../server/production/acceptance-plan.js';
-import { PRODUCTION_ACCEPTANCE_GROUP_POLICY_LITERALS, PRODUCTION_PM_OUTPUT_POLICY_LITERALS, productionApiKeySchema, productionRunInputSchema, type ProductionRun, type ProductionRunInput } from '../shared/production-schema.js';
+import { PRODUCTION_ACCEPTANCE_GROUP_POLICY_LITERALS, PRODUCTION_PM_OUTPUT_POLICY_LITERALS, PRODUCTION_STEP_AUDIT_POLICY_LITERALS, productionApiKeySchema, productionRunInputSchema, type ProductionRun, type ProductionRunInput } from '../shared/production-schema.js';
 
 // All role responses are explicit injected engineering fixtures, never SDK or
 // provider calls. Preflight/Gate are stubs except in the named real Chromium
@@ -140,6 +141,14 @@ test('two groups compose one independently reviewed candidate with exact sources
   const review = JSON.parse(whole.userPrompt); assert.deepEqual(review.candidates, [{ id: attempt.compositeCandidateId, value: { checks: expectedChecks } }]);
   assert.equal(review.criteria.goal, brief); assert.equal(review.criteria.acceptance, acceptance);
   assert.ok(review.state.reviewContext.acceptanceConstruction); assert.equal(review.state.reviewContext.regeneration, undefined);
+  assert.equal(review.state.reviewContext.acceptanceConstruction.reviewProjectionVersion, ACCEPTANCE_REVIEW_PROJECTION_VERSION);
+  assert.deepEqual(review.state.reviewContext.acceptanceConstruction.attempt.groups, attempt.groups.map(({ value: _value, ...source }) => source));
+  assert.ok(review.state.reviewContext.acceptanceConstruction.attempt.groups.every((source: unknown) => !Object.hasOwn(source as object, 'value')));
+  assert.deepEqual(attempt.stepAudit, buildAcceptanceStepAudit({ plan: construction.plan.value, planHash: construction.plan.valueSha256, attemptId: attempt.id, compositeCandidateId: attempt.compositeCandidateId!, checks: attempt.checks!, groups: attempt.groups }));
+  assert.equal(attempt.stepAuditSha256, hash(attempt.stepAudit));
+  assert.deepEqual(review.state.reviewContext.acceptanceConstruction.attempt.stepAudit, attempt.stepAudit);
+  assert.equal(review.state.reviewContext.acceptanceConstruction.attempt.stepAuditSha256, attempt.stepAuditSha256);
+  assert.equal(JSON.stringify(review).split('"steps":').length - 1, 2, 'Full generated steps transmitted once per check, not again in source groups');
   assert.equal(run.verifications.find(item => item.phase === 'acceptance')!.selectedCandidateId, attempt.compositeCandidateId);
   assert.equal(run.events.filter(event => event.phase === 'freeze').length, 1);
   assert.deepEqual(JSON.parse(f.service.store.readArtifact(run.id, 'evidence.json')).acceptanceConstruction, construction);
@@ -150,6 +159,137 @@ test('three groups use at most sixteen initial logical calls without independent
   const f = fixture(t, { groups: 3 }); const run = await f.start(); assert.equal(run.status, 'completed', run.error);
   assert.equal(run.calls.length, 16); assert.equal(groupCalls(run).length, 3); assert.equal(phaseCalls(run, 'acceptance-plan:verify').length, 1); assert.equal(phaseCalls(run, 'acceptance:verify').length, 1);
   assert.equal(run.calls.some(call => /^acceptance-group-.*:verify$/.test(call.phase)), false); assert.equal(run.frozenContract!.checks.length, 3);
+});
+
+test('actual nineteen steps override a fourteen-step PM claim; audit remains factual, not a business verdict', async t => {
+  const f = fixture(t, { hook: capture => {
+    if (capture.phase === 'acceptance-plan') {
+      const plan = JSON.parse(capture.result.text) as AcceptancePlan;
+      for (const slot of plan.groups.flatMap(group => group.checks)) { slot.stepBudget = 20; slot.setup = 'PM claim: 14 steps; not measured.'; }
+      return result(plan);
+    }
+    if (capture.phase.startsWith('acceptance-group-')) {
+      const group = JSON.parse(capture.result.text) as AcceptanceGroup;
+      for (const slot of group.checks) while (slot.check.steps.length < 19) slot.check.steps.push({ action: 'assertVisible', selector: '#add' });
+      return result(group);
+    }
+  } });
+  const run = await f.start(); assert.equal(run.status, 'completed', run.error);
+  assert.equal(run.calls.length, 15); assert.equal(run.repairs, 0);
+  const attempt = run.acceptanceConstruction!.attempts[0];
+  assert.deepEqual(attempt.stepAudit!.slots.map(slot => [slot.stepBudget, slot.actualStepCount]), [[20, 19], [20, 19]]);
+  assert.ok(!JSON.stringify(attempt.stepAudit).includes('14 steps'));
+  assert.ok(!Object.hasOwn(attempt.stepAudit!, 'covered')); assert.ok(!Object.hasOwn(attempt.stepAudit!, 'passed'));
+});
+
+test('maximum twelve-by-twenty actual steps fit a bounded complete request without duplicated checks or extra calls', async t => {
+  const f = fixture(t, { groups: 3, hook: capture => {
+    if (capture.phase === 'acceptance-plan') {
+      const plan = planFixture(3);
+      for (const group of plan.groups) group.checks = Array.from({ length: 4 }, (_, index) => ({ ...group.checks[0], id: `${group.id}-c${index}`, obligationIds: plan.obligations.map(item => item.id), stepBudget: 20 }));
+      return result(plan);
+    }
+    if (capture.phase.startsWith('acceptance-group-')) {
+      const group = JSON.parse(capture.result.text) as AcceptanceGroup;
+      for (const slot of group.checks) while (slot.check.steps.length < 20) slot.check.steps.push({ action: 'assertTextExact', selector: '#result', text: slot.checkId });
+      return result(group);
+    }
+  } });
+  const run = await f.start(); assert.equal(run.status, 'completed', run.error);
+  assert.equal(run.calls.length, 16); assert.equal(run.repairs, 0);
+  const attempt = run.acceptanceConstruction!.attempts[0];
+  assert.equal(attempt.checks!.length, 12); assert.equal(attempt.stepAudit!.slots.length, 12);
+  assert.ok(attempt.stepAudit!.slots.every(slot => slot.actualStepCount === 20));
+  const whole = run.calls.find(call => call.id === attempt.reviewCallId)!; const payload = JSON.parse(whole.userPrompt);
+  assert.equal(JSON.stringify(payload).split('"steps":').length - 1, 12);
+  assert.ok(run.calls.every(call => Buffer.byteLength(`${call.systemPrompt}\n${call.userPrompt}`, 'utf8') <= 60000));
+  assert.deepEqual(payload.criteria.acceptance, acceptance); assert.deepEqual(payload.criteria.goal, brief);
+});
+
+test('a twenty-one-step fragment is rejected intact before audit/review and is never trimmed to twenty', async t => {
+  const f = fixture(t, { hook: capture => {
+    if (capture.phase === 'acceptance-plan') {
+      const plan = JSON.parse(capture.result.text) as AcceptancePlan; for (const slot of plan.groups.flatMap(group => group.checks)) slot.stepBudget = 20; return result(plan);
+    }
+    if (capture.phase.startsWith('acceptance-group-')) {
+      const group = JSON.parse(capture.result.text) as AcceptanceGroup;
+      while (group.checks[0].check.steps.length < 21) group.checks[0].check.steps.push({ action: 'assertVisible', selector: '#add' });
+      return result(group);
+    }
+  } });
+  const run = await f.start(); noDelivery(run); assert.equal(run.status, 'failed'); assert.equal(run.repairs, 2);
+  assert.equal(groupCalls(run).length, 3); assert.equal(phaseCalls(run, 'acceptance:verify').length, 0);
+  assert.ok(groupCalls(run).every(call => JSON.parse(call.rawOutput).checks[0].check.steps.length === 21));
+  assert.equal(run.acceptanceConstruction!.attempts[0].stepAudit, undefined);
+});
+
+test('valid but oversized UTF-8 complete checks fail closed without truncation, budget increase or a review request', async t => {
+  const f = fixture(t, { hook: capture => {
+    if (capture.phase.startsWith('acceptance-group-')) {
+      const group = JSON.parse(capture.result.text) as AcceptanceGroup;
+      for (const slot of group.checks) slot.check.steps = [
+        { action: 'fill', selector: '#input', value: '界'.repeat(4000) },
+        { action: 'click', selector: '#add' },
+        { action: 'assertTextExact', selector: '#result', text: '界'.repeat(4000) },
+        { action: 'assertTextExact', selector: '.item .label', text: '界'.repeat(4000) },
+      ];
+      return result(group);
+    }
+  } });
+  const run = await f.start(); noDelivery(run); assert.equal(run.status, 'failed'); assert.equal(run.repairs, 0);
+  assert.match(run.error!, /提示上下文超过受控上限/); assert.equal(phaseCalls(run, 'acceptance:verify').length, 0);
+  assert.equal(groupCalls(run).length, 2); const attempt = run.acceptanceConstruction!.attempts[0];
+  assert.ok(attempt.stepAudit); assert.ok(attempt.checks!.every(check => check.steps[0].action === 'fill' && check.steps[0].value.length === 4000));
+  assert.ok(run.calls.every(call => Buffer.byteLength(`${call.systemPrompt}\n${call.userPrompt}`, 'utf8') <= 60000));
+});
+
+for (const missing of ['independent-existing-setup', 'per-negative-business-results', 'original-requirement-omitted-from-plan'] as const) test(`injected complete Verifier rejection for ${missing} cannot be overruled by step audit or ID coverage`, async t => {
+  const originalAcceptance = `${acceptance} Check every invalid input both on an empty page and with an existing record; content and total must remain unchanged each time.`;
+  const f = fixture(t, { input: { requirement: { id: 'COVERAGE-NEGATIVE-FIXTURE', source: 'Free deliberate incomplete-coverage fixture', acceptance: originalAcceptance, background: '', difficulty: 'medium', kind: 'illustrative' } }, hook: capture => {
+    if (capture.phase === 'acceptance-plan' && missing !== 'original-requirement-omitted-from-plan') {
+      const plan = JSON.parse(capture.result.text) as AcceptancePlan;
+      plan.obligations[1] = { id: 'o-acceptance', source: 'acceptance', quote: 'with an existing record', scenario: missing, expected: 'Record content and total unchanged after each invalid submission.' };
+      for (const slot of plan.groups.flatMap(group => group.checks)) { slot.stepBudget = 20; slot.obligationIds = ['o-brief', 'o-acceptance']; }
+      return result(plan);
+    }
+    if (capture.phase.startsWith('acceptance-group-') && missing !== 'original-requirement-omitted-from-plan') {
+      const group = JSON.parse(capture.result.text) as AcceptanceGroup;
+      for (const slot of group.checks) slot.check.steps = missing === 'independent-existing-setup' ? [
+        { action: 'fill', selector: '#input', value: '' }, { action: 'click', selector: '#add' },
+        { action: 'assertTextExact', selector: '#notice', text: 'Invalid' }, { action: 'assertCount', selector: '.item', count: 0 },
+      ] : [
+        ...checkFixture(slot.checkId).steps,
+        { action: 'fill', selector: '#input', value: '' }, { action: 'click', selector: '#add' },
+        { action: 'fill', selector: '#input', value: '   ' }, { action: 'click', selector: '#add' },
+        { action: 'assertCount', selector: '.item', count: 1 },
+      ];
+      return result(group);
+    }
+    if (capture.phase === 'acceptance:verify') {
+      const context = capture.data.state.reviewContext.acceptanceConstruction;
+      assert.equal(capture.data.criteria.acceptance, originalAcceptance);
+      assert.ok(capture.data.candidates[0].value.checks.length === 2);
+      assert.ok(context.attempt.stepAudit.slots.every((slot: { assertionIndices: number[] }) => slot.assertionIndices.length > 0));
+      assert.ok(context.plan.value.obligations.every((item: { id: string }) => context.attempt.stepAudit.slots.some((slot: { obligationIds: string[] }) => slot.obligationIds.includes(item.id))));
+      assert.ok(capture.system.includes('审计不能发现计划漏掉的原始要求'));
+      const checks = capture.data.candidates[0].value.checks as AcceptanceCheck[];
+      if (missing === 'independent-existing-setup') {
+        assert.ok(context.plan.value.obligations.some((item: { quote: string }) => item.quote === 'with an existing record'));
+        assert.ok(checks.every(check => check.steps[0].action === 'fill' && check.steps[0].value === '' && check.steps.filter(step => step.action === 'click').length === 1), 'Each page has only an invalid submission, no prior good-record creation');
+      } else if (missing === 'per-negative-business-results') {
+        assert.ok(checks.every(check => check.steps[4].action === 'assertTextExact' && check.steps[4].selector === '.item .label'), 'Prior good content is explicitly checked');
+        assert.ok(checks.every(check => check.steps[6].action === 'click' && check.steps[7].action === 'fill' && check.steps[8].action === 'click' && check.steps[9].action === 'assertCount'), 'No content/total assertion between the two invalid submissions; only a final count');
+      } else {
+        assert.ok(context.plan.value.obligations.every((item: { quote: string }) => !item.quote.includes('existing record')), 'PM obligations omit the required state even though the original full acceptance still contains it');
+        assert.deepEqual(checks, [checkFixture('c1'), checkFixture('c2')]);
+      }
+      return abstain(capture); // Deliberate engineering Oracle, not real LLM proof.
+    }
+  } });
+  const run = await f.start(); noDelivery(run); assert.equal(run.status, 'failed'); assert.equal(run.repairs, 2);
+  assert.equal(phaseCalls(run, 'acceptance:verify').length, 3); assert.equal(run.acceptanceConstruction!.attempts.length, 3);
+  assert.ok(run.acceptanceConstruction!.attempts.every(attempt => attempt.stepAudit && attempt.decision === 'rejected'));
+  assert.equal(f.counts().gates, 0);
 });
 
 test('a malformed current group alone regenerates in the same attempt and preserves the preceding group source', async t => {
@@ -270,13 +410,18 @@ test('a mutating preflight adapter cannot replace composed source checks before 
   assert.ok(groupCalls(run).every(call => !call.rawOutput.includes('rewritten-by-adapter')));
 });
 
-for (const tamper of ['source-call-reference', 'composite-checks'] as const) test(`forged ${tamper} during the whole review is fatal even with an accepting injected verdict`, async t => {
+for (const tamper of ['source-call-reference', 'composite-checks', 'audit-missing', 'audit-hash', 'audit-count', 'audit-foreign-attempt', 'audit-ref-with-rehashed-audit'] as const) test(`forged ${tamper} during the whole review is fatal even with an accepting injected verdict`, async t => {
   let active: ProductionRun | undefined;
   const f = fixture(t, { hook: capture => {
     if (capture.phase !== 'acceptance:verify') return;
     const attempt = active!.acceptanceConstruction!.attempts.at(-1)!;
     if (tamper === 'source-call-reference') attempt.groups[0].sourceCallId = randomUUID();
-    else attempt.checks![0].steps[0].selector = '#not-in-any-source-group';
+    else if (tamper === 'composite-checks') attempt.checks![0].steps[0].selector = '#not-in-any-source-group';
+    else if (tamper === 'audit-missing') delete attempt.stepAudit;
+    else if (tamper === 'audit-hash') attempt.stepAuditSha256 = '0'.repeat(64);
+    else if (tamper === 'audit-count') attempt.stepAudit!.slots[0].actualStepCount = 14;
+    else if (tamper === 'audit-foreign-attempt') attempt.stepAudit!.attemptId = randomUUID();
+    else { attempt.stepAudit!.slots[0].assertionIndices = [0]; attempt.stepAuditSha256 = hash(attempt.stepAudit); }
     return capture.result;
   } });
   const save = f.service.store.save.bind(f.service.store);
@@ -287,6 +432,43 @@ for (const tamper of ['source-call-reference', 'composite-checks'] as const) tes
   assert.equal(phaseCalls(run, 'acceptance:verify').length, 1); assert.equal(run.acceptanceConstruction!.attempts[0].decision, 'rejected');
   assert.equal(run.verifications.some(review => review.phase === 'acceptance' && review.decision === 'accept'), false);
   assert.equal(f.counts().gates, 0);
+});
+
+for (const boundary of ['accept-review-save', 'accepted-event-save'] as const) for (const tamper of ['audit-missing', 'rehashed-audit'] as const) test(`${tamper} at ${boundary} cannot become the frozen baseline after an accepting Oracle`, async t => {
+  const f = fixture(t); let changed = false; const save = f.service.store.save.bind(f.service.store);
+  t.mock.method(f.service.store, 'save', (run: ProductionRun) => {
+    const acceptedReview = run.verifications.some(review => review.phase === 'acceptance' && review.decision === 'accept');
+    const acceptedEvent = run.events.some(event => event.phase === 'acceptance');
+    if (!changed && acceptedReview && (boundary === 'accept-review-save' || acceptedEvent)) {
+      changed = true; const attempt = run.acceptanceConstruction!.attempts.at(-1)!;
+      if (tamper === 'audit-missing') delete attempt.stepAudit;
+      else { attempt.stepAudit!.slots[0].actualStepCount = 14; attempt.stepAuditSha256 = hash(attempt.stepAudit); }
+    }
+    save(run);
+  });
+  const run = await f.start(); assert.ok(changed); assert.equal(run.status, 'failed'); assert.equal(run.repairs, 0);
+  assert.equal(run.frozenContract, undefined); assert.equal(run.calls.some(call => call.role === 'developer'), false);
+  assert.equal(f.counts().gates, 0); assert.equal(run.acceptanceConstruction!.attempts[0].decision, 'rejected');
+  assert.match(run.error!, /步骤审计/);
+  assert.equal(run.verifications.filter(review => review.phase === 'acceptance' && review.decision === 'accept').length, 1, 'Retain the actual Oracle verdict separately from a failed host integrity boundary');
+});
+
+test('a freeze-event persistence fault cannot adopt a rehashed audit and frozen contract as its guard baseline', async t => {
+  const f = fixture(t); let changed = false; let originalFrozenHash: string | undefined;
+  const save = f.service.store.save.bind(f.service.store);
+  t.mock.method(f.service.store, 'save', (run: ProductionRun) => {
+    if (!changed && run.events.some(event => event.phase === 'freeze')) {
+      changed = true; originalFrozenHash = run.frozenContract!.hash;
+      const attempt = run.acceptanceConstruction!.attempts[0];
+      attempt.stepAudit!.slots[0].actualStepCount = 14; attempt.stepAuditSha256 = hash(attempt.stepAudit);
+      run.frozenContract!.hash = hash({ validationContract: run.validationContract, requirement: run.input.requirement, brief: run.input.brief, checks: run.frozenContract!.checks, acceptanceConstruction: run.acceptanceConstruction });
+    }
+    save(run);
+  });
+  const run = await f.start(); assert.ok(changed); assert.equal(run.status, 'failed'); assert.equal(run.repairs, 0);
+  assert.match(run.error!, /冻结门禁发生变化/); assert.notEqual(run.frozenContract!.hash, originalFrozenHash);
+  assert.equal(run.calls.some(call => call.role === 'developer'), false); assert.equal(f.counts().gates, 0);
+  assert.equal(run.artifacts.some(artifact => artifact.name === 'index.html'), false);
 });
 
 test('the actual hard call budget is not raised to the grouped worst-case envelope', async t => {
@@ -303,7 +485,7 @@ test('omitting the opt-in keeps the existing twelve-call HTML path and no constr
 });
 
 test('new grouped protocol literals and every credential-length substring are reserved for Agent and Jev settings', async t => {
-  const literals = [...PRODUCTION_ACCEPTANCE_GROUP_POLICY_LITERALS, ...PRODUCTION_PM_OUTPUT_POLICY_LITERALS, ...ACCEPTANCE_PLAN_DIAGNOSTIC_LITERALS];
+  const literals = [...PRODUCTION_ACCEPTANCE_GROUP_POLICY_LITERALS, ...PRODUCTION_PM_OUTPUT_POLICY_LITERALS, ...PRODUCTION_STEP_AUDIT_POLICY_LITERALS, ...ACCEPTANCE_PLAN_DIAGNOSTIC_LITERALS];
   for (const literal of literals) for (let start = 0; start < literal.length; start++) for (let end = start + 16; end <= literal.length; end++) assert.equal(productionApiKeySchema.safeParse(literal.slice(start, end)).success, false, `Protocol substring in ${literal}`);
   const f = fixture(t); const agent = f.service.store.agents()[0];
   for (const literal of literals.filter(value => value.length >= 16)) {
@@ -329,12 +511,14 @@ for (const collision of ['AcceptancePlanError', 'context.plannedGroup']) test(`a
   assert.equal(f.service.store.readArtifact(run.id, 'evidence.json').includes(collision), false);
 });
 
-test('grouped v2 exposes actual phase-specific PM schema facts without changing call count or acceptance', async t => {
+test('grouped v3 retains actual phase-specific PM schema facts without changing call count or acceptance', async t => {
   const f = fixture(t); const run = await f.start(); assert.equal(run.status, 'completed', run.error);
   assert.equal(run.calls.length, 15); assert.equal(run.repairs, 0);
   assert.ok(run.calls.every(call => call.promptVersion === GROUPED_ACCEPTANCE_PROMPT_VERSION));
   assert.equal(run.validationContract!.pmOutputPolicyVersion, PM_OUTPUT_POLICY_VERSION);
   assert.equal(run.validationContract!.roleSchemaDiagnosticsVersion, ROLE_SCHEMA_DIAGNOSTICS_VERSION);
+  assert.equal(run.validationContract!.acceptanceStepAuditVersion, ACCEPTANCE_STEP_AUDIT_VERSION);
+  assert.equal(run.validationContract!.acceptanceReviewProjectionVersion, ACCEPTANCE_REVIEW_PROJECTION_VERSION);
   for (const capture of f.captures) {
     const pm = ['think-design', 'acceptance-plan', 'feedback'].includes(capture.phase);
     if (!pm) { assert.equal(capture.data.pmOutputPolicy, undefined); continue; }
@@ -460,7 +644,7 @@ for (const tamper of ['callId', 'phase', 'sourceSha256', 'outputContractHash', '
   assert.match(run.error!, /结构诊断.*不一致/); assert.equal(phaseCalls(run, 'think-design:verify').length, 0);
 });
 
-for (const collision of [PM_OUTPUT_POLICY_VERSION, ROLE_SCHEMA_DIAGNOSTICS_VERSION, GROUPED_ACCEPTANCE_PROMPT_VERSION, ROLE_SCHEMA_DIAGNOSTICS_VERSION.slice(-16), 'pmOutputPolicy.designDefaultFields']) test(`retained PM protocol credential collision of ${collision.length} characters fails at zero requests`, async t => {
+for (const collision of [PM_OUTPUT_POLICY_VERSION, ROLE_SCHEMA_DIAGNOSTICS_VERSION, GROUPED_ACCEPTANCE_PROMPT_VERSION, ROLE_SCHEMA_DIAGNOSTICS_VERSION.slice(-16), 'pmOutputPolicy.designDefaultFields', ACCEPTANCE_STEP_AUDIT_VERSION, ACCEPTANCE_REVIEW_PROJECTION_VERSION, 'exactAssertionIndices', 'Step audit source binding rejected', 'stepAuditSha256绑定']) test(`retained PM/audit protocol credential collision of ${collision.length} characters fails at zero requests`, async t => {
   const f = fixture(t);
   if (collision === 'pmOutputPolicy.designDefaultFields') assert.ok(GROUPED_CONTRACT_INSTRUCTIONS['project-manager'].includes(collision));
   const legacy = f.service.store as unknown as { encrypt(secret: string): string; state: { agents: Array<{ secret?: string }>; snapshots: Record<string, Array<{ secret?: string }>> } };

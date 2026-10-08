@@ -1,7 +1,5 @@
 # City Agent
 
-生产线最新免费切片（2026-10-08）：[grouped v3 实际步骤审计](docs/production/ACCEPTANCE-STEP-AUDIT.md)已接入，按真实数组记录容量/动作/断言及原调用血缘，完整Verifier只传一次完整checks并保留原需求；审查、接受保存及冻结边界均防漂移。审计不是语义覆盖或执行通过证书，原12×20 Gate、两次共享修复及旧提示/实验不变。[本批验证](docs/production/BATCH-STEP-AUDIT-CHECKS.md)／[下一任务](docs/production/NEXT-STEPS.md)／[下一单次实测提案（待授权）](docs/production/HTML-06-PROPOSAL.md)。本批0供应商调用；本地4420需求编辑器与静态Pages v6边界不变。下文是此前批次记录，[更新前全文留底](docs/production/archive/2026-10-08-before-step-audit/ROOT-README.md)。
-
 生产线最新免费切片（2026-10-08）：[grouped v2 分阶段PM输出协议](docs/production/PM-OUTPUT-POLICY.md)已实现，普通决策与验收计划采用各自实际Schema派生的合法字段导航，默认值不再被要求写入不存在的字段；结构拒绝提供绑定真实call/phase/原文与schema hash的受控诊断。保留严格解析、独立Verifier、原Gate和两次共享修复，旧HTML/camera提示与HTML05原件不改。[本批审查核验](docs/production/BATCH-PM-OUTPUT-POLICY-CHECKS.md)／[下一任务](docs/production/NEXT-STEPS.md)。本批0供应商调用，模型效果需新实测；本地4420编辑器与静态Pages v6边界不变。[本次原文留底](docs/production/archive/2026-10-08-before-pm-output-policy/README.md)。
 
 生产线最新（2026-10-08）：[HTML-05实际前端实测及证据](docs/production/experiments/HTML-05/RESULT.md)已完成，单次启动52.563秒／7实际HTTP／49936Token／声明价估算0.0220062 USD。PM额外字段与JSON拒绝耗尽两次修复，尚未进入分组测试或研发Gate；不计交付成功。终态后免费[JSON诊断v2](docs/production/JSON-DIAGNOSTICS-V2.md)修正尾随JSON位置，并补旧凭据碰撞首调用阻断；原实验不回写，不自动追加收费。[本批核验](docs/production/BATCH-HTML05-CHECKS.md)／[下一任务](docs/production/NEXT-STEPS.md)。本地编辑器仍为 `http://127.0.0.1:4420/#production`，Pages仍静态v6；下面记录属于此前时点。[更新前留底](docs/production/archive/2026-10-08-before-html05/README.md)。

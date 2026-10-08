@@ -179,6 +179,15 @@ export const GROUPED_CONTRACT_INSTRUCTIONS = Object.freeze(Object.fromEntries(Ob
 export const GROUPED_ACCEPTANCE_PLAN_INSTRUCTIONS = `${groupedInstructions(ACCEPTANCE_PLAN_INSTRUCTIONS)} ${PM_OUTPUT_POLICY_INSTRUCTIONS}`;
 export const GROUPED_ACCEPTANCE_GROUP_INSTRUCTIONS = groupedInstructions(ACCEPTANCE_GROUP_INSTRUCTIONS);
 
+// New opt-in profile only. Keep all v1/v2 exports byte-identical for replay.
+export const STEP_AUDITED_GROUPED_PROMPT_VERSION = 'production-html-grouped-v3';
+export const ACCEPTANCE_REVIEW_PROJECTION_VERSION = 'production-acceptance-review-projection-v1';
+export const STEP_AUDIT_PLANNING_INSTRUCTIONS = '实际步骤规划：stepBudget不是文本自评。以将要生成的每项steps数组长度计入独立新页setup、每次fill/click和每个结果断言；assertChanged.after内操作仍属于该一个数组条目，不另加预算，但不能假装先前状态已建立。多个负例×前置状态要逐一建立有效其它字段与相应状态，并在每次操作后验证原需求要求的内容/数量/统计/提示，不能用最后一次断言替代此前各次验证。不信任“14步”等说明，不跨check借用已有记录，不为20步容量删条款。宿主stepAudit仅提供真实动作种类、索引、数组长度和来源；assertTextExact/assertCount的存在、选择器不同或obligationIds齐全均不证明业务正确或完整覆盖。合法初态/静态检查无需硬加点击。无法在原容量完整表达要求时按已有角色合法字段明确缺口，由原静态Verifier拒绝；不改变目标、测试schema、返修数或Gate。';
+export const STEP_AUDITED_GROUPED_CONTRACT_INSTRUCTIONS = Object.freeze(Object.fromEntries(Object.entries(GROUPED_CONTRACT_INSTRUCTIONS).map(([role, instructions]) => [role, ['researcher', 'project-manager'].includes(role) ? `${instructions} ${STEP_AUDIT_PLANNING_INSTRUCTIONS}` : instructions])) as typeof CONTRACT_INSTRUCTIONS);
+export const STEP_AUDITED_ACCEPTANCE_PLAN_INSTRUCTIONS = `${GROUPED_ACCEPTANCE_PLAN_INSTRUCTIONS} ${STEP_AUDIT_PLANNING_INSTRUCTIONS}`;
+export const STEP_AUDITED_ACCEPTANCE_GROUP_INSTRUCTIONS = `${GROUPED_ACCEPTANCE_GROUP_INSTRUCTIONS} ${STEP_AUDIT_PLANNING_INSTRUCTIONS}`;
+export const STEP_AUDITED_CONSTRUCTION_REVIEW_INSTRUCTIONS = `${ACCEPTANCE_CONSTRUCTION_REVIEW_INSTRUCTIONS} 宿主实际步骤审计：state.reviewContext.acceptanceConstruction.attempt.stepAudit与stepAuditSha256绑定当前完整候选。slots按实际checks顺序列出actualStepCount/actionKinds/assertionIndices/exactAssertionIndices/operations；索引为零起点，embedded表示assertChanged.after内操作，该步骤只占一个数组条目。sourceGroups只投影原组来源ID/hash，完整checks在candidates中仅传一次；归档保留所有原组全文。必须直接阅读完整checks及criteria.goal/acceptance核对每个原始条款，不拿PM计划或审计索引当覆盖证书。精确断言可能只查提示/输入，CSS别名可能指向同一输入；操作索引不证明有效setup，每次负例需独立建立所需状态、其余合法字段并逐次验证业务内容与统计不变。末尾结果不能追认早先边界成功，不从其它check借状态。审计不能发现计划漏掉的原始要求，也不证明任何步骤执行；遗漏/混淆/证据不足必须低于3且abstain。仍严格四字段，不添加审计、coverage或新的输出字段；最终冻结行为Gate仍独立必需。`;
+
 export function contractProfile(capability: ProductionCapability = 'offline-single-html') {
   if (capability === 'offline-single-html') return { promptVersion: PROMPT_VERSION, acceptanceVersion: ACCEPTANCE_CONTRACT_VERSION, instructions: CONTRACT_INSTRUCTIONS, productSchema: productSchema.extend({ scope: z.literal(capability) }) };
   const scope = '平台固定可信摄像头桥/本地识别/Canvas渲染，模型仅生成严格JSON场景配置，绝不生成可执行JS/HTML、URL或改变权限。人工授权摄像头是产品使用动作；本批Gate仅验证合成手势场景行为，识别模型、物理摄像头及完整需求验收仍待实测，不能声称已完成。';

@@ -85,7 +85,7 @@ test('group preparation binds an explicit opt-in, reports sixteen/twenty-eight c
   const report = buildProductionLaunchPreflight(value, models, execution, () => { freshness++; });
   assert.equal(report.ready, true); assert.equal(report.paidAuthorized, false); assert.equal(report.finalGate, null); assert.equal(report.modelRequests, 0); assert.equal(freshness, 1);
   assert.equal(report.input.acceptanceStrategy, 'planned-groups-v1'); assert.equal(report.input.budgetAuthorized, false);
-  assert.deepEqual(report.configuration, { promptVersion: 'production-html-grouped-v2', pmOutputPolicyVersion: 'production-pm-output-policy-v1', roleSchemaDiagnosticsVersion: 'production-role-schema-diagnostics-v1' });
+  assert.deepEqual(report.configuration, { promptVersion: 'production-html-grouped-v3', pmOutputPolicyVersion: 'production-pm-output-policy-v1', roleSchemaDiagnosticsVersion: 'production-role-schema-diagnostics-v1', acceptanceStepAuditVersion: 'production-acceptance-step-audit-v1', acceptanceReviewProjectionVersion: 'production-acceptance-review-projection-v1' });
   assert.deepEqual({ base: report.budget.baseCalls, worst: report.budget.worstCaseCalls }, { base: 16, worst: 28 });
   assert.equal(report.budget.firstRequest.totalTokens, PRODUCTION_INPUT_TOKEN_RESERVATION + 6000);
   assert.equal(report.budget.firstRequest.estimatedCost, .0268608);

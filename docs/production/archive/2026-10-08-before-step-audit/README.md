@@ -1,13 +1,5 @@
 # 六角色自主软件生产工作区
 
-## 当前源码：实际步骤审计（2026-10-08）
-
-在 [PM 分阶段输出政策](PM-OUTPUT-POLICY.md)之后，本批推进 [步骤事实与完整评审契约](ACCEPTANCE-STEP-AUDIT.md)：显式分组验收使用 grouped v3，将真实数组长度、操作/断言索引与源调用 hash 绑定到完整候选；完整 Verifier 接收原需求、完整计划和一次测试全文，审查前后重算，随后仍执行原冻结行为 Gate。旧 v1/v2 提示、非分组 HTML、摄像头及历史实验保持原件。
-
-工程验证和独立审查见 [本批记录](BATCH-STEP-AUDIT-CHECKS.md)。这不是覆盖成功证书或新模型实验；步骤计数不能代替有效前置状态、完整业务断言或真实交付。最近一次真实生产运行仍为 [HTML-05](experiments/HTML-05/RESULT.md) 的失败，下一次真实运行另需有限授权。
-
-体验新的需求编辑器：`http://127.0.0.1:4420/#production` → 新建自定义需求 → 离线单 HTML / 真实模式 / LLM Verifier / 单候选 → 显式分组验收 → 免费预检。预检 configuration 显示 grouped v3、审计 v1 和评审投影 v1；ready 不授权收费，也不是最终 Gate。[跨设备安装指南](REVIEWER-GUIDE.md)与[公开静态门户](https://litianyi-007.github.io/city-agent/production/)保持适用；Pages 不运行需求研发后端。本次只更新生产分支，不发布新 Pages 或改写申报原稿。此前状态按下文历史时点保留，[修改前全文留底](archive/2026-10-08-before-step-audit/README.md)。
-
 ## 最新真实探索：HTML-03（2026-10-08）
 
 [费用记录页单次真实结果](experiments/HTML-03/RESULT.md)：已按新授权在本地页面输入并启动一次，64.951秒、9次实际HTTP、72,416 Token、估算0.034971 USD；Tester三次输出超过每项20步，耗尽两次共享纠错后失败。无冻结、研发、Gate或HTML；独立审查另发现非法金额覆盖缺口，不将结构修复或模型高分当作交付。五份原件与只读核验保留，不追加收费重跑。[本次更新前全文](archive/2026-10-08-before-html03-result/README.md)留底；公开 Pages仍是v6静态入口。
