@@ -1,0 +1,41 @@
+{
+  "version": "html07-single-run-conversation-consent-v1",
+  "recordedAt": "2026-10-08T19:32:44.976Z",
+  "userReply": "批准仅这一次，采用1 USD限额",
+  "referencedProposal": "docs/production/HTML-07-PROPOSAL.md",
+  "referencedProposalCommit": "c981490cd94bcb753f6b66291ee4319b092f62f8",
+  "proposalSha256": "7124ae5953812fcaaba9bbafcc994485cbecc6bc5ebd07fffe56331614683836",
+  "questionItemId": "[\"request_user_input_async\",\"call_deddbb663ebd4310bf8ecfa3c3cca83b\",0]",
+  "basis": "Explicit affirmative user reply to this specific bounded HTML07 question and proposal; not inherited authorization or a retry of HTML06",
+  "limitation": "Conversation-derived trusted record, not an independent signature or supplier-bill hard cap",
+  "singleRunOnly": true,
+  "automaticRetryAllowed": false,
+  "generatedArtifactManualEditsAllowed": false,
+  "declaredPricing": {
+    "inputPerMillion": 0.3,
+    "outputPerMillion": 1.2,
+    "currency": "USD"
+  },
+  "roles": [
+    "product",
+    "project-manager",
+    "researcher",
+    "developer",
+    "tester",
+    "verifier"
+  ],
+  "model": "deepseek-flash",
+  "candidateCount": 1,
+  "verifierEngine": "llm-rubric",
+  "jevRequestsAllowed": false,
+  "unknownUsagePolicy": "stop immediately; no automatic subsequent paid call",
+  "limits": {
+    "maxCalls": 24,
+    "maxRepairCycles": 2,
+    "maxTokens": 500000,
+    "maxOutputTokens": 6000,
+    "maxDurationMs": 600000,
+    "maxCost": 1,
+    "currency": "USD"
+  }
+}

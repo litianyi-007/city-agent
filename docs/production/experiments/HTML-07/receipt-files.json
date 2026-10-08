@@ -1,0 +1,117 @@
+{
+  "version": "html07-receipt-byte-index-v1",
+  "runId": "18b50d49-4cc2-4f63-bcc7-94da50802d91",
+  "sourceCommit": "c981490cd94bcb753f6b66291ee4319b092f62f8",
+  "exportedAt": "2026-10-08T19:37:19.300Z",
+  "byteEqualityIsNotIndependentAuthenticityProof": true,
+  "files": [
+    {
+      "name": "input-snapshot.json",
+      "origin": "normalized-authorization-input",
+      "bytes": 3693,
+      "sha256": "f2c92093c4514b98dc60358661cdd132aeab24214a95f56a74f4fa14fd681998"
+    },
+    {
+      "name": "authorization.json",
+      "origin": "conversation-consent-record-not-signature",
+      "bytes": 1464,
+      "sha256": "5ae2e9ea8e93b4fb7b695f925482fbbd424e587e62fcf6f56e9d8f757c8bfa7c"
+    },
+    {
+      "name": "authorization-checked.json",
+      "origin": "trusted-pre-click-authorization-check",
+      "bytes": 251,
+      "sha256": "e7542fe36cd2c92626b1e4f9533a048dc0b9056b6ef7c3a2028c02b3cd7138c3"
+    },
+    {
+      "name": "platform-metadata.json",
+      "origin": "normalized-api-snapshot",
+      "bytes": 26867,
+      "sha256": "8ff120360ea4a7bcc1ec6c4cfdea2c63335560592a3c64d3a7986d2ce90a2d15"
+    },
+    {
+      "name": "public-agent-configuration.json",
+      "origin": "normalized-api-snapshot",
+      "bytes": 2193,
+      "sha256": "97a7207838f6131d30bf46ef3bdf5a0833d1c7653e0e72071a859ee8e47b31bb"
+    },
+    {
+      "name": "actual-browser-submit.json",
+      "origin": "normalized-observed-browser-request",
+      "bytes": 3693,
+      "sha256": "f2c92093c4514b98dc60358661cdd132aeab24214a95f56a74f4fa14fd681998"
+    },
+    {
+      "name": "launch-preflight.json",
+      "origin": "normalized-api-snapshot",
+      "bytes": 9930,
+      "sha256": "21b5da60429d4bd99b9062fc7d2f9dd413cc738133018f8c3b9b2825c214bb98"
+    },
+    {
+      "name": "launch-intent.json",
+      "origin": "pre-click-single-attempt-intent",
+      "bytes": 627,
+      "sha256": "485085e9a28bda6af19a8b3ce5b89c8d089fb093251ffb9b466a403de953407e"
+    },
+    {
+      "name": "launch-response.json",
+      "origin": "normalized-api-snapshot",
+      "bytes": 29251,
+      "sha256": "dc9db97ecb0ede24002109384d777b2ee45e427e7d0ba9853ceaa1a636dd1ff0"
+    },
+    {
+      "name": "run.json",
+      "origin": "normalized-api-snapshot",
+      "bytes": 257948,
+      "sha256": "83550d54cc2eede5c3d5ccf218d1e065868ea53ecde42cce3d99becc18d88a8d"
+    },
+    {
+      "name": "evidence.json",
+      "origin": "exact-downloaded-artifact-bytes",
+      "bytes": 257947,
+      "sha256": "0992bdb9bd31a7a740eeb00df02cd141c9dd20b1e35951d15923eb874a9f4731"
+    },
+    {
+      "name": "delivery-manifest.json",
+      "origin": "exact-downloaded-artifact-bytes",
+      "bytes": 35686,
+      "sha256": "5c48c7a9d27c3421d2563c59cb831c11c84a34a1c228b130828f97fa4ed414c8"
+    },
+    {
+      "name": "ui-receipt.json",
+      "origin": "trusted-ui-automation-observation",
+      "bytes": 878,
+      "sha256": "943451aba3536a00215d9a141b111f3eabc0b8fd9c989e5f52ab1abaf7708a4e"
+    },
+    {
+      "name": "ui-before-launch.png",
+      "origin": "actual-platform-ui-screenshot",
+      "bytes": 898780,
+      "sha256": "d33e7f01cef9dde89c23362b9e3d80f3e7e2a33a6c401e0b3b6ef215de848542"
+    },
+    {
+      "name": "ui-terminal.png",
+      "origin": "actual-platform-ui-screenshot",
+      "bytes": 769212,
+      "sha256": "8af052741eb197f2c9ae01af84e2b1c4e7669a4a27dceafae637e5d947ba369e"
+    },
+    {
+      "name": "ui-driver.mjs.txt",
+      "origin": "trusted-automation-source-inert-text-not-generated-product",
+      "bytes": 15069,
+      "sha256": "ac535719292e3f5a0e4080a549f4a6530c9a47dbdf3395f11db716fee97b8eff"
+    },
+    {
+      "name": "ui-preparation.mjs.txt",
+      "origin": "trusted-automation-source-inert-text-not-generated-product",
+      "bytes": 5802,
+      "sha256": "aba9e7f71bae1c9d9072dfc025a870b6de5eb3a8138e1384eacf1a4029d26fca"
+    },
+    {
+      "name": "PRE-REGISTRATION.md",
+      "origin": "exact-pre-run-committed-proposal-bytes",
+      "bytes": 2283,
+      "sha256": "7124ae5953812fcaaba9bbafcc994485cbecc6bc5ebd07fffe56331614683836"
+    }
+  ]
+}

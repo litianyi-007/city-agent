@@ -1,13 +1,5 @@
 # 六角色自主软件生产工作区
 
-## 最新批次：HTML07真实页面与协议失败（2026-10-09）
-
-[HTML07](experiments/HTML-07/RESULT.md)按用户明确单次1 USD授权，从本地需求编辑器仅提交一次。新启动守卫放行，实际7 Harness/7供应商HTTP，49.631秒、45,238 Token、声明价估算0.0204861 USD。研究两次JSON语法错误耗尽共享返修，PM额外`risksNote`被严格拒绝；没有plan/groups/audit/freeze、测试、研发、最终Gate或产品。八项业务未测试，不把2次静态Verifier accept当交付。
-
-18份公开原档、单次UI意图/提交、明确授权、两张平台截图、声明价算术与失败反馈可无需Key只读复核。[本批工程/独立审查](BATCH-HTML07-CHECKS.md)／[下一批免费任务](NEXT-STEPS.md)分别留证；未自动启动第二次运行，旧失败、旧申报、主线与Pages不变。真实需求入口为 [本地工作台](http://127.0.0.1:4420/#production)；[公开Pages](https://litianyi-007.github.io/city-agent/production/)仍是v6静态材料/可信案例。当前管线能启动并留完整失败证据，不宣称通用HTML真实闭环已经通过。
-
-[更新前全文留底](archive/2026-10-09-before-html07/README.md)。以下按历史时点阅读，“HTML07待新授权/未运行”已被上述单次终态取代。
-
 ## 最新批次：HTML06启动失败与免费守卫修复（2026-10-09）
 
 [HTML06实际页面仅提交一次](experiments/HTML-06/RESULT.md)，启动协议守卫在首模型调用前超限，failed/286ms/0调用/0Token/0模型费用。没有进入plan、groups、audit、freeze、研发或Gate；八项业务全部未测，不把真实模式启动标记当模型执行证据。16份公开原件含输入、实际提交、授权解释、原始下载和两张截图，旧失败不回写。

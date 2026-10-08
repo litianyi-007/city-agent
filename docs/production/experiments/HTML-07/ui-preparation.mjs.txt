@@ -1,0 +1,60 @@
+import assert from 'node:assert/strict';
+import { execFileSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
+import { existsSync, readFileSync, writeFileSync, realpathSync } from 'node:fs';
+import { assertNoPublishedSecrets } from '../../scripts/production-public-safety.ts';
+import { productionRunInputSchema } from '../../shared/production-schema.ts';
+const root = '/Users/litianyi/Documents/Code/_ai-goods/city-agent-autonomous-production';
+const output = root + '/output/production-html07/';
+assert.equal(process.cwd(), root); assert.equal(realpathSync(output), output.slice(0, -1));
+const commit = 'c981490cd94bcb753f6b66291ee4319b092f62f8';
+assert.equal(existsSync(output + 'launch-intent.json'), false);
+assert.equal(existsSync(output + 'ui-runner.mjs'), false);
+assert.equal(execFileSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' }).trim(), commit);
+assert.equal(execFileSync('git', ['status', '--porcelain'], { cwd: root, encoding: 'utf8' }).trim(), '');
+const proof = JSON.parse(readFileSync(root + '/output/production-html06/final-commit-check.json', 'utf8'));
+assert.equal(proof.commit, commit); assert.equal(proof.freePreflight.startupGuard.ready, true);
+assert.equal(proof.activeRuns, 0); assert.equal(proof.productionRunCount, 22);
+const prior = JSON.parse(readFileSync(root + '/docs/production/experiments/HTML-06/input-snapshot.json', 'utf8'));
+const input = productionRunInputSchema.parse({ ...prior, requirement: { ...prior.requirement,
+  id: 'HTML-07', source: '用户明确批准仅一次HTML07，1 USD声明价估算停止额度；自拟演示需求，非真实业务工单',
+  background: '公共碰撞guard v2和同源startup guard v1修复后的单次真实模型实验；保留HTML04/05/06原八项业务、12×20 Gate与全部限额，不复用旧答案、源码或模板' } });
+assert.equal(input.brief, prior.brief); assert.equal(input.requirement.acceptance, prior.requirement.acceptance);
+const sha = b => createHash('sha256').update(b).digest('hex');
+const save = (name, value) => { const bytes = Buffer.from(JSON.stringify(value, null, 2) + '\n'); assertNoPublishedSecrets(bytes, name); writeFileSync(output + name, bytes, { flag: 'wx', mode: 0o600 }); };
+if (existsSync(output + 'authorized-input.json')) assert.deepEqual(JSON.parse(readFileSync(output + 'authorized-input.json', 'utf8')), input);
+else save('authorized-input.json', input);
+const authorization = {
+  version: 'html07-single-run-conversation-consent-v1', recordedAt: new Date().toISOString(),
+  userReply: '批准仅这一次，采用1 USD限额',
+  referencedProposal: 'docs/production/HTML-07-PROPOSAL.md',
+  referencedProposalCommit: commit,
+  proposalSha256: sha(readFileSync(root + '/docs/production/HTML-07-PROPOSAL.md')),
+  questionItemId: '["request_user_input_async","call_deddbb663ebd4310bf8ecfa3c3cca83b",0]',
+  basis: 'Explicit affirmative user reply to this specific bounded HTML07 question and proposal; not inherited authorization or a retry of HTML06',
+  limitation: 'Conversation-derived trusted record, not an independent signature or supplier-bill hard cap',
+  singleRunOnly: true, automaticRetryAllowed: false, generatedArtifactManualEditsAllowed: false,
+  declaredPricing: { inputPerMillion: 0.30, outputPerMillion: 1.20, currency: 'USD' },
+  roles: ['product', 'project-manager', 'researcher', 'developer', 'tester', 'verifier'],
+  model: 'deepseek-flash', candidateCount: 1, verifierEngine: 'llm-rubric', jevRequestsAllowed: false,
+  unknownUsagePolicy: 'stop immediately; no automatic subsequent paid call', limits: input.limits,
+};
+if (existsSync(output + 'authorization.json')) {
+  const existing = JSON.parse(readFileSync(output + 'authorization.json', 'utf8'));
+  assert.deepEqual({ ...existing, recordedAt: authorization.recordedAt }, authorization);
+} else save('authorization.json', authorization);
+// Mechanical copy of the previously inspected trusted UI harness, never the generated product.
+// Every expected replacement count is asserted; the original remains byte-identical.
+let driver = readFileSync(root + '/docs/production/experiments/HTML-06/ui-driver.mjs.txt', 'utf8');
+const replace = (a, b, count) => { assert.equal(driver.split(a).length - 1, count, a); driver = driver.split(a).join(b); };
+replace('fba3731f373d690b6792b01beb62f1e7d4337d3a', commit, 1);
+replace('45b7681c-f1d5-44b6-85d2-2f311871f47e', proof.bootId, 1);
+replace('production-html06', 'production-html07', 1);
+replace('HTML-06', 'HTML-07', 4);
+replace('assert.equal(beforeCount, 21);', 'assert.equal(beforeCount, 22);', 1);
+replace("assert.equal(approval.userReply, '继续下一步');", "assert.equal(approval.userReply, '批准仅这一次，采用1 USD限额');\nassert.equal(approval.singleRunOnly, true); assert.equal(approval.automaticRetryAllowed, false); assert.equal(approval.jevRequestsAllowed, false);\nassert.equal(approval.proposalSha256, sha(readFileSync(path.join(workdir, approval.referencedProposal))));", 1);
+replace("assert.equal(report.ready, true);", "assert.equal(report.ready, true);\n  assert.deepEqual(report.startupGuard, { version: 'production-startup-public-guard-v1', publicCollisionGuardVersion: 'public-collision-guard-v2', ready: true });\n  assert.equal(report.execution.fresh, true); assert.equal(report.execution.commit, commit);\n  const { reportHash, ...reportPayload } = report; assert.equal(sha(JSON.stringify(reportPayload)), reportHash);", 1);
+replace('html06-real-ui-receipt-v1', 'html07-real-ui-receipt-v1', 1);
+assertNoPublishedSecrets(Buffer.from(driver), 'ui-runner.mjs');
+writeFileSync(output + 'ui-runner.mjs', driver, { flag: 'wx', mode: 0o600 });
+console.log(JSON.stringify({ preparedOnly: true, id: input.requirement.id, commit, bootId: proof.bootId, modelRequests: 0, startupGuardReady: true }));

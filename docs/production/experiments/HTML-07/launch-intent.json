@@ -1,0 +1,13 @@
+{
+  "at": "2026-10-08T19:34:59.403Z",
+  "method": "actual-frontend-form-single-click",
+  "origin": "http://127.0.0.1:4420",
+  "sourceCommit": "c981490cd94bcb753f6b66291ee4319b092f62f8",
+  "bootId": "49679553-a24b-4c68-bcca-24eb9131dcd2",
+  "expectedInputSha256": "690e6576f8667076081d97f63c1a9fac747343a17d629188bf19e5edbfb3a2d7",
+  "preflightHash": "e8b8ebba1489cc2f2047dfa77a4a119bd08dcb8ea300100631d1023d5bb928f0",
+  "budgetAuthorized": true,
+  "beforeRunCount": 22,
+  "automaticRetryAllowed": false,
+  "transport": "Owned Playwright Chromium; no route fulfill or SDK injection; browser requests only to loopback service"
+}
