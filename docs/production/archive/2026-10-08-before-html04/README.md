@@ -1,7 +1,5 @@
 # City Agent
 
-生产线本轮实测（2026-10-08）：[HTML-04结果及完整证据](docs/production/experiments/HTML-04/RESULT.md)已归档。首份测试被独立Verifier以覆盖不足弃权，后续JSON／容量拒绝耗尽两次共享修复，64.396秒、10HTTP、估算0.0359493 USD，未进入研发或Gate；没有追加第二次实测。下一批先免费完善验收规划／分组生成结构，保留业务与12×20门限，不把工程或静态评审算真实交付成功。工作台本地可读历史，公开Pages仍v6；[本次更新前全文留底](docs/production/archive/2026-10-08-before-html04/README.md)。
-
 生产线当前增量（2026-10-08）：[HTML-03 单次真实费用页实验](docs/production/experiments/HTML-03/RESULT.md)已结束，测试候选容量超限、两次共享返修耗尽，未交付 HTML；实测估算0.034971 USD。[本批验收规划与容量反馈](docs/production/BATCH-ACCEPTANCE-V11-CHECKS.md)已实现同源12项／20步事实、逐项超限诊断及原始需求覆盖评审，工程验证与真实模型结果分别记录。下一次真实运行须新单次授权；旧失败与公开 v6 不回写。[当前任务顺序](docs/production/NEXT-STEPS.md)／[更新前全文留底](docs/production/archive/2026-10-08-before-acceptance-v11/README.md)。
 
 生产线最新实测（2026-10-08）：[控制面工程676/676＋浏览器45/45](docs/production/BATCH-VERIFIER-CONTROL-CHECKS.md)通过；[首次真实Verifier对照](docs/production/experiments/VERIFIER-REAL-01/RESULT.md)10请求后按非法JSON门禁停止，估算0.017598132USD、0Oracle，原件可无Key只读核验，不计模型提升或自主交付成功。[下一批任务](docs/production/NEXT-STEPS.md)优先格式诊断、边界验证与Jev兼容前提；收费授权不自动重用。下文历史记录保留，[本次原文留底](docs/production/archive/2026-10-08-before-verifier-real01/ROOT-README.md)。

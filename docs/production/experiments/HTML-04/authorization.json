@@ -1,0 +1,20 @@
+{
+  "recordedAt": "2026-10-08T06:38:03.510Z",
+  "answer": "批准仅这一次，采用1 USD限额",
+  "authorizationSource": "本轮用户对话明确批准；非签名或启动令牌",
+  "requestId": "HTML-04",
+  "launchInterface": "native-service-api; browser connection unavailable; not a UI recording",
+  "platformCommit": "19466ab1c75610502ae8ff58a069308781e62151",
+  "bootId": "107ec4b9-1c3c-4870-b000-754b8e133084",
+  "preflightReportHash": "488381b84197d3e66da2e33864a965a2e259e315fceb82e511d94a768fd6ac92",
+  "limits": {
+    "maxCalls": 24,
+    "maxRepairCycles": 2,
+    "maxTokens": 500000,
+    "maxOutputTokens": 6000,
+    "maxDurationMs": 600000,
+    "maxCost": 1,
+    "currency": "USD"
+  },
+  "allowAdditionalExperiment": false
+}
