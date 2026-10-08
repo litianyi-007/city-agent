@@ -77,6 +77,20 @@ function knownUsage(value: number | null | undefined): number | null {
   return typeof value === 'number' && Number.isInteger(value) && value >= 0 ? value : null;
 }
 
+/** Models sometimes attach a free-form note beside the four required context fields. Drop only that key. */
+function withoutDecisionContextNote(value: unknown): unknown {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return value;
+  const root = value as Record<string, unknown>;
+  const task = root.task;
+  if (!task || typeof task !== 'object' || Array.isArray(task)) return value;
+  const taskRecord = task as Record<string, unknown>;
+  const context = taskRecord.decisionContext;
+  if (!context || typeof context !== 'object' || Array.isArray(context) || !Object.hasOwn(context, 'note')) return value;
+  const decisionContext: Record<string, unknown> = { ...(context as Record<string, unknown>) };
+  delete decisionContext.note;
+  return { ...root, task: { ...taskRecord, decisionContext } };
+}
+
 function validatePublicModel(agent: RoleModelConfig): void {
   if (!['openai-compatible', 'openai-completions', 'openai', 'anthropic', 'anthropic-messages', 'deepseek'].includes(agent.provider)) throw new Error('规划模型提供方不受支持。');
   let url: URL;
@@ -160,7 +174,7 @@ export async function planResearch(
       evidence.rawResponse = `${evidence.rawResponse.slice(0, 128_000)}\n[TRUNCATED: exceeded response byte limit]`;
       throw new Error('模型原文超过512KB安全限额，已拒绝并保存脱敏截断原文。');
     }
-    const output = researchPlanningModelOutputSchema.parse(JSON.parse(evidence.rawResponse.trim()));
+    const output = researchPlanningModelOutputSchema.parse(withoutDecisionContextNote(JSON.parse(evidence.rawResponse.trim())));
     const frame = output.task.population;
     if (frame.regionCode !== input.population.regionCode || frame.period !== input.population.period || frame.unit !== input.population.unit) throw new Error('模型改变了冻结人口地域、时点或单位，候选已拒绝。');
     if (output.task.questionnaire.questions.length > input.maxQuestions) throw new Error('候选问题数超过输入限额。');

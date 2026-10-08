@@ -126,6 +126,38 @@ test('planning inputs and outputs are strict and bounded with the shared Researc
   assert.equal(researchPlanningModelOutputSchema.safeParse(malformed).success, false);
 });
 
+test('local planning schema failures do not call the model, and decisionContext note is removed before validation', async () => {
+  let calls = 0;
+  const runner: typeof runRole = async () => { calls++; return result(JSON.stringify(output())); };
+  for (const invalid of [{ ...input, request: '' }, { ...input, apiKey: 'forbidden' }, { ...input, population: { ...input.population, hidden: true } }]) {
+    await assert.rejects(planResearch(invalid, agent, new AbortController().signal, runner));
+  }
+  assert.equal(calls, 0);
+  const noted = output();
+  (noted.task.decisionContext as { note?: string }).note = '模型附加说明，不是契约字段';
+  const raw = JSON.stringify(noted);
+  const planned = await planResearch(input, agent, new AbortController().signal, async () => { calls++; return result(raw, true); });
+  assert.equal(calls, 1);
+  assert.equal(planned.status, 'candidate');
+  assert.equal(planned.evidence.modelCalls, 1);
+  assert.equal(planned.evidence.state, 'candidate');
+  assert.equal(planned.evidence.inputTokens, 0);
+  assert.equal(planned.evidence.outputTokens, 0);
+  assert.equal(Object.hasOwn(planned.task.decisionContext, 'note'), false);
+  assert.equal(planned.evidence.rawResponse, raw);
+  assert.match(planned.evidence.rawResponse, /"note"/);
+  const other = output();
+  (other.task.decisionContext as { footnote?: string }).footnote = '仍应拒绝';
+  await assert.rejects(planResearch(input, agent, new AbortController().signal, async () => { calls++; return result(JSON.stringify(other)); }), (error: unknown) => {
+    assert.ok(error instanceof ResearchPlanningError);
+    assert.equal(error.evidence.modelCalls, 1);
+    assert.equal(error.evidence.state, 'failed');
+    assert.match(error.evidence.error ?? '', /footnote/);
+    return true;
+  });
+  assert.equal(calls, 2);
+});
+
 test('one explicit call yields only an editable unverified candidate with unknown usage and cost', async () => {
   let calls = 0;
   const runner: typeof runRole = async (_agent, system, user, signal, _event, limits) => {

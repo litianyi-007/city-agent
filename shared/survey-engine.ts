@@ -147,6 +147,11 @@ export function residentPrompt(task: ResearchTask, profile: Profile, exposure: '
   const resident = exposure === 'full' ? profile : exposure === 'no-persona' ? { id: profile.id } : { id: profile.id, street: profile.street, streetName: profile.streetName, age: profile.age, ageBand: profile.ageBand, sex: profile.sex };
   return JSON.stringify({ schemaVersion: '1.0', exposure, resident, decisionContext: task.decisionContext, questionnaire: task.questionnaire });
 }
+/** Prompt text is the questionnaire's declaration. Option ids stay none/unknown; labels vary. */
+function declaredExclusiveOptionIds(question: ResearchTask['questionnaire']['questions'][number]): string[] {
+  if (question.type !== 'multiple' || !/排他|不能与其他/.test(question.prompt)) return [];
+  return question.options.filter(option => option.id === 'none' || option.id === 'unknown').map(option => option.id);
+}
 export function checkCoherence(task: ResearchTask, profile: Profile, answers: Answer[]) {
   const issues: { ruleId: string; questionId: string; severity: 'error' | 'unknown'; message: string }[] = []; let checked = 0;
   for (const rule of task.validationRules ?? []) {
@@ -158,7 +163,16 @@ export function checkCoherence(task: ResearchTask, profile: Profile, answers: An
     const value = profile[rule.field];
     if (choice.equals !== undefined && value !== choice.equals || choice.min !== undefined && (typeof value !== 'number' || value < choice.min) || choice.max !== undefined && (typeof value !== 'number' || value > choice.max)) issues.push({ ruleId: rule.id, questionId: rule.questionId, severity: 'error', message: `回答与画像 ${rule.field}=${value} 矛盾。` });
   }
-  return { status: !(task.validationRules?.length) ? 'not-configured' : issues.some(issue => issue.severity === 'error') ? 'contradiction' : issues.length ? 'partial' : 'checked', checked, issues, scope: '仅执行问卷JSON预登记的硬约束；不自动理解职业、家庭或开放题语义，不以消费刻板印象判错。' };
+  for (const question of task.questionnaire.questions) {
+    const exclusive = declaredExclusiveOptionIds(question);
+    if (!exclusive.length) continue;
+    const value = answers.find(item => item.questionId === question.id)?.value;
+    if (!Array.isArray(value) || value.length < 2 || !exclusive.some(id => value.includes(id))) continue;
+    checked++;
+    issues.push({ ruleId: `${question.id}-exclusive-options`, questionId: question.id, severity: 'error', message: '“无/未知”等排他选项不能与其他选择同时出现。' });
+  }
+  const status = issues.some(issue => issue.severity === 'error') ? 'contradiction' : !(task.validationRules?.length) ? 'not-configured' : issues.length ? 'partial' : 'checked';
+  return { status, checked, issues, scope: '仅执行问卷JSON预登记的硬约束；不自动理解职业、家庭或开放题语义，不以消费刻板印象判错。' };
 }
 const answerEnvelope = z.object({ residentId: z.string(), answers: z.array(z.object({ questionId: z.string(), value: z.union([z.string(), z.array(z.string()), z.number().finite(), z.null()]) }).strict()).max(50) }).strict();
 export function validateAnswers(task: ResearchTask, profileId: string, raw: string): Answer[] {
@@ -190,8 +204,20 @@ export function fixtureAnswers(task: ResearchTask, profile: Profile, seed: numbe
       if (question.id === 'age-range') index = profile.age < 18 ? 1 : profile.age < 30 ? 2 : profile.age < 45 ? 3 : profile.age < 60 ? 4 : 5;
       value = question.options[Math.max(0, Math.min(index, question.options.length - 1))].id;
     } else if (question.type === 'multiple') {
-      const ids = question.options.map(option => ({ id: option.id, order: random() })).sort((a, b) => a.order - b.order).map(option => option.id);
-      value = ids.slice(0, question.minSelections + Math.floor(random() * (question.maxSelections - question.minSelections + 1)));
+      const exclusive = declaredExclusiveOptionIds(question);
+      if (!exclusive.length) {
+        const ids = question.options.map(option => ({ id: option.id, order: random() })).sort((a, b) => a.order - b.order).map(option => option.id);
+        value = ids.slice(0, question.minSelections + Math.floor(random() * (question.maxSelections - question.minSelections + 1)));
+      } else {
+        const ordinary = question.options.filter(option => !exclusive.includes(option.id));
+        const solo = question.minSelections <= 1 && ordinary.length > 0 && random() < exclusive.length / question.options.length;
+        if (solo || ordinary.length < question.minSelections) value = [exclusive[Math.floor(random() * exclusive.length)]];
+        else {
+          const ids = ordinary.map(option => ({ id: option.id, order: random() })).sort((a, b) => a.order - b.order).map(option => option.id);
+          const upper = Math.min(question.maxSelections, ids.length);
+          value = ids.slice(0, question.minSelections + Math.floor(random() * (upper - question.minSelections + 1)));
+        }
+      }
     } else if (question.type === 'scale') value = question.min + Math.floor(random() * (question.max - question.min + 1));
     else if (question.type === 'number') value = Math.min(question.max, Math.max(question.min, Math.round((question.min + random() * (question.max - question.min)) * 100) / 100));
     else value = '工程演示答卷：此文本验证开放题保留与回查，不表达真实消费偏好。'.slice(0, question.maxLength);
