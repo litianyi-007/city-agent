@@ -1,7 +1,5 @@
 # City Agent
 
-生产线当前增量（2026-10-08）：[HTML-03 单次真实费用页实验](docs/production/experiments/HTML-03/RESULT.md)已结束，测试候选容量超限、两次共享返修耗尽，未交付 HTML；实测估算0.034971 USD。[本批验收规划与容量反馈](docs/production/BATCH-ACCEPTANCE-V11-CHECKS.md)已实现同源12项／20步事实、逐项超限诊断及原始需求覆盖评审，工程验证与真实模型结果分别记录。下一次真实运行须新单次授权；旧失败与公开 v6 不回写。[当前任务顺序](docs/production/NEXT-STEPS.md)／[更新前全文留底](docs/production/archive/2026-10-08-before-acceptance-v11/README.md)。
-
 生产线最新实测（2026-10-08）：[控制面工程676/676＋浏览器45/45](docs/production/BATCH-VERIFIER-CONTROL-CHECKS.md)通过；[首次真实Verifier对照](docs/production/experiments/VERIFIER-REAL-01/RESULT.md)10请求后按非法JSON门禁停止，估算0.017598132USD、0Oracle，原件可无Key只读核验，不计模型提升或自主交付成功。[下一批任务](docs/production/NEXT-STEPS.md)优先格式诊断、边界验证与Jev兼容前提；收费授权不自动重用。下文历史记录保留，[本次原文留底](docs/production/archive/2026-10-08-before-verifier-real01/ROOT-README.md)。
 
 最新生产分支切片：[Verifier评估控制面与跨设备只读证据核验](docs/production/VERIFIER-CONTROL-PLANE.md)。本机 **决策设置 → Verifier对照评估** 默认免费工程演练；软件需求仍在 **生产工作台 → 新建自定义需求**。真实评估必须新的冻结配置与页面明确同意，不自动继承旧预算。GitHub静态入口/已提交申报稿不随本批源码自动更新。[更新前全文留底](docs/production/archive/2026-10-07-before-verifier-control/ROOT-README.md)。

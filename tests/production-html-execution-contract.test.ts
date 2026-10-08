@@ -35,7 +35,7 @@ test('HTML execution profile is immutable and describes the actual unchanged Gat
 });
 
 test('actual HTML role contracts announce v9 execution facts and frozen content/control DOM ownership without changing camera scope', () => {
-  assert.equal(PROMPT_VERSION, 'production-html-v10');
+  assert.equal(PROMPT_VERSION, 'production-html-v11');
   const profile = contractProfile('offline-single-html');
   assert.equal(profile.promptVersion, PROMPT_VERSION);
   for (const [role, instruction] of Object.entries(profile.instructions)) {

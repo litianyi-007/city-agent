@@ -49,11 +49,11 @@ test('credential-free private identity survives restart and changes on removal a
   assert.notEqual(store.studyConfigurationIdentity(verifier.id), renamed);
 });
 
-test('retained study source-v3/v4 and current v5 public literals reject all credential-length substrings at schema and store writes', t => {
+test('retained study source-v3/v4/v5 and current v6 public literals reject all credential-length substrings at schema and store writes', t => {
   const directory = mkdtempSync(path.join(fileURLToPath(new URL('../', import.meta.url)), '.city-agent-study-generation-'));
   t.after(() => rmSync(directory, { recursive: true, force: true }));
   const store = new ProductionStore(directory); const verifier = store.agents().find(agent => agent.role === 'verifier')!;
-  for (const literal of ['verifier-study-source-v3', 'verifier-study-source-v4', 'verifier-study-source-v5']) {
+  for (const literal of ['verifier-study-source-v3', 'verifier-study-source-v4', 'verifier-study-source-v5', 'verifier-study-source-v6']) {
     for (let start = 0; start < literal.length; start++) for (let end = start + 16; end <= literal.length; end++) {
       const value = literal.slice(start, end);
       assert.equal(productionApiKeySchema.safeParse(value).success, false);

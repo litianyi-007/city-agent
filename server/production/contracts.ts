@@ -6,7 +6,8 @@ import { HTML_DOM_CONTRACT_INSTRUCTIONS, HTML_EXECUTION_INSTRUCTIONS } from '../
 import type { VerifierDecisionDiagnostic, VerifierDiagnosticPath, VerifierSchemaIssueCode } from './verifier-diagnostics.js';
 import { implementationEvidenceSchema } from '../../shared/production-implementation-evidence.js';
 
-export const PROMPT_VERSION = 'production-html-v10';
+export const PROMPT_VERSION = 'production-html-v11';
+export const ACCEPTANCE_PLANNING_VERSION = 'production-acceptance-planning-v1';
 export const ACCEPTANCE_CONTRACT_VERSION = 'production-acceptance-v3';
 export const CRITERIA_VERSION = PRODUCTION_VERIFIER_VERSION;
 export const CAMERA_PROMPT_VERSION = 'production-camera-scene-v7';
@@ -144,12 +145,17 @@ const BASE_CONTRACT_INSTRUCTIONS = {
 } as const;
 
 export const HTML_JSON_INSTRUCTIONS = 'JSON语法与纠错：返回一个完整JSON对象，数组必须是数组而不是包在引号内的字符串。通用语法示例仅示范类型：{"items":["说明"],"notes":[],"meta":{"ok":true}}；数组结束符]后直接用逗号分隔下一个属性或用}闭合对象，不得在]后多写双引号。字符串内双引号、反斜杠、换行必须按JSON转义。该示例不是本角色的输出schema，不能复制items/notes/meta为额外字段。outputContract中的maxItems及其他硬限制不因语法纠错而改变。context.regeneration.rejectedCandidates[].outputDiagnostic若存在，仅定位上一份已脱敏原文的语法错误（UTF16位置、sourceSha256与局部片段），不提供修好的答案、也不代表其他位置或schema合法；结合完整本阶段schema重新生成新候选，不盲目复制旧错误。宿主不会自动修复JSON，native json_object请求也不能代替宿主解析与结构门禁。';
+// HTML-only policy: keep BASE_CONTRACT_INSTRUCTIONS and the camera profile
+// byte-identical. These are planning/review obligations, not a new output
+// schema, an automatic test editor, or evidence that a Gate has executed.
+const HTML_ACCEPTANCE_PLANNING_INSTRUCTIONS = `HTML验收规划 ${ACCEPTANCE_PLANNING_VERSION}：context.acceptanceCapacity是宿主从实际验收schema提供的同源机器事实，maxChecks/maxSteps仍为12项/每项20步；本角色outputContract与冻结Gate不变。以input.brief和input.requirement.acceptance逐条为准，context.product.acceptance只是补充拆解，不能因产品压缩而遗漏原条款。覆盖需求明确指定的全部正负例、状态及边界组合，不擅自扩大范围。每组独立新页，逐组计入独立setup、业务操作和全部必需断言，步数按该check的steps数组条目计数；不用跨组状态，不为容量删减必需条款或断言。负例每次只改变目标变量，其它字段与前置状态必须有效；成功操作清空输入后，下一负例先重新fill其它必需字段的合法值，避免其它无效字段掩盖被测规则。除提示外，按原要求断言相关业务内容、数量、状态与统计的不变或指定变化，不能只看到提示就认为规则被验证。容量声明与静态规划不代表覆盖完整或已经执行通过。`;
+export const HTML_ACCEPTANCE_REVIEW_INSTRUCTIONS = `HTML验收评审 ${ACCEPTANCE_PLANNING_VERSION}：逐条对照criteria.goal与criteria.acceptance中的原始brief和验收要求审核当前checks，state.reviewContext.product.acceptance不能授权压缩或遗漏原条款。检查需求明确指定的全部正负例、状态与边界组合是否有实际操作和精确业务结果断言；check名称、自评、schema合法或容量声明不构成覆盖证据。每项须独立新页setup，不依赖其它check；据state.reviewContext.acceptanceCapacity的maxChecks/maxSteps及outputContract核对检查数与逐项steps，setup、操作和全部必需断言都计入，不为容量删要求。负例只改变目标变量，其它字段与前置状态有效；成功清空后须重填合法其它字段，排除无效字段混淆或仅见遗留错误提示的假覆盖。确定必需条款遗漏、负例混淆或容量不合格的候选必须低于3分；全部不合格或证据不足时abstain。仅做当前测试契约静态评审，不要求未来研发或虚构已执行。仍只返回decision/selectedCandidateId/scores/reason严格四字段，紧凑reason、最低3分与最高分规则不变；评审不能替代或覆盖最终冻结行为Gate。`;
 const htmlInstructions = (instructions: string) => `${instructions} ${HTML_EXECUTION_INSTRUCTIONS} ${HTML_DOM_CONTRACT_INSTRUCTIONS} ${HTML_JSON_INSTRUCTIONS}`;
 export const CONTRACT_INSTRUCTIONS = Object.freeze({
   product: htmlInstructions(BASE_CONTRACT_INSTRUCTIONS.product),
-  researcher: `${htmlInstructions(BASE_CONTRACT_INSTRUCTIONS.researcher)} 研究建议优先每类3–6条高信息密度判断，unknowns可为空；实际每数组最多12条仍以outputContract为准。简洁不能省略必需业务约束、真实阻碍或未经验证项，不把冗长说明拆成超过数量限制的条目。`,
-  'project-manager': htmlInstructions(BASE_CONTRACT_INSTRUCTIONS['project-manager']),
-  tester: htmlInstructions(BASE_CONTRACT_INSTRUCTIONS.tester),
+  researcher: `${htmlInstructions(BASE_CONTRACT_INSTRUCTIONS.researcher)} 研究建议优先每类3–6条高信息密度判断，unknowns可为空；实际每数组最多12条仍以outputContract为准。简洁不能省略必需业务约束、真实阻碍或未经验证项，不把冗长说明拆成超过数量限制的条目。 ${HTML_ACCEPTANCE_PLANNING_INSTRUCTIONS} 在现有observations/constraints中简述验收分组、逐组setup/操作/断言步数及合计的可达性依据；研究只给可执行规划，不生成checks、代码、已冻结或已执行声明，不新增输出字段。`,
+  'project-manager': `${htmlInstructions(BASE_CONTRACT_INSTRUCTIONS['project-manager'])} ${HTML_ACCEPTANCE_PLANNING_INSTRUCTIONS} 研发前不能仅复述上限：在现有summary/tasks中说明组数和逐组步数依据，明确tester负责定义并经宿主校验冻结checks、核对容量和完整覆盖，researcher补齐可执行方案；任务书不是已完成冻结。可自主补齐的规划缺口用revise，真正不支持或必需blocking条件用stop，不改需求或门限。若context.gate存在，仅按已有frozenContract、实际Gate和剩余预算安排反馈/修复，不能重新分组、改写冻结checks或要求重新冻结。`,
+  tester: `${htmlInstructions(BASE_CONTRACT_INSTRUCTIONS.tester)} ${HTML_ACCEPTANCE_PLANNING_INSTRUCTIONS} 先自主分组并逐项核对完整步骤数量，再只返回完整checks，不新增容量或覆盖字段，不输出规划过程。若context.regeneration.rejectedCandidates[].acceptanceDiagnostic存在，其checkCount/stepCounts/oversizedStepCheckIndices与sourceSha256仅定位前一原文的容量拒绝，不是修好或接受的答案。自行重新组织完整新候选，独立setup与全部必需断言仍须保留；宿主不会删步、拆改旧checks、修JSON、增加返修或放宽上限。`,
   developer: htmlInstructions(BASE_CONTRACT_INSTRUCTIONS.developer),
 });
 

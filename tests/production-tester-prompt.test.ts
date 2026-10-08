@@ -7,7 +7,7 @@ test('tester full few-shot is parseable strict JSON and valid production busines
   const example = parseJson(TESTER_VALID_JSON_EXAMPLE) as { checks: unknown[] };
   assert.deepEqual(testsSchema.parse(example), example); assert.equal(acceptanceSchema.safeParse(example.checks).success, true);
   assert.ok(CONTRACT_INSTRUCTIONS.tester.includes(TESTER_VALID_JSON_EXAMPLE)); assert.ok(CONTRACT_INSTRUCTIONS.tester.includes(JSON.stringify(TESTER_STEP_EXAMPLES)));
-  assert.equal(PROMPT_VERSION, 'production-html-v10'); assert.equal(CAMERA_PROMPT_VERSION, 'production-camera-scene-v7');
+  assert.equal(PROMPT_VERSION, 'production-html-v11'); assert.equal(CAMERA_PROMPT_VERSION, 'production-camera-scene-v7');
   assert.equal(CRITERIA_VERSION, 'verifier-phase-ordinal-v5'); assert.equal(ACCEPTANCE_CONTRACT_VERSION, 'production-acceptance-v3'); assert.equal(CAMERA_ACCEPTANCE_VERSION, 'production-camera-acceptance-v2');
 });
 
