@@ -51,6 +51,8 @@ npm run build
 
 提交前 **43文件** 范围及常见秘密扫描、三份文档留底字节、历史实验/public/申报/冻结tag不变检查通过；两张截图已视觉检查，profile/private状态未读或导出。扫描是启发式，不声称任意编码秘密不存在。只推送 `feature/autonomous-production`，不发布新Pages、改main/tag或另一worktree。
 
-干净提交后重新构建，确认本分支4420服务无活动任务且PID/cwd匹配再重启；只读复核HTML05/06 API及原始artifact字节、22运行/2基准/3study，并再次免费预检新的guard版本。服务实测收口另由提交后的检查记录确认，预先不把这些步骤写成已通过。
+源码与本批文档已提交/推送 `f18913755e906f3a22ec6acb340064bcb810361f`，随后干净构建并仅重启已确认idle且PID/cwd匹配的本分支4420服务。[提交后免费服务检查](service-checks/2026-10-09-html06-guard.json)记录该源码/boot：ready=true、fresh=true、sourceClean=true，页面现有配置的startupGuard v1 / collision v2通过；0模型请求、22运行/2基准/3study/0活动。HTML05/06 API对象及原始下载artifact与归档逐字节一致，未自动创建或恢复任何收费任务。
+
+服务检查是本机可信脚本的规范化观察，不是独立签名/源码加载原子证明或交付Gate。新检查文件只读公开数据，不含Key/profile/私有状态；此次文档收口提交后仍须重建/重启以对齐新HEAD，旧f189检查保留其历史身份，不将其boot篡改为后续commit。
 
 下一次收费仍须[HTML07新单次授权](HTML-07-PROPOSAL.md)。任何启动拒绝、取消或失败都留账；没有模板回退、外层改生成HTML或临时降低Gate，不宣称已实现通用L5。
