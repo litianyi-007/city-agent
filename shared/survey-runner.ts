@@ -82,7 +82,7 @@ export async function executeSurvey(input: SurveyExecution): Promise<SurveyRun> 
       if (input.mode === 'fixture') { raw = safeText(input.fixtureResponse ? input.fixtureResponse(profile, task, input.seed) : fixtureAnswers(task, profile, input.seed)); await new Promise(resolve => setTimeout(resolve, 10)); }
       else { calls++; inFlight = true; await input.checkpoint?.(run('running')); const result = await input.call(profile, RESIDENT_SYSTEM_PROMPT, users[index].text, input.signal); raw = safeText(result.text); usage = { inputTokens: result.inputTokens, outputTokens: result.outputTokens }; inFlight = false; }
       try {
-        const answers = validateAnswers(task, profile.id, raw); const coherence = checkCoherence(task, profile, answers);
+        const answers = validateAnswers(task, profile.id, raw); const coherence = checkCoherence(task, profile, answers, { recordExclusivePasses: true });
         const exclusiveIssue = coherence.issues.find(issue => issue.severity === 'error' && issue.ruleId.endsWith('-exclusive-options'));
         responses.push({ residentId: profile.id, status: exposure === 'full' && coherence.status === 'contradiction' ? 'invalid' : 'valid', structureValid: true, answers, coherence, raw, ...(coherence.status === 'contradiction' ? { error: exclusiveIssue?.message ?? '违反已登记画像约束；保留原始答卷和诊断。' } : {}), durationMs: performance.now() - began, ...usage });
       } catch (error) { responses.push({ residentId: profile.id, status: 'invalid', structureValid: false, answers: [], raw, error: (error as Error).message, durationMs: performance.now() - began, ...usage }); }

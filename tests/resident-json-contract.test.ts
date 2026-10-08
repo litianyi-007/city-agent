@@ -5,7 +5,7 @@ import { createHash } from 'node:crypto';
 import { getPopulationModel, getPopulationPack } from '../server/population/service';
 import { createBusinessDemoRun } from '../shared/research-demo';
 import { createLiveBusinessProtocol, createLiveBusinessContractProtocol } from '../shared/live-business-protocol';
-import { fingerprint, RESIDENT_PROMPT_VERSION, RESIDENT_SYSTEM_PROMPT, validateAnswers, type SurveyRun } from '../shared/survey-engine';
+import { fingerprint, RESIDENT_PROMPT_VERSION, RESIDENT_SYSTEM_PROMPT, SURVEY_VERSION, validateAnswers, type SurveyRun } from '../shared/survey-engine';
 import { parseSurveyEvidence } from '../src/run-history';
 
 const model = { provider: 'deepseek' as const, baseUrl: 'https://api.deepseek.com', modelId: 'deepseek-flash' };
@@ -34,7 +34,8 @@ test('historical 2.0 and real 2.1 evidence remain byte-identical and are not upg
 
 test('new evidence registers the exact 1.1 system contract and rejects silent old-prompt relabeling', async () => {
   const { run } = await createBusinessDemoRun({ demoId: 'child-snacks', population: getPopulationModel(), pack: getPopulationPack(), seed: 20261007 });
-  assert.equal(run.version, 'coverage-survey-2.2-json-contract');
+  assert.equal(run.version, SURVEY_VERSION);
+  assert.equal(SURVEY_VERSION, 'coverage-survey-2.3-exclusive-check');
   assert.equal(run.parameters?.residentPromptVersion, RESIDENT_PROMPT_VERSION);
   assert.equal(run.prompt.system, RESIDENT_SYSTEM_PROMPT);
   assert.deepEqual(parseSurveyEvidence(JSON.parse(JSON.stringify(run))), run);

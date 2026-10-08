@@ -4,7 +4,8 @@ import { getPopulationModel, getPopulationPack } from '../server/population/serv
 import { getBusinessDemos } from '../shared/research-demo.ts';
 import { executeSurvey, type SurveyExecution } from '../shared/survey-runner.ts';
 import type { ResearchTask } from '../shared/research-schema.ts';
-import { buildProfiles, checkCoherence, fixtureAnswers, validateAnswers, type Answer } from '../shared/survey-engine.ts';
+import { buildProfiles, checkCoherence, fixtureAnswers, SURVEY_VERSION, validateAnswers, type Answer } from '../shared/survey-engine.ts';
+import { parseSurveyEvidence } from '../src/run-history.ts';
 
 const population = getPopulationModel();
 const pack = getPopulationPack();
@@ -42,8 +43,13 @@ test('pet snack rule fixture does not treat none/unknown mixes as contradiction-
     for (const profile of buildProfiles(pet.task, population, presets, 2, seed)) {
       const answers = validateAnswers(pet.task, profile.id, fixtureAnswers(pet.task, profile, seed));
       assert.deepEqual(mixesExclusive(pet.task, answers), [], `${seed} ${profile.id}`);
-      assert.equal(checkCoherence(pet.task, profile, answers).status, 'not-configured');
-      assert.equal(checkCoherence(pet.task, profile, answers).checked, 0);
+      const legacy = checkCoherence(pet.task, profile, answers);
+      assert.equal(legacy.status, 'not-configured');
+      assert.equal(legacy.checked, 0);
+      const passed = checkCoherence(pet.task, profile, answers, { recordExclusivePasses: true });
+      assert.equal(passed.status, 'checked');
+      assert.ok(passed.checked > 0);
+      assert.equal(passed.issues.length, 0);
     }
   }
   const generated = await executeSurvey(execution(pet.task, presets));
@@ -53,7 +59,8 @@ test('pet snack rule fixture does not treat none/unknown mixes as contradiction-
   assert.equal(generated.metrics.valid, 2);
   assert.equal(generated.metrics.structurallyValid, 2);
   assert.equal(generated.metrics.contradictions, 0);
-  assert.ok(generated.responses.every(response => response.status === 'valid' && response.structureValid === true && response.coherence?.status === 'not-configured' && response.coherence.checked === 0));
+  assert.equal(generated.version, SURVEY_VERSION);
+  assert.ok(generated.responses.every(response => response.status === 'valid' && response.structureValid === true && response.coherence?.status === 'checked' && response.coherence.checked > 0 && response.coherence.issues.length === 0));
 
   const quoted = await executeSurvey(execution(pet.task, presets, {
     fixturePolicyId: 'exclusive-option-regression',
@@ -94,6 +101,9 @@ test('pet snack rule fixture does not treat none/unknown mixes as contradiction-
   assert.equal(unknownOnly.metrics.valid, 1);
   assert.equal(unknownOnly.metrics.contradictions, 0);
   assert.equal(unknownOnly.responses[0].status, 'valid');
+  assert.equal(unknownOnly.responses[0].coherence?.status, 'checked');
+  assert.ok((unknownOnly.responses[0].coherence?.checked ?? 0) > 0);
+  assert.equal(unknownOnly.responses[0].coherence?.issues.some(issue => issue.questionId === 'past-snack-categories'), false);
   assert.deepEqual(unknownOnly.responses[0].answers.find(answer => answer.questionId === 'past-snack-categories')!.value, ['unknown']);
 
   const caregiver = await executeSurvey(execution(child.task, child.presets.slice(0, 1), { seed: 42 }));
@@ -102,5 +112,35 @@ test('pet snack rule fixture does not treat none/unknown mixes as contradiction-
   assert.equal(caregiver.metrics.valid, 2);
   assert.equal(caregiver.metrics.contradictions, 0);
   assert.equal(caregiver.metrics.modelCalls, 0);
-  for (const response of caregiver.responses) assert.deepEqual(mixesExclusive(child.task, response.answers), []);
+  for (const response of caregiver.responses) {
+    assert.deepEqual(mixesExclusive(child.task, response.answers), []);
+    assert.equal(response.coherence?.status, 'checked');
+    assert.ok((response.coherence?.checked ?? 0) > 0);
+  }
+});
+
+test('clean pet snack fixture records the exclusive check as run and passed', async () => {
+  const presets = pet.presets.slice(0, 1);
+  const profiles = buildProfiles(pet.task, population, presets, 2, 20261009);
+  assert.deepEqual(profiles.map(profile => profile.id), ['resident-001', 'resident-002']);
+  for (const profile of profiles) {
+    const answers = validateAnswers(pet.task, profile.id, fixtureAnswers(pet.task, profile, 20261009));
+    assert.deepEqual(mixesExclusive(pet.task, answers), []);
+    const storedLikeHistorical = checkCoherence(pet.task, profile, answers);
+    assert.equal(storedLikeHistorical.status, 'not-configured');
+    assert.equal(storedLikeHistorical.checked, 0);
+    const passed = checkCoherence(pet.task, profile, answers, { recordExclusivePasses: true });
+    assert.notEqual(passed.status, 'not-configured');
+    assert.equal(passed.status, 'checked');
+    assert.ok(passed.checked > 0);
+    assert.equal(passed.scope, storedLikeHistorical.scope);
+  }
+  const run = await executeSurvey(execution(pet.task, presets, { seed: 20261009 }));
+  assert.equal(run.metrics.modelCalls, 0);
+  assert.equal(run.metrics.valid, 2);
+  assert.equal(run.metrics.contradictions, 0);
+  assert.ok(run.responses.every(response => response.coherence?.status === 'checked' && (response.coherence?.checked ?? 0) > 0));
+  const imported = parseSurveyEvidence(JSON.parse(JSON.stringify(run)));
+  assert.equal(imported.responses[0].coherence?.status, 'checked');
+  assert.ok((imported.responses[0].coherence?.checked ?? 0) > 0);
 });

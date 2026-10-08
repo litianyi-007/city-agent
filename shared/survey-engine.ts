@@ -8,7 +8,7 @@ import type { RegionPack, auditPack } from '../server/population/model';
 import type { SurveyAnalysis, samplingReport } from './survey-analysis';
 import { residentPersonaSchema, type ResidentPersona } from './resident-persona';
 
-export const SURVEY_VERSION = 'coverage-survey-2.2-json-contract';
+export const SURVEY_VERSION = 'coverage-survey-2.3-exclusive-check';
 export const RESIDENT_PROMPT_VERSION = 'resident-json-contract-1.1';
 export const RESIDENT_SYSTEM_PROMPT = `你是虚拟受访者。只代表本次给定的合成画像回答问卷，不代表滨江真人。
 输出契约版本：${RESIDENT_PROMPT_VERSION}。
@@ -152,8 +152,8 @@ function declaredExclusiveOptionIds(question: ResearchTask['questionnaire']['que
   if (question.type !== 'multiple' || !/排他|不能与其他/.test(question.prompt)) return [];
   return question.options.filter(option => option.id === 'none' || option.id === 'unknown').map(option => option.id);
 }
-export function checkCoherence(task: ResearchTask, profile: Profile, answers: Answer[]) {
-  const issues: { ruleId: string; questionId: string; severity: 'error' | 'unknown'; message: string }[] = []; let checked = 0;
+export function checkCoherence(task: ResearchTask, profile: Profile, answers: Answer[], options?: { recordExclusivePasses?: boolean }) {
+  const issues: { ruleId: string; questionId: string; severity: 'error' | 'unknown'; message: string }[] = []; let checked = 0; let exclusiveChecked = 0;
   for (const rule of task.validationRules ?? []) {
     const answer = answers.find(item => item.questionId === rule.questionId);
     const choice = rule.choices.find(item => item.optionId === answer?.value);
@@ -167,11 +167,14 @@ export function checkCoherence(task: ResearchTask, profile: Profile, answers: An
     const exclusive = declaredExclusiveOptionIds(question);
     if (!exclusive.length) continue;
     const value = answers.find(item => item.questionId === question.id)?.value;
-    if (!Array.isArray(value) || value.length < 2 || !exclusive.some(id => value.includes(id))) continue;
-    checked++;
-    issues.push({ ruleId: `${question.id}-exclusive-options`, questionId: question.id, severity: 'error', message: '“无/未知”等排他选项不能与其他选择同时出现。' });
+    if (!Array.isArray(value)) continue;
+    const mixed = value.length > 1 && exclusive.some(id => value.includes(id));
+    // Historical 2.0–2.2 evidence only counted a mix. A compliant answer must still be a recorded pass on new runs.
+    if (!options?.recordExclusivePasses && !mixed) continue;
+    checked++; exclusiveChecked++;
+    if (mixed) issues.push({ ruleId: `${question.id}-exclusive-options`, questionId: question.id, severity: 'error', message: '“无/未知”等排他选项不能与其他选择同时出现。' });
   }
-  const status = issues.some(issue => issue.severity === 'error') ? 'contradiction' : !(task.validationRules?.length) ? 'not-configured' : issues.length ? 'partial' : 'checked';
+  const status = issues.some(issue => issue.severity === 'error') ? 'contradiction' : !(task.validationRules?.length) && !exclusiveChecked ? 'not-configured' : issues.length ? 'partial' : 'checked';
   return { status, checked, issues, scope: '仅执行问卷JSON预登记的硬约束；不自动理解职业、家庭或开放题语义，不以消费刻板印象判错。' };
 }
 const answerEnvelope = z.object({ residentId: z.string(), answers: z.array(z.object({ questionId: z.string(), value: z.union([z.string(), z.array(z.string()), z.number().finite(), z.null()]) }).strict()).max(50) }).strict();

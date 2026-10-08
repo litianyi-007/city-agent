@@ -9,12 +9,13 @@ import { SurveyResults } from './SurveyResults';
 import { researchApi } from './research-client';
 import { runLocalSurvey } from './local-survey';
 import type { AgentPublic } from '../server/types';
+import { nextSurveyAudience } from './survey-audience';
 
 const pagesMode = import.meta.env.MODE === 'pages';
 
 export function PagesSurveyPanel({ readDraft, busy, onBusyChange, draftVersion }: { readDraft: () => ResearchProjectInput; busy: boolean; onBusyChange: (value: boolean) => void; draftVersion: number }) {
   const [mode, setMode] = useState<'fixture' | 'live'>('fixture');
-  const [count, setCount] = useState(12); const [seed, setSeed] = useState(42);
+  const [count, setCount] = useState(12); const fixtureCount = useRef(12); const [seed, setSeed] = useState(42);
   const [assumptions, setAssumptions] = useState(false); const [progress, setProgress] = useState('');
   const [error, setError] = useState(''); const [run, setRun] = useState<SurveyRun | null>(null); const [history, setHistory] = useState<SurveyRun[]>([]);
   const [inputPrice, setInputPrice] = useState(''); const [outputPrice, setOutputPrice] = useState('');
@@ -65,7 +66,7 @@ export function PagesSurveyPanel({ readDraft, busy, onBusyChange, draftVersion }
   return <section className="panel research-panel pages-simulation" aria-label="问卷仿真与结果">
     <div className="panel-heading"><h2>04 · 问卷仿真与结果</h2><span className="small-muted">RUN & EVIDENCE v2</span></div>
     <p className="research-note">逐人独立作答；格式校验与已登记画像硬约束分开报告。演示无需Key；{pagesMode ? '真实模式使用当前会话Key，接口须支持跨域。运行自动保存于本机浏览器，不上传GitHub；清理浏览器数据前请导出。' : '真实模式使用本机加密Key，通过DeepSeek Harness执行，运行保存在SQLite。'}</p>
-    <fieldset disabled={busy}><div className="form-two"><label>运行方式<select value={mode} onChange={event => { const next = event.target.value as typeof mode; setMode(next); setFeeConsent(null); if (next === 'live') setCount(1); }}><option value="fixture">工程演示 · 不调用模型</option><option value="live">真实模型 · {pagesMode ? '浏览器直接调用' : 'DeepSeek Harness'}</option></select></label><label>计划受访者<input type="number" min={1} max={mode === 'live' ? 12 : 30} value={count} onChange={event => { setCount(Number(event.target.value)); setFeeConsent(null); }} /></label></div>
+    <fieldset disabled={busy}><div className="form-two"><label>运行方式<select value={mode} onChange={event => { const next = nextSurveyAudience({ mode, count: mode === 'fixture' ? fixtureCount.current : count, fixtureCount: fixtureCount.current }, event.target.value as typeof mode); fixtureCount.current = next.fixtureCount; setMode(next.mode); setCount(next.count); setFeeConsent(null); }}><option value="fixture">工程演示 · 不调用模型</option><option value="live">真实模型 · {pagesMode ? '浏览器直接调用' : 'DeepSeek Harness'}</option></select></label><label>计划受访者<input type="number" min={1} max={mode === 'live' ? 12 : 30} value={count} onChange={event => { const value = Number(event.target.value); setCount(value); if (mode === 'fixture') fixtureCount.current = value; setFeeConsent(null); }} /></label></div>
     <label>画像随机种子<input type="number" min={0} max={2147483647} value={seed} onChange={event => { setSeed(Number(event.target.value)); setFeeConsent(null); }} /></label>
     {mode === 'live' && <><p className="research-note">每人最多1次请求，不自动重试；输出上限3000 Token，超时90秒。单价会冻结进证据包；未知保持未知。</p><div className="form-two"><label>输入单价（元／百万 Token）<input type="number" step="any" min={0} value={inputPrice} onChange={event => { setInputPrice(event.target.value); setFeeConsent(null); }} placeholder="未知留空" /></label><label>输出单价（元／百万 Token）<input type="number" step="any" min={0} value={outputPrice} onChange={event => { setOutputPrice(event.target.value); setFeeConsent(null); }} placeholder="未知留空" /></label></div><p className="research-note warning">本页不是受控实验CLI：没有供应商钱包金额硬限额，结构无效不会自动停止后续居民。请先选1人，核对供应商价格和原文，再自行决定下一次运行；随时可取消。不得把未知用量当免费。</p><label className="checkbox-label"><input type="checkbox" checked={feesAccepted} onChange={event => setFeeConsent(event.target.checked ? feeContext : null)} />确认使用自己的 Key 支付本次最多 {count} 次模型请求；金额由供应商计费，本页不承诺费用硬上限。</label></>}
     <label className="checkbox-label"><input type="checkbox" checked={assumptions} onChange={event => setAssumptions(event.target.checked)} />确认本次按显式画像假设开展合成实验，结果不直接外推真人总体。</label></fieldset>
