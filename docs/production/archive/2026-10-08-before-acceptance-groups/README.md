@@ -1,7 +1,5 @@
 # City Agent
 
-生产线本批增量（2026-10-08）：[版本化验收规划与分组生成](docs/production/ACCEPTANCE-GROUPS-CONTRACT.md)已实现。项目经理先规划原始条款／状态／独立检查槽位，测试最多3组，无损聚合后经过完整结构、语义、CSS和独立LLM审查才冻结；原12项／20步门限与两次共享修复不变。本地“新建自定义需求”提供默认关闭的“启用分组验收规划（工程预览）”；仅真实模式、离线HTML、LLM、单候选与兼容证据模式可选。[本批免费验证记录](docs/production/BATCH-ACCEPTANCE-GROUPS-CHECKS.md)与[当前任务顺序](docs/production/NEXT-STEPS.md)分别记录工程结果和下一次实测条件。HTML-04授权已结束，没有追加模型调用；公开Pages仍v6。[本次更新前全文留底](docs/production/archive/2026-10-08-before-acceptance-groups/README.md)。
-
 生产线本轮实测（2026-10-08）：[HTML-04结果及完整证据](docs/production/experiments/HTML-04/RESULT.md)已归档。首份测试被独立Verifier以覆盖不足弃权，后续JSON／容量拒绝耗尽两次共享修复，64.396秒、10HTTP、估算0.0359493 USD，未进入研发或Gate；没有追加第二次实测。下一批先免费完善验收规划／分组生成结构，保留业务与12×20门限，不把工程或静态评审算真实交付成功。工作台本地可读历史，公开Pages仍v6；[本次更新前全文留底](docs/production/archive/2026-10-08-before-html04/README.md)。
 
 生产线当前增量（2026-10-08）：[HTML-03 单次真实费用页实验](docs/production/experiments/HTML-03/RESULT.md)已结束，测试候选容量超限、两次共享返修耗尽，未交付 HTML；实测估算0.034971 USD。[本批验收规划与容量反馈](docs/production/BATCH-ACCEPTANCE-V11-CHECKS.md)已实现同源12项／20步事实、逐项超限诊断及原始需求覆盖评审，工程验证与真实模型结果分别记录。下一次真实运行须新单次授权；旧失败与公开 v6 不回写。[当前任务顺序](docs/production/NEXT-STEPS.md)／[更新前全文留底](docs/production/archive/2026-10-08-before-acceptance-v11/README.md)。

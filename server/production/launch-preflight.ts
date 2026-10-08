@@ -23,6 +23,7 @@ const warnings = {
   'token-envelope-exceeds-budget': '保守请求预留包络超过 maxTokens，不代表实际超限，但运行可能提前停止。',
   'cost-envelope-exceeds-budget': '声明价保守预留包络超过 maxCost，不代表实际收费，但运行可能提前停止。',
   'source-bound-not-real-validated': 'source-bound-v1 只有免费工程证据；源码锚点和检查引用不证明语义正确，完整冻结行为 Gate 仍必需，首轮建议 legacy 后再独立对照。',
+  'planned-groups-not-real-validated': '分组策略只完成工程验证，未实测质量或节费；组不独立冻结或接受。按最多3组预留16初始／最多28次调用（两次共享修复），实际硬预算可能提前停止；原12项／20步与最终Gate不变。',
 } as const;
 const sha = /^[a-f0-9]{64}$/;
 const commit = /^[a-f0-9]{40}(?:[a-f0-9]{24})?$/;
@@ -74,7 +75,7 @@ export function buildProductionLaunchPreflight(raw: unknown, publicAgents: reado
   const execution = executionSummary(identity, fresh);
   if (!execution.ready) add('execution-unready');
   if (!execution.fresh) add('execution-stale');
-  const calls = productionLaunchCallEnvelope(input.candidateCount, input.limits.maxRepairCycles);
+  const calls = productionLaunchCallEnvelope(input.candidateCount, input.limits.maxRepairCycles, input.acceptanceStrategy);
   const perRequest = PRODUCTION_INPUT_TOKEN_RESERVATION + input.limits.maxOutputTokens;
   const product = models.find(agent => agent.role === 'product');
   const firstCost = product?.pricing?.currency === input.limits.currency ? estimateProductionCost(product.pricing, PRODUCTION_INPUT_TOKEN_RESERVATION, input.limits.maxOutputTokens) : null;
@@ -91,6 +92,7 @@ export function buildProductionLaunchPreflight(raw: unknown, publicAgents: reado
   if (budget.envelope.worstCaseTokens > input.limits.maxTokens) warning('token-envelope-exceeds-budget');
   if (budget.envelope.worstCaseEstimatedCost !== null && budget.envelope.worstCaseEstimatedCost > input.limits.maxCost) warning('cost-envelope-exceeds-budget');
   if (input.implementationEvidencePolicy === 'source-bound-v1') warning('source-bound-not-real-validated');
+  if (input.acceptanceStrategy === 'planned-groups-v1') warning('planned-groups-not-real-validated');
   const payload = { version: PRODUCTION_LAUNCH_PREFLIGHT_VERSION, ready: !issues.length, paidAuthorized: false as const, finalGate: null, modelRequests: 0 as const, input, models, execution, budget, issues, warnings: warn };
   return { ...payload, reportHash: createHash('sha256').update(JSON.stringify(payload)).digest('hex') };
 }

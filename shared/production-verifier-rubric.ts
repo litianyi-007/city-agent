@@ -31,6 +31,13 @@ const VERIFIER_JSON_STRING_ESCAPE_EXAMPLE = JSON.stringify('引号"、反斜杠\
 
 /** Unknown phases (e.g. independent whole-answer benchmarks) retain their own rubric. */
 export function productionPhaseRubric(phase: string, capability: ProductionCapability = 'offline-single-html'): ProductionPhaseRubric | null {
+  if (phase === 'acceptance-plan' && capability === 'offline-single-html') {
+    const base = productionPhaseRubric('think-design', capability)!;
+    return { ...base, phase, expectedArtifact: 'Strict versioned acceptance plan: exact original-source quotes, required scenario/state obligations, independent check slots/setup/assertions and bounded step budgets; no checks or implementation yet.',
+      dimensions: { coverage: 'Review the original criteria.goal and criteria.acceptance against EVERY planned obligation, including all explicitly required positive/negative/state/boundary combinations. Check independent setup, valid other fields for negatives, exact observable assertions and realistic per-slot <=20 step budgets, <=12 total checks and <=3 groups. Exact quotes and complete ID mappings are NOT semantic coverage proof. Missing required states/outcomes or budgets that silently delete assertions score below 3; insufficient evidence means abstain. Do not require generated checks or future code yet.', consistency: 'Validate the plan against the full original requirement and supplied product/research/PM decisions; quotes/IDs cannot invent authority or hide blockers. Planning is static, not a frozen or passed Gate.', scope: 'Expected now: only the strict versioned obligations/groups/check-slots plan with exact source quotes and bounded independent setup/exercise/assertions. This separate acceptance-plan schema does NOT contain ordinary PM decision/summary/tasks/risks; do not demand those fields or generated checks/code. No new permission, edited requirement, already-frozen or passed Gate claim.' },
+      positiveExample: 'Exact brief/acceptance quotes plus every required state/boundary obligation mapped to independent setup and observable assertions within each slot budget; future generation and execution honestly pending.',
+      negativeExample: 'Missing required scenarios, inventing original quotes or permissions, depending on another check state, or removing required assertions to fit a slot budget.' };
+  }
   const stage: ProductionReviewStage | null = phase === 'product' ? 'product' : phase === 'research' ? 'research' : phase === 'think-design' ? 'plan' : phase === 'acceptance' ? 'acceptance' : phase === 'implement' || /^repair-[0-2]$/.test(phase) ? 'implementation' : /^feedback-[0-2]$/.test(phase) ? 'feedback' : null;
   if (!stage) return null;
   const definition = STAGES[stage];

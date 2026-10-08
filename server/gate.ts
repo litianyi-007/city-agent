@@ -23,6 +23,11 @@ const checkSchema = z.object({
   steps: z.array(stepSchema).min(1).max(20),
 }).strict();
 
+// Reuse the exact per-check contract for opt-in grouped construction. Partial
+// groups are not independently accepted: the complete gate keeps its 2..12
+// checks and interaction requirements unchanged.
+export const acceptanceCheckSchema = checkSchema;
+
 export type AcceptanceCheck = z.infer<typeof checkSchema>;
 
 export const acceptanceSchema = z.array(checkSchema).min(2).max(12).superRefine((checks, ctx) => {
