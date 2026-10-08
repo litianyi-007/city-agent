@@ -49,16 +49,17 @@ test('credential-free private identity survives restart and changes on removal a
   assert.notEqual(store.studyConfigurationIdentity(verifier.id), renamed);
 });
 
-test('current study source-v4 public literal and all credential-length substrings are refused at schema and store writes', t => {
+test('retained study source-v3/v4 and current v5 public literals reject all credential-length substrings at schema and store writes', t => {
   const directory = mkdtempSync(path.join(fileURLToPath(new URL('../', import.meta.url)), '.city-agent-study-generation-'));
   t.after(() => rmSync(directory, { recursive: true, force: true }));
   const store = new ProductionStore(directory); const verifier = store.agents().find(agent => agent.role === 'verifier')!;
-  const literal = 'verifier-study-source-v4';
-  for (let start = 0; start < literal.length; start++) for (let end = start + 16; end <= literal.length; end++) {
-    const value = literal.slice(start, end);
-    assert.equal(productionApiKeySchema.safeParse(value).success, false);
-    assert.throws(() => store.patchAgent(verifier.id, { apiKey: value }));
-    assert.throws(() => store.patchJevConfig({ apiKey: value }));
+  for (const literal of ['verifier-study-source-v3', 'verifier-study-source-v4', 'verifier-study-source-v5']) {
+    for (let start = 0; start < literal.length; start++) for (let end = start + 16; end <= literal.length; end++) {
+      const value = literal.slice(start, end);
+      assert.equal(productionApiKeySchema.safeParse(value).success, false);
+      assert.throws(() => store.patchAgent(verifier.id, { apiKey: value }));
+      assert.throws(() => store.patchJevConfig({ apiKey: value }));
+    }
   }
   assert.equal(store.agents().find(agent => agent.id === verifier.id)!.hasApiKey, false); assert.equal(store.jevConfig().hasApiKey, false);
 });

@@ -23,6 +23,7 @@ import { diagnoseJsonOutput, OUTPUT_DIAGNOSTICS_VERSION } from './output-diagnos
 import { parseVerifierDecisionText, VerifierDecisionError, VERIFIER_DECISION_DIAGNOSTICS_VERSION } from './verifier-diagnostics.js';
 import { IMPLEMENTATION_EVIDENCE_VERSION, IMPLEMENTATION_EVIDENCE_VERIFIER_PROFILE, ImplementationEvidenceError, assertImplementationEvidencePolicy, buildImplementationEvidenceContract, type ImplementationEvidenceInput } from '../../shared/production-implementation-evidence.js';
 import { parseImplementationEvidenceDecisionText } from './implementation-evidence.js';
+import { estimateProductionCost, PRODUCTION_INPUT_TOKEN_RESERVATION } from '../../shared/production-launch-preflight.js';
 
 export interface ProductionOptions { roleCall?: typeof runRole; gate?: typeof runGate; cameraGate?: typeof runCameraSceneGate; jevCall?: typeof evaluateJevCandidates; acceptancePreflight?: typeof preflightAcceptanceChecks; executionIdentity?: ProductionExecutionIdentity; assertExecutionFresh?: () => void; }
 export const CAMERA_GESTURE_DOM_CONTRACT = { selector: '#gesture-map', text: '固定可信平台文案，由scene.mappings唯一计算，不是用户必须定稿的UI文字。根据用户明确映射或授权范围内尚未指定的映射选择对应完整label，不能改变硬约束。', debounceFrames: CAMERA_DEBOUNCE_FRAMES, labels: CAMERA_GESTURE_LABELS };
@@ -69,7 +70,7 @@ export class ProductionPipeline {
       this.options.assertExecutionFresh?.();
       if (run.executionIdentity && this.options.executionIdentity && hash(run.executionIdentity) !== hash(this.options.executionIdentity)) throw new Error('任务启动身份与当前进程不一致，停止付费执行');
     };
-    const estimate = (agent: SecretAgent, inputTokens: number, outputTokens: number) => agent.pricing ? (inputTokens * agent.pricing.inputPerMillion + outputTokens * agent.pricing.outputPerMillion) / 1e6 : null;
+    const estimate = (agent: SecretAgent, inputTokens: number, outputTokens: number) => estimateProductionCost(agent.pricing, inputTokens, outputTokens);
     const invoke = async (role: ProductionRole, phase: string, systemPrompt: string, userPrompt: string, fixture: unknown, verificationMetadata?: Pick<ProductionCall, 'verificationEngine' | 'sourceJevCallId'>): Promise<{ text: string; call: ProductionCall }> => {
       signal.throwIfAborted(); if (run.calls.length + (run.jevCalls?.length ?? 0) >= run.input.limits.maxCalls) throw new Error('请求次数预算耗尽');
       const agent = agents.find(value => value.role === role)!;
@@ -80,9 +81,9 @@ export class ProductionPipeline {
         if (!this.options.assertExecutionFresh && !this.options.roleCall) throw new Error('缺少生产启动身份门禁，拒绝真实模型请求');
         if (unknownUsage) throw new Error('上一请求 usage 未知，停止后续付费请求');
         aggregate();
-        const reservedTokens = 65536 + run.input.limits.maxOutputTokens;
+        const reservedTokens = PRODUCTION_INPUT_TOKEN_RESERVATION + run.input.limits.maxOutputTokens;
         if ((run.usage.inputTokens ?? 0) + (run.usage.outputTokens ?? 0) + reservedTokens > run.input.limits.maxTokens) throw new Error('Token 预算不足以安全预留下一请求');
-        const reserve = estimate(agent, 65536, run.input.limits.maxOutputTokens);
+        const reserve = estimate(agent, PRODUCTION_INPUT_TOKEN_RESERVATION, run.input.limits.maxOutputTokens);
         if (reserve === null || (run.usage.estimatedCost ?? 0) + reserve > run.input.limits.maxCost) throw new Error('费用预算不足以安全预留下一请求');
       }
       // Register the actual invocation after all budget/preflight refusals.
@@ -194,7 +195,7 @@ export class ProductionPipeline {
         aggregate(); signal.throwIfAborted();
         if (unknownUsage) throw new Error('上一请求用量未知，停止 Jev 请求');
         if ((run.jevCalls?.length ?? 0) >= jev.maxRequests || run.calls.length + (run.jevCalls?.length ?? 0) >= run.input.limits.maxCalls) throw new Error('Jev 请求预算耗尽');
-        if ((run.usage.inputTokens ?? 0) + (run.usage.outputTokens ?? 0) + 65536 > run.input.limits.maxTokens || (run.usage.estimatedCost ?? 0) + 65536 * jev.inputPerMillion / 1e6 > run.input.limits.maxCost) throw new Error('预算不足以预留 Jev 决策请求');
+        if ((run.usage.inputTokens ?? 0) + (run.usage.outputTokens ?? 0) + PRODUCTION_INPUT_TOKEN_RESERVATION > run.input.limits.maxTokens || (run.usage.estimatedCost ?? 0) + PRODUCTION_INPUT_TOKEN_RESERVATION * jev.inputPerMillion / 1e6 > run.input.limits.maxCost) throw new Error('预算不足以预留 Jev 决策请求');
         const pending: JevEvaluation = { policyVersion: JEV_POLICY_VERSION, status: 'error', selectedCandidateId: null, reason: '请求已登记，尚未获得结果', requestSnapshot: null, rawResponse: null, scores: [], choice: null, usage: { inputTokens: null, outputTokens: null, estimatedCost: null, currency: 'USD', complete: false }, modelIdRequested: jev.modelId, modelIdReturned: null, httpStatus: null, providerRequests: 0, durationMs: 0 };
         const entry = { id: randomUUID(), phase, startedAt: new Date().toISOString(), configHash: hash({ config: run.jevSnapshot, policy: JEV_POLICY_VERSION, repairPolicyVersion: PRODUCTION_REPAIR_POLICY_VERSION, credentialPolicyVersion: PRODUCTION_CREDENTIAL_POLICY_VERSION, criteria }), evaluation: pending };
         (run.jevCalls ??= []).push(entry); aggregate(); event(`${phase}:jev`, 'Jev 批量评估独立维度；概率集中度不等于业务正确率。', 'verifier');

@@ -1,9 +1,5 @@
 # 六角色自主软件生产工作区
 
-## 最新本地切片：HTML-03 免费启动预检（2026-10-08）
-
-本地生产工作台新增“免费启动预检”：输入自定义软件需求后，核对六角色公开配置、首请求预算预留与干净 source/build/boot；0模型请求、0运行写入、不授予付费权限。预检报告不是最终行为 Gate 或启动令牌。最新[单次批准方案](HTML03-NEXT-RUN-PROPOSAL.md)和[费用记录页预登记](experiments/HTML-03/PRE-REGISTRATION.md)固定用户批准的1 USD范围；真实结果另行保留，不自动重跑。[更新前全文](archive/2026-10-08-before-html03/README.md)留底。公开 Pages 仍是下面已核验的固定v6，不会因源码推送变成模型后端。
-
 ## 最新质量版本 v6（本节优先，2026-10-08）
 
 新增 Jev v4 弱证据弃权分流、默认关闭的 source-bound-v1 条款证据、精确版本／库存／可信HTML／压缩包／历史不覆盖发布门禁，以及更直接的[评委安装指南](REVIEWER-GUIDE.md)。[设计与权限](QUALITY-V6-DESIGN.md)、[本批工程及独立对抗审查](BATCH-QUALITY-V6-CHECKS.md)分列；没有新收费模型运行，不用免费工程结果追认旧模型效果。

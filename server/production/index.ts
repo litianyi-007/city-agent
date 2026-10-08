@@ -21,6 +21,7 @@ import { ProductionPreview } from './preview.js';
 import { JEV_POLICY_VERSION } from '../../shared/jev-schema.js';
 import { productionRequestCounts } from '../../shared/production-ledger.js';
 import { VerifierStudyController } from './verifier-study-control.js';
+import { buildProductionLaunchPreflight } from './launch-preflight.js';
 export { isUnresolvedJevIntent, productionRequestCounts } from '../../shared/production-ledger.js';
 
 // Source is a download, never an execution-capable document in the UI browser.
@@ -143,6 +144,17 @@ export function createProductionService(dataDir: string, options: ProductionOpti
     catch { res.status(400).json({ error: '取消请求未确认；请读取最新状态。不会自动恢复或重复调用。' }); }
   });
   router.get('/runs', action((_req, res) => res.json(store.runs())));
+  // Free readiness is deliberately outside action(): redaction there decrypts
+  // configured Keys. Neither rejected nor successful preflight may do so.
+  router.post('/runs/preflight', (req, res) => {
+    res.setHeader('Cache-Control', 'no-store');
+    try {
+      if (pipeline.busy || benchmark || studies.busy) throw new Error('预检时已有活动运行。');
+      store.assertStudyPublicSafe(req.body);
+      const report = buildProductionLaunchPreflight(req.body, store.agents(), executionIdentity, assertExecutionFresh);
+      store.assertStudyPublicSafe(report); res.json(report);
+    } catch { res.status(400).json({ error: '免费预检被拒绝：请检查未授权的离线HTML输入、公开配置、运行互斥及保密边界；未启动任何任务。' }); }
+  });
   router.get('/runs/:id', action((req, res) => { const run = store.run(String(req.params.id)); if (!run) throw new Error('运行不存在'); res.json(run); }));
   router.post('/runs', action((req, res) => {
     if (pipeline.busy || benchmark || studies.busy) throw new Error('已有运行中的生产任务');

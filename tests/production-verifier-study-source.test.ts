@@ -13,7 +13,8 @@ const mutate = (value: VerifierStudySourceSnapshot) => structuredClone(value);
 
 test('source snapshot is fixed, complete, immutable actual repository SHA evidence', () => {
   const value = snapshot();
-  assert.equal(VERIFIER_STUDY_SOURCE_VERSION, 'verifier-study-source-v4');
+  assert.equal(VERIFIER_STUDY_SOURCE_VERSION, 'verifier-study-source-v5');
+  assert.equal(VERIFIER_STUDY_SOURCE_FILES.length, 51);
   assert.deepEqual(Object.keys(value).sort(), ['clean', 'commit', 'hashes']);
   assert.match(value.commit, /^[a-f0-9]{40}$/); assert.equal(typeof value.clean, 'boolean');
   assert.deepEqual(Object.keys(value.hashes), [...VERIFIER_STUDY_SOURCE_FILES]);
@@ -27,6 +28,10 @@ test('source snapshot is fixed, complete, immutable actual repository SHA eviden
   assert.ok(VERIFIER_STUDY_SOURCE_FILES.includes('server/production/verifier-diagnostics.ts'));
   assert.ok(VERIFIER_STUDY_SOURCE_FILES.includes('shared/production-implementation-evidence.ts'));
   assert.ok(VERIFIER_STUDY_SOURCE_FILES.includes('server/production/implementation-evidence.ts'));
+  for (const relative of ['shared/production-launch-preflight.ts', 'server/production/launch-preflight.ts'] as const) {
+    assert.ok(VERIFIER_STUDY_SOURCE_FILES.includes(relative));
+    assert.equal(value.hashes[relative], createHash('sha256').update(readFileSync(new URL(`../${relative}`, import.meta.url))).digest('hex'));
+  }
   assert.equal(Object.isFrozen(value), true); assert.equal(Object.isFrozen(value.hashes), true);
   assert.throws(() => { value.hashes['server/harness.ts'] = 'a'.repeat(64); }, TypeError);
   assert.throws(() => { value.clean = !value.clean; }, TypeError);
@@ -56,6 +61,16 @@ test('source file set cannot be omitted, extended, redirected or decorated', () 
   const value = snapshot();
   const missing = mutate(value); delete missing.hashes[VERIFIER_STUDY_SOURCE_FILES[0]];
   assert.throws(() => assertVerifierStudySourceFresh(missing, false));
+  const previous49 = mutate(value);
+  delete previous49.hashes['shared/production-launch-preflight.ts'];
+  delete previous49.hashes['server/production/launch-preflight.ts'];
+  assert.equal(Object.keys(previous49.hashes).length, 49);
+  assert.throws(() => assertVerifierStudySourceFresh(previous49, false), /Verifier study source/);
+  const previous47 = mutate(previous49);
+  delete previous47.hashes['shared/production-implementation-evidence.ts'];
+  delete previous47.hashes['server/production/implementation-evidence.ts'];
+  assert.equal(Object.keys(previous47.hashes).length, 47);
+  assert.throws(() => assertVerifierStudySourceFresh(previous47, false), /Verifier study source/);
   for (const path of ['../package.json', '/tmp/outside-source.ts', 'server/unknown.ts', '__proto__']) {
     const extended = mutate(value); Object.defineProperty(extended.hashes, path, { value: 'a'.repeat(64), enumerable: true });
     assert.throws(() => assertVerifierStudySourceFresh(extended, false));
