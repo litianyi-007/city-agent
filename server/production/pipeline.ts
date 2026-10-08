@@ -382,7 +382,7 @@ export class ProductionPipeline {
       // Fail before any paid request if a legacy credential would corrupt the
       // new fixed host protocol. This compares authenticated encrypted bytes,
       // never exports credentials or migrates the caller's private settings.
-      if (!camera) this.store.assertStudyPublicSafe({ acceptanceCapacity, acceptanceDiagnosticsVersion: ACCEPTANCE_DIAGNOSTICS_VERSION, acceptancePlanningVersion: ACCEPTANCE_PLANNING_VERSION, protocolLiterals: PRODUCTION_ACCEPTANCE_POLICY_LITERALS });
+      if (!camera) this.store.assertStudyPublicSafe({ outputDiagnosticsVersion: OUTPUT_DIAGNOSTICS_VERSION, acceptanceCapacity, acceptanceDiagnosticsVersion: ACCEPTANCE_DIAGNOSTICS_VERSION, acceptancePlanningVersion: ACCEPTANCE_PLANNING_VERSION, protocolLiterals: PRODUCTION_ACCEPTANCE_POLICY_LITERALS });
       if (groupedAcceptance) {
         this.store.assertStudyPublicSafe({ strategy: acceptanceStrategy, groupProtocolLiterals: PRODUCTION_ACCEPTANCE_GROUP_POLICY_LITERALS, diagnostics: ACCEPTANCE_PLAN_DIAGNOSTIC_LITERALS });
         // Scan each complete fixed instruction separately, without weakening

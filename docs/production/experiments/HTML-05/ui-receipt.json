@@ -1,0 +1,23 @@
+{
+  "version": "html05-real-ui-receipt-v1",
+  "startedThroughActualFrontend": true,
+  "noFulfillmentStubs": true,
+  "nativeCuaUnavailable": true,
+  "sourceCommit": "8928f9aac7a5d6a59615467c851d7e8a7e94c54f",
+  "bootId": "5eb125c3-87ff-4c8d-aa13-41eac83a74c0",
+  "runId": "9a56085f-8a2e-474d-97fd-82f82aaac795",
+  "preflightHash": "5ba90d2d36b8f8fc0feb66777abb4fce45a6e464c408651019a829053ed9192f",
+  "httpSubmitCount": 1,
+  "observedStartResponses": 1,
+  "blockedBrowserExternalRequests": 0,
+  "beforeRunCount": 20,
+  "afterRunCount": 21,
+  "evidenceKind": "real-model",
+  "terminalStatus": "failed",
+  "screenshotFiles": [
+    "ui-before-launch.png",
+    "ui-terminal.png"
+  ],
+  "generatedArtifactEditedByOuterAgent": false,
+  "automaticAdditionalRun": false
+}

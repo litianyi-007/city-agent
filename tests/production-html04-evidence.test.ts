@@ -4,7 +4,7 @@ import { existsSync, readFileSync } from 'node:fs';
 import test from 'node:test';
 import { parseJson, parseVerifiedDecision, planSchema, productSchema, researchSchema, testsSchema } from '../server/production/contracts.js';
 import { acceptanceCapacityFacts, diagnoseAcceptanceCapacity } from '../server/production/acceptance-diagnostics.js';
-import { diagnoseJsonOutput } from '../server/production/output-diagnostics.js';
+import { diagnoseJsonOutput, LEGACY_OUTPUT_DIAGNOSTICS_VERSION } from '../server/production/output-diagnostics.js';
 import { projectProductionLedger } from '../shared/production-ledger.js';
 import type { ProductionRun } from '../shared/production-schema.js';
 
@@ -110,7 +110,7 @@ test('first regeneration preserves an invalid JSON quote and exact UTF16 syntax 
   assert.equal(sha(call.rawOutput), testerPins[1].sha256); assert.equal(call.rawOutput.length, testerPins[1].length);
   assert.throws(() => parseJson(call.rawOutput), SyntaxError);
   assert.equal(call.rawOutput.slice(3589, 3606).includes('"count":2"'), true);
-  assert.deepEqual(call.outputDiagnostic, diagnoseJsonOutput(call.rawOutput));
+  assert.deepEqual(call.outputDiagnostic, diagnoseJsonOutput(call.rawOutput, LEGACY_OUTPUT_DIAGNOSTICS_VERSION));
   assert.equal(call.outputDiagnostic!.kind, 'json-syntax'); assert.equal(call.outputDiagnostic!.positionUnit, 'utf16-code-unit');
   assert.equal(call.outputDiagnostic!.position, 3604); assert.equal(call.outputDiagnostic!.rawPosition, 3604);
   assert.equal(call.acceptanceDiagnostic, undefined); assert.notEqual(call.selected, true);

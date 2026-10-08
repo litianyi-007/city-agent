@@ -1,0 +1,99 @@
+{
+  "version": "html05-receipt-byte-index-v1",
+  "runId": "9a56085f-8a2e-474d-97fd-82f82aaac795",
+  "sourceCommit": "8928f9aac7a5d6a59615467c851d7e8a7e94c54f",
+  "exportedAt": "2026-10-08T08:52:23.883Z",
+  "byteEqualityIsNotIndependentAuthenticityProof": true,
+  "files": [
+    {
+      "name": "input-snapshot.json",
+      "origin": "normalized-authorization-input",
+      "bytes": 3704,
+      "sha256": "7ac499f23ce5b900447e2c4405594e7fd97ca15daf208ed119b2e4dae892e037"
+    },
+    {
+      "name": "authorization.json",
+      "origin": "conversation-consent-record-not-signature",
+      "bytes": 1408,
+      "sha256": "8314be2ef25eb074f71c43afbb76380de8eada523a7411382d7634741c021106"
+    },
+    {
+      "name": "platform-metadata.json",
+      "origin": "normalized-api-snapshot",
+      "bytes": 26118,
+      "sha256": "eadb0d2b1ca33471375b2a29603494e3eb4e227ba0a19a1ab184a26b90fd6237"
+    },
+    {
+      "name": "public-agent-configuration.json",
+      "origin": "normalized-api-snapshot",
+      "bytes": 2193,
+      "sha256": "97a7207838f6131d30bf46ef3bdf5a0833d1c7653e0e72071a859ee8e47b31bb"
+    },
+    {
+      "name": "actual-browser-submit.json",
+      "origin": "normalized-observed-browser-request",
+      "bytes": 3704,
+      "sha256": "e57bbcbdcbfcc0de7ac42502ef3b19c9872b32bc75d28af011381f14e4709cfc"
+    },
+    {
+      "name": "launch-preflight.json",
+      "origin": "normalized-api-snapshot",
+      "bytes": 9130,
+      "sha256": "87f621fa3af1d685baf8c5c282561b8897f0484a8e765fc6c26323758d537bd0"
+    },
+    {
+      "name": "launch-intent.json",
+      "origin": "pre-click-single-attempt-intent",
+      "bytes": 627,
+      "sha256": "7943a18357aa32cb8f74720cb28e283783bcb629779f264698441cc3c2e3b69c"
+    },
+    {
+      "name": "launch-response.json",
+      "origin": "normalized-api-snapshot",
+      "bytes": 28513,
+      "sha256": "dd1867675a82235b91849e0be0f8148d8a4c5dcc959758e57b1b4f369ab5dd6c"
+    },
+    {
+      "name": "run.json",
+      "origin": "normalized-api-snapshot",
+      "bytes": 280573,
+      "sha256": "2c136e51b37dea090248308e1b0dbf5e75388bacdeb7f7ca1ad31866d5187723"
+    },
+    {
+      "name": "evidence.json",
+      "origin": "exact-downloaded-artifact-bytes",
+      "bytes": 280572,
+      "sha256": "f342caa9f24593bf7b7e448fd8e1d5f297e74da6c4082db313b7d7a3570972b0"
+    },
+    {
+      "name": "delivery-manifest.json",
+      "origin": "exact-downloaded-artifact-bytes",
+      "bytes": 34647,
+      "sha256": "afdad3e01d23a70b2b072a34537b4ad102ecdb23b505c9d843a225dcc727e60d"
+    },
+    {
+      "name": "ui-receipt.json",
+      "origin": "trusted-ui-automation-observation",
+      "bytes": 763,
+      "sha256": "e74339212c7f95f80bde69289baf736d7a52da121386695bb1c8f1a0df73dd67"
+    },
+    {
+      "name": "ui-before-launch.png",
+      "origin": "actual-platform-ui-screenshot",
+      "bytes": 974634,
+      "sha256": "57afb28bb107ed7b8c3062061d8b375f7027192da9745752d3bd7c1dfc8f3149"
+    },
+    {
+      "name": "ui-terminal.png",
+      "origin": "actual-platform-ui-screenshot",
+      "bytes": 769350,
+      "sha256": "ece8eeab52a8d03da330d06baa9c64b79bbc89400276dd0ec1cfe7aa90b03cac"
+    },
+    {
+      "name": "ui-driver.mjs.txt",
+      "origin": "trusted-automation-source-inert-text-not-generated-product",
+      "bytes": 12259,
+      "sha256": "7ff54facc4d6204f360f184f0186fbe696141fa081a606b1abd63bbe8e7b31f4"
+    }
+  ]
+}

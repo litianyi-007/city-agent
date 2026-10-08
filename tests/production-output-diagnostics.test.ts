@@ -3,7 +3,7 @@ import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import test from 'node:test';
 import { parseJson, researchSchema } from '../server/production/contracts.ts';
-import { diagnoseJsonOutput, OUTPUT_DIAGNOSTICS_VERSION } from '../server/production/output-diagnostics.ts';
+import { diagnoseJsonOutput, LEGACY_OUTPUT_DIAGNOSTICS_VERSION, OUTPUT_DIAGNOSTICS_VERSION } from '../server/production/output-diagnostics.ts';
 
 // Free, archived-source replay and pure parser tests only. No provider, browser,
 // generated code, secret reads, JSON repair, migration or delivery inference.
@@ -132,4 +132,50 @@ test('all syntactically legal JSON returns undefined even when the role schema w
   }
   assert.equal(researchSchema.safeParse({}).success, false);
   assert.equal(diagnoseJsonOutput('{}'), undefined, 'Do not manufacture a schema-semantic diagnosis');
+});
+
+test('v2 locates trailing objects, primitives and early closure with whitespace, fences and Unicode without extraction', () => {
+  for (const body of ['{} {}', '{} trailing', '123 true', '{"note":"😀汉字"},"tasks":[]', '{"value":1} <!-- end -->']) {
+    const trailing = body.startsWith('123') ? body.indexOf('true') : body.indexOf('}') + 1;
+    const expected = body.indexOf(body.slice(trailing).trimStart(), trailing);
+    for (const raw of [body, ` \t\n${body}\n `, ` \n\`\`\`json\n${body}\n\`\`\` \n`]) {
+      const result = inspect(raw);
+      assert.equal(result.position, expected);
+      assert.equal(result.rawPosition, raw.indexOf(body) + expected);
+      assert.ok(result.excerpt.start <= result.rawPosition! && result.excerpt.end > result.rawPosition!);
+      assert.throws(() => parseJson(raw), SyntaxError);
+      const legacy = diagnoseJsonOutput(raw, LEGACY_OUTPUT_DIAGNOSTICS_VERSION)!;
+      assert.equal(legacy.version, LEGACY_OUTPUT_DIAGNOSTICS_VERSION);
+      assert.equal(legacy.position, null);
+    }
+  }
+});
+
+test('HTML-05 original v1 null-position record is unchanged while v2 identifies the actual early-close position 505', () => {
+  const location = new URL('../docs/production/experiments/HTML-05/run.json', import.meta.url);
+  const bytes = readFileSync(location); const before = sha(bytes);
+  const run = JSON.parse(bytes.toString('utf8'));
+  const call = run.calls.at(-1);
+  assert.equal(call.id, 'd0a6e23b-c912-4596-a04f-ec0ec1e18960');
+  assert.equal(sha(call.rawOutput), '5f3347aa43571dd2859ecf358fc082f31bf34adfcfd32bde8cff32ffaa5f8235');
+  assert.deepEqual(diagnoseJsonOutput(call.rawOutput, LEGACY_OUTPUT_DIAGNOSTICS_VERSION), call.outputDiagnostic);
+  const result = inspect(call.rawOutput);
+  assert.equal(result.position, 505); assert.equal(result.rawPosition, 505);
+  assert.equal(call.rawOutput.slice(504, 515), '},"tasks":[');
+  assert.ok(result.excerpt.text.includes('},"tasks":['));
+  assert.ok(result.excerpt.start <= 505 && result.excerpt.end > 505);
+  assert.equal(call.outputDiagnostic.position, null);
+  assert.equal(sha(readFileSync(location)), before, 'Never repair, migrate or regrade the old run');
+});
+
+test('v2 never takes a fabricated after-JSON position from user-provided text', () => {
+  for (const raw of ['not-json after JSON at position 12', 'after JSON at position 3', '```json\n{"items":[\n```']) {
+    const result = inspect(raw);
+    assert.equal(result.position, null);
+    assert.equal(result.rawPosition, null);
+  }
+  const unterminated = '{"note":"after JSON at position 42';
+  const actual = inspect(unterminated);
+  assert.notEqual(actual.position, 42, 'A real string-end parser position must not be confused with quoted input');
+  assert.equal(actual.position, unterminated.length);
 });

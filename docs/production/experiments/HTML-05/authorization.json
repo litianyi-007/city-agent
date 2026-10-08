@@ -1,0 +1,16 @@
+{
+  "version": "html05-single-run-authorization-v1",
+  "userReply": "推进下一步",
+  "context": "Reply to the immediately preceding explicit HTML-05 single-run proposal, interpreted as approval and announced before execution.",
+  "scope": "Exactly one new HTML-05 actual frontend submission; no automatic retry, rerun or additional experiment.",
+  "sourceCommit": "8928f9aac7a5d6a59615467c851d7e8a7e94c54f",
+  "proposal": "docs/production/HTML-05-PROPOSAL.md",
+  "limits": { "maxCalls": 24, "maxRepairCycles": 2, "maxTokens": 500000, "maxOutputTokens": 6000, "maxDurationMs": 600000, "maxCost": 1, "currency": "USD" },
+  "models": "Six role-specific agents configured with deepseek-flash, DeepSeek provider, https://api.deepseek.com; keys remain in control plane.",
+  "declaredPricing": { "inputPerMillion": 0.30, "outputPerMillion": 1.20, "currency": "USD" },
+  "configuration": { "candidateCount": 1, "verifierEngine": "llm-rubric", "implementationEvidencePolicy": "legacy", "acceptanceStrategy": "planned-groups-v1", "usesJev": false },
+  "estimatedBillingOnlyAcknowledged": true,
+  "reservationEnvelope": { "baseCalls": 16, "worstCaseCalls": 28, "actualCallLimitRemains": 24 },
+  "unknownUsagePolicy": "Stop, retain unknown, do not replace by zero.",
+  "runtimeGatePolicy": "No code/Prompt/Gate changes during the live run; no outer edits to generated artifacts, JSON repair or template fallback."
+}

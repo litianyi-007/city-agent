@@ -6,6 +6,7 @@ import { fileURLToPath } from 'node:url';
 import test, { type TestContext } from 'node:test';
 import { createProductionService } from '../server/production/index.js';
 import { hash } from '../server/production/store.js';
+import { OUTPUT_DIAGNOSTICS_VERSION } from '../server/production/output-diagnostics.js';
 import type { ProductionOptions } from '../server/production/pipeline.js';
 import type { runRole, RoleResult } from '../server/harness.js';
 import { preflightAcceptanceChecks, runGate, type AcceptanceCheck } from '../server/gate.js';
@@ -91,6 +92,22 @@ function noDelivery(run: ProductionRun) {
 }
 function abstain(capture: Capture): RoleResult {
   return result({ decision: 'abstain', selectedCandidateId: null, scores: capture.data.candidates.map((candidate: { id: string }) => ({ candidateId: candidate.id, score: 2, reason: 'Deliberate incomplete-coverage fixture verdict' })), reason: 'Injected rejection, not model quality evidence' });
+}
+
+for (const strategy of [undefined, 'planned-groups-v1'] as const) for (const collision of [OUTPUT_DIAGNOSTICS_VERSION, OUTPUT_DIAGNOSTICS_VERSION.slice(-16)]) {
+  test(`retained synthetic v2 diagnostic credential (${collision.length} chars, ${strategy ?? 'legacy path'}) fails before any request`, async t => {
+    assert.equal(productionApiKeySchema.safeParse(collision).success, false);
+    const f = fixture(t, { input: { acceptanceStrategy: strategy } });
+    // Test-owned legacy encrypted state, not a caller credential or migration.
+    const legacy = f.service.store as unknown as { encrypt(secret: string): string; state: { agents: Array<{ secret?: string }>; snapshots: Record<string, Array<{ secret?: string }>> } };
+    const encrypted = legacy.encrypt(collision);
+    legacy.state.agents[0].secret = encrypted; legacy.state.snapshots[f.run.id][0].secret = encrypted;
+    const run = await f.start();
+    assert.equal(run.status, 'failed'); assert.equal(run.calls.length, 0); assert.equal(run.repairs, 0);
+    assert.equal(f.captures.length, 0); assert.deepEqual(f.counts(), { preflights: 0, gates: 0 });
+    assert.match(run.error!, /凭据与评估公开契约冲突/);
+    noDelivery(run);
+  });
 }
 
 test('two groups compose one independently reviewed candidate with exact sources, no fabricated call, then freeze once', async t => {

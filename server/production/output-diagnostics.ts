@@ -1,11 +1,13 @@
 import { createHash } from 'node:crypto';
 import { parseJson } from './contracts.js';
 
-export const OUTPUT_DIAGNOSTICS_VERSION = 'production-json-diagnostics-v1' as const;
+export const LEGACY_OUTPUT_DIAGNOSTICS_VERSION = 'production-json-diagnostics-v1' as const;
+export const OUTPUT_DIAGNOSTICS_VERSION = 'production-json-diagnostics-v2' as const;
+type DiagnosticsVersion = typeof LEGACY_OUTPUT_DIAGNOSTICS_VERSION | typeof OUTPUT_DIAGNOSTICS_VERSION;
 const MAX_EXCERPT_UNITS = 320;
 
 export interface JsonOutputDiagnostic {
-  version: typeof OUTPUT_DIAGNOSTICS_VERSION;
+  version: DiagnosticsVersion;
   kind: 'json-syntax';
   /** SHA-256 of the complete supplied, already-redacted source encoded as UTF-8. */
   sourceSha256: string;
@@ -43,18 +45,24 @@ function excerpt(raw: string, bodyEnd: number, rawPosition: number | null): Json
  * reads secrets nor sanitizes, edits, retries, evaluates or schema-validates
  * the source. Any diagnostic and its hash refer to this exact supplied string.
  */
-export function diagnoseJsonOutput(raw: string): JsonOutputDiagnostic | undefined {
+export function diagnoseJsonOutput(raw: string, version: DiagnosticsVersion = OUTPUT_DIAGNOSTICS_VERSION): JsonOutputDiagnostic | undefined {
   try { parseJson(raw); return undefined; }
   catch (error) {
     if (!(error instanceof SyntaxError)) throw error;
     const { offset, body } = bodyCoordinates(raw);
     // Match only V8's terminal protocol, not a phrase quoted from user output.
-    const match = /\bin JSON at position (\d+)(?: \(line \d+ column \d+\))?$/.exec(error.message);
+    // v1 remains available for read-only replay of its immutable archives.
+    // V8 also uses "after JSON" when an object closes before trailing data.
+    // Both patterns are anchored to the actual parser error's terminal suffix;
+    // no position is extracted from raw input or a quoted spoofed phrase.
+    const match = (version === LEGACY_OUTPUT_DIAGNOSTICS_VERSION
+      ? /\bin JSON at position (\d+)(?: \(line \d+ column \d+\))?$/
+      : /\b(?:in JSON|after JSON) at position (\d+)(?: \(line \d+ column \d+\))?$/).exec(error.message);
     const reported = match ? Number(match[1]) : null;
     const position = reported !== null && Number.isSafeInteger(reported) && reported >= 0 && reported <= body.length ? reported : null;
     const rawPosition = position === null ? null : offset + position;
     return {
-      version: OUTPUT_DIAGNOSTICS_VERSION,
+      version,
       kind: 'json-syntax',
       sourceSha256: createHash('sha256').update(raw, 'utf8').digest('hex'),
       positionUnit: 'utf16-code-unit',
