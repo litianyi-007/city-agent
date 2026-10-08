@@ -8,7 +8,8 @@ import { implementationEvidenceSchema } from '../../shared/production-implementa
 
 export const PROMPT_VERSION = 'production-html-v11';
 export const ACCEPTANCE_PLANNING_VERSION = 'production-acceptance-planning-v1';
-export const GROUPED_ACCEPTANCE_PROMPT_VERSION = 'production-html-grouped-v1';
+export const LEGACY_GROUPED_ACCEPTANCE_PROMPT_VERSION = 'production-html-grouped-v1';
+export const GROUPED_ACCEPTANCE_PROMPT_VERSION = 'production-html-grouped-v2';
 export const ACCEPTANCE_CONTRACT_VERSION = 'production-acceptance-v3';
 export const CRITERIA_VERSION = PRODUCTION_VERIFIER_VERSION;
 export const CAMERA_PROMPT_VERSION = 'production-camera-scene-v7';
@@ -163,6 +164,20 @@ export const CONTRACT_INSTRUCTIONS = Object.freeze({
   tester: `${htmlInstructions(BASE_CONTRACT_INSTRUCTIONS.tester)} ${HTML_ACCEPTANCE_PLANNING_INSTRUCTIONS} 先自主分组并逐项核对完整步骤数量，再只返回完整checks，不新增容量或覆盖字段，不输出规划过程。若context.regeneration.rejectedCandidates[].acceptanceDiagnostic存在，其checkCount/stepCounts/oversizedStepCheckIndices与sourceSha256仅定位前一原文的容量拒绝，不是修好或接受的答案。自行重新组织完整新候选，独立setup与全部必需断言仍须保留；宿主不会删步、拆改旧checks、修JSON、增加返修或放宽上限。`,
   developer: htmlInstructions(BASE_CONTRACT_INSTRUCTIONS.developer),
 });
+
+// Only the new grouped profile replaces the incompatible legacy default-field
+// instruction. Do not append a contradictory override, edit old prompts, or
+// change the actual schemas/Gate to accommodate an invalid model answer.
+const LEGACY_DEFAULT_RECORDING = '并在acceptance或constraints记录以供冻结';
+const STAGE_DEFAULT_RECORDING = '仅在本阶段outputContract已有且语义适合的字段记录，不新增字段；项目经理按请求顶层pmOutputPolicy.designDefaultFields记录，普通决策阶段与acceptance-plan阶段的合法字段不同；标题/颜色等默认值不是新的业务权限、真实验证结果或已冻结声明';
+function groupedInstructions(instructions: string) {
+  if (instructions.split(LEGACY_DEFAULT_RECORDING).length !== 2) throw new Error('分组提示的默认值指引来源不唯一，拒绝静默覆盖');
+  return instructions.replace(LEGACY_DEFAULT_RECORDING, STAGE_DEFAULT_RECORDING);
+}
+export const PM_OUTPUT_POLICY_INSTRUCTIONS = '请求顶层pmOutputPolicy是宿主从本次实际outputContract派生的阶段导航：root列出允许/必需字段与闭合规则，outputContractHash绑定完整schema；它不是替代嵌套schema或业务评审的新schema。普通决策仅decision/summary/tasks/risks，验收计划仅version/obligations/groups；不能混用。决策依据只写summary，任务只写合法tasks项，不加decision_note、decision_rationale_note、解释性元数据或空的额外字段。合法数组为空也不能省略required字段。必须一次返回完整对象，根对象闭合后不得再追加tasks等尾随内容。context.regeneration.rejectedCandidates[].roleSchemaDiagnostic仅是绑定真实call/candidate、phase、原文SHA与完整schema hash的宿主结构拒绝定位；固定code/path/count不提供修好的答案、也不证明业务覆盖。按完整schema自主生成新候选，不能自动删字段、截取合法JSON前缀或修改Gate来让旧答案通过。';
+export const GROUPED_CONTRACT_INSTRUCTIONS = Object.freeze(Object.fromEntries(Object.entries(CONTRACT_INSTRUCTIONS).map(([role, instructions]) => [role, `${groupedInstructions(instructions)}${role === 'project-manager' ? ` ${PM_OUTPUT_POLICY_INSTRUCTIONS}` : ''}`])) as typeof CONTRACT_INSTRUCTIONS);
+export const GROUPED_ACCEPTANCE_PLAN_INSTRUCTIONS = `${groupedInstructions(ACCEPTANCE_PLAN_INSTRUCTIONS)} ${PM_OUTPUT_POLICY_INSTRUCTIONS}`;
+export const GROUPED_ACCEPTANCE_GROUP_INSTRUCTIONS = groupedInstructions(ACCEPTANCE_GROUP_INSTRUCTIONS);
 
 export function contractProfile(capability: ProductionCapability = 'offline-single-html') {
   if (capability === 'offline-single-html') return { promptVersion: PROMPT_VERSION, acceptanceVersion: ACCEPTANCE_CONTRACT_VERSION, instructions: CONTRACT_INSTRUCTIONS, productSchema: productSchema.extend({ scope: z.literal(capability) }) };

@@ -31,6 +31,8 @@ export interface ProductionLaunchPreflightReport {
   version: typeof PRODUCTION_LAUNCH_PREFLIGHT_VERSION; ready: boolean;
   paidAuthorized: false; finalGate: null; modelRequests: 0;
   input: ProductionRunInput; models: ProductionAgent[]; execution: ProductionLaunchExecutionSummary;
+  /** Opt-in only: legacy report serialization/hash stays byte-compatible. */
+  configuration?: { promptVersion: string; pmOutputPolicyVersion: string; roleSchemaDiagnosticsVersion: string };
   budget: {
     baseCalls: number; worstCaseCalls: number; inputTokensPerRequest: number; outputTokensPerRequest: number;
     firstRequest: { totalTokens: number; estimatedCost: number | null; currency: 'USD' | 'CNY' };
