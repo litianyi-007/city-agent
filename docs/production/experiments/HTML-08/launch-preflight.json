@@ -1,0 +1,216 @@
+{
+  "version": "production-launch-preflight-v1",
+  "ready": true,
+  "paidAuthorized": false,
+  "finalGate": null,
+  "modelRequests": 0,
+  "input": {
+    "brief": "为小团队做一个无需登录、无需网络的单页费用记录页：填写描述、金额并选择“办公/差旅”后添加记录，支持删除及“全部/办公/差旅”筛选，准确显示全部费用总额和当前筛选小计；金额只接受0.01至9999.99元（含边界）、最多两位小数，无效金额或空白描述应提示且不得入账，数据仅在当前页面保存。",
+    "capability": "offline-single-html",
+    "mode": "live",
+    "verifierEngine": "llm-rubric",
+    "implementationEvidencePolicy": "legacy",
+    "acceptanceStrategy": "planned-groups-v1",
+    "agentIds": [
+      "58b2f492-52c1-49ee-8936-53e5c8c6cc89",
+      "65e308f1-8582-4b41-b485-92911d44ed0f",
+      "8abcf5e4-a5f3-44a5-b58b-4f7aa83d8834",
+      "5e6500fe-48d3-4646-a412-d0bfaacffacc",
+      "299e00c3-cf0c-4f3f-814d-6c33e723a9d7",
+      "cc18586a-8d6b-4c19-950f-308034a0c0b1"
+    ],
+    "candidateCount": 1,
+    "limits": {
+      "maxCalls": 24,
+      "maxRepairCycles": 2,
+      "maxTokens": 500000,
+      "maxOutputTokens": 6000,
+      "maxDurationMs": 600000,
+      "maxCost": 1,
+      "currency": "USD"
+    },
+    "requirement": {
+      "id": "HTML-08",
+      "source": "用户明确批准仅一次HTML08，1 USD声明价估算停止额度；自拟演示需求，非真实业务工单",
+      "background": "grouped v4与output-envelope v1通用JSON导航后的单次真实模型实验；保留HTML07原八项业务、12×20 Gate与全部限额，不复用旧答案、源码或模板",
+      "acceptance": "1. 初始实际记录数0，全部总额与当前筛选小计均精确为0.00。某分类没有记录时，实际显示0条、小计0.00，不产生占位记录冒充费用。\n2. 添加“打印纸／办公／10.10”和“车票／差旅／20.20”后，实际只有2条，描述、分类和金额准确；全部总额及全部筛选小计为30.30。每次成功添加后描述、金额输入清空。\n3. 办公筛选只显示“打印纸”1条、小计10.10；差旅筛选只显示“车票”1条、小计20.20；全部总额始终为30.30。切回全部恢复原2条，不复制、丢失或修改记录。\n4. 在独立新页添加0.10与0.20两笔后，实际2条，总额与全部小计精确为0.30，不是浮点尾数或输入拼接；删除其中0.10一笔后，另一笔保留且总额为0.20。\n5. 单条下界0.01和上界9999.99均可入账且分别只新增1条；两笔合计精确为10000.00。上限属于单条金额，不能错误限制全部费用总额。金额显示保留两位小数。\n6. -1、0、空金额、1.234和10000.00均提示并拒绝。分别在空列表及已有有效记录的状态下核对：拒绝后实际记录数、已有内容、全部总额与当前小计不变。不得将空值当0、负数取绝对值或超精度金额静默四舍五入后入账。\n7. 空白描述（包括纯空格）即使金额有效也提示并拒绝，实际记录、内容与总额保持不变。\n8. 分类筛选状态下删除只移除目标记录并立即更新小计、全部总额；切回全部后其它记录仍在。删除最后一条后实际记录数0、总额与小计均回到0.00。\n各独立check自行setup，不依赖前一个检查的页面状态；最多12项、每项20步。分类选择和筛选可通过click操作，业务由明确按钮click驱动，不依赖原生form.submit。使用独立业务内容/金额节点做精确断言、实际条目容器做数量断言，不以按钮可见、输入回显或整行含操作按钮的文本替代业务验证。当前Gate无reload、键盘或selectOption，不把未发生的刷新/持久化验证写成通过。",
+      "difficulty": "low",
+      "kind": "illustrative"
+    },
+    "budgetAuthorized": false
+  },
+  "models": [
+    {
+      "id": "58b2f492-52c1-49ee-8936-53e5c8c6cc89",
+      "name": "产品经理",
+      "role": "product",
+      "provider": "deepseek",
+      "baseUrl": "https://api.deepseek.com",
+      "modelId": "deepseek-flash",
+      "enabled": true,
+      "pricing": {
+        "inputPerMillion": 0.3,
+        "outputPerMillion": 1.2,
+        "currency": "USD"
+      },
+      "hasApiKey": true
+    },
+    {
+      "id": "65e308f1-8582-4b41-b485-92911d44ed0f",
+      "name": "项目经理",
+      "role": "project-manager",
+      "provider": "deepseek",
+      "baseUrl": "https://api.deepseek.com",
+      "modelId": "deepseek-flash",
+      "enabled": true,
+      "pricing": {
+        "inputPerMillion": 0.3,
+        "outputPerMillion": 1.2,
+        "currency": "USD"
+      },
+      "hasApiKey": true
+    },
+    {
+      "id": "8abcf5e4-a5f3-44a5-b58b-4f7aa83d8834",
+      "name": "研究员",
+      "role": "researcher",
+      "provider": "deepseek",
+      "baseUrl": "https://api.deepseek.com",
+      "modelId": "deepseek-flash",
+      "enabled": true,
+      "pricing": {
+        "inputPerMillion": 0.3,
+        "outputPerMillion": 1.2,
+        "currency": "USD"
+      },
+      "hasApiKey": true
+    },
+    {
+      "id": "5e6500fe-48d3-4646-a412-d0bfaacffacc",
+      "name": "研发",
+      "role": "developer",
+      "provider": "deepseek",
+      "baseUrl": "https://api.deepseek.com",
+      "modelId": "deepseek-flash",
+      "enabled": true,
+      "pricing": {
+        "inputPerMillion": 0.3,
+        "outputPerMillion": 1.2,
+        "currency": "USD"
+      },
+      "hasApiKey": true
+    },
+    {
+      "id": "299e00c3-cf0c-4f3f-814d-6c33e723a9d7",
+      "name": "测试",
+      "role": "tester",
+      "provider": "deepseek",
+      "baseUrl": "https://api.deepseek.com",
+      "modelId": "deepseek-flash",
+      "enabled": true,
+      "pricing": {
+        "inputPerMillion": 0.3,
+        "outputPerMillion": 1.2,
+        "currency": "USD"
+      },
+      "hasApiKey": true
+    },
+    {
+      "id": "cc18586a-8d6b-4c19-950f-308034a0c0b1",
+      "name": "Verifier",
+      "role": "verifier",
+      "provider": "deepseek",
+      "baseUrl": "https://api.deepseek.com",
+      "modelId": "deepseek-flash",
+      "enabled": true,
+      "pricing": {
+        "inputPerMillion": 0.3,
+        "outputPerMillion": 1.2,
+        "currency": "USD"
+      },
+      "hasApiKey": true
+    }
+  ],
+  "execution": {
+    "bootId": "e46b7f26-3512-4d33-aaa4-04d4b5449491",
+    "startedAt": "2026-10-09T04:17:20.820Z",
+    "commit": "f21256f8fe280b619c295ec17842fdc941b36545",
+    "sourceClean": true,
+    "sourceFingerprint": "db0434458d21676cdddacca12f7fc3bb876e5f3f5053a3a2ed2f1ddde54afb9f",
+    "buildFingerprint": "757c7645f1ff5da4be58571c5d5fc4690ee061c200acbe1b17dd671c52a91c64",
+    "buildSnapshot": {
+      "platformCommit": "f21256f8fe280b619c295ec17842fdc941b36545",
+      "sourceClean": true,
+      "builtAt": "2026-10-09T04:16:48.482Z"
+    },
+    "ready": true,
+    "fresh": true
+  },
+  "budget": {
+    "baseCalls": 16,
+    "worstCaseCalls": 28,
+    "inputTokensPerRequest": 65536,
+    "outputTokensPerRequest": 6000,
+    "firstRequest": {
+      "totalTokens": 71536,
+      "estimatedCost": 0.0268608,
+      "currency": "USD"
+    },
+    "envelope": {
+      "baseTokens": 1144576,
+      "worstCaseTokens": 2003008,
+      "baseEstimatedCost": 0.4297728,
+      "worstCaseEstimatedCost": 0.7521024000000001,
+      "currency": "USD"
+    }
+  },
+  "issues": [],
+  "warnings": [
+    {
+      "code": "not-paid-authorization",
+      "message": "ready 仅表示此刻公开配置和第一次请求预留可满足，不是收费授权或启动令牌。真实启动仍须单独明确有限预算授权并重新校验。"
+    },
+    {
+      "code": "acceptance-not-frozen",
+      "message": "尚未生成产品、测试或 HTML；finalGate 为 null。原需求不会由预检缩减，研发前冻结检查仍须原测试角色生成、预检和独立评审；完整业务覆盖未验证。"
+    },
+    {
+      "code": "reservation-not-billing",
+      "message": "包络使用每请求 65536 输入 Token 加最大输出的保守预留，费用为声明价上界而非 Token 预测、供应商报价或账单；没有新增模型请求。"
+    },
+    {
+      "code": "budget-may-stop-early",
+      "message": "调用、Token、时间、费用或全局修复预算可能提前停止；unknown usage、协议错误或环境失败仍立即停止，不保证交付。"
+    },
+    {
+      "code": "call-envelope-exceeds-budget",
+      "message": "请求包络超过 maxCalls，受限运行可能在完成前因调用预算停止。"
+    },
+    {
+      "code": "token-envelope-exceeds-budget",
+      "message": "保守请求预留包络超过 maxTokens，不代表实际超限，但运行可能提前停止。"
+    },
+    {
+      "code": "planned-groups-not-real-validated",
+      "message": "分组策略只完成工程验证，未实测质量或节费；组不独立冻结或接受。按最多3组预留16初始／最多28次调用（两次共享修复），实际硬预算可能提前停止；原12项／20步与最终Gate不变。"
+    },
+    {
+      "code": "startup-guard-not-guarantee",
+      "message": "固定启动材料已使用加密凭据集合核验，不解密或导出秘密；ready仍非收费授权。实际启动重复核验，后续新数据、配置变化与执行错误仍可能停止。"
+    }
+  ],
+  "configuration": {
+    "promptVersion": "production-html-grouped-v4",
+    "pmOutputPolicyVersion": "production-pm-output-policy-v1",
+    "roleSchemaDiagnosticsVersion": "production-role-schema-diagnostics-v1",
+    "acceptanceStepAuditVersion": "production-acceptance-step-audit-v1",
+    "acceptanceReviewProjectionVersion": "production-acceptance-review-projection-v1",
+    "outputEnvelopeVersion": "production-output-envelope-v1"
+  },
+  "startupGuard": {
+    "version": "production-startup-public-guard-v1",
+    "publicCollisionGuardVersion": "public-collision-guard-v2",
+    "ready": true
+  },
+  "reportHash": "4bd32ecbf0256e47bc40fb03da6f8c7df2d1cd25b837d621d948710fe48eeefd"
+}

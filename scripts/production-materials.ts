@@ -7,11 +7,11 @@ import { packagePath } from './production-public-safety.js';
 import { reviewerInstallCommands, REVIEWER_CAMERA_PREPARATION_COMMANDS, REVIEWER_SOFTWARE_REQUIREMENTS } from './production-install.js';
 
 export const SUBMISSION_BASELINE = 'b66122c21604fdb2ecdcbafb89c3d5ad8cde1466';
-export const MATERIALS_VERSION = 'production-materials-v6';
+export const MATERIALS_VERSION = 'production-materials-v7';
 const SOURCE_REPOSITORY = 'https://github.com/litianyi-007/city-agent';
 export const PACKAGE_DOCS = ['README.md', 'RUNBOOK.md', 'DESIGN.md', 'EVALUATION.md', 'REQUIREMENTS.md', 'EXPERIMENTS.md', 'VALIDATION.md', 'ISOLATION.md', 'SUBMISSION.md', 'NEXT-STEPS.md', 'REVIEW.md'] as const;
 /** New reviewer documents are optional for historical packages. */
-export const OPTIONAL_PACKAGE_DOCS = ['REVIEWER-GUIDE.md', 'SUBMISSION-REPORT.md', 'SUBMISSION-INTRODUCTION.md', 'POST-SUBMISSION-PLAN.md', 'CAMERA-04-RESULT.md', 'JEV-RESILIENCE-V3-DESIGN.md', 'JEV-PROTOCOL-AUDIT-CAMERA-03.md', 'BATCH-CAMERA03-CHECKS.md', 'BATCH-CAMERA04-CHECKS.md', 'QUALITY-V6-DESIGN.md', 'BATCH-QUALITY-V6-CHECKS.md'] as const;
+export const OPTIONAL_PACKAGE_DOCS = ['REVIEWER-GUIDE.md', 'SUBMISSION-REPORT.md', 'SUBMISSION-INTRODUCTION.md', 'POST-SUBMISSION-PLAN.md', 'CAMERA-04-RESULT.md', 'JEV-RESILIENCE-V3-DESIGN.md', 'JEV-PROTOCOL-AUDIT-CAMERA-03.md', 'BATCH-CAMERA03-CHECKS.md', 'BATCH-CAMERA04-CHECKS.md', 'QUALITY-V6-DESIGN.md', 'BATCH-QUALITY-V6-CHECKS.md', 'CURRENT-PROGRESS.md'] as const;
 export const CAMERA_MATERIAL_ARCHIVES = ['01', '02', '03', '04', '05', '06', '07', '08', '09'] as const;
 export const CAMERA_DELIVERY_SCOPE = 'Model-generated declarative scene DSL plus a fixed trusted platform runtime; synthetic scene behavior only, not arbitrary software source, verified vision, physical camera acceptance or full requirement delivery.';
 export const CAMERA_DELIVERY_NOTICE = '真实摄像头研发产物是模型生成的声明式场景 DSL＋平台可信 runtime，不是任意软件源码。只记录合成场景行为 Gate；真实视觉、实体摄像头和完整需求仍未验收，不认证稳定 L4/L5。';
@@ -20,7 +20,7 @@ export function cameraMaterialFiles(number: typeof CAMERA_MATERIAL_ARCHIVES[numb
 }
 /** Re-render presentation once; inherit original evidence and video bytes. */
 export function materialInheritancePaths(paths: readonly string[], currentDocs: readonly string[]): string[] {
-  const replacements = new Set([...currentDocs, 'submission.html', 'production-mock-submission.pdf', 'PACKAGE-NOTES.md', 'materials-summary.json', 'real-camera-runs.json']);
+  const replacements = new Set([...currentDocs, 'submission.html', 'production-mock-submission.pdf', 'PACKAGE-NOTES.md', 'materials-summary.json', 'real-camera-runs.json', 'HTML-DELIVERY-STATUS.json']);
   if (new Set(paths).size !== paths.length) throw new Error('Duplicate inherited package paths');
   return paths.filter(name => { packagePath(name); return !replacements.has(name); });
 }

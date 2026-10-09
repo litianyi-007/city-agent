@@ -1,0 +1,214 @@
+import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
+import { execFileSync } from 'node:child_process';
+import { existsSync, readFileSync, realpathSync, writeFileSync } from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { chromium } from '../../node_modules/playwright/index.mjs';
+import { productionRunInputSchema, PRODUCTION_ROLES } from '../../shared/production-schema.ts';
+import { assertNoPublishedSecrets } from '../../scripts/production-public-safety.ts';
+
+const workdir = '/Users/litianyi/Documents/Code/_ai-goods/city-agent-autonomous-production';
+const directory = fileURLToPath(new URL('./', import.meta.url));
+const origin = 'http://127.0.0.1:4420';
+const commit = 'f21256f8fe280b619c295ec17842fdc941b36545';
+const boot = 'e46b7f26-3512-4d33-aaa4-04d4b5449491';
+assert.equal(process.cwd(), workdir);
+assert.equal(realpathSync(directory), path.join(workdir, 'output/production-html08'));
+assert.equal(execFileSync('git', ['rev-parse', 'HEAD'], { cwd: workdir, encoding: 'utf8' }).trim(), commit);
+assert.equal(execFileSync('git', ['status', '--porcelain'], { cwd: workdir, encoding: 'utf8' }).trim(), '');
+assert.equal(existsSync(path.join(directory, 'launch-intent.json')), false, 'Never replay an issued or ambiguous submission');
+const expected = productionRunInputSchema.parse(JSON.parse(readFileSync(path.join(directory, 'authorized-input.json'), 'utf8')));
+assert.equal(expected.requirement.id, 'HTML-08');
+assert.equal(expected.budgetAuthorized, true);
+const sha = bytes => createHash('sha256').update(bytes).digest('hex');
+const saveBytes = (name, bytes) => {
+  assert.ok(/^[a-zA-Z0-9._-]+$/.test(name));
+  assertNoPublishedSecrets(Buffer.from(bytes), name);
+  writeFileSync(path.join(directory, name), bytes, { flag: 'wx', mode: 0o600 });
+};
+const save = (name, value) => saveBytes(name, JSON.stringify(value, null, 2) + '\n');
+const api = async endpoint => {
+  const response = await fetch(origin + '/api/production/' + endpoint, { signal: AbortSignal.timeout(10000) });
+  assert.equal(response.status, 200);
+  return response.json();
+};
+const clean = async () => {
+  assert.equal(execFileSync('git', ['status', '--porcelain'], { cwd: workdir, encoding: 'utf8' }).trim(), '');
+  const m = await api('metadata');
+  assert.equal(m.platformCommit, commit);
+  assert.equal(m.executionIdentity.commit, commit);
+  assert.equal(m.executionIdentity.bootId, boot);
+  assert.equal(m.executionIdentity.sourceClean, true);
+  assert.equal(m.executionIdentity.ready, true);
+  assert.equal(m.executionIdentity.buildSnapshot.platformCommit, commit);
+  assert.deepEqual(m.executionIdentity.issues, []);
+  assert.ok(m.executionIdentity.sourceFiles.some(file => file.path === 'server/production/acceptance-step-audit.ts'));
+  return m;
+};
+const assertIdle = async () => {
+  const runs = await api('runs');
+  assert.equal(runs.filter(r => r.input.requirement.id === 'HTML-08').length, 0, 'Do not duplicate an existing attempt');
+  assert.equal(runs.filter(r => ['running', 'queued'].includes(r.status)).length, 0);
+  for (const endpoint of ['jev/benchmarks', 'verifier-studies']) {
+    const records = await api(endpoint);
+    assert.equal(records.filter(r => ['running', 'queued', 'prepared'].includes(r.status)).length, 0);
+  }
+  return runs.length;
+};
+let beforeCount = await assertIdle();
+assert.equal(beforeCount, 23);
+assert.deepEqual(expected.limits, { maxCalls: 24, maxRepairCycles: 2, maxTokens: 500000, maxOutputTokens: 6000, maxDurationMs: 600000, maxCost: 1, currency: 'USD' });
+const approval = JSON.parse(readFileSync(path.join(directory, 'authorization.json'), 'utf8'));
+assert.equal(approval.userReply, '批准仅这一次，采用1 USD限额');
+assert.equal(approval.singleRunOnly, true); assert.equal(approval.automaticRetryAllowed, false); assert.equal(approval.jevRequestsAllowed, false);
+assert.equal(approval.proposalSha256, sha(readFileSync(path.join(workdir, approval.referencedProposal))));
+assert.equal(approval.referencedProposalCommit, commit);
+assert.deepEqual(approval.limits, expected.limits);
+save('authorization-checked.json', { checkedAt: new Date().toISOString(), approvalSha256: sha(readFileSync(path.join(directory, 'authorization.json'))), boundedInputSha256: sha(JSON.stringify(expected)), singleRunOnly: true });
+save('platform-metadata.json', await clean());
+const agents = await api('agents');
+const selected = expected.agentIds.map(id => agents.find(a => a.id === id));
+for (const [i, a] of selected.entries()) {
+  assert.ok(a);
+  assert.equal(a.role, PRODUCTION_ROLES[i]);
+  assert.equal(a.enabled, true);
+  assert.equal(a.hasApiKey, true);
+  assert.equal(a.provider, 'deepseek');
+  assert.equal(a.modelId, 'deepseek-flash');
+  assert.equal(a.baseUrl, 'https://api.deepseek.com');
+  assert.deepEqual(a.pricing, { inputPerMillion: .3, outputPerMillion: 1.2, currency: 'USD' });
+}
+save('public-agent-configuration.json', selected);
+const context = await chromium.launchPersistentContext(path.join(directory, 'browser-profile'), {
+  headless: true, viewport: { width: 1440, height: 1100 }, permissions: [], acceptDownloads: false, serviceWorkers: 'block',
+});
+let issued = 0; let blocked = 0; let runId; let terminal;
+const responses = [];
+context.on('request', request => {
+  if (request.method() === 'POST' && new URL(request.url()).pathname === '/api/production/runs') issued++;
+});
+context.on('response', response => {
+  const request = response.request();
+  if (request.method() === 'POST' && new URL(request.url()).pathname === '/api/production/runs') responses.push(response);
+});
+await context.route('**/*', async route => {
+  const request = route.request(); const url = new URL(request.url());
+  if (url.origin !== origin) { blocked++; return route.abort('blockedbyclient'); }
+  if (request.method() === 'POST' && url.pathname === '/api/production/runs') {
+    if (existsSync(path.join(directory, 'actual-browser-submit.json'))) return route.abort('blockedbyclient');
+    const sent = productionRunInputSchema.parse(request.postDataJSON());
+    assert.deepEqual(sent, expected);
+    save('actual-browser-submit.json', sent);
+  }
+  return route.continue();
+});
+try {
+  const page = context.pages()[0] ?? await context.newPage();
+  page.setDefaultTimeout(15000);
+  await page.goto(origin + '/#production', { waitUntil: 'networkidle' });
+  await page.getByRole('button', { name: '新建自定义需求', exact: true }).click();
+  await page.getByLabel('需求原话', { exact: true }).fill(expected.brief);
+  await page.getByLabel('编号', { exact: true }).fill(expected.requirement.id);
+  await page.getByLabel('来源', { exact: true }).fill(expected.requirement.source);
+  await page.getByLabel('背景', { exact: true }).fill(expected.requirement.background);
+  await page.getByLabel('业务验收要求', { exact: true }).fill(expected.requirement.acceptance);
+  await page.getByLabel('需求来源类型', { exact: true }).selectOption('illustrative');
+  await page.getByLabel('难度', { exact: true }).selectOption('low');
+  await page.getByLabel('受控交付能力', { exact: true }).selectOption('offline-single-html');
+  await page.getByLabel('真实模型', { exact: true }).check();
+  await page.getByLabel('候选验证引擎', { exact: true }).selectOption('llm-rubric');
+  await page.getByLabel('启用条款证据门禁（LLM）', { exact: true }).uncheck();
+  await page.getByLabel('启用分组验收规划（工程预览）', { exact: true }).check();
+  await page.getByText('候选验证与有界执行预算', { exact: true }).click();
+  for (const [id, value] of Object.entries({
+    'prod-max-calls': 24, 'prod-repairs': 2, 'prod-duration': 600,
+    'prod-token-limit': 500000, 'prod-output-limit': 6000, 'prod-cost-limit': 1,
+  })) await page.locator('#' + id).fill(String(value));
+  await page.locator('#prod-candidates').selectOption('1');
+  await page.locator('#prod-currency').selectOption('USD');
+  for (const a of selected) await page.locator('#prod-agent-' + a.role).selectOption(a.id);
+  const preparation = page.waitForResponse(r => r.request().method() === 'POST' && new URL(r.url()).pathname === '/api/production/runs/preflight');
+  await page.getByRole('button', { name: '免费启动预检', exact: true }).click();
+  const prepared = await preparation;
+  assert.equal(prepared.status(), 200);
+  const report = await prepared.json();
+  assert.equal(report.ready, true);
+  assert.deepEqual(report.startupGuard, { version: 'production-startup-public-guard-v1', publicCollisionGuardVersion: 'public-collision-guard-v2', ready: true });
+  assert.equal(report.execution.fresh, true); assert.equal(report.execution.commit, commit);
+  const { reportHash, ...reportPayload } = report; assert.equal(sha(JSON.stringify(reportPayload)), reportHash);
+  assert.equal(report.paidAuthorized, false);
+  assert.equal(report.modelRequests, 0);
+  assert.deepEqual(report.input, { ...expected, budgetAuthorized: false });
+  assert.deepEqual(report.configuration, { promptVersion: 'production-html-grouped-v4', pmOutputPolicyVersion: 'production-pm-output-policy-v1', roleSchemaDiagnosticsVersion: 'production-role-schema-diagnostics-v1', acceptanceStepAuditVersion: 'production-acceptance-step-audit-v1', acceptanceReviewProjectionVersion: 'production-acceptance-review-projection-v1', outputEnvelopeVersion: 'production-output-envelope-v1' });
+  assert.deepEqual(report.models, selected);
+  assert.equal(report.budget.baseCalls, 16);
+  assert.equal(report.budget.worstCaseCalls, 28);
+  save('launch-preflight.json', report);
+  await page.getByLabel(/我授权本次在上述有限预算/).check();
+  await page.screenshot({ path: path.join(directory, 'ui-before-launch.png'), fullPage: true });
+  await clean(); await assertIdle();
+  save('launch-intent.json', { at: new Date().toISOString(), method: 'actual-frontend-form-single-click', origin,
+    sourceCommit: commit, bootId: boot, expectedInputSha256: sha(JSON.stringify(expected)), preflightHash: report.reportHash,
+    budgetAuthorized: true, beforeRunCount: beforeCount, automaticRetryAllowed: false,
+    transport: 'Owned Playwright Chromium; no route fulfill or SDK injection; browser requests only to loopback service' });
+  const launched = page.waitForResponse(r => r.request().method() === 'POST' && new URL(r.url()).pathname === '/api/production/runs', { timeout: 30000 });
+  await page.getByRole('button', { name: '启动真实生产', exact: true }).click();
+  const response = await launched;
+  assert.equal(response.status(), 202);
+  const run = await response.json(); runId = run.id;
+  assert.equal(run.evidenceKind, 'real-model');
+  assert.equal(run.platformCommit, commit);
+  assert.deepEqual(run.input, expected);
+  save('launch-response.json', run);
+  console.log(JSON.stringify({ stage: 'started', runId, id: 'HTML-08', sourceCommit: commit, maxCost: 1, httpSubmitCount: issued }));
+  const deadline = Date.now() + 660000; let last = '';
+  while (Date.now() < deadline) {
+    terminal = await api('runs/' + runId);
+    const projection = { status: terminal.status, calls: terminal.calls.length, lastPhase: terminal.calls.at(-1)?.phase,
+      finishedCalls: terminal.calls.filter(c => c.finishedAt).length, repairs: terminal.repairs, estimatedCost: terminal.usage.estimatedCost,
+      frozen: !!terminal.frozenContract, gate: terminal.gate?.passed ?? null };
+    if (JSON.stringify(projection) !== last) { console.log(JSON.stringify({ runId, ...projection })); last = JSON.stringify(projection); }
+    assert.ok(terminal.calls.length <= 24);
+    if (!['queued', 'running'].includes(terminal.status) && terminal.finishedAt && ['evidence.json', 'delivery-manifest.json'].every(name => terminal.artifacts.some(artifact => artifact.name === name))) break;
+    await new Promise(resolve => setTimeout(resolve, 2000));
+  }
+  if (['queued', 'running'].includes(terminal.status)) throw Error('Observation deadline elapsed; never retry or modify the task. Inspect current run and cancel only the matching active run.');
+  assert.ok(terminal.finishedAt);
+  assert.ok(['evidence.json', 'delivery-manifest.json'].every(name => terminal.artifacts.some(artifact => artifact.name === name)), 'Wait for complete terminal receipts, not only a transient status');
+  assert.equal(terminal.platformCommit, commit);
+  assert.equal(terminal.executionIdentity.bootId, boot);
+  assert.deepEqual(terminal.agentSnapshot, selected);
+  assert.ok(terminal.calls.every(call => call.executionSource === 'harness'), 'No injected or Mock role execution');
+  save('run.json', terminal);
+  assert.deepEqual(terminal.input, expected);
+  const found = (await api('runs')).filter(r => r.input.requirement.id === 'HTML-08');
+  assert.equal(found.length, 1); assert.equal(found[0].id, runId);
+  assert.equal(issued, 1); assert.equal(responses.length, 1);
+  await page.getByRole('combobox', { name: '选择运行', exact: true }).selectOption(runId);
+  await new Promise(resolve => setTimeout(resolve, 1800));
+  await page.screenshot({ path: path.join(directory, 'ui-terminal.png'), fullPage: true });
+  for (const artifact of terminal.artifacts.filter(a => a.name !== 'index.html')) {
+    const response = await fetch(origin + '/api/production/runs/' + runId + '/artifacts/' + encodeURIComponent(artifact.name), { signal: AbortSignal.timeout(10000) });
+    assert.equal(response.status, 200);
+    saveBytes(artifact.name, Buffer.from(await response.arrayBuffer()));
+  }
+  if (terminal.artifacts.some(a => a.name === 'index.html')) {
+    const response = await fetch(origin + '/api/production/runs/' + runId + '/artifacts/index.html', { signal: AbortSignal.timeout(10000) });
+    assert.equal(response.status, 200);
+    saveBytes('index.html.txt', Buffer.from(await response.arrayBuffer()));
+  }
+  save('ui-receipt.json', { version: 'html08-real-ui-receipt-v1', startedThroughActualFrontend: true,
+    noFulfillmentStubs: true, inAppBrowserUnavailable: true, browserFallbackReason: 'cua iab returned Browser is not available; use owned purpose-built Playwright CLI', sourceCommit: commit, bootId: boot,
+    runId, preflightHash: report.reportHash, httpSubmitCount: issued, observedStartResponses: responses.length,
+    blockedBrowserExternalRequests: blocked, beforeRunCount: beforeCount, afterRunCount: (await api('runs')).length,
+    evidenceKind: terminal.evidenceKind, terminalStatus: terminal.status, screenshotFiles: ['ui-before-launch.png', 'ui-terminal.png'],
+    generatedArtifactEditedByOuterAgent: false, automaticAdditionalRun: false });
+  console.log(JSON.stringify({ stage: 'terminal', runId, status: terminal.status, calls: terminal.calls.length,
+    repairs: terminal.repairs, usage: terminal.usage, gate: terminal.gate?.passed ?? null }));
+} catch (error) {
+  save('ui-runner-error.json', { time: new Date().toISOString(), runId: runId ?? null, httpSubmitCount: issued,
+    observedStartResponses: responses.length, error: error instanceof Error ? error.message : 'UI runner failed',
+    automaticRetryAllowed: false, activeTaskMustBeInspectedBeforeAnyNextAction: issued > 0 });
+  throw error;
+} finally { await context.close(); }

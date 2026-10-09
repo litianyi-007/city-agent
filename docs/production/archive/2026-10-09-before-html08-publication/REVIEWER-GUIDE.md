@@ -1,15 +1,5 @@
 # 评委安装、访问与自主测试指南
 
-## 当前附录（2026-10-09，v7材料 / grouped v5源码）
-
-公开首页先选“体验固定案例”“本地输入新需求”或“查看材料”。固定案例无需Key，不能接收新开发任务；本地安装后才有需求编辑器、六角色设置、免费预检与真实生产。版本是否已上线请核对在线publication-manifest，不能以本文代替部署回执。
-
-当前源码的离线HTML可选分组验收：填写原话、来源和完整业务验收 → 选择真实模型/LLM Verifier/单候选/分组验收 → 配置六角色及单价 → 免费启动预检 → 核对配置后本次预算授权 → 启动一次。预检返回grouped v5、phase-readiness-v1；ready不是收费授权或交付保证。启动后分别查看阶段、原始调用、冻结hash、实际Gate、返修、费用和失败。
-
-最新[HTML08](experiments/HTML-08/RESULT.md)失败于前置PM准入，未到研发/Gate；新v5仅免费工程验证，不能把测试夹具通过当自主交付。v7包的HTML-DELIVERY-STATUS.json提供八次原run文本及另外三份原件的hash/固定链接；[CURRENT-PROGRESS](CURRENT-PROGRESS.md)是申报后的独立附录。原SUBMISSION-REPORT.md与历史MP4逐字保留，不冒充最新实验。
-
-下面v6指南及数字为历史时点；安装的精确完整commit请使用在线当前版本提供的命令，或本机checkout已核验生产分支commit。不要复制作者Key/数据库，不要在宿主运行下载的生成Node/shell。[更新前全文](archive/2026-10-09-before-html08-publication/REVIEWER-GUIDE.md)。
-
 ## 先选体验方式
 
 | 我想做什么 | 入口 | 是否需要 Key |

@@ -1,13 +1,5 @@
 # 六角色自主软件生产工作区
 
-## 当前进度与体验（2026-10-09，HTML08 / grouped v5）
-
-请先看独立增量 [CURRENT-PROGRESS](CURRENT-PROGRESS.md)，再按 [评委指南](REVIEWER-GUIDE.md)选择“在线固定案例”或“本地输入新需求”。[HTML08真实结果](experiments/HTML-08/RESULT.md)为18 HTTP、179634 Token、102.991秒、0.0658755 USD声明价估算，未到研发或最终Gate；单次授权已消费。旧失败和已提交主稿不改写。
-
-最新免费切片 [阶段准入v1](PHASE-READINESS.md) / grouped v5 区分当前准入与未来验收构建，PM proceed只能释放后续测试构建，不能跳过完整审查、冻结或行为Gate。免费验证不追认旧结果，也不证明新模型效果。HTML01～08原档将纳入v7静态材料索引，PDF/视频/安装源码各自记录来源；发布实际状态以[publication-manifest](https://litianyi-007.github.io/city-agent/production/publication-manifest.json)为准。源码推送不是Harness后端上线。
-
-以下各“最新”“待执行”与测试数字均为历史时点，当前顺序以本文首段与NEXT-STEPS首段为准。更新前全文[留底](archive/2026-10-09-before-html08-publication/README.md)。
-
 ## 最新免费切片：grouped v4 输出协议与容量反例（2026-10-09）
 
 [输出导航与完整 JSON 自检](OUTPUT-ENVELOPE.md)已接入研究员/PM，绑定实际闭集Schema、角色、阶段与完整契约hash；不修旧JSON、删字段、增加调用或放宽Gate。[工程与独立审查](BATCH-OUTPUT-ENVELOPE-CHECKS.md)单列首次回归问题与修正，不将提示/Mock通过当模型效果。实际槽位反例明确：容量与审计不能证明有效setup或完整业务覆盖。本批不启动新收费实验；[下一任务](NEXT-STEPS.md)另需新配置及单次授权。

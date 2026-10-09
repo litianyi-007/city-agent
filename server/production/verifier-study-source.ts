@@ -5,7 +5,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { types as utilTypes } from 'node:util';
 
-export const VERIFIER_STUDY_SOURCE_VERSION = 'verifier-study-source-v8' as const;
+export const VERIFIER_STUDY_SOURCE_VERSION = 'verifier-study-source-v9' as const;
 const BRANCH = 'feature/autonomous-production';
 const BASELINE = 'b66122c21604fdb2ecdcbafb89c3d5ad8cde1466';
 // There is deliberately no caller-selected root, filename, Git command or ref.
@@ -35,6 +35,7 @@ export const VERIFIER_STUDY_SOURCE_FILES = Object.freeze([
   'server/production/acceptance-diagnostics.ts',
   'server/production/public-collision-guard.ts',
   'server/production/output-envelope.ts',
+  'server/production/phase-readiness.ts',
 ] as const);
 
 export interface VerifierStudySourceSnapshot {

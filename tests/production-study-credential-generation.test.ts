@@ -53,7 +53,7 @@ test('retained study source-v3/v4/v5/v6/v7 and current v8 public literals reject
   const directory = mkdtempSync(path.join(fileURLToPath(new URL('../', import.meta.url)), '.city-agent-study-generation-'));
   t.after(() => rmSync(directory, { recursive: true, force: true }));
   const store = new ProductionStore(directory); const verifier = store.agents().find(agent => agent.role === 'verifier')!;
-  for (const literal of ['verifier-study-source-v3', 'verifier-study-source-v4', 'verifier-study-source-v5', 'verifier-study-source-v6', 'verifier-study-source-v7', 'verifier-study-source-v8', 'production-html-grouped-v4', 'production-output-envelope-v1', 'outputEnvelopeVersion', 'outputEnvelopeProtocolLiterals', 'groups[].checks[].obligationIds']) {
+  for (const literal of ['verifier-study-source-v3', 'verifier-study-source-v4', 'verifier-study-source-v5', 'verifier-study-source-v6', 'verifier-study-source-v7', 'verifier-study-source-v8', 'production-html-grouped-v4', 'production-output-envelope-v1', 'production-html-grouped-v5', 'production-phase-readiness-v1', 'phaseReadinessVersion', 'phaseReadinessProtocolLiterals', 'control-plane-stage-policy', 'verifier-study-source-v9', 'outputEnvelopeVersion', 'outputEnvelopeProtocolLiterals', 'groups[].checks[].obligationIds']) {
     for (let start = 0; start < literal.length; start++) for (let end = start + 16; end <= literal.length; end++) {
       const value = literal.slice(start, end);
       assert.equal(productionApiKeySchema.safeParse(value).success, false);

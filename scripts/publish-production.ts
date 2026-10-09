@@ -8,6 +8,8 @@ import { assertMaterialZipSnapshot, assertNoPublishedSecrets, assertUnrelatedTre
 import { MATERIALS_VERSION } from './production-materials.js';
 import { assertReviewedPublicRender } from './production-public.js';
 import { verifyVerifierReal02Materials } from './production-study-materials.js';
+import { HTML_MATERIALS_FILENAME, readSelectedHtmlMaterials, verifySelectedHtmlMaterials } from './production-html-materials.js';
+import type { ProductionRun } from '../shared/production-schema.js';
 
 const executeFile = promisify(execFile);
 const REPOSITORY = 'litianyi-007/city-agent';
@@ -39,7 +41,7 @@ export function assertVersionedPublicationTarget(name: string, commit: string) {
 }
 /** Version labels and broad directory prefixes must not bypass the reviewed
  * package contract. Bind the exact public inventory to its embedded manifest. */
-export function assertReviewedPublicationSnapshot(manifest: PublicManifest, bytes: ReadonlyMap<string, Buffer>, commit: string) {
+export function assertReviewedPublicationSnapshot(manifest: PublicManifest, bytes: ReadonlyMap<string, Buffer>, commit: string, originalHtmlFiles?: ReadonlyMap<string, Buffer>) {
   const base = `reviews/${commit}/`;
   if (manifest.materialsVersion !== MATERIALS_VERSION || manifest.materialsBase !== base + 'submission/' || manifest.versionedEntry !== base + 'index.html') throw new Error('Publication requires the current reviewed material contract.');
   const packageBytes = bytes.get(base + 'submission/package-manifest.json');
@@ -56,11 +58,14 @@ export function assertReviewedPublicationSnapshot(manifest: PublicManifest, byte
     if (!content || sha256(content) !== item.sha256) throw new Error('Published material differs from its reviewed package.');
     expected.add(target); sourceFiles.set(item.path, content);
   }
-  for (const required of ['REVIEW.md', 'materials-summary.json', 'REVIEWER-GUIDE.md', 'SUBMISSION-REPORT.md', 'requirements.json', 'submission-evidence.json', 'production-mock-submission.pdf', 'demo.webm', ...['01', '02', '03'].map(id => `MOCK-${id}/index.html`)]) if (!sourceFiles.has(required)) throw new Error('Reviewed publication material is missing: ' + required);
+  for (const required of ['REVIEW.md', 'materials-summary.json', 'REVIEWER-GUIDE.md', 'SUBMISSION-REPORT.md', 'CURRENT-PROGRESS.md', HTML_MATERIALS_FILENAME, 'mixed-and-live-runs.json', 'requirements.json', 'submission-evidence.json', 'production-mock-submission.pdf', 'demo.webm', ...['01', '02', '03'].map(id => `MOCK-${id}/index.html`)]) if (!sourceFiles.has(required)) throw new Error('Reviewed publication material is missing: ' + required);
   if (bytes.size !== expected.size || [...expected].some(name => !bytes.has(name))) throw new Error('Publication inventory differs from the registered package.');
+  const mixedRuns = JSON.parse(sourceFiles.get('mixed-and-live-runs.json')!.toString('utf8')) as ProductionRun[];
+  if (!Array.isArray(mixedRuns)) throw new Error('Mixed publication evidence ledger must be an array.');
+  verifySelectedHtmlMaterials(sourceFiles.get(HTML_MATERIALS_FILENAME)!, commit, mixedRuns, originalHtmlFiles);
   verifyVerifierReal02Materials(sourceFiles);
   assertMaterialZipSnapshot(bytes.get(base + 'submission/materials.zip')!, sourceFiles);
-  assertReviewedPublicRender(manifest, sourceFiles, bytes);
+  assertReviewedPublicRender(manifest, sourceFiles, bytes, originalHtmlFiles);
   return sourceFiles;
 }
 export async function publishProduction(directory: string, root: string, execute = false) {
@@ -83,7 +88,14 @@ export async function publishProduction(directory: string, root: string, execute
   if (total > 100_000_000) throw new Error('Production publication exceeds the total bound.');
   if (manifest.materialsBase !== undefined && manifest.materialsBase !== `reviews/${commit}/submission/`) throw new Error('Materials base differs from the reviewed revision.');
   if (manifest.versionedEntry !== undefined && manifest.versionedEntry !== `reviews/${commit}/index.html`) throw new Error('Versioned entry differs from the reviewed revision.');
-  assertReviewedPublicationSnapshot(manifest, bytes, commit);
+  // Re-read only the registered public archive paths from clean HEAD. A
+  // forged index/ZIP/portal cannot certify itself by changing every hash.
+  const mixedBytes = bytes.get(`reviews/${commit}/submission/mixed-and-live-runs.json`);
+  if (!mixedBytes) throw new Error('Reviewed publication mixed ledger is missing.');
+  const mixedRuns = JSON.parse(mixedBytes.toString('utf8')) as ProductionRun[];
+  if (!Array.isArray(mixedRuns)) throw new Error('Mixed publication evidence ledger must be an array.');
+  const selectedHtml = await readSelectedHtmlMaterials(root, commit, mixedRuns);
+  assertReviewedPublicationSnapshot(manifest, bytes, commit, selectedHtml.files);
   bytes.set('publication-manifest.json', markerBytes);
   const gh = async <T>(endpoint: string, method = 'GET', body?: unknown): Promise<T> => {
     const args = ['api', 'repos/' + REPOSITORY + '/' + endpoint, '--method', method];

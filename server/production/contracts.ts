@@ -208,6 +208,31 @@ export const OUTPUT_ENVELOPE_ACCEPTANCE_PLAN_INSTRUCTIONS = `${STEP_AUDITED_ACCE
 export const OUTPUT_ENVELOPE_ACCEPTANCE_GROUP_INSTRUCTIONS = STEP_AUDITED_ACCEPTANCE_GROUP_INSTRUCTIONS;
 export const OUTPUT_ENVELOPE_CONSTRUCTION_REVIEW_INSTRUCTIONS = STEP_AUDITED_CONSTRUCTION_REVIEW_INSTRUCTIONS;
 
+// The new grouped profile removes pre-stage requirements instead of appending
+// contradictory overrides. Every v1-v4 export above remains byte-identical.
+export const PHASE_READY_GROUPED_PROMPT_VERSION = 'production-html-grouped-v5';
+const PHASE_READY_FEASIBILITY_INSTRUCTIONS = 'HTML阶段可行性：完整保留input.brief与input.requirement.acceptance，不以产品摘要删原条款。context.phaseReadiness是宿主阶段依赖说明，不是已生成、已冻结或已通过证据。research/think-design给出可执行路线、真实范围/必要输入/容量风险；具体CSS与实际checks在后续acceptance-plan和tester阶段定义，不能要求尚未释放的tester先完成再批准进入该阶段。静态估计不是实际steps计数或完整覆盖证明，不能虚称已核算达标；确定原容量无法覆盖须明确缺口，不删条款。实际验收仍须每check独立新页，全部setup、操作与必需断言计入原12项/每项20步；负例只改变被测变量并建立其它合法字段/状态，每次验证原要求的业务内容与统计，不能借其它check状态或仅凭提示。';
+const PHASE_READY_RESEARCH_INSTRUCTIONS = '在现有observations/constraints说明可执行设计与验收构建方向，区分当前必要blocking和后续deferred验证。未生成的CSS/checks/实际步数不冒充已存在或已核算；不需要在研究阶段生成它们，不新增输出字段。';
+const PHASE_READY_PM_INSTRUCTIONS = 'think-design只决定是否释放后续验收构建：当前目标与授权可行且路线具体，可proceed，由控制面进入本角色acceptance-plan，再分配tester定义具体CSS/checks、预检和冻结任务；这不是批准立即研发、冻结或交付。tasks.owner仍仅用outputContract允许的角色，不给控制面阶段新增非法owner。当前产品/研究有实质设计缺口用revise并给它们可执行补齐任务，真正不支持/必要blocking用stop；仅缺未来tester产物不构成当前设计缺口。该revise链路只重生成产品、研究员与本决策，不提前执行tester。不得将未生成steps的估计写成实际核算达标，具体分组/逐步容量在下一验收构建严格校验，不改需求/门限。若context.gate存在，仅按已有frozenContract、实际Gate和剩余预算安排反馈/修复，不能重新分组、改写冻结checks或要求重新冻结。';
+function replaceStageInstruction(instructions: string, original: string, replacement: string): string {
+  const location = instructions.indexOf(original);
+  if (location < 0 || instructions.lastIndexOf(original) !== location) throw new Error('Stage readiness unavailable');
+  return instructions.replace(original, replacement);
+}
+function phaseReadyRoleInstructions(role: string, instructions: string): string {
+  if (role !== 'researcher' && role !== 'project-manager') return instructions;
+  instructions = replaceStageInstruction(instructions, HTML_ACCEPTANCE_PLANNING_INSTRUCTIONS, PHASE_READY_FEASIBILITY_INSTRUCTIONS);
+  instructions = replaceStageInstruction(instructions, STEP_AUDIT_PLANNING_INSTRUCTIONS, '后续真实steps必须独立核算全部setup、操作与必需断言，assertChanged.after仍占一个数组条目；不能把声明、ID或索引当完整覆盖证书，不能改schema、返修数或Gate。');
+  if (role === 'researcher') return replaceStageInstruction(instructions,
+    '在现有observations/constraints中简述验收分组、逐组setup/操作/断言步数及合计的可达性依据；研究只给可执行规划，不生成checks、代码、已冻结或已执行声明，不新增输出字段。', PHASE_READY_RESEARCH_INSTRUCTIONS);
+  return replaceStageInstruction(instructions,
+    '研发前不能仅复述上限：在现有summary/tasks中说明组数和逐组步数依据，明确tester负责定义并经宿主校验冻结checks、核对容量和完整覆盖，researcher补齐可执行方案；任务书不是已完成冻结。可自主补齐的规划缺口用revise，真正不支持或必需blocking条件用stop，不改需求或门限。若context.gate存在，仅按已有frozenContract、实际Gate和剩余预算安排反馈/修复，不能重新分组、改写冻结checks或要求重新冻结。', PHASE_READY_PM_INSTRUCTIONS);
+}
+export const PHASE_READY_GROUPED_CONTRACT_INSTRUCTIONS = Object.freeze(Object.fromEntries(Object.entries(OUTPUT_ENVELOPE_GROUPED_CONTRACT_INSTRUCTIONS).map(([role, instructions]) => [role, phaseReadyRoleInstructions(role, instructions)])) as typeof CONTRACT_INSTRUCTIONS);
+export const PHASE_READY_ACCEPTANCE_PLAN_INSTRUCTIONS = OUTPUT_ENVELOPE_ACCEPTANCE_PLAN_INSTRUCTIONS;
+export const PHASE_READY_ACCEPTANCE_GROUP_INSTRUCTIONS = OUTPUT_ENVELOPE_ACCEPTANCE_GROUP_INSTRUCTIONS;
+export const PHASE_READY_CONSTRUCTION_REVIEW_INSTRUCTIONS = OUTPUT_ENVELOPE_CONSTRUCTION_REVIEW_INSTRUCTIONS;
+
 export function contractProfile(capability: ProductionCapability = 'offline-single-html') {
   if (capability === 'offline-single-html') return { promptVersion: PROMPT_VERSION, acceptanceVersion: ACCEPTANCE_CONTRACT_VERSION, instructions: CONTRACT_INSTRUCTIONS, productSchema: productSchema.extend({ scope: z.literal(capability) }) };
   const scope = '平台固定可信摄像头桥/本地识别/Canvas渲染，模型仅生成严格JSON场景配置，绝不生成可执行JS/HTML、URL或改变权限。人工授权摄像头是产品使用动作；本批Gate仅验证合成手势场景行为，识别模型、物理摄像头及完整需求验收仍待实测，不能声称已完成。';

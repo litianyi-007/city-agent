@@ -95,6 +95,9 @@ test('immutable source links fix absent package references without moving origin
   assert.ok(result.includes(`/blob/${originalCommit}/docs/production/archive/README.md`)); assert.ok(result.includes(`/blob/${originalCommit}/shared/production-benchmarks.ts`));
   assert.ok(result.includes('[External](https://example.org)')); assert.throws(() => immutableSourceLink('main', 'docs/production/README.md'), /immutable/); assert.throws(() => immutableSourceLink(originalCommit, '../secret'), /Invalid/);
   assert.ok(result.includes('[Mock raw](MOCK-01/run.json)')); assert.ok(result.includes('[Camera raw](CAMERA-04/run.json)'));
+  const current = packageDocLinks('[HTML08](experiments/HTML-08/RESULT.md) [Index](HTML-DELIVERY-STATUS.json)', originalCommit, ['HTML-DELIVERY-STATUS.json']);
+  assert.ok(current.includes(`/blob/${originalCommit}/docs/production/experiments/HTML-08/RESULT.md`));
+  assert.ok(current.includes('[Index](HTML-DELIVERY-STATUS.json)'));
 });
 
 test('public material URL supports only explicit safe HTTPS static entry and does not enable API operations', () => {
@@ -153,7 +156,7 @@ test('reviewer instructions pin the complete report commit and document correct 
   const instructions = reviewerInstallInstructions(originalCommit);
   for (const clause of ['Node.js >=22.19', '--branch feature/autonomous-production --single-branch', `git checkout --detach ${originalCommit}`, 'npm ci', 'npx playwright install chromium', 'npm run build', 'npm start', 'http://127.0.0.1:4420/#production', 'npx tsx scripts/prepare-camera-assets.ts', '--verify', 'public GitHub Pages neither receives keys nor runs this backend']) assert.ok(instructions.includes(clause), clause);
   assert.throws(() => reviewerInstallInstructions('main'), /complete report commit/); assert.throws(() => reviewerInstallInstructions(originalCommit.slice(0, 7)), /complete report commit/);
-  assert.equal(MATERIALS_VERSION, 'production-materials-v6'); assert.ok(OPTIONAL_PACKAGE_DOCS.includes('REVIEWER-GUIDE.md')); assert.ok(OPTIONAL_PACKAGE_DOCS.includes('SUBMISSION-REPORT.md'));
+  assert.equal(MATERIALS_VERSION, 'production-materials-v7'); assert.ok(OPTIONAL_PACKAGE_DOCS.includes('REVIEWER-GUIDE.md')); assert.ok(OPTIONAL_PACKAGE_DOCS.includes('SUBMISSION-REPORT.md'));
 });
 test('v6 checked package requires complete pinned REAL02 appendix, while historical materials retain their smaller contract', async t => {
   const directory = await mkdtemp(path.join(process.cwd(), '.city-agent-materials-test-'));
@@ -166,7 +169,7 @@ test('v6 checked package requires complete pinned REAL02 appendix, while histori
     manifest.files.push({ path: name, sha256: sha256(bytes) });
   }
   await writeFile(path.join(source, 'package-manifest.json'), JSON.stringify(manifest));
-  await assert.rejects(readCheckedPackage(source), /requires the reviewed v6/);
+  await assert.rejects(readCheckedPackage(source), /requires the reviewed v6\/v7/);
   manifest.version = 'mock-package-v2'; manifest.materialsVersion = 'production-materials-v6';
   await writeFile(path.join(source, 'package-manifest.json'), JSON.stringify(manifest));
   const result = await readCheckedPackage(source); assert.equal(result.verifierStudy?.valueVerdict.highValue, false);

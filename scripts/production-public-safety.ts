@@ -8,12 +8,14 @@ export const PUBLIC_SUBTREE = 'production/';
 export const PUBLIC_PROJECT_ID = 'city-agent-autonomous-production-public-v1';
 export const sha256 = (value: string | Buffer) => createHash('sha256').update(value).digest('hex');
 export const isFrozenPackageVersion = (value: unknown): value is string => ['mock-package-v1', 'mock-package-v1-qa1', 'mock-package-v2'].includes(value as string);
-export const packageFileLimit = (materialsVersion: unknown): 100 | 120 => materialsVersion === 'production-materials-v6' ? 120 : 100;
-export const publicationFileLimit = (materialsVersion: unknown): 110 | 130 => materialsVersion === 'production-materials-v6' ? 130 : 110;
+export const isReviewedMaterialsVersion = (value: unknown) => value === 'production-materials-v6' || value === 'production-materials-v7';
+export const packageFileLimit = (materialsVersion: unknown): 100 | 120 => isReviewedMaterialsVersion(materialsVersion) ? 120 : 100;
+export const publicationFileLimit = (materialsVersion: unknown): 110 | 130 => isReviewedMaterialsVersion(materialsVersion) ? 130 : 110;
 export function packagePath(name: string) {
   if (!/^[A-Za-z0-9._/-]+$/.test(name) || name.startsWith('/') || name.split('/').some(part => !part || part === '.' || part === '..')) throw new Error('Invalid public package path.');
   const rootFiles = new Set(['package-manifest.json', 'requirements.json', 'submission-evidence.json', 'jev-benchmarks.json', 'mixed-and-live-runs.json', 'real-camera-runs.json', 'submission.html', 'production-mock-submission.pdf', 'demo.webm', 'demo.mp4', 'workspace.png', 'metrics.png', 'README.md', 'RUNBOOK.md', 'DESIGN.md', 'EVALUATION.md', 'REQUIREMENTS.md', 'EXPERIMENTS.md', 'VALIDATION.md', 'ISOLATION.md', 'SUBMISSION.md', 'NEXT-STEPS.md', 'PACKAGE-NOTES.md', 'REVIEW.md', 'materials-summary.json', 'REVIEWER-GUIDE.md', 'SUBMISSION-REPORT.md', 'CAMERA-04-RESULT.md', 'JEV-RESILIENCE-V3-DESIGN.md', 'JEV-PROTOCOL-AUDIT-CAMERA-03.md', 'BATCH-CAMERA03-CHECKS.md', 'BATCH-CAMERA04-CHECKS.md']);
   rootFiles.add('QUALITY-V6-DESIGN.md'); rootFiles.add('BATCH-QUALITY-V6-CHECKS.md');
+  rootFiles.add('CURRENT-PROGRESS.md'); rootFiles.add('HTML-DELIVERY-STATUS.json');
   if (!rootFiles.has(name) && !VERIFIER_REAL02_MATERIAL_FILES.includes(name) && !['SUBMISSION-INTRODUCTION.md', 'POST-SUBMISSION-PLAN.md'].includes(name) && !/^MOCK-0[1-3]-preview\.png$/.test(name) && !/^CAMERA-0[1-8]\/(?:run\.json|evidence\.json|delivery-manifest\.json|platform-metadata\.json)$/.test(name) && !/^CAMERA-09\/(?:run\.json|evidence\.json|delivery-manifest\.json|platform-metadata\.json|scene\.json|camera-runtime-manifest\.json|index\.html\.txt)$/.test(name) && !/^MOCK-0[1-3]\/(?:input\.json|run\.json|intermediate\.json|frozen-contract\.json|gate\.json|events\.ndjson|index\.html|delivery-manifest\.json|evidence\.json)$/.test(name)) throw new Error('File is outside the publication allowlist: ' + name);
   return name;
 }
@@ -65,12 +67,12 @@ export async function readCheckedPackage(root: string) {
   const manifestBytes = await checkedFile(root, 'package-manifest.json');
   assertNoPublishedSecrets(manifestBytes, 'package-manifest.json');
   const manifest = JSON.parse(manifestBytes.toString('utf8')) as PackageManifest;
-  if (!isFrozenPackageVersion(manifest.version) || !/^[a-f0-9]{40}$/.test(manifest.platformCommit) || manifest.submissionBaseline !== 'b66122c21604fdb2ecdcbafb89c3d5ad8cde1466' || !Array.isArray(manifest.files) || manifest.files.length > packageFileLimit(manifest.materialsVersion) || (manifest.materialsVersion === 'production-materials-v6' && manifest.version !== 'mock-package-v2')) throw new Error('Not a registered frozen production demonstration package.');
+  if (!isFrozenPackageVersion(manifest.version) || !/^[a-f0-9]{40}$/.test(manifest.platformCommit) || manifest.submissionBaseline !== 'b66122c21604fdb2ecdcbafb89c3d5ad8cde1466' || !Array.isArray(manifest.files) || manifest.files.length > packageFileLimit(manifest.materialsVersion) || (isReviewedMaterialsVersion(manifest.materialsVersion) && manifest.version !== 'mock-package-v2')) throw new Error('Not a registered frozen production demonstration package.');
   const files = new Map<string, Buffer>();
   let total = manifestBytes.length;
   for (const item of manifest.files) {
     packagePath(item.path);
-    if (item.path.startsWith('VERIFIER-REAL-02/') && manifest.materialsVersion !== 'production-materials-v6') throw new Error('REAL-02 evidence requires the reviewed v6 material contract.');
+    if (item.path.startsWith('VERIFIER-REAL-02/') && !isReviewedMaterialsVersion(manifest.materialsVersion)) throw new Error('REAL-02 evidence requires the reviewed v6/v7 material contract.');
     if (files.has(item.path) || item.path === 'package-manifest.json' || !/^[a-f0-9]{64}$/.test(item.sha256)) throw new Error('Duplicate or invalid manifest item.');
     const bytes = await checkedFile(root, item.path); total += bytes.length;
     if (total > 100_000_000) throw new Error('Public package exceeds the total size bound.');
@@ -79,7 +81,7 @@ export async function readCheckedPackage(root: string) {
   }
   for (const required of ['requirements.json', 'submission-evidence.json', 'jev-benchmarks.json', 'mixed-and-live-runs.json', 'production-mock-submission.pdf', 'demo.webm', ...['01', '02', '03'].flatMap(id => ['input.json', 'run.json', 'gate.json', 'index.html', 'delivery-manifest.json', 'evidence.json'].map(name => 'MOCK-' + id + '/' + name))]) if (!files.has(required)) throw new Error('Required public evidence is missing: ' + required);
   files.set('package-manifest.json', manifestBytes);
-  const verifierStudy = manifest.materialsVersion === 'production-materials-v6' ? verifyVerifierReal02Materials(files) : null;
+  const verifierStudy = isReviewedMaterialsVersion(manifest.materialsVersion) ? verifyVerifierReal02Materials(files) : null;
   return { manifest, files, verifierStudy };
 }
 export interface GitTreeEntry { path: string; sha: string; mode: string; type: string; }

@@ -1,0 +1,56 @@
+import assert from 'node:assert/strict';
+import { execFileSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
+import { existsSync, readFileSync, writeFileSync, realpathSync } from 'node:fs';
+import { assertNoPublishedSecrets } from '../../scripts/production-public-safety.ts';
+import { productionRunInputSchema } from '../../shared/production-schema.ts';
+const root = '/Users/litianyi/Documents/Code/_ai-goods/city-agent-autonomous-production';
+const output = root + '/output/production-html08/';
+const commit = 'f21256f8fe280b619c295ec17842fdc941b36545';
+const boot = 'e46b7f26-3512-4d33-aaa4-04d4b5449491';
+assert.equal(process.cwd(), root);
+assert.equal(realpathSync(output), output.slice(0, -1));
+for (const file of ['launch-intent.json', 'authorization.json', 'authorized-input.json', 'ui-runner.mjs']) assert.equal(existsSync(output + file), false, 'Never repeat preparation or submission');
+assert.equal(execFileSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' }).trim(), commit);
+assert.equal(execFileSync('git', ['status', '--porcelain'], { cwd: root, encoding: 'utf8' }).trim(), '');
+const proof = JSON.parse(readFileSync(root + '/output/production-output-envelope/post-commit-check.json', 'utf8'));
+assert.equal(proof.commit, commit); assert.equal(proof.bootId, boot);
+assert.equal(proof.freePreflight.startupGuard.ready, true);
+assert.equal(proof.productionRunCount, 23); assert.equal(proof.activeRuns, 0);
+const prior = JSON.parse(readFileSync(root + '/docs/production/experiments/HTML-07/input-snapshot.json', 'utf8'));
+const input = productionRunInputSchema.parse({ ...prior, requirement: { ...prior.requirement,
+  id: 'HTML-08', source: '用户明确批准仅一次HTML08，1 USD声明价估算停止额度；自拟演示需求，非真实业务工单',
+  background: 'grouped v4与output-envelope v1通用JSON导航后的单次真实模型实验；保留HTML07原八项业务、12×20 Gate与全部限额，不复用旧答案、源码或模板' } });
+assert.equal(input.brief, prior.brief); assert.equal(input.requirement.acceptance, prior.requirement.acceptance);
+const sha = b => createHash('sha256').update(b).digest('hex');
+const save = (name, value) => { const bytes = Buffer.from(JSON.stringify(value, null, 2) + '\n'); assertNoPublishedSecrets(bytes, name); writeFileSync(output + name, bytes, { flag: 'wx', mode: 0o600 }); };
+// Only mechanical replacements of the already reviewed trusted UI driver;
+// no generated product is edited or executed here.
+let driver = readFileSync(root + '/docs/production/experiments/HTML-07/ui-driver.mjs.txt', 'utf8');
+const replace = (a, b, count) => { assert.equal(driver.split(a).length - 1, count, a); driver = driver.split(a).join(b); };
+replace('c981490cd94bcb753f6b66291ee4319b092f62f8', commit, 1);
+replace('49679553-a24b-4c68-bcca-24eb9131dcd2', boot, 1);
+replace('production-html07', 'production-html08', 1);
+replace('HTML-07', 'HTML-08', 4);
+replace('assert.equal(beforeCount, 22);', 'assert.equal(beforeCount, 23);', 1);
+replace("promptVersion: 'production-html-grouped-v3'", "promptVersion: 'production-html-grouped-v4'", 1);
+replace("acceptanceReviewProjectionVersion: 'production-acceptance-review-projection-v1' });", "acceptanceReviewProjectionVersion: 'production-acceptance-review-projection-v1', outputEnvelopeVersion: 'production-output-envelope-v1' });", 1);
+replace('html07-real-ui-receipt-v1', 'html08-real-ui-receipt-v1', 1);
+assertNoPublishedSecrets(Buffer.from(driver), 'ui-runner.mjs');
+save('authorized-input.json', input);
+save('authorization.json', {
+  version: 'html08-single-run-conversation-consent-v1', recordedAt: new Date().toISOString(),
+  userReply: '批准仅这一次，采用1 USD限额',
+  referencedProposal: 'docs/production/HTML-08-PROPOSAL.md', referencedProposalCommit: commit,
+  proposalSha256: sha(readFileSync(root + '/docs/production/HTML-08-PROPOSAL.md')),
+  questionItemId: '["request_user_input_async","call_cae141c1a61e418d82118da682dfac44",0]',
+  basis: 'Explicit affirmative reply to this single bounded HTML08 question; no earlier approval or remaining allowance reused',
+  limitation: 'Conversation-derived trusted record, not independent signature or supplier-bill hard cap',
+  singleRunOnly: true, automaticRetryAllowed: false, generatedArtifactManualEditsAllowed: false,
+  declaredPricing: { inputPerMillion: 0.30, outputPerMillion: 1.20, currency: 'USD' },
+  roles: ['product', 'project-manager', 'researcher', 'developer', 'tester', 'verifier'],
+  model: 'deepseek-flash', candidateCount: 1, verifierEngine: 'llm-rubric', jevRequestsAllowed: false,
+  unknownUsagePolicy: 'stop immediately; no automatic subsequent paid call', limits: input.limits,
+});
+writeFileSync(output + 'ui-runner.mjs', driver, { flag: 'wx', mode: 0o600 });
+console.log(JSON.stringify({ preparedOnly: true, id: input.requirement.id, commit, bootId: boot, modelRequests: 0 }));

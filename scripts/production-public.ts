@@ -12,6 +12,7 @@ import { MATERIALS_VERSION } from './production-materials.js';
 import { buildMaterialZipSnapshot } from './production-material-zip.js';
 import { assertNoPublishedSecrets, assertWorktreeDirectory, PUBLIC_PROJECT_ID, publicPath, readCheckedPackage, sha256, type PackageManifest } from './production-public-safety.js';
 import { verifyVerifierReal02Materials } from './production-study-materials.js';
+import { HTML_MATERIALS_FILENAME, readSelectedHtmlMaterials, verifySelectedHtmlMaterials } from './production-html-materials.js';
 
 export const PREVIEW_CSP = "default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; connect-src 'none'; worker-src 'none'; frame-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'";
 export function productionReviewLayout(commit: string) {
@@ -53,7 +54,7 @@ export async function probeCheckedVideoDuration(videoBytes: Buffer, root: string
   }
 }
 export function assertCurrentReviewedPackage(manifest: Record<string, unknown>, files: ReadonlyMap<string, Buffer>, commit: string): void {
-  if (manifest.version !== 'mock-package-v2' || manifest.materialsVersion !== MATERIALS_VERSION || manifest.publisherCommit !== commit || !['REVIEW.md', 'materials-summary.json', 'REVIEWER-GUIDE.md', 'SUBMISSION-REPORT.md'].every(name => files.has(name))) throw new Error('Export the current reviewed material snapshot and reviewer documents before publication; a historical PDF cannot impersonate this report commit.');
+  if (manifest.version !== 'mock-package-v2' || manifest.materialsVersion !== MATERIALS_VERSION || manifest.publisherCommit !== commit || !['REVIEW.md', 'materials-summary.json', 'REVIEWER-GUIDE.md', 'SUBMISSION-REPORT.md', 'CURRENT-PROGRESS.md', HTML_MATERIALS_FILENAME].every(name => files.has(name))) throw new Error('Export the current reviewed material snapshot and reviewer documents before publication; a historical PDF cannot impersonate this report commit.');
 }
 export function trustedFixturePreview(run: ProductionRun, original: Buffer) {
   const demo = PRODUCTION_DEMO_CASES.find(item => item.id === run.input.requirement.id);
@@ -63,7 +64,7 @@ export function trustedFixturePreview(run: ProductionRun, original: Buffer) {
   return original.toString('utf8').replace('<head>', '<head><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Content-Security-Policy" content="' + PREVIEW_CSP + '">');
 }
 interface PublicRenderMetadata { publisherCommit: string; generatedAt: string; videoDurationSeconds: number; videoName: string; videoSourceCommit: string; sourcePackageManifestSha256: string; materialsBase: string; previewsBase: string; versionedEntry: string; evidencePlatformCommit: string; materialsVersion: unknown }
-export function buildReviewedPublicRenders(metadata: PublicRenderMetadata, packageManifest: PackageManifest, files: ReadonlyMap<string, Buffer>): Map<string, Buffer> {
+export function buildReviewedPublicRenders(metadata: PublicRenderMetadata, packageManifest: PackageManifest, files: ReadonlyMap<string, Buffer>, originalHtmlFiles?: ReadonlyMap<string, Buffer>): Map<string, Buffer> {
   const commit = metadata.publisherCommit, layout = productionReviewLayout(commit);
   assertCurrentReviewedPackage(packageManifest, files, commit);
   if (metadata.materialsVersion !== MATERIALS_VERSION || metadata.materialsVersion !== packageManifest.materialsVersion || metadata.sourcePackageManifestSha256 !== sha256(files.get('package-manifest.json')!) || metadata.evidencePlatformCommit !== packageManifest.platformCommit || metadata.materialsBase !== layout.materialsBase || metadata.previewsBase !== layout.previewsBase || metadata.versionedEntry !== layout.versionedEntry || metadata.videoName !== preferredPublicVideo(files) || metadata.videoSourceCommit !== String(packageManifest.videoSourceCommit ?? packageManifest.platformCommit) || !/^[a-f0-9]{40}$/.test(metadata.videoSourceCommit) || typeof metadata.generatedAt !== 'string' || !Number.isFinite(Date.parse(metadata.generatedAt)) || new Date(metadata.generatedAt).toISOString() !== metadata.generatedAt || typeof metadata.videoDurationSeconds !== 'number' || !Number.isFinite(metadata.videoDurationSeconds) || metadata.videoDurationSeconds <= 0 || metadata.videoDurationSeconds > 86400) throw new Error('Public render metadata differs from the checked reviewer snapshot.');
@@ -77,18 +78,21 @@ export function buildReviewedPublicRenders(metadata: PublicRenderMetadata, packa
   if (rendered.size !== 3) throw new Error('Reviewed previews require three distinct registered fixture IDs.');
   const cameraRuns = files.has('real-camera-runs.json') ? json<ProductionRun[]>('real-camera-runs.json') : [];
   if (!Array.isArray(cameraRuns) || cameraRuns.some(run => run.evidenceKind !== 'real-model' || run.input.capability !== 'camera-scene-v1') || new Set(cameraRuns.map(run => run.id)).size !== cameraRuns.length) throw new Error('Camera evidence ledger must contain unique real declarative-scene attempts.');
-  const input = { packageManifest, report: json('submission-evidence.json'), requirements: json<ProductionPortalRequirement[]>('requirements.json'), runs, jevBenchmarks: json<JevBenchmarkRun[]>('jev-benchmarks.json'), mixedRuns: json<ProductionRun[]>('mixed-and-live-runs.json'), cameraRuns, verifierStudy: verifyVerifierReal02Materials(files), recordedBuildInfo: { deploymentCommit: commit, generatedAt: metadata.generatedAt, videoDurationSeconds: metadata.videoDurationSeconds, videoSourceCommit: metadata.videoSourceCommit, historicalIframeRecording: historicalIframeVideo(packageManifest, metadata.videoSourceCommit) }, trustedFixtureIds: runs.map(run => run.input.requirement.id), sourceHref: 'https://github.com/litianyi-007/city-agent/tree/' + commit };
+  const mixedRuns = json<ProductionRun[]>('mixed-and-live-runs.json');
+  if (!Array.isArray(mixedRuns)) throw new Error('Mixed evidence ledger must be an array.');
+  const htmlMaterials = verifySelectedHtmlMaterials(files.get(HTML_MATERIALS_FILENAME)!, commit, mixedRuns, originalHtmlFiles).index;
+  const input = { packageManifest, report: json('submission-evidence.json'), requirements: json<ProductionPortalRequirement[]>('requirements.json'), runs, jevBenchmarks: json<JevBenchmarkRun[]>('jev-benchmarks.json'), mixedRuns, cameraRuns, htmlMaterials, verifierStudy: verifyVerifierReal02Materials(files), recordedBuildInfo: { deploymentCommit: commit, generatedAt: metadata.generatedAt, videoDurationSeconds: metadata.videoDurationSeconds, videoSourceCommit: metadata.videoSourceCommit, historicalIframeRecording: historicalIframeVideo(packageManifest, metadata.videoSourceCommit) }, trustedFixtureIds: runs.map(run => run.input.requirement.id), sourceHref: 'https://github.com/litianyi-007/city-agent/tree/' + commit };
   rendered.set('index.html', Buffer.from(renderProductionPortal({ ...input, submissionBase: './' + layout.materialsBase, previewBase: './' + layout.previewsBase, virtualSocietyHref: '../', snapshotHref: './' + layout.versionedEntry })));
   rendered.set(layout.versionedEntry, Buffer.from(renderProductionPortal({ ...input, submissionBase: './submission/', previewBase: './previews/', virtualSocietyHref: '../../../', snapshotHref: './' })));
   return rendered;
 }
 /** Reconstruct every executable publication byte from checked source evidence;
  * a replaced portal/preview cannot impersonate a reviewed static renderer. */
-export function assertReviewedPublicRender(manifest: unknown, sourceFiles: ReadonlyMap<string, Buffer>, publicationBytes: ReadonlyMap<string, Buffer>): void {
+export function assertReviewedPublicRender(manifest: unknown, sourceFiles: ReadonlyMap<string, Buffer>, publicationBytes: ReadonlyMap<string, Buffer>, originalHtmlFiles?: ReadonlyMap<string, Buffer>): void {
   if (!manifest || typeof manifest !== 'object' || Array.isArray(manifest) || !sourceFiles.has('package-manifest.json')) throw new Error('Public render requires its checked source manifest.');
   const metadata = manifest as PublicRenderMetadata;
   const packageManifest = JSON.parse(sourceFiles.get('package-manifest.json')!.toString('utf8')) as PackageManifest;
-  for (const [name, expected] of buildReviewedPublicRenders(metadata, packageManifest, sourceFiles)) if (!publicationBytes.get(name)?.equals(expected)) throw new Error('Executable public file differs from the reviewed trusted renderer.');
+  for (const [name, expected] of buildReviewedPublicRenders(metadata, packageManifest, sourceFiles, originalHtmlFiles)) if (!publicationBytes.get(name)?.equals(expected)) throw new Error('Executable public file differs from the reviewed trusted renderer.');
 }
 export async function buildProductionPublic(source: string, root: string) {
   await assertWorktreeDirectory(root, source, 'output/pdf');
@@ -97,6 +101,12 @@ export async function buildProductionPublic(source: string, root: string) {
   const branch = execFileSync('git', ['branch', '--show-current'], { cwd: root, encoding: 'utf8' }).trim();
   if (branch !== 'feature/autonomous-production' || execFileSync('git', ['status', '--porcelain'], { cwd: root, encoding: 'utf8' }).trim()) throw new Error('Commit and freeze the clean production branch before public packaging.');
   assertCurrentReviewedPackage(checked.manifest, checked.files, commit);
+  const mixedRuns = JSON.parse(checked.files.get('mixed-and-live-runs.json')!.toString('utf8')) as ProductionRun[];
+  if (!Array.isArray(mixedRuns)) throw new Error('Mixed evidence ledger must be an array.');
+  // Current clean HEAD is authoritative, not the package's self-reported
+  // hashes. Only the explicit 32 already-public archive paths are read.
+  const selectedHtml = await readSelectedHtmlMaterials(root, commit, mixedRuns);
+  verifySelectedHtmlMaterials(checked.files.get(HTML_MATERIALS_FILENAME)!, commit, mixedRuns, selectedHtml.files);
   const layout = productionReviewLayout(commit);
   const json = <T>(name: string) => JSON.parse(checked.files.get(name)!.toString('utf8')) as T;
   const runs = ['01', '02', '03'].map(id => json<ProductionRun>('MOCK-' + id + '/run.json'));
@@ -117,7 +127,7 @@ export async function buildProductionPublic(source: string, root: string) {
   const generatedAt = new Date().toISOString();
   const videoSourceCommit = String(checked.manifest.videoSourceCommit ?? checked.manifest.platformCommit);
   const renderMetadata = { publisherCommit: commit, generatedAt, videoDurationSeconds, videoName, videoSourceCommit, sourcePackageManifestSha256: sha256(checked.files.get('package-manifest.json')!), ...layout, evidencePlatformCommit: checked.manifest.platformCommit, materialsVersion: checked.manifest.materialsVersion };
-  for (const [name, bytes] of buildReviewedPublicRenders(renderMetadata, checked.manifest, checked.files)) await save(name, bytes);
+  for (const [name, bytes] of buildReviewedPublicRenders(renderMetadata, checked.manifest, checked.files, selectedHtml.files)) await save(name, bytes);
   // ZIP keeps original artifact names/bytes. On Pages, raw source is .html.txt
   // instead of executable same-origin HTML, with a public sourcePath mapping.
   await save(layout.materialsBase + 'materials.zip', buildMaterialZipSnapshot(checked.files));

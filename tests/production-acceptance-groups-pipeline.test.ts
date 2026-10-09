@@ -10,7 +10,7 @@ import { OUTPUT_DIAGNOSTICS_VERSION } from '../server/production/output-diagnost
 import type { ProductionOptions } from '../server/production/pipeline.js';
 import type { runRole, RoleResult } from '../server/harness.js';
 import { preflightAcceptanceChecks, runGate, type AcceptanceCheck } from '../server/gate.js';
-import { ACCEPTANCE_GROUP_INSTRUCTIONS, OUTPUT_ENVELOPE_GROUPED_CONTRACT_INSTRUCTIONS as GROUPED_CONTRACT_INSTRUCTIONS, OUTPUT_ENVELOPE_GROUPED_PROMPT_VERSION as GROUPED_ACCEPTANCE_PROMPT_VERSION, ACCEPTANCE_REVIEW_PROJECTION_VERSION, outputContractSnapshot, planSchema } from '../server/production/contracts.js';
+import { ACCEPTANCE_GROUP_INSTRUCTIONS, PHASE_READY_GROUPED_CONTRACT_INSTRUCTIONS as GROUPED_CONTRACT_INSTRUCTIONS, PHASE_READY_GROUPED_PROMPT_VERSION as GROUPED_ACCEPTANCE_PROMPT_VERSION, ACCEPTANCE_REVIEW_PROJECTION_VERSION, outputContractSnapshot, planSchema } from '../server/production/contracts.js';
 import { OUTPUT_ENVELOPE_VERSION, OUTPUT_ENVELOPE_INSTRUCTIONS, outputEnvelopePolicy } from '../server/production/output-envelope.js';
 import { ACCEPTANCE_STEP_AUDIT_VERSION, buildAcceptanceStepAudit } from '../server/production/acceptance-step-audit.js';
 import { PM_OUTPUT_POLICY_VERSION, ROLE_SCHEMA_DIAGNOSTICS_VERSION, diagnoseRoleSchema } from '../server/production/role-output-policy.js';
@@ -531,7 +531,7 @@ for (const collision of ['AcceptancePlanError', 'context.plannedGroup']) test(`a
   assert.equal(f.service.store.readArtifact(run.id, 'evidence.json').includes(collision), false);
 });
 
-test('grouped v4 retains actual phase-specific PM schema facts without changing call count or acceptance', async t => {
+test('grouped v5 retains actual phase-specific PM schema facts without changing call count or acceptance', async t => {
   const f = fixture(t); const run = await f.start(); assert.equal(run.status, 'completed', run.error);
   assert.equal(run.calls.length, 15); assert.equal(run.repairs, 0);
   assert.ok(run.calls.every(call => call.promptVersion === GROUPED_ACCEPTANCE_PROMPT_VERSION));
@@ -573,7 +573,7 @@ test('grouped v4 retains actual phase-specific PM schema facts without changing 
 
 // Replay only public immutable original text through current strict parsing.
 // These are injected regression failures, NOT a new real model experiment.
-for (const original of ['research-0', 'research-1', 'pm-extra-field'] as const) test(`v4 guidance never repairs or normalizes HTML07 ${original} original output`, async t => {
+for (const original of ['research-0', 'research-1', 'pm-extra-field'] as const) test(`v5 guidance never repairs or normalizes HTML07 ${original} original output`, async t => {
   const prior = JSON.parse(readFileSync(new URL('../docs/production/experiments/HTML-07/run.json', import.meta.url), 'utf8')) as ProductionRun;
   const archived = original === 'pm-extra-field' ? prior.calls.find(call => call.phase === 'think-design')! : prior.calls.filter(call => call.phase === 'research')[original === 'research-0' ? 0 : 1];
   const f = fixture(t, { hook: capture => capture.phase === archived.phase ? result(archived.rawOutput) : undefined });

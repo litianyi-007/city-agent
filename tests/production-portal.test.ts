@@ -9,6 +9,7 @@ import { demoHtml } from '../server/production/fixtures.js';
 import type { JevBenchmarkRun } from '../server/production/jev-benchmark.js';
 import type { JevEvaluation } from '../shared/jev-schema.js';
 import { VERIFIER_REAL02_MATERIAL_FILES, verifyVerifierReal02Materials } from '../scripts/production-study-materials.js';
+import { buildSelectedHtmlMaterials, HTML_MATERIALS_FILENAME, SELECTED_HTML_MATERIAL_ARCHIVES, SELECTED_HTML_MATERIAL_FILES } from '../scripts/production-html-materials.js';
 
 function fixtureRun(index: number): ProductionRun {
   const item = PRODUCTION_DEMO_CASES[index];
@@ -60,8 +61,28 @@ test('public onboarding prioritizes three honest entry points and fixed cases be
   assert.ok(html.includes('这里只展示案例快照，不能提交新需求'));
   assert.equal(html.includes('<textarea'), false);
   assert.equal(html.includes('href="http://127.0.0.1:'), false);
-  assert.ok(html.includes('本包未记录通过的真实交付闭环；完整需求未验收'));
+  assert.ok(html.includes('归档真实HTML行为交付 0；真实完整需求交付 0；有界合成场景通过 0'));
   assert.equal(html.includes('真实有界场景闭环已记录'), false);
+});
+
+test('v7 HTML ledger exposes all eight original failed attempts without executing code or calling them stable success', () => {
+  const input = portalInput(); const publisher = 'a'.repeat(40);
+  const originals = new Map(SELECTED_HTML_MATERIAL_ARCHIVES.flatMap(id => SELECTED_HTML_MATERIAL_FILES.map(name => {
+    const source = `docs/production/experiments/${id}/${name}`;
+    return [`${id}/${name}`, readFileSync(new URL('../' + source, import.meta.url))] as const;
+  })));
+  input.htmlMaterials = buildSelectedHtmlMaterials(publisher, originals);
+  input.packageManifest = { ...input.packageManifest, materialsVersion: 'production-materials-v7', publisherCommit: publisher, files: [{ path: HTML_MATERIALS_FILENAME }, { path: 'CURRENT-PROGRESS.md' }] };
+  const html = renderProductionPortal(input);
+  assert.ok(html.includes('本组实际行为 Gate 交付 0 / 8；不是稳定成功率'));
+  for (const id of SELECTED_HTML_MATERIAL_ARCHIVES) assert.ok(html.includes(`/blob/${publisher}/docs/production/experiments/${id}/RESULT.md`));
+  for (const text of ['18次真实HTTP', '0.0658755 USD', '新阶段政策v5仅完成免费工程验证', 'unknown', '免费启动预检', 'ready只表示工程准入']) assert.ok(html.includes(text), text);
+  assert.ok(html.includes(`href="./submission/${HTML_MATERIALS_FILENAME}"`));
+  assert.ok(html.includes('href="./submission/CURRENT-PROGRESS.md"'));
+  assert.equal(html.includes('<textarea'), false); assert.equal(html.includes('fetch('), false);
+  assert.equal(html.includes('data-src="./previews/HTML-'), false);
+  input.packageManifest.files = [{ path: 'CURRENT-PROGRESS.md' }];
+  assert.throws(() => renderProductionPortal(input), /verified index/);
 });
 
 test('reviewer v3 highlights same-version Markdown, independent installation and immutable evidence links', () => {
@@ -161,7 +182,7 @@ test('four different-version real camera failures remain separate from three zer
   assert.ok(boundedHtml.includes('0 个通过 / 1 次本包归档终态尝试'));
   assert.ok(boundedHtml.includes('通过（不代表实机）'));
   assert.equal(boundedHtml.includes('完整需求已验收'), false);
-  assert.ok(boundedHtml.includes('真实有界场景闭环已记录；摄像头实机 / 完整需求未验收'));
+  assert.ok(boundedHtml.includes('真实完整需求交付 0；有界合成场景通过 1'));
   assert.ok(boundedHtml.includes('有界场景行为 1 / 1 次终态'));
   assert.equal(boundedHtml.includes('当前真实自主交付尚未通过'), false);
   assert.equal(boundedHtml.includes('真实端到端交付未证实'), false);
@@ -180,7 +201,7 @@ test('v5 archived CAMERA09 bounded delivery is traced through seven text-only fi
   const html = renderProductionPortal(input);
   assert.ok(html.includes('本包归档 9 次相机场景调优；相机完整需求交付通过 0 / 9 次终态'));
   assert.ok(html.includes('有界场景行为 1 / 9 次终态；仅为异配置调优账本计数，非稳定成功率'));
-  assert.ok(html.includes('真实有界场景闭环已记录；摄像头实机 / 完整需求未验收'));
+  assert.ok(html.includes('真实完整需求交付 0；有界合成场景通过 1'));
   assert.ok(html.includes('模型场景 DSL＋平台可信 runtime，不是任意软件源码'));
   assert.ok(html.includes('每阶段候选数 N=1；N=1 仅验证单候选，不证明多候选选优或节费'));
   assert.ok(html.includes('0 个通过 / 9 次本包归档终态尝试'));

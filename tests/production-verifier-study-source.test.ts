@@ -13,8 +13,8 @@ const mutate = (value: VerifierStudySourceSnapshot) => structuredClone(value);
 
 test('source snapshot is fixed, complete, immutable actual repository SHA evidence', () => {
   const value = snapshot();
-  assert.equal(VERIFIER_STUDY_SOURCE_VERSION, 'verifier-study-source-v8');
-  assert.equal(VERIFIER_STUDY_SOURCE_FILES.length, 54);
+  assert.equal(VERIFIER_STUDY_SOURCE_VERSION, 'verifier-study-source-v9');
+  assert.equal(VERIFIER_STUDY_SOURCE_FILES.length, 55);
   assert.deepEqual(Object.keys(value).sort(), ['clean', 'commit', 'hashes']);
   assert.match(value.commit, /^[a-f0-9]{40}$/); assert.equal(typeof value.clean, 'boolean');
   assert.deepEqual(Object.keys(value.hashes), [...VERIFIER_STUDY_SOURCE_FILES]);
@@ -28,7 +28,7 @@ test('source snapshot is fixed, complete, immutable actual repository SHA eviden
   assert.ok(VERIFIER_STUDY_SOURCE_FILES.includes('server/production/verifier-diagnostics.ts'));
   assert.ok(VERIFIER_STUDY_SOURCE_FILES.includes('shared/production-implementation-evidence.ts'));
   assert.ok(VERIFIER_STUDY_SOURCE_FILES.includes('server/production/implementation-evidence.ts'));
-  for (const relative of ['shared/production-launch-preflight.ts', 'server/production/launch-preflight.ts', 'server/production/acceptance-diagnostics.ts', 'server/production/public-collision-guard.ts', 'server/production/output-envelope.ts'] as const) {
+  for (const relative of ['shared/production-launch-preflight.ts', 'server/production/launch-preflight.ts', 'server/production/acceptance-diagnostics.ts', 'server/production/public-collision-guard.ts', 'server/production/output-envelope.ts', 'server/production/phase-readiness.ts'] as const) {
     assert.ok(VERIFIER_STUDY_SOURCE_FILES.includes(relative));
     assert.equal(value.hashes[relative], createHash('sha256').update(readFileSync(new URL(`../${relative}`, import.meta.url))).digest('hex'));
   }
@@ -61,7 +61,11 @@ test('source file set cannot be omitted, extended, redirected or decorated', () 
   const value = snapshot();
   const missing = mutate(value); delete missing.hashes[VERIFIER_STUDY_SOURCE_FILES[0]];
   assert.throws(() => assertVerifierStudySourceFresh(missing, false));
-  const previous53 = mutate(value);
+  const previous54 = mutate(value);
+  delete previous54.hashes['server/production/phase-readiness.ts'];
+  assert.equal(Object.keys(previous54.hashes).length, 54);
+  assert.throws(() => assertVerifierStudySourceFresh(previous54, false), /Verifier study source/);
+  const previous53 = mutate(previous54);
   delete previous53.hashes['server/production/output-envelope.ts'];
   assert.equal(Object.keys(previous53.hashes).length, 53);
   assert.throws(() => assertVerifierStudySourceFresh(previous53, false), /Verifier study source/);

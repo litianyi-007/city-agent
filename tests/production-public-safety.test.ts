@@ -29,7 +29,9 @@ test('v6 adds exactly ten selected public REAL02 files and version-specific coun
   for (const name of VERIFIER_REAL02_MATERIAL_FILES) assert.equal(publicPath(name), name);
   for (const name of ['VERIFIER-REAL-01/run-ledger.tar.gz', 'VERIFIER-REAL-03/metrics.json', 'VERIFIER-REAL-02/state.json', 'VERIFIER-REAL-02/control/encryption-key', 'VERIFIER-REAL-02/index.html', 'VERIFIER-REAL-02/run/manifest.json', 'VERIFIER-REAL-02/../state.json']) assert.throws(() => packagePath(name));
   assert.equal(packageFileLimit('production-materials-v6'), 120); assert.equal(publicationFileLimit('production-materials-v6'), 130);
-  for (const version of [undefined, 'production-materials-v5', 'production-materials-v6-extra', 'production-materials-v7']) { assert.equal(packageFileLimit(version), 100); assert.equal(publicationFileLimit(version), 110); }
+  assert.equal(packageFileLimit('production-materials-v7'), 120); assert.equal(publicationFileLimit('production-materials-v7'), 130);
+  for (const name of ['CURRENT-PROGRESS.md', 'HTML-DELIVERY-STATUS.json']) assert.equal(packagePath(name), name);
+  for (const version of [undefined, 'production-materials-v5', 'production-materials-v6-extra', 'production-materials-v7-extra', 'production-materials-v8']) { assert.equal(packageFileLimit(version), 100); assert.equal(publicationFileLimit(version), 110); }
 });
 test('secret-like values and nonempty credential fields block publication', () => {
   assert.throws(() => assertNoPublishedSecrets(Buffer.from('apikey_' + 'a'.repeat(40)), 'note.txt'));

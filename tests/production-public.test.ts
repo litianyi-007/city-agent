@@ -13,6 +13,7 @@ import { productionRunInputSchema, type ProductionRun } from '../shared/producti
 import { demoHtml } from '../server/production/fixtures.js';
 import { sha256, type PackageManifest } from '../scripts/production-public-safety.js';
 import { VERIFIER_REAL02_MATERIAL_FILES } from '../scripts/production-study-materials.js';
+import { buildSelectedHtmlMaterials, HTML_MATERIALS_FILENAME, SELECTED_HTML_MATERIAL_ARCHIVES, SELECTED_HTML_MATERIAL_FILES } from '../scripts/production-html-materials.js';
 
 test('reviewer publication layout is immutable and does not target historical production material paths', () => {
   const commit = 'a'.repeat(40);
@@ -33,13 +34,15 @@ test('public video selects registered MP4 first, falls back to WebM and fails cl
 
 test('new public installer requires the same reviewed material version and immutable publisher, not the prior v3 report', () => {
   const commit = 'a'.repeat(40);
-  const files = new Map(['REVIEW.md', 'materials-summary.json', 'REVIEWER-GUIDE.md', 'SUBMISSION-REPORT.md'].map(name => [name, Buffer.alloc(0)]));
+  const files = new Map(['REVIEW.md', 'materials-summary.json', 'REVIEWER-GUIDE.md', 'SUBMISSION-REPORT.md', 'CURRENT-PROGRESS.md', HTML_MATERIALS_FILENAME].map(name => [name, Buffer.alloc(0)]));
   const manifest = { version: 'mock-package-v2', materialsVersion: MATERIALS_VERSION, publisherCommit: commit };
   assert.doesNotThrow(() => assertCurrentReviewedPackage(manifest, files, commit));
   assert.throws(() => assertCurrentReviewedPackage({ ...manifest, materialsVersion: 'production-materials-v3' }, files, commit));
+  assert.throws(() => assertCurrentReviewedPackage({ ...manifest, materialsVersion: 'production-materials-v6' }, files, commit));
   assert.throws(() => assertCurrentReviewedPackage({ ...manifest, publisherCommit: 'b'.repeat(40) }, files, commit));
   const missingGuide = new Map(files); missingGuide.delete('REVIEWER-GUIDE.md');
   assert.throws(() => assertCurrentReviewedPackage(manifest, missingGuide, commit));
+  for (const name of ['CURRENT-PROGRESS.md', HTML_MATERIALS_FILENAME]) { const missing = new Map(files); missing.delete(name); assert.throws(() => assertCurrentReviewedPackage(manifest, missing, commit)); }
 });
 
 function renderSnapshot() {
@@ -51,11 +54,13 @@ function renderSnapshot() {
     files.set(`${fixture.id}/run.json`, Buffer.from(JSON.stringify(run))); files.set(`${fixture.id}/index.html`, Buffer.from(demoHtml(input)));
   }
   for (const [name, value] of [['requirements.json', PRODUCTION_DEMO_CASES], ['submission-evidence.json', {}], ['jev-benchmarks.json', []], ['mixed-and-live-runs.json', []], ['materials-summary.json', {}]] as const) files.set(name, Buffer.from(JSON.stringify(value)));
-  for (const name of ['REVIEW.md', 'REVIEWER-GUIDE.md', 'SUBMISSION-REPORT.md', 'demo.mp4']) files.set(name, Buffer.from('fixture bytes, no media/service invocation'));
+  const originals = new Map<string, Buffer>(SELECTED_HTML_MATERIAL_ARCHIVES.flatMap(id => SELECTED_HTML_MATERIAL_FILES.map(name => [`${id}/${name}`, readFileSync(new URL(`../docs/production/experiments/${id}/${name}`, import.meta.url))] as const)));
+  files.set(HTML_MATERIALS_FILENAME, Buffer.from(JSON.stringify(buildSelectedHtmlMaterials(commit, originals))));
+  for (const name of ['REVIEW.md', 'REVIEWER-GUIDE.md', 'SUBMISSION-REPORT.md', 'CURRENT-PROGRESS.md', 'demo.mp4']) files.set(name, Buffer.from('fixture bytes, no media/service invocation'));
   const manifest: PackageManifest = { version: 'mock-package-v2', materialsVersion: MATERIALS_VERSION, publisherCommit: commit, platformCommit, videoSourceCommit: platformCommit, generatedAt: '2026-10-08T00:00:00.000Z', submissionBaseline: 'b66122c21604fdb2ecdcbafb89c3d5ad8cde1466', files: [...files].map(([path, bytes]) => ({ path, sha256: sha256(bytes) })) };
   files.set('package-manifest.json', Buffer.from(JSON.stringify(manifest)));
   const layout = productionReviewLayout(commit), metadata = { ...layout, publisherCommit: commit, generatedAt: '2026-10-08T00:00:00.000Z', videoDurationSeconds: 205.88, videoName: 'demo.mp4', videoSourceCommit: platformCommit, sourcePackageManifestSha256: sha256(files.get('package-manifest.json')!), evidencePlatformCommit: platformCommit, materialsVersion: MATERIALS_VERSION };
-  return { manifest, files, metadata };
+  return { manifest, files, metadata, originals };
 }
 test('publisher regenerates both portals and all three byte-verified previews, rejecting replaced executable HTML', () => {
   const { manifest, files, metadata } = renderSnapshot();
@@ -70,6 +75,32 @@ test('public render metadata cannot change evidence/video sources, versioned pat
   const { manifest, files, metadata } = renderSnapshot(), rendered = buildReviewedPublicRenders(metadata, manifest, files);
   for (const change of [{ sourcePackageManifestSha256: '0'.repeat(64) }, { evidencePlatformCommit: 'c'.repeat(40) }, { videoSourceCommit: 'c'.repeat(40) }, { materialsBase: '../submission/' }, { videoDurationSeconds: NaN }, { videoDurationSeconds: -1 }, { generatedAt: '<script>unsafe</script>' }]) assert.throws(() => assertReviewedPublicRender({ ...metadata, ...change }, files, rendered));
   const tampered = new Map(files); tampered.set('MOCK-01/index.html', Buffer.from('<script>untrusted()</script>')); assert.throws(() => buildReviewedPublicRenders(metadata, manifest, tampered), /trusted fixture/);
+});
+test('v7 public render verifies selected HTML archive summaries and rejects mixed-run conflicts or stale publisher identity', () => {
+  const { manifest, files, metadata } = renderSnapshot();
+  const htmlIndex = JSON.parse(files.get(HTML_MATERIALS_FILENAME)!.toString('utf8'));
+  const render = buildReviewedPublicRenders(metadata, manifest, files);
+  assert.equal(render.size, 5);
+  const drifted = new Map(files); htmlIndex.entries[7].summary.gateState = 'passed'; drifted.set(HTML_MATERIALS_FILENAME, Buffer.from(JSON.stringify(htmlIndex)));
+  assert.throws(() => buildReviewedPublicRenders(metadata, manifest, drifted), /portable index/);
+  const oldPublisher = JSON.parse(files.get(HTML_MATERIALS_FILENAME)!.toString('utf8')); oldPublisher.publisherCommit = 'c'.repeat(40);
+  const stale = new Map(files); stale.set(HTML_MATERIALS_FILENAME, Buffer.from(JSON.stringify(oldPublisher))); assert.throws(() => buildReviewedPublicRenders(metadata, manifest, stale), /portable index/);
+  const run = JSON.parse(JSON.parse(files.get(HTML_MATERIALS_FILENAME)!.toString('utf8')).entries[7].originalRunUtf8) as ProductionRun;
+  const same = new Map(files); same.set('mixed-and-live-runs.json', Buffer.from(JSON.stringify([run]))); assert.doesNotThrow(() => buildReviewedPublicRenders(metadata, manifest, same));
+  const conflict = structuredClone(run); conflict.repairs = 0;
+  same.set('mixed-and-live-runs.json', Buffer.from(JSON.stringify([run, conflict]))); assert.throws(() => buildReviewedPublicRenders(metadata, manifest, same), /existing mixed run/);
+  for (const value of [null, {}]) { const malformed = new Map(files); malformed.set('mixed-and-live-runs.json', Buffer.from(JSON.stringify(value))); assert.throws(() => buildReviewedPublicRenders(metadata, manifest, malformed), /must be an array/); }
+});
+test('checked original archive snapshot rejects a coherently rewritten portable index and renderer', () => {
+  const { manifest, files, metadata, originals } = renderSnapshot();
+  assert.doesNotThrow(() => buildReviewedPublicRenders(metadata, manifest, files, originals));
+  const changed = new Map(files), index = JSON.parse(files.get(HTML_MATERIALS_FILENAME)!.toString()), entry = index.entries[7], run = JSON.parse(entry.originalRunUtf8);
+  run.error += ' synthetic forged archive'; entry.originalRunUtf8 = JSON.stringify(run); entry.summary.error = run.error;
+  entry.originalArtifacts[0].sha256 = sha256(entry.originalRunUtf8); entry.originalArtifacts[0].bytes = Buffer.byteLength(entry.originalRunUtf8);
+  changed.set(HTML_MATERIALS_FILENAME, Buffer.from(JSON.stringify(index)));
+  const forgedRenders = buildReviewedPublicRenders(metadata, manifest, changed);
+  assert.throws(() => buildReviewedPublicRenders(metadata, manifest, changed, originals), /archived originals/);
+  assert.throws(() => assertReviewedPublicRender(metadata, changed, forgedRenders, originals), /archived originals/);
 });
 
 const worktreeRoot = path.resolve(fileURLToPath(new URL('..', import.meta.url)));
