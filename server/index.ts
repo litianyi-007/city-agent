@@ -132,6 +132,7 @@ export function createApp(store: CityStore, suppliedRunner?: Runner, planningRun
   app.get('/api/research/planning/agents', (_request, response) => response.json(
     store.getAgents().filter(agent => agent.enabled && ['product', 'researcher'].includes(agent.role)),
   ));
+  // Planning has no id until the POST returns, so cancellation is this request's AbortSignal. There is no /planning/cancel route.
   app.post('/api/research/planning', async (request, response) => {
     const { agentId, acknowledgeCost: _acknowledgeCost, ...input } = planningRequestSchema.parse(request.body);
     const agent = store.getAgent(agentId, true);
@@ -192,9 +193,9 @@ export function createApp(store: CityStore, suppliedRunner?: Runner, planningRun
   });
 
   app.get('/api/research/resident-templates', (_request, response) => response.json(getResidentTemplates()));
-  app.get('/api/research/surveys', (_request, response) => response.json(store.listSurveyRuns()));
+  app.get('/api/research/surveys', (_request, response) => response.json(store.listSurveyRunSummaries()));
   app.get('/api/research/surveys/:id', (request, response) => {
-    const run = store.listSurveyRuns().find(run => run.id === parameter(request, 'id'));
+    const run = store.getSurveyRun(parameter(request, 'id'));
     if (!run) throw new StoreError('问卷运行不存在。', 404);
     response.json(run);
   });

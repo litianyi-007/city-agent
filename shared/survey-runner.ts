@@ -4,7 +4,9 @@ import type { ResearchTask } from './research-schema';
 import { HASH_ALGORITHM, fingerprint } from './evidence';
 import { containsKnownSecret, redactKnownSecret } from './redaction';
 import { buildAnalysis, samplingReport } from './survey-analysis';
-import { buildProfiles, checkCoherence, fixtureAnswers, residentPrompt, RESIDENT_PROMPT_VERSION, RESIDENT_SYSTEM_PROMPT, summarize, SURVEY_VERSION, validateAnswers, validateProfileEligibility, type Profile, type ResponseRecord, type SurveyRun } from './survey-engine';
+import { checkQuestionnaireLogic } from './questionnaire-logic';
+import { registeredFixtureAnswers, registeredLogicRulesFor, surveyLogicAudit } from './registered-questionnaire-logic';
+import { buildProfiles, checkCoherence, residentPrompt, RESIDENT_PROMPT_VERSION, RESIDENT_SYSTEM_PROMPT, summarize, SURVEY_VERSION, validateAnswers, validateProfileEligibility, type Profile, type ResponseRecord, type SurveyRun } from './survey-engine';
 
 export interface SurveyExecution {
   task: ResearchTask; population: CompiledPopulation; pack: RegionPack; presets: ResidentAgentPublic[]; count: number; seed: number; mode: 'fixture' | 'live';
@@ -45,6 +47,7 @@ export async function executeSurvey(input: SurveyExecution): Promise<SurveyRun> 
     if (fingerprint(profile.persona ?? null) !== fingerprint(preset.persona ?? null)) throw new Error('冻结画像的五层设定与所选预设不一致。');
   }
   const task = structuredClone(input.task); const presets = structuredClone(input.presets); const exposure = input.exposure ?? 'full';
+  const logicRules = registeredLogicRulesFor(task);
   const safeText = (text: string) => (input.knownSecrets ?? []).filter(Boolean).reduce((value, secret) => redactKnownSecret(value, secret), text);
   const users = profiles.map(profile => ({ residentId: profile.id, text: residentPrompt(task, profile, exposure), hash: fingerprint(residentPrompt(task, profile, exposure)) }));
   const responses: ResponseRecord[] = []; let calls = 0; let inFlight = false; let stopped = ''; const id = input.id ?? crypto.randomUUID();
@@ -63,7 +66,8 @@ export async function executeSurvey(input: SurveyExecution): Promise<SurveyRun> 
       timingBasis: '从构建画像之前到当前统计/分析完成；包含模型等待与诊断，不含渲染、持久化及导出；running记录为部分进度。',
       pricing: { ...input.pricing },
       prompt: { system: RESIDENT_SYSTEM_PROMPT, systemHash: fingerprint(RESIDENT_SYSTEM_PROMPT), users },
-      metrics: { planned: profiles.length, valid: responses.filter(response => response.status === 'valid').length, structurallyValid: responses.filter(response => response.structureValid).length, contradictions: responses.filter(response => response.coherence?.status === 'contradiction').length,
+      logicAudit: surveyLogicAudit(task, responses),
+      metrics: { planned: profiles.length, valid: responses.filter(response => response.status === 'valid').length, structurallyValid: responses.filter(response => response.structureValid).length, contradictions: responses.filter(response => response.coherence?.status === 'contradiction' || response.logic?.status === 'conflict').length,
         failed: responses.filter(response => ['failed', 'invalid'].includes(response.status)).length, notStarted: profiles.length - responses.filter(response => response.status !== 'not-started').length,
         modelCalls: calls, inputTokens, outputTokens, apiCostCny: input.mode === 'fixture' ? 0 : oneModel && inputTokens !== null && outputTokens !== null && input.pricing.inputPerMillion !== null && input.pricing.outputPerMillion !== null ? (inputTokens * input.pricing.inputPerMillion + outputTokens * input.pricing.outputPerMillion) / 1e6 : null,
         pricingBasis: input.mode === 'fixture' ? '没有API请求，API费用为0；不含本机计算成本。' : '按证据包 pricing 中用户提供的CNY/百万Token单价估算；多模型或usage/单价缺失保持未知，最终以账单为准。' },
@@ -79,12 +83,15 @@ export async function executeSurvey(input: SurveyExecution): Promise<SurveyRun> 
     input.progress?.(`${input.mode === 'fixture' ? '规则演示' : '模型作答'} ${index + 1}/${profiles.length} · ${profile.streetName} · ${profile.presetName}`);
     const began = performance.now(); let raw = ''; let usage: { inputTokens: number | null; outputTokens: number | null } = { inputTokens: input.mode === 'fixture' ? 0 : null, outputTokens: input.mode === 'fixture' ? 0 : null };
     try {
-      if (input.mode === 'fixture') { raw = safeText(input.fixtureResponse ? input.fixtureResponse(profile, task, input.seed) : fixtureAnswers(task, profile, input.seed)); await new Promise(resolve => setTimeout(resolve, 10)); }
+      if (input.mode === 'fixture') { raw = safeText(input.fixtureResponse ? input.fixtureResponse(profile, task, input.seed) : registeredFixtureAnswers(task, profile, input.seed)); await new Promise(resolve => setTimeout(resolve, 10)); }
       else { calls++; inFlight = true; await input.checkpoint?.(run('running')); const result = await input.call(profile, RESIDENT_SYSTEM_PROMPT, users[index].text, input.signal); raw = safeText(result.text); usage = { inputTokens: result.inputTokens, outputTokens: result.outputTokens }; inFlight = false; }
       try {
         const answers = validateAnswers(task, profile.id, raw); const coherence = checkCoherence(task, profile, answers, { recordExclusivePasses: true });
+        const logic = logicRules.length ? checkQuestionnaireLogic(task, answers, logicRules) : undefined;
         const exclusiveIssue = coherence.issues.find(issue => issue.severity === 'error' && issue.ruleId.endsWith('-exclusive-options'));
-        responses.push({ residentId: profile.id, status: exposure === 'full' && coherence.status === 'contradiction' ? 'invalid' : 'valid', structureValid: true, answers, coherence, raw, ...(coherence.status === 'contradiction' ? { error: exclusiveIssue?.message ?? '违反已登记画像约束；保留原始答卷和诊断。' } : {}), durationMs: performance.now() - began, ...usage });
+        const logicConflict = logic?.status === 'conflict';
+        const contradicted = coherence.status === 'contradiction' || logicConflict;
+        responses.push({ residentId: profile.id, status: exposure === 'full' && contradicted ? 'invalid' : 'valid', structureValid: true, answers, coherence, ...(logic ? { logic } : {}), raw, ...(contradicted ? { error: coherence.status === 'contradiction' ? exclusiveIssue?.message ?? '违反已登记画像约束；保留原始答卷和诊断。' : logic?.issues[0]?.message ?? '回答违反显式登记的跨题条件；保留原文，不自动修正。' } : {}), durationMs: performance.now() - began, ...usage });
       } catch (error) { responses.push({ residentId: profile.id, status: 'invalid', structureValid: false, answers: [], raw, error: (error as Error).message, durationMs: performance.now() - began, ...usage }); }
     } catch (error) {
       inFlight = false;

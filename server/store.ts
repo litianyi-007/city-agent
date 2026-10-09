@@ -6,7 +6,7 @@ import { PROVIDERS, ROLES } from './types.js';
 import type { Agent, AgentInput, AgentPatch, AgentPublic, NormalizedRunInput, Run, RunInput } from './types.js';
 import { assertPublicMetadataSafe, getResidentTemplates, residentCreateSchema, residentPatchSchema, residentPublic, residentInput, researchProjectInputSchema } from './research/residents.js';
 import type { ResidentAgent, ResidentAgentInput, ResidentAgentPatch, ResidentAgentPublic, ResearchProject, ResearchProjectInput } from './research/residents.js';
-import type { SurveyRun } from '../shared/survey-engine.js';
+import { surveyRunSummary, type SurveyRun, type SurveyRunSummary } from '../shared/survey-engine.js';
 import { redactKnownSecret } from '../shared/redaction.js';
 
 export class StoreError extends Error {
@@ -301,6 +301,23 @@ export class CityStore {
   listSurveyRuns(): SurveyRun[] {
     return (this.db.prepare('SELECT data FROM survey_runs ORDER BY rowid DESC').all() as unknown as { data: string }[]).map(row => { const run = JSON.parse(row.data); this.assertPublicSafe(run, [], '问卷运行证据'); return run; });
   }
+  getSurveyRun(id: string): SurveyRun | undefined {
+    const row = this.db.prepare('SELECT data FROM survey_runs WHERE id = ?').get(id) as unknown as { data: string } | undefined;
+    if (!row) return undefined;
+    const run = JSON.parse(row.data); this.assertPublicSafe(run, [], '问卷运行证据'); return run;
+  }
+  listSurveyRunSummaries(): SurveyRunSummary[] {
+    const rows = this.db.prepare(`SELECT json_extract(data, '$.id') AS id, json_extract(data, '$.state') AS state, json_extract(data, '$.mode') AS mode,
+      json_extract(data, '$.startedAt') AS startedAt, json_extract(data, '$.durationMs') AS durationMs, json_extract(data, '$.task.title') AS title,
+      json_extract(data, '$.task.questionnaire.id') AS questionnaireId, json_extract(data, '$.metrics') AS metrics
+      FROM survey_runs ORDER BY rowid DESC`).all() as unknown as { id: string; state: string | null; mode: SurveyRun['mode']; startedAt: string; durationMs: number; title: string; questionnaireId: string; metrics: string }[];
+    return rows.map(row => {
+      const summary = surveyRunSummary({ id: row.id, ...(row.state ? { state: row.state as SurveyRun['state'] } : {}), mode: row.mode, startedAt: row.startedAt, durationMs: row.durationMs,
+        task: { title: row.title, questionnaire: { id: row.questionnaireId } }, metrics: typeof row.metrics === 'string' ? JSON.parse(row.metrics) : row.metrics });
+      this.assertPublicSafe(summary, [], '问卷运行摘要');
+      return summary;
+    });
+  }
   saveSurveyRun(run: SurveyRun): void {
     this.assertPublicSafe(run, [], '问卷运行证据');
     this.db.prepare('INSERT INTO survey_runs (id, data) VALUES (?, ?) ON CONFLICT(id) DO UPDATE SET data = excluded.data').run(run.id, JSON.stringify(run));
@@ -342,7 +359,7 @@ export class CityStore {
     const selected = agents as Agent[];
     if (new Set(selected.map(agent => agent.role)).size !== ROLES.length) throw new StoreError('产品、研发、测试、研究员每种角色必须各选 1 个。');
     const now = new Date().toISOString();
-    const questionnaireSurvey = input.researchSurveyId ? this.listSurveyRuns().find(value => value.id === input.researchSurveyId) : undefined;
+    const questionnaireSurvey = input.researchSurveyId ? this.getSurveyRun(input.researchSurveyId) : undefined;
     if (input.researchSurveyId && (input.mode !== 'live' || !questionnaireSurvey || questionnaireSurvey.state !== 'completed' || questionnaireSurvey.metrics.valid < 1)) throw new StoreError('问卷交付须选择已完成且有有效答卷的运行，并使用四角色真实模式。');
     this.assertPublicSafe({ normalized, questionnaireSurvey, agentSnapshot: selected.map(publicAgent) }, selected.flatMap(agent => agent.apiKey ? [agent.apiKey] : []), '任务及冻结快照');
     const run: Run = {
