@@ -2,7 +2,8 @@ import { createHash } from 'node:crypto';
 import { PRODUCTION_ROLES, productionAgentInputSchema, productionRunInputSchema, type ProductionAgent, type ProductionRunInput } from '../../shared/production-schema.js';
 import { estimateProductionCost, productionLaunchCallEnvelope, PRODUCTION_INPUT_TOKEN_RESERVATION, PRODUCTION_LAUNCH_PREFLIGHT_VERSION, type ProductionLaunchPreflightReport, type ProductionLaunchExecutionSummary } from '../../shared/production-launch-preflight.js';
 import type { ProductionExecutionIdentity } from './provenance.js';
-import { STEP_AUDITED_GROUPED_PROMPT_VERSION, ACCEPTANCE_REVIEW_PROJECTION_VERSION } from './contracts.js';
+import { OUTPUT_ENVELOPE_GROUPED_PROMPT_VERSION, ACCEPTANCE_REVIEW_PROJECTION_VERSION } from './contracts.js';
+import { OUTPUT_ENVELOPE_VERSION } from './output-envelope.js';
 import { ACCEPTANCE_STEP_AUDIT_VERSION } from './acceptance-step-audit.js';
 import { PM_OUTPUT_POLICY_VERSION, ROLE_SCHEMA_DIAGNOSTICS_VERSION } from './role-output-policy.js';
 import { PUBLIC_COLLISION_GUARD_VERSION } from './public-collision-guard.js';
@@ -108,7 +109,7 @@ export function buildProductionLaunchPreflight(raw: unknown, publicAgents: reado
     startupGuard = { version: STARTUP_PUBLIC_GUARD_VERSION, publicCollisionGuardVersion: PUBLIC_COLLISION_GUARD_VERSION, ready: safe };
     warning('startup-guard-not-guarantee');
   }
-  const payload = { version: PRODUCTION_LAUNCH_PREFLIGHT_VERSION, ready: !issues.length, paidAuthorized: false as const, finalGate: null, modelRequests: 0 as const, input, models, execution, budget, issues, warnings: warn, ...(input.acceptanceStrategy === 'planned-groups-v1' ? { configuration: { promptVersion: STEP_AUDITED_GROUPED_PROMPT_VERSION, pmOutputPolicyVersion: PM_OUTPUT_POLICY_VERSION, roleSchemaDiagnosticsVersion: ROLE_SCHEMA_DIAGNOSTICS_VERSION, acceptanceStepAuditVersion: ACCEPTANCE_STEP_AUDIT_VERSION, acceptanceReviewProjectionVersion: ACCEPTANCE_REVIEW_PROJECTION_VERSION } } : {}) };
+  const payload = { version: PRODUCTION_LAUNCH_PREFLIGHT_VERSION, ready: !issues.length, paidAuthorized: false as const, finalGate: null, modelRequests: 0 as const, input, models, execution, budget, issues, warnings: warn, ...(input.acceptanceStrategy === 'planned-groups-v1' ? { configuration: { promptVersion: OUTPUT_ENVELOPE_GROUPED_PROMPT_VERSION, pmOutputPolicyVersion: PM_OUTPUT_POLICY_VERSION, roleSchemaDiagnosticsVersion: ROLE_SCHEMA_DIAGNOSTICS_VERSION, acceptanceStepAuditVersion: ACCEPTANCE_STEP_AUDIT_VERSION, acceptanceReviewProjectionVersion: ACCEPTANCE_REVIEW_PROJECTION_VERSION, outputEnvelopeVersion: OUTPUT_ENVELOPE_VERSION } } : {}) };
   const checkedPayload = { ...payload, ...(startupGuard ? { startupGuard } : {}) };
   return { ...checkedPayload, reportHash: createHash('sha256').update(JSON.stringify(checkedPayload)).digest('hex') };
 }

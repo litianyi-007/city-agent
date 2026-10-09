@@ -5,6 +5,7 @@ import { PRODUCTION_VERIFIER_VERSION } from '../../shared/production-verifier-ru
 import { HTML_DOM_CONTRACT_INSTRUCTIONS, HTML_EXECUTION_INSTRUCTIONS } from '../../shared/production-execution-profile.js';
 import type { VerifierDecisionDiagnostic, VerifierDiagnosticPath, VerifierSchemaIssueCode } from './verifier-diagnostics.js';
 import { implementationEvidenceSchema } from '../../shared/production-implementation-evidence.js';
+import { OUTPUT_ENVELOPE_INSTRUCTIONS } from './output-envelope.js';
 
 export const PROMPT_VERSION = 'production-html-v11';
 export const ACCEPTANCE_PLANNING_VERSION = 'production-acceptance-planning-v1';
@@ -187,6 +188,25 @@ export const STEP_AUDITED_GROUPED_CONTRACT_INSTRUCTIONS = Object.freeze(Object.f
 export const STEP_AUDITED_ACCEPTANCE_PLAN_INSTRUCTIONS = `${GROUPED_ACCEPTANCE_PLAN_INSTRUCTIONS} ${STEP_AUDIT_PLANNING_INSTRUCTIONS}`;
 export const STEP_AUDITED_ACCEPTANCE_GROUP_INSTRUCTIONS = `${GROUPED_ACCEPTANCE_GROUP_INSTRUCTIONS} ${STEP_AUDIT_PLANNING_INSTRUCTIONS}`;
 export const STEP_AUDITED_CONSTRUCTION_REVIEW_INSTRUCTIONS = `${ACCEPTANCE_CONSTRUCTION_REVIEW_INSTRUCTIONS} 宿主实际步骤审计：state.reviewContext.acceptanceConstruction.attempt.stepAudit与stepAuditSha256绑定当前完整候选。slots按实际checks顺序列出actualStepCount/actionKinds/assertionIndices/exactAssertionIndices/operations；索引为零起点，embedded表示assertChanged.after内操作，该步骤只占一个数组条目。sourceGroups只投影原组来源ID/hash，完整checks在candidates中仅传一次；归档保留所有原组全文。必须直接阅读完整checks及criteria.goal/acceptance核对每个原始条款，不拿PM计划或审计索引当覆盖证书。精确断言可能只查提示/输入，CSS别名可能指向同一输入；操作索引不证明有效setup，每次负例需独立建立所需状态、其余合法字段并逐次验证业务内容与统计不变。末尾结果不能追认早先边界成功，不从其它check借状态。审计不能发现计划漏掉的原始要求，也不证明任何步骤执行；遗漏/混淆/证据不足必须低于3且abstain。仍严格四字段，不添加审计、coverage或新的输出字段；最终冻结行为Gate仍独立必需。`;
+
+// New opt-in grouped configuration; keep v1/v2/v3 exports and legacy/camera
+// text intact for old experiments. Guidance adds no parser repair or calls.
+export const OUTPUT_ENVELOPE_GROUPED_PROMPT_VERSION = 'production-html-grouped-v4';
+// Deduplicate only the new PM prompt: the envelope repeats its generic JSON
+// rules. Preserve phase/default/diagnostic semantics and every old v3 byte.
+const ENVELOPE_PM_POLICY_INSTRUCTIONS = 'pmOutputPolicy绑定本阶段outputContractHash；designDefaultFields仅指定合法记录位置，完整嵌套schema/业务门禁仍必需。决策decision/summary/tasks/risks，依据在summary、任务在tasks；验收计划version/obligations/groups，不混用，不加note/metadata/空额外字段。roleSchemaDiagnostic仅为宿主绑定真实call/candidate/phase/原文SHA/完整schema hash的结构定位，非修好答案或覆盖证明；按完整schema自主生成新候选，不取合法前缀、不删字段或改Gate。';
+const envelopeRoleInstructions = (role: string, instructions: string) => {
+  if (role === 'project-manager') {
+    const location = instructions.indexOf(PM_OUTPUT_POLICY_INSTRUCTIONS);
+    if (location < 0 || instructions.lastIndexOf(PM_OUTPUT_POLICY_INSTRUCTIONS) !== location) throw new Error('Output envelope unavailable');
+    instructions = instructions.replace(PM_OUTPUT_POLICY_INSTRUCTIONS, ENVELOPE_PM_POLICY_INSTRUCTIONS);
+  }
+  return ['researcher', 'project-manager'].includes(role) ? `${instructions} ${OUTPUT_ENVELOPE_INSTRUCTIONS}` : instructions;
+};
+export const OUTPUT_ENVELOPE_GROUPED_CONTRACT_INSTRUCTIONS = Object.freeze(Object.fromEntries(Object.entries(STEP_AUDITED_GROUPED_CONTRACT_INSTRUCTIONS).map(([role, instructions]) => [role, envelopeRoleInstructions(role, instructions)])) as typeof CONTRACT_INSTRUCTIONS);
+export const OUTPUT_ENVELOPE_ACCEPTANCE_PLAN_INSTRUCTIONS = `${STEP_AUDITED_ACCEPTANCE_PLAN_INSTRUCTIONS} ${OUTPUT_ENVELOPE_INSTRUCTIONS}`;
+export const OUTPUT_ENVELOPE_ACCEPTANCE_GROUP_INSTRUCTIONS = STEP_AUDITED_ACCEPTANCE_GROUP_INSTRUCTIONS;
+export const OUTPUT_ENVELOPE_CONSTRUCTION_REVIEW_INSTRUCTIONS = STEP_AUDITED_CONSTRUCTION_REVIEW_INSTRUCTIONS;
 
 export function contractProfile(capability: ProductionCapability = 'offline-single-html') {
   if (capability === 'offline-single-html') return { promptVersion: PROMPT_VERSION, acceptanceVersion: ACCEPTANCE_CONTRACT_VERSION, instructions: CONTRACT_INSTRUCTIONS, productSchema: productSchema.extend({ scope: z.literal(capability) }) };

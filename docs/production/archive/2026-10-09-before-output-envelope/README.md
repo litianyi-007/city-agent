@@ -1,11 +1,5 @@
 # 六角色自主软件生产工作区
 
-## 最新免费切片：grouped v4 输出协议与容量反例（2026-10-09）
-
-[输出导航与完整 JSON 自检](OUTPUT-ENVELOPE.md)已接入研究员/PM，绑定实际闭集Schema、角色、阶段与完整契约hash；不修旧JSON、删字段、增加调用或放宽Gate。[工程与独立审查](BATCH-OUTPUT-ENVELOPE-CHECKS.md)单列首次回归问题与修正，不将提示/Mock通过当模型效果。实际槽位反例明确：容量与审计不能证明有效setup或完整业务覆盖。本批不启动新收费实验；[下一任务](NEXT-STEPS.md)另需新配置及单次授权。
-
-入口为 [本地需求编辑器](http://127.0.0.1:4420/#production) → 新建自定义需求 → 显式分组验收 → 免费启动预检；预检API报告configuration包含 grouped v4 / output-envelope v1，当前页面显示准备摘要而非协议版本，ready不授权付费。公开[Pages](https://litianyi-007.github.io/city-agent/production/)仍固定v6静态材料/案例，主线、旧申报和旧实验不改。[更新前全文留底](archive/2026-10-09-before-output-envelope/README.md)。以下是各历史批次记录。
-
 ## 最新批次：HTML07真实页面与协议失败（2026-10-09）
 
 [HTML07](experiments/HTML-07/RESULT.md)按用户明确单次1 USD授权，从本地需求编辑器仅提交一次。新启动守卫放行，实际7 Harness/7供应商HTTP，49.631秒、45,238 Token、声明价估算0.0204861 USD。研究两次JSON语法错误耗尽共享返修，PM额外`risksNote`被严格拒绝；没有plan/groups/audit/freeze、测试、研发、最终Gate或产品。八项业务未测试，不把2次静态Verifier accept当交付。

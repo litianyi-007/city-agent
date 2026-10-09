@@ -1,7 +1,5 @@
 # City Agent
 
-生产线最新免费切片（2026-10-09）：[grouped v4 输出导航与完整 JSON 自检](docs/production/OUTPUT-ENVELOPE.md)为研究员/PM提供实际Schema派生的闭集字段导航；新增真实槽位容量反例，仍保留严格拒绝、完整历史凭据与原业务Gate。工程及非作者审查见[本批记录](docs/production/BATCH-OUTPUT-ENVELOPE-CHECKS.md)，不把提示改进宣称模型效果；本批0新增收费请求。[下一任务](docs/production/NEXT-STEPS.md)／[修改前全文留底](docs/production/archive/2026-10-09-before-output-envelope/ROOT-README.md)。真实需求编辑器在本地4420，公开Pages仍固定v6静态入口。下文按历史时点保留。
-
 生产线最新实测（2026-10-09）：[HTML07实际前端单次提交及原件](docs/production/experiments/HTML-07/RESULT.md)完成，启动守卫已放行，但研究两次JSON错误耗尽共享修复，随后PM额外字段被拒绝，failed／49.631秒／7真实HTTP／45,238 Token／声明价估算0.0204861 USD；尚无验收冻结、研发或最终Gate，不计自主交付。用户批准仅此一次，未追加另一收费实验，本次7请求完整留账。下一批先免费完善通用输出协议与真实槽位容量反例，再另冻结配置和新预算；[本批核验](docs/production/BATCH-HTML07-CHECKS.md)／[下一任务](docs/production/NEXT-STEPS.md)。本地4420是真实需求编辑器，公开Pages仍v6静态入口；旧申报、实验及主线不改。[修改前全文留底](docs/production/archive/2026-10-09-before-html07/ROOT-README.md)。下文“待HTML07授权/实测”为此前时点。
 
 生产线最新批次（2026-10-09）：[HTML06真实页面单次启动](docs/production/experiments/HTML-06/RESULT.md)在首模型请求前因守卫工作量超限停止，0调用/0Token/0模型费用；原件保留，不计自主交付成功。已免费修复[公共碰撞守卫及预检/启动材料同源](docs/production/PUBLIC-COLLISION-GUARD.md)，历史凭据仍全部覆盖，原业务Gate不变。[本批验证](docs/production/BATCH-HTML06-GUARD-CHECKS.md)／[下一批待新授权提案](docs/production/HTML-07-PROPOSAL.md)。仅生产分支更新，本地需求编辑器 `http://127.0.0.1:4420/#production`；公开Pages仍v6静态入口。下文按历史时点保留，[修改前全文](docs/production/archive/2026-10-09-before-html06/ROOT-README.md)。

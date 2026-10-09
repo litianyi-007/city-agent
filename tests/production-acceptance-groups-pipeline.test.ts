@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { randomUUID } from 'node:crypto';
-import { mkdtempSync, rmSync } from 'node:fs';
+import { mkdtempSync, readFileSync, rmSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import test, { type TestContext } from 'node:test';
@@ -10,7 +10,8 @@ import { OUTPUT_DIAGNOSTICS_VERSION } from '../server/production/output-diagnost
 import type { ProductionOptions } from '../server/production/pipeline.js';
 import type { runRole, RoleResult } from '../server/harness.js';
 import { preflightAcceptanceChecks, runGate, type AcceptanceCheck } from '../server/gate.js';
-import { ACCEPTANCE_GROUP_INSTRUCTIONS, STEP_AUDITED_GROUPED_CONTRACT_INSTRUCTIONS as GROUPED_CONTRACT_INSTRUCTIONS, STEP_AUDITED_GROUPED_PROMPT_VERSION as GROUPED_ACCEPTANCE_PROMPT_VERSION, ACCEPTANCE_REVIEW_PROJECTION_VERSION, outputContractSnapshot, planSchema } from '../server/production/contracts.js';
+import { ACCEPTANCE_GROUP_INSTRUCTIONS, OUTPUT_ENVELOPE_GROUPED_CONTRACT_INSTRUCTIONS as GROUPED_CONTRACT_INSTRUCTIONS, OUTPUT_ENVELOPE_GROUPED_PROMPT_VERSION as GROUPED_ACCEPTANCE_PROMPT_VERSION, ACCEPTANCE_REVIEW_PROJECTION_VERSION, outputContractSnapshot, planSchema } from '../server/production/contracts.js';
+import { OUTPUT_ENVELOPE_VERSION, OUTPUT_ENVELOPE_INSTRUCTIONS, outputEnvelopePolicy } from '../server/production/output-envelope.js';
 import { ACCEPTANCE_STEP_AUDIT_VERSION, buildAcceptanceStepAudit } from '../server/production/acceptance-step-audit.js';
 import { PM_OUTPUT_POLICY_VERSION, ROLE_SCHEMA_DIAGNOSTICS_VERSION, diagnoseRoleSchema } from '../server/production/role-output-policy.js';
 import { ACCEPTANCE_GROUP_VERSION, ACCEPTANCE_PLAN_VERSION, ACCEPTANCE_CONSTRUCTION_VERSION, ACCEPTANCE_PLAN_DIAGNOSTIC_LITERALS, acceptancePlanHash, type AcceptanceGroup, type AcceptancePlan } from '../server/production/acceptance-plan.js';
@@ -44,7 +45,7 @@ function checkFixture(id: string): AcceptanceCheck {
 const result = (value: unknown): RoleResult => ({ text: typeof value === 'string' ? value : JSON.stringify(value), inputTokens: 100, outputTokens: 100, usageReported: true, harness: 'Free injected grouped-construction fixture; no provider request' });
 type Capture = { phase: string; data: any; system: string; signal: AbortSignal; result: RoleResult };
 type Hook = (capture: Capture) => RoleResult | undefined | Promise<RoleResult | undefined>;
-interface FixtureOptions { groups?: number; hook?: Hook; preflight?: ProductionOptions['acceptancePreflight']; gate?: ProductionOptions['gate']; input?: Partial<ProductionRunInput>; }
+interface FixtureOptions { groups?: number; hook?: Hook; preflight?: ProductionOptions['acceptancePreflight']; gate?: ProductionOptions['gate']; input?: Partial<ProductionRunInput>; credentialFixtureLength?: number; }
 function fixture(t: TestContext, options: FixtureOptions = {}) {
   const directory = mkdtempSync(path.join(fileURLToPath(new URL('../', import.meta.url)), '.city-agent-groups-test-'));
   const captures: Capture[] = []; let preflights = 0; let gates = 0;
@@ -68,7 +69,7 @@ function fixture(t: TestContext, options: FixtureOptions = {}) {
   };
   const service = createProductionService(directory, { roleCall, acceptancePreflight: async (checks, signal) => { preflights++; return options.preflight ? options.preflight(checks, signal) : { valid: true, errors: [] }; }, gate: async (html, checks, signal) => { gates++; return options.gate ? options.gate(html, checks, signal) : { passed: true, checks: [{ name: 'Injected Gate only; no browser evidence', passed: true }] }; } });
   t.after(async () => { await service.close(); rmSync(directory, { recursive: true, force: true }); });
-  for (const agent of service.store.agents()) service.store.patchAgent(agent.id, { apiKey: `group-fixture-${agent.role}-never-a-real-key`, pricing: { inputPerMillion: .30, outputPerMillion: 1.20, currency: 'USD' } });
+  for (const agent of service.store.agents()) service.store.patchAgent(agent.id, { apiKey: `group-fixture-${agent.role}-never-a-real-key`.padEnd(options.credentialFixtureLength ?? 0, 'x'), pricing: { inputPerMillion: .30, outputPerMillion: 1.20, currency: 'USD' } });
   const input = productionRunInputSchema.parse({ brief, capability: 'offline-single-html', mode: 'live', verifierEngine: 'llm-rubric', implementationEvidencePolicy: 'legacy', acceptanceStrategy: 'planned-groups-v1', candidateCount: 1, budgetAuthorized: true, agentIds: service.store.agents().map(agent => agent.id), requirement: { id: 'GROUPS-FREE-FIXTURE', source: 'Synthetic engineering requirement, not real business evidence', acceptance, kind: 'illustrative' }, limits: { maxCalls: 80, maxTokens: 5_000_000, maxCost: 10 }, ...options.input });
   const run: ProductionRun = { id: randomUUID(), input, status: 'queued', createdAt: new Date().toISOString(), evidenceKind: 'injected-test', agentSnapshot: service.store.agents(), events: [], calls: [], verifications: [], outputs: [], gateHistory: [], repairs: 0, usage: { inputTokens: 0, outputTokens: 0, estimatedCost: 0, currency: 'USD', complete: true }, interventions: [], artifacts: [] };
   service.store.addRun(run, input.agentIds);
@@ -496,6 +497,8 @@ test('the actual hard call budget is not raised to the grouped worst-case envelo
 test('omitting the opt-in keeps the existing twelve-call HTML path and no construction evidence', async t => {
   const f = fixture(t, { input: { acceptanceStrategy: undefined } }); const run = await f.start(); assert.equal(run.status, 'completed', run.error);
   assert.equal(run.calls.length, 12); assert.equal(run.acceptanceConstruction, undefined); assert.equal(run.validationContract!.acceptanceStrategy, undefined);
+  assert.equal(run.validationContract!.outputEnvelopeVersion, undefined);
+  for (const capture of f.captures) { assert.equal(capture.data.outputEnvelope, undefined); assert.equal(capture.system.includes(OUTPUT_ENVELOPE_INSTRUCTIONS), false); }
   assert.equal(phaseCalls(run, 'acceptance-plan').length, 0); assert.equal(groupCalls(run).length, 0); assert.equal(phaseCalls(run, 'acceptance').length, 1);
 });
 
@@ -511,7 +514,9 @@ test('new grouped protocol literals and every credential-length substring are re
 });
 
 for (const collision of ['AcceptancePlanError', 'context.plannedGroup']) test(`a retained synthetic credential colliding with ${collision === 'AcceptancePlanError' ? 'a new fixed diagnostic' : 'the complete group instruction'} stops before the first role call`, async t => {
-  const f = fixture(t);
+  // Isolate literal detection from the separate bounded work-exhaustion case.
+  // Default fixture and explicit startup regression retain six distinct lengths.
+  const f = fixture(t, { credentialFixtureLength: 64 });
   if (collision === 'context.plannedGroup') {
     assert.ok(ACCEPTANCE_GROUP_INSTRUCTIONS.includes(collision));
     assert.equal(productionApiKeySchema.safeParse(collision).success, true, 'The runtime guard covers complete instruction text beyond registered protocol literals');
@@ -526,7 +531,7 @@ for (const collision of ['AcceptancePlanError', 'context.plannedGroup']) test(`a
   assert.equal(f.service.store.readArtifact(run.id, 'evidence.json').includes(collision), false);
 });
 
-test('grouped v3 retains actual phase-specific PM schema facts without changing call count or acceptance', async t => {
+test('grouped v4 retains actual phase-specific PM schema facts without changing call count or acceptance', async t => {
   const f = fixture(t); const run = await f.start(); assert.equal(run.status, 'completed', run.error);
   assert.equal(run.calls.length, 15); assert.equal(run.repairs, 0);
   assert.ok(run.calls.every(call => call.promptVersion === GROUPED_ACCEPTANCE_PROMPT_VERSION));
@@ -534,6 +539,17 @@ test('grouped v3 retains actual phase-specific PM schema facts without changing 
   assert.equal(run.validationContract!.roleSchemaDiagnosticsVersion, ROLE_SCHEMA_DIAGNOSTICS_VERSION);
   assert.equal(run.validationContract!.acceptanceStepAuditVersion, ACCEPTANCE_STEP_AUDIT_VERSION);
   assert.equal(run.validationContract!.acceptanceReviewProjectionVersion, ACCEPTANCE_REVIEW_PROJECTION_VERSION);
+  assert.equal(run.validationContract!.outputEnvelopeVersion, OUTPUT_ENVELOPE_VERSION);
+  for (const call of run.calls) {
+    const data = JSON.parse(call.userPrompt); const guided = call.role === 'researcher' || call.role === 'project-manager';
+    if (guided) {
+      assert.deepEqual(data.outputEnvelope, outputEnvelopePolicy(call.role as 'researcher' | 'project-manager', call.phase, data.outputContract));
+      assert.equal(data.outputEnvelope.outputContractHash, hash(data.outputContract));
+      assert.equal(call.systemPrompt.includes(OUTPUT_ENVELOPE_INSTRUCTIONS), true);
+    } else { assert.equal(data.outputEnvelope, undefined); assert.equal(call.systemPrompt.includes(OUTPUT_ENVELOPE_INSTRUCTIONS), false); }
+    assert.equal(data.context?.outputEnvelope, undefined); assert.equal(data.state?.reviewContext?.outputEnvelope, undefined);
+    assert.equal(call.promptHash, hash({ system: call.systemPrompt, prompt: call.userPrompt }));
+  }
   for (const capture of f.captures) {
     const pm = ['think-design', 'acceptance-plan', 'feedback'].includes(capture.phase);
     if (!pm) { assert.equal(capture.data.pmOutputPolicy, undefined); continue; }
@@ -552,6 +568,59 @@ test('grouped v3 retains actual phase-specific PM schema facts without changing 
   const manifest = JSON.parse(f.service.store.readArtifact(run.id, 'delivery-manifest.json'));
   assert.equal(manifest.promptVersion, GROUPED_ACCEPTANCE_PROMPT_VERSION);
   assert.equal(manifest.validationContract.pmOutputPolicyVersion, PM_OUTPUT_POLICY_VERSION);
+  assert.equal(manifest.validationContract.outputEnvelopeVersion, OUTPUT_ENVELOPE_VERSION);
+});
+
+// Replay only public immutable original text through current strict parsing.
+// These are injected regression failures, NOT a new real model experiment.
+for (const original of ['research-0', 'research-1', 'pm-extra-field'] as const) test(`v4 guidance never repairs or normalizes HTML07 ${original} original output`, async t => {
+  const prior = JSON.parse(readFileSync(new URL('../docs/production/experiments/HTML-07/run.json', import.meta.url), 'utf8')) as ProductionRun;
+  const archived = original === 'pm-extra-field' ? prior.calls.find(call => call.phase === 'think-design')! : prior.calls.filter(call => call.phase === 'research')[original === 'research-0' ? 0 : 1];
+  const f = fixture(t, { hook: capture => capture.phase === archived.phase ? result(archived.rawOutput) : undefined });
+  const run = await f.start(); noDelivery(run); assert.equal(run.status, 'failed'); assert.equal(run.repairs, 2);
+  const calls = phaseCalls(run, archived.phase); assert.equal(calls.length, 3);
+  for (const call of calls) { assert.equal(call.rawOutput, archived.rawOutput); assert.equal(JSON.parse(call.userPrompt).outputEnvelope.version, OUTPUT_ENVELOPE_VERSION); assert.equal(call.selected, undefined); }
+  assert.equal(phaseCalls(run, `${archived.phase}:verify`).length, 0);
+  if (original === 'pm-extra-field') assert.ok(calls.every(call => call.roleSchemaDiagnostic?.kind === 'schema-structure'));
+  else assert.ok(calls.every(call => call.outputDiagnostic));
+});
+
+test('changing the validation output envelope version stops at the next call boundary without repair', async t => {
+  const f = fixture(t); let changed = false; const save = f.service.store.save.bind(f.service.store);
+  t.mock.method(f.service.store, 'save', (run: ProductionRun) => {
+    if (!changed && run.calls.some(call => call.role === 'product' && call.finishedAt)) { changed = true; run.validationContract!.outputEnvelopeVersion = 'unauthorized-version'; }
+    save(run);
+  });
+  const run = await f.start(); noDelivery(run); assert.ok(changed); assert.equal(run.status, 'failed'); assert.equal(run.repairs, 0);
+  assert.match(run.error!, /冻结门禁发生变化/); assert.equal(run.calls.length, 1);
+});
+
+test('registration persistence drift stops before dispatch even though the attempted invocation is already recorded', async t => {
+  const f = fixture(t); let changed = false; const save = f.service.store.save.bind(f.service.store);
+  t.mock.method(f.service.store, 'save', (run: ProductionRun) => {
+    if (!changed && run.calls.some(call => call.role === 'product' && !call.finishedAt)) { changed = true; run.validationContract!.outputEnvelopeVersion = 'unauthorized-before-dispatch'; }
+    save(run);
+  });
+  const run = await f.start(); noDelivery(run); assert.ok(changed); assert.equal(run.status, 'failed'); assert.equal(run.repairs, 0);
+  assert.match(run.error!, /冻结门禁发生变化/); assert.equal(run.calls.length, 1); assert.equal(f.captures.length, 0);
+  assert.equal(run.calls[0].providerRequests, undefined); assert.equal(run.calls[0].rawOutput, '');
+  assert.equal(run.calls[0].usage.inputTokens, null); assert.equal(run.calls[0].usage.outputTokens, null);
+  assert.deepEqual(f.counts(), { preflights: 0, gates: 0 });
+});
+
+test('Gate feedback PM gets its actual envelope phase under the same shared repair budget', async t => {
+  let attempts = 0;
+  const f = fixture(t, { hook: capture => capture.phase === 'feedback' && capture.data.context.gate.passed === false ? result({ ...JSON.parse(capture.result.text), decision: 'revise' }) : undefined, gate: async () => ++attempts === 1 ? { passed: false, checks: [{ name: 'Synthetic failure; no browser run', passed: false, error: 'Injected behavior failure' }] } : { passed: true, checks: [{ name: 'Synthetic pass; no browser run', passed: true }] } });
+  const run = await f.start(); assert.equal(run.status, 'completed', run.error); assert.equal(run.repairs, 1); assert.equal(attempts, 2);
+  const calls = run.calls.filter(call => call.role === 'project-manager' && call.phase.startsWith('feedback-'));
+  assert.deepEqual(calls.map(call => call.phase), ['feedback-0', 'feedback-1']);
+  assert.deepEqual(calls.map(call => JSON.parse(call.rawOutput).decision), ['revise', 'proceed']);
+  for (const call of calls) {
+    const data = JSON.parse(call.userPrompt);
+    assert.deepEqual(data.outputEnvelope, outputEnvelopePolicy('project-manager', call.phase, data.outputContract));
+    assert.equal(data.outputEnvelope.phase, call.phase); assert.deepEqual(data.outputEnvelope.root.allowedFields, ['decision', 'summary', 'tasks', 'risks']);
+    assert.equal(data.outputEnvelope.outputContractHash, hash(outputContractSnapshot(planSchema)));
+  }
 });
 
 for (const invalid of ['extra-root', 'extra-nested', 'missing-risks', 'too-many-tasks', 'oversize-summary', 'trailing-root', 'primitive'] as const) test(`three ${invalid} PM outputs are never normalized, cost two repairs and stop before any PM Verifier/Gate`, async t => {
@@ -659,8 +728,8 @@ for (const tamper of ['callId', 'phase', 'sourceSha256', 'outputContractHash', '
   assert.match(run.error!, /结构诊断.*不一致/); assert.equal(phaseCalls(run, 'think-design:verify').length, 0);
 });
 
-for (const collision of [PM_OUTPUT_POLICY_VERSION, ROLE_SCHEMA_DIAGNOSTICS_VERSION, GROUPED_ACCEPTANCE_PROMPT_VERSION, ROLE_SCHEMA_DIAGNOSTICS_VERSION.slice(-16), 'pmOutputPolicy.designDefaultFields', ACCEPTANCE_STEP_AUDIT_VERSION, ACCEPTANCE_REVIEW_PROJECTION_VERSION, 'exactAssertionIndices', 'Step audit source binding rejected', 'stepAuditSha256绑定']) test(`retained PM/audit protocol credential collision of ${collision.length} characters fails at zero requests`, async t => {
-  const f = fixture(t);
+for (const collision of [PM_OUTPUT_POLICY_VERSION, ROLE_SCHEMA_DIAGNOSTICS_VERSION, GROUPED_ACCEPTANCE_PROMPT_VERSION, ROLE_SCHEMA_DIAGNOSTICS_VERSION.slice(-16), 'pmOutputPolicy.designDefaultFields', ACCEPTANCE_STEP_AUDIT_VERSION, ACCEPTANCE_REVIEW_PROJECTION_VERSION, 'exactAssertionIndices', 'Step audit source binding rejected', 'stepAuditSha256绑定', OUTPUT_ENVELOPE_VERSION, OUTPUT_ENVELOPE_VERSION.slice(-16), 'outputEnvelopeVersion', 'groups[].checks[].obligationIds', 'Output envelope unavailable', OUTPUT_ENVELOPE_INSTRUCTIONS.slice(-16)]) test(`retained PM/audit/envelope protocol credential collision of ${collision.length} characters fails at zero requests`, async t => {
+  const f = fixture(t, { credentialFixtureLength: 64 });
   if (collision === 'pmOutputPolicy.designDefaultFields') assert.ok(GROUPED_CONTRACT_INSTRUCTIONS['project-manager'].includes(collision));
   const legacy = f.service.store as unknown as { encrypt(secret: string): string; state: { agents: Array<{ secret?: string }>; snapshots: Record<string, Array<{ secret?: string }>> } };
   const encrypted = legacy.encrypt(collision); legacy.state.agents[0].secret = encrypted; legacy.state.snapshots[f.run.id][0].secret = encrypted;
