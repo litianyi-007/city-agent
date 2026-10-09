@@ -1,0 +1,23 @@
+{
+  "version": "html09-real-ui-receipt-v1",
+  "startedThroughActualFrontend": true,
+  "noFulfillmentStubs": true,
+  "browserAutomation": "Owned purpose-built Playwright with an independent profile; no user browser profile or execution of model HTML in the user browser",
+  "sourceCommit": "c74d723a4dd5e5f3830d5446ace559f1df713f77",
+  "bootId": "8482bed9-3eb7-49c8-b980-e911296dda6c",
+  "runId": "9f37b05e-3900-45c2-8dad-0bf82eb03ae7",
+  "preflightHash": "af523a7dfb13fa2c3001f685fa78e1a8c09861a09de77a3fef033099e78eda36",
+  "httpSubmitCount": 1,
+  "observedStartResponses": 1,
+  "blockedBrowserExternalRequests": 0,
+  "beforeRunCount": 24,
+  "afterRunCount": 25,
+  "evidenceKind": "real-model",
+  "terminalStatus": "failed",
+  "screenshotFiles": [
+    "ui-before-launch.png",
+    "ui-terminal.png"
+  ],
+  "generatedArtifactEditedByOuterAgent": false,
+  "automaticAdditionalRun": false
+}

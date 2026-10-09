@@ -1,0 +1,41 @@
+{
+  "version": "html09-single-run-conversation-consent-v1",
+  "recordedAt": "2026-10-09T09:21:41.818Z",
+  "userReply": "推进下一步",
+  "precedingQuestion": "免费267项回归、独立审查、c74d723源码推送和本地UI预检已通过。是否批准仅一次HTML09真实交付实验？六角色deepseek-flash（声明输入0.30/输出1.20 USD每百万Token），单候选、LLM Verifier、不调用Jev；最多24逻辑调用、500000总Token、每次6000输出、600秒、2次共享返修。估算达到1 USD停止后续调用，unknown用量即停，不自动重跑；该限额不是供应商账单硬上限。",
+  "basis": "User requested proceeding immediately after the bounded HTML09 consent question and final statement awaiting that approval. Interpreted only for the exact single-run proposal, and explicitly restated to user before execution; not a verbatim structured approval reply.",
+  "referencedProposal": "docs/production/HTML-09-PROPOSAL.md",
+  "referencedProposalCommit": "c74d723a4dd5e5f3830d5446ace559f1df713f77",
+  "proposalSha256": "4f590c6205c1ff00ea161ba3ed51fb3bdff22e1b7b30656f609d04690319a643",
+  "limitation": "Conversation-derived trusted record, not independent signature or supplier-bill hard cap",
+  "singleRunOnly": true,
+  "automaticRetryAllowed": false,
+  "generatedArtifactManualEditsAllowed": false,
+  "declaredPricing": {
+    "inputPerMillion": 0.3,
+    "outputPerMillion": 1.2,
+    "currency": "USD"
+  },
+  "roles": [
+    "product",
+    "project-manager",
+    "researcher",
+    "developer",
+    "tester",
+    "verifier"
+  ],
+  "model": "deepseek-flash",
+  "candidateCount": 1,
+  "verifierEngine": "llm-rubric",
+  "jevRequestsAllowed": false,
+  "unknownUsagePolicy": "stop immediately; no automatic subsequent paid call",
+  "limits": {
+    "maxCalls": 24,
+    "maxRepairCycles": 2,
+    "maxTokens": 500000,
+    "maxOutputTokens": 6000,
+    "maxDurationMs": 600000,
+    "maxCost": 1,
+    "currency": "USD"
+  }
+}
