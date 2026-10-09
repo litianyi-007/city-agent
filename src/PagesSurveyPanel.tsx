@@ -55,7 +55,8 @@ export function PagesSurveyPanel({ readDraft, busy, onBusyChange, draftVersion }
       }
     } catch (error) { if (!stopped) setError((error as Error).message); }
   })(); return () => { stopped = true; controller.current?.abort(); }; }, []);
-  let matchesDraft = false; try { matchesDraft = !run || fingerprint(readDraft().task) === run.taskHash; } catch { /* Incomplete draft differs from immutable history. */ }
+  let matchesDraft = false; let audienceCount: number | null = null;
+  try { const draft = readDraft(); audienceCount = draft.residentAgentIds.length; matchesDraft = !run || fingerprint(draft.task) === run.taskHash; } catch { /* Incomplete draft differs from immutable history. */ }
   const keep = async (value: SurveyRun) => { pinned.current = true; packs.current.set(value.id, value); setRun(value); if (pagesMode) await saveSurveyRun(value); setHistory(previous => [surveyRunSummary(value), ...previous.filter(old => old.id !== value.id)]); };
   async function showHistory(id: string) {
     const token = ++historyToken.current;
@@ -70,7 +71,9 @@ export function PagesSurveyPanel({ readDraft, busy, onBusyChange, draftVersion }
       if (!assumptions) throw new Error('请确认本次按显式画像假设开展合成实验。');
       if (!feesAccepted) throw new Error('请确认本次真实调用费用；修改问卷、样本或价格后须重新确认。');
       if (mode === 'live') setFeeConsent(null);
-      const input = readDraft(); const allPresets = pagesMode ? browserPresets() : await researchApi<ResidentAgentPublic[]>('/resident-agents');
+      const input = readDraft();
+      if (!input.residentAgentIds.length) throw new Error('请选择已启用的人群预设。');
+      const allPresets = pagesMode ? browserPresets() : await researchApi<ResidentAgentPublic[]>('/resident-agents');
       const presets = input.residentAgentIds.map(id => { const preset = allPresets.find(agent => agent.id === id); if (!preset) throw new Error('请先选择人群预设。'); return preset; });
       const configurations = pagesMode && mode === 'live' ? new Map(presets.map(agent => [agent.id, getBrowserModel(agent.id)])) : new Map();
       const knownSecrets = pagesMode ? presets.filter(agent => agent.enabled && agent.hasApiKey).map(agent => getBrowserModel(agent.id).apiKey) : [];
@@ -92,7 +95,8 @@ export function PagesSurveyPanel({ readDraft, busy, onBusyChange, draftVersion }
     <label>画像随机种子<input type="number" min={0} max={2147483647} value={seed} onChange={event => { setSeed(Number(event.target.value)); setFeeConsent(null); }} /></label>
     {mode === 'live' && <><p className="research-note">每人最多1次请求，不自动重试；输出上限3000 Token，超时90秒。单价会冻结进证据包；未知保持未知。</p><div className="form-two"><label>输入单价（元／百万 Token）<input type="number" step="any" min={0} value={inputPrice} onChange={event => { setInputPrice(event.target.value); setFeeConsent(null); }} placeholder="未知留空" /></label><label>输出单价（元／百万 Token）<input type="number" step="any" min={0} value={outputPrice} onChange={event => { setOutputPrice(event.target.value); setFeeConsent(null); }} placeholder="未知留空" /></label></div><p className="research-note warning">本页不是受控实验CLI：没有供应商钱包金额硬限额，结构无效不会自动停止后续居民。请先选1人，核对供应商价格和原文，再自行决定下一次运行；随时可取消。不得把未知用量当免费。</p><label className="checkbox-label"><input type="checkbox" checked={feesAccepted} onChange={event => setFeeConsent(event.target.checked ? feeContext : null)} />确认使用自己的 Key 支付本次最多 {count} 次模型请求；金额由供应商计费，本页不承诺费用硬上限。</label></>}
     <label className="checkbox-label"><input type="checkbox" checked={assumptions} onChange={event => setAssumptions(event.target.checked)} />确认本次按显式画像假设开展合成实验，结果不直接外推真人总体。</label></fieldset>
-    <div className="research-save-bar"><button className="primary" disabled={busy || !assumptions || !feesAccepted} onClick={() => void start()}>{running ? '作答中…' : mode === 'fixture' ? '运行问卷演示' : '开始真实模型调查'}</button>{running && <button className="secondary" onClick={() => controller.current?.abort()}>取消</button>}{pagesMode && <button className="secondary" disabled={busy} onClick={() => void loadPublished()}>查看已发布实测 · 无需Key</button>}{!pagesMode && run?.state === 'completed' && run.metrics.valid > 0 && <button className="secondary" disabled={busy || deliveryBusy} onClick={() => void deliver()}>{deliveryBusy ? '创建交付…' : '交给四角色生成交付页'}</button>}</div>
+    {audienceCount === 0 && <p className="research-note">请选择已启用的人群预设。</p>}
+    <div className="research-save-bar"><button className="primary" disabled={busy || !assumptions || !feesAccepted || audienceCount === 0} onClick={() => void start()}>{running ? '作答中…' : mode === 'fixture' ? '运行问卷演示' : '开始真实模型调查'}</button>{running && <button className="secondary" onClick={() => controller.current?.abort()}>取消</button>}{pagesMode && <button className="secondary" disabled={busy} onClick={() => void loadPublished()}>查看已发布实测 · 无需Key</button>}{!pagesMode && run?.state === 'completed' && run.metrics.valid > 0 && <button className="secondary" disabled={busy || deliveryBusy} onClick={() => void deliver()}>{deliveryBusy ? '创建交付…' : '交给四角色生成交付页'}</button>}</div>
     {error && <div className="alert error" role="alert">{error}</div>}<p className="research-note" role="status">{progress}</p>
     <div className="research-toolbar"><label>历史运行<select disabled={busy} value={run?.id ?? ''} onChange={event => { void showHistory(event.target.value); }}><option value="">选择运行证据</option>{history.map(value => <option key={value.id} value={value.id}>{value.startedAt} · {value.title} · {value.mode} · {value.metrics.valid}/{value.metrics.planned}</option>)}</select></label>{pagesMode && <label className="secondary intake-upload">导入v2运行证据<input disabled={busy} type="file" accept=".json,application/json" aria-label="导入运行证据" onChange={async event => { const file = event.target.files?.[0]; event.target.value = ''; if (!file) return; try { if (file.size > 6 * 1024 * 1024) throw new Error('证据包不能超过6MB。'); await keep(parseSurveyEvidence(JSON.parse(await file.text()))); setProgress('证据包已校验指纹并保存；导入不调用模型。'); } catch (error) { setError((error as Error).message); } }} /></label>}</div>
     {run && !matchesDraft && <p className="research-note warning">当前草稿与所选历史问卷不同；下方仍展示冻结的历史结果，不会被草稿修改覆盖。草稿修订 {draftVersion}。</p>}
