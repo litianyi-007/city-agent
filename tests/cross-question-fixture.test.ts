@@ -3,7 +3,9 @@ import test from 'node:test';
 import { getPopulationModel, getPopulationPack } from '../server/population/service.ts';
 import { BUSINESS_FIXTURE_POLICY_ID, createBusinessDemoRun, getBusinessDemos } from '../shared/research-demo.ts';
 import { executeSurvey, type SurveyExecution } from '../shared/survey-runner.ts';
-import { fixtureAnswers, type Answer } from '../shared/survey-engine.ts';
+import { buildProfiles, fixtureAnswers, type Answer } from '../shared/survey-engine.ts';
+import { checkQuestionnaireLogic } from '../shared/questionnaire-logic.ts';
+import { registeredFixtureAnswers, registeredLogicRulesFor } from '../shared/registered-questionnaire-logic.ts';
 import { parseSurveyEvidence } from '../src/run-history.ts';
 
 const population = getPopulationModel();
@@ -26,27 +28,65 @@ function withAnswers(profileId: string, task: typeof pet.task, profile: Paramete
   return JSON.stringify(raw);
 }
 
-test('caregiver and pet API fixtures are invalid when registered cross-question rules fire, and the pack keeps the audit', async () => {
+function valueOf(answers: Answer[], questionId: string) {
+  return answers.find(answer => answer.questionId === questionId)?.value;
+}
+
+function assertRegisteredAnswers(task: typeof pet.task, answers: Answer[]) {
+  const value = (questionId: string) => valueOf(answers, questionId);
+  if (task.questionnaire.id === 'business-child-q') assert.equal(value('child-own-taste'), null);
+  if (value('purchase-intent') === 'no') {
+    assert.equal(value('monthly-budget'), 0);
+    assert.equal(value('package-size'), 'none');
+    assert.deepEqual(value('planned-channels'), ['none']);
+    assert.equal(value('travel-minutes'), null);
+    assert.equal(value(task.questionnaire.id === 'business-child-q' ? 'price-per20g' : 'price-per50g'), 'none');
+    if (task.questionnaire.id === 'business-pet-q') {
+      assert.equal(value('online-handoff'), 'none');
+      assert.equal(value('price10-intent'), 'no');
+      assert.equal(value('price20-intent'), 'no');
+    }
+  }
+  if (value('purchase-intent') === 'unknown') assert.equal(value('monthly-budget'), null);
+  if (value('past-frequency') === 'none') assert.deepEqual(value(task.questionnaire.id === 'business-child-q' ? 'past-categories' : 'past-snack-categories'), ['none']);
+  if (value('online-handoff') === 'delivery') assert.equal(value('travel-minutes'), null);
+  if (value('pet-type') === 'cat') assert.equal((value('past-snack-categories') as string[]).includes('dog-chew'), false);
+  if (value('pet-type') === 'dog') assert.equal((value('past-snack-categories') as string[]).includes('cat-creamy'), false);
+  if (task.questionnaire.id === 'business-child-q' && Array.isArray(value('purchase-role')) && (value('purchase-role') as string[]).length === 1 && (value('purchase-role') as string[])[0] === 'none') assert.equal(value('traceability-importance'), null);
+  const logic = checkQuestionnaireLogic(task, answers, registeredLogicRulesFor(task));
+  assert.equal(logic.status, 'checked');
+  assert.equal(logic.issues.length, 0);
+}
+
+test('generic 工程演示 fixtures already satisfy registered cross-question rules, and injected conflicts stay invalid', async () => {
   for (const demo of [child, pet]) {
-    const run = await executeSurvey(execution(demo.task, demo.presets.slice(0, 1)));
+    for (const seed of [0, 1, 42, 20261007, 20261009, 922572]) {
+      for (const profile of buildProfiles(demo.task, population, demo.presets.slice(0, 1), 12, seed)) {
+        const answers = JSON.parse(registeredFixtureAnswers(demo.task, profile, seed)).answers as Answer[];
+        assertRegisteredAnswers(demo.task, answers);
+      }
+    }
+    const run = await executeSurvey(execution(demo.task, demo.presets.slice(0, 1), { count: 12, seed: 42 }));
     assert.equal(run.metrics.modelCalls, 0);
     assert.equal(run.parameters?.fixturePolicyId, undefined);
+    assert.equal(run.metrics.planned, 12);
+    assert.equal(run.metrics.valid, 12);
+    assert.equal(run.metrics.contradictions, 0);
     assert.ok(run.logicAudit);
     assert.ok(run.logicAudit.registered > 0);
-    assert.equal(run.logicAudit.status, 'conflict');
-    const conflicts = run.responses.filter(response => response.logic?.status === 'conflict');
-    assert.ok(conflicts.length > 0, demo.id);
-    for (const response of conflicts) {
-      assert.equal(response.status, 'invalid');
+    assert.equal(run.logicAudit.status, 'checked');
+    assert.equal(run.logicAudit.records.filter(record => record.status === 'conflict').length, 0);
+    for (const response of run.responses) {
+      assert.equal(response.status, 'valid');
       assert.equal(response.structureValid, true);
-      assert.ok(response.logic!.issues.length > 0);
+      assert.equal(response.logic?.status, 'checked');
+      assert.equal(response.logic?.issues.length, 0);
+      assertRegisteredAnswers(demo.task, response.answers);
     }
-    assert.equal(run.metrics.valid, run.responses.length - conflicts.length);
-    assert.ok((run.metrics.contradictions ?? 0) >= conflicts.length);
     const imported = parseSurveyEvidence(JSON.parse(JSON.stringify(run)));
-    assert.equal(imported.logicAudit?.status, 'conflict');
-    assert.equal(imported.metrics.contradictions, run.metrics.contradictions);
-    assert.equal(imported.metrics.valid, run.metrics.valid);
+    assert.equal(imported.logicAudit?.status, 'checked');
+    assert.equal(imported.metrics.contradictions, 0);
+    assert.equal(imported.metrics.valid, 12);
   }
 
   const caregiver = await executeSurvey(execution(child.task, child.presets.slice(0, 1), {

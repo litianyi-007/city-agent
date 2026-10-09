@@ -1,8 +1,7 @@
 import { fingerprint } from './evidence';
 import { QUESTIONNAIRE_LOGIC_VERIFIER_VERSION, validateQuestionnaireLogicRules, type QuestionnaireLogicRule } from './questionnaire-logic';
 import type { ResearchTask } from './research-schema';
-import type { SurveyLogicAudit, SurveyLogicReport } from './survey-engine';
-import type { Answer } from './survey-engine';
+import { fixtureAnswers, type Answer, type Profile, type SurveyLogicAudit, type SurveyLogicReport } from './survey-engine';
 
 export type RegisteredBusinessScenario = 'child-snacks' | 'pet-snacks';
 
@@ -48,6 +47,74 @@ export function registeredLogicRulesFor(task: ResearchTask): QuestionnaireLogicR
   if (!scenario) return [];
   try { return validateQuestionnaireLogicRules(task, buildBusinessLogicRules(scenario)); }
   catch { return []; }
+}
+
+const sameAnswer = (left: Answer['value'] | undefined, right: Answer['value']) => Array.isArray(left) && Array.isArray(right)
+  ? left.length === right.length && left.every(item => right.includes(item)) : left === right;
+
+function repairExcludedSelection(task: ResearchTask, questionId: string, value: Answer['value'], excluded: readonly string[]): Answer['value'] | undefined {
+  const question = task.questionnaire.questions.find(item => item.id === questionId);
+  if (!question || !('options' in question)) return undefined;
+  if (Array.isArray(value)) {
+    if (question.type !== 'multiple') return undefined;
+    const next = value.filter(id => !excluded.includes(id));
+    if (next.length === value.length) return undefined;
+    const exclusive = new Set(question.options.filter(option => option.id === 'none' || option.id === 'unknown').map(option => option.id));
+    for (const option of question.options) {
+      if (next.length >= question.minSelections) break;
+      if (excluded.includes(option.id) || exclusive.has(option.id) || next.includes(option.id)) continue;
+      next.push(option.id);
+    }
+    let repaired = next;
+    if (repaired.length < question.minSelections) {
+      const solo = question.options.find(option => !excluded.includes(option.id));
+      repaired = solo ? [solo.id] : repaired;
+    }
+    if (repaired.length > 1 && repaired.some(id => exclusive.has(id))) repaired = [repaired.find(id => exclusive.has(id))!];
+    return repaired.slice(0, question.maxSelections);
+  }
+  if (typeof value === 'string' && excluded.includes(value)) return question.options.find(option => !excluded.includes(option.id))?.id;
+  return undefined;
+}
+
+/** Default 工程演示 answers already obey the registered cross-question rules. Injected fixture responses are not rewritten. */
+export function registeredFixtureAnswers(task: ResearchTask, profile: Profile, seed: number): string {
+  const raw = fixtureAnswers(task, profile, seed);
+  const rules = registeredLogicRulesFor(task);
+  if (!rules.length) return raw;
+  const parsed = JSON.parse(raw) as { residentId: string; answers: Answer[] };
+  const byId = new Map(parsed.answers.map(answer => [answer.questionId, answer]));
+  let changed = false;
+  for (let pass = 0; pass < 8; pass++) {
+    let passChanged = false;
+    for (const rule of rules) {
+      if (rule.kind === 'exclusive-options') {
+        const answer = byId.get(rule.questionId);
+        const value = answer?.value;
+        if (!Array.isArray(value) || value.length < 2 || !rule.exclusiveOptionIds.some(id => value.includes(id))) continue;
+        const kept = value.find(id => rule.exclusiveOptionIds.includes(id));
+        if (!kept || !answer) continue;
+        answer.value = [kept];
+        passChanged = true;
+      } else if (!sameAnswer(byId.get(rule.whenQuestionId)?.value, rule.whenValue)) continue;
+      else if (rule.kind === 'conditional-equals') {
+        const answer = byId.get(rule.thenQuestionId);
+        if (!answer || sameAnswer(answer.value, rule.thenValue)) continue;
+        answer.value = Array.isArray(rule.thenValue) ? [...rule.thenValue] : rule.thenValue;
+        passChanged = true;
+      } else {
+        const answer = byId.get(rule.thenQuestionId);
+        if (!answer) continue;
+        const repaired = repairExcludedSelection(task, rule.thenQuestionId, answer.value, rule.excludedOptionIds);
+        if (repaired === undefined || sameAnswer(answer.value, repaired)) continue;
+        answer.value = repaired;
+        passChanged = true;
+      }
+    }
+    changed = changed || passChanged;
+    if (!passChanged) break;
+  }
+  return changed ? JSON.stringify(parsed) : raw;
 }
 
 export function surveyLogicAudit(task: ResearchTask, responses: { residentId: string; logic?: SurveyLogicReport }[]): SurveyLogicAudit {

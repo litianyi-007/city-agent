@@ -5,8 +5,8 @@ import { HASH_ALGORITHM, fingerprint } from './evidence';
 import { containsKnownSecret, redactKnownSecret } from './redaction';
 import { buildAnalysis, samplingReport } from './survey-analysis';
 import { checkQuestionnaireLogic } from './questionnaire-logic';
-import { registeredLogicRulesFor, surveyLogicAudit } from './registered-questionnaire-logic';
-import { buildProfiles, checkCoherence, fixtureAnswers, residentPrompt, RESIDENT_PROMPT_VERSION, RESIDENT_SYSTEM_PROMPT, summarize, SURVEY_VERSION, validateAnswers, validateProfileEligibility, type Profile, type ResponseRecord, type SurveyRun } from './survey-engine';
+import { registeredFixtureAnswers, registeredLogicRulesFor, surveyLogicAudit } from './registered-questionnaire-logic';
+import { buildProfiles, checkCoherence, residentPrompt, RESIDENT_PROMPT_VERSION, RESIDENT_SYSTEM_PROMPT, summarize, SURVEY_VERSION, validateAnswers, validateProfileEligibility, type Profile, type ResponseRecord, type SurveyRun } from './survey-engine';
 
 export interface SurveyExecution {
   task: ResearchTask; population: CompiledPopulation; pack: RegionPack; presets: ResidentAgentPublic[]; count: number; seed: number; mode: 'fixture' | 'live';
@@ -83,7 +83,7 @@ export async function executeSurvey(input: SurveyExecution): Promise<SurveyRun> 
     input.progress?.(`${input.mode === 'fixture' ? '规则演示' : '模型作答'} ${index + 1}/${profiles.length} · ${profile.streetName} · ${profile.presetName}`);
     const began = performance.now(); let raw = ''; let usage: { inputTokens: number | null; outputTokens: number | null } = { inputTokens: input.mode === 'fixture' ? 0 : null, outputTokens: input.mode === 'fixture' ? 0 : null };
     try {
-      if (input.mode === 'fixture') { raw = safeText(input.fixtureResponse ? input.fixtureResponse(profile, task, input.seed) : fixtureAnswers(task, profile, input.seed)); await new Promise(resolve => setTimeout(resolve, 10)); }
+      if (input.mode === 'fixture') { raw = safeText(input.fixtureResponse ? input.fixtureResponse(profile, task, input.seed) : registeredFixtureAnswers(task, profile, input.seed)); await new Promise(resolve => setTimeout(resolve, 10)); }
       else { calls++; inFlight = true; await input.checkpoint?.(run('running')); const result = await input.call(profile, RESIDENT_SYSTEM_PROMPT, users[index].text, input.signal); raw = safeText(result.text); usage = { inputTokens: result.inputTokens, outputTokens: result.outputTokens }; inFlight = false; }
       try {
         const answers = validateAnswers(task, profile.id, raw); const coherence = checkCoherence(task, profile, answers, { recordExclusivePasses: true });

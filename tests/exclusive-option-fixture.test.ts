@@ -58,8 +58,11 @@ test('pet snack rule fixture does not treat none/unknown mixes as contradiction-
   assert.equal(generated.metrics.modelCalls, 0);
   assert.equal(generated.metrics.structurallyValid, 2);
   assert.equal(generated.version, SURVEY_VERSION);
-  assert.ok(generated.responses.every(response => response.structureValid === true && response.coherence?.status === 'checked' && response.coherence.checked > 0 && response.coherence.issues.length === 0));
-  assert.ok(generated.responses.every(response => response.logic?.status !== 'conflict' || response.status === 'invalid'));
+  assert.ok(generated.responses.every(response => response.status === 'valid' && response.structureValid === true && response.coherence?.status === 'checked' && response.coherence.checked > 0 && response.coherence.issues.length === 0));
+  assert.ok(generated.responses.every(response => response.logic?.status === 'checked' && response.logic.issues.length === 0));
+  assert.equal(generated.metrics.valid, 2);
+  assert.equal(generated.metrics.contradictions, 0);
+  assert.equal(generated.logicAudit?.status, 'checked');
 
   const quoted = await executeSurvey(execution(pet.task, presets, {
     fixturePolicyId: 'exclusive-option-regression',
@@ -108,9 +111,15 @@ test('pet snack rule fixture does not treat none/unknown mixes as contradiction-
   assert.equal(caregiver.metrics.modelCalls, 0);
   for (const response of caregiver.responses) {
     assert.deepEqual(mixesExclusive(child.task, response.answers), []);
+    assert.equal(response.status, 'valid');
+    assert.equal(response.logic?.status, 'checked');
+    assert.equal(response.logic?.issues.length, 0);
     assert.equal(response.coherence?.status, 'checked');
     assert.ok((response.coherence?.checked ?? 0) > 0);
   }
+  assert.equal(caregiver.metrics.valid, 2);
+  assert.equal(caregiver.metrics.contradictions, 0);
+  assert.equal(caregiver.logicAudit?.status, 'checked');
 });
 
 test('clean pet snack fixture records the exclusive check as run and passed', async () => {
@@ -132,6 +141,9 @@ test('clean pet snack fixture records the exclusive check as run and passed', as
   const run = await executeSurvey(execution(pet.task, presets, { seed: 20261009 }));
   assert.equal(run.metrics.modelCalls, 0);
   assert.ok(run.responses.every(response => response.coherence?.status === 'checked' && (response.coherence?.checked ?? 0) > 0));
+  assert.equal(run.metrics.valid, 2);
+  assert.equal(run.metrics.contradictions, 0);
+  assert.equal(run.logicAudit?.status, 'checked');
   assert.equal(run.metrics.contradictions, run.responses.filter(response => response.coherence?.status === 'contradiction' || response.logic?.status === 'conflict').length);
   const imported = parseSurveyEvidence(JSON.parse(JSON.stringify(run)));
   assert.equal(imported.responses[0].coherence?.status, 'checked');
