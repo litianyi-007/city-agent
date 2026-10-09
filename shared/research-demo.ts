@@ -4,6 +4,7 @@ import personaInputs from '../data/research/business-personas.json';
 import { researchTaskSchema, type ResearchTask } from './research-schema';
 import { residentPersonaSchema } from './resident-persona';
 import { checkQuestionnaireLogic, validateQuestionnaireLogicRules, QUESTIONNAIRE_LOGIC_VERIFIER_VERSION, type QuestionnaireLogicRule } from './questionnaire-logic';
+import { buildBusinessLogicRules } from './registered-questionnaire-logic';
 import { fingerprint } from './evidence';
 import { executeSurvey } from './survey-runner';
 import { validateAnswers, type Answer, type Profile, type SurveyRun } from './survey-engine';
@@ -17,36 +18,6 @@ export type BusinessDemoId = 'child-snacks' | 'pet-snacks';
 export interface BusinessDemo {
   id: BusinessDemoId; title: string; task: ResearchTask; presets: ResidentAgentPublic[];
   logicRules: QuestionnaireLogicRule[]; limitations: string[]; nextEvidence: string[];
-}
-
-function logicRules(id: BusinessDemoId): QuestionnaireLogicRule[] {
-  const multipleIds = id === 'child-snacks'
-    ? ['purchase-role', 'past-categories', 'permission-factors', 'planned-channels', 'reachable-streets', 'purchase-barriers']
-    : ['purchase-role', 'past-snack-categories', 'planned-channels', 'reachable-streets', 'purchase-barriers'];
-  const rules: QuestionnaireLogicRule[] = multipleIds.map(questionId => ({ id: `${questionId}-exclusive`, kind: 'exclusive-options', questionId,
-    exclusiveOptionIds: questionId === 'reachable-streets' ? ['unknown'] : ['none', 'unknown'] }));
-  const then = (suffix: string, whenQuestionId: string, whenValue: Answer['value'], thenQuestionId: string, thenValue: Answer['value']) => rules.push({
-    id: suffix, kind: 'conditional-equals', whenQuestionId, whenValue, thenQuestionId, thenValue,
-  });
-  then('no-purchase-zero-budget', 'purchase-intent', 'no', 'monthly-budget', 0);
-  then('unknown-intent-unknown-budget', 'purchase-intent', 'unknown', 'monthly-budget', null);
-  then('no-purchase-no-package', 'purchase-intent', 'no', 'package-size', 'none');
-  then('no-purchase-no-channel', 'purchase-intent', 'no', 'planned-channels', ['none']);
-  then('no-purchase-travel-not-applicable', 'purchase-intent', 'no', 'travel-minutes', null);
-  then('no-purchase-no-price', 'purchase-intent', 'no', id === 'child-snacks' ? 'price-per20g' : 'price-per50g', 'none');
-  then('zero-past-frequency-no-past-categories', 'past-frequency', 'none', id === 'child-snacks' ? 'past-categories' : 'past-snack-categories', ['none']);
-  if (id === 'child-snacks') {
-    for (const value of ['not-collected', 'proxy-unverified', 'unknown']) then(`child-no-direct-taste-${value}`, 'child-evidence', value, 'child-own-taste', null);
-    then('no-permission-traceability-not-applicable', 'purchase-role', ['none'], 'traceability-importance', null);
-  } else {
-    then('no-purchase-no-online-handoff', 'purchase-intent', 'no', 'online-handoff', 'none');
-    then('delivery-only-travel-not-applicable', 'online-handoff', 'delivery', 'travel-minutes', null);
-    then('no-purchase-no-price10-intent', 'purchase-intent', 'no', 'price10-intent', 'no');
-    then('no-purchase-no-price20-intent', 'purchase-intent', 'no', 'price20-intent', 'no');
-    rules.push({ id: 'cat-only-no-dog-product', kind: 'conditional-excludes', whenQuestionId: 'pet-type', whenValue: 'cat', thenQuestionId: 'past-snack-categories', excludedOptionIds: ['dog-chew'] },
-      { id: 'dog-only-no-cat-product', kind: 'conditional-excludes', whenQuestionId: 'pet-type', whenValue: 'dog', thenQuestionId: 'past-snack-categories', excludedOptionIds: ['cat-creamy'] });
-  }
-  return rules;
 }
 
 /** Returns new snapshots; no key, network, public publishing or mutable shared preset registry. */
@@ -70,7 +41,7 @@ export function getBusinessDemos(): BusinessDemo[] {
         provider: 'deepseek', baseUrl: 'https://example.invalid', modelId: 'fixture-no-model', enabled: true, hasApiKey: false,
         createdAt: '2026-10-07T00:00:00.000Z', updatedAt: '2026-10-07T00:00:00.000Z' };
     });
-    const rules = validateQuestionnaireLogicRules(task, logicRules(id));
+    const rules = validateQuestionnaireLogicRules(task, buildBusinessLogicRules(id));
     return { id, title: task.title, task, presets, logicRules: rules,
       limitations: [BUSINESS_DEMO_NOTICE, '回答情景由seed及resident序号轮转，与五层人格、教育、家庭和收入无因果关系；不能把规则答案回显当人格贡献。',
         '12/12工程结构通过由夹具保证，不升级真实模型完整率、语义质量、稳健性或外部效度门限。',

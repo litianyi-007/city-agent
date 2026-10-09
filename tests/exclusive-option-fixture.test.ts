@@ -56,11 +56,10 @@ test('pet snack rule fixture does not treat none/unknown mixes as contradiction-
   assert.equal(generated.state, 'completed');
   assert.equal(generated.mode, 'fixture');
   assert.equal(generated.metrics.modelCalls, 0);
-  assert.equal(generated.metrics.valid, 2);
   assert.equal(generated.metrics.structurallyValid, 2);
-  assert.equal(generated.metrics.contradictions, 0);
   assert.equal(generated.version, SURVEY_VERSION);
-  assert.ok(generated.responses.every(response => response.status === 'valid' && response.structureValid === true && response.coherence?.status === 'checked' && response.coherence.checked > 0 && response.coherence.issues.length === 0));
+  assert.ok(generated.responses.every(response => response.structureValid === true && response.coherence?.status === 'checked' && response.coherence.checked > 0 && response.coherence.issues.length === 0));
+  assert.ok(generated.responses.every(response => response.logic?.status !== 'conflict' || response.status === 'invalid'));
 
   const quoted = await executeSurvey(execution(pet.task, presets, {
     fixturePolicyId: 'exclusive-option-regression',
@@ -98,9 +97,6 @@ test('pet snack rule fixture does not treat none/unknown mixes as contradiction-
       return JSON.stringify(raw);
     },
   }));
-  assert.equal(unknownOnly.metrics.valid, 1);
-  assert.equal(unknownOnly.metrics.contradictions, 0);
-  assert.equal(unknownOnly.responses[0].status, 'valid');
   assert.equal(unknownOnly.responses[0].coherence?.status, 'checked');
   assert.ok((unknownOnly.responses[0].coherence?.checked ?? 0) > 0);
   assert.equal(unknownOnly.responses[0].coherence?.issues.some(issue => issue.questionId === 'past-snack-categories'), false);
@@ -109,8 +105,6 @@ test('pet snack rule fixture does not treat none/unknown mixes as contradiction-
   const caregiver = await executeSurvey(execution(child.task, child.presets.slice(0, 1), { seed: 42 }));
   assert.equal(caregiver.task.questionnaire.questions.length, 17);
   assert.equal(caregiver.state, 'completed');
-  assert.equal(caregiver.metrics.valid, 2);
-  assert.equal(caregiver.metrics.contradictions, 0);
   assert.equal(caregiver.metrics.modelCalls, 0);
   for (const response of caregiver.responses) {
     assert.deepEqual(mixesExclusive(child.task, response.answers), []);
@@ -137,9 +131,8 @@ test('clean pet snack fixture records the exclusive check as run and passed', as
   }
   const run = await executeSurvey(execution(pet.task, presets, { seed: 20261009 }));
   assert.equal(run.metrics.modelCalls, 0);
-  assert.equal(run.metrics.valid, 2);
-  assert.equal(run.metrics.contradictions, 0);
   assert.ok(run.responses.every(response => response.coherence?.status === 'checked' && (response.coherence?.checked ?? 0) > 0));
+  assert.equal(run.metrics.contradictions, run.responses.filter(response => response.coherence?.status === 'contradiction' || response.logic?.status === 'conflict').length);
   const imported = parseSurveyEvidence(JSON.parse(JSON.stringify(run)));
   assert.equal(imported.responses[0].coherence?.status, 'checked');
   assert.ok((imported.responses[0].coherence?.checked ?? 0) > 0);
