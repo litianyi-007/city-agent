@@ -66,7 +66,7 @@ export async function createPersonaProof({ count = 12, seed = 20261007, id = ran
     capabilityChecks: { fiveLayersInFrozenProfilesAndPrompts: true, questionnaireParsed: true, individualResponsesRetained: run.responses.length === count,
       deterministicStatisticsAvailable: true, unknownLayersRetained: run.profiles.some(profile => profile.persona?.work.employment === 'unknown'),
       realModelQuality: 'not-tested', externalValidity: 'not-validated' },
-    limitations: [NOTICE, 'fixtureAnswers根据seed生成合法答卷，不根据五层画像推导消费偏好；完整率由工程规则保证。',
+    limitations: [NOTICE, '明确询问某一层的工程题会回显该层情景假设（未设置与未知分开，未知不补成中位偏好）；同seed同画像答案稳定。不据此推导品类、价位或购买意愿，完整率仍由工程规则保证。',
       '猫狗人数来自预设轮转，不是滨江养宠比例；人口历史框不提供目标购买者分母。',
       '价格和品类选项分布只验证数表与追溯能力，不支持选址、主营、定价、主粮或利润结论。',
       '五层画像均为情景假设，不是DNA、测量人格或真实成长/家庭/教育/工作记录。',
