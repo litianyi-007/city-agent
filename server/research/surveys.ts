@@ -21,12 +21,14 @@ export function createSurveyService(store: CityStore, model = runRole) {
       if (input.mode === 'live' && input.count > 12) throw new StoreError('首批真实模型最多12人。');
       const selected = input.residentAgentIds.map(id => {
         const agent = store.getResidentAgent(id, true);
-        if (!agent?.enabled || input.mode === 'live' && !agent.apiKey) throw new StoreError('所选预设未启用或缺少Key。');
+        if (!agent) throw new StoreError('所选人群预设不存在，请刷新后重新选择。');
+        if (!agent.enabled) throw new StoreError('所选人群预设未启用。');
+        if (input.mode === 'live' && !agent.apiKey) throw new StoreError('所选预设缺少Key。');
         return agent;
       });
       const population = getPopulationModel(); const pack = getPopulationPack();
       buildProfiles(input.task, population, selected, input.count, input.seed);
-      const source = input.frozenFromRunId ? store.listSurveyRuns().find(run => run.id === input.frozenFromRunId) : undefined;
+      const source = input.frozenFromRunId ? store.getSurveyRun(input.frozenFromRunId) : undefined;
       if (input.frozenFromRunId && (!source || source.state !== 'completed' || source.models.length !== selected.length || source.profiles.length < input.count || source.seed !== input.seed || source.populationHash !== population.datasetHash || fingerprint(source.task.population) !== fingerprint(input.task.population) || source.models.some(model => !selected.some(agent => agent.id === model.presetId && agent.modelId === model.modelId && agent.provider === model.provider && agent.baseUrl === model.baseUrl)))) throw new StoreError('冻结实验的来源、人口、样本数、seed或模型配置不一致。');
       if (source && source.profiles.slice(0, input.count).some(profile => fingerprint(profile.persona ?? null) !== fingerprint(selected.find(agent => agent.id === profile.presetId)?.persona ?? null))) throw new StoreError('冻结画像的五层设定与当前预设不一致；请使用原预设或另立新画像实验。');
       const publicPresets = selected.map(({ apiKey: _key, ...agent }) => agent);
@@ -41,7 +43,7 @@ export function createSurveyService(store: CityStore, model = runRole) {
           return { text: result.text, inputTokens: result.usageReported === false ? null : result.inputTokens, outputTokens: result.usageReported === false ? null : result.outputTokens };
         },
       }).then(run => { run.limitations.push(`本机居民通过 ${HARNESS_NAME} 执行。`); store.saveSurveyRun(run); }).catch(() => {
-        const latest = store.listSurveyRuns().find(run => run.id === id);
+        const latest = store.getSurveyRun(id);
         if (latest) { latest.state = 'stopped'; latest.limitations.push('运行异常停止，保留已完成快照；不会自动重试。'); store.saveSurveyRun(latest); }
       }).finally(() => active.delete(id));
       return { id };

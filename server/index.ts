@@ -193,9 +193,9 @@ export function createApp(store: CityStore, suppliedRunner?: Runner, planningRun
   });
 
   app.get('/api/research/resident-templates', (_request, response) => response.json(getResidentTemplates()));
-  app.get('/api/research/surveys', (_request, response) => response.json(store.listSurveyRuns()));
+  app.get('/api/research/surveys', (_request, response) => response.json(store.listSurveyRunSummaries()));
   app.get('/api/research/surveys/:id', (request, response) => {
-    const run = store.listSurveyRuns().find(run => run.id === parameter(request, 'id'));
+    const run = store.getSurveyRun(parameter(request, 'id'));
     if (!run) throw new StoreError('问卷运行不存在。', 404);
     response.json(run);
   });

@@ -269,3 +269,11 @@ export interface SurveyRun {
   exposure?: 'full' | 'no-persona' | 'demographics-only'; experiment?: { id: string; arm: string };
   logicAudit?: SurveyLogicAudit;
 }
+export interface SurveyRunSummary {
+  id: string; state?: SurveyRun['state']; mode: SurveyRun['mode']; startedAt: string; durationMs: number;
+  title: string; questionnaireId: string; metrics: SurveyRun['metrics'];
+}
+export function surveyRunSummary(run: Pick<SurveyRun, 'id' | 'state' | 'mode' | 'startedAt' | 'durationMs' | 'metrics'> & { task: { title: string; questionnaire: { id: string } } }): SurveyRunSummary {
+  return { id: run.id, ...(run.state ? { state: run.state } : {}), mode: run.mode, startedAt: run.startedAt, durationMs: run.durationMs,
+    title: run.task.title, questionnaireId: run.task.questionnaire.id, metrics: run.metrics };
+}

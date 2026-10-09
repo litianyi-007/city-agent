@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import type { ResearchProjectInput, ResidentAgentPublic } from '../server/research/residents';
-import { fingerprint, type SurveyRun } from '../shared/survey-engine';
+import { fingerprint, surveyRunSummary, type SurveyRun, type SurveyRunSummary } from '../shared/survey-engine';
 import { executeSurvey } from '../shared/survey-runner';
 import { browserPresets, getBrowserModel, pagesPack, pagesPopulation } from './pages-api';
 import { callBrowserModel } from './browser-model';
@@ -17,7 +17,8 @@ export function PagesSurveyPanel({ readDraft, busy, onBusyChange, draftVersion }
   const [mode, setMode] = useState<'fixture' | 'live'>('fixture');
   const [count, setCount] = useState(12); const fixtureCount = useRef(12); const [seed, setSeed] = useState(42);
   const [assumptions, setAssumptions] = useState(false); const [progress, setProgress] = useState('');
-  const [error, setError] = useState(''); const [run, setRun] = useState<SurveyRun | null>(null); const [history, setHistory] = useState<SurveyRun[]>([]);
+  const [error, setError] = useState(''); const [run, setRun] = useState<SurveyRun | null>(null); const [history, setHistory] = useState<SurveyRunSummary[]>([]);
+  const packs = useRef(new Map<string, SurveyRun>()); const pinned = useRef(false); const historyToken = useRef(0);
   const [inputPrice, setInputPrice] = useState(''); const [outputPrice, setOutputPrice] = useState('');
   const [feeConsent, setFeeConsent] = useState<string | null>(null);
   const feeContext = fingerprint({ mode, count, seed, inputPrice, outputPrice, draftVersion });
@@ -39,9 +40,30 @@ export function PagesSurveyPanel({ readDraft, busy, onBusyChange, draftVersion }
       setProgress(`四角色交付已启动 ${value.id}；请到任务工作台查看执行、页面和浏览器验收。不会再次请求居民作答。`);
     } catch (error) { setError((error as Error).message); } finally { setDeliveryBusy(false); }
   }
-  useEffect(() => { let stopped = false; void (pagesMode ? listSurveyRuns() : researchApi<SurveyRun[]>('/surveys')).then(values => { if (!stopped) { setHistory(values); setRun(values[0] ?? null); } }).catch(error => !stopped && setError(error.message)); return () => { stopped = true; controller.current?.abort(); }; }, []);
+  useEffect(() => { let stopped = false; void (async () => {
+    try {
+      if (pagesMode) {
+        const values = await listSurveyRuns(); if (stopped) return;
+        for (const value of values) packs.current.set(value.id, value);
+        setHistory(values.map(surveyRunSummary)); if (!pinned.current) setRun(values[0] ?? null);
+      } else {
+        const values = await researchApi<SurveyRunSummary[]>('/surveys'); if (stopped) return;
+        setHistory(values); if (!values[0] || pinned.current) return;
+        const token = ++historyToken.current;
+        const detail = await researchApi<SurveyRun>(`/surveys/${values[0].id}`); if (stopped || pinned.current || historyToken.current !== token) return;
+        packs.current.set(detail.id, detail); setRun(detail);
+      }
+    } catch (error) { if (!stopped) setError((error as Error).message); }
+  })(); return () => { stopped = true; controller.current?.abort(); }; }, []);
   let matchesDraft = false; try { matchesDraft = !run || fingerprint(readDraft().task) === run.taskHash; } catch { /* Incomplete draft differs from immutable history. */ }
-  const keep = async (value: SurveyRun) => { setRun(value); if (pagesMode) await saveSurveyRun(value); setHistory(previous => [value, ...previous.filter(old => old.id !== value.id)]); };
+  const keep = async (value: SurveyRun) => { pinned.current = true; packs.current.set(value.id, value); setRun(value); if (pagesMode) await saveSurveyRun(value); setHistory(previous => [surveyRunSummary(value), ...previous.filter(old => old.id !== value.id)]); };
+  async function showHistory(id: string) {
+    const token = ++historyToken.current;
+    if (!id) { setRun(null); return; }
+    const cached = packs.current.get(id); if (cached) { setRun(cached); return; }
+    try { const detail = await researchApi<SurveyRun>(`/surveys/${id}`); if (historyToken.current !== token) return; packs.current.set(detail.id, detail); setRun(detail); }
+    catch (error) { if (historyToken.current === token) setError((error as Error).message); }
+  }
   async function start() {
     setError(''); setRunning(true); onBusyChange(true); controller.current = new AbortController();
     try {
@@ -72,7 +94,7 @@ export function PagesSurveyPanel({ readDraft, busy, onBusyChange, draftVersion }
     <label className="checkbox-label"><input type="checkbox" checked={assumptions} onChange={event => setAssumptions(event.target.checked)} />确认本次按显式画像假设开展合成实验，结果不直接外推真人总体。</label></fieldset>
     <div className="research-save-bar"><button className="primary" disabled={busy || !assumptions || !feesAccepted} onClick={() => void start()}>{running ? '作答中…' : mode === 'fixture' ? '运行问卷演示' : '开始真实模型调查'}</button>{running && <button className="secondary" onClick={() => controller.current?.abort()}>取消</button>}{pagesMode && <button className="secondary" disabled={busy} onClick={() => void loadPublished()}>查看已发布实测 · 无需Key</button>}{!pagesMode && run?.state === 'completed' && run.metrics.valid > 0 && <button className="secondary" disabled={busy || deliveryBusy} onClick={() => void deliver()}>{deliveryBusy ? '创建交付…' : '交给四角色生成交付页'}</button>}</div>
     {error && <div className="alert error" role="alert">{error}</div>}<p className="research-note" role="status">{progress}</p>
-    <div className="research-toolbar"><label>历史运行<select disabled={busy} value={run?.id ?? ''} onChange={event => setRun(history.find(value => value.id === event.target.value) ?? null)}><option value="">选择运行证据</option>{history.map(value => <option key={value.id} value={value.id}>{value.startedAt} · {value.task.title} · {value.mode} · {value.metrics.valid}/{value.metrics.planned}</option>)}</select></label>{pagesMode && <label className="secondary intake-upload">导入v2运行证据<input disabled={busy} type="file" accept=".json,application/json" aria-label="导入运行证据" onChange={async event => { const file = event.target.files?.[0]; event.target.value = ''; if (!file) return; try { if (file.size > 6 * 1024 * 1024) throw new Error('证据包不能超过6MB。'); await keep(parseSurveyEvidence(JSON.parse(await file.text()))); setProgress('证据包已校验指纹并保存；导入不调用模型。'); } catch (error) { setError((error as Error).message); } }} /></label>}</div>
+    <div className="research-toolbar"><label>历史运行<select disabled={busy} value={run?.id ?? ''} onChange={event => { void showHistory(event.target.value); }}><option value="">选择运行证据</option>{history.map(value => <option key={value.id} value={value.id}>{value.startedAt} · {value.title} · {value.mode} · {value.metrics.valid}/{value.metrics.planned}</option>)}</select></label>{pagesMode && <label className="secondary intake-upload">导入v2运行证据<input disabled={busy} type="file" accept=".json,application/json" aria-label="导入运行证据" onChange={async event => { const file = event.target.files?.[0]; event.target.value = ''; if (!file) return; try { if (file.size > 6 * 1024 * 1024) throw new Error('证据包不能超过6MB。'); await keep(parseSurveyEvidence(JSON.parse(await file.text()))); setProgress('证据包已校验指纹并保存；导入不调用模型。'); } catch (error) { setError((error as Error).message); } }} /></label>}</div>
     {run && !matchesDraft && <p className="research-note warning">当前草稿与所选历史问卷不同；下方仍展示冻结的历史结果，不会被草稿修改覆盖。草稿修订 {draftVersion}。</p>}
     {run && <SurveyResults run={run} />}
   </section>;
