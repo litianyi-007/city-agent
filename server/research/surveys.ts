@@ -8,6 +8,7 @@ import { buildProfiles, fingerprint } from '../../shared/survey-engine.js';
 import { assertSurveyInputsSafe, executeSurvey } from '../../shared/survey-runner.js';
 
 export const surveyInputSchema = researchProjectInputSchema.extend({
+  residentAgentIds: researchProjectInputSchema.shape.residentAgentIds.min(1, '请选择已启用的人群预设。'),
   mode: z.enum(['fixture', 'live']), count: z.number().int().min(1).max(30), seed: z.number().int().min(0).max(2147483647), assumptionsAccepted: z.literal(true),
   pricing: z.object({ currency: z.literal('CNY'), inputPerMillion: z.number().finite().min(0).nullable(), outputPerMillion: z.number().finite().min(0).nullable(), suppliedAt: z.string().max(80), source: z.string().max(500) }).strict(),
   frozenFromRunId: z.string().uuid().optional(), exposure: z.enum(['full', 'no-persona', 'demographics-only']).optional(), experiment: z.object({ id: z.string().max(80), arm: z.string().max(80) }).strict().optional(),
@@ -16,7 +17,12 @@ export function createSurveyService(store: CityStore, model = runRole) {
   const active = new Map<string, AbortController>();
   return {
     start(body: unknown) {
-      const input = surveyInputSchema.parse(body);
+      const parsed = surveyInputSchema.safeParse(body);
+      if (!parsed.success) {
+        if (parsed.error.issues.length > 0 && parsed.error.issues.every(issue => issue.message === '请选择已启用的人群预设。')) throw new StoreError('请选择已启用的人群预设。');
+        throw parsed.error;
+      }
+      const input = parsed.data;
       if (active.size) throw new StoreError('已有问卷正在运行，请完成或取消后再开始。', 409);
       if (input.mode === 'live' && input.count > 12) throw new StoreError('首批真实模型最多12人。');
       const selected = input.residentAgentIds.map(id => {

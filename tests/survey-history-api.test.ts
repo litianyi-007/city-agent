@@ -77,6 +77,29 @@ test('survey list returns summaries and the full pack stays on the detail route'
   assert.equal((await request(`/api/research/surveys/${randomUUID()}`)).status, 404);
 });
 
+test('empty residentAgentIds is a client error and a selected preset still starts', async t => {
+  const { store, request } = await fixture(t);
+  const task = getResearchTemplates()[2];
+  const preset = store.getResidentAgents()[0];
+  const body = (residentAgentIds: string[], mode: 'fixture' | 'live' = 'fixture') => ({
+    task, residentAgentIds, mode, count: 1, seed: 42, assumptionsAccepted: true, pricing,
+  });
+  for (const mode of ['fixture', 'live'] as const) {
+    const empty = await request('/api/research/surveys', 'POST', body([], mode));
+    assert.equal(empty.status, 400);
+    assert.deepEqual(await empty.json(), { error: '请选择已启用的人群预设。' });
+  }
+  assert.equal(store.listSurveyRuns().length, 0);
+  const started = await request('/api/research/surveys', 'POST', body([preset.id]));
+  assert.equal(started.status, 202);
+  const { id } = await started.json();
+  for (let tick = 0; tick < 50 && store.getSurveyRun(id)?.state !== 'completed'; tick++) await new Promise(resolve => setTimeout(resolve, 20));
+  const run = store.getSurveyRun(id);
+  assert.equal(run?.state, 'completed');
+  assert.equal(run?.metrics.modelCalls, 0);
+  assert.equal(run?.metrics.valid, 1);
+});
+
 test('a missing resident preset is not reported as a missing key', async t => {
   const { store, request } = await fixture(t);
   const task = getResearchTemplates()[2];
