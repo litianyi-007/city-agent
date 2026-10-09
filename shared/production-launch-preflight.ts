@@ -32,7 +32,7 @@ export interface ProductionLaunchPreflightReport {
   paidAuthorized: false; finalGate: null; modelRequests: 0;
   input: ProductionRunInput; models: ProductionAgent[]; execution: ProductionLaunchExecutionSummary;
   /** Opt-in only: legacy report serialization/hash stays byte-compatible. */
-  configuration?: { promptVersion: string; pmOutputPolicyVersion: string; roleSchemaDiagnosticsVersion: string; acceptanceStepAuditVersion?: string; acceptanceReviewProjectionVersion?: string; outputEnvelopeVersion?: string };
+  configuration?: { promptVersion: string; pmOutputPolicyVersion: string; roleSchemaDiagnosticsVersion: string; acceptanceStepAuditVersion?: string; acceptanceReviewProjectionVersion?: string; outputEnvelopeVersion?: string; phaseReadinessVersion?: string };
   /** Present only when the server has checked the same full fixed material
    * and encrypted credential set as startup. No plaintext/secret metadata. */
   startupGuard?: { version: string; publicCollisionGuardVersion: string; ready: boolean };
