@@ -159,10 +159,12 @@ test('actual HTTP rejects contaminated public config and planner JSON evidence/0
   assert.equal(rejected.status, 400);
   const rejectedBody = await rejected.text(); assert.match(rejectedBody, /凭据/); assert.equal(redactKnownSecret(rejectedBody, secret), rejectedBody);
   const agent = store.createAgent({ name: 'Safe planner', role: 'researcher', ...config });
-  const response = await post('/api/research/planning', { ...planningInput, request: `request ${unicode}`, context: `context ${mixed}`, agentId: agent.id, acknowledgeCost: true });
+  const cancelId = '77777777-7777-4777-8777-777777777777';
+  const response = await post('/api/research/planning', { ...planningInput, request: `request ${unicode}`, context: `context ${mixed}`, agentId: agent.id, acknowledgeCost: true, cancelId });
   assert.equal(response.status, 200);
   const text = await response.text(); assert.equal(redactKnownSecret(text, secret), text);
   const parsed = JSON.parse(text);
+  assert.equal(parsed.cancelId, cancelId);
   const record = readFileSync(path.join(directory, 'planning', `${parsed.recordId}.json`), 'utf8');
   assert.equal(redactKnownSecret(record, secret), record);
   assert.equal(JSON.parse(record).result.evidence.input.request.includes('REDACTED'), true);
