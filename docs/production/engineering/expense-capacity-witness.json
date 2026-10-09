@@ -1,0 +1,1111 @@
+{
+  "version": "expense-engineering-witness-v1",
+  "recordedAt": "2026-10-09T08:11:56.186Z",
+  "evidenceKind": "test-owned-engineering-only",
+  "baseCommit": "5f07a406d7ca91d395933d31d19dc684d30fefcb",
+  "sourceFiles": [
+    {
+      "path": "tests/fixtures/production-expense-witness.ts",
+      "sha256": "a6aca40a87d9a230f37cea010b0181b0cd6c79ea267e0c6876f65ec55cf6df20"
+    },
+    {
+      "path": "tests/production-expense-witness-contract.test.ts",
+      "sha256": "ce93e4b4a0b88848bc4e2ecf3006641e06616d4927993c18794f82bbbfb68206"
+    },
+    {
+      "path": "tests/production-expense-witness-gate.test.ts",
+      "sha256": "99100b529a4007ea201c124913c871fbb1d524e56b9bd3d63bd4f2584492f755"
+    }
+  ],
+  "requirementFileSha256": "41e97f5469241ad1e60e04af64e0425864c9466b0a133c5b200d90ab4ab7bb03",
+  "checksSha256": "10168fa060063119a1f365759c6d074a41f708ec79a1edc7d1d9b97e674bc78f",
+  "planHash": "6afdf629800d610640014f2b3d0ee6b1f983b6039b240829c6fb60ec5fc27261",
+  "actualOuterStepCounts": [
+    16,
+    16,
+    20,
+    20,
+    20,
+    12,
+    20,
+    20,
+    16,
+    19,
+    20,
+    20
+  ],
+  "totalOuterSteps": 219,
+  "groups": [
+    4,
+    4,
+    4
+  ],
+  "gateUnmodified": true,
+  "suite": {
+    "tests": 267,
+    "passed": 267,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "durationMs": 273484.425333,
+    "logPath": "output/production-capacity-7I03md/targeted.tap",
+    "logSha256": "d63e6987c1789b4eaf7d27b9a96ea07ad16f493bcbad3b515e8362cb3a02eae3",
+    "diagnosticEncoding": "Node TAP escaped backslashes and hashes decoded; no model output parsed or repaired"
+  },
+  "positive": {
+    "kind": "test-owned-engineering-only",
+    "providerRequests": 0,
+    "authoredChecks": 12,
+    "elapsedMs": 4305,
+    "result": {
+      "passed": true,
+      "checks": [
+        {
+          "name": "页面加载、可见内容与 JavaScript",
+          "passed": true
+        },
+        {
+          "name": "金额拒绝-空-1",
+          "passed": true
+        },
+        {
+          "name": "金额拒绝-空-2",
+          "passed": true
+        },
+        {
+          "name": "金额拒绝-空-3",
+          "passed": true
+        },
+        {
+          "name": "金额拒绝-已有-1",
+          "passed": true
+        },
+        {
+          "name": "金额拒绝-已有-2",
+          "passed": true
+        },
+        {
+          "name": "金额拒绝-已有-3",
+          "passed": true
+        },
+        {
+          "name": "新增两类且每次清空输入",
+          "passed": true
+        },
+        {
+          "name": "双分类筛选并无损恢复全部",
+          "passed": true
+        },
+        {
+          "name": "独立小数相加与删除",
+          "passed": true
+        },
+        {
+          "name": "单条双边界而非总额上限",
+          "passed": true
+        },
+        {
+          "name": "空和空格描述均拒绝且保留原记录",
+          "passed": true
+        },
+        {
+          "name": "筛选删除目标与删除最后一条归零",
+          "passed": true
+        }
+      ],
+      "summary": "独立 Chromium 验收通过，交互与输出已验证。"
+    }
+  },
+  "mutants": [
+    {
+      "mutant": "placeholder",
+      "testOwnedOnly": true,
+      "fullSuite": false,
+      "authoredChecks": 2,
+      "target": "金额拒绝-空-3",
+      "elapsedMs": 2278,
+      "result": {
+        "passed": false,
+        "checks": [
+          {
+            "name": "页面加载、可见内容与 JavaScript",
+            "passed": true
+          },
+          {
+            "name": "金额拒绝-空-3",
+            "passed": false,
+            "detail": "#ledger .record 元素数量不等于 0"
+          },
+          {
+            "name": "新增两类且每次清空输入",
+            "passed": true
+          }
+        ],
+        "summary": "浏览器验收未通过，需修复失败项。"
+      }
+    },
+    {
+      "mutant": "inputs-not-cleared",
+      "testOwnedOnly": true,
+      "fullSuite": false,
+      "authoredChecks": 2,
+      "target": "新增两类且每次清空输入",
+      "elapsedMs": 2318,
+      "result": {
+        "passed": false,
+        "checks": [
+          {
+            "name": "页面加载、可见内容与 JavaScript",
+            "passed": true
+          },
+          {
+            "name": "新增两类且每次清空输入",
+            "passed": false,
+            "detail": "#description 的值不是 "
+          },
+          {
+            "name": "独立小数相加与删除",
+            "passed": true
+          }
+        ],
+        "summary": "浏览器验收未通过，需修复失败项。"
+      }
+    },
+    {
+      "mutant": "wrong-category",
+      "testOwnedOnly": true,
+      "fullSuite": false,
+      "authoredChecks": 2,
+      "target": "新增两类且每次清空输入",
+      "elapsedMs": 3760,
+      "result": {
+        "passed": false,
+        "checks": [
+          {
+            "name": "页面加载、可见内容与 JavaScript",
+            "passed": true
+          },
+          {
+            "name": "新增两类且每次清空输入",
+            "passed": false,
+            "detail": "#ledger 文本不精确等于：打印纸 ／ 办公 ／ 10.10"
+          },
+          {
+            "name": "独立小数相加与删除",
+            "passed": false,
+            "detail": "#ledger 文本不精确等于：一角 ／ 办公 ／ 0.10 两角 ／ 办公 ／ 0.20"
+          }
+        ],
+        "summary": "浏览器验收未通过，需修复失败项。"
+      }
+    },
+    {
+      "mutant": "filter-leaks",
+      "testOwnedOnly": true,
+      "fullSuite": false,
+      "authoredChecks": 2,
+      "target": "双分类筛选并无损恢复全部",
+      "elapsedMs": 2379,
+      "result": {
+        "passed": false,
+        "checks": [
+          {
+            "name": "页面加载、可见内容与 JavaScript",
+            "passed": true
+          },
+          {
+            "name": "双分类筛选并无损恢复全部",
+            "passed": false,
+            "detail": "#ledger .record 元素数量不等于 1"
+          },
+          {
+            "name": "新增两类且每次清空输入",
+            "passed": true
+          }
+        ],
+        "summary": "浏览器验收未通过，需修复失败项。"
+      }
+    },
+    {
+      "mutant": "filter-mutates",
+      "testOwnedOnly": true,
+      "fullSuite": false,
+      "authoredChecks": 2,
+      "target": "双分类筛选并无损恢复全部",
+      "elapsedMs": 2345,
+      "result": {
+        "passed": false,
+        "checks": [
+          {
+            "name": "页面加载、可见内容与 JavaScript",
+            "passed": true
+          },
+          {
+            "name": "双分类筛选并无损恢复全部",
+            "passed": false,
+            "detail": "#ledger 文本不精确等于：打印纸 ／ 办公 ／ 10.10"
+          },
+          {
+            "name": "新增两类且每次清空输入",
+            "passed": true
+          }
+        ],
+        "summary": "浏览器验收未通过，需修复失败项。"
+      }
+    },
+    {
+      "mutant": "filtered-total",
+      "testOwnedOnly": true,
+      "fullSuite": false,
+      "authoredChecks": 2,
+      "target": "双分类筛选并无损恢复全部",
+      "elapsedMs": 2360,
+      "result": {
+        "passed": false,
+        "checks": [
+          {
+            "name": "页面加载、可见内容与 JavaScript",
+            "passed": true
+          },
+          {
+            "name": "双分类筛选并无损恢复全部",
+            "passed": false,
+            "detail": "#feedback 文本不精确等于：总额：30.30；当前小计：10.10"
+          },
+          {
+            "name": "新增两类且每次清空输入",
+            "passed": true
+          }
+        ],
+        "summary": "浏览器验收未通过，需修复失败项。"
+      }
+    },
+    {
+      "mutant": "concat",
+      "testOwnedOnly": true,
+      "fullSuite": false,
+      "authoredChecks": 2,
+      "target": "独立小数相加与删除",
+      "elapsedMs": 3830,
+      "result": {
+        "passed": false,
+        "checks": [
+          {
+            "name": "页面加载、可见内容与 JavaScript",
+            "passed": true
+          },
+          {
+            "name": "独立小数相加与删除",
+            "passed": false,
+            "detail": "#feedback 文本不精确等于：总额：0.30；当前小计：0.30"
+          },
+          {
+            "name": "新增两类且每次清空输入",
+            "passed": false,
+            "detail": "#feedback 文本不精确等于：总额：30.30；当前小计：30.30"
+          }
+        ],
+        "summary": "浏览器验收未通过，需修复失败项。"
+      }
+    },
+    {
+      "mutant": "float-tail",
+      "testOwnedOnly": true,
+      "fullSuite": false,
+      "authoredChecks": 2,
+      "target": "独立小数相加与删除",
+      "elapsedMs": 2344,
+      "result": {
+        "passed": false,
+        "checks": [
+          {
+            "name": "页面加载、可见内容与 JavaScript",
+            "passed": true
+          },
+          {
+            "name": "独立小数相加与删除",
+            "passed": false,
+            "detail": "#feedback 文本不精确等于：总额：0.30；当前小计：0.30"
+          },
+          {
+            "name": "新增两类且每次清空输入",
+            "passed": true
+          }
+        ],
+        "summary": "浏览器验收未通过，需修复失败项。"
+      }
+    },
+    {
+      "mutant": "reject-lower",
+      "testOwnedOnly": true,
+      "fullSuite": false,
+      "authoredChecks": 2,
+      "target": "单条双边界而非总额上限",
+      "elapsedMs": 2254,
+      "result": {
+        "passed": false,
+        "checks": [
+          {
+            "name": "页面加载、可见内容与 JavaScript",
+            "passed": true
+          },
+          {
+            "name": "单条双边界而非总额上限",
+            "passed": false,
+            "detail": "#ledger .record 元素数量不等于 1"
+          },
+          {
+            "name": "新增两类且每次清空输入",
+            "passed": true
+          }
+        ],
+        "summary": "浏览器验收未通过，需修复失败项。"
+      }
+    },
+    {
+      "mutant": "reject-upper",
+      "testOwnedOnly": true,
+      "fullSuite": false,
+      "authoredChecks": 2,
+      "target": "单条双边界而非总额上限",
+      "elapsedMs": 2329,
+      "result": {
+        "passed": false,
+        "checks": [
+          {
+            "name": "页面加载、可见内容与 JavaScript",
+            "passed": true
+          },
+          {
+            "name": "单条双边界而非总额上限",
+            "passed": false,
+            "detail": "#ledger .record 元素数量不等于 2"
+          },
+          {
+            "name": "新增两类且每次清空输入",
+            "passed": true
+          }
+        ],
+        "summary": "浏览器验收未通过，需修复失败项。"
+      }
+    },
+    {
+      "mutant": "aggregate-cap",
+      "testOwnedOnly": true,
+      "fullSuite": false,
+      "authoredChecks": 2,
+      "target": "单条双边界而非总额上限",
+      "elapsedMs": 2375,
+      "result": {
+        "passed": false,
+        "checks": [
+          {
+            "name": "页面加载、可见内容与 JavaScript",
+            "passed": true
+          },
+          {
+            "name": "单条双边界而非总额上限",
+            "passed": false,
+            "detail": "#ledger .record 元素数量不等于 2"
+          },
+          {
+            "name": "新增两类且每次清空输入",
+            "passed": true
+          }
+        ],
+        "summary": "浏览器验收未通过，需修复失败项。"
+      }
+    },
+    {
+      "mutant": "accept-negative",
+      "testOwnedOnly": true,
+      "fullSuite": false,
+      "authoredChecks": 2,
+      "target": "金额拒绝-空-1",
+      "elapsedMs": 2291,
+      "result": {
+        "passed": false,
+        "checks": [
+          {
+            "name": "页面加载、可见内容与 JavaScript",
+            "passed": true
+          },
+          {
+            "name": "金额拒绝-空-1",
+            "passed": false,
+            "detail": "#ledger .record 元素数量不等于 0"
+          },
+          {
+            "name": "新增两类且每次清空输入",
+            "passed": true
+          }
+        ],
+        "summary": "浏览器验收未通过，需修复失败项。"
+      }
+    },
+    {
+      "mutant": "accept-zero",
+      "testOwnedOnly": true,
+      "fullSuite": false,
+      "authoredChecks": 2,
+      "target": "金额拒绝-空-1",
+      "elapsedMs": 2302,
+      "result": {
+        "passed": false,
+        "checks": [
+          {
+            "name": "页面加载、可见内容与 JavaScript",
+            "passed": true
+          },
+          {
+            "name": "金额拒绝-空-1",
+            "passed": false,
+            "detail": "#feedback 在交互后没有改变。"
+          },
+          {
+            "name": "新增两类且每次清空输入",
+            "passed": true
+          }
+        ],
+        "summary": "浏览器验收未通过，需修复失败项。"
+      }
+    },
+    {
+      "mutant": "accept-empty",
+      "testOwnedOnly": true,
+      "fullSuite": false,
+      "authoredChecks": 2,
+      "target": "金额拒绝-空-2",
+      "elapsedMs": 2321,
+      "result": {
+        "passed": false,
+        "checks": [
+          {
+            "name": "页面加载、可见内容与 JavaScript",
+            "passed": true
+          },
+          {
+            "name": "金额拒绝-空-2",
+            "passed": false,
+            "detail": "#feedback 在交互后没有改变。"
+          },
+          {
+            "name": "新增两类且每次清空输入",
+            "passed": true
+          }
+        ],
+        "summary": "浏览器验收未通过，需修复失败项。"
+      }
+    },
+    {
+      "mutant": "round-precision",
+      "testOwnedOnly": true,
+      "fullSuite": false,
+      "authoredChecks": 2,
+      "target": "金额拒绝-空-2",
+      "elapsedMs": 2413,
+      "result": {
+        "passed": false,
+        "checks": [
+          {
+            "name": "页面加载、可见内容与 JavaScript",
+            "passed": true
+          },
+          {
+            "name": "金额拒绝-空-2",
+            "passed": false,
+            "detail": "#ledger .record 元素数量不等于 0"
+          },
+          {
+            "name": "新增两类且每次清空输入",
+            "passed": true
+          }
+        ],
+        "summary": "浏览器验收未通过，需修复失败项。"
+      }
+    },
+    {
+      "mutant": "accept-over-upper",
+      "testOwnedOnly": true,
+      "fullSuite": false,
+      "authoredChecks": 2,
+      "target": "金额拒绝-空-3",
+      "elapsedMs": 2407,
+      "result": {
+        "passed": false,
+        "checks": [
+          {
+            "name": "页面加载、可见内容与 JavaScript",
+            "passed": true
+          },
+          {
+            "name": "金额拒绝-空-3",
+            "passed": false,
+            "detail": "#ledger .record 元素数量不等于 0"
+          },
+          {
+            "name": "新增两类且每次清空输入",
+            "passed": true
+          }
+        ],
+        "summary": "浏览器验收未通过，需修复失败项。"
+      }
+    },
+    {
+      "mutant": "accept-blank",
+      "testOwnedOnly": true,
+      "fullSuite": false,
+      "authoredChecks": 2,
+      "target": "空和空格描述均拒绝且保留原记录",
+      "elapsedMs": 2381,
+      "result": {
+        "passed": false,
+        "checks": [
+          {
+            "name": "页面加载、可见内容与 JavaScript",
+            "passed": true
+          },
+          {
+            "name": "空和空格描述均拒绝且保留原记录",
+            "passed": false,
+            "detail": "#ledger .record 元素数量不等于 1"
+          },
+          {
+            "name": "新增两类且每次清空输入",
+            "passed": true
+          }
+        ],
+        "summary": "浏览器验收未通过，需修复失败项。"
+      }
+    },
+    {
+      "mutant": "accept-spaces",
+      "testOwnedOnly": true,
+      "fullSuite": false,
+      "authoredChecks": 2,
+      "target": "空和空格描述均拒绝且保留原记录",
+      "elapsedMs": 2473,
+      "result": {
+        "passed": false,
+        "checks": [
+          {
+            "name": "页面加载、可见内容与 JavaScript",
+            "passed": true
+          },
+          {
+            "name": "空和空格描述均拒绝且保留原记录",
+            "passed": false,
+            "detail": "#ledger .record 元素数量不等于 1"
+          },
+          {
+            "name": "新增两类且每次清空输入",
+            "passed": true
+          }
+        ],
+        "summary": "浏览器验收未通过，需修复失败项。"
+      }
+    },
+    {
+      "mutant": "reject-clears",
+      "testOwnedOnly": true,
+      "fullSuite": false,
+      "authoredChecks": 2,
+      "target": "金额拒绝-已有-1",
+      "elapsedMs": 2379,
+      "result": {
+        "passed": false,
+        "checks": [
+          {
+            "name": "页面加载、可见内容与 JavaScript",
+            "passed": true
+          },
+          {
+            "name": "金额拒绝-已有-1",
+            "passed": false,
+            "detail": "#ledger .record 元素数量不等于 1"
+          },
+          {
+            "name": "新增两类且每次清空输入",
+            "passed": true
+          }
+        ],
+        "summary": "浏览器验收未通过，需修复失败项。"
+      }
+    },
+    {
+      "mutant": "reject-description",
+      "testOwnedOnly": true,
+      "fullSuite": false,
+      "authoredChecks": 2,
+      "target": "金额拒绝-已有-1",
+      "elapsedMs": 2391,
+      "result": {
+        "passed": false,
+        "checks": [
+          {
+            "name": "页面加载、可见内容与 JavaScript",
+            "passed": true
+          },
+          {
+            "name": "金额拒绝-已有-1",
+            "passed": false,
+            "detail": "#ledger 文本不精确等于：已有记录 ／ 办公 ／ 10.10"
+          },
+          {
+            "name": "新增两类且每次清空输入",
+            "passed": true
+          }
+        ],
+        "summary": "浏览器验收未通过，需修复失败项。"
+      }
+    },
+    {
+      "mutant": "reject-category",
+      "testOwnedOnly": true,
+      "fullSuite": false,
+      "authoredChecks": 2,
+      "target": "金额拒绝-已有-1",
+      "elapsedMs": 2314,
+      "result": {
+        "passed": false,
+        "checks": [
+          {
+            "name": "页面加载、可见内容与 JavaScript",
+            "passed": true
+          },
+          {
+            "name": "金额拒绝-已有-1",
+            "passed": false,
+            "detail": "#ledger 文本不精确等于：已有记录 ／ 办公 ／ 10.10"
+          },
+          {
+            "name": "新增两类且每次清空输入",
+            "passed": true
+          }
+        ],
+        "summary": "浏览器验收未通过，需修复失败项。"
+      }
+    },
+    {
+      "mutant": "reject-amount",
+      "testOwnedOnly": true,
+      "fullSuite": false,
+      "authoredChecks": 2,
+      "target": "金额拒绝-已有-1",
+      "elapsedMs": 2322,
+      "result": {
+        "passed": false,
+        "checks": [
+          {
+            "name": "页面加载、可见内容与 JavaScript",
+            "passed": true
+          },
+          {
+            "name": "金额拒绝-已有-1",
+            "passed": false,
+            "detail": "#ledger 文本不精确等于：已有记录 ／ 办公 ／ 10.10"
+          },
+          {
+            "name": "新增两类且每次清空输入",
+            "passed": true
+          }
+        ],
+        "summary": "浏览器验收未通过，需修复失败项。"
+      }
+    },
+    {
+      "mutant": "reject-total",
+      "testOwnedOnly": true,
+      "fullSuite": false,
+      "authoredChecks": 2,
+      "target": "金额拒绝-已有-1",
+      "elapsedMs": 2407,
+      "result": {
+        "passed": false,
+        "checks": [
+          {
+            "name": "页面加载、可见内容与 JavaScript",
+            "passed": true
+          },
+          {
+            "name": "金额拒绝-已有-1",
+            "passed": false,
+            "detail": "#feedback 文本不精确等于：金额无效；总额：10.10；当前小计：10.10"
+          },
+          {
+            "name": "新增两类且每次清空输入",
+            "passed": true
+          }
+        ],
+        "summary": "浏览器验收未通过，需修复失败项。"
+      }
+    },
+    {
+      "mutant": "reject-subtotal",
+      "testOwnedOnly": true,
+      "fullSuite": false,
+      "authoredChecks": 2,
+      "target": "金额拒绝-已有-1",
+      "elapsedMs": 2432,
+      "result": {
+        "passed": false,
+        "checks": [
+          {
+            "name": "页面加载、可见内容与 JavaScript",
+            "passed": true
+          },
+          {
+            "name": "金额拒绝-已有-1",
+            "passed": false,
+            "detail": "#feedback 文本不精确等于：金额无效；总额：10.10；当前小计：10.10"
+          },
+          {
+            "name": "新增两类且每次清空输入",
+            "passed": true
+          }
+        ],
+        "summary": "浏览器验收未通过，需修复失败项。"
+      }
+    },
+    {
+      "mutant": "hidden-hint",
+      "testOwnedOnly": true,
+      "fullSuite": false,
+      "authoredChecks": 2,
+      "target": "金额拒绝-空-1",
+      "elapsedMs": 2307,
+      "result": {
+        "passed": false,
+        "checks": [
+          {
+            "name": "页面加载、可见内容与 JavaScript",
+            "passed": true
+          },
+          {
+            "name": "金额拒绝-空-1",
+            "passed": false,
+            "detail": "locator.waitFor: Timeout 1500ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#feedback') to be visible\u001b[22m\n\u001b[2m    16 × locator resolved to hidden <output id=\"feedback\" aria-live=\"polite\">金额无效；总额：0.00；当前小计：0.00</output>\u001b[22m\n"
+          },
+          {
+            "name": "新增两类且每次清空输入",
+            "passed": true
+          }
+        ],
+        "summary": "浏览器验收未通过，需修复失败项。"
+      }
+    },
+    {
+      "mutant": "first-hint-only",
+      "testOwnedOnly": true,
+      "fullSuite": false,
+      "authoredChecks": 2,
+      "target": "金额拒绝-空-1",
+      "elapsedMs": 2476,
+      "result": {
+        "passed": false,
+        "checks": [
+          {
+            "name": "页面加载、可见内容与 JavaScript",
+            "passed": true
+          },
+          {
+            "name": "金额拒绝-空-1",
+            "passed": false,
+            "detail": "#feedback 在交互后没有改变。"
+          },
+          {
+            "name": "新增两类且每次清空输入",
+            "passed": true
+          }
+        ],
+        "summary": "浏览器验收未通过，需修复失败项。"
+      }
+    },
+    {
+      "mutant": "stale-hint-only",
+      "testOwnedOnly": true,
+      "fullSuite": false,
+      "authoredChecks": 2,
+      "target": "金额拒绝-空-1",
+      "elapsedMs": 2463,
+      "result": {
+        "passed": false,
+        "checks": [
+          {
+            "name": "页面加载、可见内容与 JavaScript",
+            "passed": true
+          },
+          {
+            "name": "金额拒绝-空-1",
+            "passed": false,
+            "detail": "#feedback 在交互后没有改变。"
+          },
+          {
+            "name": "新增两类且每次清空输入",
+            "passed": true
+          }
+        ],
+        "summary": "浏览器验收未通过，需修复失败项。"
+      }
+    },
+    {
+      "mutant": "filtered-delete-all",
+      "testOwnedOnly": true,
+      "fullSuite": false,
+      "authoredChecks": 2,
+      "target": "筛选删除目标与删除最后一条归零",
+      "elapsedMs": 2372,
+      "result": {
+        "passed": false,
+        "checks": [
+          {
+            "name": "页面加载、可见内容与 JavaScript",
+            "passed": true
+          },
+          {
+            "name": "筛选删除目标与删除最后一条归零",
+            "passed": false,
+            "detail": "#feedback 文本不精确等于：总额：20.20；当前小计：0.00"
+          },
+          {
+            "name": "新增两类且每次清空输入",
+            "passed": true
+          }
+        ],
+        "summary": "浏览器验收未通过，需修复失败项。"
+      }
+    },
+    {
+      "mutant": "delete-wrong",
+      "testOwnedOnly": true,
+      "fullSuite": false,
+      "authoredChecks": 2,
+      "target": "独立小数相加与删除",
+      "elapsedMs": 2426,
+      "result": {
+        "passed": false,
+        "checks": [
+          {
+            "name": "页面加载、可见内容与 JavaScript",
+            "passed": true
+          },
+          {
+            "name": "独立小数相加与删除",
+            "passed": false,
+            "detail": "#ledger 文本不精确等于：两角 ／ 办公 ／ 0.20"
+          },
+          {
+            "name": "新增两类且每次清空输入",
+            "passed": true
+          }
+        ],
+        "summary": "浏览器验收未通过，需修复失败项。"
+      }
+    },
+    {
+      "mutant": "last-total-stale",
+      "testOwnedOnly": true,
+      "fullSuite": false,
+      "authoredChecks": 2,
+      "target": "筛选删除目标与删除最后一条归零",
+      "elapsedMs": 2471,
+      "result": {
+        "passed": false,
+        "checks": [
+          {
+            "name": "页面加载、可见内容与 JavaScript",
+            "passed": true
+          },
+          {
+            "name": "筛选删除目标与删除最后一条归零",
+            "passed": false,
+            "detail": "#feedback 文本不精确等于：总额：0.00；当前小计：0.00"
+          },
+          {
+            "name": "新增两类且每次清空输入",
+            "passed": true
+          }
+        ],
+        "summary": "浏览器验收未通过，需修复失败项。"
+      }
+    },
+    {
+      "mutant": "empty-category-subtotal",
+      "testOwnedOnly": true,
+      "fullSuite": false,
+      "authoredChecks": 2,
+      "target": "单条双边界而非总额上限",
+      "elapsedMs": 2387,
+      "result": {
+        "passed": false,
+        "checks": [
+          {
+            "name": "页面加载、可见内容与 JavaScript",
+            "passed": true
+          },
+          {
+            "name": "单条双边界而非总额上限",
+            "passed": false,
+            "detail": "#feedback 文本不精确等于：总额：10000.00；当前小计：0.00"
+          },
+          {
+            "name": "新增两类且每次清空输入",
+            "passed": true
+          }
+        ],
+        "summary": "浏览器验收未通过，需修复失败项。"
+      }
+    },
+    {
+      "mutant": "hidden-ledger",
+      "testOwnedOnly": true,
+      "fullSuite": false,
+      "authoredChecks": 2,
+      "target": "新增两类且每次清空输入",
+      "elapsedMs": 3744,
+      "result": {
+        "passed": false,
+        "checks": [
+          {
+            "name": "页面加载、可见内容与 JavaScript",
+            "passed": true
+          },
+          {
+            "name": "新增两类且每次清空输入",
+            "passed": false,
+            "detail": "locator.waitFor: Timeout 1500ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#ledger') to be visible\u001b[22m\n\u001b[2m    16 × locator resolved to hidden <section id=\"ledger\" aria-label=\"记录明细\">…</section>\u001b[22m\n"
+          },
+          {
+            "name": "独立小数相加与删除",
+            "passed": false,
+            "detail": "locator.waitFor: Timeout 1500ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#ledger') to be visible\u001b[22m\n\u001b[2m    16 × locator resolved to hidden <section id=\"ledger\" aria-label=\"记录明细\">…</section>\u001b[22m\n"
+          }
+        ],
+        "summary": "浏览器验收未通过，需修复失败项。"
+      }
+    },
+    {
+      "mutant": "transient-reject-content",
+      "testOwnedOnly": true,
+      "fullSuite": false,
+      "authoredChecks": 2,
+      "target": "金额拒绝-已有-1",
+      "elapsedMs": 2365,
+      "result": {
+        "passed": false,
+        "checks": [
+          {
+            "name": "页面加载、可见内容与 JavaScript",
+            "passed": true
+          },
+          {
+            "name": "金额拒绝-已有-1",
+            "passed": false,
+            "detail": "#ledger 文本不精确等于：已有记录 ／ 办公 ／ 10.10"
+          },
+          {
+            "name": "新增两类且每次清空输入",
+            "passed": true
+          }
+        ],
+        "summary": "浏览器验收未通过，需修复失败项。"
+      }
+    },
+    {
+      "mutant": "transient-reject-count",
+      "testOwnedOnly": true,
+      "fullSuite": false,
+      "authoredChecks": 2,
+      "target": "金额拒绝-已有-1",
+      "elapsedMs": 2322,
+      "result": {
+        "passed": false,
+        "checks": [
+          {
+            "name": "页面加载、可见内容与 JavaScript",
+            "passed": true
+          },
+          {
+            "name": "金额拒绝-已有-1",
+            "passed": false,
+            "detail": "#ledger .record 元素数量不等于 1"
+          },
+          {
+            "name": "新增两类且每次清空输入",
+            "passed": true
+          }
+        ],
+        "summary": "浏览器验收未通过，需修复失败项。"
+      }
+    },
+    {
+      "mutant": "transient-reject-total",
+      "testOwnedOnly": true,
+      "fullSuite": false,
+      "authoredChecks": 2,
+      "target": "金额拒绝-已有-1",
+      "elapsedMs": 2332,
+      "result": {
+        "passed": false,
+        "checks": [
+          {
+            "name": "页面加载、可见内容与 JavaScript",
+            "passed": true
+          },
+          {
+            "name": "金额拒绝-已有-1",
+            "passed": false,
+            "detail": "#feedback 文本不精确等于：金额无效；总额：10.10；当前小计：10.10"
+          },
+          {
+            "name": "新增两类且每次清空输入",
+            "passed": true
+          }
+        ],
+        "summary": "浏览器验收未通过，需修复失败项。"
+      }
+    },
+    {
+      "mutant": "transient-reject-subtotal",
+      "testOwnedOnly": true,
+      "fullSuite": false,
+      "authoredChecks": 2,
+      "target": "金额拒绝-已有-1",
+      "elapsedMs": 2388,
+      "result": {
+        "passed": false,
+        "checks": [
+          {
+            "name": "页面加载、可见内容与 JavaScript",
+            "passed": true
+          },
+          {
+            "name": "金额拒绝-已有-1",
+            "passed": false,
+            "detail": "#feedback 文本不精确等于：金额无效；总额：10.10；当前小计：10.10"
+          },
+          {
+            "name": "新增两类且每次清空输入",
+            "passed": true
+          }
+        ],
+        "summary": "浏览器验收未通过，需修复失败项。"
+      }
+    }
+  ],
+  "externalProviderRequests": 0,
+  "realProductionTasksStarted": 0,
+  "modelInputTokens": 0,
+  "modelOutputTokens": 0,
+  "modelEstimatedCost": 0,
+  "currency": "USD",
+  "outerDevelopmentTokens": null,
+  "outerDevelopmentCost": null,
+  "supplierInvoice": null,
+  "limitations": [
+    "Handwritten fixture, not internal role output or autonomous delivery.",
+    "Mutants each execute target and companion only, not all twelve.",
+    "Raw TAP is local and hash-linked; this receipt is not an independent signature.",
+    "Final comment-only fixture correction has no behavioral change from the tested implementation."
+  ]
+}
