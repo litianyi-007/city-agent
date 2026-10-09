@@ -37,6 +37,8 @@
 - 提交前范围/秘密核对：共享契约2文件与本线57文件共59文件，秘密模式匹配0；三份关键文档备份与f212原件逐字相同，SUBMISSION-REPORT.md及旧HTML01～07与f212逐字相同。共享兼容提交`1bf0982`独立供另一线审查，不自动合并；生产源码`84587ef7ced3adacf5839defacfcf37fbebb109f`已普通推送。
 - `84587ef`干净Node22构建后，只核对并重启本线无活动任务的4420服务。真实页面免费预检ready，grouped v5/phase-readiness-v1/source v9，0模型请求/0新任务；原24条生产、2条Jev基准、3条study均无活动运行。回执`output/production-html08/free-v5-QbuP0j/receipt.json`，reportHash `34015beb166f429a8112ab6f1d2210e4a5daa745d2fd7d71d616bef85c9f62af`。后续docs-only提交重新构建与预检，最终source/build/boot以发布回执为准。
 - 独立评委从GitHub普通fetch并detach `84587ef`，独立依赖/浏览器/空数据，无作者Key：实际UI三个Mock均completed，各3项Gate通过、0返修，1055/1220/1313ms；新需求编辑器缺Key/费率免费预检明确阻断，modelRequests=0、账本仍3Mock。UI段12.710秒；回执SHA256 `60fc22b846f513fd31ed1f13b0bb55202cc667a7e63cf16552eb624158af883c`（本地`output/production-reviewer-install-yZ5wiT/verification/receipt.json`）。这是外层安装/工程验证，不是内部真实模型交付；自有4520服务已停止，其余三端口无监听。当前新增文档另经非作者只读复核，无P1/P2矛盾。
+- docs-only `79c8b4f`干净构建与boot绑定再通过实际本地免费预检，reportHash `ea8c46ad352db2fcdcb7caca4dbed24a05ef179495a9f44d60320c4f43995b6b`，仍0模型/新任务。独立空数据再次安装实操：三个Mock各3Gate通过、0修复，1106/1202/1282ms，UI段11.807秒；缺Key/费率预检阻断，0HTTP/Harness/Token/模型费用。最终安装回执SHA256 `3cfeee31921f25f0e0d3982fbb25ef81c15cf7e49c13de28e1aab602cebd6ebf`（`verification-final/receipt.json`），旧回执未覆盖，临时端口全退出。
+- 全量后PDF实际逐页审查发现首个候选Vd9LjO的HTML表长UUID/commit重叠，暂停发布，保留候选不当终版。新增局部账本表换行、不裁剪/隐藏原文；5文件52/52专项，8.235秒，非作者另实跑print 1/1、647ms，P1/P2=0。此后只修改可信导出样式/相应测试与本记录，不改运行时源码、原档、Gate、预算或权限；1078全量在该打印修复前通过，不虚称已包含新增print用例。重新导出全部PDF页面检查和最终发布另见回执。
 
 ## 费用、来源和发布
 

@@ -8,6 +8,8 @@ import { reviewerInstallCommands, REVIEWER_CAMERA_PREPARATION_COMMANDS, REVIEWER
 
 export const SUBMISSION_BASELINE = 'b66122c21604fdb2ecdcbafb89c3d5ad8cde1466';
 export const MATERIALS_VERSION = 'production-materials-v7';
+/** Long evidence IDs/hashes must wrap; short Mock identifiers keep their layout. */
+export const PRODUCTION_LEDGER_PRINT_STYLE = '.case-table.ledger-table th,.case-table.ledger-table td{white-space:pre-line;word-break:normal;overflow-wrap:anywhere}';
 const SOURCE_REPOSITORY = 'https://github.com/litianyi-007/city-agent';
 export const PACKAGE_DOCS = ['README.md', 'RUNBOOK.md', 'DESIGN.md', 'EVALUATION.md', 'REQUIREMENTS.md', 'EXPERIMENTS.md', 'VALIDATION.md', 'ISOLATION.md', 'SUBMISSION.md', 'NEXT-STEPS.md', 'REVIEW.md'] as const;
 /** New reviewer documents are optional for historical packages. */
