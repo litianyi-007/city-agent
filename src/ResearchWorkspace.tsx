@@ -3,6 +3,7 @@ import { researchTaskSchema, type ResearchTask } from '../shared/research-schema
 import { residentInput, type ResidentAgentInput, type ResidentAgentPublic, type ResearchProject, type ResearchProjectInput } from '../server/research/residents';
 import { QuestionEditor, newQuestion, questionTypes, type Question } from './QuestionEditor';
 import { researchApi, downloadJson, type ProjectCheck } from './research-client';
+import { CONTRACT11_ROUND_BANNER } from './research-round-copy';
 import { createBlankResearchTask, readResearchDraft } from './research-draft';
 import './research.css';
 import './research-next.css';
@@ -131,7 +132,7 @@ export function ResearchWorkspace({ section, onSectionChange, onDirtyChange, onB
           <a className="text-button" href={`${publicReviewBase}index.html`} target="_blank" rel="noreferrer">RC1完整申报材料 · 历史保留 ↗</a>
           {!pagesMode && <a className="text-button" href={`${import.meta.env.BASE_URL}submission-next/index.html`} target="_blank" rel="noreferrer">本机公开审查材料副本 ↗</a>}
         </div>
-        <p className="research-note">历史契约1.1真实调查：小学联合0/10、宠物3/10，15未启动；5请求，保守估算¥0.042032。两个十人门限仍失败，规划/CORS未启动，账本closed，不自动重试或扩容。新接口能力记录另册，未替换本页执行路线。合成居民不是真人，不能推断实际开店结论；下方完整业务示例仍是0模型调用夹具，原始各轮结果分别留档。</p>
+        <p className="research-note">{CONTRACT11_ROUND_BANNER}</p>
         {section === 'projects' && showBusinessDemos && <Suspense fallback={<p>加载完整业务问卷与五层情景…</p>}><BusinessDemoPanel busy={busy} onBusyChange={setBusy} onApplyDemo={async (next, presets) => {
           if (dirty && !window.confirm('当前问卷有未保存修改。是否放弃修改，应用完整业务问卷并新增四份无 Key 情景预设？不会删除既有预设。')) return false;
           setBusy(true); setError('');
