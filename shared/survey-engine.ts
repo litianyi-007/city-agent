@@ -8,7 +8,20 @@ import type { RegionPack, auditPack } from '../server/population/model';
 import type { SurveyAnalysis, samplingReport } from './survey-analysis';
 import { residentPersonaSchema, type ResidentPersona } from './resident-persona';
 
-export const SURVEY_VERSION = 'coverage-survey-2.3-exclusive-check';
+export const SURVEY_VERSION = 'coverage-survey-2.4-logic-audit';
+const EXCLUSIVE_PASS_VERSION = 'coverage-survey-2.3-exclusive-check';
+export function surveyRecordsExclusivePasses(version: string) { return version === EXCLUSIVE_PASS_VERSION || version === SURVEY_VERSION; }
+export function surveyRecordsLogicAudit(version: string) { return version === SURVEY_VERSION; }
+export interface SurveyLogicReport {
+  schemaVersion: '1.0'; verifierVersion: string; status: 'not-evaluated' | 'conflict' | 'checked';
+  answerStructureValid: boolean; rulesHash: string; registered: number; checked: number; skipped: number;
+  issues: { ruleId: string; questionId: string; message: string }[]; scope: string;
+}
+export interface SurveyLogicAudit {
+  schemaVersion: '1.0'; verifierVersion: string; status: 'conflict' | 'checked' | 'not-evaluated';
+  rules: unknown[]; rulesHash: string; registered: number;
+  records: { residentId: string; status: SurveyLogicReport['status'] | 'not-applicable'; report: SurveyLogicReport | null }[];
+}
 export const RESIDENT_PROMPT_VERSION = 'resident-json-contract-1.1';
 export const RESIDENT_SYSTEM_PROMPT = `你是虚拟受访者。只代表本次给定的合成画像回答问卷，不代表滨江真人。
 输出契约版本：${RESIDENT_PROMPT_VERSION}。
@@ -47,7 +60,7 @@ export interface Answer { questionId: string; value: string | string[] | number 
 export interface ResponseRecord {
   residentId: string; status: 'valid' | 'invalid' | 'failed' | 'not-started'; answers: Answer[];
   raw: string; error?: string; durationMs: number; inputTokens: number | null; outputTokens: number | null;
-  structureValid?: boolean; coherence?: ReturnType<typeof checkCoherence>;
+  structureValid?: boolean; coherence?: ReturnType<typeof checkCoherence>; logic?: SurveyLogicReport;
 }
 function rng(seed: number) { let n = seed >>> 0; return () => { n = (Math.imul(n, 1664525) + 1013904223) >>> 0; return n / 4294967296; }; }
 export function matchesPopulationFilter(value: Scalar | undefined, filter: ResearchTask['population']['filters'][number]) {
@@ -254,4 +267,5 @@ export interface SurveyRun {
   presetSnapshots?: Omit<ResidentAgentPublic, 'hasApiKey'>[];
   sampling?: ReturnType<typeof samplingReport>; analysis?: SurveyAnalysis;
   exposure?: 'full' | 'no-persona' | 'demographics-only'; experiment?: { id: string; arm: string };
+  logicAudit?: SurveyLogicAudit;
 }

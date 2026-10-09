@@ -35,7 +35,7 @@ test('historical 2.0 and real 2.1 evidence remain byte-identical and are not upg
 test('new evidence registers the exact 1.1 system contract and rejects silent old-prompt relabeling', async () => {
   const { run } = await createBusinessDemoRun({ demoId: 'child-snacks', population: getPopulationModel(), pack: getPopulationPack(), seed: 20261007 });
   assert.equal(run.version, SURVEY_VERSION);
-  assert.equal(SURVEY_VERSION, 'coverage-survey-2.3-exclusive-check');
+  assert.equal(SURVEY_VERSION, 'coverage-survey-2.4-logic-audit');
   assert.equal(run.parameters?.residentPromptVersion, RESIDENT_PROMPT_VERSION);
   assert.equal(run.prompt.system, RESIDENT_SYSTEM_PROMPT);
   assert.deepEqual(parseSurveyEvidence(JSON.parse(JSON.stringify(run))), run);
