@@ -1,4 +1,5 @@
 import { execFile } from 'node:child_process';
+import { createHash } from 'node:crypto';
 import { promisify } from 'node:util';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -13,6 +14,93 @@ import type { ProductionRun } from '../shared/production-schema.js';
 
 const executeFile = promisify(execFile);
 const REPOSITORY = 'litianyi-007/city-agent';
+const MAX_PUBLICATION_BLOB_BYTES = 30_000_000;
+
+/** Resolve only after execFile's close callback, including failed stdin writes.
+ * CLI bodies/stderr are never echoed; only this request's child is stopped. */
+export async function publicationApiRequest<T>(root: string, endpoint: string, method = 'GET', body?: unknown, timeoutMs = 60000): Promise<T> {
+  if (timeoutMs !== 60000 && !(endpoint === 'git/blobs' && method === 'POST' && [120000, 180000].includes(timeoutMs))) throw new Error('Only bounded blob uploads may extend the API deadline.');
+  const args = ['api', 'repos/' + REPOSITORY + '/' + endpoint, '--method', method];
+  if (body !== undefined) args.push('--input', '-');
+  const output = await new Promise<string>((resolve, reject) => {
+    let inputFailed = false;
+    const child = execFile('gh', args, { cwd: root, encoding: 'utf8', timeout: timeoutMs, maxBuffer: 60_000_000 }, (error, stdout) => {
+      if (error || inputFailed) reject(new Error('GitHub API refused: ' + method + ' ' + endpoint + '; no forced update attempted.'));
+      else resolve(stdout);
+    });
+    child.stdin!.on('error', () => { inputFailed = true; child.kill(); });
+    child.stdin!.end(body === undefined ? undefined : JSON.stringify(body));
+  });
+  try { return JSON.parse(output) as T; }
+  catch { throw new Error('GitHub API returned invalid JSON: ' + method + ' ' + endpoint); }
+}
+
+/** Git objects hash their binary header and raw bytes, not base64 or UTF-16. */
+export function publicationGitBlobSha(content: Buffer): string {
+  if (!Buffer.isBuffer(content) || content.length > MAX_PUBLICATION_BLOB_BYTES) throw new Error('Publication blob exceeds its existing byte bound.');
+  return createHash('sha1').update(`blob ${content.length}\0`).update(content).digest('hex');
+}
+/** Only blob uploads get a larger, size-bounded deadline; never an API retry. */
+export function publicationBlobTimeoutMs(bytes: number): number {
+  if (!Number.isSafeInteger(bytes) || bytes < 0 || bytes > MAX_PUBLICATION_BLOB_BYTES) throw new Error('Publication blob byte count is invalid.');
+  return bytes <= 1_000_000 ? 60_000 : bytes <= 10_000_000 ? 120_000 : 180_000;
+}
+export interface PublicationBlobUpload {
+  content: Buffer;
+  expectedSha: string;
+  timeoutMs: number;
+}
+/** Called only after the complete source/ZIP/renderer checks. Reuse is based
+ * exclusively on the inspected prior production tree, not a package claim,
+ * a local receipt, or an assumed upload from an earlier failed attempt. */
+export async function uploadPublicationBlobs(files: ReadonlyMap<string, Buffer>, priorProduction: readonly GitTreeEntry[], upload: (item: PublicationBlobUpload) => Promise<{ sha: string }>) {
+  if (files.size > publicationFileLimit(MATERIALS_VERSION) + 1 || priorProduction.length > 5000) throw new Error('Publication upload inventory exceeds its existing bound.');
+  const known = new Set<string>();
+  for (const entry of priorProduction) if (entry.type === 'blob') {
+    if (!/^[a-f0-9]{40}$/.test(entry.sha)) throw new Error('Prior production blob SHA is invalid.');
+    known.add(entry.sha);
+  }
+  const groups = new Map<string, { content: Buffer; names: string[] }>();
+  let total = 0;
+  for (const [name, content] of files) {
+    const sha = publicationGitBlobSha(content); total += content.length;
+    if (total > 100_000_000) throw new Error('Production publication exceeds the total bound.');
+    const group = groups.get(sha);
+    if (group) {
+      if (!group.content.equals(content)) throw new Error('Different publication bytes have the same Git object SHA.');
+      group.names.push(name);
+    } else groups.set(sha, { content, names: [name] });
+  }
+  const resolved = new Map<string, string>();
+  const queue: Array<{ content: Buffer; names: string[]; expectedSha: string }> = [];
+  let reusedBlobs = 0, reusedFiles = 0;
+  for (const [sha, group] of groups) {
+    if (known.has(sha)) {
+      reusedBlobs++; reusedFiles += group.names.length;
+      for (const name of group.names) resolved.set(name, sha);
+    } else queue.push({ ...group, expectedSha: sha });
+  }
+  let position = 0, uploadedBlobs = 0, failed = false;
+  let failure: Error | undefined;
+  // Three workers remain the maximum. After any failure no worker takes a new
+  // item; already-dispatched bounded requests settle before this rejects.
+  await Promise.all(Array.from({ length: Math.min(3, queue.length) }, async () => {
+    while (!failed && position < queue.length) {
+      const item = queue[position++];
+      try {
+        const blob = await upload({ content: item.content, expectedSha: item.expectedSha, timeoutMs: publicationBlobTimeoutMs(item.content.length) });
+        if (blob?.sha !== item.expectedSha) throw new Error('Uploaded Git blob SHA differs from the reviewed bytes.');
+        uploadedBlobs++;
+        for (const name of item.names) resolved.set(name, blob.sha);
+      } catch (error) {
+        if (!failed) { failed = true; failure = error instanceof Error ? error : new Error('Publication blob upload failed.'); }
+      }
+    }
+  }));
+  if (failed) throw failure;
+  if (resolved.size !== files.size) throw new Error('Publication upload did not resolve the complete inventory.');
+  return { shas: resolved, uploadedBlobs, reusedBlobs, reusedFiles, distinctBlobs: groups.size, deduplicatedFiles: files.size - groups.size };
+}
 interface PublicManifest { version: string; materialsVersion?: string; sourceBranch: string; publisherCommit: string; evidencePlatformCommit: string; materialsBase?: string; versionedEntry?: string; sourcePackageManifestSha256?: string; files: Array<{ path: string; sha256: string; bytes: number }> }
 export function publishPath(name: string, publisherCommit?: string) {
   if (!/^[A-Za-z0-9._/-]+$/.test(name) || name.split('/').some(part => !part || part === '.' || part === '..') || !/^(index\.html|publication-manifest\.json|submission\/[A-Za-z0-9._/-]+|previews\/MOCK-0[1-3]\/index\.html|reviews\/[a-f0-9]{40}\/(index\.html|submission\/[A-Za-z0-9._/-]+|previews\/MOCK-0[1-3]\/index\.html))$/.test(name)) throw new Error('Invalid production publication path.');
@@ -97,18 +185,7 @@ export async function publishProduction(directory: string, root: string, execute
   const selectedHtml = await readSelectedHtmlMaterials(root, commit, mixedRuns);
   assertReviewedPublicationSnapshot(manifest, bytes, commit, selectedHtml.files);
   bytes.set('publication-manifest.json', markerBytes);
-  const gh = async <T>(endpoint: string, method = 'GET', body?: unknown): Promise<T> => {
-    const args = ['api', 'repos/' + REPOSITORY + '/' + endpoint, '--method', method];
-    if (body !== undefined) args.push('--input', '-');
-    const output = await new Promise<string>((resolve, reject) => {
-      // execFile's callback waits for close (stdout drained), enforces maxBuffer
-      // and timeout. Do not echo API bodies or CLI stderr into evidence/logs.
-      const child = execFile('gh', args, { cwd: root, encoding: 'utf8', timeout: 60000, maxBuffer: 60_000_000 }, (error, stdout) => error ? reject(new Error('GitHub API refused: ' + method + ' ' + endpoint + '; no forced update attempted.')) : resolve(stdout));
-      child.stdin!.on('error', () => reject(new Error('GitHub API input failed: ' + method + ' ' + endpoint)));
-      if (body !== undefined) child.stdin!.end(JSON.stringify(body));
-    });
-    return JSON.parse(output) as T;
-  };
+  const gh = <T>(endpoint: string, method = 'GET', body?: unknown, timeoutMs = 60000): Promise<T> => publicationApiRequest<T>(root, endpoint, method, body, timeoutMs);
   if (!execute) return { dryRun: true, target: 'gh-pages:' + PUBLIC_SUBTREE, publisherCommit: commit, evidencePlatformCommit: manifest.evidencePlatformCommit, files: bytes.size, bytes: total, prohibited: ['root/index.html', 'root/assets/', 'root/submission/', 'main', 'frozen tags'] };
   const sourceRef = await gh<{ object: { sha: string } }>('git/ref/heads/feature/autonomous-production');
   if (sourceRef.object.sha !== commit) throw new Error('Push the reviewed source production commit before publishing.');
@@ -126,17 +203,10 @@ export async function publishProduction(directory: string, root: string, execute
     const old = JSON.parse(Buffer.from(priorMarker.content, 'base64').toString('utf8')) as PublicManifest;
     if (old.version !== PUBLIC_PROJECT_ID || old.sourceBranch !== branch) throw new Error('Existing production subtree belongs to another task; refusing to overwrite.');
   }
-  const entries: Array<{ path: string; mode: string; type: string; sha: string }> = [];
-  // Bounded concurrency. Only reviewed allowlisted bytes are uploaded; no GitHub
-  // token extraction, repository checkout, deletion, or force-push is involved.
-  const queue = [...bytes]; let position = 0;
-  await Promise.all(Array.from({ length: 3 }, async () => {
-    while (position < queue.length) {
-      const [name, content] = queue[position++];
-      const blob = await gh<{ sha: string }>('git/blobs', 'POST', { content: content.toString('base64'), encoding: 'base64' });
-      entries.push({ path: publishPath(name, commit), mode: '100644', type: 'blob', sha: blob.sha });
-    }
-  }));
+  // Inherited video/evidence bytes already in the inspected production tree
+  // need no POST. New blobs remain single-attempt, at most three concurrently.
+  const uploads = await uploadPublicationBlobs(bytes, priorProductionTree.tree, ({ content, timeoutMs }) => gh<{ sha: string }>('git/blobs', 'POST', { content: content.toString('base64'), encoding: 'base64' }, timeoutMs));
+  const entries = [...bytes.keys()].map(name => ({ path: publishPath(name, commit), mode: '100644', type: 'blob', sha: uploads.shas.get(name)! }));
   const tree = await gh<{ sha: string }>('git/trees', 'POST', { base_tree: prior.tree.sha, tree: entries });
   const composed = await gh<{ tree: GitTreeEntry[]; truncated: boolean }>('git/trees/' + tree.sha);
   if (composed.truncated) throw new Error('Cannot verify the composed publication tree.');
@@ -153,7 +223,7 @@ export async function publishProduction(directory: string, root: string, execute
   const finalRef = await gh<{ object: { sha: string } }>('git/ref/heads/gh-pages');
   if (finalRef.object.sha !== deployment.sha) throw new Error('Publication ref changed concurrently after update; inspect the recorded deployment, do not force it.');
   const publicBase = 'https://litianyi-007.github.io/city-agent/production/';
-  const result = { version: 'production-publication-receipt-v1', generatedAt: new Date().toISOString(), sourceCommit: commit, evidencePlatformCommit: manifest.evidencePlatformCommit, deploymentCommit: deployment.sha, priorDeploymentCommit: priorRef.object.sha, outsideProductionTreesUnchanged: true, historicalProductionLeavesUnchanged: true, priorHistoricalLeafCount: priorProductionTree.tree.filter(item => item.type !== 'tree' && !['index.html', 'publication-manifest.json'].includes(item.path)).length, sourceFiles: bytes.size, url: publicBase, versionedUrl: manifest.versionedEntry ? publicBase + manifest.versionedEntry : null, materials: publicBase + (manifest.materialsBase ?? 'submission/') + 'production-mock-submission.pdf', rootTrees: priorTree.tree.filter(item => item.path !== 'production') };
+  const result = { version: 'production-publication-receipt-v1', generatedAt: new Date().toISOString(), sourceCommit: commit, evidencePlatformCommit: manifest.evidencePlatformCommit, deploymentCommit: deployment.sha, priorDeploymentCommit: priorRef.object.sha, outsideProductionTreesUnchanged: true, historicalProductionLeavesUnchanged: true, priorHistoricalLeafCount: priorProductionTree.tree.filter(item => item.type !== 'tree' && !['index.html', 'publication-manifest.json'].includes(item.path)).length, sourceFiles: bytes.size, blobUploads: { uploadedBlobs: uploads.uploadedBlobs, reusedBlobs: uploads.reusedBlobs, reusedFiles: uploads.reusedFiles, distinctBlobs: uploads.distinctBlobs, deduplicatedFiles: uploads.deduplicatedFiles, maximumConcurrency: 3, maximumBlobTimeoutMs: 180000 }, url: publicBase, versionedUrl: manifest.versionedEntry ? publicBase + manifest.versionedEntry : null, materials: publicBase + (manifest.materialsBase ?? 'submission/') + 'production-mock-submission.pdf', rootTrees: priorTree.tree.filter(item => item.path !== 'production') };
   await writeFile(path.join(directory, 'publication-receipt.json'), JSON.stringify(result, null, 2), { flag: 'wx' });
   return result;
 }

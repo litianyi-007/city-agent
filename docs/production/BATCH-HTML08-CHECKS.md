@@ -47,3 +47,17 @@
 提交后干净构建/本分支服务重启只操作已核对cwd且无任务的4420服务；免费预检报告v5/sourcev9，无新增模型任务。新PDF/ZIP和静态Pages先验证旧包原证据/视频一致、固定commit、可信三案例、安全边界，再dry-run。实际部署与线上检查另存发布回执；源码push不等于部署，也不提供在线Harness后端。
 
 下一真实HTML09须重新冻结配置与预登记，另行确认单次有限预算。稳定九次与通用受控仓库不是本轮自动授权，未验证容器不执行生成Node/shell。
+
+## 发布前追加核验
+
+`3235c69232386910282c7e562e84b9200e2e6534`终版候选的19页PDF逐页视觉检查无重叠/裁切；独立核验离线材料包112登记文件加manifest共113件、38,519,052字节（不同于其静态发布包119登记加marker共120件、60,148,346字节），32件HTML源档匹配该固定Git对象。旧Mock、CAMERA09、REAL02、mixed与两份视频原字节不变；主稿恢复为仓库原字节。原稿保留历史相对/浮动链接，现版阅读从CURRENT与评委指南进入，不能声称所有历史原件MD离线跳转都可用。
+
+该源码独立全新空数据安装再验：实际UI三个Mock各3Gate、0返修，1136/1178/1225ms；缺Key/费率预检阻断、0HTTP/Harness/Token/模型费用，UI段12.170秒。回执`verification-published/receipt.json` SHA256 `fecd5c3f1269dde7e5b863dee2b25ed9aa09e7480f75cb004b4d18afbe817fa4`。终版静态产物也完成三案例、手机实际操作、两主题及375/768/1024/1440屏宽校验，0模型请求、0外联、0页面错误、0worker。首次静态诊断曾因Playwright `serviceWorkers:'block'`注入访问opaque sandbox的navigator.serviceWorker而失败；非作者以无脚本父子页面四格对照确认归因。改用全新默认context，保留allow-scripts沙箱和严格零错误/本地GET allowlist，没有过滤报错或增加allow-same-origin；对应通过回执`output/production-html08/public-ui-lc9Ns7/receipt.json`。
+
+首轮实际发布在POST git/blobs失败，尚未更新gh-pages。诊断中同一32,522字节公开manifest上传1.043秒成功、20,310,895字节ZIP单独52.632秒成功；大对象并发接近统一60秒超时是可疑原因，首轮没有保存原始killed状态，不能写成已确证超时。仅修复发布传输的既有blob复用与有上限的大对象时间，源档/ZIP/可信渲染/历史树/非强制ref校验不得放松；新源码冻结后另导出和核验最终包，不能将旧3235候选冒充新publisher。实际最终部署另存独立回执。
+
+发布传输修复后的六文件专项（upload/public/versioned/safety/HTML materials/print）49/49通过、13.023秒、0跳过/取消；其中新增8项覆盖Git原始二进制对象hash、旧树复用、重复字节单上传、大小/总量/数量边界、最多3并发、首错停止派发并等待在途请求、响应SHA不匹配拒绝、原有sourceproof与非强推次序。大blob仅POST分档60/120/180秒，其他API仍60秒；只从实际旧production树复用，诊断孤立对象不成为可信缓存。此修复是免费发布侧工程验证，不改变平台运行时或HTML08真实结论；全量1078与浏览器65仍为此前明确时点，不冒充这次新增用例后的全量运行。
+
+非作者复审又指出既有stdin-error直接拒绝可能早于gh子进程关闭，修正为只标记输入失败并停止自身child，统一等execFile close回调返回；错误不回显stdout/body/stderr。新增真实stub时序和非blob延长时限拒绝/非法JSON脱敏测试，最终六文件51/51通过、13.217秒，TypeScript与diff检查通过；不将前一48/49/27专项结论当作已经覆盖这次补修。
+
+最新传输代码非作者安全/质量复审五文件50/50、8.458秒、0跳过/取消，另独立TypeScript与diff检查通过，stdin提前结束P2关闭，无未关闭P1/P2；此结论包括最终close修复，但不冒充真实REST发布成功。
