@@ -38,7 +38,7 @@ export function PagesApp() {
       <h3>历史RC1公开评审证据包（未覆盖）</h3>
       <p>前一轮7请求、小学0/10与宠物1/10联合通过、17未启动；规划0/2可应用、CORS两次HTTP200只证明协议。新旧轮次分列，原PDF与零费用录屏保持原样，不因新版修复改写历史结果。</p>
       <div className="research-save-bar">
-        <a className="primary" href={`${publicReviewBase}index.html`} target="_blank" rel="noreferrer">新版公开评审材料 · 非提交回执 ↗</a>
+        <a className="primary" href={`${publicReviewBase}index.html`} target="_blank" rel="noreferrer">RC1完整申报材料 · 历史保留 · 契约1.0 ↗</a>
         <a className="secondary" href={`${publicReviewBase}project-materials.pdf`} target="_blank" rel="noreferrer">RC1历史评审 PDF ↗</a>
         <a className="secondary" href={`${publicReviewBase}live-proof/report.md`} target="_blank" rel="noreferrer">RC1真实 API 调查报告 ↗</a>
         <a className="secondary" href={`${publicReviewBase}live-proof/report.json`} target="_blank" rel="noreferrer">RC1真实 API 证据 JSON ↗</a>
@@ -50,7 +50,7 @@ export function PagesApp() {
       <h3>原冻结里程碑（保留）</h3>
       <p>15题问卷、旧真实模型答卷、重复与对照实验、失败记录、Prompt、耗时和费用。无需Key即可在调查页载入旧实测快照；旧重复实验与交付失败仍按原记录展示，不被新版覆盖。当前没有真人市场校准。</p>
       <div className="research-save-bar"><a className="secondary" href={`${import.meta.env.BASE_URL}submission/index.html`}>原项目材料</a><a className="secondary" href={`${import.meta.env.BASE_URL}submission/demo.mp4`}>原演示录屏</a><a className="secondary" href={`${import.meta.env.BASE_URL}submission/live-run.json`}>旧真实问卷证据</a><a className="secondary" href={`${import.meta.env.BASE_URL}submission/evaluation-summary.json`}>原实验诊断</a></div>
-      <p>公开评审发布不等于正式比赛提交，提交状态须以回执为准。浏览器新发真实请求需要自行填写Key，且供应商须支持浏览器跨域；历史CORS协议检查见RC1，本轮没有新增CORS。页面不自动复跑已关闭实验。本机版提供DeepSeek Harness居民执行与四角色编排，GitHub Pages不运行本机后端或四角色自动开发。</p>
+      <p>公开评审发布不等于正式比赛提交，提交状态须以回执为准。浏览器新发真实请求需要自行填写Key，且供应商须支持浏览器跨域；历史CORS协议检查见RC1，当前页面没有新增CORS。页面不自动复跑已关闭实验。本机版提供DeepSeek Harness居民执行与四角色编排，GitHub Pages不运行本机后端或四角色自动开发。</p>
     </section>}
   </div></main></div>;
 }

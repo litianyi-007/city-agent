@@ -21,12 +21,12 @@ npm run setup
 npm run build
 npm run doctor
 npm run start:review</code></pre><p>Node22.22.3（最低22.19）；打开 <code>http://127.0.0.1:4320/#research</code>。SDK依锁文件安装，无需GPU或全局dsh。以下旧安装段仅用于对应历史版本，不替代此版本。</p></section>
-  <section class="note"><h2>追加：契约1.1真实调查补充</h2><p>2026-10-07新增真实测试：小学联合0/10、宠物3/10，15未启动。实际5请求、17,032 Token，保守估算¥0.042032，两个十人门限仍失败。质量停止后规划/CORS未启动，不重试、不补样、不扩容。工程通过不等于市场有效。</p><p><a href="./submission-contract11/">独立结果、原文与2页PDF补充</a>。下面RC1安装和材料保持独立历史口径，未被此次结果替换；新版页面已采用居民1.1输出契约。</p><p>需要最新源码请选独立Tag <code>society-contract-review-2026-10-07-rc2-ui1</code>，替换下面clone命令的Tag与新目录名；npm安装、构建、自检和回环启动步骤相同。此版修正了调查工作区的历史报告命名，旧RC2 Tag不移动。新版未完成他人电脑或跨OS安装验收，不自动继承RC1的同机新目录安装结果。</p></section>
-  <p>历史RC1固定源码Tag：<code>society-review-2026-10-07-rc1</code>。以下对应前轮记录；安装成功不等于质量验收通过。</p>
-  <p><a href="./submission-next/index.html">最新申报材料</a> · <a href="./submission-next/project-materials.pdf">完整PDF</a> · <a href="./submission-next/live-proof/report.md">本轮真实测试报告</a> · <a href="./submission-next/demo-next.mp4">4分33秒零费用UI录屏</a></p>
+  <section class="note"><h2>追加：契约1.1真实调查补充</h2><p>2026-10-07契约1.1真实测试：小学联合0/10、宠物联合3/10，15未启动。实际5请求、17,032 Token，保守估算¥0.042032，两个十人门限仍失败。质量停止后规划/CORS未启动，不重试、不补样、不扩容。工程通过不等于市场有效。</p><p>本段只描述契约1.1。下面的 RC1 / 契约1.0 是更早一轮：小学联合0/10、宠物联合1/10、17未启动、7次请求、¥0.085884。两轮数字不能当成同一次测试。</p><p><a href="./submission-contract11/">契约1.1独立结果、原文与2页PDF补充</a>。下面RC1安装和材料保持独立历史口径，未被此次结果替换；新版页面已采用居民1.1输出契约。</p><p>需要最新源码请选独立Tag <code>society-contract-review-2026-10-07-rc2-ui1</code>，替换下面clone命令的Tag与新目录名；npm安装、构建、自检和回环启动步骤相同。此版修正了调查工作区的历史报告命名，旧RC2 Tag不移动。新版未完成他人电脑或跨OS安装验收，不自动继承RC1的同机新目录安装结果。</p></section>
+  <p>历史RC1固定源码Tag：<code>society-review-2026-10-07-rc1</code>。以下对应前轮记录（契约1.0，不是契约1.1）；安装成功不等于质量验收通过。</p>
+  <p>下列材料是 <strong>RC1 / 契约1.0 · 历史保留</strong>（协议 live-business-smoke-1.0：小学联合0/10、宠物联合1/10、17未启动、7次请求、¥0.085884）。不要读成上面的契约1.1（小学联合0/10、宠物联合3/10、15未启动、5次请求、¥0.042032）。<a href="./submission-next/index.html">RC1完整申报材料 · 历史保留</a> · <a href="./submission-next/project-materials.pdf">RC1历史PDF</a> · <a href="./submission-next/live-proof/report.md">RC1契约1.0真实测试报告</a> · <a href="./submission-next/demo-next.mp4">4分33秒零费用UI录屏</a></p>
   <div class="grid">
-    <article><h2>无需安装</h2><p><a href="https://litianyi-007.github.io/city-agent/">公开 Demo</a>提供两套17/18题、各12人的完整工程示例，以及人口来源和历史记录。不需要Key；规则夹具为0模型调用，不是本轮真实LLM答卷。</p></article>
-    <article><h2>浏览器新调用</h2><p>页面填自己的模型连接和Key，直接请求供应商，<strong>不经过Harness</strong>。本轮从Pages来源完成2次实际CORS/HTTP200检查，仅证明该配置的协议可达，不等于新版界面全流程或问卷质量通过。</p></article>
+    <article><h2>无需安装</h2><p><a href="https://litianyi-007.github.io/city-agent/">公开 Demo</a>提供两套17/18题、各12人的完整工程示例，以及人口来源和历史记录。不需要Key；规则夹具为0模型调用，不是 RC1 或契约1.1 的真实LLM答卷。调查页工具栏按钮名为「完整业务示例 · 零费用体验」。</p></article>
+    <article><h2>浏览器新调用</h2><p>页面填自己的模型连接和Key，直接请求供应商，<strong>不经过Harness</strong>。RC1 / 契约1.0 从Pages来源完成2次实际CORS/HTTP200检查，仅证明该配置的协议可达，不等于新版界面全流程或问卷质量通过，也不是契约1.1。</p></article>
     <article><h2>本机Harness</h2><p>安装固定Tag源码、Node22.22.3及依赖；页面验收另需Chromium。真实调用在页面填自己的Key并主动确认预算。无需GPU、模型权重或全局dsh。</p></article>
   </div>
   <section>
@@ -42,15 +42,16 @@ npm run doctor
 npm run start:review</code></pre>
     <p>打开 <code>http://127.0.0.1:4320/#research</code>，Ctrl+C停止。Node最低22.19.0，建议实测22.22.3；使用Unix nvm时可先执行 <code>nvm install &amp;&amp; nvm use</code>。SDK和dsh由锁文件安装，无需单独下载或全局安装。</p>
     <p>默认独立数据目录 <code>.city-agent-review/</code>。启动器不安装、不构建、不换端口、不复制Key、不请求模型。安装或运行零费用示例无需API Key；实际新调用另需自己的有效Key、模型权限、供应商余额和显式预算确认。</p>
-    <p><a href="https://github.com/litianyi-007/city-agent/tree/society-review-2026-10-07-rc1">固定Tag源码</a> · <a href="https://github.com/litianyi-007/city-agent/blob/society-review-2026-10-07-rc1/README.md">该版README</a> · <a href="./submission-next/index.html">对应申报材料</a></p>
+    <p><a href="https://github.com/litianyi-007/city-agent/tree/society-review-2026-10-07-rc1">固定Tag源码</a> · <a href="https://github.com/litianyi-007/city-agent/blob/society-review-2026-10-07-rc1/README.md">该版README</a> · <a href="./submission-next/index.html">RC1对应申报材料 · 历史保留</a></p>
     <pre><code>npm run doctor -- --json
 npm run start:review -- --port 4330 --data-dir .city-agent-review-4330</code></pre>
     <p>自检退出码：0前提就绪；1检查失败；2参数错误。只检查本机前提，不读私有配置、不创建数据库。Chromium文件存在不保证Linux共享库可用，dist存在不保证与当前源码同步。</p>
     <p class="note">申报材料ZIP不是程序包。请核对下载的源码Tag与指南一致；不要把旧冻结Tag的启动方式用于新版，或把本机安装完成当成供应商连接、真实样本与现实选址已验收。</p>
   </section>
   <section>
-    <h2>本轮真实测试：质量门限未通过</h2>
-    <p>模型为DeepSeek <code>deepseek-flash</code>，调用实际API，没有用mock替代。受访者仍是五层假设构建的合成居民，不是滨江真人。本轮7次API请求均确认上游传输并有已报告usage，但不是7份有效居民问卷：</p>
+    <h2>RC1 · 契约1.0历史保留：质量门限未通过（宠物联合1/10）</h2>
+    <p>本段只描述更早的 RC1 / 契约1.0（协议 live-business-smoke-1.0），不是上文契约1.1。契约1.1是小学联合0/10、宠物联合3/10、15未启动、5次请求、¥0.042032；本段是小学联合0/10、宠物联合1/10、17未启动、7次请求、¥0.085884。</p>
+    <p>模型为DeepSeek <code>deepseek-flash</code>，调用实际API，没有用mock替代。受访者仍是五层假设构建的合成居民，不是滨江真人。这一 RC1 轮7次API请求均确认上游传输并有已报告usage，但不是7份有效居民问卷：</p>
     <ul>
       <li>居民调查计划20人，实际请求3人：小学照护者17题为0/10有效，宠物采购者18题为1/10有效；合计1份有效、2份结构无效、17人未启动。</li>
       <li>自然语言规划实际调用2次，结构可用候选为0/2；没有替换固定问卷或据此生成选址结论。</li>
@@ -58,7 +59,7 @@ npm run start:review -- --port 4330 --data-dir .city-agent-review-4330</code></p
     </ul>
     <p>多选题将未知值返回为标量而非数组，触发逐场景停止；保留原文，不重试、不补答、不换样本。两场景均未达到首批10/10门限，没有自动扩样。已报告输入15418、输出6881，共22299Token；保守估价¥0.085884，未独立核对供应商账单。一次性¥5/最多24次授权账本已关闭，剩余额度未继续使用。</p>
     <p><a href="./submission-next/live-proof/report.json">结构化测试总账</a> · <a href="./submission-next/live-proof/budget-ledger.json">预算与逐次结算</a> · <a href="./submission-next/live-proof/plan.json">预登记计划</a> · <a href="./submission-next/live-proof/child-snacks/raw-responses.json">小学原始答卷</a> · <a href="./submission-next/live-proof/pet-snacks/raw-responses.json">宠物原始答卷</a></p>
-    <p class="note">零费用工程示例、历史12人15题真实快照和本轮真实测试分开记账。录屏展示之前零费用UI操作，不冒充本轮付费调用实录。当前材料自证可追溯工程和负结果，不自证儿童口味、猫犬市场占比、铺位或盈利。</p>
+    <p class="note">零费用工程示例、历史12人15题真实快照和 RC1 契约1.0 真实测试分开记账，也不要并入契约1.1。录屏展示之前零费用UI操作，不冒充 RC1 付费调用实录。当前材料自证可追溯工程和负结果，不自证儿童口味、猫犬市场占比、铺位或盈利。</p>
   </section>
   <section>
     <h2>第一次操作</h2>

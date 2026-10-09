@@ -54,7 +54,7 @@ function projectText(filename: string, text: string): { text: string; reasons: s
       return `${label}（源码相对路径：\`${target.replace(/^repo:\//, '')}\`；需源码包）`;
     });
     // These are archived method snapshots, not the current experiment ledger.
-    text = '> 公开投影说明：本方法正文保留候选阶段的时间口径；新增真实LLM测试轮请看[最新总账](../live-proof/report.md)。正文中的“本轮/未执行”不覆盖新增总账。\n\n' + text;
+    text = '> 公开投影说明：本方法正文保留候选阶段的时间口径。正文中的“本轮/未执行”指撰写当时，不覆盖账本。本目录 live-proof 是 RC1 / 契约1.0 历史保留（协议 live-business-smoke-1.0：小学联合0/10、宠物联合1/10、17未启动、7次请求、¥0.085884），不是契约1.1（小学联合0/10、宠物联合3/10、15未启动、5次请求、¥0.042032）。历史总账见 [RC1契约1.0报告](../live-proof/report.md)。\n\n' + text;
     reasons.push('增加历史方法时间口径提示，不回填旧统计');
   }
   assertPublicText(filename, text);
@@ -175,12 +175,13 @@ const registeredToFreezeSeconds = (Date.parse(report.generatedAt) - Date.parse(p
 if (!Number.isFinite(registeredToFreezeSeconds) || registeredToFreezeSeconds < 0) throw new Error('真实轮登记/冻结时间不合法。');
 const cover = page('City Agent：可追溯的虚拟社会调查', `
   <div class="hero">人口证据 × 五层情景居民<br/>真实LLM调查测试轮与工程夹具分账</div>
-  <h3>${qualityMet ? '真实测试已执行；首批登记工程质量门限满足，外部效度未验证' : '真实测试已执行；首批质量门限未通过，不扩样、不伪装成功'}</h3>
-  <div class="entrance"><strong>项目体验入口</strong><p>${link(PUBLISHED_DEMO_URL, PUBLISHED_DEMO_URL)}</p><p>${link('project-materials.pdf', '完整申报PDF')} · ${link('live-proof/report.md', '新增真实测试轮')} · ${link('demo-next.mp4', '4分33秒实际UI录屏')}</p><p>公开评审发布版；待部署后核验公网。无需Key可看来源、旧实验、零费用工程示例；真实新请求需要自行配置Key和明确预算。完整Harness及规划执行在本机。</p></div>
-  <p>本次授权API尝试 ${integer(report.realModelCalls, '授权尝试')} 次；确认上游请求${integer(report.providerRequestsConfirmed, '确认上游请求')}，有已报告usage的响应${integer(report.modelResponsesWithKnownUsage, '已报告usage响应')}，不使用mock规则回答。受访者仍是合成居民，不是滨江真人。每场景计划10人，失败/未启动保留在分母。</p>
+  <h3>${qualityMet ? 'RC1 · 契约1.0历史保留：真实测试已执行；首批登记工程质量门限满足，外部效度未验证' : 'RC1 · 契约1.0历史保留：真实测试已执行；宠物联合1/10，质量门限未通过，不扩样、不伪装成功'}</h3>
+  <div class="entrance"><strong>项目体验入口</strong><p>${link(PUBLISHED_DEMO_URL, PUBLISHED_DEMO_URL)}</p><p>${link('project-materials.pdf', '完整申报PDF')} · ${link('live-proof/report.md', 'RC1契约1.0真实测试报告')} · ${link('demo-next.mp4', '4分33秒实际UI录屏')}</p><p>本页是 RC1 / 契约1.0（live-business-smoke-1.0）历史保留材料，不是待部署的最新轮，也不是契约1.1。本包：小学联合0/10、宠物联合1/10、17未启动、7次请求、保守估算¥0.085884。契约1.1（../submission-contract11/）：小学联合0/10、宠物联合3/10、15未启动、5次请求、¥0.042032。两轮不可混读。无需Key可看来源、旧实验与零费用工程示例；真实新请求需要自行配置Key和明确预算。完整Harness及规划执行在本机。</p></div>
+  <p>RC1 / 契约1.0 本次授权API尝试 ${integer(report.realModelCalls, '授权尝试')} 次；确认上游请求${integer(report.providerRequestsConfirmed, '确认上游请求')}，有已报告usage的响应${integer(report.modelResponsesWithKnownUsage, '已报告usage响应')}，不使用mock规则回答。受访者仍是合成居民，不是滨江真人。每场景计划10人，失败/未启动保留在分母。</p>
   ${table(['重点验收材料', '可追溯交付'], [['来源、人群与角色构建', '官方统计原件；五层假设与未知；画像、资格、Prompt冻结'], ['问卷及结果自证', '两套固定17/18题真实LLM测试轮；另列12人规则夹具与历史负例'], ['技术及业务数据', 'Harness、模型、抽样、参数、Token和保守费用；unknown不填0'], ['体验、视频、创新与价值', '公开入口、安装指南、4:33实际UI录屏、补采与假设压力测试']])}
   <aside>本版生成${esc(new Date().toISOString())}；原15页候选与旧Tag保持不动。不是比赛正式提交回执。源码固定ref、上线可达性以独立发布记录为准；录屏是之前零费用UI演示，不冒充此次付费API实录。</aside>`);
-const liveSummary = page('新增重点：真实LLM虚拟社会调查测试轮', `
+const liveSummary = page('RC1 · 契约1.0历史保留：真实LLM测试轮（宠物联合1/10）', `
+  <p>下表只属于 RC1 / 契约1.0，协议 live-business-smoke-1.0。小学联合0/10、宠物联合1/10、17未启动、7次请求、¥0.085884。不要当成契约1.1（小学联合0/10、宠物联合3/10、15未启动、5次请求、¥0.042032，见 ../submission-contract11/）。</p>
   <p>执行：${esc(report.execution)}；mockUsed=false；模型${esc(report.model.provider)} / ${esc(report.model.modelId)}；Base URL ${esc(report.model.baseUrl)}；${esc(report.harness)}。每个画像独立请求，不能看其他答卷；共享模型仍可能相关。</p>
   ${table(['场景', '计划', '请求', '未启动', '结构/计划', '跨题/计划', '资格/计划', '联合/计划'], cases.map(value => [names[value.id], 10, value.item.started, value.item.notStarted, `${value.item.structurallyValid}/10`, `${value.item.logicPassed}/10`, `${value.item.qualificationPassed}/10`, `${value.item.completeValid}/10`]))}
   ${table(['场景', '结构失败/无效', '居民调用耗时', '输入 / 输出Token', '居民保守费用', '10人门限'], cases.map(value => [names[value.id], value.item.failed, `${(value.run.durationMs / 1000).toFixed(2)}秒`, `${value.run.metrics.inputTokens ?? '未知'} / ${value.run.metrics.outputTokens ?? '未知'}`, money(value.run.metrics.apiCostCny), value.item.qualityTargetMet ? '满足' : '未满足']))}
@@ -208,17 +209,20 @@ const liveTrace = page('自然规划候选、负结果与24项真实轮附件', 
   <h3>负结果不修补</h3><ul>${failures}</ul>
   <h3>全部真实轮附件（独立于夹具与历史实验）</h3><p>${globalNames.map(name => link(`live-proof/${name}`, name)).join(' · ')}</p>
   ${cases.map(value => `<p><strong>${esc(names[value.id])}：</strong>${caseNames.map(name => link(`live-proof/${value.id}/${name}`, name.replace('.json', ''))).join(' · ')}</p>`).join('')}
-  <aside>下文“规则夹具”各12人问卷/结果与新真实LLM的10人计划独立分账；不将24名夹具居民混入真实样本。不计算真人置信区间/猫犬市场占比/儿童口味，不据此输出主营价位或铺位建议。所有规划失败、未知usage、未启动与原文均保留。</aside>`);
+  <aside>下文“规则夹具”各12人问卷/结果与 RC1 契约1.0 的10人计划独立分账，不要和契约1.1（宠物联合3/10、¥0.042032）混读；不将24名夹具居民混入真实样本。不计算真人置信区间/猫犬市场占比/儿童口味，不据此输出主营价位或铺位建议。所有规划失败、未知usage、未启动与原文均保留。</aside>`);
 
 let html = projected['index.html'].toString('utf8');
 html = html.replaceAll('候选申报补充版', '公开评审发布版').replaceAll('新版候选申报材料', '公开评审申报材料')
   .replace(/<section class="sheet">[\s\S]*?<\/section>/, `${cover}\n${liveSummary}\n${liveTrace}`)
   .replaceAll('本轮自证总账', '规则夹具自证总账')
-  .replaceAll('当前没有新增付费模型调用，也没有30人真实完整率实验、异构稳健性、五层消融或真人/交易留出结果。尚未验证的不能以工程12/12代替。', '新增真实LLM首批测试轮见前页与live-proof：未通过、未启动均保留。30人完整率、异构稳健性、五层消融和真人/交易留出仍未执行，不能以夹具12/12代替。')
-  .replaceAll('未执行新付费批次；live API当前最多12', '首批真实轮见前页；30人未执行，live API当前最多12')
-  .replaceAll('待用户确认；不移动旧Tag', '用户已批准公开评审发布；待部署后核验，不移动旧Tag')
+  .replaceAll('当前没有新增付费模型调用，也没有30人真实完整率实验、异构稳健性、五层消融或真人/交易留出结果。尚未验证的不能以工程12/12代替。', 'RC1契约1.0首批测试轮见前页与live-proof，不是契约1.1：未通过、未启动均保留。30人完整率、异构稳健性、五层消融和真人/交易留出仍未执行，不能以夹具12/12代替。')
+  .replaceAll('未执行新付费批次；live API当前最多12', 'RC1契约1.0真实轮见前页；30人未执行，live API当前最多12')
+  .replaceAll('待用户确认；不移动旧Tag', 'RC1历史材料已留档；不把本包当成待部署的最新轮，不移动旧Tag')
+  .replaceAll('实现 / 本轮关键参数', '实现 / RC1工程关键参数')
+  .replaceAll('本轮工程核验日志', 'RC1工程核验日志')
+  .replaceAll('本轮满足；只证明工程', 'RC1工程夹具满足；只证明工程')
   .replaceAll('该ZIP是未公开候选快照，不把本地分支当成已发布GitHub版本；正式发布后补固定ref。', '安装源码以本次独立发布记录的固定Git ref/源码快照为准；不把本地工作树当成已公开版本。')
-  .replaceAll('材料生成不代表正式提交。PDF附件链接指向未发布的候选/submission-next，当前公网不能据此打开新附件；请用随附ZIP中的index.html相对打开，或待发布后统一复验。旧公开入口和本地候选有明确版本差异；正式现场审查应选择同一固定版本的源码、Demo、材料与录屏，不混用新材料和旧功能。', '材料生成不是正式比赛提交回执。公开评审版附件指向/submission-next，待部署后统一核验；离线ZIP的index.html可相对打开。旧Tag/旧submission与原15页候选保留；评审须对齐独立发布记录中的源码、Demo、材料与录屏版本。');
+  .replaceAll('材料生成不代表正式提交。PDF附件链接指向未发布的候选/submission-next，当前公网不能据此打开新附件；请用随附ZIP中的index.html相对打开，或待发布后统一复验。旧公开入口和本地候选有明确版本差异；正式现场审查应选择同一固定版本的源码、Demo、材料与录屏，不混用新材料和旧功能。', '材料生成不是正式比赛提交回执。本目录是已留档的 RC1 / 契约1.0 历史包（/submission-next），不是待部署的最新结果；离线ZIP的index.html可相对打开。旧Tag/旧submission与原15页候选保留；评审须对齐独立发布记录中的源码、Demo、材料与录屏版本。');
 // Label all old fixture sections so their zero-calls/12-person results cannot be read as the new live cohort.
 html = html.replace(/<h2>([^<]*(?:小学|宠物)[^<]*(?:问卷|结果)[^<]*)<\/h2>/g, '<h2>规则夹具工程示例：$1</h2>');
 assertPublicText('index.html', html);

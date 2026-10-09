@@ -205,8 +205,8 @@
     },
     {
       "name": "index.html",
-      "bytes": 55824,
-      "sha256": "db55d7725ad7d1b926bf6524b3d262a09578c1e092c39662c6b1bcca77e8daa2"
+      "bytes": 56679,
+      "sha256": "4163a0e3e9f237d9179f4b31520361d9722251f1204cba289643219b929449cc"
     },
     {
       "name": "live-proof/budget-ledger.json",
@@ -330,33 +330,33 @@
     },
     {
       "name": "methods/business-proof.md",
-      "bytes": 12741,
-      "sha256": "8bbac2c122f319ad36d9e3d18dd8364ba2d99c9658c13caf00df924837010256"
+      "bytes": 13014,
+      "sha256": "3e4f8f7ec35c0870d2e8c68fc9254dc72ebd869f1ad49c9161ecb95da9ded4b4"
     },
     {
       "name": "methods/evaluation-next.md",
-      "bytes": 13917,
-      "sha256": "13b45e80413cf32d18f3ece3dcaadbc8141ed03104c5d0d9487370d43f7b1b57"
+      "bytes": 14190,
+      "sha256": "7d555f8507b41d158fbaed127828387591139b945d529b4a2e1c83e5c5db603a"
     },
     {
       "name": "methods/judge-quickstart.md",
-      "bytes": 9716,
-      "sha256": "bc334e04736712d3a4ac13fc2908802f1458f4e28b2ca01db1276427637aeda0"
+      "bytes": 9989,
+      "sha256": "c6e24afe19a1f493e1f7fddcb3cef684d06721faac933889c18cb6eccd7e522d"
     },
     {
       "name": "methods/old-persona-proof.md",
-      "bytes": 6876,
-      "sha256": "c658c80d83d4dd501327578a7ebdb56ca95d40c5c91258d3bc9f1c158e62db8b"
+      "bytes": 7149,
+      "sha256": "289fb5a4d546ba689cdeec8640a7a0e75cc4028b2b372338a68dfbaefad67b25"
     },
     {
       "name": "methods/population-methodology.md",
-      "bytes": 10367,
-      "sha256": "a1f4ef6d3a942fdb21ec586565f9df8dad5ad90c16c29abaa352e37a8a9c7b87"
+      "bytes": 10640,
+      "sha256": "26da82d204746afdf4ac50773eed6913a909ad2d37867300906a8d13cd748848"
     },
     {
       "name": "methods/resident-construction.md",
-      "bytes": 12048,
-      "sha256": "c6be5212df55cc9b8c693c40a7f0ff6b68be92edaf66f987be9904afbb527033"
+      "bytes": 12321,
+      "sha256": "74b8dfce77388c5f51df1a22d4786ffb0be4612231f6c0b95ef70f9b63ddf7f0"
     },
     {
       "name": "persona-source-register.json",
@@ -375,18 +375,18 @@
     },
     {
       "name": "project-materials.md",
-      "bytes": 46885,
-      "sha256": "4919d4062b009b151632e0a16d2a56b5b38593bb6d3f4845f931aebc87552698"
+      "bytes": 47732,
+      "sha256": "8286166a51bdf21421e553b80a70d9539a021a1dee8dfd6802f2a4ac32894911"
     },
     {
       "name": "project-materials.pdf",
-      "bytes": 1588810,
-      "sha256": "6fcd0a0a4e9f2d463ca773eeba3f5a4710f26d39f857b6b4385d18db3cff3b47"
+      "bytes": 1141469,
+      "sha256": "803f31b60cbc3906e4129b6d0ece40181edbb071d4322573e9a4b799424aeec5"
     },
     {
       "name": "README.md",
-      "bytes": 17130,
-      "sha256": "4100f6b5cbbc43c1c42d469494840fb8fb804e912352ebeb002cf7b693691c69"
+      "bytes": 18209,
+      "sha256": "ec56c4ffeb32f490e5041ad418eaa92316f8947d6171c950e049e7e049993f3d"
     },
     {
       "name": "recorded-child-proof.json",

@@ -1,4 +1,4 @@
-# City Agent：公开评审申报材料
+# City Agent：RC1 / 契约1.0 历史保留申报材料
 
 体验入口：https://litianyi-007.github.io/city-agent/
 
@@ -9,15 +9,15 @@ CITY AGENT / 公开评审发布版 · 01
 真实LLM调查测试轮与工程夹具分账
   
 
-### 真实测试已执行；首批质量门限未通过，不扩样、不伪装成功
+### RC1 · 契约1.0历史保留：真实测试已执行；宠物联合1/10，质量门限未通过，不扩样、不伪装成功
   项目体验入口[https://litianyi-007.github.io/city-agent/](https://litianyi-007.github.io/city-agent/)
 
-[完整申报PDF](project-materials.pdf) · [新增真实测试轮](live-proof/report.md) · [4分33秒实际UI录屏](demo-next.mp4)
+[完整申报PDF](project-materials.pdf) · [RC1契约1.0真实测试报告](live-proof/report.md) · [4分33秒实际UI录屏](demo-next.mp4)
 
-公开评审发布版；待部署后核验公网。无需Key可看来源、旧实验、零费用工程示例；真实新请求需要自行配置Key和明确预算。完整Harness及规划执行在本机。
+本页是 RC1 / 契约1.0（live-business-smoke-1.0）历史保留材料，不是待部署的最新轮，也不是契约1.1。本包：小学联合0/10、宠物联合1/10、17未启动、7次请求、保守估算¥0.085884。契约1.1（../submission-contract11/）：小学联合0/10、宠物联合3/10、15未启动、5次请求、¥0.042032。两轮不可混读。无需Key可看来源、旧实验与零费用工程示例；真实新请求需要自行配置Key和明确预算。完整Harness及规划执行在本机。
 
 
-  本次授权API尝试 7 次；确认上游请求7，有已报告usage的响应7，不使用mock规则回答。受访者仍是合成居民，不是滨江真人。每场景计划10人，失败/未启动保留在分母。
+  RC1 / 契约1.0 本次授权API尝试 7 次；确认上游请求7，有已报告usage的响应7，不使用mock规则回答。受访者仍是合成居民，不是滨江真人。每场景计划10人，失败/未启动保留在分母。
 
 
   
@@ -35,7 +35,9 @@ CITY AGENT / 公开评审发布版 · 01
 
 CITY AGENT / 公开评审发布版 · 02
 
-## 新增重点：真实LLM虚拟社会调查测试轮
+## RC1 · 契约1.0历史保留：真实LLM测试轮（宠物联合1/10）
+
+下表只属于 RC1 / 契约1.0，协议 live-business-smoke-1.0。小学联合0/10、宠物联合1/10、17未启动、7次请求、¥0.085884。不要当成契约1.1（小学联合0/10、宠物联合3/10、15未启动、5次请求、¥0.042032，见 ../submission-contract11/）。
   执行：real-api-synthetic-residents；mockUsed=false；模型deepseek / deepseek-flash；Base URL https://api.deepseek.com；DeepSeek Harness 0.1.5-rc.3。每个画像独立请求，不能看其他答卷；共享模型仍可能相关。
 
 
@@ -141,7 +143,7 @@ CITY AGENT / 公开评审发布版 · 03
 宠物采购者 · 18题：[questionnaire](live-proof/pet-snacks/questionnaire.json) · [presets](live-proof/pet-snacks/presets.json) · [survey-run](live-proof/pet-snacks/survey-run.json) · [logic-audit](live-proof/pet-snacks/logic-audit.json) · [qualification-audit](live-proof/pet-snacks/qualification-audit.json) · [raw-responses](live-proof/pet-snacks/raw-responses.json) · [statistics](live-proof/pet-snacks/statistics.json) · [prompts.txt](live-proof/pet-snacks/prompts.txt)
 
 
-  下文“规则夹具”各12人问卷/结果与新真实LLM的10人计划独立分账；不将24名夹具居民混入真实样本。不计算真人置信区间/猫犬市场占比/儿童口味，不据此输出主营价位或铺位建议。所有规划失败、未知usage、未启动与原文均保留。
+  下文“规则夹具”各12人问卷/结果与 RC1 契约1.0 的10人计划独立分账，不要和契约1.1（宠物联合3/10、¥0.042032）混读；不将24名夹具居民混入真实样本。不计算真人置信区间/猫犬市场占比/儿童口味，不据此输出主营价位或铺位建议。所有规划失败、未知usage、未启动与原文均保留。
 
 
 CITY AGENT / 公开评审发布版 · 04
@@ -454,14 +456,14 @@ CITY AGENT / 公开评审发布版 · 13
   [旧真实12人证据](historical/live-run.json) · [全部当前实验](historical/experiment-runs.json) · [早期尝试与记账勘误](historical/prior-attempts.json) · [历史成本范围](historical/metrics.json)。
 
 
-  新增真实LLM首批测试轮见前页与live-proof：未通过、未启动均保留。30人完整率、异构稳健性、五层消融和真人/交易留出仍未执行，不能以夹具12/12代替。
+  RC1契约1.0首批测试轮见前页与live-proof，不是契约1.1：未通过、未启动均保留。30人完整率、异构稳健性、五层消融和真人/交易留出仍未执行，不能以夹具12/12代替。
 
 
 CITY AGENT / 公开评审发布版 · 14
 
 ## 技术点、参数与安全边界
   
-| 项 | 实现 / 本轮关键参数 | 
+| 项 | 实现 / RC1工程关键参数 | 
 | --- | --- |
 
 | 执行底座 | 本机DeepSeek Harness SDK 0.1.5-rc.3，锁文件安装，无全局dsh/GPU要求；公网浏览器直连不是Harness | 
@@ -488,13 +490,13 @@ CITY AGENT / 公开评审发布版 · 15
 | 层次 | 门限 | 状态 | 
 | --- | --- | --- |
 
-| 工程业务自证 | 两场景各12/12结构和显式逻辑；0请求；raw/统计/hash可复算；未知与不购买保留 | 本轮满足；只证明工程 | 
-| 真实模型完整率 | 预登记10人冒烟→单批30人≥29有效，所有计划居民为分母且遵守预登记阈值 | 首批真实轮见前页；30人未执行，live API当前最多12 | 
+| 工程业务自证 | 两场景各12/12结构和显式逻辑；0请求；raw/统计/hash可复算；未知与不购买保留 | RC1工程夹具满足；只证明工程 | 
+| 真实模型完整率 | 预登记10人冒烟→单批30人≥29有效，所有计划居民为分母且遵守预登记阈值 | RC1契约1.0真实轮见前页；30人未执行，live API当前最多12 | 
 | 内部语义与稳健性 | 盲评、措辞/题序/seed/重复/异构模型与简单基线，报告差异和失败 | 预登记工具完成；新五层贡献未验 | 
 | 儿童口味与选址 | 独立儿童合意/監护授权、资格分母、候选点/客流/规则/预算试售 | needs-data；只做成年人情景 | 
 | 宠物网点与价位 | 养宠及零食购买者分母、匿名订单密度、统一SKU规格、租金/履约/毛利/试售 | needs-data；不输出主粮比例 | 
 | 现实外部效度 | 合法独立真人/交易留出；总体与分组误差及相对简单基线 | 未获得本地验证资料 | 
-| 发布与申报 | 候选端到端验收后发布固定ref；正式入口与回执留档 | 用户已批准公开评审发布；待部署后核验，不移动旧Tag | 
+| 发布与申报 | 候选端到端验收后发布固定ref；正式入口与回执留档 | RC1历史材料已留档；不把本包当成待部署的最新轮，不移动旧Tag | 
 
 
   
@@ -573,10 +575,10 @@ Journal of Artificial Societies and Social Simulation 20(4), 16
 2025 preliminary report; resident population estimated using 2025 1% population sample survey
   
 
-### 附件索引[规则夹具自证总账](business-proof/business-proof.json) · [业务附件16项字节哈希](business-proof/manifest.json) · [本轮工程核验日志](verification.json) · [申报候选全包manifest](manifest.json)。
+### 附件索引[规则夹具自证总账](business-proof/business-proof.json) · [业务附件16项字节哈希](business-proof/manifest.json) · [RC1工程核验日志](verification.json) · [申报候选全包manifest](manifest.json)。
 
 各场景含questionnaire、presets、survey-run、raw-responses、statistics、logic-audit与prompts；历史目录保留旧真实实验、usage与勘误。录屏仅展示实际UI操作，字幕是说明叠加，不是系统返回。
 
 
-  材料生成不是正式比赛提交回执。公开评审版附件指向/submission-next，待部署后统一核验；离线ZIP的index.html可相对打开。旧Tag/旧submission与原15页候选保留；评审须对齐独立发布记录中的源码、Demo、材料与录屏版本。
+  材料生成不是正式比赛提交回执。本目录是已留档的 RC1 / 契约1.0 历史包（/submission-next），不是待部署的最新结果；离线ZIP的index.html可相对打开。旧Tag/旧submission与原15页候选保留；评审须对齐独立发布记录中的源码、Demo、材料与录屏版本。
 
