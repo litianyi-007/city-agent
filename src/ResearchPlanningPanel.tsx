@@ -21,6 +21,7 @@ export function ResearchPlanningPanel({ population, draftVersion, disabled, onBu
   const [failure, setFailure] = useState<unknown>(null);
   const [resultRevision, setResultRevision] = useState(-1);
   const controller = useRef<AbortController | null>(null);
+  const cancelId = useRef<string | null>(null);
   const requestVersion = useRef(0);
   useEffect(() => {
     if (pagesMode) return;
@@ -37,22 +38,34 @@ export function ResearchPlanningPanel({ population, draftVersion, disabled, onBu
   async function plan() {
     if (controller.current) return;
     const abort = new AbortController(); controller.current = abort;
+    const id = crypto.randomUUID(); cancelId.current = id;
     const version = requestVersion.current; const revision = draftVersion;
     setBusy(true); onBusyChange(true); setError(''); setResult(null); setFailure(null);
     try {
       const response = await fetch('/api/research/planning', {
         method: 'POST', signal: abort.signal, headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ agentId, acknowledgeCost, request, context, maxQuestions,
+        body: JSON.stringify({ agentId, acknowledgeCost, request, context, maxQuestions, cancelId: id,
           population: { regionCode: population.regionCode, period: population.period, unit: population.unit } }),
       });
       const payload = await response.json();
       if (abort.signal.aborted || version !== requestVersion.current) return;
-      if (!response.ok) { setFailure(payload); throw new Error(payload.error || `规划失败（${response.status}）`); }
+      if (!response.ok || payload.status !== 'candidate' || payload.evidence?.state === 'cancelled') {
+        if (payload?.evidence?.state === 'cancelled') {
+          setError('规划已取消。不会自动重试；已发请求仍可能计费，服务会关闭该Harness进程。');
+          return;
+        }
+        setFailure(payload); throw new Error(payload.error || `规划失败（${response.status}）`);
+      }
       setResult(payload); setResultRevision(revision);
     } catch (cause) {
       if (abort.signal.aborted) setError('规划已取消。不会自动重试；已发请求仍可能计费，服务会关闭该Harness进程。');
       else if (version === requestVersion.current) setError((cause as Error).message);
-    } finally { controller.current = null; setBusy(false); onBusyChange(false); }
+    } finally { controller.current = null; cancelId.current = null; setBusy(false); onBusyChange(false); }
+  }
+  function cancelPlan() {
+    const id = cancelId.current;
+    if (id) void fetch('/api/research/planning/cancel', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ cancelId: id }) }).catch(() => undefined);
+    controller.current?.abort();
   }
   if (pagesMode) return <section className="panel research-panel" aria-label="自然语言研究规划"><h2>自然语言研究规划 · 本机Harness能力</h2><p className="research-note">当前GitHub Pages不运行Harness规划服务。可在本机版显式调用产品/研究员模型生成候选问卷，或在这里继续手动编辑/导入问卷。没有新增调用，不会自动套用学校/宠物关键词模板。</p><a href={`${import.meta.env.BASE_URL}review-guide.html`} className="text-button" target="_blank" rel="noreferrer">查看本机复现方式 ↗</a></section>;
   const selected = agents.find(agent => agent.id === agentId);
@@ -65,7 +78,7 @@ export function ResearchPlanningPanel({ population, draftVersion, disabled, onBu
     <label>补充背景与限制（可选，不填写密钥或个人明细）<textarea rows={3} maxLength={4000} value={context} disabled={busy || disabled} onChange={event => { setContext(event.target.value); invalidate(); }} /></label>
     <label>最多题数<input type="number" min={1} max={20} value={maxQuestions} disabled={busy || disabled} onChange={event => { setMaxQuestions(Number(event.target.value)); invalidate(); }} /></label>
     <label className="checkbox-label"><input type="checkbox" checked={acknowledgeCost} disabled={busy || disabled} onChange={event => setAcknowledgeCost(event.target.checked)} />我确认启动最多一次模型请求，可能产生费用；无自动重试，费用未知不记零。</label>
-    <div className="research-save-bar"><button type="button" className="primary" disabled={busy || disabled || !request.trim() || !selected?.hasApiKey || !acknowledgeCost || !Number.isInteger(maxQuestions) || maxQuestions < 1 || maxQuestions > 20} onClick={() => void plan()}>{busy ? '正在规划候选…' : '生成候选问卷 · 调用模型'}</button>{busy && <button type="button" className="secondary" onClick={() => controller.current?.abort()}>取消规划</button>}</div>
+    <div className="research-save-bar"><button type="button" className="primary" disabled={busy || disabled || !request.trim() || !selected?.hasApiKey || !acknowledgeCost || !Number.isInteger(maxQuestions) || maxQuestions < 1 || maxQuestions > 20} onClick={() => void plan()}>{busy ? '正在规划候选…' : '生成候选问卷 · 调用模型'}</button>{busy && <button type="button" className="secondary" onClick={cancelPlan}>取消规划</button>}</div>
     {error && <p className="alert error" role="alert">{error}</p>}
     {failure !== null && <button type="button" className="secondary" onClick={() => downloadJson(failure, 'research-planning-failure.json')}>导出脱敏失败证据</button>}
     {result && <div className="check-results" aria-live="polite">
