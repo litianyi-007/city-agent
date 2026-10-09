@@ -6,15 +6,11 @@
 
 - **无需安装体验固定成品**：[GitHub Pages](https://litianyi-007.github.io/city-agent/production/) → “体验固定案例”。三个可信Mock可操作；不运行实时研发，不收API Key。
 - **在自己设备输入需求**：同页 → “本地输入新需求” → 复制固定版本安装命令 → 本地 `http://127.0.0.1:4420/#production`。六角色配置、需求编辑器、免费预检、单次预算授权、执行及证据可实际使用。
-- **核对原始实验**：查看本分支[最新HTML09原件](experiments/HTML-09/RESULT.md)及各实验RESULT中的固定GitHub原件链接；公开v7包的索引仍包含HTML01～08。源码publisher、实际实验platformCommit与视频sourceCommit分别核对，不能混用。
+- **核对原始实验**：查看本包 [HTML实验索引](HTML-DELIVERY-STATUS.json) 和固定GitHub原件链接。源码publisher、实际实验platformCommit与视频sourceCommit分别核对，不能混用。
 
 GitHub Pages只承载静态入口，源码推送不等于部署Harness后端。安装指南见 [REVIEWER-GUIDE](REVIEWER-GUIDE.md)。首次安装不带作者Key、运行数据库或日志。
 
 ## 最近的真实验证
-
-最新增量为[HTML09](experiments/HTML-09/RESULT.md)：真实前端仅一次，9 HTTP／73,573 Token／69.090秒／声明价估算0.0340338 USD。PM已释放验收构建，但三份计划同条原文quote改动标点而被严格拒绝，耗尽两次共享返修；未到测试生成、研发、冻结或Gate，完整交付0/1。单次许可已使用，不自动追加。grouped v6[免费源引用诊断](ACCEPTANCE-SOURCE-DIAGNOSTICS.md)改善定位/血缘，不改这次v5失败，亦无新版真实效果。新工程审查见[BATCH](BATCH-HTML09-CHECKS.md)，本页更新前[留底](archive/2026-10-09-before-source-diagnostics/CURRENT-PROGRESS.md)。
-
-HTML01～09配置间有工程修订，不能合并为冻结配置稳定成功率。下面HTML08与阶段v5段落按当时时点保留；公开v7固定包仍包含HTML01～08，分支新增证据不自动改变Pages或其旧PDF/视频。
 
 [HTML08](experiments/HTML-08/RESULT.md)通过实际本地前端仅启动一次：18真实HTTP、179634 Token、102.991秒、声明价估算0.0658755 USD。产品/研究/PM结构均合法，但前置PM要求后续tester产物而反复revise，耗尽两次共享返修；未到研发、冻结或最终行为Gate，完整交付0/1。限额未扩大，没有自动第二次实验。
 

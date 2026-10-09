@@ -1,14 +1,5 @@
 # 自主软件生产任务清单
 
-## 当前执行顺序（2026-10-09，HTML09之后）
-
-1. **已完成唯一真实HTML09**：[原件与结果](experiments/HTML-09/RESULT.md)，9 HTTP／73573 Token／69.090秒／估算0.0340338 USD。PM进入验收计划，但三次同条quote标点错误耗尽返修，完整交付0/1；单次授权已消费，无自动重跑。
-2. **完成免费原文引用诊断**：[grouped v6](ACCEPTANCE-SOURCE-DIAGNOSTICS.md)，仅定位坏引用索引/source/hash，返修前重算血缘；原parser/原文/12×20 Gate/≤2修复不变。实际工程与非作者审查见[BATCH-HTML09-CHECKS](BATCH-HTML09-CHECKS.md)，不冒充新模型实测。
-3. **下一真实闭环**：新干净source/build/boot与免费页面预检后，另提出单次有限模型/调用/Token/时长/费用边界。当前无HTML10收费授权；引用修复不代表尚未到达的分组容量、业务覆盖、研发或最终Gate会通过。
-4. **受控仓库及泛化**：最小真实HTML闭环通过后，先容器/等效隔离、网络/秘密/资源/取消硬门限，再模板/增量/Bug；固定三类九次另预算，不在宿主运行生成Node/shell。
-
-只推送生产分支源码/证据，公开v7与虚拟社会服务保持独立；源码推送不是在线后端部署。[NEXT全文留底](archive/2026-10-09-before-source-diagnostics/NEXT-STEPS.md)。下文为历史时点，旧下一步不是新收费授权。
-
 ## 当前执行顺序（2026-10-09，免费完整业务见证之后）
 
 1. **容量与行为工程验证**：[八条业务见证](STATE-COVERAGE-ENGINEERING.md)已实现12项/219外层步骤/三组，正序、反序及36种实际行为反例分别测试；不是内部模型生成，不进真实良品统计。结果与独立审查以[本批记录](BATCH-STATE-COVERAGE-CHECKS.md)为准；原Gate/业务/旧实验不改。

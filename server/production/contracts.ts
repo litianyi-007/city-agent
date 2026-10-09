@@ -233,6 +233,14 @@ export const PHASE_READY_ACCEPTANCE_PLAN_INSTRUCTIONS = OUTPUT_ENVELOPE_ACCEPTAN
 export const PHASE_READY_ACCEPTANCE_GROUP_INSTRUCTIONS = OUTPUT_ENVELOPE_ACCEPTANCE_GROUP_INSTRUCTIONS;
 export const PHASE_READY_CONSTRUCTION_REVIEW_INSTRUCTIONS = OUTPUT_ENVELOPE_CONSTRUCTION_REVIEW_INSTRUCTIONS;
 
+// Opt-in successor only: old grouped v1-v5 and camera prompts remain unchanged.
+export const SOURCE_BOUND_GROUPED_PROMPT_VERSION = 'production-html-grouped-v6';
+export const SOURCE_QUOTE_INSTRUCTIONS = 'quote须逐字符复制source原文连续子串，不改标点空白、不补句号；acceptanceSourceDiagnostic仅以零基索引定位不匹配，不提供答案或放宽Gate。';
+export const SOURCE_BOUND_GROUPED_CONTRACT_INSTRUCTIONS = PHASE_READY_GROUPED_CONTRACT_INSTRUCTIONS;
+export const SOURCE_BOUND_ACCEPTANCE_PLAN_INSTRUCTIONS = `${PHASE_READY_ACCEPTANCE_PLAN_INSTRUCTIONS} ${SOURCE_QUOTE_INSTRUCTIONS}`;
+export const SOURCE_BOUND_ACCEPTANCE_GROUP_INSTRUCTIONS = PHASE_READY_ACCEPTANCE_GROUP_INSTRUCTIONS;
+export const SOURCE_BOUND_CONSTRUCTION_REVIEW_INSTRUCTIONS = PHASE_READY_CONSTRUCTION_REVIEW_INSTRUCTIONS;
+
 export function contractProfile(capability: ProductionCapability = 'offline-single-html') {
   if (capability === 'offline-single-html') return { promptVersion: PROMPT_VERSION, acceptanceVersion: ACCEPTANCE_CONTRACT_VERSION, instructions: CONTRACT_INSTRUCTIONS, productSchema: productSchema.extend({ scope: z.literal(capability) }) };
   const scope = '平台固定可信摄像头桥/本地识别/Canvas渲染，模型仅生成严格JSON场景配置，绝不生成可执行JS/HTML、URL或改变权限。人工授权摄像头是产品使用动作；本批Gate仅验证合成手势场景行为，识别模型、物理摄像头及完整需求验收仍待实测，不能声称已完成。';

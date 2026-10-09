@@ -114,7 +114,7 @@ test('complete startup facts, verifier suffix and v5 instructions fit unchanged 
   const credentials = ['product', 'project-manager', 'researcher', 'developer', 'tester', 'verifier'].map(role => encrypt(key, `group-fixture-${role}-never-a-real-key`));
   const inputs = startupPublicGuardInputs({ capability: 'offline-single-html', acceptanceStrategy: 'planned-groups-v1' });
   const instructions = inputs.filter((value): value is { instructions: string } => Object.hasOwn(value as object, 'instructions')).map(value => value.instructions);
-  assert.deepEqual(instructions, [...Object.values(contracts.PHASE_READY_GROUPED_CONTRACT_INSTRUCTIONS), contracts.PHASE_READY_ACCEPTANCE_PLAN_INSTRUCTIONS, contracts.PHASE_READY_ACCEPTANCE_GROUP_INSTRUCTIONS, contracts.PHASE_READY_CONSTRUCTION_REVIEW_INSTRUCTIONS, PHASE_READINESS_REVIEW_INSTRUCTIONS]);
+  assert.deepEqual(instructions, [...Object.values(contracts.SOURCE_BOUND_GROUPED_CONTRACT_INSTRUCTIONS), contracts.SOURCE_BOUND_ACCEPTANCE_PLAN_INSTRUCTIONS, contracts.SOURCE_BOUND_ACCEPTANCE_GROUP_INSTRUCTIONS, contracts.SOURCE_BOUND_CONSTRUCTION_REVIEW_INSTRUCTIONS, PHASE_READINESS_REVIEW_INSTRUCTIONS]);
   assert.ok(inputs.some(value => Object.hasOwn(value as object, 'phaseReadinessProtocolLiterals')));
   assert.ok(inputs.filter(value => Object.hasOwn(value as object, 'phaseReadiness')).length >= phases.length);
   for (const value of inputs) assert.doesNotThrow(() => assertPublicCollisionSafe(value, key, credentials));
@@ -202,7 +202,7 @@ test('future checks absent at think-design permits an explicit PM proceed, but d
   assert.equal(run.status, 'completed', run.error); assert.equal(run.repairs, 0); assert.equal(run.calls.length, 15);
   assert.equal(run.evidenceKind, 'injected-test'); assert.ok(run.calls.every(call => call.executionSource === 'injected' && !call.providerRequests));
   assert.equal((run.validationContract as any).phaseReadinessVersion, PHASE_READINESS_VERSION);
-  assert.ok(run.calls.every(call => call.promptVersion === contracts.PHASE_READY_GROUPED_PROMPT_VERSION));
+  assert.ok(run.calls.every(call => call.promptVersion === contracts.SOURCE_BOUND_GROUPED_PROMPT_VERSION));
   const pm = f.captures.find(capture => capture.phase === 'think-design')!;
   const review = f.captures.find(capture => capture.phase === 'think-design:verify')!;
   assert.equal(pm.data.context.frozenContract, undefined);

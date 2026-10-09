@@ -10,7 +10,7 @@ import { OUTPUT_DIAGNOSTICS_VERSION } from '../server/production/output-diagnost
 import type { ProductionOptions } from '../server/production/pipeline.js';
 import type { runRole, RoleResult } from '../server/harness.js';
 import { preflightAcceptanceChecks, runGate, type AcceptanceCheck } from '../server/gate.js';
-import { ACCEPTANCE_GROUP_INSTRUCTIONS, PHASE_READY_GROUPED_CONTRACT_INSTRUCTIONS as GROUPED_CONTRACT_INSTRUCTIONS, PHASE_READY_GROUPED_PROMPT_VERSION as GROUPED_ACCEPTANCE_PROMPT_VERSION, ACCEPTANCE_REVIEW_PROJECTION_VERSION, outputContractSnapshot, planSchema } from '../server/production/contracts.js';
+import { ACCEPTANCE_GROUP_INSTRUCTIONS, PHASE_READY_GROUPED_CONTRACT_INSTRUCTIONS as GROUPED_CONTRACT_INSTRUCTIONS, SOURCE_BOUND_GROUPED_PROMPT_VERSION as GROUPED_ACCEPTANCE_PROMPT_VERSION, ACCEPTANCE_REVIEW_PROJECTION_VERSION, outputContractSnapshot, planSchema } from '../server/production/contracts.js';
 import { OUTPUT_ENVELOPE_VERSION, OUTPUT_ENVELOPE_INSTRUCTIONS, outputEnvelopePolicy } from '../server/production/output-envelope.js';
 import { ACCEPTANCE_STEP_AUDIT_VERSION, buildAcceptanceStepAudit } from '../server/production/acceptance-step-audit.js';
 import { PM_OUTPUT_POLICY_VERSION, ROLE_SCHEMA_DIAGNOSTICS_VERSION, diagnoseRoleSchema } from '../server/production/role-output-policy.js';
