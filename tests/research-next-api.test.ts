@@ -34,7 +34,7 @@ async function fixture(t: TestContext, planningRunner: typeof runRole = async ()
     rmSync(directory, { recursive: true, force: true });
   });
   const agent = store.createAgent({ name: 'fixture researcher', role: 'researcher', provider: 'openai-compatible', baseUrl: 'https://example.invalid/v1', modelId: 'synthetic-model', apiKey: secret });
-  const body = () => ({ agentId: agent.id, acknowledgeCost: true, request: '合成测试规划，不是实际市场调查。', population: { regionCode: 'binjiang', period: '2020-11-01', unit: 'person' }, maxQuestions: 12 });
+  const body = () => ({ agentId: agent.id, acknowledgeCost: true, request: '合成测试规划，不是实际市场调查。', population: { regionCode: 'binjiang', period: '2020-11-01', unit: 'person' }, maxQuestions: 12, cancelId: '11111111-1111-4111-8111-111111111111' });
   const request = (route: string, data?: unknown, options: RequestInit = {}) => fetch(`http://127.0.0.1:${address.port}${route}`, {
     method: data === undefined ? 'GET' : 'POST', ...(data === undefined ? {} : { body: JSON.stringify(data) }),
     ...options, headers: { 'Content-Type': 'application/json', ...options.headers },
@@ -76,6 +76,7 @@ test('one explicit planning call returns/persists sanitized candidate without re
   const text = await response.text(); const result = JSON.parse(text);
   assert.equal(text.includes(secret), false);
   assert.equal(result.status, 'candidate');
+  assert.equal(result.cancelId, body().cancelId);
   assert.equal(result.residentCalls, 0);
   assert.equal(result.evidence.execution, 'injected-runner');
   assert.equal(result.evidence.inputTokens, null);
@@ -84,6 +85,8 @@ test('one explicit planning call returns/persists sanitized candidate without re
   const filename = path.join(directory, 'planning', `${result.recordId}.json`);
   const saved = readFileSync(filename, 'utf8');
   assert.equal(saved.includes(secret), false);
+  assert.equal(JSON.parse(saved).cancelId, result.cancelId);
+  assert.equal(JSON.parse(saved).result.cancelId, result.cancelId);
   assert.equal(JSON.parse(saved).result.evidence.responseHash, result.evidence.responseHash);
   if (process.platform !== 'win32') assert.equal(statSync(filename).mode & 0o777, 0o600);
   assert.equal(calls, 1); assert.equal(starts(), 0);
@@ -107,6 +110,23 @@ test('no acknowledgement, missing key, disabled/wrong role, extra fields and cro
   assert.equal(calls, 0);
 });
 
+test('planning requires a client cancelId and rejects a missing or invalid id before any model call', async t => {
+  let calls = 0;
+  const { request, body } = await fixture(t, async () => { calls++; return modelResult(); });
+  for (const missing of [
+    (({ cancelId: _cancelId, ...rest }) => rest)(body()),
+    { ...body(), cancelId: undefined },
+    { ...body(), cancelId: 'not-a-uuid' },
+    { ...body(), cancelId: null },
+    { ...body(), cancelId: '' },
+  ]) {
+    const rejected = await request('/api/research/planning', missing);
+    assert.equal(rejected.status, 400);
+    assert.deepEqual(await rejected.json(), { error: '输入格式无效。', fields: ['cancelId'] });
+  }
+  assert.equal(calls, 0);
+});
+
 test('malformed and fact-upgrade output fails once and persists redacted failure, never retries', async t => {
   let calls = 0;
   const { request, body, directory, store } = await fixture(t, async () => { calls++; return modelResult(`malformed ${secret}`); });
@@ -115,6 +135,7 @@ test('malformed and fact-upgrade output fails once and persists redacted failure
   const text = await response.text(); const failure = JSON.parse(text);
   assert.equal(text.includes(secret), false);
   assert.equal(failure.evidence.state, 'failed');
+  assert.equal(failure.cancelId, body().cancelId);
   assert.equal(failure.recorded, true);
   assert.equal(readFileSync(path.join(directory, 'planning', `${failure.recordId}.json`), 'utf8').includes(secret), false);
   assert.equal(calls, 1); assert.deepEqual(store.listSurveyRuns(), []);
@@ -179,16 +200,20 @@ test('in-flight planning cancel aborts the runner, returns no candidate, and rel
   assert.equal(response.status, 422);
   const payload = await response.json();
   assert.equal(payload.evidence.state, 'cancelled');
+  assert.equal(payload.cancelId, cancelId);
   assert.equal(Object.hasOwn(payload, 'task'), false);
   assert.equal(JSON.stringify(payload).includes(secret), false);
   assert.equal(calls, 1);
   const saved = JSON.parse(readFileSync(path.join(directory, 'planning', `${payload.recordId}.json`), 'utf8'));
   assert.equal(saved.evidence.state, 'cancelled');
+  assert.equal(saved.cancelId, cancelId);
   assert.equal(saved.result, undefined);
   assert.equal((await request('/api/research/planning/cancel', { cancelId })).status, 409);
   const again = await request('/api/research/planning', body());
   assert.equal(again.status, 200, await again.clone().text());
-  assert.equal((await again.json()).status, 'candidate');
+  const againPayload = await again.json();
+  assert.equal(againPayload.status, 'candidate');
+  assert.equal(againPayload.cancelId, body().cancelId);
   assert.equal(calls, 2);
 });
 
