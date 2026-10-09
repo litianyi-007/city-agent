@@ -4,11 +4,11 @@
 
 原始响应、授权及本机 `output/` 证据不在GitHub源码中；公开白名单摘要提供各轮运行ID/hash，不以404的私有原件链接作为评委入口。旧PDF和视频保持原样，来源及五层方法可通过上面的公开页直接访问。
 
-**无需安装即可查看：[公开 Demo](https://litianyi-007.github.io/city-agent/) · [新版公开评审材料目标入口](https://litianyi-007.github.io/city-agent/submission-next/index.html) · [本轮真实测试报告](https://litianyi-007.github.io/city-agent/submission-next/live-proof/report.md)。** 新入口部署状态以[发布审查记录](../research/LIVE-REVIEW-2026-10-07.md)为准；[旧冻结材料](https://litianyi-007.github.io/city-agent/submission/index.html)保留。
+**无需安装即可查看：[公开 Demo](https://litianyi-007.github.io/city-agent/) · [RC1完整申报材料 · 历史保留 · 契约1.0](https://litianyi-007.github.io/city-agent/submission-next/index.html) · [RC1契约1.0真实测试报告](https://litianyi-007.github.io/city-agent/submission-next/live-proof/report.md)。** RC1 部署记录见[发布审查记录](../research/LIVE-REVIEW-2026-10-07.md)；[旧冻结材料](https://litianyi-007.github.io/city-agent/submission/index.html)保留。契约1.1（小学联合0/10、宠物联合3/10、¥0.042032）不在这个 RC1 链接里。
 
 本指南随虚拟社会续作 F001 公开评审候选提供。新工具源码分支为`feature/virtual-society-next`，拟固定Tag为`society-review-2026-10-07-rc1`；须在发布记录确认Tag和完整commit SHA后下载，不把浮动分支或拟定Tag写成已验证安装来源。旧Tag`submission-milestone-2026-10-07`只有原基本启动方式，**没有`doctor`或`start:review`命令**。材料ZIP是材料及证据，不是程序安装包；源码ZIP须另核对它的版本/清单。
 
-本轮真实API测试已执行：7确认请求（3居民、2规划、2CORS），input15,418/output6,881 Token，保守估算¥0.085884，不是供应商账单。20计划居民只有1份结构/跨题/资格联合通过、17未启动；两个10人门限均失败。规划0/2可应用候选，2次CORS HTTP200只证明协议。未重试、补答、替换样本或执行30人扩容；合成居民仍不是真人市场验证。最新原文、失败、参数和账本见上述报告及[JSON](https://litianyi-007.github.io/city-agent/submission-next/live-proof/report.json)。
+RC1 / 契约1.0 历史真实 API 测试（不是契约1.1）已执行：7确认请求（3居民、2规划、2CORS），input15,418/output6,881 Token，保守估算¥0.085884，不是供应商账单。20计划居民只有1份结构/跨题/资格联合通过、17未启动；小学联合0/10、宠物联合1/10，两个10人门限均失败。规划0/2可应用候选，2次CORS HTTP200只证明协议。未重试、补答、替换样本或执行30人扩容；合成居民仍不是真人市场验证。RC1原文、失败、参数和账本见上述报告及[JSON](https://litianyi-007.github.io/city-agent/submission-next/live-proof/report.json)。契约1.1另册为小学联合0/10、宠物联合3/10、15未启动、5次请求、¥0.042032。
 
 ## 三种路径
 

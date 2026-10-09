@@ -1,10 +1,10 @@
 # 公开评审发布包（非比赛提交回执）
 
-体验入口：https://litianyi-007.github.io/city-agent/；材料准备完成，部署后须按独立发布记录核验。首先打开project-materials.pdf或index.html。
+体验入口：https://litianyi-007.github.io/city-agent/。本包是 RC1 / 契约1.0 历史保留（协议 live-business-smoke-1.0），不是契约1.1，也不是待部署的最新轮。首先打开 index.html。
 
-新增API授权尝试7/24；确认上游请求7；已知usage响应7。已报告用量保守估价¥0.085884、承诺预留¥0.085884、上限¥5；usage=reported。居民仍为合成画像，mockUsed=false不等于真人外部效度。失败/未启动和全部24项live-proof附件保留。自然规划候选未自动替换固定17/18问卷；CORS重复首画像不计新居民。原工程夹具的0调用和历史负例原数值保持，彼此不合并。
+RC1 / 契约1.0：API授权尝试7/24；确认上游请求7；已知usage响应7。已报告用量保守估价¥0.085884、承诺预留¥0.085884、上限¥5；usage=reported。小学联合0/10、宠物联合1/10、17未启动。居民仍为合成画像，mockUsed=false不等于真人外部效度。失败/未启动和全部24项live-proof附件保留。自然规划候选未自动替换固定17/18问卷；CORS重复首画像不计新居民。原工程夹具的0调用和历史负例原数值保持，彼此不合并。契约1.1另册（../submission-contract11/）为小学联合0/10、宠物联合3/10、15未启动、5次请求、¥0.042032，不可与本包混读。
 
-本包不含源码、Key、私人数据库或会话。安装使用独立发布记录的固定Git ref或审查过的源码ZIP。methods正文是候选阶段方法快照，新增状态以live-proof/report为准；未随包源码链接均明确为源码相对说明。录屏4分33秒是先前零费用UI操作，不冒充此次API运行录像。
+本包不含源码、Key、私人数据库或会话。安装使用独立发布记录的固定Git ref或审查过的源码ZIP。methods正文是候选阶段方法快照。live-proof/report 是 RC1 / 契约1.0 历史总账，不是契约1.1；未随包源码链接均明确为源码相对说明。录屏4分33秒是先前零费用UI操作，不冒充此次API运行录像。
 
 ## 公开投影追溯
 
@@ -45,17 +45,17 @@
 | historical/persona-proof/questionnaire.json | 9b1a01053ab0b27de9c4b27e08d7ec6fa209a811b1ccd6b533a81c04f1c8f247 | 9b1a01053ab0b27de9c4b27e08d7ec6fa209a811b1ccd6b533a81c04f1c8f247 | 逐字节相同 |
 | historical/persona-proof/survey-run.json | 547b4958a93610d70a73bfe9509df886e2e08448f94a8b3df5d5921213b2eccf | 547b4958a93610d70a73bfe9509df886e2e08448f94a8b3df5d5921213b2eccf | 逐字节相同 |
 | historical/prior-attempts.json | 350e697f46a22b59cf0c1175979fd0a1fba3ab5bd9db1a514f7ce91d6f7c6282 | 350e697f46a22b59cf0c1175979fd0a1fba3ab5bd9db1a514f7ce91d6f7c6282 | 逐字节相同 |
-| index.html | 1e12d8faaeeb7cf52fc1f3154d312ed02aa7e6daa047a85a1dc303cb10ed0803 | db55d7725ad7d1b926bf6524b3d262a09578c1e092c39662c6b1bcca77e8daa2 | 公开阶段状态与新增真实轮内容，旧阶段原件保持不动 |
-| methods/business-proof.md | 06097e9d8ee514d140bfa17687bcbd5c6f57b8cffb296eac7f143de54a0dbbab | 8bbac2c122f319ad36d9e3d18dd8364ba2d99c9658c13caf00df924837010256 | 未随包源文件链接改为源码相对说明；增加历史方法时间口径提示，不回填旧统计 |
-| methods/evaluation-next.md | e5fbf8764a868051d455025cf799265fbf0001748bbb5a209ddd11e7668bcd96 | 13b45e80413cf32d18f3ece3dcaadbc8141ed03104c5d0d9487370d43f7b1b57 | 未随包源文件链接改为源码相对说明；增加历史方法时间口径提示，不回填旧统计 |
-| methods/judge-quickstart.md | f97abac6e25d36524d9f599ab7b94e9e0a56a96b212a4df0a55018b2eb01696c | bc334e04736712d3a4ac13fc2908802f1458f4e28b2ca01db1276427637aeda0 | 增加历史方法时间口径提示，不回填旧统计 |
-| methods/old-persona-proof.md | bb39c32e52a6fb10876cb78521730b25a6b1f6b42e278f19c83bb4ebe76a7c58 | c658c80d83d4dd501327578a7ebdb56ca95d40c5c91258d3bc9f1c158e62db8b | 本机路径转repo-relative或移除；原件未修改；未随包源文件链接改为源码相对说明；增加历史方法时间口径提示，不回填旧统计 |
-| methods/population-methodology.md | d8cb354a0ea476a193c199d7132013121c101e2575c39791e67d0d439ed6c413 | a1f4ef6d3a942fdb21ec586565f9df8dad5ad90c16c29abaa352e37a8a9c7b87 | 未随包源文件链接改为源码相对说明；增加历史方法时间口径提示，不回填旧统计 |
-| methods/resident-construction.md | 4b620a35d96b547a394d51636d3d36cbf6ab49365c0f2f8b6bc9e3583c01d874 | c6be5212df55cc9b8c693c40a7f0ff6b68be92edaf66f987be9904afbb527033 | 未随包源文件链接改为源码相对说明；增加历史方法时间口径提示，不回填旧统计 |
+| index.html | 1e12d8faaeeb7cf52fc1f3154d312ed02aa7e6daa047a85a1dc303cb10ed0803 | 4163a0e3e9f237d9179f4b31520361d9722251f1204cba289643219b929449cc | 公开阶段状态与新增真实轮内容，旧阶段原件保持不动。标题改为标明 RC1/契约1.0 历史保留，并与契约1.1对照；证据数字与 live-proof 原件未改 |
+| methods/business-proof.md | 06097e9d8ee514d140bfa17687bcbd5c6f57b8cffb296eac7f143de54a0dbbab | 3e4f8f7ec35c0870d2e8c68fc9254dc72ebd869f1ad49c9161ecb95da9ded4b4 | 未随包源文件链接改为源码相对说明；增加历史方法时间口径提示，不回填旧统计。总账提示改为 RC1/契约1.0 历史保留，方法正文证据未改 |
+| methods/evaluation-next.md | e5fbf8764a868051d455025cf799265fbf0001748bbb5a209ddd11e7668bcd96 | 7d555f8507b41d158fbaed127828387591139b945d529b4a2e1c83e5c5db603a | 未随包源文件链接改为源码相对说明；增加历史方法时间口径提示，不回填旧统计。总账提示改为 RC1/契约1.0 历史保留，方法正文证据未改 |
+| methods/judge-quickstart.md | f97abac6e25d36524d9f599ab7b94e9e0a56a96b212a4df0a55018b2eb01696c | c6e24afe19a1f493e1f7fddcb3cef684d06721faac933889c18cb6eccd7e522d | 增加历史方法时间口径提示，不回填旧统计。总账提示改为 RC1/契约1.0 历史保留，方法正文证据未改 |
+| methods/old-persona-proof.md | bb39c32e52a6fb10876cb78521730b25a6b1f6b42e278f19c83bb4ebe76a7c58 | 289fb5a4d546ba689cdeec8640a7a0e75cc4028b2b372338a68dfbaefad67b25 | 本机路径转repo-relative或移除；原件未修改；未随包源文件链接改为源码相对说明；增加历史方法时间口径提示，不回填旧统计。总账提示改为 RC1/契约1.0 历史保留，方法正文证据未改 |
+| methods/population-methodology.md | d8cb354a0ea476a193c199d7132013121c101e2575c39791e67d0d439ed6c413 | 26da82d204746afdf4ac50773eed6913a909ad2d37867300906a8d13cd748848 | 未随包源文件链接改为源码相对说明；增加历史方法时间口径提示，不回填旧统计。总账提示改为 RC1/契约1.0 历史保留，方法正文证据未改 |
+| methods/resident-construction.md | 4b620a35d96b547a394d51636d3d36cbf6ab49365c0f2f8b6bc9e3583c01d874 | 74b8dfce77388c5f51df1a22d4786ffb0be4612231f6c0b95ef70f9b63ddf7f0 | 未随包源文件链接改为源码相对说明；增加历史方法时间口径提示，不回填旧统计。总账提示改为 RC1/契约1.0 历史保留，方法正文证据未改 |
 | persona-source-register.json | d72077047f740d850a4f9c3ed4204963d25cf0be8935f9354d70e426eb6c716d | d72077047f740d850a4f9c3ed4204963d25cf0be8935f9354d70e426eb6c716d | 逐字节相同 |
 | population-pack.json | b23aaf30c015381f7b102b71848ee97ecb64756829e7edf98c24db1bf59068d7 | b23aaf30c015381f7b102b71848ee97ecb64756829e7edf98c24db1bf59068d7 | 逐字节相同 |
 | population-sources.json | a17630438396f3228d17a822d58dc68acf5056197d92140d8cbfd053412f3831 | a17630438396f3228d17a822d58dc68acf5056197d92140d8cbfd053412f3831 | 逐字节相同 |
-| project-materials.md | e19af58d1a6a893a9c782a971b7ac2d03b629eb76cbe7dfc6a881774d7b1fd01 | 4919d4062b009b151632e0a16d2a56b5b38593bb6d3f4845f931aebc87552698 | 公开阶段状态与新增真实轮内容，旧阶段原件保持不动 |
+| project-materials.md | e19af58d1a6a893a9c782a971b7ac2d03b629eb76cbe7dfc6a881774d7b1fd01 | 8286166a51bdf21421e553b80a70d9539a021a1dee8dfd6802f2a4ac32894911 | 公开阶段状态与新增真实轮内容，旧阶段原件保持不动。标题改为标明 RC1/契约1.0 历史保留，并与契约1.1对照；证据数字与 live-proof 原件未改 |
 | recorded-child-proof.json | e49552a25083a2ee098d8fff8362161649968df57fe89587d9ef1605e00d3394 | e49552a25083a2ee098d8fff8362161649968df57fe89587d9ef1605e00d3394 | 逐字节相同 |
 | recorded-pet-proof.json | 6b0799a77949aebc2854d3c737e033e3096bdf3cd843c872dbbd8dee9eb85060 | 6b0799a77949aebc2854d3c737e033e3096bdf3cd843c872dbbd8dee9eb85060 | 逐字节相同 |
 | sources/binjiang-2023-yearbook.pdf | 338886a362ca60640ce999f185bb120e33922dedee9bc31dbbad57a0a4088134 | 338886a362ca60640ce999f185bb120e33922dedee9bc31dbbad57a0a4088134 | 逐字节相同 |
@@ -87,6 +87,6 @@
 | live-proof/pet-snacks/statistics.json | 8ada851fb3361fd319ac33fec72fc9d224c957f83dc592dd946cdc56678f7414 | 8ada851fb3361fd319ac33fec72fc9d224c957f83dc592dd946cdc56678f7414 | 逐字节相同 |
 | live-proof/pet-snacks/survey-run.json | 739f2054c9cf7528b55359e901ebf7e200b806041bfbee2bff17b14161bf4e15 | 739f2054c9cf7528b55359e901ebf7e200b806041bfbee2bff17b14161bf4e15 | 逐字节相同 |
 | live-proof/pet-snacks/qualification-audit.json | 13f170d8a57d043ef93aa814209d0dc985686f7b1a15260525398388ffd4b867 | 13f170d8a57d043ef93aa814209d0dc985686f7b1a15260525398388ffd4b867 | 逐字节相同 |
-| project-materials.pdf | e7dd4d1f7dacaadd56a94b4936ba75727e5a57dca9e031b6e028494255becce5 | 6fcd0a0a4e9f2d463ca773eeba3f5a4710f26d39f857b6b4385d18db3cff3b47 | 新建公开评审PDF，显眼新增真实轮与失败数据；原15页PDF未覆盖 |
+| project-materials.pdf | e7dd4d1f7dacaadd56a94b4936ba75727e5a57dca9e031b6e028494255becce5 | 803f31b60cbc3906e4129b6d0ece40181edbb071d4322573e9a4b799424aeec5 | 新建公开评审PDF，显眼新增真实轮与失败数据；原15页PDF未覆盖。标题改为标明 RC1/契约1.0 历史保留，并与契约1.1对照；证据数字与 live-proof 原件未改 |
 
 README源件SHA-256：453006a93f35f9f98ff1efcba452e3f0069af987b48e2e98038704cae772a0bf。正式提交状态未确认；旧submission及Tag保持原样，不回填旧截止时间。

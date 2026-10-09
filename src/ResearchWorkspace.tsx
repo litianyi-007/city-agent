@@ -132,6 +132,7 @@ export function ResearchWorkspace({ section, onSectionChange, onDirtyChange, onB
           <a className="text-button" href={`${publicReviewBase}index.html`} target="_blank" rel="noreferrer">RC1完整申报材料 · 历史保留 ↗</a>
           {!pagesMode && <a className="text-button" href={`${import.meta.env.BASE_URL}submission-next/index.html`} target="_blank" rel="noreferrer">本机公开审查材料副本 ↗</a>}
         </div>
+        <p className="research-note">零 Key 路径：点工具栏「完整业务示例 · 零费用体验」。那是 0 次模型调用夹具，不要和契约1.1 或 RC1 账本当成同一轮。<button type="button" className="text-button" disabled={busy} onClick={() => setShowBusinessDemos(true)}>打开完整业务示例</button></p>
         <p className="research-note">{CONTRACT11_ROUND_BANNER}</p>
         {section === 'projects' && showBusinessDemos && <Suspense fallback={<p>加载完整业务问卷与五层情景…</p>}><BusinessDemoPanel busy={busy} onBusyChange={setBusy} onApplyDemo={async (next, presets) => {
           if (dirty && !window.confirm('当前问卷有未保存修改。是否放弃修改，应用完整业务问卷并新增四份无 Key 情景预设？不会删除既有预设。')) return false;
