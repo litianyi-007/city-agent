@@ -60,7 +60,7 @@ function assertRegisteredAnswers(task: typeof pet.task, answers: Answer[]) {
 
 test('generic 工程演示 fixtures already satisfy registered cross-question rules, and injected conflicts stay invalid', async () => {
   for (const demo of [child, pet]) {
-    for (const seed of [0, 1, 42, 20261007, 20261009, 922572]) {
+    for (const seed of [0, 1, 42, 99, 20261007, 20261009, 922572]) {
       for (const profile of buildProfiles(demo.task, population, demo.presets.slice(0, 1), 12, seed)) {
         const answers = JSON.parse(registeredFixtureAnswers(demo.task, profile, seed)).answers as Answer[];
         assertRegisteredAnswers(demo.task, answers);

@@ -48,7 +48,9 @@ const runSchema = z.object({
 }).strict();
 const planningRequestSchema = researchPlanningInputSchema.extend({
   agentId: z.string().uuid(), acknowledgeCost: z.literal(true),
+  cancelId: z.string().uuid().optional(),
 }).strict();
+const planningCancelSchema = z.object({ cancelId: z.string().uuid() }).strict();
 const businessEvidenceRequestSchema = z.object({ pack: z.unknown(), requirements: z.unknown().optional() }).strict();
 
 function parameter(request: Request, name: string): string {
@@ -73,6 +75,7 @@ export function createApp(store: CityStore, suppliedRunner?: Runner, planningRun
   const runner = suppliedRunner ?? createRunner(store);
   const surveys = createSurveyService(store);
   let planningActive = false;
+  const planningJobs = new Map<string, AbortController>();
   const webPort = process.env.CITY_AGENT_WEB_PORT || '5180';
   if (!/^\d+$/.test(webPort) || Number(webPort) < 1 || Number(webPort) > 65535) throw new Error('CITY_AGENT_WEB_PORT must be a valid TCP port.');
   app.disable('x-powered-by');
@@ -132,17 +135,29 @@ export function createApp(store: CityStore, suppliedRunner?: Runner, planningRun
   app.get('/api/research/planning/agents', (_request, response) => response.json(
     store.getAgents().filter(agent => agent.enabled && ['product', 'researcher'].includes(agent.role)),
   ));
-  // Planning has no id until the POST returns, so cancellation is this request's AbortSignal. There is no /planning/cancel route.
+  // One in-flight plan. cancelId is registered before the model call so POST /planning/cancel can abort the same signal Harness already honors.
+  app.post('/api/research/planning/cancel', (request, response) => {
+    const { cancelId } = planningCancelSchema.parse(request.body ?? {});
+    const job = planningJobs.get(cancelId);
+    if (!job) throw new StoreError('此规划没有正在运行的请求。', 409);
+    job.abort();
+    response.json({ cancelled: true, cancelId });
+  });
   app.post('/api/research/planning', async (request, response) => {
-    const { agentId, acknowledgeCost: _acknowledgeCost, ...input } = planningRequestSchema.parse(request.body);
+    const { agentId, acknowledgeCost: _acknowledgeCost, cancelId: suppliedCancelId, ...input } = planningRequestSchema.parse(request.body);
     const agent = store.getAgent(agentId, true);
     if (!agent) throw new StoreError('规划 Agent 不存在。', 404);
     if (!agent.enabled || !['product', 'researcher'].includes(agent.role)) throw new StoreError('请选择已启用的产品或研究员 Agent。');
     if (!agent.apiKey?.trim()) throw new StoreError('规划 Agent 尚未配置 API Key；未发出模型请求。');
     if (planningActive) throw new StoreError('已有候选规划正在运行；不自动重试。', 409);
+    if (suppliedCancelId && planningJobs.has(suppliedCancelId)) throw new StoreError('此规划取消编号正在使用。', 409);
+    const cancelId = suppliedCancelId ?? randomUUID();
+    const clientAbort = new AbortController();
+    const planningAbort = new AbortController();
+    const signal = AbortSignal.any([clientAbort.signal, planningAbort.signal]);
     planningActive = true;
-    const controller = new AbortController();
-    const disconnect = () => { if (!response.writableEnded) controller.abort(); };
+    planningJobs.set(cancelId, planningAbort);
+    const disconnect = () => { if (!response.writableEnded) clientAbort.abort(); };
     request.once('aborted', disconnect);
     response.once('close', disconnect);
     const recordId = randomUUID();
@@ -154,26 +169,35 @@ export function createApp(store: CityStore, suppliedRunner?: Runner, planningRun
     try {
       const pack = getPopulationPack();
       const integrity = await validatePopulationIntake(pack);
-      if (integrity.status !== 'ready') throw new StoreError('冻结人口证据完整性未通过；未发出模型请求。', 409);
-      const candidate = await planResearch(input, { ...agent, apiKey: agent.apiKey }, controller.signal, planningRunner);
+      if (!signal.aborted && integrity.status !== 'ready') throw new StoreError('冻结人口证据完整性未通过；未发出模型请求。', 409);
+      const candidate = await planResearch(input, { ...agent, apiKey: agent.apiKey }, signal, planningRunner);
+      if (signal.aborted) throw new ResearchPlanningError('候选规划已取消；不自动重试。', { ...candidate.evidence, state: 'cancelled', error: '候选规划已取消；不自动重试。' });
       const result = { ...candidate, recordId, preflight: preflightResearchTask(candidate.task, pack) };
       try { await persist({ schemaVersion: '1.0', recordId, result }); }
       catch {
-        if (!controller.signal.aborted) response.status(503).json({ error: '模型已经调用，但本机证据保存失败。请先导出返回证据，不要盲目重试。', code: 'planning-evidence-write-failed', recordId, result });
+        if (!clientAbort.signal.aborted && !planningAbort.signal.aborted) response.status(503).json({ error: '模型已经调用，但本机证据保存失败。请先导出返回证据，不要盲目重试。', code: 'planning-evidence-write-failed', recordId, result });
         return;
       }
-      if (!controller.signal.aborted) response.json(result);
+      if (planningAbort.signal.aborted) {
+        if (!clientAbort.signal.aborted) response.status(422).json({
+          error: '候选规划已取消；不自动重试。', recordId,
+          evidence: { ...candidate.evidence, state: 'cancelled', error: '候选规划已取消；不自动重试。' }, recorded: true,
+        });
+        return;
+      }
+      if (!clientAbort.signal.aborted) response.json(result);
     } catch (error) {
       if (!(error instanceof ResearchPlanningError)) throw error;
       let recorded = true;
       try { await persist({ schemaVersion: '1.0', recordId, evidence: error.evidence }); } catch { recorded = false; }
-      if (!controller.signal.aborted) response.status(error.evidence.state === 'timed-out' ? 504 : 422).json({
+      if (!clientAbort.signal.aborted) response.status(error.evidence.state === 'timed-out' ? 504 : 422).json({
         error: error.message, recordId, evidence: error.evidence, recorded,
         ...(recorded ? {} : { warning: '本机证据保存失败，请导出本响应。模型可能已计费；不要盲目重试。' }),
       });
     } finally {
       request.removeListener('aborted', disconnect);
       response.removeListener('close', disconnect);
+      planningJobs.delete(cancelId);
       planningActive = false;
     }
   });

@@ -5,7 +5,7 @@ import type { ResearchPlanningResult } from '../../shared/research-planning.ts';
 
 const fixtureAgentId = '11111111-1111-4111-8111-111111111111';
 const candidateTitle = '合成UI夹具候选 · 非真实调研';
-type PlanningBody = { agentId: string; acknowledgeCost: boolean; request: string; context?: string; maxQuestions: number; population: Omit<ResearchTask['population'], 'filters'> };
+type PlanningBody = { agentId: string; acknowledgeCost: boolean; request: string; context?: string; maxQuestions: number; cancelId?: string; population: Omit<ResearchTask['population'], 'filters'> };
 
 /** Explicitly synthetic UI response. No model, provider, credential or market fact is involved. */
 function candidateFixture(body: PlanningBody): ResearchPlanningResult {
@@ -38,7 +38,7 @@ function candidateFixture(body: PlanningBody): ResearchPlanningResult {
 
 /** All possible execution POSTs are intercepted before the local backend. */
 async function installZeroCostGuard(page: Page, planning?: (route: Route, body: PlanningBody) => Promise<void>) {
-  const state = { planningBodies: [] as PlanningBody[], blockedWrites: [] as string[], externalRequests: [] as string[], errors: [] as string[] };
+  const state = { planningBodies: [] as PlanningBody[], planningCancels: [] as { cancelId?: string }[], blockedWrites: [] as string[], externalRequests: [] as string[], errors: [] as string[] };
   page.on('pageerror', error => state.errors.push(error.message));
   await page.route('**/*', async route => {
     const request = route.request(); const url = new URL(request.url());
@@ -50,6 +50,11 @@ async function installZeroCostGuard(page: Page, planning?: (route: Route, body: 
         { id: fixtureAgentId, name: '合成规划测试连接', role: 'researcher', provider: 'openai-compatible', baseUrl: 'http://127.0.0.1:39999/v1', modelId: 'synthetic-ui-model', enabled: true, hasApiKey: true },
         { id: '22222222-2222-4222-8222-222222222222', name: '未配置Key的合成连接', role: 'product', provider: 'openai-compatible', baseUrl: 'http://127.0.0.1:39999/v1', modelId: 'synthetic-ui-model', enabled: true, hasApiKey: false },
       ] }); return;
+    }
+    if (url.pathname === '/api/research/planning/cancel' && request.method() === 'POST') {
+      state.planningCancels.push(request.postDataJSON());
+      await route.fulfill({ json: { cancelled: true, cancelId: request.postDataJSON()?.cancelId } });
+      return;
     }
     if (url.pathname === '/api/research/planning' && request.method() === 'POST') {
       const body = request.postDataJSON() as PlanningBody; state.planningBodies.push(body);
@@ -136,10 +141,13 @@ test('cancelled synthetic planning ignores a deliberately delayed candidate and 
   await expect(panel.getByRole('button', { name: '取消规划', exact: true })).toBeVisible();
   await panel.getByRole('button', { name: '取消规划', exact: true }).click();
   await expect(panel.getByRole('alert')).toContainText('规划已取消');
+  await expect.poll(() => guard.planningCancels.length).toBe(1);
   release(); await done;
   await expect(panel.getByRole('button', { name: '应用候选至草稿 · 不启动调查', exact: true })).toHaveCount(0);
   await expect(page.getByLabel('调查标题', { exact: true })).toHaveValue(initialTitle);
   expect(guard.planningBodies).toHaveLength(1);
+  expect(guard.planningCancels).toHaveLength(1);
+  expect(guard.planningCancels[0].cancelId).toBe(guard.planningBodies[0].cancelId);
   expect(guard.blockedWrites).toEqual([]);
   expect(guard.externalRequests).toEqual([]);
   expect(guard.errors).toEqual([]);

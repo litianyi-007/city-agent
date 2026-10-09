@@ -45,14 +45,20 @@ test('five-layer proof retains a full questionnaire, independent prompts, raw an
   assert.match(markdown, /主粮/); assert.match(markdown, /16题/);
 });
 
-test('fixture result is deterministic engineering data, not a demonstration of persona-driven preference', async () => {
+test('fixture layer echoes follow the five-layer persona without retargeting unrelated answers', async () => {
   const first = await createPersonaProof({ count: 12, seed: 42 });
   const second = await createPersonaProof({ count: 12, seed: 42 });
   assert.equal(first.run.profileHash, second.run.profileHash);
   assert.deepEqual(first.run.responses.map(item => item.raw), second.run.responses.map(item => item.raw));
   const profile = first.run.profiles[0];
-  assert.equal(fixtureAnswers(first.run.task, profile, 42), fixtureAnswers(first.run.task, { ...profile, persona: createDefaultPersona() }, 42));
-  assert.match(first.report.limitations.join('\n'), /不根据五层画像推导消费偏好/);
+  const answer = (raw: string, questionId: string) => JSON.parse(raw).answers.find((item: { questionId: string }) => item.questionId === questionId).value;
+  const original = fixtureAnswers(first.run.task, profile, 99);
+  const unknownLayer = fixtureAnswers(first.run.task, { ...profile, persona: createDefaultPersona() }, 99);
+  assert.equal(original, fixtureAnswers(first.run.task, structuredClone(profile), 99));
+  assert.notEqual(answer(original, 'education-context'), answer(unknownLayer, 'education-context'));
+  assert.equal(answer(original, 'price-range'), answer(unknownLayer, 'price-range'));
+  assert.match(String(answer(unknownLayer, 'education-context')), /education=unknown/);
+  assert.match(first.report.limitations.join('\n'), /不据此推导品类、价位或购买意愿/);
 });
 
 test('30-person fixture covers its planned denominator without upgrading real complete-rate acceptance', async () => {

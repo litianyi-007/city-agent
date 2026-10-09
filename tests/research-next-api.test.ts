@@ -151,6 +151,57 @@ test('HTTP client cancellation reaches planner signal and persists cancellation 
   assert.equal(saved.evidence.state, 'cancelled'); assert.equal(calls, 1);
 });
 
+test('in-flight planning cancel aborts the runner, returns no candidate, and releases the slot', async t => {
+  let calls = 0;
+  const cancelId = '33333333-3333-4333-8333-333333333333';
+  const unknownId = '44444444-4444-4444-8444-444444444444';
+  const { request, body, directory } = await fixture(t, async (_agent, _system, _user, signal) => {
+    calls++;
+    if (calls === 1) {
+      return await new Promise<RoleResult>((_resolve, reject) => {
+        const abort = () => reject(new DOMException('synthetic cancelled', 'AbortError'));
+        if (signal.aborted) abort();
+        else signal.addEventListener('abort', abort, { once: true });
+      });
+    }
+    return modelResult();
+  });
+  let settled = false;
+  const pending = request('/api/research/planning', { ...body(), cancelId }).then(response => { settled = true; return response; });
+  await until(() => calls === 1);
+  assert.equal((await request('/api/research/planning/cancel', { cancelId: unknownId })).status, 409);
+  assert.equal(settled, false);
+  assert.equal(calls, 1);
+  const cancel = await request('/api/research/planning/cancel', { cancelId });
+  assert.equal(cancel.status, 200);
+  assert.deepEqual(await cancel.json(), { cancelled: true, cancelId });
+  const response = await pending;
+  assert.equal(response.status, 422);
+  const payload = await response.json();
+  assert.equal(payload.evidence.state, 'cancelled');
+  assert.equal(Object.hasOwn(payload, 'task'), false);
+  assert.equal(JSON.stringify(payload).includes(secret), false);
+  assert.equal(calls, 1);
+  const saved = JSON.parse(readFileSync(path.join(directory, 'planning', `${payload.recordId}.json`), 'utf8'));
+  assert.equal(saved.evidence.state, 'cancelled');
+  assert.equal(saved.result, undefined);
+  assert.equal((await request('/api/research/planning/cancel', { cancelId })).status, 409);
+  const again = await request('/api/research/planning', body());
+  assert.equal(again.status, 200, await again.clone().text());
+  assert.equal((await again.json()).status, 'candidate');
+  assert.equal(calls, 2);
+});
+
+test('idle planning cancel and malformed cancel ids make zero model calls', async t => {
+  let calls = 0;
+  const { request } = await fixture(t, async () => { calls++; return modelResult(); });
+  assert.equal((await request('/api/research/planning/cancel', { cancelId: '55555555-5555-4555-8555-555555555555' })).status, 409);
+  assert.equal((await request('/api/research/planning/cancel', {})).status, 400);
+  assert.equal((await request('/api/research/planning/cancel', { cancelId: 'not-a-uuid' })).status, 400);
+  assert.equal((await request('/api/research/planning/cancel', { cancelId: '66666666-6666-4666-8666-666666666666', extra: true })).status, 400);
+  assert.equal(calls, 0);
+});
+
 test('business evidence audit API never activates data or starts models and empty template remains needs-data', async t => {
   let calls = 0;
   const { request, store, starts } = await fixture(t, async () => { calls++; return modelResult(); });

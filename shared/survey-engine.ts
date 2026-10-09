@@ -6,7 +6,7 @@ import type { CompiledPopulation } from '../server/population/model';
 import type { ResidentAgentPublic } from '../server/research/residents';
 import type { RegionPack, auditPack } from '../server/population/model';
 import type { SurveyAnalysis, samplingReport } from './survey-analysis';
-import { residentPersonaSchema, type ResidentPersona } from './resident-persona';
+import { PERSONA_CATALOG, residentPersonaSchema, type ResidentPersona } from './resident-persona';
 
 export const SURVEY_VERSION = 'coverage-survey-2.4-logic-audit';
 const EXCLUSIVE_PASS_VERSION = 'coverage-survey-2.3-exclusive-check';
@@ -210,8 +210,90 @@ export function validateAnswers(task: ResearchTask, profileId: string, raw: stri
   }
   return result.answers;
 }
+type PersonaLayer = 'personality' | 'upbringing' | 'education' | 'household' | 'work';
+type SurveyQuestion = ResearchTask['questionnaire']['questions'][number];
+
+/** Questions that ask about one persona layer. Other questions keep the seed-only draw. */
+function personaLayerForQuestion(question: Pick<SurveyQuestion, 'id' | 'prompt'>): PersonaLayer | null {
+  const id = question.id;
+  if (id === 'personality-context' || id.startsWith('personality-')) return 'personality';
+  if (id === 'upbringing-context' || id.startsWith('upbringing-')) return 'upbringing';
+  if (id === 'education-context' || id.startsWith('education-')) return 'education';
+  if (id === 'household-context' || id.startsWith('household-')) return 'household';
+  if (id === 'occupation-context' || id === 'work-context' || id.startsWith('occupation-') || id.startsWith('work-')) return 'work';
+  if (question.prompt.includes('给定人格倾向')) return 'personality';
+  if (question.prompt.includes('给定成长经历')) return 'upbringing';
+  if (question.prompt.includes('给定教育层')) return 'education';
+  if (question.prompt.includes('给定当前家庭')) return 'household';
+  if (question.prompt.includes('工作与社会角色') || question.prompt.includes('日常工作或家庭采购安排')) return 'work';
+  return null;
+}
+
+function layerTokens(persona: ResidentPersona, layer: PersonaLayer): string[] {
+  if (layer === 'education') return [persona.education.level];
+  if (layer === 'upbringing') return [persona.upbringing.primaryCaregiving, ...persona.upbringing.experiences];
+  if (layer === 'household') return [persona.household.relationship, ...persona.household.livingRoles];
+  if (layer === 'work') return [persona.work.employment, ...persona.work.socialRoles];
+  return [];
+}
+
+/** Engineering echo of a scenario assumption. It is not a preference, price, or population fact. */
+function personaLayerText(persona: ResidentPersona | undefined, layer: PersonaLayer): string {
+  const notice = '工程演示答卷：只回显情景假设，不推出品类、价位或购买意愿。';
+  if (!persona) return `${layer}=unset · ${notice}`;
+  if (layer === 'education') {
+    const detail = persona.education.customDetail ? `/${persona.education.customDetail}` : '';
+    return `education=${persona.education.level}${detail} · ${notice}`;
+  }
+  if (layer === 'personality') {
+    const scores = PERSONA_CATALOG.bigFive.map(trait => `${trait.id}=${persona.personality[trait.id] === null ? 'null' : persona.personality[trait.id]}`).join(',');
+    const custom = persona.personality.customTraits.map(item => item.label).join(',');
+    return `personality=${scores}${custom ? `;custom=${custom}` : ''} · ${notice}`;
+  }
+  if (layer === 'upbringing') return `upbringing=${persona.upbringing.primaryCaregiving};experiences=${persona.upbringing.experiences.join(',') || 'none'} · ${notice}`;
+  if (layer === 'household') return `household=${persona.household.relationship};living=${persona.household.livingRoles.join(',') || 'none'} · ${notice}`;
+  const income = persona.work.income;
+  return `work=${persona.work.employment};roles=${persona.work.socialRoles.join(',') || 'none'};income=${income.basis}:${income.lower ?? 'null'}-${income.upper ?? 'null'} · ${notice}`;
+}
+
+function personaBoundAnswer(question: SurveyQuestion, persona: ResidentPersona | undefined, seeded: Answer['value']): Answer['value'] {
+  const layer = personaLayerForQuestion(question);
+  if (!layer) return seeded;
+  if (question.type === 'text') return personaLayerText(persona, layer).slice(0, question.maxLength);
+  if (question.type === 'scale') {
+    if (!persona) return seeded;
+    const trait = PERSONA_CATALOG.bigFive.find(item => question.id === item.id || question.id.endsWith(`-${item.id}`));
+    const score = trait ? persona.personality[trait.id] : null;
+    if (typeof score !== 'number') return seeded;
+    return question.min + Math.round((score / 100) * (question.max - question.min));
+  }
+  if (question.type === 'number') {
+    if (layer !== 'work' || !question.id.includes('income')) return seeded;
+    const income = persona?.work.income;
+    if (!income || (income.lower === null && income.upper === null)) return question.required ? seeded : null;
+    const anchor = income.lower !== null && income.upper !== null ? (income.lower + income.upper) / 2 : (income.lower ?? income.upper)!;
+    return Math.round(Math.min(question.max, Math.max(question.min, anchor)) * 100) / 100;
+  }
+  const ids = question.options.map(option => option.id);
+  const specific = persona ? layerTokens(persona, layer).filter(token => token !== 'unknown' && ids.includes(token)) : [];
+  if (question.type === 'single') {
+    if (specific.length) return specific[0];
+    if (ids.includes('unknown') && specific.length === 0) return 'unknown';
+    return seeded;
+  }
+  const exclusive = new Set(declaredExclusiveOptionIds(question));
+  let chosen = specific.filter(id => !exclusive.has(id));
+  if (!chosen.length && ids.includes('unknown') && question.minSelections <= 1) chosen = ['unknown'];
+  if (chosen.length > question.maxSelections) chosen = chosen.slice(0, question.maxSelections);
+  if (chosen.length < question.minSelections || chosen.length > question.maxSelections) return seeded;
+  if (chosen.length > 1 && chosen.some(id => exclusive.has(id))) return [chosen.find(id => exclusive.has(id))!];
+  return chosen.length ? chosen : seeded;
+}
+
 export function fixtureAnswers(task: ResearchTask, profile: Profile, seed: number): string {
   const random = rng(seed + Number(profile.id.split('-').at(-1)) * 997);
+  const parsedPersona = profile.persona ? residentPersonaSchema.safeParse(profile.persona) : undefined;
+  const persona = parsedPersona?.success ? parsedPersona.data : undefined;
   return JSON.stringify({ residentId: profile.id, answers: task.questionnaire.questions.map(question => {
     let value: Answer['value'];
     if (question.type === 'single') {
@@ -237,7 +319,7 @@ export function fixtureAnswers(task: ResearchTask, profile: Profile, seed: numbe
     } else if (question.type === 'scale') value = question.min + Math.floor(random() * (question.max - question.min + 1));
     else if (question.type === 'number') value = Math.min(question.max, Math.max(question.min, Math.round((question.min + random() * (question.max - question.min)) * 100) / 100));
     else value = '工程演示答卷：此文本验证开放题保留与回查，不表达真实消费偏好。'.slice(0, question.maxLength);
-    return { questionId: question.id, value };
+    return { questionId: question.id, value: personaBoundAnswer(question, persona, value) };
   }) });
 }
 export function summarize(task: ResearchTask, records: ResponseRecord[]) {
