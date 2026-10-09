@@ -1,0 +1,4212 @@
+{
+  "version": "mock-package-v2",
+  "materialsVersion": "production-materials-v7",
+  "reportCommit": "fb1bd5ac241a07a894364e5b624c9e75989e01c3",
+  "verifierStudy": {
+    "version": "verifier-real02-derived-metrics-v1",
+    "evidenceSource": "retained call-result/decision-result and actual oracle-result events; no static labels substituted",
+    "sourceCommit": "7899b9792dc611f30958a085908add660f3b156d",
+    "sourceFiles": 47,
+    "controlRunId": "6eaf79ac-0244-48b7-b2d2-aa8bef84ea9d",
+    "nativeRunId": "1766a3be-fbd4-4217-894f-350a68a06d66",
+    "frozenStudySha256": "67165b1343b0e67e55f659662529f77ce40aa2e0ed52e569adbba3ef33af5310",
+    "manifestBytesSha256": "ec75ed83a7f37d94b365a3a9a87a9ad581f98fd3019e5b4874a2d2b3ed7dcb73",
+    "durationMs": 370649,
+    "events": 286,
+    "blindDecisionCount": 54,
+    "lastDecisionEvent": 213,
+    "firstOracleIntentEvent": 214,
+    "oracleCandidateCount": 36,
+    "goodCandidates": 16,
+    "badCandidates": 20,
+    "allBadPoolCount": 6,
+    "hasGoodPoolCount": 12,
+    "byStrategy": [
+      {
+        "strategy": "baseline",
+        "planned": 18,
+        "goodSelected": 8,
+        "badAccepted": 10,
+        "abstained": 0,
+        "correctAllBadAbstentions": 0,
+        "falseAbstentions": 0,
+        "calls": 0,
+        "inputTokens": 0,
+        "outputTokens": 0,
+        "estimatedCostUsd": 0
+      },
+      {
+        "strategy": "llm",
+        "planned": 18,
+        "goodSelected": 12,
+        "badAccepted": 4,
+        "abstained": 2,
+        "correctAllBadAbstentions": 2,
+        "falseAbstentions": 0,
+        "calls": 18,
+        "inputTokens": 115538,
+        "outputTokens": 2806,
+        "estimatedCostUsd": 0.0380286
+      },
+      {
+        "strategy": "jev-cascade",
+        "planned": 18,
+        "goodSelected": 11,
+        "badAccepted": 2,
+        "abstained": 5,
+        "correctAllBadAbstentions": 4,
+        "falseAbstentions": 1,
+        "calls": 34,
+        "inputTokens": 227448,
+        "outputTokens": 5751,
+        "estimatedCostUsd": 0.039267846
+      }
+    ],
+    "cascadeJev": {
+      "calls": 18,
+      "inputTokens": 123413,
+      "outputTokens": 3356,
+      "estimatedCostUsd": 0.005183346
+    },
+    "cascadeUpgradedLlm": {
+      "calls": 16,
+      "inputTokens": 104035,
+      "outputTokens": 2395,
+      "estimatedCostUsd": 0.0340845
+    },
+    "totals": {
+      "calls": 52,
+      "inputTokens": 342986,
+      "outputTokens": 8557,
+      "estimatedCostUsd": 0.077296446
+    },
+    "billing": {
+      "basis": "declared non-cache conservative prices; not provider bill",
+      "actualProviderBill": null,
+      "unknownCalls": 0
+    },
+    "valueVerdict": {
+      "goodSelectedNotBelowB": false,
+      "badAcceptedNotAboveB": true,
+      "costBelowB": false,
+      "highValue": false,
+      "costDeltaUsd": 0.001239246,
+      "costDeltaPercent": 3.258721067827898
+    },
+    "pools": [
+      {
+        "poolId": "H01",
+        "candidates": [
+          {
+            "id": "cand-f15c",
+            "passed": true,
+            "oracleEvent": 215
+          },
+          {
+            "id": "cand-62d8",
+            "passed": false,
+            "oracleEvent": 217
+          }
+        ],
+        "hasGoodCandidate": true,
+        "choices": [
+          {
+            "strategy": "baseline",
+            "decisionEvent": 3,
+            "decision": "accept",
+            "selectedCandidateId": "cand-f15c",
+            "selectedPassed": true,
+            "engine": "baseline",
+            "fallbackKind": null,
+            "usage": {
+              "calls": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "estimatedCostUsd": 0
+            }
+          },
+          {
+            "strategy": "llm",
+            "decisionEvent": 7,
+            "decision": "accept",
+            "selectedCandidateId": "cand-f15c",
+            "selectedPassed": true,
+            "engine": "llm",
+            "fallbackKind": null,
+            "usage": {
+              "calls": 1,
+              "inputTokens": 7029,
+              "outputTokens": 168,
+              "estimatedCostUsd": 0.0023103
+            }
+          },
+          {
+            "strategy": "jev-cascade",
+            "decisionEvent": 13,
+            "decision": "accept",
+            "selectedCandidateId": "cand-f15c",
+            "selectedPassed": true,
+            "engine": "jev-llm-protocol-fallback",
+            "fallbackKind": "arithmetic-drift",
+            "usage": {
+              "calls": 2,
+              "inputTokens": 15641,
+              "outputTokens": 317,
+              "estimatedCostUsd": 0.002626404
+            }
+          }
+        ]
+      },
+      {
+        "poolId": "H02",
+        "candidates": [
+          {
+            "id": "cand-7ab2",
+            "passed": false,
+            "oracleEvent": 219
+          },
+          {
+            "id": "cand-d90e",
+            "passed": false,
+            "oracleEvent": 221
+          }
+        ],
+        "hasGoodCandidate": false,
+        "choices": [
+          {
+            "strategy": "baseline",
+            "decisionEvent": 15,
+            "decision": "accept",
+            "selectedCandidateId": "cand-7ab2",
+            "selectedPassed": false,
+            "engine": "baseline",
+            "fallbackKind": null,
+            "usage": {
+              "calls": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "estimatedCostUsd": 0
+            }
+          },
+          {
+            "strategy": "llm",
+            "decisionEvent": 19,
+            "decision": "accept",
+            "selectedCandidateId": "cand-7ab2",
+            "selectedPassed": false,
+            "engine": "llm",
+            "fallbackKind": null,
+            "usage": {
+              "calls": 1,
+              "inputTokens": 6869,
+              "outputTokens": 170,
+              "estimatedCostUsd": 0.0022647
+            }
+          },
+          {
+            "strategy": "jev-cascade",
+            "decisionEvent": 25,
+            "decision": "accept",
+            "selectedCandidateId": "cand-d90e",
+            "selectedPassed": false,
+            "engine": "jev-llm-protocol-fallback",
+            "fallbackKind": "arithmetic-drift",
+            "usage": {
+              "calls": 2,
+              "inputTokens": 15364,
+              "outputTokens": 328,
+              "estimatedCostUsd": 0.00258789
+            }
+          }
+        ]
+      },
+      {
+        "poolId": "H03",
+        "candidates": [
+          {
+            "id": "cand-3e91",
+            "passed": false,
+            "oracleEvent": 223
+          },
+          {
+            "id": "cand-80c4",
+            "passed": true,
+            "oracleEvent": 225
+          }
+        ],
+        "hasGoodCandidate": true,
+        "choices": [
+          {
+            "strategy": "baseline",
+            "decisionEvent": 27,
+            "decision": "accept",
+            "selectedCandidateId": "cand-3e91",
+            "selectedPassed": false,
+            "engine": "baseline",
+            "fallbackKind": null,
+            "usage": {
+              "calls": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "estimatedCostUsd": 0
+            }
+          },
+          {
+            "strategy": "llm",
+            "decisionEvent": 31,
+            "decision": "accept",
+            "selectedCandidateId": "cand-80c4",
+            "selectedPassed": true,
+            "engine": "llm",
+            "fallbackKind": null,
+            "usage": {
+              "calls": 1,
+              "inputTokens": 7419,
+              "outputTokens": 209,
+              "estimatedCostUsd": 0.0024765
+            }
+          },
+          {
+            "strategy": "jev-cascade",
+            "decisionEvent": 37,
+            "decision": "accept",
+            "selectedCandidateId": "cand-80c4",
+            "selectedPassed": true,
+            "engine": "jev-llm-protocol-fallback",
+            "fallbackKind": "arithmetic-drift",
+            "usage": {
+              "calls": 2,
+              "inputTokens": 16821,
+              "outputTokens": 389,
+              "estimatedCostUsd": 0.002860584
+            }
+          }
+        ]
+      },
+      {
+        "poolId": "H04",
+        "candidates": [
+          {
+            "id": "cand-49fe",
+            "passed": true,
+            "oracleEvent": 227
+          },
+          {
+            "id": "cand-ac26",
+            "passed": true,
+            "oracleEvent": 229
+          }
+        ],
+        "hasGoodCandidate": true,
+        "choices": [
+          {
+            "strategy": "baseline",
+            "decisionEvent": 39,
+            "decision": "accept",
+            "selectedCandidateId": "cand-49fe",
+            "selectedPassed": true,
+            "engine": "baseline",
+            "fallbackKind": null,
+            "usage": {
+              "calls": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "estimatedCostUsd": 0
+            }
+          },
+          {
+            "strategy": "llm",
+            "decisionEvent": 43,
+            "decision": "accept",
+            "selectedCandidateId": "cand-49fe",
+            "selectedPassed": true,
+            "engine": "llm",
+            "fallbackKind": null,
+            "usage": {
+              "calls": 1,
+              "inputTokens": 6995,
+              "outputTokens": 148,
+              "estimatedCostUsd": 0.0022761
+            }
+          },
+          {
+            "strategy": "jev-cascade",
+            "decisionEvent": 49,
+            "decision": "accept",
+            "selectedCandidateId": "cand-ac26",
+            "selectedPassed": true,
+            "engine": "jev-llm-protocol-fallback",
+            "fallbackKind": "arithmetic-drift",
+            "usage": {
+              "calls": 2,
+              "inputTokens": 15513,
+              "outputTokens": 374,
+              "estimatedCostUsd": 0.002685456
+            }
+          }
+        ]
+      },
+      {
+        "poolId": "H05",
+        "candidates": [
+          {
+            "id": "cand-6b07",
+            "passed": false,
+            "oracleEvent": 231
+          },
+          {
+            "id": "cand-c8a3",
+            "passed": false,
+            "oracleEvent": 233
+          }
+        ],
+        "hasGoodCandidate": false,
+        "choices": [
+          {
+            "strategy": "baseline",
+            "decisionEvent": 51,
+            "decision": "accept",
+            "selectedCandidateId": "cand-6b07",
+            "selectedPassed": false,
+            "engine": "baseline",
+            "fallbackKind": null,
+            "usage": {
+              "calls": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "estimatedCostUsd": 0
+            }
+          },
+          {
+            "strategy": "llm",
+            "decisionEvent": 55,
+            "decision": "accept",
+            "selectedCandidateId": "cand-c8a3",
+            "selectedPassed": false,
+            "engine": "llm",
+            "fallbackKind": null,
+            "usage": {
+              "calls": 1,
+              "inputTokens": 7285,
+              "outputTokens": 135,
+              "estimatedCostUsd": 0.0023475
+            }
+          },
+          {
+            "strategy": "jev-cascade",
+            "decisionEvent": 61,
+            "decision": "abstain",
+            "selectedCandidateId": null,
+            "selectedPassed": null,
+            "engine": "jev-llm-protocol-fallback",
+            "fallbackKind": "arithmetic-drift",
+            "usage": {
+              "calls": 2,
+              "inputTokens": 16186,
+              "outputTokens": 322,
+              "estimatedCostUsd": 0.002723742
+            }
+          }
+        ]
+      },
+      {
+        "poolId": "H06",
+        "candidates": [
+          {
+            "id": "cand-e5d2",
+            "passed": true,
+            "oracleEvent": 235
+          },
+          {
+            "id": "cand-19f4",
+            "passed": false,
+            "oracleEvent": 237
+          }
+        ],
+        "hasGoodCandidate": true,
+        "choices": [
+          {
+            "strategy": "baseline",
+            "decisionEvent": 63,
+            "decision": "accept",
+            "selectedCandidateId": "cand-e5d2",
+            "selectedPassed": true,
+            "engine": "baseline",
+            "fallbackKind": null,
+            "usage": {
+              "calls": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "estimatedCostUsd": 0
+            }
+          },
+          {
+            "strategy": "llm",
+            "decisionEvent": 67,
+            "decision": "accept",
+            "selectedCandidateId": "cand-e5d2",
+            "selectedPassed": true,
+            "engine": "llm",
+            "fallbackKind": null,
+            "usage": {
+              "calls": 1,
+              "inputTokens": 6644,
+              "outputTokens": 146,
+              "estimatedCostUsd": 0.0021684
+            }
+          },
+          {
+            "strategy": "jev-cascade",
+            "decisionEvent": 73,
+            "decision": "accept",
+            "selectedCandidateId": "cand-e5d2",
+            "selectedPassed": true,
+            "engine": "jev-llm-protocol-fallback",
+            "fallbackKind": "arithmetic-drift",
+            "usage": {
+              "calls": 2,
+              "inputTokens": 14400,
+              "outputTokens": 348,
+              "estimatedCostUsd": 0.002512152
+            }
+          }
+        ]
+      },
+      {
+        "poolId": "H07",
+        "candidates": [
+          {
+            "id": "cand-28c5",
+            "passed": true,
+            "oracleEvent": 239
+          },
+          {
+            "id": "cand-a760",
+            "passed": true,
+            "oracleEvent": 241
+          }
+        ],
+        "hasGoodCandidate": true,
+        "choices": [
+          {
+            "strategy": "baseline",
+            "decisionEvent": 75,
+            "decision": "accept",
+            "selectedCandidateId": "cand-28c5",
+            "selectedPassed": true,
+            "engine": "baseline",
+            "fallbackKind": null,
+            "usage": {
+              "calls": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "estimatedCostUsd": 0
+            }
+          },
+          {
+            "strategy": "llm",
+            "decisionEvent": 79,
+            "decision": "accept",
+            "selectedCandidateId": "cand-28c5",
+            "selectedPassed": true,
+            "engine": "llm",
+            "fallbackKind": null,
+            "usage": {
+              "calls": 1,
+              "inputTokens": 5840,
+              "outputTokens": 154,
+              "estimatedCostUsd": 0.0019368
+            }
+          },
+          {
+            "strategy": "jev-cascade",
+            "decisionEvent": 85,
+            "decision": "accept",
+            "selectedCandidateId": "cand-28c5",
+            "selectedPassed": true,
+            "engine": "jev-llm-protocol-fallback",
+            "fallbackKind": "arithmetic-drift",
+            "usage": {
+              "calls": 2,
+              "inputTokens": 12024,
+              "outputTokens": 333,
+              "estimatedCostUsd": 0.002185728
+            }
+          }
+        ]
+      },
+      {
+        "poolId": "H08",
+        "candidates": [
+          {
+            "id": "cand-73de",
+            "passed": false,
+            "oracleEvent": 243
+          },
+          {
+            "id": "cand-4b81",
+            "passed": false,
+            "oracleEvent": 245
+          }
+        ],
+        "hasGoodCandidate": false,
+        "choices": [
+          {
+            "strategy": "baseline",
+            "decisionEvent": 87,
+            "decision": "accept",
+            "selectedCandidateId": "cand-73de",
+            "selectedPassed": false,
+            "engine": "baseline",
+            "fallbackKind": null,
+            "usage": {
+              "calls": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "estimatedCostUsd": 0
+            }
+          },
+          {
+            "strategy": "llm",
+            "decisionEvent": 91,
+            "decision": "accept",
+            "selectedCandidateId": "cand-73de",
+            "selectedPassed": false,
+            "engine": "llm",
+            "fallbackKind": null,
+            "usage": {
+              "calls": 1,
+              "inputTokens": 5466,
+              "outputTokens": 164,
+              "estimatedCostUsd": 0.0018366
+            }
+          },
+          {
+            "strategy": "jev-cascade",
+            "decisionEvent": 97,
+            "decision": "abstain",
+            "selectedCandidateId": null,
+            "selectedPassed": null,
+            "engine": "jev-llm-protocol-fallback",
+            "fallbackKind": "arithmetic-drift",
+            "usage": {
+              "calls": 2,
+              "inputTokens": 11240,
+              "outputTokens": 331,
+              "estimatedCostUsd": 0.002053908
+            }
+          }
+        ]
+      },
+      {
+        "poolId": "H09",
+        "candidates": [
+          {
+            "id": "cand-e105",
+            "passed": false,
+            "oracleEvent": 247
+          },
+          {
+            "id": "cand-6f92",
+            "passed": true,
+            "oracleEvent": 249
+          }
+        ],
+        "hasGoodCandidate": true,
+        "choices": [
+          {
+            "strategy": "baseline",
+            "decisionEvent": 99,
+            "decision": "accept",
+            "selectedCandidateId": "cand-e105",
+            "selectedPassed": false,
+            "engine": "baseline",
+            "fallbackKind": null,
+            "usage": {
+              "calls": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "estimatedCostUsd": 0
+            }
+          },
+          {
+            "strategy": "llm",
+            "decisionEvent": 103,
+            "decision": "accept",
+            "selectedCandidateId": "cand-6f92",
+            "selectedPassed": true,
+            "engine": "llm",
+            "fallbackKind": null,
+            "usage": {
+              "calls": 1,
+              "inputTokens": 6175,
+              "outputTokens": 149,
+              "estimatedCostUsd": 0.0020313
+            }
+          },
+          {
+            "strategy": "jev-cascade",
+            "decisionEvent": 109,
+            "decision": "accept",
+            "selectedCandidateId": "cand-6f92",
+            "selectedPassed": true,
+            "engine": "jev-llm-protocol-fallback",
+            "fallbackKind": "arithmetic-drift",
+            "usage": {
+              "calls": 2,
+              "inputTokens": 13070,
+              "outputTokens": 321,
+              "estimatedCostUsd": 0.00230169
+            }
+          }
+        ]
+      },
+      {
+        "poolId": "H10",
+        "candidates": [
+          {
+            "id": "cand-90ac",
+            "passed": false,
+            "oracleEvent": 251
+          },
+          {
+            "id": "cand-2d47",
+            "passed": false,
+            "oracleEvent": 253
+          }
+        ],
+        "hasGoodCandidate": false,
+        "choices": [
+          {
+            "strategy": "baseline",
+            "decisionEvent": 111,
+            "decision": "accept",
+            "selectedCandidateId": "cand-90ac",
+            "selectedPassed": false,
+            "engine": "baseline",
+            "fallbackKind": null,
+            "usage": {
+              "calls": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "estimatedCostUsd": 0
+            }
+          },
+          {
+            "strategy": "llm",
+            "decisionEvent": 115,
+            "decision": "accept",
+            "selectedCandidateId": "cand-90ac",
+            "selectedPassed": false,
+            "engine": "llm",
+            "fallbackKind": null,
+            "usage": {
+              "calls": 1,
+              "inputTokens": 7088,
+              "outputTokens": 172,
+              "estimatedCostUsd": 0.0023328
+            }
+          },
+          {
+            "strategy": "jev-cascade",
+            "decisionEvent": 121,
+            "decision": "accept",
+            "selectedCandidateId": "cand-90ac",
+            "selectedPassed": false,
+            "engine": "jev-llm-fallback",
+            "fallbackKind": "uncertain",
+            "usage": {
+              "calls": 2,
+              "inputTokens": 15626,
+              "outputTokens": 325,
+              "estimatedCostUsd": 0.002649396
+            }
+          }
+        ]
+      },
+      {
+        "poolId": "H11",
+        "candidates": [
+          {
+            "id": "cand-c38e",
+            "passed": true,
+            "oracleEvent": 255
+          },
+          {
+            "id": "cand-51b4",
+            "passed": true,
+            "oracleEvent": 257
+          }
+        ],
+        "hasGoodCandidate": true,
+        "choices": [
+          {
+            "strategy": "baseline",
+            "decisionEvent": 123,
+            "decision": "accept",
+            "selectedCandidateId": "cand-c38e",
+            "selectedPassed": true,
+            "engine": "baseline",
+            "fallbackKind": null,
+            "usage": {
+              "calls": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "estimatedCostUsd": 0
+            }
+          },
+          {
+            "strategy": "llm",
+            "decisionEvent": 127,
+            "decision": "accept",
+            "selectedCandidateId": "cand-c38e",
+            "selectedPassed": true,
+            "engine": "llm",
+            "fallbackKind": null,
+            "usage": {
+              "calls": 1,
+              "inputTokens": 7359,
+              "outputTokens": 166,
+              "estimatedCostUsd": 0.0024069
+            }
+          },
+          {
+            "strategy": "jev-cascade",
+            "decisionEvent": 133,
+            "decision": "accept",
+            "selectedCandidateId": "cand-51b4",
+            "selectedPassed": true,
+            "engine": "jev-llm-protocol-fallback",
+            "fallbackKind": "arithmetic-drift",
+            "usage": {
+              "calls": 2,
+              "inputTokens": 16054,
+              "outputTokens": 338,
+              "estimatedCostUsd": 0.00275649
+            }
+          }
+        ]
+      },
+      {
+        "poolId": "H12",
+        "candidates": [
+          {
+            "id": "cand-8fa2",
+            "passed": true,
+            "oracleEvent": 259
+          },
+          {
+            "id": "cand-36d9",
+            "passed": false,
+            "oracleEvent": 261
+          }
+        ],
+        "hasGoodCandidate": true,
+        "choices": [
+          {
+            "strategy": "baseline",
+            "decisionEvent": 135,
+            "decision": "accept",
+            "selectedCandidateId": "cand-8fa2",
+            "selectedPassed": true,
+            "engine": "baseline",
+            "fallbackKind": null,
+            "usage": {
+              "calls": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "estimatedCostUsd": 0
+            }
+          },
+          {
+            "strategy": "llm",
+            "decisionEvent": 139,
+            "decision": "accept",
+            "selectedCandidateId": "cand-8fa2",
+            "selectedPassed": true,
+            "engine": "llm",
+            "fallbackKind": null,
+            "usage": {
+              "calls": 1,
+              "inputTokens": 6600,
+              "outputTokens": 185,
+              "estimatedCostUsd": 0.002202
+            }
+          },
+          {
+            "strategy": "jev-cascade",
+            "decisionEvent": 145,
+            "decision": "accept",
+            "selectedCandidateId": "cand-8fa2",
+            "selectedPassed": true,
+            "engine": "jev-llm-protocol-fallback",
+            "fallbackKind": "arithmetic-drift",
+            "usage": {
+              "calls": 2,
+              "inputTokens": 14196,
+              "outputTokens": 353,
+              "estimatedCostUsd": 0.002498232
+            }
+          }
+        ]
+      },
+      {
+        "poolId": "C13",
+        "candidates": [
+          {
+            "id": "cand-f732",
+            "passed": false,
+            "oracleEvent": 263
+          },
+          {
+            "id": "cand-20c6",
+            "passed": true,
+            "oracleEvent": 265
+          }
+        ],
+        "hasGoodCandidate": true,
+        "choices": [
+          {
+            "strategy": "baseline",
+            "decisionEvent": 147,
+            "decision": "accept",
+            "selectedCandidateId": "cand-f732",
+            "selectedPassed": false,
+            "engine": "baseline",
+            "fallbackKind": null,
+            "usage": {
+              "calls": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "estimatedCostUsd": 0
+            }
+          },
+          {
+            "strategy": "llm",
+            "decisionEvent": 151,
+            "decision": "accept",
+            "selectedCandidateId": "cand-20c6",
+            "selectedPassed": true,
+            "engine": "llm",
+            "fallbackKind": null,
+            "usage": {
+              "calls": 1,
+              "inputTokens": 5739,
+              "outputTokens": 150,
+              "estimatedCostUsd": 0.0019017
+            }
+          },
+          {
+            "strategy": "jev-cascade",
+            "decisionEvent": 157,
+            "decision": "accept",
+            "selectedCandidateId": "cand-20c6",
+            "selectedPassed": true,
+            "engine": "jev-llm-fallback",
+            "fallbackKind": "uncertain",
+            "usage": {
+              "calls": 2,
+              "inputTokens": 10314,
+              "outputTokens": 357,
+              "estimatedCostUsd": 0.00211665
+            }
+          }
+        ]
+      },
+      {
+        "poolId": "C14",
+        "candidates": [
+          {
+            "id": "cand-57de",
+            "passed": false,
+            "oracleEvent": 267
+          },
+          {
+            "id": "cand-aca4",
+            "passed": false,
+            "oracleEvent": 269
+          }
+        ],
+        "hasGoodCandidate": false,
+        "choices": [
+          {
+            "strategy": "baseline",
+            "decisionEvent": 159,
+            "decision": "accept",
+            "selectedCandidateId": "cand-57de",
+            "selectedPassed": false,
+            "engine": "baseline",
+            "fallbackKind": null,
+            "usage": {
+              "calls": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "estimatedCostUsd": 0
+            }
+          },
+          {
+            "strategy": "llm",
+            "decisionEvent": 163,
+            "decision": "abstain",
+            "selectedCandidateId": null,
+            "selectedPassed": null,
+            "engine": "llm",
+            "fallbackKind": null,
+            "usage": {
+              "calls": 1,
+              "inputTokens": 5714,
+              "outputTokens": 125,
+              "estimatedCostUsd": 0.0018642
+            }
+          },
+          {
+            "strategy": "jev-cascade",
+            "decisionEvent": 167,
+            "decision": "abstain",
+            "selectedCandidateId": null,
+            "selectedPassed": null,
+            "engine": "jev",
+            "fallbackKind": null,
+            "usage": {
+              "calls": 1,
+              "inputTokens": 4554,
+              "outputTokens": 183,
+              "estimatedCostUsd": 0.000191268
+            }
+          }
+        ]
+      },
+      {
+        "poolId": "C15",
+        "candidates": [
+          {
+            "id": "cand-d180",
+            "passed": true,
+            "oracleEvent": 271
+          },
+          {
+            "id": "cand-6ac9",
+            "passed": false,
+            "oracleEvent": 273
+          }
+        ],
+        "hasGoodCandidate": true,
+        "choices": [
+          {
+            "strategy": "baseline",
+            "decisionEvent": 169,
+            "decision": "accept",
+            "selectedCandidateId": "cand-d180",
+            "selectedPassed": true,
+            "engine": "baseline",
+            "fallbackKind": null,
+            "usage": {
+              "calls": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "estimatedCostUsd": 0
+            }
+          },
+          {
+            "strategy": "llm",
+            "decisionEvent": 173,
+            "decision": "accept",
+            "selectedCandidateId": "cand-d180",
+            "selectedPassed": true,
+            "engine": "llm",
+            "fallbackKind": null,
+            "usage": {
+              "calls": 1,
+              "inputTokens": 5804,
+              "outputTokens": 130,
+              "estimatedCostUsd": 0.0018972
+            }
+          },
+          {
+            "strategy": "jev-cascade",
+            "decisionEvent": 179,
+            "decision": "accept",
+            "selectedCandidateId": "cand-d180",
+            "selectedPassed": true,
+            "engine": "jev-llm-fallback",
+            "fallbackKind": "uncertain",
+            "usage": {
+              "calls": 2,
+              "inputTokens": 10481,
+              "outputTokens": 327,
+              "estimatedCostUsd": 0.002106834
+            }
+          }
+        ]
+      },
+      {
+        "poolId": "C16",
+        "candidates": [
+          {
+            "id": "cand-e409",
+            "passed": true,
+            "oracleEvent": 275
+          },
+          {
+            "id": "cand-184f",
+            "passed": true,
+            "oracleEvent": 277
+          }
+        ],
+        "hasGoodCandidate": true,
+        "choices": [
+          {
+            "strategy": "baseline",
+            "decisionEvent": 181,
+            "decision": "accept",
+            "selectedCandidateId": "cand-e409",
+            "selectedPassed": true,
+            "engine": "baseline",
+            "fallbackKind": null,
+            "usage": {
+              "calls": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "estimatedCostUsd": 0
+            }
+          },
+          {
+            "strategy": "llm",
+            "decisionEvent": 185,
+            "decision": "accept",
+            "selectedCandidateId": "cand-e409",
+            "selectedPassed": true,
+            "engine": "llm",
+            "fallbackKind": null,
+            "usage": {
+              "calls": 1,
+              "inputTokens": 5789,
+              "outputTokens": 170,
+              "estimatedCostUsd": 0.0019407
+            }
+          },
+          {
+            "strategy": "jev-cascade",
+            "decisionEvent": 189,
+            "decision": "abstain",
+            "selectedCandidateId": null,
+            "selectedPassed": null,
+            "engine": "jev",
+            "fallbackKind": null,
+            "usage": {
+              "calls": 1,
+              "inputTokens": 4680,
+              "outputTokens": 185,
+              "estimatedCostUsd": 0.00019656
+            }
+          }
+        ]
+      },
+      {
+        "poolId": "C17",
+        "candidates": [
+          {
+            "id": "cand-61fb",
+            "passed": false,
+            "oracleEvent": 279
+          },
+          {
+            "id": "cand-834c",
+            "passed": false,
+            "oracleEvent": 281
+          }
+        ],
+        "hasGoodCandidate": false,
+        "choices": [
+          {
+            "strategy": "baseline",
+            "decisionEvent": 191,
+            "decision": "accept",
+            "selectedCandidateId": "cand-61fb",
+            "selectedPassed": false,
+            "engine": "baseline",
+            "fallbackKind": null,
+            "usage": {
+              "calls": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "estimatedCostUsd": 0
+            }
+          },
+          {
+            "strategy": "llm",
+            "decisionEvent": 195,
+            "decision": "abstain",
+            "selectedCandidateId": null,
+            "selectedPassed": null,
+            "engine": "llm",
+            "fallbackKind": null,
+            "usage": {
+              "calls": 1,
+              "inputTokens": 5913,
+              "outputTokens": 129,
+              "estimatedCostUsd": 0.0019287
+            }
+          },
+          {
+            "strategy": "jev-cascade",
+            "decisionEvent": 201,
+            "decision": "abstain",
+            "selectedCandidateId": null,
+            "selectedPassed": null,
+            "engine": "jev-llm-protocol-fallback",
+            "fallbackKind": "arithmetic-drift",
+            "usage": {
+              "calls": 2,
+              "inputTokens": 10728,
+              "outputTokens": 304,
+              "estimatedCostUsd": 0.00211893
+            }
+          }
+        ]
+      },
+      {
+        "poolId": "C18",
+        "candidates": [
+          {
+            "id": "cand-9ec2",
+            "passed": false,
+            "oracleEvent": 283
+          },
+          {
+            "id": "cand-510b",
+            "passed": true,
+            "oracleEvent": 285
+          }
+        ],
+        "hasGoodCandidate": true,
+        "choices": [
+          {
+            "strategy": "baseline",
+            "decisionEvent": 203,
+            "decision": "accept",
+            "selectedCandidateId": "cand-9ec2",
+            "selectedPassed": false,
+            "engine": "baseline",
+            "fallbackKind": null,
+            "usage": {
+              "calls": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "estimatedCostUsd": 0
+            }
+          },
+          {
+            "strategy": "llm",
+            "decisionEvent": 207,
+            "decision": "accept",
+            "selectedCandidateId": "cand-510b",
+            "selectedPassed": true,
+            "engine": "llm",
+            "fallbackKind": null,
+            "usage": {
+              "calls": 1,
+              "inputTokens": 5810,
+              "outputTokens": 136,
+              "estimatedCostUsd": 0.0019062
+            }
+          },
+          {
+            "strategy": "jev-cascade",
+            "decisionEvent": 213,
+            "decision": "accept",
+            "selectedCandidateId": "cand-510b",
+            "selectedPassed": true,
+            "engine": "jev-llm-fallback",
+            "fallbackKind": "uncertain",
+            "usage": {
+              "calls": 2,
+              "inputTokens": 10556,
+              "outputTokens": 316,
+              "estimatedCostUsd": 0.002095932
+            }
+          }
+        ]
+      }
+    ],
+    "archiveSha256": "8dac4a031c2f289f2d0bd2893eeeb0294890ae2eefb85c43a2f1cf7f81c7ed28",
+    "integrityAuthenticity": "not-signed-or-independently-authenticated",
+    "arithmeticDriftUpgrades": 12,
+    "uncertainUpgrades": 4,
+    "recordedJevPolicy": "jev-candidate-v3",
+    "currentPolicyExperimented": false
+  },
+  "verifierStudyOrigins": [
+    {
+      "path": "VERIFIER-REAL-02/PRE-REGISTRATION.md",
+      "sourcePath": "docs/production/experiments/VERIFIER-REAL-02/PRE-REGISTRATION.md",
+      "origin": "Byte-identical public REAL-02 archive; actual Oracle-derived academic selection evidence, not software delivery",
+      "sourceCommit": "7899b9792dc611f30958a085908add660f3b156d"
+    },
+    {
+      "path": "VERIFIER-REAL-02/RESULT.md",
+      "sourcePath": "docs/production/experiments/VERIFIER-REAL-02/RESULT.md",
+      "origin": "Byte-identical public REAL-02 archive; actual Oracle-derived academic selection evidence, not software delivery",
+      "sourceCommit": "7899b9792dc611f30958a085908add660f3b156d"
+    },
+    {
+      "path": "VERIFIER-REAL-02/archive-inspection.json",
+      "sourcePath": "docs/production/experiments/VERIFIER-REAL-02/archive-inspection.json",
+      "origin": "Byte-identical public REAL-02 archive; actual Oracle-derived academic selection evidence, not software delivery",
+      "sourceCommit": "7899b9792dc611f30958a085908add660f3b156d"
+    },
+    {
+      "path": "VERIFIER-REAL-02/metrics.json",
+      "sourcePath": "docs/production/experiments/VERIFIER-REAL-02/metrics.json",
+      "origin": "Byte-identical public REAL-02 archive; actual Oracle-derived academic selection evidence, not software delivery",
+      "sourceCommit": "7899b9792dc611f30958a085908add660f3b156d"
+    },
+    {
+      "path": "VERIFIER-REAL-02/result-page.jpg",
+      "sourcePath": "docs/production/experiments/VERIFIER-REAL-02/result-page.jpg",
+      "origin": "Byte-identical public REAL-02 archive; actual Oracle-derived academic selection evidence, not software delivery",
+      "sourceCommit": "7899b9792dc611f30958a085908add660f3b156d"
+    },
+    {
+      "path": "VERIFIER-REAL-02/run-ledger.tar.gz",
+      "sourcePath": "docs/production/experiments/VERIFIER-REAL-02/run-ledger.tar.gz",
+      "origin": "Byte-identical public REAL-02 archive; actual Oracle-derived academic selection evidence, not software delivery",
+      "sourceCommit": "7899b9792dc611f30958a085908add660f3b156d"
+    },
+    {
+      "path": "VERIFIER-REAL-02/control/consent-consumed.json",
+      "sourcePath": "docs/production/experiments/VERIFIER-REAL-02/control/consent-consumed.json",
+      "origin": "Byte-identical public REAL-02 archive; actual Oracle-derived academic selection evidence, not software delivery",
+      "sourceCommit": "7899b9792dc611f30958a085908add660f3b156d"
+    },
+    {
+      "path": "VERIFIER-REAL-02/control/running.json",
+      "sourcePath": "docs/production/experiments/VERIFIER-REAL-02/control/running.json",
+      "origin": "Byte-identical public REAL-02 archive; actual Oracle-derived academic selection evidence, not software delivery",
+      "sourceCommit": "7899b9792dc611f30958a085908add660f3b156d"
+    },
+    {
+      "path": "VERIFIER-REAL-02/control/terminal.json",
+      "sourcePath": "docs/production/experiments/VERIFIER-REAL-02/control/terminal.json",
+      "origin": "Byte-identical public REAL-02 archive; actual Oracle-derived academic selection evidence, not software delivery",
+      "sourceCommit": "7899b9792dc611f30958a085908add660f3b156d"
+    },
+    {
+      "path": "VERIFIER-REAL-02/control/terminal.confirmed.json",
+      "sourcePath": "docs/production/experiments/VERIFIER-REAL-02/control/terminal.confirmed.json",
+      "origin": "Byte-identical public REAL-02 archive; actual Oracle-derived academic selection evidence, not software delivery",
+      "sourceCommit": "7899b9792dc611f30958a085908add660f3b156d"
+    }
+  ],
+  "reviewerGuide": "REVIEWER-GUIDE.md",
+  "submissionReport": "SUBMISSION-REPORT.md",
+  "versionedMaterialsUrl": "https://litianyi-007.github.io/city-agent/production/reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/",
+  "videoSourceCommit": "c21c588632d04dc7ed9dfa8cb265606400d2b522",
+  "historicalIframeRecording": false,
+  "videoFormat": "mp4",
+  "videoScope": "Recorded fixed Mock engineering demonstration; never evidence of successful real-model generation",
+  "cameraEvidenceOrigins": [
+    {
+      "path": "CAMERA-01/run.json",
+      "sourcePath": "docs/production/experiments/CAMERA-01/run.json",
+      "origin": "Archived original terminal camera experiment bytes; each original platformCommit remains unchanged",
+      "reportCommit": "fb1bd5ac241a07a894364e5b624c9e75989e01c3"
+    },
+    {
+      "path": "CAMERA-01/delivery-manifest.json",
+      "sourcePath": "docs/production/experiments/CAMERA-01/delivery-manifest.json",
+      "origin": "Archived original terminal camera experiment bytes; each original platformCommit remains unchanged",
+      "reportCommit": "fb1bd5ac241a07a894364e5b624c9e75989e01c3"
+    },
+    {
+      "path": "CAMERA-02/run.json",
+      "sourcePath": "docs/production/experiments/CAMERA-02/run.json",
+      "origin": "Archived original terminal camera experiment bytes; each original platformCommit remains unchanged",
+      "reportCommit": "fb1bd5ac241a07a894364e5b624c9e75989e01c3"
+    },
+    {
+      "path": "CAMERA-02/delivery-manifest.json",
+      "sourcePath": "docs/production/experiments/CAMERA-02/delivery-manifest.json",
+      "origin": "Archived original terminal camera experiment bytes; each original platformCommit remains unchanged",
+      "reportCommit": "fb1bd5ac241a07a894364e5b624c9e75989e01c3"
+    },
+    {
+      "path": "CAMERA-03/run.json",
+      "sourcePath": "docs/production/experiments/CAMERA-03/run.json",
+      "origin": "Archived original terminal camera experiment bytes; each original platformCommit remains unchanged",
+      "reportCommit": "fb1bd5ac241a07a894364e5b624c9e75989e01c3"
+    },
+    {
+      "path": "CAMERA-03/evidence.json",
+      "sourcePath": "docs/production/experiments/CAMERA-03/evidence.json",
+      "origin": "Archived original terminal camera experiment bytes; each original platformCommit remains unchanged",
+      "reportCommit": "fb1bd5ac241a07a894364e5b624c9e75989e01c3"
+    },
+    {
+      "path": "CAMERA-03/delivery-manifest.json",
+      "sourcePath": "docs/production/experiments/CAMERA-03/delivery-manifest.json",
+      "origin": "Archived original terminal camera experiment bytes; each original platformCommit remains unchanged",
+      "reportCommit": "fb1bd5ac241a07a894364e5b624c9e75989e01c3"
+    },
+    {
+      "path": "CAMERA-03/platform-metadata.json",
+      "sourcePath": "docs/production/experiments/CAMERA-03/platform-metadata.json",
+      "origin": "Archived original terminal camera experiment bytes; each original platformCommit remains unchanged",
+      "reportCommit": "fb1bd5ac241a07a894364e5b624c9e75989e01c3"
+    },
+    {
+      "path": "CAMERA-04/run.json",
+      "sourcePath": "docs/production/experiments/CAMERA-04/run.json",
+      "origin": "Archived original terminal camera experiment bytes; each original platformCommit remains unchanged",
+      "reportCommit": "fb1bd5ac241a07a894364e5b624c9e75989e01c3"
+    },
+    {
+      "path": "CAMERA-04/evidence.json",
+      "sourcePath": "docs/production/experiments/CAMERA-04/evidence.json",
+      "origin": "Archived original terminal camera experiment bytes; each original platformCommit remains unchanged",
+      "reportCommit": "fb1bd5ac241a07a894364e5b624c9e75989e01c3"
+    },
+    {
+      "path": "CAMERA-04/delivery-manifest.json",
+      "sourcePath": "docs/production/experiments/CAMERA-04/delivery-manifest.json",
+      "origin": "Archived original terminal camera experiment bytes; each original platformCommit remains unchanged",
+      "reportCommit": "fb1bd5ac241a07a894364e5b624c9e75989e01c3"
+    },
+    {
+      "path": "CAMERA-04/platform-metadata.json",
+      "sourcePath": "docs/production/experiments/CAMERA-04/platform-metadata.json",
+      "origin": "Archived original terminal camera experiment bytes; each original platformCommit remains unchanged",
+      "reportCommit": "fb1bd5ac241a07a894364e5b624c9e75989e01c3"
+    },
+    {
+      "path": "CAMERA-05/run.json",
+      "sourcePath": "docs/production/experiments/CAMERA-05/run.json",
+      "origin": "Archived original terminal camera experiment bytes; each original platformCommit remains unchanged",
+      "reportCommit": "fb1bd5ac241a07a894364e5b624c9e75989e01c3"
+    },
+    {
+      "path": "CAMERA-05/evidence.json",
+      "sourcePath": "docs/production/experiments/CAMERA-05/evidence.json",
+      "origin": "Archived original terminal camera experiment bytes; each original platformCommit remains unchanged",
+      "reportCommit": "fb1bd5ac241a07a894364e5b624c9e75989e01c3"
+    },
+    {
+      "path": "CAMERA-05/delivery-manifest.json",
+      "sourcePath": "docs/production/experiments/CAMERA-05/delivery-manifest.json",
+      "origin": "Archived original terminal camera experiment bytes; each original platformCommit remains unchanged",
+      "reportCommit": "fb1bd5ac241a07a894364e5b624c9e75989e01c3"
+    },
+    {
+      "path": "CAMERA-05/platform-metadata.json",
+      "sourcePath": "docs/production/experiments/CAMERA-05/platform-metadata.json",
+      "origin": "Archived original terminal camera experiment bytes; each original platformCommit remains unchanged",
+      "reportCommit": "fb1bd5ac241a07a894364e5b624c9e75989e01c3"
+    },
+    {
+      "path": "CAMERA-06/run.json",
+      "sourcePath": "docs/production/experiments/CAMERA-06/run.json",
+      "origin": "Archived original terminal camera experiment bytes; each original platformCommit remains unchanged",
+      "reportCommit": "fb1bd5ac241a07a894364e5b624c9e75989e01c3"
+    },
+    {
+      "path": "CAMERA-06/evidence.json",
+      "sourcePath": "docs/production/experiments/CAMERA-06/evidence.json",
+      "origin": "Archived original terminal camera experiment bytes; each original platformCommit remains unchanged",
+      "reportCommit": "fb1bd5ac241a07a894364e5b624c9e75989e01c3"
+    },
+    {
+      "path": "CAMERA-06/delivery-manifest.json",
+      "sourcePath": "docs/production/experiments/CAMERA-06/delivery-manifest.json",
+      "origin": "Archived original terminal camera experiment bytes; each original platformCommit remains unchanged",
+      "reportCommit": "fb1bd5ac241a07a894364e5b624c9e75989e01c3"
+    },
+    {
+      "path": "CAMERA-06/platform-metadata.json",
+      "sourcePath": "docs/production/experiments/CAMERA-06/platform-metadata.json",
+      "origin": "Archived original terminal camera experiment bytes; each original platformCommit remains unchanged",
+      "reportCommit": "fb1bd5ac241a07a894364e5b624c9e75989e01c3"
+    },
+    {
+      "path": "CAMERA-07/run.json",
+      "sourcePath": "docs/production/experiments/CAMERA-07/run.json",
+      "origin": "Archived original terminal camera experiment bytes; each original platformCommit remains unchanged",
+      "reportCommit": "fb1bd5ac241a07a894364e5b624c9e75989e01c3"
+    },
+    {
+      "path": "CAMERA-07/evidence.json",
+      "sourcePath": "docs/production/experiments/CAMERA-07/evidence.json",
+      "origin": "Archived original terminal camera experiment bytes; each original platformCommit remains unchanged",
+      "reportCommit": "fb1bd5ac241a07a894364e5b624c9e75989e01c3"
+    },
+    {
+      "path": "CAMERA-07/delivery-manifest.json",
+      "sourcePath": "docs/production/experiments/CAMERA-07/delivery-manifest.json",
+      "origin": "Archived original terminal camera experiment bytes; each original platformCommit remains unchanged",
+      "reportCommit": "fb1bd5ac241a07a894364e5b624c9e75989e01c3"
+    },
+    {
+      "path": "CAMERA-07/platform-metadata.json",
+      "sourcePath": "docs/production/experiments/CAMERA-07/platform-metadata.json",
+      "origin": "Archived original terminal camera experiment bytes; each original platformCommit remains unchanged",
+      "reportCommit": "fb1bd5ac241a07a894364e5b624c9e75989e01c3"
+    },
+    {
+      "path": "CAMERA-08/run.json",
+      "sourcePath": "docs/production/experiments/CAMERA-08/run.json",
+      "origin": "Archived original terminal camera experiment bytes; each original platformCommit remains unchanged",
+      "reportCommit": "fb1bd5ac241a07a894364e5b624c9e75989e01c3"
+    },
+    {
+      "path": "CAMERA-08/evidence.json",
+      "sourcePath": "docs/production/experiments/CAMERA-08/evidence.json",
+      "origin": "Archived original terminal camera experiment bytes; each original platformCommit remains unchanged",
+      "reportCommit": "fb1bd5ac241a07a894364e5b624c9e75989e01c3"
+    },
+    {
+      "path": "CAMERA-08/delivery-manifest.json",
+      "sourcePath": "docs/production/experiments/CAMERA-08/delivery-manifest.json",
+      "origin": "Archived original terminal camera experiment bytes; each original platformCommit remains unchanged",
+      "reportCommit": "fb1bd5ac241a07a894364e5b624c9e75989e01c3"
+    },
+    {
+      "path": "CAMERA-08/platform-metadata.json",
+      "sourcePath": "docs/production/experiments/CAMERA-08/platform-metadata.json",
+      "origin": "Archived original terminal camera experiment bytes; each original platformCommit remains unchanged",
+      "reportCommit": "fb1bd5ac241a07a894364e5b624c9e75989e01c3"
+    },
+    {
+      "path": "CAMERA-09/run.json",
+      "sourcePath": "docs/production/experiments/CAMERA-09/run.json",
+      "origin": "Archived original terminal camera experiment bytes; each original platformCommit remains unchanged",
+      "reportCommit": "fb1bd5ac241a07a894364e5b624c9e75989e01c3"
+    },
+    {
+      "path": "CAMERA-09/evidence.json",
+      "sourcePath": "docs/production/experiments/CAMERA-09/evidence.json",
+      "origin": "Archived original terminal camera experiment bytes; each original platformCommit remains unchanged",
+      "reportCommit": "fb1bd5ac241a07a894364e5b624c9e75989e01c3"
+    },
+    {
+      "path": "CAMERA-09/delivery-manifest.json",
+      "sourcePath": "docs/production/experiments/CAMERA-09/delivery-manifest.json",
+      "origin": "Archived original terminal camera experiment bytes; each original platformCommit remains unchanged",
+      "reportCommit": "fb1bd5ac241a07a894364e5b624c9e75989e01c3"
+    },
+    {
+      "path": "CAMERA-09/platform-metadata.json",
+      "sourcePath": "docs/production/experiments/CAMERA-09/platform-metadata.json",
+      "origin": "Archived original terminal camera experiment bytes; each original platformCommit remains unchanged",
+      "reportCommit": "fb1bd5ac241a07a894364e5b624c9e75989e01c3"
+    },
+    {
+      "path": "CAMERA-09/scene.json",
+      "sourcePath": "docs/production/experiments/CAMERA-09/scene.json",
+      "origin": "Archived original terminal camera experiment bytes; each original platformCommit remains unchanged",
+      "reportCommit": "fb1bd5ac241a07a894364e5b624c9e75989e01c3"
+    },
+    {
+      "path": "CAMERA-09/camera-runtime-manifest.json",
+      "sourcePath": "docs/production/experiments/CAMERA-09/camera-runtime-manifest.json",
+      "origin": "Archived original terminal camera experiment bytes; each original platformCommit remains unchanged",
+      "reportCommit": "fb1bd5ac241a07a894364e5b624c9e75989e01c3"
+    },
+    {
+      "path": "CAMERA-09/index.html.txt",
+      "sourcePath": "docs/production/experiments/CAMERA-09/index.html.txt",
+      "origin": "Archived original terminal camera experiment bytes; each original platformCommit remains unchanged",
+      "reportCommit": "fb1bd5ac241a07a894364e5b624c9e75989e01c3"
+    }
+  ],
+  "generatedAt": "2026-10-07T04:46:37.411Z",
+  "renderedAt": "2026-10-09T07:33:10.523Z",
+  "platformCommit": "c21c588632d04dc7ed9dfa8cb265606400d2b522",
+  "publisherCommit": "fb1bd5ac241a07a894364e5b624c9e75989e01c3",
+  "auditCommit": "fb1bd5ac241a07a894364e5b624c9e75989e01c3",
+  "auditDocument": "REVIEW.md",
+  "auditSourceDocument": "SUPPLEMENTAL-REVIEW-2026-10-07.md",
+  "runtimeDocumentationScope": "Current publisher snapshot; does not retroactively describe historical run configuration",
+  "submissionBaseline": "b66122c21604fdb2ecdcbafb89c3d5ad8cde1466",
+  "inheritedFrom": {
+    "package": "production-mock-materials-oscD2V",
+    "manifestSha256": "bda6ca45643ab8b76b9b35cf594cea37fec2304128d8ee486bd05bf03d828f34"
+  },
+  "historicalVideo": true,
+  "publicDemoUrl": "https://litianyi-007.github.io/city-agent/production/",
+  "documentOrigins": [
+    {
+      "path": "README.md",
+      "sourcePath": "docs/production/README.md",
+      "origin": "current publisher repository snapshot; not historical run configuration",
+      "commit": "fb1bd5ac241a07a894364e5b624c9e75989e01c3"
+    },
+    {
+      "path": "RUNBOOK.md",
+      "sourcePath": "docs/production/RUNBOOK.md",
+      "origin": "current publisher repository snapshot; not historical run configuration",
+      "commit": "fb1bd5ac241a07a894364e5b624c9e75989e01c3"
+    },
+    {
+      "path": "DESIGN.md",
+      "sourcePath": "docs/production/DESIGN.md",
+      "origin": "current publisher repository snapshot; not historical run configuration",
+      "commit": "fb1bd5ac241a07a894364e5b624c9e75989e01c3"
+    },
+    {
+      "path": "EVALUATION.md",
+      "sourcePath": "docs/production/EVALUATION.md",
+      "origin": "current publisher repository snapshot; not historical run configuration",
+      "commit": "fb1bd5ac241a07a894364e5b624c9e75989e01c3"
+    },
+    {
+      "path": "REQUIREMENTS.md",
+      "sourcePath": "docs/production/REQUIREMENTS.md",
+      "origin": "current publisher repository snapshot; not historical run configuration",
+      "commit": "fb1bd5ac241a07a894364e5b624c9e75989e01c3"
+    },
+    {
+      "path": "EXPERIMENTS.md",
+      "sourcePath": "docs/production/EXPERIMENTS.md",
+      "origin": "current publisher repository snapshot; not historical run configuration",
+      "commit": "fb1bd5ac241a07a894364e5b624c9e75989e01c3"
+    },
+    {
+      "path": "VALIDATION.md",
+      "sourcePath": "docs/production/VALIDATION.md",
+      "origin": "current publisher repository snapshot; not historical run configuration",
+      "commit": "fb1bd5ac241a07a894364e5b624c9e75989e01c3"
+    },
+    {
+      "path": "ISOLATION.md",
+      "sourcePath": "docs/production/ISOLATION.md",
+      "origin": "current publisher repository snapshot; not historical run configuration",
+      "commit": "fb1bd5ac241a07a894364e5b624c9e75989e01c3"
+    },
+    {
+      "path": "SUBMISSION.md",
+      "sourcePath": "docs/production/SUBMISSION.md",
+      "origin": "current publisher repository snapshot; not historical run configuration",
+      "commit": "fb1bd5ac241a07a894364e5b624c9e75989e01c3"
+    },
+    {
+      "path": "NEXT-STEPS.md",
+      "sourcePath": "docs/production/NEXT-STEPS.md",
+      "origin": "current publisher repository snapshot; not historical run configuration",
+      "commit": "fb1bd5ac241a07a894364e5b624c9e75989e01c3"
+    },
+    {
+      "path": "REVIEW.md",
+      "sourcePath": "docs/production/SUPPLEMENTAL-REVIEW-2026-10-07.md",
+      "origin": "current publisher repository snapshot; not historical run configuration",
+      "commit": "fb1bd5ac241a07a894364e5b624c9e75989e01c3"
+    },
+    {
+      "path": "REVIEWER-GUIDE.md",
+      "sourcePath": "docs/production/REVIEWER-GUIDE.md",
+      "origin": "current publisher repository snapshot; not historical run configuration",
+      "commit": "fb1bd5ac241a07a894364e5b624c9e75989e01c3"
+    },
+    {
+      "path": "SUBMISSION-REPORT.md",
+      "sourcePath": "docs/production/SUBMISSION-REPORT.md",
+      "origin": "Byte-identical historical submitted report; current progress is a separate CURRENT-PROGRESS.md appendix",
+      "commit": "656102d9e7276b96082da73cc54c25e12ddc0930"
+    },
+    {
+      "path": "SUBMISSION-INTRODUCTION.md",
+      "sourcePath": "docs/production/SUBMISSION-INTRODUCTION.md",
+      "origin": "current publisher repository snapshot; not historical run configuration",
+      "commit": "fb1bd5ac241a07a894364e5b624c9e75989e01c3"
+    },
+    {
+      "path": "POST-SUBMISSION-PLAN.md",
+      "sourcePath": "docs/production/POST-SUBMISSION-PLAN.md",
+      "origin": "current publisher repository snapshot; not historical run configuration",
+      "commit": "fb1bd5ac241a07a894364e5b624c9e75989e01c3"
+    },
+    {
+      "path": "CAMERA-04-RESULT.md",
+      "sourcePath": "docs/production/CAMERA-04-RESULT.md",
+      "origin": "current publisher repository snapshot; not historical run configuration",
+      "commit": "fb1bd5ac241a07a894364e5b624c9e75989e01c3"
+    },
+    {
+      "path": "JEV-RESILIENCE-V3-DESIGN.md",
+      "sourcePath": "docs/production/JEV-RESILIENCE-V3-DESIGN.md",
+      "origin": "current publisher repository snapshot; not historical run configuration",
+      "commit": "fb1bd5ac241a07a894364e5b624c9e75989e01c3"
+    },
+    {
+      "path": "JEV-PROTOCOL-AUDIT-CAMERA-03.md",
+      "sourcePath": "docs/production/JEV-PROTOCOL-AUDIT-CAMERA-03.md",
+      "origin": "current publisher repository snapshot; not historical run configuration",
+      "commit": "fb1bd5ac241a07a894364e5b624c9e75989e01c3"
+    },
+    {
+      "path": "BATCH-CAMERA03-CHECKS.md",
+      "sourcePath": "docs/production/BATCH-CAMERA03-CHECKS.md",
+      "origin": "current publisher repository snapshot; not historical run configuration",
+      "commit": "fb1bd5ac241a07a894364e5b624c9e75989e01c3"
+    },
+    {
+      "path": "BATCH-CAMERA04-CHECKS.md",
+      "sourcePath": "docs/production/BATCH-CAMERA04-CHECKS.md",
+      "origin": "current publisher repository snapshot; not historical run configuration",
+      "commit": "fb1bd5ac241a07a894364e5b624c9e75989e01c3"
+    },
+    {
+      "path": "QUALITY-V6-DESIGN.md",
+      "sourcePath": "docs/production/QUALITY-V6-DESIGN.md",
+      "origin": "current publisher repository snapshot; not historical run configuration",
+      "commit": "fb1bd5ac241a07a894364e5b624c9e75989e01c3"
+    },
+    {
+      "path": "BATCH-QUALITY-V6-CHECKS.md",
+      "sourcePath": "docs/production/BATCH-QUALITY-V6-CHECKS.md",
+      "origin": "current publisher repository snapshot; not historical run configuration",
+      "commit": "fb1bd5ac241a07a894364e5b624c9e75989e01c3"
+    },
+    {
+      "path": "CURRENT-PROGRESS.md",
+      "sourcePath": "docs/production/CURRENT-PROGRESS.md",
+      "origin": "current publisher repository snapshot; not historical run configuration",
+      "commit": "fb1bd5ac241a07a894364e5b624c9e75989e01c3"
+    }
+  ],
+  "selectedHtmlEvidence": {
+    "filename": "HTML-DELIVERY-STATUS.json",
+    "version": "production-selected-html-v1",
+    "selection": [
+      "HTML-01",
+      "HTML-02",
+      "HTML-03",
+      "HTML-04",
+      "HTML-05",
+      "HTML-06",
+      "HTML-07",
+      "HTML-08"
+    ],
+    "source": "Explicit 32 public original files checked before rendering; original run text and pinned artifact hashes retained in index",
+    "stabilityExperiment": false
+  },
+  "runIds": [
+    "37604a90-5c8b-4d0e-b40b-b4f47af7e6ee",
+    "b2dc3667-30dc-4d79-941d-533c9294a599",
+    "18207ab0-cb91-4a0b-975e-b077d8e012e1"
+  ],
+  "cases": [
+    {
+      "requirementId": "MOCK-01",
+      "status": "completed",
+      "evidenceKind": "fixture"
+    },
+    {
+      "requirementId": "MOCK-02",
+      "status": "completed",
+      "evidenceKind": "fixture"
+    },
+    {
+      "requirementId": "MOCK-03",
+      "status": "completed",
+      "evidenceKind": "fixture"
+    }
+  ],
+  "measured": {
+    "fixturePassed": 3,
+    "fixtureStarted": 3,
+    "providerCalls": 0
+  },
+  "measuredScope": {
+    "fixtureGeneration": {
+      "scope": "Only the copied Mock generation runs; not the entire package",
+      "runIds": [
+        "37604a90-5c8b-4d0e-b40b-b4f47af7e6ee",
+        "b2dc3667-30dc-4d79-941d-533c9294a599",
+        "18207ab0-cb91-4a0b-975e-b077d8e012e1"
+      ],
+      "started": 3,
+      "gatePassed": 3,
+      "generatorProviderRequests": 0,
+      "generatorInputTokens": 0,
+      "generatorOutputTokens": 0,
+      "estimatedGeneratorCost": 0
+    },
+    "realGeneration": {
+      "scope": "Different-configuration tuning ledger of actual internal generation attempts; not a fixed-configuration stability experiment. Per-run usage includes its Jev requests; do not add it to all-Jev totals.",
+      "cameraDeliveryScope": "Model-generated declarative scene DSL plus a fixed trusted platform runtime; synthetic scene behavior only, not arbitrary software source, verified vision, physical camera acceptance or full requirement delivery.",
+      "stabilityExperiment": false,
+      "runIds": [
+        "13090ef3-072b-4194-9177-d13884b0c5d1",
+        "fb53d889-0838-4bfb-8cf1-163ceb39a0d6",
+        "7be47e2c-2ce9-4fa7-9b8a-86729accc039",
+        "6d347d58-022b-4910-b8a7-649e9ab907b4",
+        "b1a44700-26a2-4479-9aad-69891bfdf568",
+        "255e66b8-8371-4194-ad21-b32ac8477d1f",
+        "858c71f1-0a30-4943-ae4b-8067c77d9d8f",
+        "1a6231d6-9ebb-466a-879c-6381b6adffcf",
+        "789e1e5f-a16d-41de-828f-55d089ce2660",
+        "fb6e1e6a-d8b8-4f50-80c8-c557793fbddd",
+        "850135e8-7993-424d-8ee2-ee384a7c32fd",
+        "271a1ada-37ed-4b28-b5ab-b7cbdc910e97",
+        "789f99d1-792f-413e-b509-71da5302eb2f",
+        "9a56085f-8a2e-474d-97fd-82f82aaac795",
+        "6bd95961-4dca-4378-9d2b-ead8befdb36e",
+        "18b50d49-4cc2-4f63-bcc7-94da50802d91",
+        "966fc3b9-1308-4e19-832f-ea4960fb07f2"
+      ],
+      "started": 17,
+      "recordedGatePassed": 1,
+      "recordedGatePassRate": 0.058823529411764705,
+      "terminalDenominator": 17,
+      "fullRequirementDelivered": 0,
+      "fullRequirementDeliveryRate": 0,
+      "boundedCameraScenePassed": 1,
+      "cameraTerminalDenominator": 9,
+      "firstBoundedCameraScenePass": {
+        "runId": "789e1e5f-a16d-41de-828f-55d089ce2660",
+        "requirementId": "CAMERA-09",
+        "platformCommit": "24256f96165f0be3156be037a2fea42492e31117"
+      },
+      "autonomyCertified": false,
+      "records": [
+        {
+          "runId": "13090ef3-072b-4194-9177-d13884b0c5d1",
+          "requirementId": "CAMERA-01",
+          "platformCommit": "d65f869b99732cc22541002b8e95f6aafd2e030b",
+          "promptVersion": [
+            "production-camera-scene-v1"
+          ],
+          "capability": "camera-scene-v1",
+          "implementationKind": "model-scene-dsl-with-trusted-runtime",
+          "candidateCount": 1,
+          "status": "failed",
+          "brief": "开发一个梦幻的圣诞树，能通过摄像头获取手势，来控制圣诞树。",
+          "acceptance": "夜色中可见梦幻粒子圣诞树、星形顶饰与雪；摄像头默认关闭，点击开始才请求视频，关闭后释放资源。张掌散开、握拳聚合、掌心横向位置旋转，作用于实际几何。无手、权限拒绝、设备或本地模型不可用有清晰状态；按钮与键盘可回退但不计摄像头通过。不保存或上传帧，不接触模型 Key。平台合成 Gate 与真实视觉/实体设备验收分列。",
+          "input": {
+            "brief": "开发一个梦幻的圣诞树，能通过摄像头获取手势，来控制圣诞树。",
+            "capability": "camera-scene-v1",
+            "mode": "live",
+            "verifierEngine": "jev-cascade",
+            "agentIds": [
+              "58b2f492-52c1-49ee-8936-53e5c8c6cc89",
+              "65e308f1-8582-4b41-b485-92911d44ed0f",
+              "8abcf5e4-a5f3-44a5-b58b-4f7aa83d8834",
+              "5e6500fe-48d3-4646-a412-d0bfaacffacc",
+              "299e00c3-cf0c-4f3f-814d-6c33e723a9d7",
+              "cc18586a-8d6b-4c19-950f-308034a0c0b1"
+            ],
+            "candidateCount": 1,
+            "limits": {
+              "maxCalls": 24,
+              "maxRepairCycles": 2,
+              "maxTokens": 500000,
+              "maxOutputTokens": 6000,
+              "maxDurationMs": 600000,
+              "maxCost": 5,
+              "currency": "USD"
+            },
+            "requirement": {
+              "id": "CAMERA-01",
+              "source": "用户本会话提出的功能测试需求，2026-10-07；非业务工单",
+              "background": "通过本地服务真实六角色与 Jev/Verifier 链路，检验一句话到受控摄像头粒子场景的自主交付；不把场景合成 Gate 作为实体摄像头验收。",
+              "acceptance": "夜色中可见梦幻粒子圣诞树、星形顶饰与雪；摄像头默认关闭，点击开始才请求视频，关闭后释放资源。张掌散开、握拳聚合、掌心横向位置旋转，作用于实际几何。无手、权限拒绝、设备或本地模型不可用有清晰状态；按钮与键盘可回退但不计摄像头通过。不保存或上传帧，不接触模型 Key。平台合成 Gate 与真实视觉/实体设备验收分列。",
+              "difficulty": "high",
+              "kind": "illustrative"
+            },
+            "budgetAuthorized": true
+          },
+          "lastPhase": "research:verify",
+          "gateState": "not-reached",
+          "gateCount": 0,
+          "gateCheckCount": null,
+          "boundedScenePassed": false,
+          "visionModelVerified": false,
+          "physicalCameraVerified": false,
+          "fullRequirementVerified": false,
+          "roleCallCounts": {
+            "product": 1,
+            "researcher": 1,
+            "verifier": 1
+          },
+          "harnessInvocations": 3,
+          "providerRequests": 3,
+          "knownProviderRequests": 3,
+          "unknownProviderCounts": 0,
+          "roleOnlyUsage": {
+            "inputTokens": 3501,
+            "outputTokens": 1269,
+            "estimatedCost": 0.0025731,
+            "currency": "USD"
+          },
+          "jevRequestIntents": 2,
+          "jevRequests": 2,
+          "usage": {
+            "inputTokens": 7969,
+            "outputTokens": 1562,
+            "estimatedCost": 0.002760756,
+            "currency": "USD",
+            "complete": true
+          },
+          "durationMs": 11876,
+          "repairs": 0,
+          "interventions": [],
+          "error": "research Verifier 弃权：唯一候选为研究阶段的观察/约束元数据，不含任何场景配置、几何实现或业务结果验证证据，且候选自身列举大量unknown（配置内容未知、验证方法未提供、真实摄像头与模型未实测），明确未覆盖全部业务验收，不满足minimumOrdinalScore=3的硬Gate，无可选答案，故abstain。"
+        },
+        {
+          "runId": "fb53d889-0838-4bfb-8cf1-163ceb39a0d6",
+          "requirementId": "CAMERA-02",
+          "platformCommit": "fc357c8ec059c8911a52c89d9df7bc2a40fe2539",
+          "promptVersion": [
+            "production-camera-scene-v2"
+          ],
+          "capability": "camera-scene-v1",
+          "implementationKind": "model-scene-dsl-with-trusted-runtime",
+          "candidateCount": 1,
+          "status": "failed",
+          "brief": "开发一个梦幻的圣诞树，能通过摄像头获取手势，来控制圣诞树。",
+          "acceptance": "夜色中可见梦幻粒子圣诞树、星形顶饰与雪；摄像头默认关闭，点击开始才请求视频，关闭后释放资源。张掌散开、握拳聚合、掌心横向位置旋转，作用于实际几何。无手、权限拒绝、设备或本地模型不可用有清晰状态；按钮与键盘可回退但不计摄像头通过。不保存或上传帧，不接触模型 Key。平台合成 Gate 与真实视觉/实体设备验收分列。",
+          "input": {
+            "brief": "开发一个梦幻的圣诞树，能通过摄像头获取手势，来控制圣诞树。",
+            "capability": "camera-scene-v1",
+            "mode": "live",
+            "verifierEngine": "jev-cascade",
+            "agentIds": [
+              "58b2f492-52c1-49ee-8936-53e5c8c6cc89",
+              "65e308f1-8582-4b41-b485-92911d44ed0f",
+              "8abcf5e4-a5f3-44a5-b58b-4f7aa83d8834",
+              "5e6500fe-48d3-4646-a412-d0bfaacffacc",
+              "299e00c3-cf0c-4f3f-814d-6c33e723a9d7",
+              "cc18586a-8d6b-4c19-950f-308034a0c0b1"
+            ],
+            "candidateCount": 1,
+            "limits": {
+              "maxCalls": 24,
+              "maxRepairCycles": 2,
+              "maxTokens": 500000,
+              "maxOutputTokens": 6000,
+              "maxDurationMs": 600000,
+              "maxCost": 5,
+              "currency": "USD"
+            },
+            "requirement": {
+              "id": "CAMERA-02",
+              "source": "用户本会话提出的功能测试需求，2026-10-07；非业务工单",
+              "background": "通过本地服务真实六角色与 Jev/Verifier 链路，检验一句话到受控摄像头粒子场景的自主交付；不把场景合成 Gate 作为实体摄像头验收。",
+              "acceptance": "夜色中可见梦幻粒子圣诞树、星形顶饰与雪；摄像头默认关闭，点击开始才请求视频，关闭后释放资源。张掌散开、握拳聚合、掌心横向位置旋转，作用于实际几何。无手、权限拒绝、设备或本地模型不可用有清晰状态；按钮与键盘可回退但不计摄像头通过。不保存或上传帧，不接触模型 Key。平台合成 Gate 与真实视觉/实体设备验收分列。",
+              "difficulty": "high",
+              "kind": "illustrative"
+            },
+            "budgetAuthorized": true
+          },
+          "lastPhase": "acceptance",
+          "gateState": "not-reached",
+          "gateCount": 0,
+          "gateCheckCount": null,
+          "boundedScenePassed": false,
+          "visionModelVerified": false,
+          "physicalCameraVerified": false,
+          "fullRequirementVerified": false,
+          "roleCallCounts": {
+            "product": 1,
+            "verifier": 2,
+            "researcher": 1,
+            "project-manager": 1,
+            "tester": 1
+          },
+          "harnessInvocations": 6,
+          "providerRequests": 6,
+          "knownProviderRequests": 6,
+          "unknownProviderCounts": 0,
+          "roleOnlyUsage": {
+            "inputTokens": 24037,
+            "outputTokens": 4331,
+            "estimatedCost": 0.012408299999999999,
+            "currency": "USD"
+          },
+          "jevRequestIntents": 3,
+          "jevRequests": 3,
+          "usage": {
+            "inputTokens": 44778,
+            "outputTokens": 4791,
+            "estimatedCost": 0.013279421999999997,
+            "currency": "USD",
+            "complete": true
+          },
+          "durationMs": 33016,
+          "repairs": 0,
+          "interventions": [],
+          "error": "acceptance 全部候选非法，Verifier 弃权"
+        },
+        {
+          "runId": "7be47e2c-2ce9-4fa7-9b8a-86729accc039",
+          "requirementId": "CAMERA-03",
+          "platformCommit": "b8dd69b4a18c1c5f0a33185e6bb6857bce633392",
+          "promptVersion": [
+            "production-camera-scene-v4"
+          ],
+          "capability": "camera-scene-v1",
+          "implementationKind": "model-scene-dsl-with-trusted-runtime",
+          "candidateCount": 1,
+          "status": "failed",
+          "brief": "开发一个梦幻的圣诞树，能通过摄像头获取手势，来控制圣诞树。",
+          "acceptance": "夜色中可见梦幻粒子圣诞树、星形顶饰与雪；摄像头默认关闭，点击开始才请求视频，关闭后释放资源。张掌散开、握拳聚合、掌心横向位置旋转，作用于实际几何。无手、权限拒绝、设备或本地模型不可用有清晰状态；按钮与键盘可回退但不计摄像头通过。不保存或上传帧，不接触模型 Key。平台合成 Gate 与真实视觉/实体设备验收分列。",
+          "input": {
+            "brief": "开发一个梦幻的圣诞树，能通过摄像头获取手势，来控制圣诞树。",
+            "capability": "camera-scene-v1",
+            "mode": "live",
+            "verifierEngine": "jev-cascade",
+            "agentIds": [
+              "58b2f492-52c1-49ee-8936-53e5c8c6cc89",
+              "65e308f1-8582-4b41-b485-92911d44ed0f",
+              "8abcf5e4-a5f3-44a5-b58b-4f7aa83d8834",
+              "5e6500fe-48d3-4646-a412-d0bfaacffacc",
+              "299e00c3-cf0c-4f3f-814d-6c33e723a9d7",
+              "cc18586a-8d6b-4c19-950f-308034a0c0b1"
+            ],
+            "candidateCount": 1,
+            "limits": {
+              "maxCalls": 24,
+              "maxRepairCycles": 2,
+              "maxTokens": 500000,
+              "maxOutputTokens": 6000,
+              "maxDurationMs": 600000,
+              "maxCost": 5,
+              "currency": "USD"
+            },
+            "requirement": {
+              "id": "CAMERA-03",
+              "source": "用户本会话提出的功能测试需求，2026-10-07；非业务工单",
+              "background": "通过本地服务真实六角色与 Jev/Verifier 链路，检验一句话到受控摄像头粒子场景的自主交付；不把场景合成 Gate 作为实体摄像头验收。",
+              "acceptance": "夜色中可见梦幻粒子圣诞树、星形顶饰与雪；摄像头默认关闭，点击开始才请求视频，关闭后释放资源。张掌散开、握拳聚合、掌心横向位置旋转，作用于实际几何。无手、权限拒绝、设备或本地模型不可用有清晰状态；按钮与键盘可回退但不计摄像头通过。不保存或上传帧，不接触模型 Key。平台合成 Gate 与真实视觉/实体设备验收分列。",
+              "difficulty": "high",
+              "kind": "illustrative"
+            },
+            "budgetAuthorized": true
+          },
+          "lastPhase": "product",
+          "gateState": "not-reached",
+          "gateCount": 0,
+          "gateCheckCount": null,
+          "boundedScenePassed": false,
+          "visionModelVerified": false,
+          "physicalCameraVerified": false,
+          "fullRequirementVerified": false,
+          "roleCallCounts": {
+            "product": 2
+          },
+          "harnessInvocations": 2,
+          "providerRequests": 2,
+          "knownProviderRequests": 2,
+          "unknownProviderCounts": 0,
+          "roleOnlyUsage": {
+            "inputTokens": 5525,
+            "outputTokens": 1420,
+            "estimatedCost": 0.0033615,
+            "currency": "USD"
+          },
+          "jevRequestIntents": 1,
+          "jevRequests": 1,
+          "usage": {
+            "inputTokens": 12549,
+            "outputTokens": 1582,
+            "estimatedCost": 0.003656508,
+            "currency": "USD",
+            "complete": true
+          },
+          "durationMs": 10406,
+          "repairs": 1,
+          "interventions": [],
+          "error": "product Jev error：c0_scope: score does not match any probability-weighted value within display rounding；无隐式 Mock 替代"
+        },
+        {
+          "runId": "6d347d58-022b-4910-b8a7-649e9ab907b4",
+          "requirementId": "CAMERA-04",
+          "platformCommit": "96d5ca6f0d2e8dc1d49e548ed22125ba50caa16c",
+          "promptVersion": [
+            "production-camera-scene-v5"
+          ],
+          "capability": "camera-scene-v1",
+          "implementationKind": "model-scene-dsl-with-trusted-runtime",
+          "candidateCount": 1,
+          "status": "failed",
+          "brief": "开发一个梦幻的圣诞树，能通过摄像头获取手势，来控制圣诞树。",
+          "acceptance": "夜色中可见梦幻粒子圣诞树、星形顶饰与雪；摄像头默认关闭，点击开始才请求视频，关闭后释放资源。张掌散开、握拳聚合、掌心横向位置旋转，作用于实际几何。无手、权限拒绝、设备或本地模型不可用有清晰状态；按钮与键盘可回退但不计摄像头通过。不保存或上传帧，不接触模型 Key。平台合成 Gate 与真实视觉/实体设备验收分列。",
+          "input": {
+            "brief": "开发一个梦幻的圣诞树，能通过摄像头获取手势，来控制圣诞树。",
+            "capability": "camera-scene-v1",
+            "mode": "live",
+            "verifierEngine": "jev-cascade",
+            "agentIds": [
+              "58b2f492-52c1-49ee-8936-53e5c8c6cc89",
+              "65e308f1-8582-4b41-b485-92911d44ed0f",
+              "8abcf5e4-a5f3-44a5-b58b-4f7aa83d8834",
+              "5e6500fe-48d3-4646-a412-d0bfaacffacc",
+              "299e00c3-cf0c-4f3f-814d-6c33e723a9d7",
+              "cc18586a-8d6b-4c19-950f-308034a0c0b1"
+            ],
+            "candidateCount": 1,
+            "limits": {
+              "maxCalls": 24,
+              "maxRepairCycles": 2,
+              "maxTokens": 500000,
+              "maxOutputTokens": 6000,
+              "maxDurationMs": 600000,
+              "maxCost": 5,
+              "currency": "USD"
+            },
+            "requirement": {
+              "id": "CAMERA-04",
+              "source": "用户本会话提出的功能测试需求，2026-10-07；非业务工单",
+              "background": "通过本地服务真实六角色与 Jev/Verifier 链路，检验一句话到受控摄像头粒子场景的自主交付；不把场景合成 Gate 作为实体摄像头验收。",
+              "acceptance": "夜色中可见梦幻粒子圣诞树、星形顶饰与雪；摄像头默认关闭，点击开始才请求视频，关闭后释放资源。张掌散开、握拳聚合、掌心横向位置旋转，作用于实际几何。无手、权限拒绝、设备或本地模型不可用有清晰状态；按钮与键盘可回退但不计摄像头通过。不保存或上传帧，不接触模型 Key。平台合成 Gate 与真实视觉/实体设备验收分列。",
+              "difficulty": "high",
+              "kind": "illustrative"
+            },
+            "budgetAuthorized": true
+          },
+          "lastPhase": "acceptance:verify",
+          "gateState": "not-reached",
+          "gateCount": 0,
+          "gateCheckCount": null,
+          "boundedScenePassed": false,
+          "visionModelVerified": false,
+          "physicalCameraVerified": false,
+          "fullRequirementVerified": false,
+          "roleCallCounts": {
+            "product": 1,
+            "verifier": 3,
+            "researcher": 1,
+            "project-manager": 1,
+            "tester": 1
+          },
+          "harnessInvocations": 7,
+          "providerRequests": 7,
+          "knownProviderRequests": 7,
+          "unknownProviderCounts": 0,
+          "roleOnlyUsage": {
+            "inputTokens": 39165,
+            "outputTokens": 5744,
+            "estimatedCost": 0.018642299999999997,
+            "currency": "USD"
+          },
+          "jevRequestIntents": 4,
+          "jevRequests": 4,
+          "usage": {
+            "inputTokens": 73875,
+            "outputTokens": 6366,
+            "estimatedCost": 0.020100119999999996,
+            "currency": "USD",
+            "complete": true
+          },
+          "durationMs": 41465,
+          "repairs": 0,
+          "interventions": [],
+          "error": "acceptance Verifier 校验失败，未默认为通过"
+        },
+        {
+          "runId": "b1a44700-26a2-4479-9aad-69891bfdf568",
+          "requirementId": "CAMERA-05",
+          "platformCommit": "6c7fa4df9c9defd0f8f5bc7bbc39c556a5e12c93",
+          "promptVersion": [
+            "production-camera-scene-v6"
+          ],
+          "capability": "camera-scene-v1",
+          "implementationKind": "model-scene-dsl-with-trusted-runtime",
+          "candidateCount": 1,
+          "status": "failed",
+          "brief": "开发一个梦幻的圣诞树，能通过摄像头获取手势，来控制圣诞树。",
+          "acceptance": "夜色中可见梦幻粒子圣诞树、星形顶饰与雪；摄像头默认关闭，点击开始才请求视频，关闭后释放资源。张掌散开、握拳聚合、掌心横向位置旋转，作用于实际几何。无手、权限拒绝、设备或本地模型不可用有清晰状态；按钮与键盘可回退但不计摄像头通过。不保存或上传帧，不接触模型 Key。平台合成 Gate 与真实视觉/实体设备验收分列。",
+          "input": {
+            "brief": "开发一个梦幻的圣诞树，能通过摄像头获取手势，来控制圣诞树。",
+            "capability": "camera-scene-v1",
+            "cameraBusinessConstraints": {
+              "openPalm": "scatter",
+              "closedFist": "gather",
+              "palmX": "rotate"
+            },
+            "mode": "live",
+            "verifierEngine": "jev-cascade",
+            "agentIds": [
+              "58b2f492-52c1-49ee-8936-53e5c8c6cc89",
+              "65e308f1-8582-4b41-b485-92911d44ed0f",
+              "8abcf5e4-a5f3-44a5-b58b-4f7aa83d8834",
+              "5e6500fe-48d3-4646-a412-d0bfaacffacc",
+              "299e00c3-cf0c-4f3f-814d-6c33e723a9d7",
+              "cc18586a-8d6b-4c19-950f-308034a0c0b1"
+            ],
+            "candidateCount": 1,
+            "limits": {
+              "maxCalls": 30,
+              "maxRepairCycles": 2,
+              "maxTokens": 500000,
+              "maxOutputTokens": 6000,
+              "maxDurationMs": 600000,
+              "maxCost": 5,
+              "currency": "USD"
+            },
+            "requirement": {
+              "id": "CAMERA-05",
+              "source": "用户本会话提出的功能测试需求，2026-10-07；非业务工单",
+              "background": "通过本地服务真实六角色与 Jev/Verifier 链路，检验一句话到受控摄像头粒子场景的自主交付；不把场景合成 Gate 作为实体摄像头验收。",
+              "acceptance": "夜色中可见梦幻粒子圣诞树、星形顶饰与雪；摄像头默认关闭，点击开始才请求视频，关闭后释放资源。张掌散开、握拳聚合、掌心横向位置旋转，作用于实际几何。无手、权限拒绝、设备或本地模型不可用有清晰状态；按钮与键盘可回退但不计摄像头通过。不保存或上传帧，不接触模型 Key。平台合成 Gate 与真实视觉/实体设备验收分列。",
+              "difficulty": "high",
+              "kind": "illustrative"
+            },
+            "budgetAuthorized": true
+          },
+          "lastPhase": "acceptance",
+          "gateState": "not-reached",
+          "gateCount": 0,
+          "gateCheckCount": null,
+          "boundedScenePassed": false,
+          "visionModelVerified": false,
+          "physicalCameraVerified": false,
+          "fullRequirementVerified": false,
+          "roleCallCounts": {
+            "product": 1,
+            "verifier": 3,
+            "researcher": 2,
+            "project-manager": 1,
+            "tester": 1
+          },
+          "harnessInvocations": 8,
+          "providerRequests": 7,
+          "knownProviderRequests": 7,
+          "unknownProviderCounts": 0,
+          "roleOnlyUsage": {
+            "inputTokens": null,
+            "outputTokens": null,
+            "estimatedCost": null,
+            "currency": "USD"
+          },
+          "jevRequestIntents": 3,
+          "jevRequests": 3,
+          "usage": {
+            "inputTokens": null,
+            "outputTokens": null,
+            "estimatedCost": null,
+            "currency": "USD",
+            "complete": false
+          },
+          "durationMs": 39567,
+          "repairs": 1,
+          "interventions": [],
+          "error": "模型执行未完成或返回空内容: {\"kind\":\"error\",\"error\":{\"message\":\"malformed prompt variable reference \\\"{{particleCount}}\\\" in section \\\"deployment:persona-prefix\\\" (variable names match /^[a-z][a-z0-9_]*$/)\",\"code\":\"UNKNOWN\"}}"
+        },
+        {
+          "runId": "255e66b8-8371-4194-ad21-b32ac8477d1f",
+          "requirementId": "CAMERA-06",
+          "platformCommit": "e91a029f6f6053ef1afe260ff6f4557075ada776",
+          "promptVersion": [
+            "production-camera-scene-v6"
+          ],
+          "capability": "camera-scene-v1",
+          "implementationKind": "model-scene-dsl-with-trusted-runtime",
+          "candidateCount": 1,
+          "status": "failed",
+          "brief": "开发一个梦幻的圣诞树，能通过摄像头获取手势，来控制圣诞树。",
+          "acceptance": "夜色中可见梦幻粒子圣诞树、星形顶饰与雪；摄像头默认关闭，点击开始才请求视频，关闭后释放资源。张掌散开、握拳聚合、掌心横向位置旋转，作用于实际几何。无手、权限拒绝、设备或本地模型不可用有清晰状态；按钮与键盘可回退但不计摄像头通过。不保存或上传帧，不接触模型 Key。平台合成 Gate 与真实视觉/实体设备验收分列。",
+          "input": {
+            "brief": "开发一个梦幻的圣诞树，能通过摄像头获取手势，来控制圣诞树。",
+            "capability": "camera-scene-v1",
+            "cameraBusinessConstraints": {
+              "openPalm": "scatter",
+              "closedFist": "gather",
+              "palmX": "rotate"
+            },
+            "mode": "live",
+            "verifierEngine": "jev-cascade",
+            "agentIds": [
+              "58b2f492-52c1-49ee-8936-53e5c8c6cc89",
+              "65e308f1-8582-4b41-b485-92911d44ed0f",
+              "8abcf5e4-a5f3-44a5-b58b-4f7aa83d8834",
+              "5e6500fe-48d3-4646-a412-d0bfaacffacc",
+              "299e00c3-cf0c-4f3f-814d-6c33e723a9d7",
+              "cc18586a-8d6b-4c19-950f-308034a0c0b1"
+            ],
+            "candidateCount": 1,
+            "limits": {
+              "maxCalls": 30,
+              "maxRepairCycles": 2,
+              "maxTokens": 500000,
+              "maxOutputTokens": 6000,
+              "maxDurationMs": 600000,
+              "maxCost": 5,
+              "currency": "USD"
+            },
+            "requirement": {
+              "id": "CAMERA-06",
+              "source": "用户本会话提出的功能测试需求，2026-10-07；非业务工单",
+              "background": "通过本地服务真实六角色与 Jev/Verifier 链路，检验一句话到受控摄像头粒子场景的自主交付；不把场景合成 Gate 作为实体摄像头验收。",
+              "acceptance": "夜色中可见梦幻粒子圣诞树、星形顶饰与雪；摄像头默认关闭，点击开始才请求视频，关闭后释放资源。张掌散开、握拳聚合、掌心横向位置旋转，作用于实际几何。无手、权限拒绝、设备或本地模型不可用有清晰状态；按钮与键盘可回退但不计摄像头通过。不保存或上传帧，不接触模型 Key。平台合成 Gate 与真实视觉/实体设备验收分列。",
+              "difficulty": "high",
+              "kind": "illustrative"
+            },
+            "budgetAuthorized": true
+          },
+          "lastPhase": "acceptance",
+          "gateState": "not-reached",
+          "gateCount": 0,
+          "gateCheckCount": null,
+          "boundedScenePassed": false,
+          "visionModelVerified": false,
+          "physicalCameraVerified": false,
+          "fullRequirementVerified": false,
+          "roleCallCounts": {
+            "product": 1,
+            "verifier": 3,
+            "researcher": 1,
+            "project-manager": 1,
+            "tester": 2
+          },
+          "harnessInvocations": 8,
+          "providerRequests": 8,
+          "knownProviderRequests": 8,
+          "unknownProviderCounts": 0,
+          "roleOnlyUsage": {
+            "inputTokens": 51422,
+            "outputTokens": 6161,
+            "estimatedCost": 0.022819799999999998,
+            "currency": "USD"
+          },
+          "jevRequestIntents": 4,
+          "jevRequests": 3,
+          "usage": {
+            "inputTokens": null,
+            "outputTokens": null,
+            "estimatedCost": null,
+            "currency": "USD",
+            "complete": false
+          },
+          "durationMs": 47500,
+          "repairs": 1,
+          "interventions": [],
+          "error": "Jev 用量未知或非法，费用记 unknown，停止后续调用"
+        },
+        {
+          "runId": "858c71f1-0a30-4943-ae4b-8067c77d9d8f",
+          "requirementId": "CAMERA-07",
+          "platformCommit": "f30336381ed219b7738a5891e911da565aa1aaab",
+          "promptVersion": [
+            "production-camera-scene-v6"
+          ],
+          "capability": "camera-scene-v1",
+          "implementationKind": "model-scene-dsl-with-trusted-runtime",
+          "candidateCount": 1,
+          "status": "failed",
+          "brief": "开发一个梦幻的圣诞树，能通过摄像头获取手势，来控制圣诞树。",
+          "acceptance": "夜色中可见梦幻粒子圣诞树、星形顶饰与雪；摄像头默认关闭，点击开始才请求视频，关闭后释放资源。张掌散开、握拳聚合、掌心横向位置旋转，作用于实际几何。无手、权限拒绝、设备或本地模型不可用有清晰状态；按钮与键盘可回退但不计摄像头通过。不保存或上传帧，不接触模型 Key。平台合成 Gate 与真实视觉/实体设备验收分列。",
+          "input": {
+            "brief": "开发一个梦幻的圣诞树，能通过摄像头获取手势，来控制圣诞树。",
+            "capability": "camera-scene-v1",
+            "cameraBusinessConstraints": {
+              "openPalm": "scatter",
+              "closedFist": "gather",
+              "palmX": "rotate"
+            },
+            "mode": "live",
+            "verifierEngine": "jev-cascade",
+            "agentIds": [
+              "58b2f492-52c1-49ee-8936-53e5c8c6cc89",
+              "65e308f1-8582-4b41-b485-92911d44ed0f",
+              "8abcf5e4-a5f3-44a5-b58b-4f7aa83d8834",
+              "5e6500fe-48d3-4646-a412-d0bfaacffacc",
+              "299e00c3-cf0c-4f3f-814d-6c33e723a9d7",
+              "cc18586a-8d6b-4c19-950f-308034a0c0b1"
+            ],
+            "candidateCount": 1,
+            "limits": {
+              "maxCalls": 30,
+              "maxRepairCycles": 2,
+              "maxTokens": 500000,
+              "maxOutputTokens": 6000,
+              "maxDurationMs": 600000,
+              "maxCost": 1,
+              "currency": "USD"
+            },
+            "requirement": {
+              "id": "CAMERA-07",
+              "source": "用户本会话提出的功能测试需求，2026-10-07；非业务工单",
+              "background": "通过本地服务真实六角色与 Jev/Verifier 链路，检验一句话到受控摄像头粒子场景的自主交付；不把场景合成 Gate 作为实体摄像头验收。",
+              "acceptance": "夜色中可见梦幻粒子圣诞树、星形顶饰与雪；摄像头默认关闭，点击开始才请求视频，关闭后释放资源。张掌散开、握拳聚合、掌心横向位置旋转，作用于实际几何。无手、权限拒绝、设备或本地模型不可用有清晰状态；按钮与键盘可回退但不计摄像头通过。不保存或上传帧，不接触模型 Key。平台合成 Gate 与真实视觉/实体设备验收分列。",
+              "difficulty": "high",
+              "kind": "illustrative"
+            },
+            "budgetAuthorized": true
+          },
+          "lastPhase": "think-design:verify",
+          "gateState": "not-reached",
+          "gateCount": 0,
+          "gateCheckCount": null,
+          "boundedScenePassed": false,
+          "visionModelVerified": false,
+          "physicalCameraVerified": false,
+          "fullRequirementVerified": false,
+          "roleCallCounts": {
+            "product": 1,
+            "verifier": 3,
+            "researcher": 1,
+            "project-manager": 1
+          },
+          "harnessInvocations": 6,
+          "providerRequests": 6,
+          "knownProviderRequests": 6,
+          "unknownProviderCounts": 0,
+          "roleOnlyUsage": {
+            "inputTokens": 32595,
+            "outputTokens": 3356,
+            "estimatedCost": 0.013805699999999999,
+            "currency": "USD"
+          },
+          "jevRequestIntents": 3,
+          "jevRequests": 3,
+          "usage": {
+            "inputTokens": 53513,
+            "outputTokens": 3844,
+            "estimatedCost": 0.014684255999999998,
+            "currency": "USD",
+            "complete": true
+          },
+          "durationMs": 30299,
+          "repairs": 0,
+          "interventions": [],
+          "error": "初始计划尚未批准，项目经理revise：研究阶段已明确平台边界与配额，但存在两个 blocking unknown：冻结前必需的精确 title 文案与最终 count 组合（#particle-count/#scene-title 断言依赖），以及 #gesture-map 精确展示文本格式。这两项属用户/产品未指定的自由细节，应由产品在冻结前一次性定稿，不能由研究者或开发者猜测；同时须重申本批仅合成 Gate，真实摄像头/视觉模型验收不在本轮。"
+        },
+        {
+          "runId": "1a6231d6-9ebb-466a-879c-6381b6adffcf",
+          "requirementId": "CAMERA-08",
+          "platformCommit": "0d62ff08b870627872f851ef5153e527e410eea8",
+          "promptVersion": [
+            "production-camera-scene-v7"
+          ],
+          "capability": "camera-scene-v1",
+          "implementationKind": "model-scene-dsl-with-trusted-runtime",
+          "candidateCount": 1,
+          "status": "failed",
+          "brief": "开发一个梦幻的圣诞树，能通过摄像头获取手势，来控制圣诞树。",
+          "acceptance": "夜色中可见梦幻粒子圣诞树、星形顶饰与雪；摄像头默认关闭，点击开始才请求视频，关闭后释放资源。张掌散开、握拳聚合、掌心横向位置旋转，作用于实际几何。无手、权限拒绝、设备或本地模型不可用有清晰状态；按钮与键盘可回退但不计摄像头通过。不保存或上传帧，不接触模型 Key。平台合成 Gate 与真实视觉/实体设备验收分列。",
+          "input": {
+            "brief": "开发一个梦幻的圣诞树，能通过摄像头获取手势，来控制圣诞树。",
+            "capability": "camera-scene-v1",
+            "cameraBusinessConstraints": {
+              "openPalm": "scatter",
+              "closedFist": "gather",
+              "palmX": "rotate"
+            },
+            "mode": "live",
+            "verifierEngine": "jev-cascade",
+            "agentIds": [
+              "58b2f492-52c1-49ee-8936-53e5c8c6cc89",
+              "65e308f1-8582-4b41-b485-92911d44ed0f",
+              "8abcf5e4-a5f3-44a5-b58b-4f7aa83d8834",
+              "5e6500fe-48d3-4646-a412-d0bfaacffacc",
+              "299e00c3-cf0c-4f3f-814d-6c33e723a9d7",
+              "cc18586a-8d6b-4c19-950f-308034a0c0b1"
+            ],
+            "candidateCount": 1,
+            "limits": {
+              "maxCalls": 30,
+              "maxRepairCycles": 2,
+              "maxTokens": 500000,
+              "maxOutputTokens": 6000,
+              "maxDurationMs": 600000,
+              "maxCost": 1,
+              "currency": "USD"
+            },
+            "requirement": {
+              "id": "CAMERA-08",
+              "source": "用户本会话提出的功能测试需求，2026-10-07；非业务工单",
+              "background": "通过本地服务真实六角色与 Jev/Verifier 链路，检验一句话到受控摄像头粒子场景的自主交付；不把场景合成 Gate 作为实体摄像头验收。",
+              "acceptance": "夜色中可见梦幻粒子圣诞树、星形顶饰与雪；摄像头默认关闭，点击开始才请求视频，关闭后释放资源。张掌散开、握拳聚合、掌心横向位置旋转，作用于实际几何。无手、权限拒绝、设备或本地模型不可用有清晰状态；按钮与键盘可回退但不计摄像头通过。不保存或上传帧，不接触模型 Key。平台合成 Gate 与真实视觉/实体设备验收分列。",
+              "difficulty": "high",
+              "kind": "illustrative"
+            },
+            "budgetAuthorized": true
+          },
+          "lastPhase": "acceptance:verify",
+          "gateState": "not-reached",
+          "gateCount": 0,
+          "gateCheckCount": null,
+          "boundedScenePassed": false,
+          "visionModelVerified": false,
+          "physicalCameraVerified": false,
+          "fullRequirementVerified": false,
+          "roleCallCounts": {
+            "product": 1,
+            "verifier": 4,
+            "researcher": 2,
+            "project-manager": 1,
+            "tester": 2
+          },
+          "harnessInvocations": 10,
+          "providerRequests": 10,
+          "knownProviderRequests": 10,
+          "unknownProviderCounts": 0,
+          "roleOnlyUsage": {
+            "inputTokens": 69565,
+            "outputTokens": 7126,
+            "estimatedCost": 0.0294207,
+            "currency": "USD"
+          },
+          "jevRequestIntents": 4,
+          "jevRequests": 4,
+          "usage": {
+            "inputTokens": 106043,
+            "outputTokens": 7768,
+            "estimatedCost": 0.030952776,
+            "currency": "USD",
+            "complete": true
+          },
+          "durationMs": 57688,
+          "repairs": 2,
+          "interventions": [],
+          "error": "acceptance Verifier 校验失败，未默认为通过"
+        },
+        {
+          "runId": "789e1e5f-a16d-41de-828f-55d089ce2660",
+          "requirementId": "CAMERA-09",
+          "platformCommit": "24256f96165f0be3156be037a2fea42492e31117",
+          "promptVersion": [
+            "production-camera-scene-v7"
+          ],
+          "capability": "camera-scene-v1",
+          "implementationKind": "model-scene-dsl-with-trusted-runtime",
+          "candidateCount": 1,
+          "status": "completed",
+          "brief": "开发一个梦幻的圣诞树，能通过摄像头获取手势，来控制圣诞树。",
+          "acceptance": "夜色中可见梦幻粒子圣诞树、星形顶饰与雪；摄像头默认关闭，点击开始才请求视频，关闭后释放资源。张掌散开、握拳聚合、掌心横向位置旋转，作用于实际几何。无手、权限拒绝、设备或本地模型不可用有清晰状态；按钮与键盘可回退但不计摄像头通过。不保存或上传帧，不接触模型 Key。平台合成 Gate 与真实视觉/实体设备验收分列。",
+          "input": {
+            "brief": "开发一个梦幻的圣诞树，能通过摄像头获取手势，来控制圣诞树。",
+            "capability": "camera-scene-v1",
+            "cameraBusinessConstraints": {
+              "openPalm": "scatter",
+              "closedFist": "gather",
+              "palmX": "rotate"
+            },
+            "mode": "live",
+            "verifierEngine": "jev-cascade",
+            "agentIds": [
+              "58b2f492-52c1-49ee-8936-53e5c8c6cc89",
+              "65e308f1-8582-4b41-b485-92911d44ed0f",
+              "8abcf5e4-a5f3-44a5-b58b-4f7aa83d8834",
+              "5e6500fe-48d3-4646-a412-d0bfaacffacc",
+              "299e00c3-cf0c-4f3f-814d-6c33e723a9d7",
+              "cc18586a-8d6b-4c19-950f-308034a0c0b1"
+            ],
+            "candidateCount": 1,
+            "limits": {
+              "maxCalls": 30,
+              "maxRepairCycles": 2,
+              "maxTokens": 500000,
+              "maxOutputTokens": 6000,
+              "maxDurationMs": 600000,
+              "maxCost": 1,
+              "currency": "USD"
+            },
+            "requirement": {
+              "id": "CAMERA-09",
+              "source": "用户本会话提出的功能测试需求，2026-10-07；非业务工单",
+              "background": "通过本地服务真实六角色与 Jev/Verifier 链路，检验一句话到受控摄像头粒子场景的自主交付；不把场景合成 Gate 作为实体摄像头验收。",
+              "acceptance": "夜色中可见梦幻粒子圣诞树、星形顶饰与雪；摄像头默认关闭，点击开始才请求视频，关闭后释放资源。张掌散开、握拳聚合、掌心横向位置旋转，作用于实际几何。无手、权限拒绝、设备或本地模型不可用有清晰状态；按钮与键盘可回退但不计摄像头通过。不保存或上传帧，不接触模型 Key。平台合成 Gate 与真实视觉/实体设备验收分列。",
+              "difficulty": "high",
+              "kind": "illustrative"
+            },
+            "budgetAuthorized": true
+          },
+          "lastPhase": "feedback-0:verify",
+          "gateState": "passed",
+          "gateCount": 1,
+          "gateCheckCount": 11,
+          "boundedScenePassed": true,
+          "visionModelVerified": false,
+          "physicalCameraVerified": false,
+          "fullRequirementVerified": false,
+          "roleCallCounts": {
+            "product": 1,
+            "verifier": 6,
+            "researcher": 1,
+            "project-manager": 2,
+            "tester": 1,
+            "developer": 1
+          },
+          "harnessInvocations": 12,
+          "providerRequests": 12,
+          "knownProviderRequests": 12,
+          "unknownProviderCounts": 0,
+          "roleOnlyUsage": {
+            "inputTokens": 87544,
+            "outputTokens": 7786,
+            "estimatedCost": 0.035606399999999996,
+            "currency": "USD"
+          },
+          "jevRequestIntents": 6,
+          "jevRequests": 6,
+          "usage": {
+            "inputTokens": 143680,
+            "outputTokens": 8715,
+            "estimatedCost": 0.037964111999999994,
+            "currency": "USD",
+            "complete": true
+          },
+          "durationMs": 76602,
+          "repairs": 0,
+          "interventions": [],
+          "error": null
+        },
+        {
+          "runId": "fb6e1e6a-d8b8-4f50-80c8-c557793fbddd",
+          "requirementId": "HTML-01",
+          "platformCommit": "967bbba15c92dc07cf40fd2b2f5affebf1493b12",
+          "promptVersion": [
+            "production-html-v8"
+          ],
+          "capability": "offline-single-html",
+          "implementationKind": "model-html",
+          "candidateCount": 1,
+          "status": "failed",
+          "brief": "为三人研发小组做一个无需登录的单页待办板：输入任务后添加到列表，支持标记完成和删除，显示任务统计。不依赖网络或后端，刷新后可重置。",
+          "acceptance": "初始无任务；添加“准备发布”后仅出现一条同名任务；输入框清空；能标记完成并显示完成统计；删除后列表与统计归零。",
+          "input": {
+            "brief": "为三人研发小组做一个无需登录的单页待办板：输入任务后添加到列表，支持标记完成和删除，显示任务统计。不依赖网络或后端，刷新后可重置。",
+            "capability": "offline-single-html",
+            "mode": "live",
+            "verifierEngine": "jev-cascade",
+            "agentIds": [
+              "58b2f492-52c1-49ee-8936-53e5c8c6cc89",
+              "65e308f1-8582-4b41-b485-92911d44ed0f",
+              "8abcf5e4-a5f3-44a5-b58b-4f7aa83d8834",
+              "5e6500fe-48d3-4646-a412-d0bfaacffacc",
+              "299e00c3-cf0c-4f3f-814d-6c33e723a9d7",
+              "cc18586a-8d6b-4c19-950f-308034a0c0b1"
+            ],
+            "candidateCount": 1,
+            "limits": {
+              "maxCalls": 30,
+              "maxRepairCycles": 2,
+              "maxTokens": 500000,
+              "maxOutputTokens": 6000,
+              "maxDurationMs": 600000,
+              "maxCost": 1,
+              "currency": "USD"
+            },
+            "requirement": {
+              "id": "HTML-01",
+              "source": "用户授权自拟模拟需求，2026-10-07；没有真实提出者或工单",
+              "background": "最小协作工具新建网页路径；用通用自定义输入验证真实角色链路，不使用模板或已有源码。",
+              "acceptance": "初始无任务；添加“准备发布”后仅出现一条同名任务；输入框清空；能标记完成并显示完成统计；删除后列表与统计归零。",
+              "difficulty": "low",
+              "kind": "illustrative"
+            },
+            "budgetAuthorized": true
+          },
+          "lastPhase": "repair-1",
+          "gateState": "failed",
+          "gateCount": 1,
+          "gateCheckCount": 5,
+          "boundedScenePassed": null,
+          "visionModelVerified": null,
+          "physicalCameraVerified": null,
+          "fullRequirementVerified": false,
+          "roleCallCounts": {
+            "product": 1,
+            "verifier": 6,
+            "researcher": 1,
+            "project-manager": 2,
+            "tester": 1,
+            "developer": 2
+          },
+          "harnessInvocations": 13,
+          "providerRequests": 13,
+          "knownProviderRequests": 13,
+          "unknownProviderCounts": 0,
+          "roleOnlyUsage": {
+            "inputTokens": 54959,
+            "outputTokens": 9134,
+            "estimatedCost": 0.027448499999999994,
+            "currency": "USD"
+          },
+          "jevRequestIntents": 7,
+          "jevRequests": 6,
+          "usage": {
+            "inputTokens": null,
+            "outputTokens": null,
+            "estimatedCost": null,
+            "currency": "USD",
+            "complete": false
+          },
+          "durationMs": 79544,
+          "repairs": 1,
+          "interventions": [],
+          "error": "Jev 用量未知或非法，费用记 unknown，停止后续调用"
+        },
+        {
+          "runId": "850135e8-7993-424d-8ee2-ee384a7c32fd",
+          "requirementId": "HTML-02",
+          "platformCommit": "b6413d472ec25484a36101caff59b00cca5580d3",
+          "promptVersion": [
+            "production-html-v9"
+          ],
+          "capability": "offline-single-html",
+          "implementationKind": "model-html",
+          "candidateCount": 1,
+          "status": "failed",
+          "brief": "为三人研发小组做一个无需登录的单页待办板：输入任务后添加到列表，支持标记完成和删除，显示任务统计。不依赖网络或后端，刷新后可重置。",
+          "acceptance": "初始无任务；添加“准备发布”后仅出现一条同名任务；输入框清空；能标记完成并显示完成统计；删除后列表与统计归零。",
+          "input": {
+            "brief": "为三人研发小组做一个无需登录的单页待办板：输入任务后添加到列表，支持标记完成和删除，显示任务统计。不依赖网络或后端，刷新后可重置。",
+            "capability": "offline-single-html",
+            "mode": "live",
+            "verifierEngine": "jev-cascade",
+            "agentIds": [
+              "58b2f492-52c1-49ee-8936-53e5c8c6cc89",
+              "65e308f1-8582-4b41-b485-92911d44ed0f",
+              "8abcf5e4-a5f3-44a5-b58b-4f7aa83d8834",
+              "5e6500fe-48d3-4646-a412-d0bfaacffacc",
+              "299e00c3-cf0c-4f3f-814d-6c33e723a9d7",
+              "cc18586a-8d6b-4c19-950f-308034a0c0b1"
+            ],
+            "candidateCount": 1,
+            "limits": {
+              "maxCalls": 30,
+              "maxRepairCycles": 2,
+              "maxTokens": 500000,
+              "maxOutputTokens": 6000,
+              "maxDurationMs": 600000,
+              "maxCost": 1,
+              "currency": "USD"
+            },
+            "requirement": {
+              "id": "HTML-02",
+              "source": "用户授权自拟模拟需求，2026-10-07；没有真实提出者或工单",
+              "background": "最小协作工具新建网页路径；用通用自定义输入验证真实角色链路，不使用模板或已有源码。",
+              "acceptance": "初始无任务；添加“准备发布”后仅出现一条同名任务；输入框清空；能标记完成并显示完成统计；删除后列表与统计归零。",
+              "difficulty": "low",
+              "kind": "illustrative"
+            },
+            "budgetAuthorized": true
+          },
+          "lastPhase": "research",
+          "gateState": "not-reached",
+          "gateCount": 0,
+          "gateCheckCount": null,
+          "boundedScenePassed": null,
+          "visionModelVerified": null,
+          "physicalCameraVerified": null,
+          "fullRequirementVerified": false,
+          "roleCallCounts": {
+            "product": 1,
+            "verifier": 1,
+            "researcher": 3
+          },
+          "harnessInvocations": 5,
+          "providerRequests": 5,
+          "knownProviderRequests": 5,
+          "unknownProviderCounts": 0,
+          "roleOnlyUsage": {
+            "inputTokens": 16041,
+            "outputTokens": 5288,
+            "estimatedCost": 0.0111579,
+            "currency": "USD"
+          },
+          "jevRequestIntents": 1,
+          "jevRequests": 1,
+          "usage": {
+            "inputTokens": 19546,
+            "outputTokens": 5448,
+            "estimatedCost": 0.01130511,
+            "currency": "USD",
+            "complete": true
+          },
+          "durationMs": 36766,
+          "repairs": 2,
+          "interventions": [],
+          "error": "全局自动返修次数耗尽（2/2）；research 全部候选非法，Verifier 弃权；候选契约拒绝：Expected ',' or '}' after property value in JSON at position 1891 (line 1 column 1892)；保留失败，无模板回退"
+        },
+        {
+          "runId": "271a1ada-37ed-4b28-b5ab-b7cbdc910e97",
+          "requirementId": "HTML-03",
+          "platformCommit": "2c69fcb721aa84f6a065b9441494834dbf4192fb",
+          "promptVersion": [
+            "production-html-v10"
+          ],
+          "capability": "offline-single-html",
+          "implementationKind": "model-html",
+          "candidateCount": 1,
+          "status": "failed",
+          "brief": "为小团队做一个无需登录、无需网络的单页费用记录页：填写描述、金额并选择“办公/差旅”后添加记录，支持删除及“全部/办公/差旅”筛选，准确显示全部费用总额和当前筛选小计；金额只接受0.01至9999.99元（含边界）、最多两位小数，无效金额或空白描述应提示且不得入账，数据仅在当前页面保存。",
+          "acceptance": "1. 初始实际记录数0，全部总额与当前筛选小计均精确为0.00。某分类没有记录时，实际显示0条、小计0.00，不产生占位记录冒充费用。\n2. 添加“打印纸／办公／10.10”和“车票／差旅／20.20”后，实际只有2条，描述、分类和金额准确；全部总额及全部筛选小计为30.30。每次成功添加后描述、金额输入清空。\n3. 办公筛选只显示“打印纸”1条、小计10.10；差旅筛选只显示“车票”1条、小计20.20；全部总额始终为30.30。切回全部恢复原2条，不复制、丢失或修改记录。\n4. 在独立新页添加0.10与0.20两笔后，实际2条，总额与全部小计精确为0.30，不是浮点尾数或输入拼接；删除其中0.10一笔后，另一笔保留且总额为0.20。\n5. 单条下界0.01和上界9999.99均可入账且分别只新增1条；两笔合计精确为10000.00。上限属于单条金额，不能错误限制全部费用总额。金额显示保留两位小数。\n6. -1、0、空金额、1.234和10000.00均提示并拒绝。分别在空列表及已有有效记录的状态下核对：拒绝后实际记录数、已有内容、全部总额与当前小计不变。不得将空值当0、负数取绝对值或超精度金额静默四舍五入后入账。\n7. 空白描述（包括纯空格）即使金额有效也提示并拒绝，实际记录、内容与总额保持不变。\n8. 分类筛选状态下删除只移除目标记录并立即更新小计、全部总额；切回全部后其它记录仍在。删除最后一条后实际记录数0、总额与小计均回到0.00。\n各独立check自行setup，不依赖前一个检查的页面状态；最多12项、每项20步。分类选择和筛选可通过click操作，业务由明确按钮click驱动，不依赖原生form.submit。使用独立业务内容/金额节点做精确断言、实际条目容器做数量断言，不以按钮可见、输入回显或整行含操作按钮的文本替代业务验证。当前Gate无reload、键盘或selectOption，不把未发生的刷新/持久化验证写成通过。",
+          "input": {
+            "brief": "为小团队做一个无需登录、无需网络的单页费用记录页：填写描述、金额并选择“办公/差旅”后添加记录，支持删除及“全部/办公/差旅”筛选，准确显示全部费用总额和当前筛选小计；金额只接受0.01至9999.99元（含边界）、最多两位小数，无效金额或空白描述应提示且不得入账，数据仅在当前页面保存。",
+            "capability": "offline-single-html",
+            "mode": "live",
+            "verifierEngine": "llm-rubric",
+            "implementationEvidencePolicy": "legacy",
+            "agentIds": [
+              "58b2f492-52c1-49ee-8936-53e5c8c6cc89",
+              "65e308f1-8582-4b41-b485-92911d44ed0f",
+              "8abcf5e4-a5f3-44a5-b58b-4f7aa83d8834",
+              "5e6500fe-48d3-4646-a412-d0bfaacffacc",
+              "299e00c3-cf0c-4f3f-814d-6c33e723a9d7",
+              "cc18586a-8d6b-4c19-950f-308034a0c0b1"
+            ],
+            "candidateCount": 1,
+            "limits": {
+              "maxCalls": 24,
+              "maxRepairCycles": 2,
+              "maxTokens": 500000,
+              "maxOutputTokens": 6000,
+              "maxDurationMs": 600000,
+              "maxCost": 1,
+              "currency": "USD"
+            },
+            "requirement": {
+              "id": "HTML-03",
+              "source": "用户授权范围内自拟演示需求，2026-10-08；没有真实提出者或业务工单；用户批准免费预检和独立审查通过后仅一次1 USD实验",
+              "background": "新建离线费用记录小应用，用通用自定义输入验证真实角色链路，不使用待办Mock模板或已有源码",
+              "acceptance": "1. 初始实际记录数0，全部总额与当前筛选小计均精确为0.00。某分类没有记录时，实际显示0条、小计0.00，不产生占位记录冒充费用。\n2. 添加“打印纸／办公／10.10”和“车票／差旅／20.20”后，实际只有2条，描述、分类和金额准确；全部总额及全部筛选小计为30.30。每次成功添加后描述、金额输入清空。\n3. 办公筛选只显示“打印纸”1条、小计10.10；差旅筛选只显示“车票”1条、小计20.20；全部总额始终为30.30。切回全部恢复原2条，不复制、丢失或修改记录。\n4. 在独立新页添加0.10与0.20两笔后，实际2条，总额与全部小计精确为0.30，不是浮点尾数或输入拼接；删除其中0.10一笔后，另一笔保留且总额为0.20。\n5. 单条下界0.01和上界9999.99均可入账且分别只新增1条；两笔合计精确为10000.00。上限属于单条金额，不能错误限制全部费用总额。金额显示保留两位小数。\n6. -1、0、空金额、1.234和10000.00均提示并拒绝。分别在空列表及已有有效记录的状态下核对：拒绝后实际记录数、已有内容、全部总额与当前小计不变。不得将空值当0、负数取绝对值或超精度金额静默四舍五入后入账。\n7. 空白描述（包括纯空格）即使金额有效也提示并拒绝，实际记录、内容与总额保持不变。\n8. 分类筛选状态下删除只移除目标记录并立即更新小计、全部总额；切回全部后其它记录仍在。删除最后一条后实际记录数0、总额与小计均回到0.00。\n各独立check自行setup，不依赖前一个检查的页面状态；最多12项、每项20步。分类选择和筛选可通过click操作，业务由明确按钮click驱动，不依赖原生form.submit。使用独立业务内容/金额节点做精确断言、实际条目容器做数量断言，不以按钮可见、输入回显或整行含操作按钮的文本替代业务验证。当前Gate无reload、键盘或selectOption，不把未发生的刷新/持久化验证写成通过。",
+              "difficulty": "low",
+              "kind": "illustrative"
+            },
+            "budgetAuthorized": true
+          },
+          "lastPhase": "acceptance",
+          "gateState": "not-reached",
+          "gateCount": 0,
+          "gateCheckCount": null,
+          "boundedScenePassed": null,
+          "visionModelVerified": null,
+          "physicalCameraVerified": null,
+          "fullRequirementVerified": false,
+          "roleCallCounts": {
+            "product": 1,
+            "verifier": 3,
+            "researcher": 1,
+            "project-manager": 1,
+            "tester": 3
+          },
+          "harnessInvocations": 9,
+          "providerRequests": 9,
+          "knownProviderRequests": 9,
+          "unknownProviderCounts": 0,
+          "roleOnlyUsage": {
+            "inputTokens": 57698,
+            "outputTokens": 14718,
+            "estimatedCost": 0.034971,
+            "currency": "USD"
+          },
+          "jevRequestIntents": 0,
+          "jevRequests": 0,
+          "usage": {
+            "inputTokens": 57698,
+            "outputTokens": 14718,
+            "estimatedCost": 0.034971,
+            "currency": "USD",
+            "complete": true
+          },
+          "durationMs": 64951,
+          "repairs": 2,
+          "interventions": [],
+          "error": "全局自动返修次数耗尽（2/2）；acceptance 全部候选非法，Verifier 弃权；候选契约拒绝：[\n  {\n    \"origin\": \"array\",\n    \"code\": \"too_big\",\n    \"maximum\": 20,\n    \"inclusive\": true,\n    \"path\": [\n      \"checks\",\n      5,\n      \"steps\"\n    ],\n    \"message\": \"Too big: expected array to have <=20 items\"\n  },\n  {\n    \"origin\": \"array\",\n    \"code\": \"too_big\",\n    \"maximum\": 20,\n    \"inclusive\": true,\n    \"path\": [\n      \"checks\",\n      8,\n      \"steps\"\n    ],\n    \"message\": \"Too big: expected array to have <=20 items\"\n  }\n]；保留失败，无模板回退"
+        },
+        {
+          "runId": "789f99d1-792f-413e-b509-71da5302eb2f",
+          "requirementId": "HTML-04",
+          "platformCommit": "19466ab1c75610502ae8ff58a069308781e62151",
+          "promptVersion": [
+            "production-html-v11"
+          ],
+          "capability": "offline-single-html",
+          "implementationKind": "model-html",
+          "candidateCount": 1,
+          "status": "failed",
+          "brief": "为小团队做一个无需登录、无需网络的单页费用记录页：填写描述、金额并选择“办公/差旅”后添加记录，支持删除及“全部/办公/差旅”筛选，准确显示全部费用总额和当前筛选小计；金额只接受0.01至9999.99元（含边界）、最多两位小数，无效金额或空白描述应提示且不得入账，数据仅在当前页面保存。",
+          "acceptance": "1. 初始实际记录数0，全部总额与当前筛选小计均精确为0.00。某分类没有记录时，实际显示0条、小计0.00，不产生占位记录冒充费用。\n2. 添加“打印纸／办公／10.10”和“车票／差旅／20.20”后，实际只有2条，描述、分类和金额准确；全部总额及全部筛选小计为30.30。每次成功添加后描述、金额输入清空。\n3. 办公筛选只显示“打印纸”1条、小计10.10；差旅筛选只显示“车票”1条、小计20.20；全部总额始终为30.30。切回全部恢复原2条，不复制、丢失或修改记录。\n4. 在独立新页添加0.10与0.20两笔后，实际2条，总额与全部小计精确为0.30，不是浮点尾数或输入拼接；删除其中0.10一笔后，另一笔保留且总额为0.20。\n5. 单条下界0.01和上界9999.99均可入账且分别只新增1条；两笔合计精确为10000.00。上限属于单条金额，不能错误限制全部费用总额。金额显示保留两位小数。\n6. -1、0、空金额、1.234和10000.00均提示并拒绝。分别在空列表及已有有效记录的状态下核对：拒绝后实际记录数、已有内容、全部总额与当前小计不变。不得将空值当0、负数取绝对值或超精度金额静默四舍五入后入账。\n7. 空白描述（包括纯空格）即使金额有效也提示并拒绝，实际记录、内容与总额保持不变。\n8. 分类筛选状态下删除只移除目标记录并立即更新小计、全部总额；切回全部后其它记录仍在。删除最后一条后实际记录数0、总额与小计均回到0.00。\n各独立check自行setup，不依赖前一个检查的页面状态；最多12项、每项20步。分类选择和筛选可通过click操作，业务由明确按钮click驱动，不依赖原生form.submit。使用独立业务内容/金额节点做精确断言、实际条目容器做数量断言，不以按钮可见、输入回显或整行含操作按钮的文本替代业务验证。当前Gate无reload、键盘或selectOption，不把未发生的刷新/持久化验证写成通过。",
+          "input": {
+            "brief": "为小团队做一个无需登录、无需网络的单页费用记录页：填写描述、金额并选择“办公/差旅”后添加记录，支持删除及“全部/办公/差旅”筛选，准确显示全部费用总额和当前筛选小计；金额只接受0.01至9999.99元（含边界）、最多两位小数，无效金额或空白描述应提示且不得入账，数据仅在当前页面保存。",
+            "capability": "offline-single-html",
+            "mode": "live",
+            "verifierEngine": "llm-rubric",
+            "implementationEvidencePolicy": "legacy",
+            "agentIds": [
+              "58b2f492-52c1-49ee-8936-53e5c8c6cc89",
+              "65e308f1-8582-4b41-b485-92911d44ed0f",
+              "8abcf5e4-a5f3-44a5-b58b-4f7aa83d8834",
+              "5e6500fe-48d3-4646-a412-d0bfaacffacc",
+              "299e00c3-cf0c-4f3f-814d-6c33e723a9d7",
+              "cc18586a-8d6b-4c19-950f-308034a0c0b1"
+            ],
+            "candidateCount": 1,
+            "limits": {
+              "maxCalls": 24,
+              "maxRepairCycles": 2,
+              "maxTokens": 500000,
+              "maxOutputTokens": 6000,
+              "maxDurationMs": 600000,
+              "maxCost": 1,
+              "currency": "USD"
+            },
+            "requirement": {
+              "id": "HTML-04",
+              "source": "用户授权范围内自拟演示需求，2026-10-08；非真实业务工单；用户批准仅这一次HTML-04，采用1 USD声明价限额",
+              "background": "在通用HTML v11验收规划与容量反馈版本上做一次真实闭环探索；不复用旧tester checks、已有源码或模板",
+              "acceptance": "1. 初始实际记录数0，全部总额与当前筛选小计均精确为0.00。某分类没有记录时，实际显示0条、小计0.00，不产生占位记录冒充费用。\n2. 添加“打印纸／办公／10.10”和“车票／差旅／20.20”后，实际只有2条，描述、分类和金额准确；全部总额及全部筛选小计为30.30。每次成功添加后描述、金额输入清空。\n3. 办公筛选只显示“打印纸”1条、小计10.10；差旅筛选只显示“车票”1条、小计20.20；全部总额始终为30.30。切回全部恢复原2条，不复制、丢失或修改记录。\n4. 在独立新页添加0.10与0.20两笔后，实际2条，总额与全部小计精确为0.30，不是浮点尾数或输入拼接；删除其中0.10一笔后，另一笔保留且总额为0.20。\n5. 单条下界0.01和上界9999.99均可入账且分别只新增1条；两笔合计精确为10000.00。上限属于单条金额，不能错误限制全部费用总额。金额显示保留两位小数。\n6. -1、0、空金额、1.234和10000.00均提示并拒绝。分别在空列表及已有有效记录的状态下核对：拒绝后实际记录数、已有内容、全部总额与当前小计不变。不得将空值当0、负数取绝对值或超精度金额静默四舍五入后入账。\n7. 空白描述（包括纯空格）即使金额有效也提示并拒绝，实际记录、内容与总额保持不变。\n8. 分类筛选状态下删除只移除目标记录并立即更新小计、全部总额；切回全部后其它记录仍在。删除最后一条后实际记录数0、总额与小计均回到0.00。\n各独立check自行setup，不依赖前一个检查的页面状态；最多12项、每项20步。分类选择和筛选可通过click操作，业务由明确按钮click驱动，不依赖原生form.submit。使用独立业务内容/金额节点做精确断言、实际条目容器做数量断言，不以按钮可见、输入回显或整行含操作按钮的文本替代业务验证。当前Gate无reload、键盘或selectOption，不把未发生的刷新/持久化验证写成通过。",
+              "difficulty": "low",
+              "kind": "illustrative"
+            },
+            "budgetAuthorized": true
+          },
+          "lastPhase": "acceptance",
+          "gateState": "not-reached",
+          "gateCount": 0,
+          "gateCheckCount": null,
+          "boundedScenePassed": null,
+          "visionModelVerified": null,
+          "physicalCameraVerified": null,
+          "fullRequirementVerified": false,
+          "roleCallCounts": {
+            "product": 1,
+            "verifier": 4,
+            "researcher": 1,
+            "project-manager": 1,
+            "tester": 3
+          },
+          "harnessInvocations": 10,
+          "providerRequests": 10,
+          "knownProviderRequests": 10,
+          "unknownProviderCounts": 0,
+          "roleOnlyUsage": {
+            "inputTokens": 69479,
+            "outputTokens": 12588,
+            "estimatedCost": 0.035949300000000003,
+            "currency": "USD"
+          },
+          "jevRequestIntents": 0,
+          "jevRequests": 0,
+          "usage": {
+            "inputTokens": 69479,
+            "outputTokens": 12588,
+            "estimatedCost": 0.035949300000000003,
+            "currency": "USD",
+            "complete": true
+          },
+          "durationMs": 64396,
+          "repairs": 2,
+          "interventions": [],
+          "error": "全局自动返修次数耗尽（2/2）；acceptance 全部候选非法，Verifier 弃权；候选契约拒绝：[\n  {\n    \"origin\": \"array\",\n    \"code\": \"too_big\",\n    \"maximum\": 20,\n    \"inclusive\": true,\n    \"path\": [\n      \"checks\",\n      1,\n      \"steps\"\n    ],\n    \"message\": \"Too big: expected array to have <=20 items\"\n  },\n  {\n    \"origin\": \"array\",\n    \"code\": \"too_big\",\n    \"maximum\": 20,\n    \"inclusive\": true,\n    \"path\": [\n      \"checks\",\n      2,\n      \"steps\"\n    ],\n    \"message\": \"Too big: expected array to have <=20 items\"\n  },\n  {\n    \"origin\": \"array\",\n    \"code\": \"too_big\",\n    \"maximum\": 20,\n    \"inclusive\": true,\n    \"path\": [\n      \"checks\",\n      5,\n      \"steps\"\n    ],\n    \"message\": \"Too big: expected array to have <=20 items\"\n  },\n  {\n    \"origin\": \"array\",\n    \"code\": \"too_big\",\n    \"maximum\": 20,\n    \"inclusive\": true,\n    \"path\": [\n      \"checks\",\n      8,\n      \"steps\"\n    ],\n    \"message\": \"Too big: expected array to have <=20 items\"\n  }\n]；保留失败，无模板回退"
+        },
+        {
+          "runId": "9a56085f-8a2e-474d-97fd-82f82aaac795",
+          "requirementId": "HTML-05",
+          "platformCommit": "8928f9aac7a5d6a59615467c851d7e8a7e94c54f",
+          "promptVersion": [
+            "production-html-grouped-v1"
+          ],
+          "capability": "offline-single-html",
+          "implementationKind": "model-html",
+          "candidateCount": 1,
+          "status": "failed",
+          "brief": "为小团队做一个无需登录、无需网络的单页费用记录页：填写描述、金额并选择“办公/差旅”后添加记录，支持删除及“全部/办公/差旅”筛选，准确显示全部费用总额和当前筛选小计；金额只接受0.01至9999.99元（含边界）、最多两位小数，无效金额或空白描述应提示且不得入账，数据仅在当前页面保存。",
+          "acceptance": "1. 初始实际记录数0，全部总额与当前筛选小计均精确为0.00。某分类没有记录时，实际显示0条、小计0.00，不产生占位记录冒充费用。\n2. 添加“打印纸／办公／10.10”和“车票／差旅／20.20”后，实际只有2条，描述、分类和金额准确；全部总额及全部筛选小计为30.30。每次成功添加后描述、金额输入清空。\n3. 办公筛选只显示“打印纸”1条、小计10.10；差旅筛选只显示“车票”1条、小计20.20；全部总额始终为30.30。切回全部恢复原2条，不复制、丢失或修改记录。\n4. 在独立新页添加0.10与0.20两笔后，实际2条，总额与全部小计精确为0.30，不是浮点尾数或输入拼接；删除其中0.10一笔后，另一笔保留且总额为0.20。\n5. 单条下界0.01和上界9999.99均可入账且分别只新增1条；两笔合计精确为10000.00。上限属于单条金额，不能错误限制全部费用总额。金额显示保留两位小数。\n6. -1、0、空金额、1.234和10000.00均提示并拒绝。分别在空列表及已有有效记录的状态下核对：拒绝后实际记录数、已有内容、全部总额与当前小计不变。不得将空值当0、负数取绝对值或超精度金额静默四舍五入后入账。\n7. 空白描述（包括纯空格）即使金额有效也提示并拒绝，实际记录、内容与总额保持不变。\n8. 分类筛选状态下删除只移除目标记录并立即更新小计、全部总额；切回全部后其它记录仍在。删除最后一条后实际记录数0、总额与小计均回到0.00。\n各独立check自行setup，不依赖前一个检查的页面状态；最多12项、每项20步。分类选择和筛选可通过click操作，业务由明确按钮click驱动，不依赖原生form.submit。使用独立业务内容/金额节点做精确断言、实际条目容器做数量断言，不以按钮可见、输入回显或整行含操作按钮的文本替代业务验证。当前Gate无reload、键盘或selectOption，不把未发生的刷新/持久化验证写成通过。",
+          "input": {
+            "brief": "为小团队做一个无需登录、无需网络的单页费用记录页：填写描述、金额并选择“办公/差旅”后添加记录，支持删除及“全部/办公/差旅”筛选，准确显示全部费用总额和当前筛选小计；金额只接受0.01至9999.99元（含边界）、最多两位小数，无效金额或空白描述应提示且不得入账，数据仅在当前页面保存。",
+            "capability": "offline-single-html",
+            "mode": "live",
+            "verifierEngine": "llm-rubric",
+            "implementationEvidencePolicy": "legacy",
+            "acceptanceStrategy": "planned-groups-v1",
+            "agentIds": [
+              "58b2f492-52c1-49ee-8936-53e5c8c6cc89",
+              "65e308f1-8582-4b41-b485-92911d44ed0f",
+              "8abcf5e4-a5f3-44a5-b58b-4f7aa83d8834",
+              "5e6500fe-48d3-4646-a412-d0bfaacffacc",
+              "299e00c3-cf0c-4f3f-814d-6c33e723a9d7",
+              "cc18586a-8d6b-4c19-950f-308034a0c0b1"
+            ],
+            "candidateCount": 1,
+            "limits": {
+              "maxCalls": 24,
+              "maxRepairCycles": 2,
+              "maxTokens": 500000,
+              "maxOutputTokens": 6000,
+              "maxDurationMs": 600000,
+              "maxCost": 1,
+              "currency": "USD"
+            },
+            "requirement": {
+              "id": "HTML-05",
+              "source": "用户授权范围内自拟演示需求，非真实业务工单；用户在HTML-05单次1USD提案后回复‘推进下一步’确认，仅此一次，不自动追加",
+              "background": "新版分组验收工程切片后拟进行一次真实闭环探索；保持HTML-04原八项业务要求，不复用旧答案、源码或模板",
+              "acceptance": "1. 初始实际记录数0，全部总额与当前筛选小计均精确为0.00。某分类没有记录时，实际显示0条、小计0.00，不产生占位记录冒充费用。\n2. 添加“打印纸／办公／10.10”和“车票／差旅／20.20”后，实际只有2条，描述、分类和金额准确；全部总额及全部筛选小计为30.30。每次成功添加后描述、金额输入清空。\n3. 办公筛选只显示“打印纸”1条、小计10.10；差旅筛选只显示“车票”1条、小计20.20；全部总额始终为30.30。切回全部恢复原2条，不复制、丢失或修改记录。\n4. 在独立新页添加0.10与0.20两笔后，实际2条，总额与全部小计精确为0.30，不是浮点尾数或输入拼接；删除其中0.10一笔后，另一笔保留且总额为0.20。\n5. 单条下界0.01和上界9999.99均可入账且分别只新增1条；两笔合计精确为10000.00。上限属于单条金额，不能错误限制全部费用总额。金额显示保留两位小数。\n6. -1、0、空金额、1.234和10000.00均提示并拒绝。分别在空列表及已有有效记录的状态下核对：拒绝后实际记录数、已有内容、全部总额与当前小计不变。不得将空值当0、负数取绝对值或超精度金额静默四舍五入后入账。\n7. 空白描述（包括纯空格）即使金额有效也提示并拒绝，实际记录、内容与总额保持不变。\n8. 分类筛选状态下删除只移除目标记录并立即更新小计、全部总额；切回全部后其它记录仍在。删除最后一条后实际记录数0、总额与小计均回到0.00。\n各独立check自行setup，不依赖前一个检查的页面状态；最多12项、每项20步。分类选择和筛选可通过click操作，业务由明确按钮click驱动，不依赖原生form.submit。使用独立业务内容/金额节点做精确断言、实际条目容器做数量断言，不以按钮可见、输入回显或整行含操作按钮的文本替代业务验证。当前Gate无reload、键盘或selectOption，不把未发生的刷新/持久化验证写成通过。",
+              "difficulty": "low",
+              "kind": "illustrative"
+            },
+            "budgetAuthorized": true
+          },
+          "lastPhase": "think-design",
+          "gateState": "not-reached",
+          "gateCount": 0,
+          "gateCheckCount": null,
+          "boundedScenePassed": null,
+          "visionModelVerified": null,
+          "physicalCameraVerified": null,
+          "fullRequirementVerified": false,
+          "roleCallCounts": {
+            "product": 1,
+            "verifier": 2,
+            "researcher": 1,
+            "project-manager": 3
+          },
+          "harnessInvocations": 7,
+          "providerRequests": 7,
+          "knownProviderRequests": 7,
+          "unknownProviderCounts": 0,
+          "roleOnlyUsage": {
+            "inputTokens": 42130,
+            "outputTokens": 7806,
+            "estimatedCost": 0.022006199999999997,
+            "currency": "USD"
+          },
+          "jevRequestIntents": 0,
+          "jevRequests": 0,
+          "usage": {
+            "inputTokens": 42130,
+            "outputTokens": 7806,
+            "estimatedCost": 0.022006199999999997,
+            "currency": "USD",
+            "complete": true
+          },
+          "durationMs": 52563,
+          "repairs": 2,
+          "interventions": [],
+          "error": "全局自动返修次数耗尽（2/2）；think-design 全部候选非法，Verifier 弃权；候选契约拒绝：Unexpected non-whitespace character after JSON at position 505 (line 1 column 506)；保留失败，无模板回退"
+        },
+        {
+          "runId": "6bd95961-4dca-4378-9d2b-ead8befdb36e",
+          "requirementId": "HTML-06",
+          "platformCommit": "fba3731f373d690b6792b01beb62f1e7d4337d3a",
+          "promptVersion": [],
+          "capability": "offline-single-html",
+          "implementationKind": "model-html",
+          "candidateCount": 1,
+          "status": "failed",
+          "brief": "为小团队做一个无需登录、无需网络的单页费用记录页：填写描述、金额并选择“办公/差旅”后添加记录，支持删除及“全部/办公/差旅”筛选，准确显示全部费用总额和当前筛选小计；金额只接受0.01至9999.99元（含边界）、最多两位小数，无效金额或空白描述应提示且不得入账，数据仅在当前页面保存。",
+          "acceptance": "1. 初始实际记录数0，全部总额与当前筛选小计均精确为0.00。某分类没有记录时，实际显示0条、小计0.00，不产生占位记录冒充费用。\n2. 添加“打印纸／办公／10.10”和“车票／差旅／20.20”后，实际只有2条，描述、分类和金额准确；全部总额及全部筛选小计为30.30。每次成功添加后描述、金额输入清空。\n3. 办公筛选只显示“打印纸”1条、小计10.10；差旅筛选只显示“车票”1条、小计20.20；全部总额始终为30.30。切回全部恢复原2条，不复制、丢失或修改记录。\n4. 在独立新页添加0.10与0.20两笔后，实际2条，总额与全部小计精确为0.30，不是浮点尾数或输入拼接；删除其中0.10一笔后，另一笔保留且总额为0.20。\n5. 单条下界0.01和上界9999.99均可入账且分别只新增1条；两笔合计精确为10000.00。上限属于单条金额，不能错误限制全部费用总额。金额显示保留两位小数。\n6. -1、0、空金额、1.234和10000.00均提示并拒绝。分别在空列表及已有有效记录的状态下核对：拒绝后实际记录数、已有内容、全部总额与当前小计不变。不得将空值当0、负数取绝对值或超精度金额静默四舍五入后入账。\n7. 空白描述（包括纯空格）即使金额有效也提示并拒绝，实际记录、内容与总额保持不变。\n8. 分类筛选状态下删除只移除目标记录并立即更新小计、全部总额；切回全部后其它记录仍在。删除最后一条后实际记录数0、总额与小计均回到0.00。\n各独立check自行setup，不依赖前一个检查的页面状态；最多12项、每项20步。分类选择和筛选可通过click操作，业务由明确按钮click驱动，不依赖原生form.submit。使用独立业务内容/金额节点做精确断言、实际条目容器做数量断言，不以按钮可见、输入回显或整行含操作按钮的文本替代业务验证。当前Gate无reload、键盘或selectOption，不把未发生的刷新/持久化验证写成通过。",
+          "input": {
+            "brief": "为小团队做一个无需登录、无需网络的单页费用记录页：填写描述、金额并选择“办公/差旅”后添加记录，支持删除及“全部/办公/差旅”筛选，准确显示全部费用总额和当前筛选小计；金额只接受0.01至9999.99元（含边界）、最多两位小数，无效金额或空白描述应提示且不得入账，数据仅在当前页面保存。",
+            "capability": "offline-single-html",
+            "mode": "live",
+            "verifierEngine": "llm-rubric",
+            "implementationEvidencePolicy": "legacy",
+            "acceptanceStrategy": "planned-groups-v1",
+            "agentIds": [
+              "58b2f492-52c1-49ee-8936-53e5c8c6cc89",
+              "65e308f1-8582-4b41-b485-92911d44ed0f",
+              "8abcf5e4-a5f3-44a5-b58b-4f7aa83d8834",
+              "5e6500fe-48d3-4646-a412-d0bfaacffacc",
+              "299e00c3-cf0c-4f3f-814d-6c33e723a9d7",
+              "cc18586a-8d6b-4c19-950f-308034a0c0b1"
+            ],
+            "candidateCount": 1,
+            "limits": {
+              "maxCalls": 24,
+              "maxRepairCycles": 2,
+              "maxTokens": 500000,
+              "maxOutputTokens": 6000,
+              "maxDurationMs": 600000,
+              "maxCost": 1,
+              "currency": "USD"
+            },
+            "requirement": {
+              "id": "HTML-06",
+              "source": "用户授权范围内自拟演示需求；非真实业务工单；HTML-06仅本次1 USD声明价估算停止额度",
+              "background": "grouped v3实际步骤审计与完整评审工程验证后的单次闭环提案；保留HTML-04/05全部业务要求与限额，不复用旧答案、源码或模板",
+              "acceptance": "1. 初始实际记录数0，全部总额与当前筛选小计均精确为0.00。某分类没有记录时，实际显示0条、小计0.00，不产生占位记录冒充费用。\n2. 添加“打印纸／办公／10.10”和“车票／差旅／20.20”后，实际只有2条，描述、分类和金额准确；全部总额及全部筛选小计为30.30。每次成功添加后描述、金额输入清空。\n3. 办公筛选只显示“打印纸”1条、小计10.10；差旅筛选只显示“车票”1条、小计20.20；全部总额始终为30.30。切回全部恢复原2条，不复制、丢失或修改记录。\n4. 在独立新页添加0.10与0.20两笔后，实际2条，总额与全部小计精确为0.30，不是浮点尾数或输入拼接；删除其中0.10一笔后，另一笔保留且总额为0.20。\n5. 单条下界0.01和上界9999.99均可入账且分别只新增1条；两笔合计精确为10000.00。上限属于单条金额，不能错误限制全部费用总额。金额显示保留两位小数。\n6. -1、0、空金额、1.234和10000.00均提示并拒绝。分别在空列表及已有有效记录的状态下核对：拒绝后实际记录数、已有内容、全部总额与当前小计不变。不得将空值当0、负数取绝对值或超精度金额静默四舍五入后入账。\n7. 空白描述（包括纯空格）即使金额有效也提示并拒绝，实际记录、内容与总额保持不变。\n8. 分类筛选状态下删除只移除目标记录并立即更新小计、全部总额；切回全部后其它记录仍在。删除最后一条后实际记录数0、总额与小计均回到0.00。\n各独立check自行setup，不依赖前一个检查的页面状态；最多12项、每项20步。分类选择和筛选可通过click操作，业务由明确按钮click驱动，不依赖原生form.submit。使用独立业务内容/金额节点做精确断言、实际条目容器做数量断言，不以按钮可见、输入回显或整行含操作按钮的文本替代业务验证。当前Gate无reload、键盘或selectOption，不把未发生的刷新/持久化验证写成通过。",
+              "difficulty": "low",
+              "kind": "illustrative"
+            },
+            "budgetAuthorized": true
+          },
+          "lastPhase": "failed",
+          "gateState": "not-reached",
+          "gateCount": 0,
+          "gateCheckCount": null,
+          "boundedScenePassed": null,
+          "visionModelVerified": null,
+          "physicalCameraVerified": null,
+          "fullRequirementVerified": false,
+          "roleCallCounts": {},
+          "harnessInvocations": 0,
+          "providerRequests": 0,
+          "knownProviderRequests": 0,
+          "unknownProviderCounts": 0,
+          "roleOnlyUsage": {
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "estimatedCost": 0,
+            "currency": "USD"
+          },
+          "jevRequestIntents": 0,
+          "jevRequests": 0,
+          "usage": {
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "estimatedCost": 0,
+            "currency": "USD",
+            "complete": true
+          },
+          "durationMs": 286,
+          "repairs": 0,
+          "interventions": [],
+          "error": "评估凭据碰撞检查超限，请精简配置"
+        },
+        {
+          "runId": "18b50d49-4cc2-4f63-bcc7-94da50802d91",
+          "requirementId": "HTML-07",
+          "platformCommit": "c981490cd94bcb753f6b66291ee4319b092f62f8",
+          "promptVersion": [
+            "production-html-grouped-v3"
+          ],
+          "capability": "offline-single-html",
+          "implementationKind": "model-html",
+          "candidateCount": 1,
+          "status": "failed",
+          "brief": "为小团队做一个无需登录、无需网络的单页费用记录页：填写描述、金额并选择“办公/差旅”后添加记录，支持删除及“全部/办公/差旅”筛选，准确显示全部费用总额和当前筛选小计；金额只接受0.01至9999.99元（含边界）、最多两位小数，无效金额或空白描述应提示且不得入账，数据仅在当前页面保存。",
+          "acceptance": "1. 初始实际记录数0，全部总额与当前筛选小计均精确为0.00。某分类没有记录时，实际显示0条、小计0.00，不产生占位记录冒充费用。\n2. 添加“打印纸／办公／10.10”和“车票／差旅／20.20”后，实际只有2条，描述、分类和金额准确；全部总额及全部筛选小计为30.30。每次成功添加后描述、金额输入清空。\n3. 办公筛选只显示“打印纸”1条、小计10.10；差旅筛选只显示“车票”1条、小计20.20；全部总额始终为30.30。切回全部恢复原2条，不复制、丢失或修改记录。\n4. 在独立新页添加0.10与0.20两笔后，实际2条，总额与全部小计精确为0.30，不是浮点尾数或输入拼接；删除其中0.10一笔后，另一笔保留且总额为0.20。\n5. 单条下界0.01和上界9999.99均可入账且分别只新增1条；两笔合计精确为10000.00。上限属于单条金额，不能错误限制全部费用总额。金额显示保留两位小数。\n6. -1、0、空金额、1.234和10000.00均提示并拒绝。分别在空列表及已有有效记录的状态下核对：拒绝后实际记录数、已有内容、全部总额与当前小计不变。不得将空值当0、负数取绝对值或超精度金额静默四舍五入后入账。\n7. 空白描述（包括纯空格）即使金额有效也提示并拒绝，实际记录、内容与总额保持不变。\n8. 分类筛选状态下删除只移除目标记录并立即更新小计、全部总额；切回全部后其它记录仍在。删除最后一条后实际记录数0、总额与小计均回到0.00。\n各独立check自行setup，不依赖前一个检查的页面状态；最多12项、每项20步。分类选择和筛选可通过click操作，业务由明确按钮click驱动，不依赖原生form.submit。使用独立业务内容/金额节点做精确断言、实际条目容器做数量断言，不以按钮可见、输入回显或整行含操作按钮的文本替代业务验证。当前Gate无reload、键盘或selectOption，不把未发生的刷新/持久化验证写成通过。",
+          "input": {
+            "brief": "为小团队做一个无需登录、无需网络的单页费用记录页：填写描述、金额并选择“办公/差旅”后添加记录，支持删除及“全部/办公/差旅”筛选，准确显示全部费用总额和当前筛选小计；金额只接受0.01至9999.99元（含边界）、最多两位小数，无效金额或空白描述应提示且不得入账，数据仅在当前页面保存。",
+            "capability": "offline-single-html",
+            "mode": "live",
+            "verifierEngine": "llm-rubric",
+            "implementationEvidencePolicy": "legacy",
+            "acceptanceStrategy": "planned-groups-v1",
+            "agentIds": [
+              "58b2f492-52c1-49ee-8936-53e5c8c6cc89",
+              "65e308f1-8582-4b41-b485-92911d44ed0f",
+              "8abcf5e4-a5f3-44a5-b58b-4f7aa83d8834",
+              "5e6500fe-48d3-4646-a412-d0bfaacffacc",
+              "299e00c3-cf0c-4f3f-814d-6c33e723a9d7",
+              "cc18586a-8d6b-4c19-950f-308034a0c0b1"
+            ],
+            "candidateCount": 1,
+            "limits": {
+              "maxCalls": 24,
+              "maxRepairCycles": 2,
+              "maxTokens": 500000,
+              "maxOutputTokens": 6000,
+              "maxDurationMs": 600000,
+              "maxCost": 1,
+              "currency": "USD"
+            },
+            "requirement": {
+              "id": "HTML-07",
+              "source": "用户明确批准仅一次HTML07，1 USD声明价估算停止额度；自拟演示需求，非真实业务工单",
+              "background": "公共碰撞guard v2和同源startup guard v1修复后的单次真实模型实验；保留HTML04/05/06原八项业务、12×20 Gate与全部限额，不复用旧答案、源码或模板",
+              "acceptance": "1. 初始实际记录数0，全部总额与当前筛选小计均精确为0.00。某分类没有记录时，实际显示0条、小计0.00，不产生占位记录冒充费用。\n2. 添加“打印纸／办公／10.10”和“车票／差旅／20.20”后，实际只有2条，描述、分类和金额准确；全部总额及全部筛选小计为30.30。每次成功添加后描述、金额输入清空。\n3. 办公筛选只显示“打印纸”1条、小计10.10；差旅筛选只显示“车票”1条、小计20.20；全部总额始终为30.30。切回全部恢复原2条，不复制、丢失或修改记录。\n4. 在独立新页添加0.10与0.20两笔后，实际2条，总额与全部小计精确为0.30，不是浮点尾数或输入拼接；删除其中0.10一笔后，另一笔保留且总额为0.20。\n5. 单条下界0.01和上界9999.99均可入账且分别只新增1条；两笔合计精确为10000.00。上限属于单条金额，不能错误限制全部费用总额。金额显示保留两位小数。\n6. -1、0、空金额、1.234和10000.00均提示并拒绝。分别在空列表及已有有效记录的状态下核对：拒绝后实际记录数、已有内容、全部总额与当前小计不变。不得将空值当0、负数取绝对值或超精度金额静默四舍五入后入账。\n7. 空白描述（包括纯空格）即使金额有效也提示并拒绝，实际记录、内容与总额保持不变。\n8. 分类筛选状态下删除只移除目标记录并立即更新小计、全部总额；切回全部后其它记录仍在。删除最后一条后实际记录数0、总额与小计均回到0.00。\n各独立check自行setup，不依赖前一个检查的页面状态；最多12项、每项20步。分类选择和筛选可通过click操作，业务由明确按钮click驱动，不依赖原生form.submit。使用独立业务内容/金额节点做精确断言、实际条目容器做数量断言，不以按钮可见、输入回显或整行含操作按钮的文本替代业务验证。当前Gate无reload、键盘或selectOption，不把未发生的刷新/持久化验证写成通过。",
+              "difficulty": "low",
+              "kind": "illustrative"
+            },
+            "budgetAuthorized": true
+          },
+          "lastPhase": "think-design",
+          "gateState": "not-reached",
+          "gateCount": 0,
+          "gateCheckCount": null,
+          "boundedScenePassed": null,
+          "visionModelVerified": null,
+          "physicalCameraVerified": null,
+          "fullRequirementVerified": false,
+          "roleCallCounts": {
+            "product": 1,
+            "verifier": 2,
+            "researcher": 3,
+            "project-manager": 1
+          },
+          "harnessInvocations": 7,
+          "providerRequests": 7,
+          "knownProviderRequests": 7,
+          "unknownProviderCounts": 0,
+          "roleOnlyUsage": {
+            "inputTokens": 37555,
+            "outputTokens": 7683,
+            "estimatedCost": 0.0204861,
+            "currency": "USD"
+          },
+          "jevRequestIntents": 0,
+          "jevRequests": 0,
+          "usage": {
+            "inputTokens": 37555,
+            "outputTokens": 7683,
+            "estimatedCost": 0.0204861,
+            "currency": "USD",
+            "complete": true
+          },
+          "durationMs": 49631,
+          "repairs": 2,
+          "interventions": [],
+          "error": "全局自动返修次数耗尽（2/2）；think-design 全部候选非法，Verifier 弃权；候选契约拒绝：production-role-schema-diagnostics-v1 / schema-structure；保留失败，无模板回退"
+        },
+        {
+          "runId": "966fc3b9-1308-4e19-832f-ea4960fb07f2",
+          "requirementId": "HTML-08",
+          "platformCommit": "f21256f8fe280b619c295ec17842fdc941b36545",
+          "promptVersion": [
+            "production-html-grouped-v4"
+          ],
+          "capability": "offline-single-html",
+          "implementationKind": "model-html",
+          "candidateCount": 1,
+          "status": "failed",
+          "brief": "为小团队做一个无需登录、无需网络的单页费用记录页：填写描述、金额并选择“办公/差旅”后添加记录，支持删除及“全部/办公/差旅”筛选，准确显示全部费用总额和当前筛选小计；金额只接受0.01至9999.99元（含边界）、最多两位小数，无效金额或空白描述应提示且不得入账，数据仅在当前页面保存。",
+          "acceptance": "1. 初始实际记录数0，全部总额与当前筛选小计均精确为0.00。某分类没有记录时，实际显示0条、小计0.00，不产生占位记录冒充费用。\n2. 添加“打印纸／办公／10.10”和“车票／差旅／20.20”后，实际只有2条，描述、分类和金额准确；全部总额及全部筛选小计为30.30。每次成功添加后描述、金额输入清空。\n3. 办公筛选只显示“打印纸”1条、小计10.10；差旅筛选只显示“车票”1条、小计20.20；全部总额始终为30.30。切回全部恢复原2条，不复制、丢失或修改记录。\n4. 在独立新页添加0.10与0.20两笔后，实际2条，总额与全部小计精确为0.30，不是浮点尾数或输入拼接；删除其中0.10一笔后，另一笔保留且总额为0.20。\n5. 单条下界0.01和上界9999.99均可入账且分别只新增1条；两笔合计精确为10000.00。上限属于单条金额，不能错误限制全部费用总额。金额显示保留两位小数。\n6. -1、0、空金额、1.234和10000.00均提示并拒绝。分别在空列表及已有有效记录的状态下核对：拒绝后实际记录数、已有内容、全部总额与当前小计不变。不得将空值当0、负数取绝对值或超精度金额静默四舍五入后入账。\n7. 空白描述（包括纯空格）即使金额有效也提示并拒绝，实际记录、内容与总额保持不变。\n8. 分类筛选状态下删除只移除目标记录并立即更新小计、全部总额；切回全部后其它记录仍在。删除最后一条后实际记录数0、总额与小计均回到0.00。\n各独立check自行setup，不依赖前一个检查的页面状态；最多12项、每项20步。分类选择和筛选可通过click操作，业务由明确按钮click驱动，不依赖原生form.submit。使用独立业务内容/金额节点做精确断言、实际条目容器做数量断言，不以按钮可见、输入回显或整行含操作按钮的文本替代业务验证。当前Gate无reload、键盘或selectOption，不把未发生的刷新/持久化验证写成通过。",
+          "input": {
+            "brief": "为小团队做一个无需登录、无需网络的单页费用记录页：填写描述、金额并选择“办公/差旅”后添加记录，支持删除及“全部/办公/差旅”筛选，准确显示全部费用总额和当前筛选小计；金额只接受0.01至9999.99元（含边界）、最多两位小数，无效金额或空白描述应提示且不得入账，数据仅在当前页面保存。",
+            "capability": "offline-single-html",
+            "mode": "live",
+            "verifierEngine": "llm-rubric",
+            "implementationEvidencePolicy": "legacy",
+            "acceptanceStrategy": "planned-groups-v1",
+            "agentIds": [
+              "58b2f492-52c1-49ee-8936-53e5c8c6cc89",
+              "65e308f1-8582-4b41-b485-92911d44ed0f",
+              "8abcf5e4-a5f3-44a5-b58b-4f7aa83d8834",
+              "5e6500fe-48d3-4646-a412-d0bfaacffacc",
+              "299e00c3-cf0c-4f3f-814d-6c33e723a9d7",
+              "cc18586a-8d6b-4c19-950f-308034a0c0b1"
+            ],
+            "candidateCount": 1,
+            "limits": {
+              "maxCalls": 24,
+              "maxRepairCycles": 2,
+              "maxTokens": 500000,
+              "maxOutputTokens": 6000,
+              "maxDurationMs": 600000,
+              "maxCost": 1,
+              "currency": "USD"
+            },
+            "requirement": {
+              "id": "HTML-08",
+              "source": "用户明确批准仅一次HTML08，1 USD声明价估算停止额度；自拟演示需求，非真实业务工单",
+              "background": "grouped v4与output-envelope v1通用JSON导航后的单次真实模型实验；保留HTML07原八项业务、12×20 Gate与全部限额，不复用旧答案、源码或模板",
+              "acceptance": "1. 初始实际记录数0，全部总额与当前筛选小计均精确为0.00。某分类没有记录时，实际显示0条、小计0.00，不产生占位记录冒充费用。\n2. 添加“打印纸／办公／10.10”和“车票／差旅／20.20”后，实际只有2条，描述、分类和金额准确；全部总额及全部筛选小计为30.30。每次成功添加后描述、金额输入清空。\n3. 办公筛选只显示“打印纸”1条、小计10.10；差旅筛选只显示“车票”1条、小计20.20；全部总额始终为30.30。切回全部恢复原2条，不复制、丢失或修改记录。\n4. 在独立新页添加0.10与0.20两笔后，实际2条，总额与全部小计精确为0.30，不是浮点尾数或输入拼接；删除其中0.10一笔后，另一笔保留且总额为0.20。\n5. 单条下界0.01和上界9999.99均可入账且分别只新增1条；两笔合计精确为10000.00。上限属于单条金额，不能错误限制全部费用总额。金额显示保留两位小数。\n6. -1、0、空金额、1.234和10000.00均提示并拒绝。分别在空列表及已有有效记录的状态下核对：拒绝后实际记录数、已有内容、全部总额与当前小计不变。不得将空值当0、负数取绝对值或超精度金额静默四舍五入后入账。\n7. 空白描述（包括纯空格）即使金额有效也提示并拒绝，实际记录、内容与总额保持不变。\n8. 分类筛选状态下删除只移除目标记录并立即更新小计、全部总额；切回全部后其它记录仍在。删除最后一条后实际记录数0、总额与小计均回到0.00。\n各独立check自行setup，不依赖前一个检查的页面状态；最多12项、每项20步。分类选择和筛选可通过click操作，业务由明确按钮click驱动，不依赖原生form.submit。使用独立业务内容/金额节点做精确断言、实际条目容器做数量断言，不以按钮可见、输入回显或整行含操作按钮的文本替代业务验证。当前Gate无reload、键盘或selectOption，不把未发生的刷新/持久化验证写成通过。",
+              "difficulty": "low",
+              "kind": "illustrative"
+            },
+            "budgetAuthorized": true
+          },
+          "lastPhase": "think-design:verify",
+          "gateState": "not-reached",
+          "gateCount": 0,
+          "gateCheckCount": null,
+          "boundedScenePassed": null,
+          "visionModelVerified": null,
+          "physicalCameraVerified": null,
+          "fullRequirementVerified": false,
+          "roleCallCounts": {
+            "product": 3,
+            "verifier": 9,
+            "researcher": 3,
+            "project-manager": 3
+          },
+          "harnessInvocations": 18,
+          "providerRequests": 18,
+          "knownProviderRequests": 18,
+          "unknownProviderCounts": 0,
+          "roleOnlyUsage": {
+            "inputTokens": 166317,
+            "outputTokens": 13317,
+            "estimatedCost": 0.0658755,
+            "currency": "USD"
+          },
+          "jevRequestIntents": 0,
+          "jevRequests": 0,
+          "usage": {
+            "inputTokens": 166317,
+            "outputTokens": 13317,
+            "estimatedCost": 0.0658755,
+            "currency": "USD",
+            "complete": true
+          },
+          "durationMs": 102991,
+          "repairs": 2,
+          "interventions": [],
+          "error": "全局自动返修次数耗尽（2/2）；研发前规划revise：原8项验收、12组×20步划分与全部硬约束均可实现，无需stop。但冻结独立DOM业务Gate前仍缺两项可直接执行的具体化产物：一是普通CSS选择器字符串与节点层级尚未逐字冻结（当前仅有节点类型清单），二是12组逐组steps数组条目的静态核算与G8/G9负例前置重建细则尚未落实。二者均在本授权与能力范围内（离线单HTML、fill+click、type=button），故交原产品与研究员补齐后重新评审，不改变需求、验收条款、12×20门限、返修预算；本轮不声称任何执行或通过。；保留失败，无模板回退"
+        }
+      ]
+    },
+    "jevDecisions": {
+      "scope": "Recorded non-injected Jev intents/responses, including protocol errors, abstention, mixed/live failures and cancellations; skipped cases made no request. Explicitly injected production/benchmark evidence is retained separately, never added to these provider totals. Legacy benchmark classification is preserved, not recertified.",
+      "benchmarkIds": [
+        "f0c7b845-1dff-4573-8644-a8de82157505",
+        "807e9dc4-957a-437d-9798-4cebd57998da"
+      ],
+      "supplementalRunIds": [
+        "e436f153-4304-4b7b-ac1e-54e2d9a91b5f",
+        "13090ef3-072b-4194-9177-d13884b0c5d1",
+        "fb53d889-0838-4bfb-8cf1-163ceb39a0d6",
+        "7be47e2c-2ce9-4fa7-9b8a-86729accc039",
+        "6d347d58-022b-4910-b8a7-649e9ab907b4",
+        "b1a44700-26a2-4479-9aad-69891bfdf568",
+        "255e66b8-8371-4194-ad21-b32ac8477d1f",
+        "858c71f1-0a30-4943-ae4b-8067c77d9d8f",
+        "1a6231d6-9ebb-466a-879c-6381b6adffcf",
+        "789e1e5f-a16d-41de-828f-55d089ce2660",
+        "fb6e1e6a-d8b8-4f50-80c8-c557793fbddd",
+        "850135e8-7993-424d-8ee2-ee384a7c32fd"
+      ],
+      "providerRequests": 41,
+      "knownProviderRequests": 41,
+      "unknownRequestIntents": 0,
+      "inputTokens": null,
+      "outputTokens": null,
+      "estimatedCost": null,
+      "currency": "USD",
+      "complete": false,
+      "records": [
+        {
+          "origin": "jev-benchmark",
+          "runId": "f0c7b845-1dff-4573-8644-a8de82157505",
+          "itemId": "MOCK-01",
+          "status": "error",
+          "requests": 1,
+          "inputTokens": 3386,
+          "outputTokens": 177,
+          "estimatedCost": 0.000142212,
+          "complete": true
+        },
+        {
+          "origin": "jev-benchmark",
+          "runId": "807e9dc4-957a-437d-9798-4cebd57998da",
+          "itemId": "MOCK-01",
+          "status": "accepted",
+          "requests": 1,
+          "inputTokens": 3386,
+          "outputTokens": 177,
+          "estimatedCost": 0.000142212,
+          "complete": true
+        },
+        {
+          "origin": "jev-benchmark",
+          "runId": "807e9dc4-957a-437d-9798-4cebd57998da",
+          "itemId": "MOCK-02",
+          "status": "uncertain",
+          "requests": 1,
+          "inputTokens": 3432,
+          "outputTokens": 177,
+          "estimatedCost": 0.000144144,
+          "complete": true
+        },
+        {
+          "origin": "jev-benchmark",
+          "runId": "807e9dc4-957a-437d-9798-4cebd57998da",
+          "itemId": "MOCK-03",
+          "status": "accepted",
+          "requests": 1,
+          "inputTokens": 3442,
+          "outputTokens": 177,
+          "estimatedCost": 0.00014456400000000002,
+          "complete": true
+        },
+        {
+          "origin": "production-jev",
+          "runId": "e436f153-4304-4b7b-ac1e-54e2d9a91b5f",
+          "itemId": "67a7ac1d-43c5-4e36-bec4-29233a939ea1",
+          "status": "uncertain",
+          "requests": 1,
+          "inputTokens": 1381,
+          "outputTokens": 166,
+          "estimatedCost": 0.000058002000000000005,
+          "complete": true
+        },
+        {
+          "origin": "production-jev",
+          "runId": "13090ef3-072b-4194-9177-d13884b0c5d1",
+          "itemId": "0f554748-8465-4ccd-b39f-1b662d4e1635",
+          "status": "accepted",
+          "requests": 1,
+          "inputTokens": 2259,
+          "outputTokens": 160,
+          "estimatedCost": 0.000094878,
+          "complete": true
+        },
+        {
+          "origin": "production-jev",
+          "runId": "13090ef3-072b-4194-9177-d13884b0c5d1",
+          "itemId": "098b92e8-6a74-4c09-826e-25952057eabc",
+          "status": "uncertain",
+          "requests": 1,
+          "inputTokens": 2209,
+          "outputTokens": 133,
+          "estimatedCost": 0.00009277800000000001,
+          "complete": true
+        },
+        {
+          "origin": "production-jev",
+          "runId": "fb53d889-0838-4bfb-8cf1-163ceb39a0d6",
+          "itemId": "1ef4e01f-1b6b-4e68-ab7f-edb632f02fb0",
+          "status": "uncertain",
+          "requests": 1,
+          "inputTokens": 5439,
+          "outputTokens": 134,
+          "estimatedCost": 0.00022843800000000002,
+          "complete": true
+        },
+        {
+          "origin": "production-jev",
+          "runId": "fb53d889-0838-4bfb-8cf1-163ceb39a0d6",
+          "itemId": "73f6c0fd-793d-4e1c-a81b-4eaa91b3fc38",
+          "status": "accepted",
+          "requests": 1,
+          "inputTokens": 7130,
+          "outputTokens": 162,
+          "estimatedCost": 0.00029946000000000004,
+          "complete": true
+        },
+        {
+          "origin": "production-jev",
+          "runId": "fb53d889-0838-4bfb-8cf1-163ceb39a0d6",
+          "itemId": "4b7ab434-2780-4015-8074-1a8f94497153",
+          "status": "uncertain",
+          "requests": 1,
+          "inputTokens": 8172,
+          "outputTokens": 164,
+          "estimatedCost": 0.00034322400000000005,
+          "complete": true
+        },
+        {
+          "origin": "production-jev",
+          "runId": "7be47e2c-2ce9-4fa7-9b8a-86729accc039",
+          "itemId": "7751ed6a-fa4a-4c34-8e4c-dfa05c1a4f6c",
+          "status": "error",
+          "requests": 1,
+          "inputTokens": 7024,
+          "outputTokens": 162,
+          "estimatedCost": 0.00029500800000000003,
+          "complete": true
+        },
+        {
+          "origin": "production-jev",
+          "runId": "6d347d58-022b-4910-b8a7-649e9ab907b4",
+          "itemId": "14727bbc-9fd8-42b4-9743-2c46615d6bd1",
+          "status": "uncertain",
+          "requests": 1,
+          "inputTokens": 6155,
+          "outputTokens": 164,
+          "estimatedCost": 0.00025851,
+          "complete": true
+        },
+        {
+          "origin": "production-jev",
+          "runId": "6d347d58-022b-4910-b8a7-649e9ab907b4",
+          "itemId": "0cd753e2-6fb2-4ee2-82d5-bfb7dbb03d0e",
+          "status": "accepted",
+          "requests": 1,
+          "inputTokens": 8081,
+          "outputTokens": 168,
+          "estimatedCost": 0.00033940200000000004,
+          "complete": true
+        },
+        {
+          "origin": "production-jev",
+          "runId": "6d347d58-022b-4910-b8a7-649e9ab907b4",
+          "itemId": "93fb8d34-744d-400a-aa32-202d594fb88b",
+          "status": "uncertain",
+          "requests": 1,
+          "inputTokens": 9286,
+          "outputTokens": 158,
+          "estimatedCost": 0.000390012,
+          "complete": true
+        },
+        {
+          "origin": "production-jev",
+          "runId": "6d347d58-022b-4910-b8a7-649e9ab907b4",
+          "itemId": "bef34364-3d61-4d5a-8528-42bc73a7f7a5",
+          "status": "uncertain",
+          "requests": 1,
+          "inputTokens": 11188,
+          "outputTokens": 132,
+          "estimatedCost": 0.00046989600000000003,
+          "complete": true
+        },
+        {
+          "origin": "production-jev",
+          "runId": "b1a44700-26a2-4479-9aad-69891bfdf568",
+          "itemId": "2390fda0-807a-49c9-9636-d8e9fb2d1a1f",
+          "status": "uncertain",
+          "requests": 1,
+          "inputTokens": 5643,
+          "outputTokens": 158,
+          "estimatedCost": 0.00023700600000000003,
+          "complete": true
+        },
+        {
+          "origin": "production-jev",
+          "runId": "b1a44700-26a2-4479-9aad-69891bfdf568",
+          "itemId": "5e801873-7148-4671-b5c6-f36a61ec779d",
+          "status": "uncertain",
+          "requests": 1,
+          "inputTokens": 8920,
+          "outputTokens": 160,
+          "estimatedCost": 0.00037464000000000003,
+          "complete": true
+        },
+        {
+          "origin": "production-jev",
+          "runId": "b1a44700-26a2-4479-9aad-69891bfdf568",
+          "itemId": "13243dd5-2684-4ca6-b96c-b369aa1fa3ac",
+          "status": "uncertain",
+          "requests": 1,
+          "inputTokens": 8157,
+          "outputTokens": 166,
+          "estimatedCost": 0.000342594,
+          "complete": true
+        },
+        {
+          "origin": "production-jev",
+          "runId": "255e66b8-8371-4194-ad21-b32ac8477d1f",
+          "itemId": "779fd91d-159a-4fc8-af0c-3eb75bb8663c",
+          "status": "uncertain",
+          "requests": 1,
+          "inputTokens": 5849,
+          "outputTokens": 160,
+          "estimatedCost": 0.000245658,
+          "complete": true
+        },
+        {
+          "origin": "production-jev",
+          "runId": "255e66b8-8371-4194-ad21-b32ac8477d1f",
+          "itemId": "db4848aa-8f3d-43a6-9711-6138ff80bb73",
+          "status": "error",
+          "requests": 1,
+          "inputTokens": 7908,
+          "outputTokens": 166,
+          "estimatedCost": 0.000332136,
+          "complete": true
+        },
+        {
+          "origin": "production-jev",
+          "runId": "255e66b8-8371-4194-ad21-b32ac8477d1f",
+          "itemId": "78042c73-5887-4d27-9e44-f5fc64feee32",
+          "status": "error",
+          "requests": 1,
+          "inputTokens": 9689,
+          "outputTokens": 158,
+          "estimatedCost": 0.000406938,
+          "complete": true
+        },
+        {
+          "origin": "production-jev",
+          "runId": "255e66b8-8371-4194-ad21-b32ac8477d1f",
+          "itemId": "a6fabcd1-c4f8-41dd-b48d-4236f03d91d1",
+          "status": "error",
+          "requests": 0,
+          "inputTokens": null,
+          "outputTokens": null,
+          "estimatedCost": null,
+          "complete": false
+        },
+        {
+          "origin": "production-jev",
+          "runId": "858c71f1-0a30-4943-ae4b-8067c77d9d8f",
+          "itemId": "8228daa0-e639-4624-aff1-3a788aac2049",
+          "status": "uncertain",
+          "requests": 1,
+          "inputTokens": 5308,
+          "outputTokens": 164,
+          "estimatedCost": 0.000222936,
+          "complete": true
+        },
+        {
+          "origin": "production-jev",
+          "runId": "858c71f1-0a30-4943-ae4b-8067c77d9d8f",
+          "itemId": "f7e3946d-deec-4b15-80d7-b7facc77bcc2",
+          "status": "error",
+          "requests": 1,
+          "inputTokens": 7294,
+          "outputTokens": 164,
+          "estimatedCost": 0.000306348,
+          "complete": true
+        },
+        {
+          "origin": "production-jev",
+          "runId": "858c71f1-0a30-4943-ae4b-8067c77d9d8f",
+          "itemId": "50dc4f36-7e3d-4581-9ab4-7eb2790c4002",
+          "status": "error",
+          "requests": 1,
+          "inputTokens": 8316,
+          "outputTokens": 160,
+          "estimatedCost": 0.000349272,
+          "complete": true
+        },
+        {
+          "origin": "production-jev",
+          "runId": "1a6231d6-9ebb-466a-879c-6381b6adffcf",
+          "itemId": "230126bd-6b82-46e5-b4fe-f5c94148a26b",
+          "status": "uncertain",
+          "requests": 1,
+          "inputTokens": 6008,
+          "outputTokens": 160,
+          "estimatedCost": 0.00025233600000000003,
+          "complete": true
+        },
+        {
+          "origin": "production-jev",
+          "runId": "1a6231d6-9ebb-466a-879c-6381b6adffcf",
+          "itemId": "8857aaf6-73fb-4c2f-a5c4-7a250fa63dcb",
+          "status": "error",
+          "requests": 1,
+          "inputTokens": 8289,
+          "outputTokens": 158,
+          "estimatedCost": 0.00034813800000000006,
+          "complete": true
+        },
+        {
+          "origin": "production-jev",
+          "runId": "1a6231d6-9ebb-466a-879c-6381b6adffcf",
+          "itemId": "4c5919b3-bb63-465c-9654-e6dcfcf7b926",
+          "status": "error",
+          "requests": 1,
+          "inputTokens": 10085,
+          "outputTokens": 158,
+          "estimatedCost": 0.00042357000000000007,
+          "complete": true
+        },
+        {
+          "origin": "production-jev",
+          "runId": "1a6231d6-9ebb-466a-879c-6381b6adffcf",
+          "itemId": "c7a10f80-b0b6-48a5-8591-05aaf3ab3a70",
+          "status": "uncertain",
+          "requests": 1,
+          "inputTokens": 12096,
+          "outputTokens": 166,
+          "estimatedCost": 0.0005080320000000001,
+          "complete": true
+        },
+        {
+          "origin": "production-jev",
+          "runId": "789e1e5f-a16d-41de-828f-55d089ce2660",
+          "itemId": "3e1e9d76-8609-4884-9664-c1baa2dd776c",
+          "status": "uncertain",
+          "requests": 1,
+          "inputTokens": 6475,
+          "outputTokens": 156,
+          "estimatedCost": 0.00027194999999999997,
+          "complete": true
+        },
+        {
+          "origin": "production-jev",
+          "runId": "789e1e5f-a16d-41de-828f-55d089ce2660",
+          "itemId": "5f90c5c7-c887-4bdb-850a-bf51aa3b26e1",
+          "status": "uncertain",
+          "requests": 1,
+          "inputTokens": 8266,
+          "outputTokens": 168,
+          "estimatedCost": 0.00034717200000000003,
+          "complete": true
+        },
+        {
+          "origin": "production-jev",
+          "runId": "789e1e5f-a16d-41de-828f-55d089ce2660",
+          "itemId": "54557210-a899-476b-9718-69b8e442e53f",
+          "status": "error",
+          "requests": 1,
+          "inputTokens": 9917,
+          "outputTokens": 160,
+          "estimatedCost": 0.000416514,
+          "complete": true
+        },
+        {
+          "origin": "production-jev",
+          "runId": "789e1e5f-a16d-41de-828f-55d089ce2660",
+          "itemId": "ee500a18-c3cc-47ec-9613-30a6c97b164c",
+          "status": "uncertain",
+          "requests": 1,
+          "inputTokens": 11221,
+          "outputTokens": 154,
+          "estimatedCost": 0.00047128200000000006,
+          "complete": true
+        },
+        {
+          "origin": "production-jev",
+          "runId": "789e1e5f-a16d-41de-828f-55d089ce2660",
+          "itemId": "6a8d2faa-93d8-4f5d-864a-f58b2d9315d1",
+          "status": "uncertain",
+          "requests": 1,
+          "inputTokens": 12215,
+          "outputTokens": 131,
+          "estimatedCost": 0.00051303,
+          "complete": true
+        },
+        {
+          "origin": "production-jev",
+          "runId": "789e1e5f-a16d-41de-828f-55d089ce2660",
+          "itemId": "e0106fe8-7b30-4bd5-871b-b650584ca67f",
+          "status": "error",
+          "requests": 1,
+          "inputTokens": 8042,
+          "outputTokens": 160,
+          "estimatedCost": 0.000337764,
+          "complete": true
+        },
+        {
+          "origin": "production-jev",
+          "runId": "fb6e1e6a-d8b8-4f50-80c8-c557793fbddd",
+          "itemId": "12be02b1-5f1f-4971-998f-6a05352632ba",
+          "status": "error",
+          "requests": 1,
+          "inputTokens": 2951,
+          "outputTokens": 162,
+          "estimatedCost": 0.00012394200000000001,
+          "complete": true
+        },
+        {
+          "origin": "production-jev",
+          "runId": "fb6e1e6a-d8b8-4f50-80c8-c557793fbddd",
+          "itemId": "b0ea6580-a556-4056-bfd4-e91d9f6f551b",
+          "status": "error",
+          "requests": 1,
+          "inputTokens": 4335,
+          "outputTokens": 160,
+          "estimatedCost": 0.00018207000000000002,
+          "complete": true
+        },
+        {
+          "origin": "production-jev",
+          "runId": "fb6e1e6a-d8b8-4f50-80c8-c557793fbddd",
+          "itemId": "b66d9663-2c68-43de-b145-ee7179e1dd25",
+          "status": "error",
+          "requests": 1,
+          "inputTokens": 5601,
+          "outputTokens": 166,
+          "estimatedCost": 0.000235242,
+          "complete": true
+        },
+        {
+          "origin": "production-jev",
+          "runId": "fb6e1e6a-d8b8-4f50-80c8-c557793fbddd",
+          "itemId": "be9f103d-d5b9-444b-950d-a077ef4f457f",
+          "status": "uncertain",
+          "requests": 1,
+          "inputTokens": 6564,
+          "outputTokens": 164,
+          "estimatedCost": 0.00027568800000000006,
+          "complete": true
+        },
+        {
+          "origin": "production-jev",
+          "runId": "fb6e1e6a-d8b8-4f50-80c8-c557793fbddd",
+          "itemId": "3cd756dc-fbb1-46de-aa43-c71e3de703e6",
+          "status": "error",
+          "requests": 1,
+          "inputTokens": 9050,
+          "outputTokens": 160,
+          "estimatedCost": 0.0003801,
+          "complete": true
+        },
+        {
+          "origin": "production-jev",
+          "runId": "fb6e1e6a-d8b8-4f50-80c8-c557793fbddd",
+          "itemId": "da85a7b3-9482-42f5-9bb7-a479ec6a6aa7",
+          "status": "error",
+          "requests": 1,
+          "inputTokens": 4515,
+          "outputTokens": 152,
+          "estimatedCost": 0.00018963,
+          "complete": true
+        },
+        {
+          "origin": "production-jev",
+          "runId": "fb6e1e6a-d8b8-4f50-80c8-c557793fbddd",
+          "itemId": "77b9265b-52c8-4b23-b46d-54d87e65dcdd",
+          "status": "error",
+          "requests": 0,
+          "inputTokens": null,
+          "outputTokens": null,
+          "estimatedCost": null,
+          "complete": false
+        },
+        {
+          "origin": "production-jev",
+          "runId": "850135e8-7993-424d-8ee2-ee384a7c32fd",
+          "itemId": "4cf31150-5830-464a-b567-56802a9311f4",
+          "status": "error",
+          "requests": 1,
+          "inputTokens": 3505,
+          "outputTokens": 160,
+          "estimatedCost": 0.00014721,
+          "complete": true
+        }
+      ]
+    },
+    "injectedEngineering": {
+      "scope": "Injected engineering records, not real generation or verified provider spending. Jev dispatch observations do not prove HTTP. Any explicit Harness HTTP observations remain in the per-run ledger; unknown is not zero.",
+      "runIds": [],
+      "started": 0,
+      "countedAsRealGeneration": false,
+      "countedInJevDecisions": false,
+      "records": [],
+      "benchmarkIds": [],
+      "benchmarkStarted": 0,
+      "benchmarkRecords": []
+    },
+    "excludes": [
+      "Outside platform developer/model cost",
+      "Device and recording cost",
+      "Provider invoice verification",
+      "Measured same-scope human baseline"
+    ]
+  },
+  "unknown": [
+    "realModelAutonomy",
+    "measuredHumanBaseline",
+    "measuredEfficiency"
+  ],
+  "files": [
+    {
+      "path": "jev-benchmarks.json",
+      "sha256": "887b34072287b305c73b2f05d5fbfe6d395684150c2e2af161a2fa46726df853"
+    },
+    {
+      "path": "mixed-and-live-runs.json",
+      "sha256": "688fb43c601328f24ba49f4f8b9f1efd2cdb006850fd5034df5f495ba3275ffa"
+    },
+    {
+      "path": "workspace.png",
+      "sha256": "19da018b93a072356f2c1d67bd63d920fa23ca54d9dc8fd66c0bba80756e0a43"
+    },
+    {
+      "path": "MOCK-01/input.json",
+      "sha256": "207266639ed282b72d89fefc4a253001504e7b5bc369ae294cf484f61c88d6a4"
+    },
+    {
+      "path": "MOCK-01/run.json",
+      "sha256": "655b87a53d985b7f9775b28fc7b8a1f5fc090481cd4a0a61903abe2a0c258dca"
+    },
+    {
+      "path": "MOCK-01/intermediate.json",
+      "sha256": "054288ee21cca21111f8da34a091c54d1b629e117ed9072aa82643a6d4fa83bc"
+    },
+    {
+      "path": "MOCK-01/frozen-contract.json",
+      "sha256": "ad26f4ed835e0f4f2fa273427d9ced1b06737e1dd96324d6215240e6c8c62960"
+    },
+    {
+      "path": "MOCK-01/gate.json",
+      "sha256": "d63591ea309863ebbddd1a7452d4446df537e7756d0be288d8629b432d500a82"
+    },
+    {
+      "path": "MOCK-01/events.ndjson",
+      "sha256": "51dcae6e174c7073bc125f4033dbfde7a0c2a97e83d520ef0a9af20df3d8e9a7"
+    },
+    {
+      "path": "MOCK-01/index.html",
+      "sha256": "718b0fa044423ac80ee53efec3e6fae675b64f7cffa00708b5694e9ba494d3ef"
+    },
+    {
+      "path": "MOCK-01/delivery-manifest.json",
+      "sha256": "e8e43225576e3e20e5a49b1cf2fa639ab7311896a5555596ce9e0e0ac322eb2c"
+    },
+    {
+      "path": "MOCK-01/evidence.json",
+      "sha256": "655b87a53d985b7f9775b28fc7b8a1f5fc090481cd4a0a61903abe2a0c258dca"
+    },
+    {
+      "path": "MOCK-01-preview.png",
+      "sha256": "dcdbef52daca59b228dcea989061f1315321eefcfb7952bf6b46d1aab80dba54"
+    },
+    {
+      "path": "MOCK-02/input.json",
+      "sha256": "3a78322b0a08d43733542edd453358be0ad6665cff44803661b9dc84a357c3c3"
+    },
+    {
+      "path": "MOCK-02/run.json",
+      "sha256": "c95e67bfc574c7c89f79d24f602a9b7552292ee2ea4d776d8517086cba08756f"
+    },
+    {
+      "path": "MOCK-02/intermediate.json",
+      "sha256": "73c9b179f283ccf124a569156ea895d45b87ba995659255eff092af9dff65aed"
+    },
+    {
+      "path": "MOCK-02/frozen-contract.json",
+      "sha256": "ea1ddfa3b17c49b16b9527a196704d89fb487c95793105562eb7f0c02fe65fb9"
+    },
+    {
+      "path": "MOCK-02/gate.json",
+      "sha256": "85f7d47e10ab53e2b744d4171f9387efc59d97aa38590437196efe11e435624e"
+    },
+    {
+      "path": "MOCK-02/events.ndjson",
+      "sha256": "3ab00fcfa89c087e8abe3dac102554eba4e4b0c94d458d62bab9751c019e7bdd"
+    },
+    {
+      "path": "MOCK-02/index.html",
+      "sha256": "601a88a51fdc66c4fc6451f2b4ebc0d0666ff583e79c6e853b859cc4d9ed656d"
+    },
+    {
+      "path": "MOCK-02/delivery-manifest.json",
+      "sha256": "9d2a8da545fb1f0f1bbdbff356fb65df151ffda1dd8d2adc80e8d3f561050cab"
+    },
+    {
+      "path": "MOCK-02/evidence.json",
+      "sha256": "c95e67bfc574c7c89f79d24f602a9b7552292ee2ea4d776d8517086cba08756f"
+    },
+    {
+      "path": "MOCK-02-preview.png",
+      "sha256": "a03408720140e19ea01f16e006f8b8abc05e3e4820eaf73c343a2b400f51e38e"
+    },
+    {
+      "path": "MOCK-03/input.json",
+      "sha256": "a7e0a18095f464d5ef1cd3043712918e2379f2750885423e2c5f669dd36b0b2f"
+    },
+    {
+      "path": "MOCK-03/run.json",
+      "sha256": "efc6cb9dd9ea76b3c94f94f7819ebefb79bef13ab6a609e75469d6bc4f576de5"
+    },
+    {
+      "path": "MOCK-03/intermediate.json",
+      "sha256": "3fc57138b040242eec621bc1434e474c086a6498a1cdf8aa5accf053e469a9b8"
+    },
+    {
+      "path": "MOCK-03/frozen-contract.json",
+      "sha256": "ee47f0eccd0f8545e1b2cbad77d96bd80f60d482f8df1c6f084ce57f43161d4d"
+    },
+    {
+      "path": "MOCK-03/gate.json",
+      "sha256": "a36608d4122e8952cf9470b3749b97798eac68eb1c57e5a6ee768896392dce2a"
+    },
+    {
+      "path": "MOCK-03/events.ndjson",
+      "sha256": "48c2dc9ec6458e9b2954bf15464109fbb6b3cc4a5a53eb5be0a70d7f0b21ea83"
+    },
+    {
+      "path": "MOCK-03/index.html",
+      "sha256": "c707ca3cb5ee748744431040f3ee14b50bf7aed989f9138266addbd46e47ac65"
+    },
+    {
+      "path": "MOCK-03/delivery-manifest.json",
+      "sha256": "41977b773b7b7339c1b450e33a83849c5c54c781465fd4d9ec7bdddb719145cc"
+    },
+    {
+      "path": "MOCK-03/evidence.json",
+      "sha256": "efc6cb9dd9ea76b3c94f94f7819ebefb79bef13ab6a609e75469d6bc4f576de5"
+    },
+    {
+      "path": "MOCK-03-preview.png",
+      "sha256": "dd99f13c225480e8cfb192a5575089f0a5d91ba2401f6932f6c43287178b1760"
+    },
+    {
+      "path": "metrics.png",
+      "sha256": "e062a29644057fb5128b8a6005316b37c6dace1a61d67ba76e3b51266597a66a"
+    },
+    {
+      "path": "demo.webm",
+      "sha256": "4c754e7827f1559fcbbf19f8fc54151436908f31ca7bb951e9fd691104e52d86"
+    },
+    {
+      "path": "demo.mp4",
+      "sha256": "ad2627631dd99efc79c282f9c61ef46783421a8f00bc8a565e1e5e0ac81e9f36"
+    },
+    {
+      "path": "CAMERA-01/run.json",
+      "sha256": "977c76d2eea34484aad59f76f73d5dbc2c9e131e7f2ad05e4b7672512047b1a0"
+    },
+    {
+      "path": "CAMERA-01/delivery-manifest.json",
+      "sha256": "fbdd166f1b1f71e5d32e18fb81177deaec42156feb7721d54c936cf7e7175ab9"
+    },
+    {
+      "path": "CAMERA-02/run.json",
+      "sha256": "7ce8bc5bc1002957c3573d92e0432688270542b87c063aff07f4190bba52ba96"
+    },
+    {
+      "path": "CAMERA-02/delivery-manifest.json",
+      "sha256": "059e9701f33abd404b4c11a4a131fe5f85ee9e8928750939f21eb5f92fdfbb6d"
+    },
+    {
+      "path": "CAMERA-03/run.json",
+      "sha256": "606f83b19c72b219f8c6f76f7fe3260705a970aa02dddbd68f98799ebfd812dd"
+    },
+    {
+      "path": "CAMERA-03/evidence.json",
+      "sha256": "606f83b19c72b219f8c6f76f7fe3260705a970aa02dddbd68f98799ebfd812dd"
+    },
+    {
+      "path": "CAMERA-03/delivery-manifest.json",
+      "sha256": "3bffae686858857ad2284d272b9a057aeee7653c59b05907797211490fa28066"
+    },
+    {
+      "path": "CAMERA-03/platform-metadata.json",
+      "sha256": "aa7bbf24cc9b6ef1dcfcf24881fb85e161b8222bccda496fff71f503428192c0"
+    },
+    {
+      "path": "CAMERA-04/run.json",
+      "sha256": "6461e50743067cb22fd18bcf45e76f37cd4707bddda079a3e23383999e60ae74"
+    },
+    {
+      "path": "CAMERA-04/evidence.json",
+      "sha256": "6461e50743067cb22fd18bcf45e76f37cd4707bddda079a3e23383999e60ae74"
+    },
+    {
+      "path": "CAMERA-04/delivery-manifest.json",
+      "sha256": "732367e50e7f0fe297bceabde6fd6a7907771c1ef6af4c6b3d02909ae721d490"
+    },
+    {
+      "path": "CAMERA-04/platform-metadata.json",
+      "sha256": "f7a6fbe4b2565eeba880c355fe1734eb713bf49074584540da452a3758c8bf42"
+    },
+    {
+      "path": "submission-evidence.json",
+      "sha256": "69723b7a22268e430e527d2f05bc251934532c4ca073e4792d1c9deacb6dbf71"
+    },
+    {
+      "path": "requirements.json",
+      "sha256": "e6f2da7e6d9c35a03300ac2a82b4ec39c03f4a82a3490c70a39dd7a763f64511"
+    },
+    {
+      "path": "CAMERA-05/run.json",
+      "sha256": "61cb1e48477e0bbf4bc28e7e53cf5e55bce01c5a0b70e258f3796c9dc91e0d8f"
+    },
+    {
+      "path": "CAMERA-05/evidence.json",
+      "sha256": "c8c7c2f78ce5354e8dd7544fe1489344adea40f454ed59b13e360515589bf5d2"
+    },
+    {
+      "path": "CAMERA-05/delivery-manifest.json",
+      "sha256": "958b3af5c977c91018e31000901595a4b95fff0b66f243b5ac930bf4b95a269f"
+    },
+    {
+      "path": "CAMERA-05/platform-metadata.json",
+      "sha256": "928e1e97361750456e0abe106e1b11c04a19ed73e11fa580e7efa8efaea7224d"
+    },
+    {
+      "path": "CAMERA-06/run.json",
+      "sha256": "3c231fc1f30932899d93488948ed6d381d9bf10d4d02fbdd95d7b2b680960394"
+    },
+    {
+      "path": "CAMERA-06/evidence.json",
+      "sha256": "d3218b84568d16e72176f14fd7376d43605daa4038eb44a7df5b6ca2ac11db4f"
+    },
+    {
+      "path": "CAMERA-06/delivery-manifest.json",
+      "sha256": "3171c89b86b5df6428261e77ae1bb155684f4203f8829e27b9d4094c5f071f07"
+    },
+    {
+      "path": "CAMERA-06/platform-metadata.json",
+      "sha256": "0e01b38a50c869d91c7d0c1645c3a15fe619c0e6aff9a2b0bdd361984d00d1f2"
+    },
+    {
+      "path": "CAMERA-07/run.json",
+      "sha256": "bb2cb22cad787d1fedc332b690983730733317c09d30bef93d931f7fb3609f55"
+    },
+    {
+      "path": "CAMERA-07/evidence.json",
+      "sha256": "954f411217e0050f07eba66ba908570121c257b300f75949a43856bd234a8139"
+    },
+    {
+      "path": "CAMERA-07/delivery-manifest.json",
+      "sha256": "0a570c6aaebc4f71af97358401098d13a75cc369f23a272444a6ad6cace46018"
+    },
+    {
+      "path": "CAMERA-07/platform-metadata.json",
+      "sha256": "4bf9cf11bd189c664c4325fb70a9139e702eb20b0e7d2f496c6c36a3548ec139"
+    },
+    {
+      "path": "CAMERA-08/run.json",
+      "sha256": "bf1c660970d3fb83f3f093365161f2524b2a63ab7749c9b2021bd193b2cbafb2"
+    },
+    {
+      "path": "CAMERA-08/evidence.json",
+      "sha256": "0f68761b2ab307258755ceb7f350c564c61afa48ca1af6f674fca7d3aaa1c70e"
+    },
+    {
+      "path": "CAMERA-08/delivery-manifest.json",
+      "sha256": "d53939e81473471a4ea1a1158bef58fb6a0c513253ec797f4a64415b22962be8"
+    },
+    {
+      "path": "CAMERA-08/platform-metadata.json",
+      "sha256": "e32d306cc839351cdc014a73a77c8798356206c15e94ee44733d38650e7aea2b"
+    },
+    {
+      "path": "CAMERA-09/run.json",
+      "sha256": "2aa51535623e6b9e5458b8e737a3ee4848db1930fd887ee15bf9c5b83da291c7"
+    },
+    {
+      "path": "CAMERA-09/evidence.json",
+      "sha256": "51076309392aa83cc2963c53cadc710f8b9459395c661c9fd8a3b39b8ac8e667"
+    },
+    {
+      "path": "CAMERA-09/delivery-manifest.json",
+      "sha256": "4a4f1bc4d619bf8df231a455db53ad2a72921401df6f1fe53d01881b20bbcac3"
+    },
+    {
+      "path": "CAMERA-09/platform-metadata.json",
+      "sha256": "b8ffb1e26eefe2070f23bc5664356dab62bcf1b18b941ccb22912a1e1d99c25f"
+    },
+    {
+      "path": "CAMERA-09/scene.json",
+      "sha256": "a439568ad8d89e3e19bf790e0939b05e636d72e8cf1b497db014710fec6abba6"
+    },
+    {
+      "path": "CAMERA-09/camera-runtime-manifest.json",
+      "sha256": "c96184d7de26924d2d13ca3e71c1a77da268c14d104f05297d63eae948017e10"
+    },
+    {
+      "path": "CAMERA-09/index.html.txt",
+      "sha256": "a1c0899d948022c9a416402f772f47082823f766fd42961262553b7e0f575a24"
+    },
+    {
+      "path": "VERIFIER-REAL-02/PRE-REGISTRATION.md",
+      "sha256": "1ac7a08e453aaea05f99f54af59ee63ed0aa2f348a2f89c572be561f65451aa5"
+    },
+    {
+      "path": "VERIFIER-REAL-02/RESULT.md",
+      "sha256": "f3b52591e868f6f790e3c843c1a56b3163426c8f0a86480e9a645ee5a3f68f51"
+    },
+    {
+      "path": "VERIFIER-REAL-02/archive-inspection.json",
+      "sha256": "bc333538df3296c0edb6864fae4c49c6a7077bef2b0c6928189430ebb50328d2"
+    },
+    {
+      "path": "VERIFIER-REAL-02/metrics.json",
+      "sha256": "55f15e4197050104e582e9716fad1eb3d1b710cb68d635726ec382d0a2f2c978"
+    },
+    {
+      "path": "VERIFIER-REAL-02/result-page.jpg",
+      "sha256": "9eba73073061849c06e24e28c2b7bfee212d9c9dbde0423e35980341aef154f3"
+    },
+    {
+      "path": "VERIFIER-REAL-02/run-ledger.tar.gz",
+      "sha256": "8dac4a031c2f289f2d0bd2893eeeb0294890ae2eefb85c43a2f1cf7f81c7ed28"
+    },
+    {
+      "path": "VERIFIER-REAL-02/control/consent-consumed.json",
+      "sha256": "b841941b04af9b545fd1d27cbaeee4176680e160edfbf81271a28c42a0cce7e9"
+    },
+    {
+      "path": "VERIFIER-REAL-02/control/running.json",
+      "sha256": "ed191a673ca7f77ea8e30750cfc745b79fe87c6e7e5b4b84e3b51ecff03a6587"
+    },
+    {
+      "path": "VERIFIER-REAL-02/control/terminal.json",
+      "sha256": "892ce7b801fdfde3579f8f91ce0df3c37f2ca1c38d415010633ef9aa310d01d3"
+    },
+    {
+      "path": "VERIFIER-REAL-02/control/terminal.confirmed.json",
+      "sha256": "fbb00e47e01ed0e2ef36b9a4571d740d4e804e11ea80a420be2f4bcbf5a04710"
+    },
+    {
+      "path": "real-camera-runs.json",
+      "sha256": "db0d5e9f4d1df0b6ffd9dae2d2a1fd05187ad23453ddfd571869badcb7906824"
+    },
+    {
+      "path": "HTML-DELIVERY-STATUS.json",
+      "sha256": "8897853d80e4c6c630a4abcb81b6ce86398a828fca4b2156f23711a9b52f6791"
+    },
+    {
+      "path": "materials-summary.json",
+      "sha256": "8ecc2f7fbffc68f7b9537355fd79bb6fd6717774a9dcb553fff2ea6568aa30cd"
+    },
+    {
+      "path": "submission.html",
+      "sha256": "b299e4c0e6ea67171a20d0b887ca74f5e8eee8b3b70c3f53cc3e381b1ece549d"
+    },
+    {
+      "path": "production-mock-submission.pdf",
+      "sha256": "69657b4cbb2e9b9b02e700cd535e1896a2b76fbb915d0023b4940cd05816e4c6"
+    },
+    {
+      "path": "README.md",
+      "sha256": "d2191f07d093d7687bf89d96c3f6670198646b8a3eba4a934c07ec584b732e68"
+    },
+    {
+      "path": "RUNBOOK.md",
+      "sha256": "a10be46259b0c2f97ea7aadf3f95bdbfa68861cdbd565cb05ae9a52295d6e092"
+    },
+    {
+      "path": "DESIGN.md",
+      "sha256": "ca9fab3bfe7ac7c439e40733fdb2b0fb65645bacb3960f1fa69c01b0e84d22fc"
+    },
+    {
+      "path": "EVALUATION.md",
+      "sha256": "0e9873c8f443dc94b25de0825aa720f707b82a9a3c1cd8129a8f4bc6866e556d"
+    },
+    {
+      "path": "REQUIREMENTS.md",
+      "sha256": "f028c634f1f06f9bf0adb121160eb911916754de59dfe6ef85b227db8489ae4e"
+    },
+    {
+      "path": "EXPERIMENTS.md",
+      "sha256": "b75ac4b66e4396cf38582272af084806f7aec51f7512056de8b98b5d061ebbde"
+    },
+    {
+      "path": "VALIDATION.md",
+      "sha256": "18e90501e2d789a5ff7999ed71e349580c1758a9260551e46e73ea5e6695d6b3"
+    },
+    {
+      "path": "ISOLATION.md",
+      "sha256": "e9d450c220558f2a545ec51a017025f6fbb5879ec215daa388aa728ccd5be90a"
+    },
+    {
+      "path": "SUBMISSION.md",
+      "sha256": "30b8704b1bad0fae07426e463ed5c811501f2c6a7586958729a627955fed358d"
+    },
+    {
+      "path": "NEXT-STEPS.md",
+      "sha256": "bba0386483a8eeaeed032cc81625cd5cd3e087e98d0ff4a15a1d90744f8b368f"
+    },
+    {
+      "path": "REVIEW.md",
+      "sha256": "2acfcd78ff06b3d5bcebf7dc307143edd2bbc002ce4f0ae62259fe80a0b240fa"
+    },
+    {
+      "path": "REVIEWER-GUIDE.md",
+      "sha256": "476ef0537e60fc9d3ed11a092aa161b5fdbce4dce61dbfc228d4cd88274f6bb7"
+    },
+    {
+      "path": "SUBMISSION-REPORT.md",
+      "sha256": "a461245abcb42b7d3ebf213333bead1bb174e047b8d051811d729b708c91676f"
+    },
+    {
+      "path": "SUBMISSION-INTRODUCTION.md",
+      "sha256": "3b9059adf842bd5d3f4a6908f4dd065a0244508ee7ccf1f00a38231b9f98d4a6"
+    },
+    {
+      "path": "POST-SUBMISSION-PLAN.md",
+      "sha256": "c4a1f67b6b2d1a3497b073855e90b3150a6f1bc48909af96e00d9cc76d905e27"
+    },
+    {
+      "path": "CAMERA-04-RESULT.md",
+      "sha256": "868ead6e9181556f6e2c86fb937183eefea30c5b572cbbbebac01799008399fa"
+    },
+    {
+      "path": "JEV-RESILIENCE-V3-DESIGN.md",
+      "sha256": "eba479d6d4f00d4441e71ec25d978ee86f46ec51ab82effa1d08dfb47029d341"
+    },
+    {
+      "path": "JEV-PROTOCOL-AUDIT-CAMERA-03.md",
+      "sha256": "ad697b75312b3fb0bb8ea73147f1b635b745f1c82c5b020b9aabc6aacb321d3f"
+    },
+    {
+      "path": "BATCH-CAMERA03-CHECKS.md",
+      "sha256": "afc42c7d7874ae292cb4f706f52a069e67c2067568e4038da4593427331e54d4"
+    },
+    {
+      "path": "BATCH-CAMERA04-CHECKS.md",
+      "sha256": "01e4415e240c4436611e999cc677762ea0926bf0a83e2da7d9c907fcac24dfaf"
+    },
+    {
+      "path": "QUALITY-V6-DESIGN.md",
+      "sha256": "5c98582f970d22c45cf0e17876f6a27175c26ea95974be530dc3d80b665678c1"
+    },
+    {
+      "path": "BATCH-QUALITY-V6-CHECKS.md",
+      "sha256": "edd40ffa93b9dc5398d7470231174d68cf1286590008d417cd57b187a7bc6fae"
+    },
+    {
+      "path": "CURRENT-PROGRESS.md",
+      "sha256": "2feed15079fdd8b1c27be81fcacede55c50bc733a37f71beb5b3661aae193c1b"
+    },
+    {
+      "path": "PACKAGE-NOTES.md",
+      "sha256": "5b7c03770642beeb81c6ef4afb81396a45441c942d9293f221159c302e4030f8"
+    }
+  ]
+}

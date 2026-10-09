@@ -1,0 +1,20 @@
+[
+  {
+    "passed": true,
+    "checks": [
+      {
+        "name": "页面加载、可见内容与 JavaScript",
+        "passed": true
+      },
+      {
+        "name": "Mock 边界可见与初始零任务",
+        "passed": true
+      },
+      {
+        "name": "两任务状态筛选与统计回归",
+        "passed": true
+      }
+    ],
+    "summary": "独立 Chromium 验收通过，交互与输出已验证。"
+  }
+]

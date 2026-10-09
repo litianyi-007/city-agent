@@ -1,0 +1,1228 @@
+{
+  "version": "verifier-real02-derived-metrics-v1",
+  "evidenceSource": "retained call-result/decision-result and actual oracle-result events; no static labels substituted",
+  "sourceCommit": "7899b9792dc611f30958a085908add660f3b156d",
+  "sourceFiles": 47,
+  "controlRunId": "6eaf79ac-0244-48b7-b2d2-aa8bef84ea9d",
+  "nativeRunId": "1766a3be-fbd4-4217-894f-350a68a06d66",
+  "frozenStudySha256": "67165b1343b0e67e55f659662529f77ce40aa2e0ed52e569adbba3ef33af5310",
+  "manifestBytesSha256": "ec75ed83a7f37d94b365a3a9a87a9ad581f98fd3019e5b4874a2d2b3ed7dcb73",
+  "durationMs": 370649,
+  "events": 286,
+  "blindDecisionCount": 54,
+  "lastDecisionEvent": 213,
+  "firstOracleIntentEvent": 214,
+  "oracleCandidateCount": 36,
+  "goodCandidates": 16,
+  "badCandidates": 20,
+  "allBadPoolCount": 6,
+  "hasGoodPoolCount": 12,
+  "byStrategy": [
+    {
+      "strategy": "baseline",
+      "planned": 18,
+      "goodSelected": 8,
+      "badAccepted": 10,
+      "abstained": 0,
+      "correctAllBadAbstentions": 0,
+      "falseAbstentions": 0,
+      "calls": 0,
+      "inputTokens": 0,
+      "outputTokens": 0,
+      "estimatedCostUsd": 0
+    },
+    {
+      "strategy": "llm",
+      "planned": 18,
+      "goodSelected": 12,
+      "badAccepted": 4,
+      "abstained": 2,
+      "correctAllBadAbstentions": 2,
+      "falseAbstentions": 0,
+      "calls": 18,
+      "inputTokens": 115538,
+      "outputTokens": 2806,
+      "estimatedCostUsd": 0.0380286
+    },
+    {
+      "strategy": "jev-cascade",
+      "planned": 18,
+      "goodSelected": 11,
+      "badAccepted": 2,
+      "abstained": 5,
+      "correctAllBadAbstentions": 4,
+      "falseAbstentions": 1,
+      "calls": 34,
+      "inputTokens": 227448,
+      "outputTokens": 5751,
+      "estimatedCostUsd": 0.039267846
+    }
+  ],
+  "cascadeJev": {
+    "calls": 18,
+    "inputTokens": 123413,
+    "outputTokens": 3356,
+    "estimatedCostUsd": 0.005183346
+  },
+  "cascadeUpgradedLlm": {
+    "calls": 16,
+    "inputTokens": 104035,
+    "outputTokens": 2395,
+    "estimatedCostUsd": 0.0340845
+  },
+  "totals": {
+    "calls": 52,
+    "inputTokens": 342986,
+    "outputTokens": 8557,
+    "estimatedCostUsd": 0.077296446
+  },
+  "billing": {
+    "basis": "declared non-cache conservative prices; not provider bill",
+    "actualProviderBill": null,
+    "unknownCalls": 0
+  },
+  "valueVerdict": {
+    "goodSelectedNotBelowB": false,
+    "badAcceptedNotAboveB": true,
+    "costBelowB": false,
+    "highValue": false,
+    "costDeltaUsd": 0.001239246,
+    "costDeltaPercent": 3.2587210678278966
+  },
+  "pools": [
+    {
+      "poolId": "H01",
+      "candidates": [
+        {
+          "id": "cand-f15c",
+          "passed": true,
+          "oracleEvent": 215
+        },
+        {
+          "id": "cand-62d8",
+          "passed": false,
+          "oracleEvent": 217
+        }
+      ],
+      "hasGoodCandidate": true,
+      "choices": [
+        {
+          "strategy": "baseline",
+          "decisionEvent": 3,
+          "decision": "accept",
+          "selectedCandidateId": "cand-f15c",
+          "selectedPassed": true,
+          "engine": "baseline",
+          "fallbackKind": null,
+          "usage": {
+            "calls": 0,
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "estimatedCostUsd": 0
+          }
+        },
+        {
+          "strategy": "llm",
+          "decisionEvent": 7,
+          "decision": "accept",
+          "selectedCandidateId": "cand-f15c",
+          "selectedPassed": true,
+          "engine": "llm",
+          "fallbackKind": null,
+          "usage": {
+            "calls": 1,
+            "inputTokens": 7029,
+            "outputTokens": 168,
+            "estimatedCostUsd": 0.0023103
+          }
+        },
+        {
+          "strategy": "jev-cascade",
+          "decisionEvent": 13,
+          "decision": "accept",
+          "selectedCandidateId": "cand-f15c",
+          "selectedPassed": true,
+          "engine": "jev-llm-protocol-fallback",
+          "fallbackKind": "arithmetic-drift",
+          "usage": {
+            "calls": 2,
+            "inputTokens": 15641,
+            "outputTokens": 317,
+            "estimatedCostUsd": 0.002626404
+          }
+        }
+      ]
+    },
+    {
+      "poolId": "H02",
+      "candidates": [
+        {
+          "id": "cand-7ab2",
+          "passed": false,
+          "oracleEvent": 219
+        },
+        {
+          "id": "cand-d90e",
+          "passed": false,
+          "oracleEvent": 221
+        }
+      ],
+      "hasGoodCandidate": false,
+      "choices": [
+        {
+          "strategy": "baseline",
+          "decisionEvent": 15,
+          "decision": "accept",
+          "selectedCandidateId": "cand-7ab2",
+          "selectedPassed": false,
+          "engine": "baseline",
+          "fallbackKind": null,
+          "usage": {
+            "calls": 0,
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "estimatedCostUsd": 0
+          }
+        },
+        {
+          "strategy": "llm",
+          "decisionEvent": 19,
+          "decision": "accept",
+          "selectedCandidateId": "cand-7ab2",
+          "selectedPassed": false,
+          "engine": "llm",
+          "fallbackKind": null,
+          "usage": {
+            "calls": 1,
+            "inputTokens": 6869,
+            "outputTokens": 170,
+            "estimatedCostUsd": 0.0022647
+          }
+        },
+        {
+          "strategy": "jev-cascade",
+          "decisionEvent": 25,
+          "decision": "accept",
+          "selectedCandidateId": "cand-d90e",
+          "selectedPassed": false,
+          "engine": "jev-llm-protocol-fallback",
+          "fallbackKind": "arithmetic-drift",
+          "usage": {
+            "calls": 2,
+            "inputTokens": 15364,
+            "outputTokens": 328,
+            "estimatedCostUsd": 0.00258789
+          }
+        }
+      ]
+    },
+    {
+      "poolId": "H03",
+      "candidates": [
+        {
+          "id": "cand-3e91",
+          "passed": false,
+          "oracleEvent": 223
+        },
+        {
+          "id": "cand-80c4",
+          "passed": true,
+          "oracleEvent": 225
+        }
+      ],
+      "hasGoodCandidate": true,
+      "choices": [
+        {
+          "strategy": "baseline",
+          "decisionEvent": 27,
+          "decision": "accept",
+          "selectedCandidateId": "cand-3e91",
+          "selectedPassed": false,
+          "engine": "baseline",
+          "fallbackKind": null,
+          "usage": {
+            "calls": 0,
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "estimatedCostUsd": 0
+          }
+        },
+        {
+          "strategy": "llm",
+          "decisionEvent": 31,
+          "decision": "accept",
+          "selectedCandidateId": "cand-80c4",
+          "selectedPassed": true,
+          "engine": "llm",
+          "fallbackKind": null,
+          "usage": {
+            "calls": 1,
+            "inputTokens": 7419,
+            "outputTokens": 209,
+            "estimatedCostUsd": 0.0024765
+          }
+        },
+        {
+          "strategy": "jev-cascade",
+          "decisionEvent": 37,
+          "decision": "accept",
+          "selectedCandidateId": "cand-80c4",
+          "selectedPassed": true,
+          "engine": "jev-llm-protocol-fallback",
+          "fallbackKind": "arithmetic-drift",
+          "usage": {
+            "calls": 2,
+            "inputTokens": 16821,
+            "outputTokens": 389,
+            "estimatedCostUsd": 0.002860584
+          }
+        }
+      ]
+    },
+    {
+      "poolId": "H04",
+      "candidates": [
+        {
+          "id": "cand-49fe",
+          "passed": true,
+          "oracleEvent": 227
+        },
+        {
+          "id": "cand-ac26",
+          "passed": true,
+          "oracleEvent": 229
+        }
+      ],
+      "hasGoodCandidate": true,
+      "choices": [
+        {
+          "strategy": "baseline",
+          "decisionEvent": 39,
+          "decision": "accept",
+          "selectedCandidateId": "cand-49fe",
+          "selectedPassed": true,
+          "engine": "baseline",
+          "fallbackKind": null,
+          "usage": {
+            "calls": 0,
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "estimatedCostUsd": 0
+          }
+        },
+        {
+          "strategy": "llm",
+          "decisionEvent": 43,
+          "decision": "accept",
+          "selectedCandidateId": "cand-49fe",
+          "selectedPassed": true,
+          "engine": "llm",
+          "fallbackKind": null,
+          "usage": {
+            "calls": 1,
+            "inputTokens": 6995,
+            "outputTokens": 148,
+            "estimatedCostUsd": 0.0022761
+          }
+        },
+        {
+          "strategy": "jev-cascade",
+          "decisionEvent": 49,
+          "decision": "accept",
+          "selectedCandidateId": "cand-ac26",
+          "selectedPassed": true,
+          "engine": "jev-llm-protocol-fallback",
+          "fallbackKind": "arithmetic-drift",
+          "usage": {
+            "calls": 2,
+            "inputTokens": 15513,
+            "outputTokens": 374,
+            "estimatedCostUsd": 0.002685456
+          }
+        }
+      ]
+    },
+    {
+      "poolId": "H05",
+      "candidates": [
+        {
+          "id": "cand-6b07",
+          "passed": false,
+          "oracleEvent": 231
+        },
+        {
+          "id": "cand-c8a3",
+          "passed": false,
+          "oracleEvent": 233
+        }
+      ],
+      "hasGoodCandidate": false,
+      "choices": [
+        {
+          "strategy": "baseline",
+          "decisionEvent": 51,
+          "decision": "accept",
+          "selectedCandidateId": "cand-6b07",
+          "selectedPassed": false,
+          "engine": "baseline",
+          "fallbackKind": null,
+          "usage": {
+            "calls": 0,
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "estimatedCostUsd": 0
+          }
+        },
+        {
+          "strategy": "llm",
+          "decisionEvent": 55,
+          "decision": "accept",
+          "selectedCandidateId": "cand-c8a3",
+          "selectedPassed": false,
+          "engine": "llm",
+          "fallbackKind": null,
+          "usage": {
+            "calls": 1,
+            "inputTokens": 7285,
+            "outputTokens": 135,
+            "estimatedCostUsd": 0.0023475
+          }
+        },
+        {
+          "strategy": "jev-cascade",
+          "decisionEvent": 61,
+          "decision": "abstain",
+          "selectedCandidateId": null,
+          "selectedPassed": null,
+          "engine": "jev-llm-protocol-fallback",
+          "fallbackKind": "arithmetic-drift",
+          "usage": {
+            "calls": 2,
+            "inputTokens": 16186,
+            "outputTokens": 322,
+            "estimatedCostUsd": 0.002723742
+          }
+        }
+      ]
+    },
+    {
+      "poolId": "H06",
+      "candidates": [
+        {
+          "id": "cand-e5d2",
+          "passed": true,
+          "oracleEvent": 235
+        },
+        {
+          "id": "cand-19f4",
+          "passed": false,
+          "oracleEvent": 237
+        }
+      ],
+      "hasGoodCandidate": true,
+      "choices": [
+        {
+          "strategy": "baseline",
+          "decisionEvent": 63,
+          "decision": "accept",
+          "selectedCandidateId": "cand-e5d2",
+          "selectedPassed": true,
+          "engine": "baseline",
+          "fallbackKind": null,
+          "usage": {
+            "calls": 0,
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "estimatedCostUsd": 0
+          }
+        },
+        {
+          "strategy": "llm",
+          "decisionEvent": 67,
+          "decision": "accept",
+          "selectedCandidateId": "cand-e5d2",
+          "selectedPassed": true,
+          "engine": "llm",
+          "fallbackKind": null,
+          "usage": {
+            "calls": 1,
+            "inputTokens": 6644,
+            "outputTokens": 146,
+            "estimatedCostUsd": 0.0021684
+          }
+        },
+        {
+          "strategy": "jev-cascade",
+          "decisionEvent": 73,
+          "decision": "accept",
+          "selectedCandidateId": "cand-e5d2",
+          "selectedPassed": true,
+          "engine": "jev-llm-protocol-fallback",
+          "fallbackKind": "arithmetic-drift",
+          "usage": {
+            "calls": 2,
+            "inputTokens": 14400,
+            "outputTokens": 348,
+            "estimatedCostUsd": 0.002512152
+          }
+        }
+      ]
+    },
+    {
+      "poolId": "H07",
+      "candidates": [
+        {
+          "id": "cand-28c5",
+          "passed": true,
+          "oracleEvent": 239
+        },
+        {
+          "id": "cand-a760",
+          "passed": true,
+          "oracleEvent": 241
+        }
+      ],
+      "hasGoodCandidate": true,
+      "choices": [
+        {
+          "strategy": "baseline",
+          "decisionEvent": 75,
+          "decision": "accept",
+          "selectedCandidateId": "cand-28c5",
+          "selectedPassed": true,
+          "engine": "baseline",
+          "fallbackKind": null,
+          "usage": {
+            "calls": 0,
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "estimatedCostUsd": 0
+          }
+        },
+        {
+          "strategy": "llm",
+          "decisionEvent": 79,
+          "decision": "accept",
+          "selectedCandidateId": "cand-28c5",
+          "selectedPassed": true,
+          "engine": "llm",
+          "fallbackKind": null,
+          "usage": {
+            "calls": 1,
+            "inputTokens": 5840,
+            "outputTokens": 154,
+            "estimatedCostUsd": 0.0019368
+          }
+        },
+        {
+          "strategy": "jev-cascade",
+          "decisionEvent": 85,
+          "decision": "accept",
+          "selectedCandidateId": "cand-28c5",
+          "selectedPassed": true,
+          "engine": "jev-llm-protocol-fallback",
+          "fallbackKind": "arithmetic-drift",
+          "usage": {
+            "calls": 2,
+            "inputTokens": 12024,
+            "outputTokens": 333,
+            "estimatedCostUsd": 0.002185728
+          }
+        }
+      ]
+    },
+    {
+      "poolId": "H08",
+      "candidates": [
+        {
+          "id": "cand-73de",
+          "passed": false,
+          "oracleEvent": 243
+        },
+        {
+          "id": "cand-4b81",
+          "passed": false,
+          "oracleEvent": 245
+        }
+      ],
+      "hasGoodCandidate": false,
+      "choices": [
+        {
+          "strategy": "baseline",
+          "decisionEvent": 87,
+          "decision": "accept",
+          "selectedCandidateId": "cand-73de",
+          "selectedPassed": false,
+          "engine": "baseline",
+          "fallbackKind": null,
+          "usage": {
+            "calls": 0,
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "estimatedCostUsd": 0
+          }
+        },
+        {
+          "strategy": "llm",
+          "decisionEvent": 91,
+          "decision": "accept",
+          "selectedCandidateId": "cand-73de",
+          "selectedPassed": false,
+          "engine": "llm",
+          "fallbackKind": null,
+          "usage": {
+            "calls": 1,
+            "inputTokens": 5466,
+            "outputTokens": 164,
+            "estimatedCostUsd": 0.0018366
+          }
+        },
+        {
+          "strategy": "jev-cascade",
+          "decisionEvent": 97,
+          "decision": "abstain",
+          "selectedCandidateId": null,
+          "selectedPassed": null,
+          "engine": "jev-llm-protocol-fallback",
+          "fallbackKind": "arithmetic-drift",
+          "usage": {
+            "calls": 2,
+            "inputTokens": 11240,
+            "outputTokens": 331,
+            "estimatedCostUsd": 0.002053908
+          }
+        }
+      ]
+    },
+    {
+      "poolId": "H09",
+      "candidates": [
+        {
+          "id": "cand-e105",
+          "passed": false,
+          "oracleEvent": 247
+        },
+        {
+          "id": "cand-6f92",
+          "passed": true,
+          "oracleEvent": 249
+        }
+      ],
+      "hasGoodCandidate": true,
+      "choices": [
+        {
+          "strategy": "baseline",
+          "decisionEvent": 99,
+          "decision": "accept",
+          "selectedCandidateId": "cand-e105",
+          "selectedPassed": false,
+          "engine": "baseline",
+          "fallbackKind": null,
+          "usage": {
+            "calls": 0,
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "estimatedCostUsd": 0
+          }
+        },
+        {
+          "strategy": "llm",
+          "decisionEvent": 103,
+          "decision": "accept",
+          "selectedCandidateId": "cand-6f92",
+          "selectedPassed": true,
+          "engine": "llm",
+          "fallbackKind": null,
+          "usage": {
+            "calls": 1,
+            "inputTokens": 6175,
+            "outputTokens": 149,
+            "estimatedCostUsd": 0.0020313
+          }
+        },
+        {
+          "strategy": "jev-cascade",
+          "decisionEvent": 109,
+          "decision": "accept",
+          "selectedCandidateId": "cand-6f92",
+          "selectedPassed": true,
+          "engine": "jev-llm-protocol-fallback",
+          "fallbackKind": "arithmetic-drift",
+          "usage": {
+            "calls": 2,
+            "inputTokens": 13070,
+            "outputTokens": 321,
+            "estimatedCostUsd": 0.00230169
+          }
+        }
+      ]
+    },
+    {
+      "poolId": "H10",
+      "candidates": [
+        {
+          "id": "cand-90ac",
+          "passed": false,
+          "oracleEvent": 251
+        },
+        {
+          "id": "cand-2d47",
+          "passed": false,
+          "oracleEvent": 253
+        }
+      ],
+      "hasGoodCandidate": false,
+      "choices": [
+        {
+          "strategy": "baseline",
+          "decisionEvent": 111,
+          "decision": "accept",
+          "selectedCandidateId": "cand-90ac",
+          "selectedPassed": false,
+          "engine": "baseline",
+          "fallbackKind": null,
+          "usage": {
+            "calls": 0,
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "estimatedCostUsd": 0
+          }
+        },
+        {
+          "strategy": "llm",
+          "decisionEvent": 115,
+          "decision": "accept",
+          "selectedCandidateId": "cand-90ac",
+          "selectedPassed": false,
+          "engine": "llm",
+          "fallbackKind": null,
+          "usage": {
+            "calls": 1,
+            "inputTokens": 7088,
+            "outputTokens": 172,
+            "estimatedCostUsd": 0.0023328
+          }
+        },
+        {
+          "strategy": "jev-cascade",
+          "decisionEvent": 121,
+          "decision": "accept",
+          "selectedCandidateId": "cand-90ac",
+          "selectedPassed": false,
+          "engine": "jev-llm-fallback",
+          "fallbackKind": "uncertain",
+          "usage": {
+            "calls": 2,
+            "inputTokens": 15626,
+            "outputTokens": 325,
+            "estimatedCostUsd": 0.002649396
+          }
+        }
+      ]
+    },
+    {
+      "poolId": "H11",
+      "candidates": [
+        {
+          "id": "cand-c38e",
+          "passed": true,
+          "oracleEvent": 255
+        },
+        {
+          "id": "cand-51b4",
+          "passed": true,
+          "oracleEvent": 257
+        }
+      ],
+      "hasGoodCandidate": true,
+      "choices": [
+        {
+          "strategy": "baseline",
+          "decisionEvent": 123,
+          "decision": "accept",
+          "selectedCandidateId": "cand-c38e",
+          "selectedPassed": true,
+          "engine": "baseline",
+          "fallbackKind": null,
+          "usage": {
+            "calls": 0,
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "estimatedCostUsd": 0
+          }
+        },
+        {
+          "strategy": "llm",
+          "decisionEvent": 127,
+          "decision": "accept",
+          "selectedCandidateId": "cand-c38e",
+          "selectedPassed": true,
+          "engine": "llm",
+          "fallbackKind": null,
+          "usage": {
+            "calls": 1,
+            "inputTokens": 7359,
+            "outputTokens": 166,
+            "estimatedCostUsd": 0.0024069
+          }
+        },
+        {
+          "strategy": "jev-cascade",
+          "decisionEvent": 133,
+          "decision": "accept",
+          "selectedCandidateId": "cand-51b4",
+          "selectedPassed": true,
+          "engine": "jev-llm-protocol-fallback",
+          "fallbackKind": "arithmetic-drift",
+          "usage": {
+            "calls": 2,
+            "inputTokens": 16054,
+            "outputTokens": 338,
+            "estimatedCostUsd": 0.00275649
+          }
+        }
+      ]
+    },
+    {
+      "poolId": "H12",
+      "candidates": [
+        {
+          "id": "cand-8fa2",
+          "passed": true,
+          "oracleEvent": 259
+        },
+        {
+          "id": "cand-36d9",
+          "passed": false,
+          "oracleEvent": 261
+        }
+      ],
+      "hasGoodCandidate": true,
+      "choices": [
+        {
+          "strategy": "baseline",
+          "decisionEvent": 135,
+          "decision": "accept",
+          "selectedCandidateId": "cand-8fa2",
+          "selectedPassed": true,
+          "engine": "baseline",
+          "fallbackKind": null,
+          "usage": {
+            "calls": 0,
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "estimatedCostUsd": 0
+          }
+        },
+        {
+          "strategy": "llm",
+          "decisionEvent": 139,
+          "decision": "accept",
+          "selectedCandidateId": "cand-8fa2",
+          "selectedPassed": true,
+          "engine": "llm",
+          "fallbackKind": null,
+          "usage": {
+            "calls": 1,
+            "inputTokens": 6600,
+            "outputTokens": 185,
+            "estimatedCostUsd": 0.002202
+          }
+        },
+        {
+          "strategy": "jev-cascade",
+          "decisionEvent": 145,
+          "decision": "accept",
+          "selectedCandidateId": "cand-8fa2",
+          "selectedPassed": true,
+          "engine": "jev-llm-protocol-fallback",
+          "fallbackKind": "arithmetic-drift",
+          "usage": {
+            "calls": 2,
+            "inputTokens": 14196,
+            "outputTokens": 353,
+            "estimatedCostUsd": 0.002498232
+          }
+        }
+      ]
+    },
+    {
+      "poolId": "C13",
+      "candidates": [
+        {
+          "id": "cand-f732",
+          "passed": false,
+          "oracleEvent": 263
+        },
+        {
+          "id": "cand-20c6",
+          "passed": true,
+          "oracleEvent": 265
+        }
+      ],
+      "hasGoodCandidate": true,
+      "choices": [
+        {
+          "strategy": "baseline",
+          "decisionEvent": 147,
+          "decision": "accept",
+          "selectedCandidateId": "cand-f732",
+          "selectedPassed": false,
+          "engine": "baseline",
+          "fallbackKind": null,
+          "usage": {
+            "calls": 0,
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "estimatedCostUsd": 0
+          }
+        },
+        {
+          "strategy": "llm",
+          "decisionEvent": 151,
+          "decision": "accept",
+          "selectedCandidateId": "cand-20c6",
+          "selectedPassed": true,
+          "engine": "llm",
+          "fallbackKind": null,
+          "usage": {
+            "calls": 1,
+            "inputTokens": 5739,
+            "outputTokens": 150,
+            "estimatedCostUsd": 0.0019017
+          }
+        },
+        {
+          "strategy": "jev-cascade",
+          "decisionEvent": 157,
+          "decision": "accept",
+          "selectedCandidateId": "cand-20c6",
+          "selectedPassed": true,
+          "engine": "jev-llm-fallback",
+          "fallbackKind": "uncertain",
+          "usage": {
+            "calls": 2,
+            "inputTokens": 10314,
+            "outputTokens": 357,
+            "estimatedCostUsd": 0.00211665
+          }
+        }
+      ]
+    },
+    {
+      "poolId": "C14",
+      "candidates": [
+        {
+          "id": "cand-57de",
+          "passed": false,
+          "oracleEvent": 267
+        },
+        {
+          "id": "cand-aca4",
+          "passed": false,
+          "oracleEvent": 269
+        }
+      ],
+      "hasGoodCandidate": false,
+      "choices": [
+        {
+          "strategy": "baseline",
+          "decisionEvent": 159,
+          "decision": "accept",
+          "selectedCandidateId": "cand-57de",
+          "selectedPassed": false,
+          "engine": "baseline",
+          "fallbackKind": null,
+          "usage": {
+            "calls": 0,
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "estimatedCostUsd": 0
+          }
+        },
+        {
+          "strategy": "llm",
+          "decisionEvent": 163,
+          "decision": "abstain",
+          "selectedCandidateId": null,
+          "selectedPassed": null,
+          "engine": "llm",
+          "fallbackKind": null,
+          "usage": {
+            "calls": 1,
+            "inputTokens": 5714,
+            "outputTokens": 125,
+            "estimatedCostUsd": 0.0018642
+          }
+        },
+        {
+          "strategy": "jev-cascade",
+          "decisionEvent": 167,
+          "decision": "abstain",
+          "selectedCandidateId": null,
+          "selectedPassed": null,
+          "engine": "jev",
+          "fallbackKind": null,
+          "usage": {
+            "calls": 1,
+            "inputTokens": 4554,
+            "outputTokens": 183,
+            "estimatedCostUsd": 0.000191268
+          }
+        }
+      ]
+    },
+    {
+      "poolId": "C15",
+      "candidates": [
+        {
+          "id": "cand-d180",
+          "passed": true,
+          "oracleEvent": 271
+        },
+        {
+          "id": "cand-6ac9",
+          "passed": false,
+          "oracleEvent": 273
+        }
+      ],
+      "hasGoodCandidate": true,
+      "choices": [
+        {
+          "strategy": "baseline",
+          "decisionEvent": 169,
+          "decision": "accept",
+          "selectedCandidateId": "cand-d180",
+          "selectedPassed": true,
+          "engine": "baseline",
+          "fallbackKind": null,
+          "usage": {
+            "calls": 0,
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "estimatedCostUsd": 0
+          }
+        },
+        {
+          "strategy": "llm",
+          "decisionEvent": 173,
+          "decision": "accept",
+          "selectedCandidateId": "cand-d180",
+          "selectedPassed": true,
+          "engine": "llm",
+          "fallbackKind": null,
+          "usage": {
+            "calls": 1,
+            "inputTokens": 5804,
+            "outputTokens": 130,
+            "estimatedCostUsd": 0.0018972
+          }
+        },
+        {
+          "strategy": "jev-cascade",
+          "decisionEvent": 179,
+          "decision": "accept",
+          "selectedCandidateId": "cand-d180",
+          "selectedPassed": true,
+          "engine": "jev-llm-fallback",
+          "fallbackKind": "uncertain",
+          "usage": {
+            "calls": 2,
+            "inputTokens": 10481,
+            "outputTokens": 327,
+            "estimatedCostUsd": 0.002106834
+          }
+        }
+      ]
+    },
+    {
+      "poolId": "C16",
+      "candidates": [
+        {
+          "id": "cand-e409",
+          "passed": true,
+          "oracleEvent": 275
+        },
+        {
+          "id": "cand-184f",
+          "passed": true,
+          "oracleEvent": 277
+        }
+      ],
+      "hasGoodCandidate": true,
+      "choices": [
+        {
+          "strategy": "baseline",
+          "decisionEvent": 181,
+          "decision": "accept",
+          "selectedCandidateId": "cand-e409",
+          "selectedPassed": true,
+          "engine": "baseline",
+          "fallbackKind": null,
+          "usage": {
+            "calls": 0,
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "estimatedCostUsd": 0
+          }
+        },
+        {
+          "strategy": "llm",
+          "decisionEvent": 185,
+          "decision": "accept",
+          "selectedCandidateId": "cand-e409",
+          "selectedPassed": true,
+          "engine": "llm",
+          "fallbackKind": null,
+          "usage": {
+            "calls": 1,
+            "inputTokens": 5789,
+            "outputTokens": 170,
+            "estimatedCostUsd": 0.0019407
+          }
+        },
+        {
+          "strategy": "jev-cascade",
+          "decisionEvent": 189,
+          "decision": "abstain",
+          "selectedCandidateId": null,
+          "selectedPassed": null,
+          "engine": "jev",
+          "fallbackKind": null,
+          "usage": {
+            "calls": 1,
+            "inputTokens": 4680,
+            "outputTokens": 185,
+            "estimatedCostUsd": 0.00019656
+          }
+        }
+      ]
+    },
+    {
+      "poolId": "C17",
+      "candidates": [
+        {
+          "id": "cand-61fb",
+          "passed": false,
+          "oracleEvent": 279
+        },
+        {
+          "id": "cand-834c",
+          "passed": false,
+          "oracleEvent": 281
+        }
+      ],
+      "hasGoodCandidate": false,
+      "choices": [
+        {
+          "strategy": "baseline",
+          "decisionEvent": 191,
+          "decision": "accept",
+          "selectedCandidateId": "cand-61fb",
+          "selectedPassed": false,
+          "engine": "baseline",
+          "fallbackKind": null,
+          "usage": {
+            "calls": 0,
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "estimatedCostUsd": 0
+          }
+        },
+        {
+          "strategy": "llm",
+          "decisionEvent": 195,
+          "decision": "abstain",
+          "selectedCandidateId": null,
+          "selectedPassed": null,
+          "engine": "llm",
+          "fallbackKind": null,
+          "usage": {
+            "calls": 1,
+            "inputTokens": 5913,
+            "outputTokens": 129,
+            "estimatedCostUsd": 0.0019287
+          }
+        },
+        {
+          "strategy": "jev-cascade",
+          "decisionEvent": 201,
+          "decision": "abstain",
+          "selectedCandidateId": null,
+          "selectedPassed": null,
+          "engine": "jev-llm-protocol-fallback",
+          "fallbackKind": "arithmetic-drift",
+          "usage": {
+            "calls": 2,
+            "inputTokens": 10728,
+            "outputTokens": 304,
+            "estimatedCostUsd": 0.00211893
+          }
+        }
+      ]
+    },
+    {
+      "poolId": "C18",
+      "candidates": [
+        {
+          "id": "cand-9ec2",
+          "passed": false,
+          "oracleEvent": 283
+        },
+        {
+          "id": "cand-510b",
+          "passed": true,
+          "oracleEvent": 285
+        }
+      ],
+      "hasGoodCandidate": true,
+      "choices": [
+        {
+          "strategy": "baseline",
+          "decisionEvent": 203,
+          "decision": "accept",
+          "selectedCandidateId": "cand-9ec2",
+          "selectedPassed": false,
+          "engine": "baseline",
+          "fallbackKind": null,
+          "usage": {
+            "calls": 0,
+            "inputTokens": 0,
+            "outputTokens": 0,
+            "estimatedCostUsd": 0
+          }
+        },
+        {
+          "strategy": "llm",
+          "decisionEvent": 207,
+          "decision": "accept",
+          "selectedCandidateId": "cand-510b",
+          "selectedPassed": true,
+          "engine": "llm",
+          "fallbackKind": null,
+          "usage": {
+            "calls": 1,
+            "inputTokens": 5810,
+            "outputTokens": 136,
+            "estimatedCostUsd": 0.0019062
+          }
+        },
+        {
+          "strategy": "jev-cascade",
+          "decisionEvent": 213,
+          "decision": "accept",
+          "selectedCandidateId": "cand-510b",
+          "selectedPassed": true,
+          "engine": "jev-llm-fallback",
+          "fallbackKind": "uncertain",
+          "usage": {
+            "calls": 2,
+            "inputTokens": 10556,
+            "outputTokens": 316,
+            "estimatedCostUsd": 0.002095932
+          }
+        }
+      ]
+    }
+  ]
+}

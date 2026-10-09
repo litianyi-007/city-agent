@@ -1,0 +1,260 @@
+{
+  "version": "production-delivery-v1",
+  "runId": "18207ab0-cb91-4a0b-975e-b077d8e012e1",
+  "platformCommit": "c21c588632d04dc7ed9dfa8cb265606400d2b522",
+  "status": "completed",
+  "evidenceKind": "fixture",
+  "capability": "offline-single-html",
+  "requirement": {
+    "id": "MOCK-03",
+    "source": "用户授权自拟模拟需求，2026-10-07；人工构造缺陷的修复演练",
+    "background": "检查反例、错误反馈与修复后的回归；fixture 的修复不能计为真实模型自主修复。",
+    "acceptance": "空输入、纯空格提交均保持零项并显示提示；连续添加“回归接口”和“检查日志”恰好两项；删除第一条后第二条仍在，总数为一。",
+    "difficulty": "medium",
+    "kind": "illustrative"
+  },
+  "frozenContract": {
+    "version": "production-acceptance-v2",
+    "hash": "5241ed2c655203e448de06493b485248e9c5138e44e6ed36d7db720a293e3c69",
+    "requirementHash": "3829b40f81e89c3318e5558a03589d35ea5234d672651b275c53c71442e4c6e0",
+    "checks": [
+      {
+        "name": "Mock 边界可见与初始零任务",
+        "steps": [
+          {
+            "action": "assertText",
+            "selector": "#notice",
+            "text": "Mock"
+          },
+          {
+            "action": "assertTextExact",
+            "selector": "#count",
+            "text": "0"
+          },
+          {
+            "action": "assertCount",
+            "selector": "#tasks li",
+            "count": 0
+          }
+        ]
+      },
+      {
+        "name": "拒绝空输入及空格，连续添加和删除不丢项",
+        "steps": [
+          {
+            "action": "click",
+            "selector": "#add-task"
+          },
+          {
+            "action": "assertCount",
+            "selector": "#tasks li",
+            "count": 0
+          },
+          {
+            "action": "assertTextExact",
+            "selector": "#feedback",
+            "text": "任务不能为空"
+          },
+          {
+            "action": "fill",
+            "selector": "#task-input",
+            "value": "   "
+          },
+          {
+            "action": "click",
+            "selector": "#add-task"
+          },
+          {
+            "action": "assertCount",
+            "selector": "#tasks li",
+            "count": 0
+          },
+          {
+            "action": "assertTextExact",
+            "selector": "#feedback",
+            "text": "任务不能为空"
+          },
+          {
+            "action": "fill",
+            "selector": "#task-input",
+            "value": "回归接口"
+          },
+          {
+            "action": "click",
+            "selector": "#add-task"
+          },
+          {
+            "action": "fill",
+            "selector": "#task-input",
+            "value": "检查日志"
+          },
+          {
+            "action": "click",
+            "selector": "#add-task"
+          },
+          {
+            "action": "assertCount",
+            "selector": "#tasks li",
+            "count": 2
+          },
+          {
+            "action": "assertTextExact",
+            "selector": "#count",
+            "text": "2"
+          },
+          {
+            "action": "click",
+            "selector": "[data-task-id=\"0\"] .delete"
+          },
+          {
+            "action": "assertCount",
+            "selector": "#tasks li",
+            "count": 1
+          },
+          {
+            "action": "assertTextExact",
+            "selector": "#count",
+            "text": "1"
+          },
+          {
+            "action": "assertTextExact",
+            "selector": "#tasks li span",
+            "text": "检查日志"
+          }
+        ]
+      }
+    ],
+    "frozenAt": "2026-10-07T04:45:25.747Z"
+  },
+  "promptVersion": "production-html-v6",
+  "verifierVersion": "verifier-phase-ordinal-v3",
+  "outputContractVersion": "production-output-contract-v1",
+  "repairPolicyVersion": "production-global-repair-v1",
+  "repairHistory": [],
+  "credentialPolicyVersion": "visible-token-v2",
+  "jevPolicyVersion": "jev-candidate-v3",
+  "jevConfig": null,
+  "usageObserverVersion": "raw-wire-usage-v1",
+  "runtime": "DeepSeek Harness 0.1.5-rc.3 + restricted Chromium Gate",
+  "environment": {
+    "generatedExecution": "restricted short-lived Chromium; no generated Node/shell execution",
+    "localPreview": "controlled screenshot, not a generated-code iframe",
+    "dependencyLock": "repository package-lock.json; no generated dependencies",
+    "targetBaseCommit": null,
+    "targetBaseCommitReason": "single HTML generation; no target Git repository was modified",
+    "platformFrozenBaseline": "b66122c21604fdb2ecdcbafb89c3d5ad8cde1466"
+  },
+  "source": "index.html",
+  "sourceSha256": "c707ca3cb5ee748744431040f3ee14b50bf7aed989f9138266addbd46e47ac65",
+  "models": [
+    {
+      "id": "58b2f492-52c1-49ee-8936-53e5c8c6cc89",
+      "name": "产品经理",
+      "role": "product",
+      "provider": "deepseek",
+      "baseUrl": "https://api.deepseek.com",
+      "modelId": "deepseek-flash",
+      "enabled": true,
+      "hasApiKey": true,
+      "pricing": {
+        "inputPerMillion": 0.3,
+        "outputPerMillion": 1.2,
+        "currency": "USD"
+      }
+    },
+    {
+      "id": "65e308f1-8582-4b41-b485-92911d44ed0f",
+      "name": "项目经理",
+      "role": "project-manager",
+      "provider": "deepseek",
+      "baseUrl": "https://api.deepseek.com",
+      "modelId": "deepseek-flash",
+      "enabled": true,
+      "hasApiKey": true,
+      "pricing": {
+        "inputPerMillion": 0.3,
+        "outputPerMillion": 1.2,
+        "currency": "USD"
+      }
+    },
+    {
+      "id": "8abcf5e4-a5f3-44a5-b58b-4f7aa83d8834",
+      "name": "研究员",
+      "role": "researcher",
+      "provider": "deepseek",
+      "baseUrl": "https://api.deepseek.com",
+      "modelId": "deepseek-flash",
+      "enabled": true,
+      "hasApiKey": true,
+      "pricing": {
+        "inputPerMillion": 0.3,
+        "outputPerMillion": 1.2,
+        "currency": "USD"
+      }
+    },
+    {
+      "id": "5e6500fe-48d3-4646-a412-d0bfaacffacc",
+      "name": "研发",
+      "role": "developer",
+      "provider": "deepseek",
+      "baseUrl": "https://api.deepseek.com",
+      "modelId": "deepseek-flash",
+      "enabled": true,
+      "hasApiKey": true,
+      "pricing": {
+        "inputPerMillion": 0.3,
+        "outputPerMillion": 1.2,
+        "currency": "USD"
+      }
+    },
+    {
+      "id": "299e00c3-cf0c-4f3f-814d-6c33e723a9d7",
+      "name": "测试",
+      "role": "tester",
+      "provider": "deepseek",
+      "baseUrl": "https://api.deepseek.com",
+      "modelId": "deepseek-flash",
+      "enabled": true,
+      "hasApiKey": true,
+      "pricing": {
+        "inputPerMillion": 0.3,
+        "outputPerMillion": 1.2,
+        "currency": "USD"
+      }
+    },
+    {
+      "id": "cc18586a-8d6b-4c19-950f-308034a0c0b1",
+      "name": "Verifier",
+      "role": "verifier",
+      "provider": "deepseek",
+      "baseUrl": "https://api.deepseek.com",
+      "modelId": "deepseek-flash",
+      "enabled": true,
+      "hasApiKey": true,
+      "pricing": {
+        "inputPerMillion": 0.3,
+        "outputPerMillion": 1.2,
+        "currency": "USD"
+      }
+    }
+  ],
+  "reproduce": "Run frozen checks against delivered index.html in request-denying isolated Chromium; raw records are in evidence.json. Downloaded HTML opened outside this controlled environment is not network isolated.",
+  "limitations": [
+    "Offline single HTML only",
+    "No calibrated verifier confidence",
+    "Cost based on declared pricing, not provider invoice",
+    "No arbitrary repository execution; verified container unavailable",
+    "Chromium timeout and heap bounds are not OS CPU/memory/disk hard limits"
+  ],
+  "usage": {
+    "inputTokens": 0,
+    "outputTokens": 0,
+    "estimatedCost": 0,
+    "currency": "USD",
+    "complete": true
+  },
+  "durationMs": 3202,
+  "repairs": 0,
+  "interventions": [],
+  "failure": null
+}

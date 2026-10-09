@@ -1,0 +1,113 @@
+{
+  "version": "production-acceptance-v2",
+  "hash": "5241ed2c655203e448de06493b485248e9c5138e44e6ed36d7db720a293e3c69",
+  "requirementHash": "3829b40f81e89c3318e5558a03589d35ea5234d672651b275c53c71442e4c6e0",
+  "checks": [
+    {
+      "name": "Mock 边界可见与初始零任务",
+      "steps": [
+        {
+          "action": "assertText",
+          "selector": "#notice",
+          "text": "Mock"
+        },
+        {
+          "action": "assertTextExact",
+          "selector": "#count",
+          "text": "0"
+        },
+        {
+          "action": "assertCount",
+          "selector": "#tasks li",
+          "count": 0
+        }
+      ]
+    },
+    {
+      "name": "拒绝空输入及空格，连续添加和删除不丢项",
+      "steps": [
+        {
+          "action": "click",
+          "selector": "#add-task"
+        },
+        {
+          "action": "assertCount",
+          "selector": "#tasks li",
+          "count": 0
+        },
+        {
+          "action": "assertTextExact",
+          "selector": "#feedback",
+          "text": "任务不能为空"
+        },
+        {
+          "action": "fill",
+          "selector": "#task-input",
+          "value": "   "
+        },
+        {
+          "action": "click",
+          "selector": "#add-task"
+        },
+        {
+          "action": "assertCount",
+          "selector": "#tasks li",
+          "count": 0
+        },
+        {
+          "action": "assertTextExact",
+          "selector": "#feedback",
+          "text": "任务不能为空"
+        },
+        {
+          "action": "fill",
+          "selector": "#task-input",
+          "value": "回归接口"
+        },
+        {
+          "action": "click",
+          "selector": "#add-task"
+        },
+        {
+          "action": "fill",
+          "selector": "#task-input",
+          "value": "检查日志"
+        },
+        {
+          "action": "click",
+          "selector": "#add-task"
+        },
+        {
+          "action": "assertCount",
+          "selector": "#tasks li",
+          "count": 2
+        },
+        {
+          "action": "assertTextExact",
+          "selector": "#count",
+          "text": "2"
+        },
+        {
+          "action": "click",
+          "selector": "[data-task-id=\"0\"] .delete"
+        },
+        {
+          "action": "assertCount",
+          "selector": "#tasks li",
+          "count": 1
+        },
+        {
+          "action": "assertTextExact",
+          "selector": "#count",
+          "text": "1"
+        },
+        {
+          "action": "assertTextExact",
+          "selector": "#tasks li span",
+          "text": "检查日志"
+        }
+      ]
+    }
+  ],
+  "frozenAt": "2026-10-07T04:45:25.747Z"
+}

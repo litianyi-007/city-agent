@@ -1,0 +1,93 @@
+{
+  "version": "verifier-study-control-v1",
+  "grantSha256": "ffc7a84942e3720c9a9b12dcc5c4531ac769663ec7f6526d776bc59034555477",
+  "run": {
+    "id": "6eaf79ac-0244-48b7-b2d2-aa8bef84ea9d",
+    "status": "completed",
+    "executionSource": "real-provider",
+    "bootId": "1d361474-e7d2-4735-adee-e069cccef563",
+    "frozenStudySha256": "67165b1343b0e67e55f659662529f77ce40aa2e0ed52e569adbba3ef33af5310",
+    "createdAt": "2026-10-07T19:12:00.183Z",
+    "finishedAt": "2026-10-07T19:18:12.643Z",
+    "progress": {
+      "ledgerEvents": 286,
+      "decisions": 54,
+      "calls": 52,
+      "oracles": 36
+    },
+    "summary": {
+      "version": "verifier-study-observed-v1",
+      "runId": "1766a3be-fbd4-4217-894f-350a68a06d66",
+      "executionSource": "real-provider",
+      "cachePolicy": "bypass",
+      "status": "completed",
+      "reason": null,
+      "startedAt": "2026-10-07T19:12:01.476Z",
+      "endedAt": "2026-10-07T19:18:12.127Z",
+      "durationMs": 370649,
+      "plannedDecisions": 54,
+      "attemptedDecisions": 54,
+      "notStartedDecisions": 0,
+      "plannedOracles": 36,
+      "attemptedOracles": 36,
+      "completedOracles": 36,
+      "callbackIntents": 52,
+      "actualProviderHttpAttempts": 52,
+      "localFixtureHttpAttempts": null,
+      "actualModelUsage": {
+        "inputTokens": 342986,
+        "outputTokens": 8557,
+        "estimatedCostUsd": 0.07729644599999999
+      },
+      "usage": {
+        "complete": true,
+        "knownInputTokens": 342986,
+        "knownOutputTokens": 8557,
+        "knownEstimatedCost": 0.07729644599999999,
+        "currency": "USD",
+        "unknownCalls": 0,
+        "scope": "observed-provider-declared-rate-estimate-not-bill"
+      },
+      "byStrategy": [
+        {
+          "strategy": "baseline",
+          "planned": 18,
+          "attempted": 18,
+          "accepted": 18,
+          "abstained": 0,
+          "errors": 0,
+          "notStarted": 0,
+          "selectedOraclePass": 8,
+          "selectedOracleFail": 10,
+          "selectedOracleUnknown": 0
+        },
+        {
+          "strategy": "llm",
+          "planned": 18,
+          "attempted": 18,
+          "accepted": 16,
+          "abstained": 2,
+          "errors": 0,
+          "notStarted": 0,
+          "selectedOraclePass": 12,
+          "selectedOracleFail": 4,
+          "selectedOracleUnknown": 0
+        },
+        {
+          "strategy": "jev-cascade",
+          "planned": 18,
+          "attempted": 18,
+          "accepted": 13,
+          "abstained": 5,
+          "errors": 0,
+          "notStarted": 0,
+          "selectedOraclePass": 11,
+          "selectedOracleFail": 2,
+          "selectedOracleUnknown": 0
+        }
+      ],
+      "ledgerTerminalPersisted": true
+    },
+    "error": null
+  }
+}

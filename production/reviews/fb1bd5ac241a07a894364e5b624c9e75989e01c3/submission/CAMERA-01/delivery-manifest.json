@@ -1,0 +1,230 @@
+{
+  "version": "production-camera-delivery-v1",
+  "runId": "13090ef3-072b-4194-9177-d13884b0c5d1",
+  "platformCommit": "d65f869b99732cc22541002b8e95f6aafd2e030b",
+  "status": "failed",
+  "evidenceKind": "real-model",
+  "capability": "camera-scene-v1",
+  "requirement": {
+    "id": "CAMERA-01",
+    "source": "用户本会话提出的功能测试需求，2026-10-07；非业务工单",
+    "background": "通过本地服务真实六角色与 Jev/Verifier 链路，检验一句话到受控摄像头粒子场景的自主交付；不把场景合成 Gate 作为实体摄像头验收。",
+    "acceptance": "夜色中可见梦幻粒子圣诞树、星形顶饰与雪；摄像头默认关闭，点击开始才请求视频，关闭后释放资源。张掌散开、握拳聚合、掌心横向位置旋转，作用于实际几何。无手、权限拒绝、设备或本地模型不可用有清晰状态；按钮与键盘可回退但不计摄像头通过。不保存或上传帧，不接触模型 Key。平台合成 Gate 与真实视觉/实体设备验收分列。",
+    "difficulty": "high",
+    "kind": "illustrative"
+  },
+  "promptVersion": "production-camera-scene-v1",
+  "verifierVersion": "verifier-ordinal-v1",
+  "credentialPolicyVersion": "visible-token-v1",
+  "jevPolicyVersion": "jev-candidate-v2",
+  "jevConfig": {
+    "enabled": true,
+    "modelId": "jev-1.13.0",
+    "minConfidence": 0.5,
+    "minScore": 3,
+    "inputPerMillion": 0.042,
+    "outputPerMillion": 0,
+    "currency": "USD",
+    "maxRequests": 24,
+    "timeoutMs": 30000,
+    "hasApiKey": true
+  },
+  "usageObserverVersion": "raw-wire-usage-v1",
+  "runtime": "DeepSeek Harness 0.1.5-rc.3 + trusted camera scene runtime + synthetic Chromium Gate",
+  "cameraRuntime": {
+    "version": "camera-scene-runtime-v1",
+    "hash": "cf429206b118cbe9bf46172cc9290c0807b2a412ebc8a0a12c437020a9ae932c",
+    "rendererHash": "34541423dbb364437c0d2d474703cc4c3a94a347f2d081b4311f292835c1e0b4",
+    "gateRendererHash": "7374659f0fcc34a2b79cff27f299c35a975dd6412ff37d90c2d37e7ceb4adb8e",
+    "styleHash": "de0d7b2d16ea3986bcb4cf9bb24fd76329f9a57cf25830a96b142370a2a9f5b7",
+    "workerVersion": "camera-hand-worker-v1",
+    "workerHash": "cc545796296dc630f97c4f06e8313b462e471e65603b51fbf5a77a4e7746020f",
+    "geometryVersion": "hand-geometry-v1",
+    "assetManifest": {
+      "version": "mediapipe-hand-v1",
+      "packageVersion": "0.10.32",
+      "sourceCommit": "8317ba78778738ba90a521e7e4580a2ba0129c81",
+      "assets": [
+        {
+          "filename": "vision_bundle.mjs",
+          "sha256": "de83c48ff329717a27aeb528d5ef5f47f077c628a5302dc483aca5b513e7464b",
+          "bytes": 137160,
+          "contentType": "text/javascript; charset=utf-8",
+          "sourceUrl": "https://registry.npmjs.org/@mediapipe/tasks-vision/-/tasks-vision-0.10.32.tgz"
+        },
+        {
+          "filename": "vision_wasm_internal.js",
+          "sha256": "6f6b86509cf9e163ea1cfec7edc8cf53732699c04781e4c21c557c1ba402310e",
+          "bytes": 204816,
+          "contentType": "text/javascript; charset=utf-8",
+          "sourceUrl": "https://registry.npmjs.org/@mediapipe/tasks-vision/-/tasks-vision-0.10.32.tgz"
+        },
+        {
+          "filename": "vision_wasm_internal.wasm",
+          "sha256": "cb3ec20026a9aecc2a81a93c25630ceb5389297ddb7a5f0bd61dd09cde606b9b",
+          "bytes": 11453626,
+          "contentType": "application/wasm",
+          "sourceUrl": "https://registry.npmjs.org/@mediapipe/tasks-vision/-/tasks-vision-0.10.32.tgz"
+        },
+        {
+          "filename": "vision_wasm_nosimd_internal.js",
+          "sha256": "9f8fc960e363f0fb2f42f7937b97ae9cf9a5630490f71031fa90caa9bb121938",
+          "bytes": 204669,
+          "contentType": "text/javascript; charset=utf-8",
+          "sourceUrl": "https://registry.npmjs.org/@mediapipe/tasks-vision/-/tasks-vision-0.10.32.tgz"
+        },
+        {
+          "filename": "vision_wasm_nosimd_internal.wasm",
+          "sha256": "924274fcd5ac8985f6570a8573e7971b7bd2d580ba1b8f3beb0ba8f95db6347c",
+          "bytes": 10647962,
+          "contentType": "application/wasm",
+          "sourceUrl": "https://registry.npmjs.org/@mediapipe/tasks-vision/-/tasks-vision-0.10.32.tgz"
+        },
+        {
+          "filename": "hand_landmarker.task",
+          "sha256": "fbc2a30080c3c557093b5ddfc334698132eb341044ccee322ccf8bcf3607cde1",
+          "bytes": 7819105,
+          "contentType": "application/octet-stream",
+          "sourceUrl": "https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task"
+        }
+      ]
+    },
+    "mandatoryChecksVersion": "camera-scene-behavior-v1"
+  },
+  "cameraVerification": {
+    "scope": "scene-behavior-synthetic",
+    "boundedScenePassed": false,
+    "visionModelVerified": false,
+    "physicalCameraVerified": false,
+    "fullRequirementVerified": false,
+    "runtimeVersion": "camera-scene-runtime-v1",
+    "runtimeHash": "cf429206b118cbe9bf46172cc9290c0807b2a412ebc8a0a12c437020a9ae932c",
+    "limitations": [
+      "Synthetic gesture scene behavior only; actual vision model not validated",
+      "Physical camera permissions, hardware, lighting, latency and visual quality await real-device acceptance",
+      "Model generates declarative scene config, not arbitrary executable product code"
+    ]
+  },
+  "trustedPreviewSha256": null,
+  "environment": {
+    "generatedExecution": "strict scene JSON only; fixed trusted platform code; no model-generated JS/HTML or Node/shell execution",
+    "localPreview": "fixed trusted renderer from validated scene; explicit user camera action, not arbitrary generated HTML",
+    "dependencyLock": "repository package-lock.json and pinned camera asset manifest; no generated dependencies",
+    "targetBaseCommit": null,
+    "targetBaseCommitReason": "declarative scene generation; no target Git repository was modified",
+    "platformFrozenBaseline": "b66122c21604fdb2ecdcbafb89c3d5ad8cde1466"
+  },
+  "source": null,
+  "sourceSha256": null,
+  "models": [
+    {
+      "id": "58b2f492-52c1-49ee-8936-53e5c8c6cc89",
+      "name": "产品经理",
+      "role": "product",
+      "provider": "deepseek",
+      "baseUrl": "https://api.deepseek.com",
+      "modelId": "deepseek-flash",
+      "enabled": true,
+      "hasApiKey": true,
+      "pricing": {
+        "inputPerMillion": 0.3,
+        "outputPerMillion": 1.2,
+        "currency": "USD"
+      }
+    },
+    {
+      "id": "65e308f1-8582-4b41-b485-92911d44ed0f",
+      "name": "项目经理",
+      "role": "project-manager",
+      "provider": "deepseek",
+      "baseUrl": "https://api.deepseek.com",
+      "modelId": "deepseek-flash",
+      "enabled": true,
+      "hasApiKey": true,
+      "pricing": {
+        "inputPerMillion": 0.3,
+        "outputPerMillion": 1.2,
+        "currency": "USD"
+      }
+    },
+    {
+      "id": "8abcf5e4-a5f3-44a5-b58b-4f7aa83d8834",
+      "name": "研究员",
+      "role": "researcher",
+      "provider": "deepseek",
+      "baseUrl": "https://api.deepseek.com",
+      "modelId": "deepseek-flash",
+      "enabled": true,
+      "hasApiKey": true,
+      "pricing": {
+        "inputPerMillion": 0.3,
+        "outputPerMillion": 1.2,
+        "currency": "USD"
+      }
+    },
+    {
+      "id": "5e6500fe-48d3-4646-a412-d0bfaacffacc",
+      "name": "研发",
+      "role": "developer",
+      "provider": "deepseek",
+      "baseUrl": "https://api.deepseek.com",
+      "modelId": "deepseek-flash",
+      "enabled": true,
+      "hasApiKey": true,
+      "pricing": {
+        "inputPerMillion": 0.3,
+        "outputPerMillion": 1.2,
+        "currency": "USD"
+      }
+    },
+    {
+      "id": "299e00c3-cf0c-4f3f-814d-6c33e723a9d7",
+      "name": "测试",
+      "role": "tester",
+      "provider": "deepseek",
+      "baseUrl": "https://api.deepseek.com",
+      "modelId": "deepseek-flash",
+      "enabled": true,
+      "hasApiKey": true,
+      "pricing": {
+        "inputPerMillion": 0.3,
+        "outputPerMillion": 1.2,
+        "currency": "USD"
+      }
+    },
+    {
+      "id": "cc18586a-8d6b-4c19-950f-308034a0c0b1",
+      "name": "Verifier",
+      "role": "verifier",
+      "provider": "deepseek",
+      "baseUrl": "https://api.deepseek.com",
+      "modelId": "deepseek-flash",
+      "enabled": true,
+      "hasApiKey": true,
+      "pricing": {
+        "inputPerMillion": 0.3,
+        "outputPerMillion": 1.2,
+        "currency": "USD"
+      }
+    }
+  ],
+  "reproduce": "Validate scene.json, run camera-scene-v1 frozen checks and mandatory synthetic behavior Gate with the pinned trusted runtime. Vision/hardware acceptance must be separately recorded on a real device; do not infer it from scene Gate or Jev scores.",
+  "limitations": [
+    "Profile-limited declarative camera scene generation, not general software code generation; actual vision/physical camera/full requirement unverified",
+    "No calibrated verifier confidence",
+    "Cost based on declared pricing, not provider invoice",
+    "No arbitrary repository execution; verified container unavailable",
+    "Chromium timeout and heap bounds are not OS CPU/memory/disk hard limits"
+  ],
+  "usage": {
+    "inputTokens": 7969,
+    "outputTokens": 1562,
+    "estimatedCost": 0.002760756,
+    "currency": "USD",
+    "complete": true
+  },
+  "durationMs": 11876,
+  "repairs": 0,
+  "interventions": [],
+  "failure": "research Verifier 弃权：唯一候选为研究阶段的观察/约束元数据，不含任何场景配置、几何实现或业务结果验证证据，且候选自身列举大量unknown（配置内容未知、验证方法未提供、真实摄像头与模型未实测），明确未覆盖全部业务验收，不满足minimumOrdinalScore=3的硬Gate，无可选答案，故abstain。"
+}

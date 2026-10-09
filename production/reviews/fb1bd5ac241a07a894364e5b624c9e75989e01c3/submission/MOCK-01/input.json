@@ -1,0 +1,34 @@
+{
+  "brief": "为三人研发小组做一个无需登录的单页待办板：输入任务后添加到列表，支持标记完成和删除，显示任务统计。不依赖网络或后端，刷新后可重置。",
+  "capability": "offline-single-html",
+  "mode": "demo",
+  "verifierEngine": "llm-rubric",
+  "demoCaseId": "create",
+  "agentIds": [
+    "58b2f492-52c1-49ee-8936-53e5c8c6cc89",
+    "65e308f1-8582-4b41-b485-92911d44ed0f",
+    "8abcf5e4-a5f3-44a5-b58b-4f7aa83d8834",
+    "5e6500fe-48d3-4646-a412-d0bfaacffacc",
+    "299e00c3-cf0c-4f3f-814d-6c33e723a9d7",
+    "cc18586a-8d6b-4c19-950f-308034a0c0b1"
+  ],
+  "candidateCount": 1,
+  "limits": {
+    "maxCalls": 24,
+    "maxRepairCycles": 2,
+    "maxTokens": 500000,
+    "maxOutputTokens": 6000,
+    "maxDurationMs": 600000,
+    "maxCost": 5,
+    "currency": "USD"
+  },
+  "requirement": {
+    "id": "MOCK-01",
+    "source": "用户授权自拟模拟需求，2026-10-07；没有真实提出者或工单",
+    "background": "用最小协作工具验证从一句话目标到可交互 HTML 的新建应用路径。",
+    "acceptance": "初始无任务；添加“准备发布”后仅出现一条同名任务；输入框清空；能标记完成并显示完成统计；删除后列表与统计归零。",
+    "difficulty": "low",
+    "kind": "illustrative"
+  },
+  "budgetAuthorized": false
+}

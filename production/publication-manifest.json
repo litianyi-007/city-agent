@@ -1,17 +1,17 @@
 {
   "version": "city-agent-autonomous-production-public-v1",
-  "publisherCommit": "5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda",
-  "generatedAt": "2026-10-07T21:45:31.144Z",
+  "publisherCommit": "fb1bd5ac241a07a894364e5b624c9e75989e01c3",
+  "generatedAt": "2026-10-09T07:33:27.333Z",
   "videoDurationSeconds": 205.88,
   "videoName": "demo.mp4",
   "videoSourceCommit": "c21c588632d04dc7ed9dfa8cb265606400d2b522",
-  "sourcePackageManifestSha256": "bda6ca45643ab8b76b9b35cf594cea37fec2304128d8ee486bd05bf03d828f34",
-  "base": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/",
-  "materialsBase": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/",
-  "previewsBase": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/previews/",
-  "versionedEntry": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/index.html",
+  "sourcePackageManifestSha256": "22b0aaf38dc460435963c6c73fe5171ea4e6a0e2e7128310c5154d9ea619009b",
+  "base": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/",
+  "materialsBase": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/",
+  "previewsBase": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/previews/",
+  "versionedEntry": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/index.html",
   "evidencePlatformCommit": "c21c588632d04dc7ed9dfa8cb265606400d2b522",
-  "materialsVersion": "production-materials-v6",
+  "materialsVersion": "production-materials-v7",
   "sourceBranch": "feature/autonomous-production",
   "submissionBaseline": "b66122c21604fdb2ecdcbafb89c3d5ad8cde1466",
   "mode": "trusted-fixture-interaction-and-static-evidence",
@@ -23,700 +23,712 @@
   "preservesHistoricalProductionMaterials": true,
   "files": [
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/jev-benchmarks.json",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/jev-benchmarks.json",
       "sourcePath": "jev-benchmarks.json",
       "sha256": "887b34072287b305c73b2f05d5fbfe6d395684150c2e2af161a2fa46726df853",
       "bytes": 164365
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/mixed-and-live-runs.json",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/mixed-and-live-runs.json",
       "sourcePath": "mixed-and-live-runs.json",
       "sha256": "688fb43c601328f24ba49f4f8b9f1efd2cdb006850fd5034df5f495ba3275ffa",
       "bytes": 815108
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/workspace.png",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/workspace.png",
       "sourcePath": "workspace.png",
       "sha256": "19da018b93a072356f2c1d67bd63d920fa23ca54d9dc8fd66c0bba80756e0a43",
       "bytes": 412710
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/MOCK-01/input.json",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/MOCK-01/input.json",
       "sourcePath": "MOCK-01/input.json",
       "sha256": "207266639ed282b72d89fefc4a253001504e7b5bc369ae294cf484f61c88d6a4",
       "bytes": 1340
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/MOCK-01/run.json",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/MOCK-01/run.json",
       "sourcePath": "MOCK-01/run.json",
       "sha256": "655b87a53d985b7f9775b28fc7b8a1f5fc090481cd4a0a61903abe2a0c258dca",
       "bytes": 171982
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/MOCK-01/intermediate.json",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/MOCK-01/intermediate.json",
       "sourcePath": "MOCK-01/intermediate.json",
       "sha256": "054288ee21cca21111f8da34a091c54d1b629e117ed9072aa82643a6d4fa83bc",
       "bytes": 7270
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/MOCK-01/frozen-contract.json",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/MOCK-01/frozen-contract.json",
       "sourcePath": "MOCK-01/frozen-contract.json",
       "sha256": "ad26f4ed835e0f4f2fa273427d9ced1b06737e1dd96324d6215240e6c8c62960",
       "bytes": 2099
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/MOCK-01/gate.json",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/MOCK-01/gate.json",
       "sourcePath": "MOCK-01/gate.json",
       "sha256": "d63591ea309863ebbddd1a7452d4446df537e7756d0be288d8629b432d500a82",
       "bytes": 424
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/MOCK-01/events.ndjson",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/MOCK-01/events.ndjson",
       "sourcePath": "MOCK-01/events.ndjson",
       "sha256": "51dcae6e174c7073bc125f4033dbfde7a0c2a97e83d520ef0a9af20df3d8e9a7",
       "bytes": 3847
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/MOCK-01/index.html.txt",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/MOCK-01/index.html.txt",
       "sourcePath": "MOCK-01/index.html",
       "sha256": "718b0fa044423ac80ee53efec3e6fae675b64f7cffa00708b5694e9ba494d3ef",
       "bytes": 2586
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/MOCK-01/delivery-manifest.json",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/MOCK-01/delivery-manifest.json",
       "sourcePath": "MOCK-01/delivery-manifest.json",
       "sha256": "e8e43225576e3e20e5a49b1cf2fa639ab7311896a5555596ce9e0e0ac322eb2c",
       "bytes": 7208
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/MOCK-01/evidence.json",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/MOCK-01/evidence.json",
       "sourcePath": "MOCK-01/evidence.json",
       "sha256": "655b87a53d985b7f9775b28fc7b8a1f5fc090481cd4a0a61903abe2a0c258dca",
       "bytes": 171982
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/MOCK-01-preview.png",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/MOCK-01-preview.png",
       "sourcePath": "MOCK-01-preview.png",
       "sha256": "dcdbef52daca59b228dcea989061f1315321eefcfb7952bf6b46d1aab80dba54",
       "bytes": 133296
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/MOCK-02/input.json",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/MOCK-02/input.json",
       "sourcePath": "MOCK-02/input.json",
       "sha256": "3a78322b0a08d43733542edd453358be0ad6665cff44803661b9dc84a357c3c3",
       "bytes": 1418
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/MOCK-02/run.json",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/MOCK-02/run.json",
       "sourcePath": "MOCK-02/run.json",
       "sha256": "c95e67bfc574c7c89f79d24f602a9b7552292ee2ea4d776d8517086cba08756f",
       "bytes": 176092
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/MOCK-02/intermediate.json",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/MOCK-02/intermediate.json",
       "sourcePath": "MOCK-02/intermediate.json",
       "sha256": "73c9b179f283ccf124a569156ea895d45b87ba995659255eff092af9dff65aed",
       "bytes": 7824
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/MOCK-02/frozen-contract.json",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/MOCK-02/frozen-contract.json",
       "sourcePath": "MOCK-02/frozen-contract.json",
       "sha256": "ea1ddfa3b17c49b16b9527a196704d89fb487c95793105562eb7f0c02fe65fb9",
       "bytes": 2509
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/MOCK-02/gate.json",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/MOCK-02/gate.json",
       "sourcePath": "MOCK-02/gate.json",
       "sha256": "85f7d47e10ab53e2b744d4171f9387efc59d97aa38590437196efe11e435624e",
       "bytes": 421
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/MOCK-02/events.ndjson",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/MOCK-02/events.ndjson",
       "sourcePath": "MOCK-02/events.ndjson",
       "sha256": "3ab00fcfa89c087e8abe3dac102554eba4e4b0c94d458d62bab9751c019e7bdd",
       "bytes": 3847
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/MOCK-02/index.html.txt",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/MOCK-02/index.html.txt",
       "sourcePath": "MOCK-02/index.html",
       "sha256": "601a88a51fdc66c4fc6451f2b4ebc0d0666ff583e79c6e853b859cc4d9ed656d",
       "bytes": 2606
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/MOCK-02/delivery-manifest.json",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/MOCK-02/delivery-manifest.json",
       "sourcePath": "MOCK-02/delivery-manifest.json",
       "sha256": "9d2a8da545fb1f0f1bbdbff356fb65df151ffda1dd8d2adc80e8d3f561050cab",
       "bytes": 7709
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/MOCK-02/evidence.json",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/MOCK-02/evidence.json",
       "sourcePath": "MOCK-02/evidence.json",
       "sha256": "c95e67bfc574c7c89f79d24f602a9b7552292ee2ea4d776d8517086cba08756f",
       "bytes": 176092
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/MOCK-02-preview.png",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/MOCK-02-preview.png",
       "sourcePath": "MOCK-02-preview.png",
       "sha256": "a03408720140e19ea01f16e006f8b8abc05e3e4820eaf73c343a2b400f51e38e",
       "bytes": 144815
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/MOCK-03/input.json",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/MOCK-03/input.json",
       "sourcePath": "MOCK-03/input.json",
       "sha256": "a7e0a18095f464d5ef1cd3043712918e2379f2750885423e2c5f669dd36b0b2f",
       "bytes": 1413
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/MOCK-03/run.json",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/MOCK-03/run.json",
       "sourcePath": "MOCK-03/run.json",
       "sha256": "efc6cb9dd9ea76b3c94f94f7819ebefb79bef13ab6a609e75469d6bc4f576de5",
       "bytes": 177121
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/MOCK-03/intermediate.json",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/MOCK-03/intermediate.json",
       "sourcePath": "MOCK-03/intermediate.json",
       "sha256": "3fc57138b040242eec621bc1434e474c086a6498a1cdf8aa5accf053e469a9b8",
       "bytes": 8023
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/MOCK-03/frozen-contract.json",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/MOCK-03/frozen-contract.json",
       "sourcePath": "MOCK-03/frozen-contract.json",
       "sha256": "ee47f0eccd0f8545e1b2cbad77d96bd80f60d482f8df1c6f084ce57f43161d4d",
       "bytes": 2678
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/MOCK-03/gate.json",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/MOCK-03/gate.json",
       "sourcePath": "MOCK-03/gate.json",
       "sha256": "a36608d4122e8952cf9470b3749b97798eac68eb1c57e5a6ee768896392dce2a",
       "bytes": 442
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/MOCK-03/events.ndjson",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/MOCK-03/events.ndjson",
       "sourcePath": "MOCK-03/events.ndjson",
       "sha256": "48c2dc9ec6458e9b2954bf15464109fbb6b3cc4a5a53eb5be0a70d7f0b21ea83",
       "bytes": 3847
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/MOCK-03/index.html.txt",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/MOCK-03/index.html.txt",
       "sourcePath": "MOCK-03/index.html",
       "sha256": "c707ca3cb5ee748744431040f3ee14b50bf7aed989f9138266addbd46e47ac65",
       "bytes": 2621
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/MOCK-03/delivery-manifest.json",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/MOCK-03/delivery-manifest.json",
       "sourcePath": "MOCK-03/delivery-manifest.json",
       "sha256": "41977b773b7b7339c1b450e33a83849c5c54c781465fd4d9ec7bdddb719145cc",
       "bytes": 7871
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/MOCK-03/evidence.json",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/MOCK-03/evidence.json",
       "sourcePath": "MOCK-03/evidence.json",
       "sha256": "efc6cb9dd9ea76b3c94f94f7819ebefb79bef13ab6a609e75469d6bc4f576de5",
       "bytes": 177121
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/MOCK-03-preview.png",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/MOCK-03-preview.png",
       "sourcePath": "MOCK-03-preview.png",
       "sha256": "dd99f13c225480e8cfb192a5575089f0a5d91ba2401f6932f6c43287178b1760",
       "bytes": 148733
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/metrics.png",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/metrics.png",
       "sourcePath": "metrics.png",
       "sha256": "e062a29644057fb5128b8a6005316b37c6dace1a61d67ba76e3b51266597a66a",
       "bytes": 213976
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/demo.webm",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/demo.webm",
       "sourcePath": "demo.webm",
       "sha256": "4c754e7827f1559fcbbf19f8fc54151436908f31ca7bb951e9fd691104e52d86",
       "bytes": 15080294
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/demo.mp4",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/demo.mp4",
       "sourcePath": "demo.mp4",
       "sha256": "ad2627631dd99efc79c282f9c61ef46783421a8f00bc8a565e1e5e0ac81e9f36",
       "bytes": 4857699
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/CAMERA-01/run.json",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/CAMERA-01/run.json",
       "sourcePath": "CAMERA-01/run.json",
       "sha256": "977c76d2eea34484aad59f76f73d5dbc2c9e131e7f2ad05e4b7672512047b1a0",
       "bytes": 67630
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/CAMERA-01/delivery-manifest.json",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/CAMERA-01/delivery-manifest.json",
       "sourcePath": "CAMERA-01/delivery-manifest.json",
       "sha256": "fbdd166f1b1f71e5d32e18fb81177deaec42156feb7721d54c936cf7e7175ab9",
       "bytes": 9673
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/CAMERA-02/run.json",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/CAMERA-02/run.json",
       "sourcePath": "CAMERA-02/run.json",
       "sha256": "7ce8bc5bc1002957c3573d92e0432688270542b87c063aff07f4190bba52ba96",
       "bytes": 246664
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/CAMERA-02/delivery-manifest.json",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/CAMERA-02/delivery-manifest.json",
       "sourcePath": "CAMERA-02/delivery-manifest.json",
       "sha256": "059e9701f33abd404b4c11a4a131fe5f85ee9e8928750939f21eb5f92fdfbb6d",
       "bytes": 9354
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/CAMERA-03/run.json",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/CAMERA-03/run.json",
       "sourcePath": "CAMERA-03/run.json",
       "sha256": "606f83b19c72b219f8c6f76f7fe3260705a970aa02dddbd68f98799ebfd812dd",
       "bytes": 69448
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/CAMERA-03/evidence.json",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/CAMERA-03/evidence.json",
       "sourcePath": "CAMERA-03/evidence.json",
       "sha256": "606f83b19c72b219f8c6f76f7fe3260705a970aa02dddbd68f98799ebfd812dd",
       "bytes": 69448
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/CAMERA-03/delivery-manifest.json",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/CAMERA-03/delivery-manifest.json",
       "sourcePath": "CAMERA-03/delivery-manifest.json",
       "sha256": "3bffae686858857ad2284d272b9a057aeee7653c59b05907797211490fa28066",
       "bytes": 10153
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/CAMERA-03/platform-metadata.json",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/CAMERA-03/platform-metadata.json",
       "sourcePath": "CAMERA-03/platform-metadata.json",
       "sha256": "aa7bbf24cc9b6ef1dcfcf24881fb85e161b8222bccda496fff71f503428192c0",
       "bytes": 4119
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/CAMERA-04/run.json",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/CAMERA-04/run.json",
       "sourcePath": "CAMERA-04/run.json",
       "sha256": "6461e50743067cb22fd18bcf45e76f37cd4707bddda079a3e23383999e60ae74",
       "bytes": 394763
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/CAMERA-04/evidence.json",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/CAMERA-04/evidence.json",
       "sourcePath": "CAMERA-04/evidence.json",
       "sha256": "6461e50743067cb22fd18bcf45e76f37cd4707bddda079a3e23383999e60ae74",
       "bytes": 394763
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/CAMERA-04/delivery-manifest.json",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/CAMERA-04/delivery-manifest.json",
       "sourcePath": "CAMERA-04/delivery-manifest.json",
       "sha256": "732367e50e7f0fe297bceabde6fd6a7907771c1ef6af4c6b3d02909ae721d490",
       "bytes": 9499
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/CAMERA-04/platform-metadata.json",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/CAMERA-04/platform-metadata.json",
       "sourcePath": "CAMERA-04/platform-metadata.json",
       "sha256": "f7a6fbe4b2565eeba880c355fe1734eb713bf49074584540da452a3758c8bf42",
       "bytes": 4271
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/submission-evidence.json",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/submission-evidence.json",
       "sourcePath": "submission-evidence.json",
       "sha256": "69723b7a22268e430e527d2f05bc251934532c4ca073e4792d1c9deacb6dbf71",
       "bytes": 89095
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/requirements.json",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/requirements.json",
       "sourcePath": "requirements.json",
       "sha256": "e6f2da7e6d9c35a03300ac2a82b4ec39c03f4a82a3490c70a39dd7a763f64511",
       "bytes": 3349
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/CAMERA-05/run.json",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/CAMERA-05/run.json",
       "sourcePath": "CAMERA-05/run.json",
       "sha256": "61cb1e48477e0bbf4bc28e7e53cf5e55bce01c5a0b70e258f3796c9dc91e0d8f",
       "bytes": 329004
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/CAMERA-05/evidence.json",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/CAMERA-05/evidence.json",
       "sourcePath": "CAMERA-05/evidence.json",
       "sha256": "c8c7c2f78ce5354e8dd7544fe1489344adea40f454ed59b13e360515589bf5d2",
       "bytes": 363206
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/CAMERA-05/delivery-manifest.json",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/CAMERA-05/delivery-manifest.json",
       "sourcePath": "CAMERA-05/delivery-manifest.json",
       "sha256": "958b3af5c977c91018e31000901595a4b95fff0b66f243b5ac930bf4b95a269f",
       "bytes": 12632
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/CAMERA-05/platform-metadata.json",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/CAMERA-05/platform-metadata.json",
       "sourcePath": "CAMERA-05/platform-metadata.json",
       "sha256": "928e1e97361750456e0abe106e1b11c04a19ed73e11fa580e7efa8efaea7224d",
       "bytes": 3339
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/CAMERA-06/run.json",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/CAMERA-06/run.json",
       "sourcePath": "CAMERA-06/run.json",
       "sha256": "3c231fc1f30932899d93488948ed6d381d9bf10d4d02fbdd95d7b2b680960394",
       "bytes": 408822
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/CAMERA-06/evidence.json",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/CAMERA-06/evidence.json",
       "sourcePath": "CAMERA-06/evidence.json",
       "sha256": "d3218b84568d16e72176f14fd7376d43605daa4038eb44a7df5b6ca2ac11db4f",
       "bytes": 454210
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/CAMERA-06/delivery-manifest.json",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/CAMERA-06/delivery-manifest.json",
       "sourcePath": "CAMERA-06/delivery-manifest.json",
       "sha256": "3171c89b86b5df6428261e77ae1bb155684f4203f8829e27b9d4094c5f071f07",
       "bytes": 13034
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/CAMERA-06/platform-metadata.json",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/CAMERA-06/platform-metadata.json",
       "sourcePath": "CAMERA-06/platform-metadata.json",
       "sha256": "0e01b38a50c869d91c7d0c1645c3a15fe619c0e6aff9a2b0bdd361984d00d1f2",
       "bytes": 3339
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/CAMERA-07/run.json",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/CAMERA-07/run.json",
       "sourcePath": "CAMERA-07/run.json",
       "sha256": "bb2cb22cad787d1fedc332b690983730733317c09d30bef93d931f7fb3609f55",
       "bytes": 262148
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/CAMERA-07/evidence.json",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/CAMERA-07/evidence.json",
       "sourcePath": "CAMERA-07/evidence.json",
       "sha256": "954f411217e0050f07eba66ba908570121c257b300f75949a43856bd234a8139",
       "bytes": 293230
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/CAMERA-07/delivery-manifest.json",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/CAMERA-07/delivery-manifest.json",
       "sourcePath": "CAMERA-07/delivery-manifest.json",
       "sha256": "0a570c6aaebc4f71af97358401098d13a75cc369f23a272444a6ad6cace46018",
       "bytes": 12512
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/CAMERA-07/platform-metadata.json",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/CAMERA-07/platform-metadata.json",
       "sourcePath": "CAMERA-07/platform-metadata.json",
       "sha256": "4bf9cf11bd189c664c4325fb70a9139e702eb20b0e7d2f496c6c36a3548ec139",
       "bytes": 3339
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/CAMERA-08/run.json",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/CAMERA-08/run.json",
       "sourcePath": "CAMERA-08/run.json",
       "sha256": "bf1c660970d3fb83f3f093365161f2524b2a63ab7749c9b2021bd193b2cbafb2",
       "bytes": 497457
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/CAMERA-08/evidence.json",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/CAMERA-08/evidence.json",
       "sourcePath": "CAMERA-08/evidence.json",
       "sha256": "0f68761b2ab307258755ceb7f350c564c61afa48ca1af6f674fca7d3aaa1c70e",
       "bytes": 548509
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/CAMERA-08/delivery-manifest.json",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/CAMERA-08/delivery-manifest.json",
       "sourcePath": "CAMERA-08/delivery-manifest.json",
       "sha256": "d53939e81473471a4ea1a1158bef58fb6a0c513253ec797f4a64415b22962be8",
       "bytes": 13754
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/CAMERA-08/platform-metadata.json",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/CAMERA-08/platform-metadata.json",
       "sourcePath": "CAMERA-08/platform-metadata.json",
       "sha256": "e32d306cc839351cdc014a73a77c8798356206c15e94ee44733d38650e7aea2b",
       "bytes": 3339
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/CAMERA-09/run.json",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/CAMERA-09/run.json",
       "sourcePath": "CAMERA-09/run.json",
       "sha256": "2aa51535623e6b9e5458b8e737a3ee4848db1930fd887ee15bf9c5b83da291c7",
       "bytes": 654249
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/CAMERA-09/evidence.json",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/CAMERA-09/evidence.json",
       "sourcePath": "CAMERA-09/evidence.json",
       "sha256": "51076309392aa83cc2963c53cadc710f8b9459395c661c9fd8a3b39b8ac8e667",
       "bytes": 743701
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/CAMERA-09/delivery-manifest.json",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/CAMERA-09/delivery-manifest.json",
       "sourcePath": "CAMERA-09/delivery-manifest.json",
       "sha256": "4a4f1bc4d619bf8df231a455db53ad2a72921401df6f1fe53d01881b20bbcac3",
       "bytes": 20394
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/CAMERA-09/platform-metadata.json",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/CAMERA-09/platform-metadata.json",
       "sourcePath": "CAMERA-09/platform-metadata.json",
       "sha256": "b8ffb1e26eefe2070f23bc5664356dab62bcf1b18b941ccb22912a1e1d99c25f",
       "bytes": 3339
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/CAMERA-09/scene.json",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/CAMERA-09/scene.json",
       "sourcePath": "CAMERA-09/scene.json",
       "sha256": "a439568ad8d89e3e19bf790e0939b05e636d72e8cf1b497db014710fec6abba6",
       "bytes": 1791
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/CAMERA-09/camera-runtime-manifest.json",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/CAMERA-09/camera-runtime-manifest.json",
       "sourcePath": "CAMERA-09/camera-runtime-manifest.json",
       "sha256": "c96184d7de26924d2d13ca3e71c1a77da268c14d104f05297d63eae948017e10",
       "bytes": 3663
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/CAMERA-09/index.html.txt",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/CAMERA-09/index.html.txt",
       "sourcePath": "CAMERA-09/index.html.txt",
       "sha256": "a1c0899d948022c9a416402f772f47082823f766fd42961262553b7e0f575a24",
       "bytes": 24181
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/VERIFIER-REAL-02/PRE-REGISTRATION.md",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/VERIFIER-REAL-02/PRE-REGISTRATION.md",
       "sourcePath": "VERIFIER-REAL-02/PRE-REGISTRATION.md",
       "sha256": "1ac7a08e453aaea05f99f54af59ee63ed0aa2f348a2f89c572be561f65451aa5",
       "bytes": 4321
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/VERIFIER-REAL-02/RESULT.md",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/VERIFIER-REAL-02/RESULT.md",
       "sourcePath": "VERIFIER-REAL-02/RESULT.md",
       "sha256": "f3b52591e868f6f790e3c843c1a56b3163426c8f0a86480e9a645ee5a3f68f51",
       "bytes": 13263
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/VERIFIER-REAL-02/archive-inspection.json",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/VERIFIER-REAL-02/archive-inspection.json",
       "sourcePath": "VERIFIER-REAL-02/archive-inspection.json",
       "sha256": "bc333538df3296c0edb6864fae4c49c6a7077bef2b0c6928189430ebb50328d2",
       "bytes": 1330
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/VERIFIER-REAL-02/metrics.json",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/VERIFIER-REAL-02/metrics.json",
       "sourcePath": "VERIFIER-REAL-02/metrics.json",
       "sha256": "55f15e4197050104e582e9716fad1eb3d1b710cb68d635726ec382d0a2f2c978",
       "bytes": 31740
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/VERIFIER-REAL-02/result-page.jpg",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/VERIFIER-REAL-02/result-page.jpg",
       "sourcePath": "VERIFIER-REAL-02/result-page.jpg",
       "sha256": "9eba73073061849c06e24e28c2b7bfee212d9c9dbde0423e35980341aef154f3",
       "bytes": 106534
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/VERIFIER-REAL-02/run-ledger.tar.gz",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/VERIFIER-REAL-02/run-ledger.tar.gz",
       "sourcePath": "VERIFIER-REAL-02/run-ledger.tar.gz",
       "sha256": "8dac4a031c2f289f2d0bd2893eeeb0294890ae2eefb85c43a2f1cf7f81c7ed28",
       "bytes": 769918
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/VERIFIER-REAL-02/control/consent-consumed.json",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/VERIFIER-REAL-02/control/consent-consumed.json",
       "sourcePath": "VERIFIER-REAL-02/control/consent-consumed.json",
       "sha256": "b841941b04af9b545fd1d27cbaeee4176680e160edfbf81271a28c42a0cce7e9",
       "bytes": 15422
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/VERIFIER-REAL-02/control/running.json",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/VERIFIER-REAL-02/control/running.json",
       "sourcePath": "VERIFIER-REAL-02/control/running.json",
       "sha256": "ed191a673ca7f77ea8e30750cfc745b79fe87c6e7e5b4b84e3b51ecff03a6587",
       "bytes": 637
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/VERIFIER-REAL-02/control/terminal.json",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/VERIFIER-REAL-02/control/terminal.json",
       "sourcePath": "VERIFIER-REAL-02/control/terminal.json",
       "sha256": "892ce7b801fdfde3579f8f91ce0df3c37f2ca1c38d415010633ef9aa310d01d3",
       "bytes": 2754
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/VERIFIER-REAL-02/control/terminal.confirmed.json",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/VERIFIER-REAL-02/control/terminal.confirmed.json",
       "sourcePath": "VERIFIER-REAL-02/control/terminal.confirmed.json",
       "sha256": "fbb00e47e01ed0e2ef36b9a4571d740d4e804e11ea80a420be2f4bcbf5a04710",
       "bytes": 372
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/real-camera-runs.json",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/real-camera-runs.json",
       "sourcePath": "real-camera-runs.json",
       "sha256": "db0d5e9f4d1df0b6ffd9dae2d2a1fd05187ad23453ddfd571869badcb7906824",
       "bytes": 3230785
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/materials-summary.json",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/HTML-DELIVERY-STATUS.json",
+      "sourcePath": "HTML-DELIVERY-STATUS.json",
+      "sha256": "8897853d80e4c6c630a4abcb81b6ce86398a828fca4b2156f23711a9b52f6791",
+      "bytes": 3177453
+    },
+    {
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/materials-summary.json",
       "sourcePath": "materials-summary.json",
-      "sha256": "87668fa1cd9ce533eafece20bf3c794a9f64b246d98f9f56634e53e6418618a6",
-      "bytes": 106964
+      "sha256": "8ecc2f7fbffc68f7b9537355fd79bb6fd6717774a9dcb553fff2ea6568aa30cd",
+      "bytes": 169931
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/submission.html",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/submission.html",
       "sourcePath": "submission.html",
-      "sha256": "f98afd8f11ba2ff0671988d961fd8092bb9a1b74ba66b4861035bbcb896c7c4e",
-      "bytes": 32669
+      "sha256": "b299e4c0e6ea67171a20d0b887ca74f5e8eee8b3b70c3f53cc3e381b1ece549d",
+      "bytes": 48078
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/production-mock-submission.pdf",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/production-mock-submission.pdf",
       "sourcePath": "production-mock-submission.pdf",
-      "sha256": "83c357ac8be57411f6f074da725cc59c7d27bc74470dc06629feb73208bb00a3",
-      "bytes": 1275264
+      "sha256": "69657b4cbb2e9b9b02e700cd535e1896a2b76fbb915d0023b4940cd05816e4c6",
+      "bytes": 1364306
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/README.md",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/README.md",
       "sourcePath": "README.md",
-      "sha256": "97573184f80c37ae7d1a370f9674f66a128fd78c17c14f354445d69099d1ac46",
-      "bytes": 21545
+      "sha256": "d2191f07d093d7687bf89d96c3f6670198646b8a3eba4a934c07ec584b732e68",
+      "bytes": 32471
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/RUNBOOK.md",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/RUNBOOK.md",
       "sourcePath": "RUNBOOK.md",
-      "sha256": "5c66f37a8437367296ac332edaf8c7b0b4e274da2dfc2b5a49d2f3fcc80ee7a2",
+      "sha256": "a10be46259b0c2f97ea7aadf3f95bdbfa68861cdbd565cb05ae9a52295d6e092",
       "bytes": 5154
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/DESIGN.md",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/DESIGN.md",
       "sourcePath": "DESIGN.md",
       "sha256": "ca9fab3bfe7ac7c439e40733fdb2b0fb65645bacb3960f1fa69c01b0e84d22fc",
       "bytes": 8959
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/EVALUATION.md",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/EVALUATION.md",
       "sourcePath": "EVALUATION.md",
-      "sha256": "304b6057390c7ad1ac5af6e1f277731357e69f0d1e2dc048ee390c621662585d",
+      "sha256": "0e9873c8f443dc94b25de0825aa720f707b82a9a3c1cd8129a8f4bc6866e556d",
       "bytes": 8906
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/REQUIREMENTS.md",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/REQUIREMENTS.md",
       "sourcePath": "REQUIREMENTS.md",
-      "sha256": "9dd094a591db588b152a7b607d6252fe264d8e361c7683b6469861dd65e925f2",
+      "sha256": "f028c634f1f06f9bf0adb121160eb911916754de59dfe6ef85b227db8489ae4e",
       "bytes": 2580
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/EXPERIMENTS.md",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/EXPERIMENTS.md",
       "sourcePath": "EXPERIMENTS.md",
-      "sha256": "241dde929207ffbd53c3447bd78a938da36442a0d39657137340fb198a4831c8",
+      "sha256": "b75ac4b66e4396cf38582272af084806f7aec51f7512056de8b98b5d061ebbde",
       "bytes": 8581
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/VALIDATION.md",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/VALIDATION.md",
       "sourcePath": "VALIDATION.md",
-      "sha256": "1a7748abda6cfd5c80fb0b89da1bdb9d263d3f3db7ffe6d28c151c968fd6279f",
+      "sha256": "18e90501e2d789a5ff7999ed71e349580c1758a9260551e46e73ea5e6695d6b3",
       "bytes": 15557
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/ISOLATION.md",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/ISOLATION.md",
       "sourcePath": "ISOLATION.md",
       "sha256": "e9d450c220558f2a545ec51a017025f6fbb5879ec215daa388aa728ccd5be90a",
       "bytes": 1914
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/SUBMISSION.md",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/SUBMISSION.md",
       "sourcePath": "SUBMISSION.md",
-      "sha256": "8f6a7a734a9a40e7a34551bd65ac25c15607f9077cb13190993c521e36161d37",
+      "sha256": "30b8704b1bad0fae07426e463ed5c811501f2c6a7586958729a627955fed358d",
       "bytes": 5589
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/NEXT-STEPS.md",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/NEXT-STEPS.md",
       "sourcePath": "NEXT-STEPS.md",
-      "sha256": "dcb1a2ab2779e29294755140b34e823be2536f8b5b63f299c544c228dc1ea5b3",
-      "bytes": 16390
+      "sha256": "bba0386483a8eeaeed032cc81625cd5cd3e087e98d0ff4a15a1d90744f8b368f",
+      "bytes": 36928
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/REVIEW.md",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/REVIEW.md",
       "sourcePath": "REVIEW.md",
-      "sha256": "edd40ffa93b9dc5398d7470231174d68cf1286590008d417cd57b187a7bc6fae",
-      "bytes": 10440
+      "sha256": "2acfcd78ff06b3d5bcebf7dc307143edd2bbc002ce4f0ae62259fe80a0b240fa",
+      "bytes": 4590
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/REVIEWER-GUIDE.md",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/REVIEWER-GUIDE.md",
       "sourcePath": "REVIEWER-GUIDE.md",
-      "sha256": "b336bbed7e67e357b8eb5ec1ca4249d391e2fc6b7662d6a1d012e35056b90468",
-      "bytes": 11045
+      "sha256": "476ef0537e60fc9d3ed11a092aa161b5fdbce4dce61dbfc228d4cd88274f6bb7",
+      "bytes": 12833
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/SUBMISSION-REPORT.md",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/SUBMISSION-REPORT.md",
       "sourcePath": "SUBMISSION-REPORT.md",
-      "sha256": "e2eece888eed96b99a0e6b1439f3b7725ba79399e4018e9f02817da2184373a0",
-      "bytes": 22095
+      "sha256": "a461245abcb42b7d3ebf213333bead1bb174e047b8d051811d729b708c91676f",
+      "bytes": 20651
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/SUBMISSION-INTRODUCTION.md",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/SUBMISSION-INTRODUCTION.md",
       "sourcePath": "SUBMISSION-INTRODUCTION.md",
       "sha256": "3b9059adf842bd5d3f4a6908f4dd065a0244508ee7ccf1f00a38231b9f98d4a6",
       "bytes": 3868
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/POST-SUBMISSION-PLAN.md",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/POST-SUBMISSION-PLAN.md",
       "sourcePath": "POST-SUBMISSION-PLAN.md",
-      "sha256": "a454c6f162566b193ef6e11d51cf86c898ca0eec293553d31b22c2daa26456fd",
+      "sha256": "c4a1f67b6b2d1a3497b073855e90b3150a6f1bc48909af96e00d9cc76d905e27",
       "bytes": 14747
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/CAMERA-04-RESULT.md",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/CAMERA-04-RESULT.md",
       "sourcePath": "CAMERA-04-RESULT.md",
-      "sha256": "36e297dffdc4c73a1e81f0becab228ca98518002fa434c12495e1bc5110459cd",
+      "sha256": "868ead6e9181556f6e2c86fb937183eefea30c5b572cbbbebac01799008399fa",
       "bytes": 3814
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/JEV-RESILIENCE-V3-DESIGN.md",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/JEV-RESILIENCE-V3-DESIGN.md",
       "sourcePath": "JEV-RESILIENCE-V3-DESIGN.md",
       "sha256": "eba479d6d4f00d4441e71ec25d978ee86f46ec51ab82effa1d08dfb47029d341",
       "bytes": 5402
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/JEV-PROTOCOL-AUDIT-CAMERA-03.md",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/JEV-PROTOCOL-AUDIT-CAMERA-03.md",
       "sourcePath": "JEV-PROTOCOL-AUDIT-CAMERA-03.md",
-      "sha256": "2e613034c91becfc819bb92faaeaabc7be9e1da1668efe7c1d85c7e6a141a7da",
+      "sha256": "ad697b75312b3fb0bb8ea73147f1b635b745f1c82c5b020b9aabc6aacb321d3f",
       "bytes": 3740
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/BATCH-CAMERA03-CHECKS.md",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/BATCH-CAMERA03-CHECKS.md",
       "sourcePath": "BATCH-CAMERA03-CHECKS.md",
-      "sha256": "dec19c5a7dc12fe1282099f20a71c840f7de888439dfd6d2064ae6f8ee14ad8a",
+      "sha256": "afc42c7d7874ae292cb4f706f52a069e67c2067568e4038da4593427331e54d4",
       "bytes": 3141
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/BATCH-CAMERA04-CHECKS.md",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/BATCH-CAMERA04-CHECKS.md",
       "sourcePath": "BATCH-CAMERA04-CHECKS.md",
       "sha256": "01e4415e240c4436611e999cc677762ea0926bf0a83e2da7d9c907fcac24dfaf",
       "bytes": 3598
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/QUALITY-V6-DESIGN.md",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/QUALITY-V6-DESIGN.md",
       "sourcePath": "QUALITY-V6-DESIGN.md",
       "sha256": "5c98582f970d22c45cf0e17876f6a27175c26ea95974be530dc3d80b665678c1",
       "bytes": 5067
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/BATCH-QUALITY-V6-CHECKS.md",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/BATCH-QUALITY-V6-CHECKS.md",
       "sourcePath": "BATCH-QUALITY-V6-CHECKS.md",
       "sha256": "edd40ffa93b9dc5398d7470231174d68cf1286590008d417cd57b187a7bc6fae",
       "bytes": 10440
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/PACKAGE-NOTES.md",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/CURRENT-PROGRESS.md",
+      "sourcePath": "CURRENT-PROGRESS.md",
+      "sha256": "2feed15079fdd8b1c27be81fcacede55c50bc733a37f71beb5b3661aae193c1b",
+      "bytes": 3956
+    },
+    {
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/PACKAGE-NOTES.md",
       "sourcePath": "PACKAGE-NOTES.md",
-      "sha256": "1d0a1c9363411e1ba79774e34336905ea0da0f8e75b1a85791942c82dbeaeb69",
-      "bytes": 6785
+      "sha256": "5b7c03770642beeb81c6ef4afb81396a45441c942d9293f221159c302e4030f8",
+      "bytes": 8742
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/package-manifest.json",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/package-manifest.json",
       "sourcePath": "package-manifest.json",
-      "sha256": "bda6ca45643ab8b76b9b35cf594cea37fec2304128d8ee486bd05bf03d828f34",
-      "bytes": 128437
+      "sha256": "22b0aaf38dc460435963c6c73fe5171ea4e6a0e2e7128310c5154d9ea619009b",
+      "bytes": 192432
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/previews/MOCK-01/index.html",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/previews/MOCK-01/index.html",
       "sha256": "b32adc948ce3f2c8f50a51c8251af3a87ae80c56f86e8d238f1e475e918db35b",
       "bytes": 2908
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/previews/MOCK-02/index.html",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/previews/MOCK-02/index.html",
       "sha256": "7e05551aacfc4f6aa8c759c52aec4fc80c4f161151f1cf0d3e3f27a6eb7cb516",
       "bytes": 2928
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/previews/MOCK-03/index.html",
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/previews/MOCK-03/index.html",
       "sha256": "4ac0b26aef4c0b24cc29a6ff6c0f8c56a18df159852720c20c72cc7cf1867f29",
       "bytes": 2943
     },
     {
       "path": "index.html",
-      "sha256": "5faaac9f62391496281676895f073e3d8ef85ea5d7989997626165c56a0e5b1d",
-      "bytes": 542002
+      "sha256": "076bcff0ece3bd972249407a4c69f03cd7fd6966cb795376f9d7301fe428ffb7",
+      "bytes": 641197
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/index.html",
-      "sha256": "820815fa03198ea6861c5a4d4f8c9750741a2596b828e66867fe75033e710e5b",
-      "bytes": 537196
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/index.html",
+      "sha256": "0a57115aaede659559f44221816f018f233408ccce7f5423701660a9de609346",
+      "bytes": 635901
     },
     {
-      "path": "reviews/5b91af1ecf7e20fff56789ab0b2d0e2c951d9bda/submission/materials.zip",
-      "sha256": "b30f9d1a7dbd9c279087ea7b55c1f5faaca67756bcc3a8a078d3565a9af41707",
-      "bytes": 19508609
+      "path": "reviews/fb1bd5ac241a07a894364e5b624c9e75989e01c3/submission/materials.zip",
+      "sha256": "bee905e5ca095c3e5836308517649a63f4f508269c2fb158b967b7bbecd04855",
+      "bytes": 20308760
     }
   ]
 }
